@@ -7,167 +7,203 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    /* Variables CSS para facilitar modificaciones */
+    /* Variables CSS para personalización */
     :root {
-      --primary-color: #444;
-      --secondary-color: #666;
+      --primary-color: #2c3e50;
+      --secondary-color: #34495e;
       --accent-color: #e67e22;
-      --bg-color: #f9f9f9;
+      --bg-color: #f4f4f4;
+      --white: #ffffff;
       --text-color: #333;
-      --white: #fff;
+      --light-gray: #ecf0f1;
     }
-    /* Reset y estilos básicos */
+    /* Reset básico */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
     body {
-      font-family: 'Roboto', sans-serif;
-      line-height: 1.6;
-      color: var(--text-color);
+      font-family: 'Poppins', sans-serif;
       background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
     }
     .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 20px;
     }
-    /* Encabezado */
+    /* HEADER */
     header {
-      background-color: var(--primary-color);
+      background: var(--primary-color);
       color: var(--white);
-      padding: 20px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
     .header-content {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-wrap: wrap;
+      padding: 20px 0;
     }
-    .header-content .logo h1 {
-      font-size: 2em;
+    .logo h1 {
+      font-size: 1.8rem;
     }
-    .header-content .logo p {
-      font-size: 1em;
+    .logo p {
+      font-size: 0.9rem;
+      opacity: 0.8;
     }
     nav ul {
       list-style: none;
       display: flex;
-      gap: 15px;
+      gap: 20px;
     }
     nav ul li a {
+      padding: 8px 15px;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    nav ul li a:hover {
+      background: var(--accent-color);
       color: var(--white);
-      text-decoration: none;
-      padding: 5px 10px;
-      border-radius: 3px;
-      transition: background 0.3s ease;
     }
-    nav ul li a:hover,
-    nav ul li a:focus {
-      background-color: var(--secondary-color);
-    }
-    /* Sección Hero */
+    /* SECCIÓN HERO */
     .hero {
-      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-                  url('ruta_imagen_hero.jpg') no-repeat center center/cover;
-      height: 400px;
+      position: relative;
+      background: url('ruta_imagen_hero.jpg') no-repeat center center/cover;
+      height: 500px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .hero h1 {
-      font-size: 3em;
-      color: var(--white);
-      text-align: center;
-      padding: 20px;
-      background-color: rgba(0,0,0,0.4);
-      border-radius: 5px;
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1;
     }
-    /* Main y Secciones */
+    .hero h1 {
+      position: relative;
+      z-index: 2;
+      color: var(--white);
+      font-size: 3rem;
+      text-align: center;
+      padding: 20px 30px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      animation: fadeIn 1.2s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* MAIN Y SECCIONES */
     main {
-      padding: 40px 0;
+      padding: 60px 0;
     }
     section {
-      margin-bottom: 60px;
+      padding: 40px 0;
     }
     section h2 {
-      font-size: 2.5em;
       text-align: center;
       margin-bottom: 20px;
+      font-size: 2.5rem;
       color: var(--primary-color);
     }
     section p {
       text-align: justify;
+      font-size: 1.1rem;
       margin-bottom: 20px;
-      font-size: 1.1em;
     }
-    /* Galería de imágenes */
+    /* GALERÍA DE IMÁGENES */
     .gallery {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 15px;
+      gap: 20px;
     }
     .gallery img {
       width: 100%;
-      height: 200px;
+      height: 250px;
       object-fit: cover;
-      border-radius: 5px;
-      transition: transform 0.3s ease;
+      border-radius: 10px;
+      transition: transform 0.4s ease;
     }
     .gallery img:hover {
       transform: scale(1.05);
     }
-    /* Formulario de Contacto */
+    /* FORMULARIO DE CONTACTO */
     .contact-form {
+      background: var(--white);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
       max-width: 600px;
-      margin: 0 auto;
-      background-color: var(--white);
-      padding: 20px;
-      border-radius: 5px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin: auto;
     }
     .contact-form label {
       display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
+      margin-bottom: 8px;
+      font-weight: 600;
     }
     .contact-form input,
     .contact-form textarea {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-      font-size: 1em;
+      border: 1px solid var(--light-gray);
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: var(--accent-color);
+      outline: none;
     }
     .contact-form button {
-      background-color: var(--accent-color);
-      color: var(--white);
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background: var(--accent-color);
       border: none;
-      padding: 10px 20px;
-      font-size: 1em;
-      border-radius: 3px;
+      color: var(--white);
+      font-size: 1.1rem;
+      border-radius: 5px;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: background 0.3s;
     }
-    .contact-form button:hover,
-    .contact-form button:focus {
-      background-color: #cf711f;
+    .contact-form button:hover {
+      background: #cf711f;
     }
-    /* Pie de página */
+    /* FOOTER */
     footer {
-      background-color: var(--primary-color);
+      background: var(--primary-color);
       color: var(--white);
       text-align: center;
-      padding: 15px 0;
+      padding: 20px 0;
     }
-    /* Responsive */
+    footer p {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    /* RESPONSIVE */
     @media (max-width: 768px) {
       .header-content {
         flex-direction: column;
+        align-items: center;
         text-align: center;
       }
       nav ul {
@@ -175,11 +211,14 @@
         gap: 10px;
         margin-top: 10px;
       }
+      .hero h1 {
+        font-size: 2.5rem;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Encabezado -->
+  <!-- HEADER -->
   <header>
     <div class="container header-content">
       <div class="logo">
@@ -196,41 +235,41 @@
       </nav>
     </div>
   </header>
-
-  <!-- Sección Hero -->
+  
+  <!-- SECCIÓN HERO -->
   <section class="hero" id="inicio">
     <h1>Bienvenidos a Xolos Ramirez</h1>
   </section>
-
-  <!-- Contenido Principal -->
+  
+  <!-- CONTENIDO PRINCIPAL -->
   <main>
-    <!-- Sección Sobre Nosotros -->
+    <!-- SOBRE NOSOTROS -->
     <section id="sobre-nosotros">
       <div class="container">
         <h2>Sobre Nosotros</h2>
         <p>
-          En <strong>Xolos Ramirez</strong> nos dedicamos con pasión a la crianza y cuidado del Xoloitzcuintle, una raza única y ancestral de México. Con años de experiencia, garantizamos la salud, el bienestar y la excelencia de cada uno de nuestros ejemplares, promoviendo el amor y respeto por esta herencia viva.
+          En <strong>Xolos Ramirez</strong> nos dedicamos con pasión a la crianza y cuidado del Xoloitzcuintle, una raza única y ancestral de México. Nuestra experiencia y compromiso garantizan la salud, el bienestar y la calidad en cada uno de nuestros ejemplares.
         </p>
       </div>
     </section>
-
-    <!-- Sección Nuestros Xolos -->
+    
+    <!-- GALERÍA -->
     <section id="nuestros-xolos">
       <div class="container">
         <h2>Nuestros Xolos</h2>
         <p>
-          Conoce a nuestros Xolos, criados en un ambiente familiar y con el mejor cuidado. Cada uno de nuestros perros es evaluado minuciosamente para asegurar la pureza de la raza y que cumplan con los estándares de salud y temperamento.
+          Conoce a nuestros Xolos, criados en un ambiente familiar con el mayor cuidado. Cada uno es evaluado meticulosamente para asegurar su pureza, salud y temperamento.
         </p>
         <div class="gallery">
-          <!-- Reemplaza "xolo1.jpg", "xolo2.jpg", "xolo3.jpg" por las rutas reales de tus imágenes -->
-          <img src="xolo1.jpg" alt="Xoloitzcuintle en ambiente natural">
+          <!-- Reemplaza las rutas de las imágenes por las reales -->
+          <img src="xolo1.jpg" alt="Xoloitzcuintle en su hábitat natural">
           <img src="xolo2.jpg" alt="Xoloitzcuintle posando">
-          <img src="xolo3.jpg" alt="Xoloitzcuintle en movimiento">
+          <img src="xolo3.jpg" alt="Xoloitzcuintle en acción">
         </div>
       </div>
     </section>
-
-    <!-- Sección de Contacto -->
+    
+    <!-- CONTACTO -->
     <section id="contacto">
       <div class="container">
         <h2>Contacto</h2>
@@ -238,7 +277,6 @@
           ¿Tienes alguna pregunta o deseas agendar una visita? ¡Contáctanos!
         </p>
         <div class="contact-form">
-          <!-- Puedes cambiar el atributo "action" por la URL de tu servidor o servicio de procesamiento -->
           <form action="procesar_formulario.php" method="POST">
             <label for="nombre">Nombre:</label>
             <input type="text" id="nombre" name="nombre" required>
@@ -258,8 +296,8 @@
       </div>
     </section>
   </main>
-
-  <!-- Pie de Página -->
+  
+  <!-- FOOTER -->
   <footer>
     <div class="container">
       <p>&copy; 2025 Xolos Ramirez. Todos los derechos reservados.</p>
