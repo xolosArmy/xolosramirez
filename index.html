@@ -4,75 +4,100 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Xolos Ramirez - Criadero Xoloitzcuintle</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* Estilos globales */
+    /* Variables CSS para facilitar modificaciones */
+    :root {
+      --primary-color: #444;
+      --secondary-color: #666;
+      --accent-color: #e67e22;
+      --bg-color: #f9f9f9;
+      --text-color: #333;
+      --white: #fff;
+    }
+    /* Reset y estilos básicos */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Roboto', sans-serif;
       line-height: 1.6;
-      color: #333;
-      background-color: #f9f9f9;
+      color: var(--text-color);
+      background-color: var(--bg-color);
     }
-    .contenedor {
+    .container {
       max-width: 1200px;
-      margin: auto;
+      margin: 0 auto;
       padding: 0 20px;
     }
+    /* Encabezado */
     header {
-      background-color: #444;
-      color: #fff;
+      background-color: var(--primary-color);
+      color: var(--white);
       padding: 20px 0;
-      text-align: center;
     }
-    header h1 {
-      margin-bottom: 10px;
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .header-content .logo h1 {
+      font-size: 2em;
+    }
+    .header-content .logo p {
+      font-size: 1em;
     }
     nav ul {
       list-style: none;
       display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    nav ul li {
-      margin: 0 10px;
+      gap: 15px;
     }
     nav ul li a {
-      color: #fff;
+      color: var(--white);
       text-decoration: none;
       padding: 5px 10px;
+      border-radius: 3px;
+      transition: background 0.3s ease;
     }
-    nav ul li a:hover {
-      background-color: #666;
-      border-radius: 5px;
+    nav ul li a:hover,
+    nav ul li a:focus {
+      background-color: var(--secondary-color);
     }
-    /* Sección hero */
+    /* Sección Hero */
     .hero {
-      background: url('ruta_imagen_hero.jpg') no-repeat center center/cover;
-      height: 300px;
-      position: relative;
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                  url('ruta_imagen_hero.jpg') no-repeat center center/cover;
+      height: 400px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
     .hero h1 {
-      background: rgba(0, 0, 0, 0.6);
+      font-size: 3em;
+      color: var(--white);
+      text-align: center;
       padding: 20px;
-      color: #fff;
+      background-color: rgba(0,0,0,0.4);
       border-radius: 5px;
     }
-    /* Secciones */
-    section {
+    /* Main y Secciones */
+    main {
       padding: 40px 0;
     }
+    section {
+      margin-bottom: 60px;
+    }
     section h2 {
+      font-size: 2.5em;
       text-align: center;
       margin-bottom: 20px;
-      font-size: 2em;
-      color: #444;
+      color: var(--primary-color);
     }
     section p {
       text-align: justify;
@@ -80,31 +105,75 @@
       font-size: 1.1em;
     }
     /* Galería de imágenes */
-    .galeria {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
     }
-    .galeria img {
-      width: 30%;
-      margin: 1%;
+    .gallery img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
       border-radius: 5px;
+      transition: transform 0.3s ease;
     }
-    /* Footer */
+    .gallery img:hover {
+      transform: scale(1.05);
+    }
+    /* Formulario de Contacto */
+    .contact-form {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: var(--white);
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .contact-form label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 1em;
+    }
+    .contact-form button {
+      background-color: var(--accent-color);
+      color: var(--white);
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .contact-form button:hover,
+    .contact-form button:focus {
+      background-color: #cf711f;
+    }
+    /* Pie de página */
     footer {
-      background-color: #444;
-      color: #fff;
+      background-color: var(--primary-color);
+      color: var(--white);
       text-align: center;
-      padding: 10px 0;
+      padding: 15px 0;
     }
     /* Responsive */
-    @media(max-width: 768px) {
-      .galeria img {
-        width: 80%;
-        margin: 10px 0;
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        text-align: center;
       }
       nav ul {
         flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
       }
     }
   </style>
@@ -112,9 +181,11 @@
 <body>
   <!-- Encabezado -->
   <header>
-    <div class="contenedor">
-      <h1>Xolos Ramirez</h1>
-      <p>Criadero Xoloitzcuintle</p>
+    <div class="container header-content">
+      <div class="logo">
+        <h1>Xolos Ramirez</h1>
+        <p>Criadero Xoloitzcuintle</p>
+      </div>
       <nav>
         <ul>
           <li><a href="#inicio">Inicio</a></li>
@@ -131,49 +202,68 @@
     <h1>Bienvenidos a Xolos Ramirez</h1>
   </section>
 
-  <!-- Sección Sobre Nosotros -->
-  <section id="sobre-nosotros">
-    <div class="contenedor">
-      <h2>Sobre Nosotros</h2>
-      <p>
-        En <strong>Xolos Ramirez</strong> nos dedicamos con pasión a la crianza y el cuidado del Xoloitzcuintle, una raza única y ancestral de México. Contamos con años de experiencia y un profundo amor por estos maravillosos perros, garantizando la salud, el bienestar y la excelencia en cada uno de nuestros ejemplares.
-      </p>
-    </div>
-  </section>
-
-  <!-- Sección Nuestros Xolos -->
-  <section id="nuestros-xolos">
-    <div class="contenedor">
-      <h2>Nuestros Xolos</h2>
-      <p>
-        Conoce a nuestros Xolos, criados en un ambiente familiar y con el mejor cuidado. Cada uno de nuestros perros es evaluado por expertos para asegurar sus cualidades y la pureza de la raza.
-      </p>
-      <div class="galeria">
-        <!-- Reemplaza "xolo1.jpg", "xolo2.jpg", "xolo3.jpg" por la ruta de tus imágenes -->
-        <img src="xolo1.jpg" alt="Xoloitzcuintle 1">
-        <img src="xolo2.jpg" alt="Xoloitzcuintle 2">
-        <img src="xolo3.jpg" alt="Xoloitzcuintle 3">
+  <!-- Contenido Principal -->
+  <main>
+    <!-- Sección Sobre Nosotros -->
+    <section id="sobre-nosotros">
+      <div class="container">
+        <h2>Sobre Nosotros</h2>
+        <p>
+          En <strong>Xolos Ramirez</strong> nos dedicamos con pasión a la crianza y cuidado del Xoloitzcuintle, una raza única y ancestral de México. Con años de experiencia, garantizamos la salud, el bienestar y la excelencia de cada uno de nuestros ejemplares, promoviendo el amor y respeto por esta herencia viva.
+        </p>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Sección de Contacto -->
-  <section id="contacto">
-    <div class="contenedor">
-      <h2>Contacto</h2>
-      <p>
-        Para obtener más información o agendar una visita, no dudes en contactarnos a través de los siguientes medios:
-      </p>
-      <ul>
-        <li>Email: <a href="mailto:contacto@xolosramirez.com">contacto@xolosramirez.com</a></li>
-        <li>Teléfono: +52 123 456 7890</li>
-      </ul>
-    </div>
-  </section>
+    <!-- Sección Nuestros Xolos -->
+    <section id="nuestros-xolos">
+      <div class="container">
+        <h2>Nuestros Xolos</h2>
+        <p>
+          Conoce a nuestros Xolos, criados en un ambiente familiar y con el mejor cuidado. Cada uno de nuestros perros es evaluado minuciosamente para asegurar la pureza de la raza y que cumplan con los estándares de salud y temperamento.
+        </p>
+        <div class="gallery">
+          <!-- Reemplaza "xolo1.jpg", "xolo2.jpg", "xolo3.jpg" por las rutas reales de tus imágenes -->
+          <img src="xolo1.jpg" alt="Xoloitzcuintle en ambiente natural">
+          <img src="xolo2.jpg" alt="Xoloitzcuintle posando">
+          <img src="xolo3.jpg" alt="Xoloitzcuintle en movimiento">
+        </div>
+      </div>
+    </section>
 
-  <!-- Pie de página -->
+    <!-- Sección de Contacto -->
+    <section id="contacto">
+      <div class="container">
+        <h2>Contacto</h2>
+        <p>
+          ¿Tienes alguna pregunta o deseas agendar una visita? ¡Contáctanos!
+        </p>
+        <div class="contact-form">
+          <!-- Puedes cambiar el atributo "action" por la URL de tu servidor o servicio de procesamiento -->
+          <form action="procesar_formulario.php" method="POST">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+            
+            <label for="email">Correo Electrónico:</label>
+            <input type="email" id="email" name="email" required>
+            
+            <label for="telefono">Teléfono:</label>
+            <input type="tel" id="telefono" name="telefono">
+            
+            <label for="mensaje">Mensaje:</label>
+            <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
+            
+            <button type="submit">Enviar Mensaje</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Pie de Página -->
   <footer>
-    <p>&copy; 2025 Xolos Ramirez. Todos los derechos reservados.</p>
+    <div class="container">
+      <p>&copy; 2025 Xolos Ramirez. Todos los derechos reservados.</p>
+    </div>
   </footer>
 </body>
 </html>
