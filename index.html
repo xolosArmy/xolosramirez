@@ -4,21 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Xolos Ramirez - Criadero Xoloitzcuintle</title>
-  <!-- Google Fonts -->
+  <!-- Google Fonts: Poppins -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    /* Variables de colores y tipografía */
+    /* VARIABLES DE COLOR Y TIPOGRAFÍA */
     :root {
-      --primary-red: #c0392b;     /* Rojo principal */
-      --secondary-red: #e74c3c;   /* Rojo secundario/acento */
-      --white: #ffffff;           /* Blanco */
-      --bg-color: #ffffff;        /* Fondo blanco */
-      --text-color: #333333;      /* Texto oscuro */
+      --primary-red: #c0392b;       /* Rojo principal */
+      --secondary-red: #e74c3c;     /* Rojo secundario/acento */
+      --white: #ffffff;            /* Blanco */
+      --bg-color: #ffffff;         /* Fondo blanco */
+      --text-color: #333333;       /* Texto oscuro */
       --light-gray: #f2f2f2;
     }
-    /* Reset básico */
+    /* RESET */
     * {
       margin: 0;
       padding: 0;
@@ -34,6 +34,10 @@
       text-decoration: none;
       color: inherit;
     }
+    img {
+      max-width: 100%;
+      display: block;
+    }
     .container {
       max-width: 1200px;
       margin: 0 auto;
@@ -47,6 +51,10 @@
       top: 0;
       z-index: 100;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: background-color 0.3s ease;
+    }
+    header:hover {
+      background-color: var(--secondary-red);
     }
     .header-content {
       display: flex;
@@ -86,7 +94,6 @@
       justify-content: center;
       overflow: hidden;
     }
-    /* Capa oscurecedora */
     .hero::before {
       content: "";
       position: absolute;
@@ -97,7 +104,6 @@
       background: rgba(0, 0, 0, 0.4);
       z-index: 1;
     }
-    /* Símbolo de rayo (lightning) en el fondo */
     .hero::after {
       content: "";
       position: absolute;
@@ -124,7 +130,7 @@
       from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    /* MAIN & SECCIONES */
+    /* MAIN Y SECCIONES */
     main {
       padding: 60px 0;
     }
@@ -142,7 +148,7 @@
       font-size: 1.1rem;
       margin-bottom: 20px;
     }
-    /* GALERÍA */
+    /* GALERÍA / NUESTROS XOLOS */
     .gallery {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -157,6 +163,49 @@
     }
     .gallery img:hover {
       transform: scale(1.05);
+    }
+    /* BLOG */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    .blog-post {
+      background: var(--white);
+      border: 1px solid var(--light-gray);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .blog-post:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .blog-post img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    .blog-content {
+      padding: 20px;
+    }
+    .blog-content h3 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: var(--primary-red);
+    }
+    .blog-content p {
+      font-size: 1rem;
+      margin-bottom: 15px;
+    }
+    .blog-content a {
+      color: var(--secondary-red);
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+    .blog-content a:hover {
+      color: var(--primary-red);
     }
     /* FORMULARIO DE CONTACTO */
     .contact-form {
@@ -244,6 +293,7 @@
           <li><a href="#inicio">Inicio</a></li>
           <li><a href="#sobre-nosotros">Sobre Nosotros</a></li>
           <li><a href="#nuestros-xolos">Nuestros Xolos</a></li>
+          <li><a href="#blog">Blog</a></li>
           <li><a href="#contacto">Contacto</a></li>
         </ul>
       </nav>
@@ -267,18 +317,56 @@
       </div>
     </section>
 
-    <!-- GALERÍA -->
+    <!-- GALERÍA / NUESTROS XOLOS -->
     <section id="nuestros-xolos">
       <div class="container">
         <h2>Nuestros Xolos</h2>
         <p>
-          Conoce a nuestros Xolos, criados en un ambiente familiar con el mayor cuidado. Cada ejemplar es evaluado meticulosamente para asegurar su pureza, salud y temperamento.
+          Conoce a nuestros Xolos, criados en un ambiente familiar con el mayor cuidado. Cada ejemplar es evaluado minuciosamente para asegurar su pureza, salud y temperamento.
         </p>
         <div class="gallery">
-          <!-- Reemplaza estas rutas por las imágenes reales -->
           <img src="xolo1.jpg" alt="Xoloitzcuintle en su hábitat natural">
           <img src="xolo2.jpg" alt="Xoloitzcuintle posando">
           <img src="xolo3.jpg" alt="Xoloitzcuintle en acción">
+        </div>
+      </div>
+    </section>
+
+    <!-- BLOG -->
+    <section id="blog">
+      <div class="container">
+        <h2>Blog</h2>
+        <p>
+          Lee nuestras últimas novedades y artículos sobre el mundo del Xoloitzcuintle.
+        </p>
+        <div class="blog-grid">
+          <!-- Artículo 1 -->
+          <article class="blog-post">
+            <img src="blog1.jpg" alt="Título del artículo 1">
+            <div class="blog-content">
+              <h3>Título del Artículo 1</h3>
+              <p>Resumen breve del contenido del artículo 1 para captar la atención del lector y motivarlo a leer más.</p>
+              <a href="#">Leer más</a>
+            </div>
+          </article>
+          <!-- Artículo 2 -->
+          <article class="blog-post">
+            <img src="blog2.jpg" alt="Título del artículo 2">
+            <div class="blog-content">
+              <h3>Título del Artículo 2</h3>
+              <p>Resumen breve del contenido del artículo 2 para captar la atención del lector y motivarlo a leer más.</p>
+              <a href="#">Leer más</a>
+            </div>
+          </article>
+          <!-- Artículo 3 -->
+          <article class="blog-post">
+            <img src="blog3.jpg" alt="Título del artículo 3">
+            <div class="blog-content">
+              <h3>Título del Artículo 3</h3>
+              <p>Resumen breve del contenido del artículo 3 para captar la atención del lector y motivarlo a leer más.</p>
+              <a href="#">Leer más</a>
+            </div>
+          </article>
         </div>
       </div>
     </section>
