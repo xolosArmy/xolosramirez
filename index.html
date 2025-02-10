@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xolos Ramirez - Criadero Xoloitzcuintle</title>
+  <style>
+    /* Estilos globales */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f9f9f9;
+    }
+    .contenedor {
+      max-width: 1200px;
+      margin: auto;
+      padding: 0 20px;
+    }
+    header {
+      background-color: #444;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+    }
+    header h1 {
+      margin-bottom: 10px;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    nav ul li {
+      margin: 0 10px;
+    }
+    nav ul li a {
+      color: #fff;
+      text-decoration: none;
+      padding: 5px 10px;
+    }
+    nav ul li a:hover {
+      background-color: #666;
+      border-radius: 5px;
+    }
+    /* Sección hero */
+    .hero {
+      background: url('ruta_imagen_hero.jpg') no-repeat center center/cover;
+      height: 300px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero h1 {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      color: #fff;
+      border-radius: 5px;
+    }
+    /* Secciones */
+    section {
+      padding: 40px 0;
+    }
+    section h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 2em;
+      color: #444;
+    }
+    section p {
+      text-align: justify;
+      margin-bottom: 20px;
+      font-size: 1.1em;
+    }
+    /* Galería de imágenes */
+    .galeria {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .galeria img {
+      width: 30%;
+      margin: 1%;
+      border-radius: 5px;
+    }
+    /* Footer */
+    footer {
+      background-color: #444;
+      color: #fff;
+      text-align: center;
+      padding: 10px 0;
+    }
+    /* Responsive */
+    @media(max-width: 768px) {
+      .galeria img {
+        width: 80%;
+        margin: 10px 0;
+      }
+      nav ul {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Encabezado -->
+  <header>
+    <div class="contenedor">
+      <h1>Xolos Ramirez</h1>
+      <p>Criadero Xoloitzcuintle</p>
+      <nav>
+        <ul>
+          <li><a href="#inicio">Inicio</a></li>
+          <li><a href="#sobre-nosotros">Sobre Nosotros</a></li>
+          <li><a href="#nuestros-xolos">Nuestros Xolos</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Sección Hero -->
+  <section class="hero" id="inicio">
+    <h1>Bienvenidos a Xolos Ramirez</h1>
+  </section>
+
+  <!-- Sección Sobre Nosotros -->
+  <section id="sobre-nosotros">
+    <div class="contenedor">
+      <h2>Sobre Nosotros</h2>
+      <p>
+        En <strong>Xolos Ramirez</strong> nos dedicamos con pasión a la crianza y el cuidado del Xoloitzcuintle, una raza única y ancestral de México. Contamos con años de experiencia y un profundo amor por estos maravillosos perros, garantizando la salud, el bienestar y la excelencia en cada uno de nuestros ejemplares.
+      </p>
+    </div>
+  </section>
+
+  <!-- Sección Nuestros Xolos -->
+  <section id="nuestros-xolos">
+    <div class="contenedor">
+      <h2>Nuestros Xolos</h2>
+      <p>
+        Conoce a nuestros Xolos, criados en un ambiente familiar y con el mejor cuidado. Cada uno de nuestros perros es evaluado por expertos para asegurar sus cualidades y la pureza de la raza.
+      </p>
+      <div class="galeria">
+        <!-- Reemplaza "xolo1.jpg", "xolo2.jpg", "xolo3.jpg" por la ruta de tus imágenes -->
+        <img src="xolo1.jpg" alt="Xoloitzcuintle 1">
+        <img src="xolo2.jpg" alt="Xoloitzcuintle 2">
+        <img src="xolo3.jpg" alt="Xoloitzcuintle 3">
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de Contacto -->
+  <section id="contacto">
+    <div class="contenedor">
+      <h2>Contacto</h2>
+      <p>
+        Para obtener más información o agendar una visita, no dudes en contactarnos a través de los siguientes medios:
+      </p>
+      <ul>
+        <li>Email: <a href="mailto:contacto@xolosramirez.com">contacto@xolosramirez.com</a></li>
+        <li>Teléfono: +52 123 456 7890</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Pie de página -->
+  <footer>
+    <p>&copy; 2025 Xolos Ramirez. Todos los derechos reservados.</p>
+  </footer>
+</body>
+</html>
