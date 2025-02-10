@@ -29,10 +29,15 @@
       background-color: var(--bg-color);
       color: var(--text-color);
       line-height: 1.6;
+      overflow-x: hidden;
     }
     a {
       text-decoration: none;
       color: inherit;
+      transition: color 0.3s;
+    }
+    a:hover, a:focus {
+      color: var(--secondary-red);
     }
     img {
       max-width: 100%;
@@ -49,7 +54,7 @@
       color: var(--white);
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 1000;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       transition: background-color 0.3s ease;
     }
@@ -84,6 +89,33 @@
     nav ul li a:hover {
       background-color: var(--secondary-red);
     }
+    /* Menú móvil: ícono hamburguesa */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .menu-toggle span {
+      width: 25px;
+      height: 3px;
+      background: var(--white);
+      margin-bottom: 5px;
+      border-radius: 3px;
+    }
+    /* Navegación responsive */
+    @media (max-width: 768px) {
+      nav ul {
+        flex-direction: column;
+        width: 100%;
+        display: none;
+      }
+      nav ul.active {
+        display: flex;
+      }
+      .menu-toggle {
+        display: flex;
+      }
+    }
     /* SECCIÓN HERO */
     .hero {
       position: relative;
@@ -114,6 +146,12 @@
       background: url('ruta_lightning.png') no-repeat center center/contain;
       opacity: 0.2;
       z-index: 2;
+      animation: pulse 3s infinite;
+    }
+    @keyframes pulse {
+      0% { opacity: 0.2; transform: scale(0.9); }
+      50% { opacity: 0.3; transform: scale(1); }
+      100% { opacity: 0.2; transform: scale(0.9); }
     }
     .hero h1 {
       position: relative;
@@ -288,8 +326,14 @@
         <h1>Xolos Ramirez</h1>
         <p>Criadero Xoloitzcuintle</p>
       </div>
+      <!-- Botón de menú móvil -->
+      <div class="menu-toggle" id="mobile-menu" aria-label="Menú de navegación" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
       <nav>
-        <ul>
+        <ul id="nav-menu">
           <li><a href="#inicio">Inicio</a></li>
           <li><a href="#sobre-nosotros">Sobre Nosotros</a></li>
           <li><a href="#nuestros-xolos">Nuestros Xolos</a></li>
@@ -342,7 +386,7 @@
         <div class="blog-grid">
           <!-- Artículo 1 -->
           <article class="blog-post">
-            <img src="blog1.jpg" alt="Título del artículo 1">
+            <img src="blog1.jpg" alt="Artículo 1: Título del artículo 1">
             <div class="blog-content">
               <h3>Título del Artículo 1</h3>
               <p>Resumen breve del contenido del artículo 1 para captar la atención del lector y motivarlo a leer más.</p>
@@ -351,7 +395,7 @@
           </article>
           <!-- Artículo 2 -->
           <article class="blog-post">
-            <img src="blog2.jpg" alt="Título del artículo 2">
+            <img src="blog2.jpg" alt="Artículo 2: Título del artículo 2">
             <div class="blog-content">
               <h3>Título del Artículo 2</h3>
               <p>Resumen breve del contenido del artículo 2 para captar la atención del lector y motivarlo a leer más.</p>
@@ -360,7 +404,7 @@
           </article>
           <!-- Artículo 3 -->
           <article class="blog-post">
-            <img src="blog3.jpg" alt="Título del artículo 3">
+            <img src="blog3.jpg" alt="Artículo 3: Título del artículo 3">
             <div class="blog-content">
               <h3>Título del Artículo 3</h3>
               <p>Resumen breve del contenido del artículo 3 para captar la atención del lector y motivarlo a leer más.</p>
@@ -405,5 +449,18 @@
       <p>&copy; 2025 Xolos Ramirez. Todos los derechos reservados.</p>
     </div>
   </footer>
+  
+  <script>
+    // Script para activar/desactivar el menú móvil
+    const menuToggle = document.getElementById('mobile-menu');
+    const navMenu = document.getElementById('nav-menu');
+    
+    menuToggle.addEventListener('click', () => {
+      navMenu.classList.toggle('active');
+      // Actualiza el atributo aria-expanded para accesibilidad
+      const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+      menuToggle.setAttribute('aria-expanded', !isExpanded);
+    });
+  </script>
 </body>
 </html>
