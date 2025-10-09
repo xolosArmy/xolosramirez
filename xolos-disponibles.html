@@ -21,6 +21,7 @@
     <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
   </head>
   <body>
+    <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
     <header>
       <div class="site-header">
         <a class="brand" href="index.html">
@@ -37,7 +38,7 @@
         <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false">
           Menú
         </button>
-        <nav aria-label="Menú principal">
+        <nav role="navigation" aria-label="Navegación principal">
           <ul data-menu-list data-open="false">
             <li><a href="index.html">Inicio</a></li>
             <li><a href="xolos-disponibles.html">Xolos disponibles</a></li>
@@ -50,15 +51,15 @@
       </div>
     </header>
 
-    <section class="hero">
-      <h1>Xolos disponibles</h1>
-      <p>
-        Conoce a los xolositzcuintles que buscan un hogar. Cada ficha incluye
-        edad, tamaño, personalidad y requisitos de adopción.
-      </p>
-    </section>
+    <main id="contenido-principal">
+      <section class="hero">
+        <h1>Xolos disponibles</h1>
+        <p>
+          Conoce a los xolositzcuintles que buscan un hogar. Cada ficha incluye
+          edad, tamaño, personalidad y requisitos de adopción.
+        </p>
+      </section>
 
-    <main>
       <section>
         <h2>Proceso de adopción responsable</h2>
         <p>
