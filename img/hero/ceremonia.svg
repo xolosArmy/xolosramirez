@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="ceremony" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#f97316" />
+      <stop offset="100%" stop-color="#ea580c" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#ceremony)" />
+  <path d="M0 360h800v140H0z" fill="#0f172a" opacity="0.55" />
+  <circle cx="140" cy="200" r="80" fill="#fcd34d" opacity="0.65" />
+  <text x="400" y="260" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="64" fill="#fff7ed" font-weight="700">
+    Ceremonia
+  </text>
+</svg>

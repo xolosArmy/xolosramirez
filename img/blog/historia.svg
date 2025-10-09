@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <rect width="600" height="400" fill="#0f172a" />
+  <path d="M80 320c60-80 120-140 220-140s160 60 220 140" fill="#1e293b" />
+  <path d="M120 300c50-70 100-120 180-120s130 50 180 120" fill="#334155" />
+  <text x="300" y="210" text-anchor="middle" font-size="40" fill="#f8fafc" font-family="'Segoe UI', sans-serif" font-weight="600">
+    Historia xoloitzcuintle
+  </text>
+</svg>

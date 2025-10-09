@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Contacto | Xolos Ramirez</title>
+    <meta
+      name="description"
+      content="Comunícate con el equipo de Xolos Ramirez para adopciones responsables, colaboraciones y eventos culturales."
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
+  </head>
+  <body>
+    <header>
+      <div class="site-header">
+        <a class="brand" href="index.html">
+          <img src="img/logo-xolos-ramirez.svg" alt="Logo de Xolos Ramirez" width="44" height="44" />
+          <span>Xolos Ramirez</span>
+        </a>
+        <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false">
+          Menú
+        </button>
+        <nav aria-label="Menú principal">
+          <ul data-menu-list data-open="false">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="xolos-disponibles.html">Xolos disponibles</a></li>
+            <li><a href="galeria.html">Galería</a></li>
+            <li><a href="testimonios.html">Testimonios</a></li>
+            <li><a href="blog/index.html">Blog</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <section class="hero">
+      <h1>Contacto</h1>
+      <p>
+        ¿Quieres adoptar, colaborar o conocer más de Xolos Ramirez? Escríbenos y te
+        responderemos en menos de 48 horas hábiles.
+      </p>
+    </section>
+
+    <main>
+      <section>
+        <h2>Formulario de contacto</h2>
+        <form aria-label="Formulario de contacto general">
+          <div>
+            <label for="nombre">Nombre completo</label>
+            <input id="nombre" name="nombre" type="text" required autocomplete="name" />
+          </div>
+          <div>
+            <label for="email">Correo electrónico</label>
+            <input id="email" name="email" type="email" required autocomplete="email" />
+          </div>
+          <div>
+            <label for="motivo">Motivo de contacto</label>
+            <select id="motivo" name="motivo" required>
+              <option value="" disabled selected>Selecciona una opción</option>
+              <option value="adopcion">Adopción responsable</option>
+              <option value="apadrinamiento">Apadrinamiento</option>
+              <option value="voluntariado">Voluntariado</option>
+              <option value="prensa">Prensa y colaboraciones</option>
+            </select>
+          </div>
+          <div>
+            <label for="mensaje">Mensaje</label>
+            <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
+          </div>
+          <button type="submit">Enviar mensaje</button>
+        </form>
+      </section>
+
+      <section>
+        <h2>Información adicional</h2>
+        <div class="grid grid-2">
+          <article class="card">
+            <h3>Visítanos</h3>
+            <p>Calle del Xolo 123, Colonia Historia Viva, Ciudad de México.</p>
+            <p><strong>Horario:</strong> Lunes a sábado de 10:00 a 18:00 h.</p>
+          </article>
+          <article class="card">
+            <h3>Contacto directo</h3>
+            <p><strong>Teléfono:</strong> +52 55 1234 5678</p>
+            <p><strong>Correo:</strong> hola@xolosramirez.mx</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="site-footer">
+        <nav class="footer-nav" aria-label="Enlaces secundarios">
+          <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="xolos-disponibles.html">Xolos disponibles</a></li>
+            <li><a href="galeria.html">Galería</a></li>
+            <li><a href="testimonios.html">Testimonios</a></li>
+            <li><a href="blog/index.html">Blog</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
+          </ul>
+        </nav>
+        <small>&copy; <span id="year"></span> Xolos Ramirez. Todos los derechos reservados.</small>
+      </div>
+    </footer>
+    <script src="js/main.js" defer></script>
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>

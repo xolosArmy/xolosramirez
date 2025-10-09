@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <rect width="600" height="400" fill="#f8fafc" />
+  <path d="M120 300c50-80 90-120 180-120s140 60 180 120" fill="#cbd5f5" />
+  <path d="M150 280c40-70 90-110 150-110s110 40 150 110" fill="#94a3b8" opacity="0.7" />
+  <text x="300" y="220" text-anchor="middle" font-size="42" fill="#1e293b" font-family="'Segoe UI', sans-serif" font-weight="600">
+    Pareja de xolos
+  </text>
+</svg>

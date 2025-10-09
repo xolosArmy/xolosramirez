@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <rect width="600" height="400" fill="#dcfce7" />
+  <circle cx="300" cy="200" r="120" fill="#4ade80" opacity="0.55" />
+  <text x="300" y="215" text-anchor="middle" font-size="48" fill="#166534" font-family="'Segoe UI', sans-serif" font-weight="700">
+    Xolo mini
+  </text>
+</svg>

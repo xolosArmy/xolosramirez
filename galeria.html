@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Galería | Xolos Ramirez</title>
+    <meta
+      name="description"
+      content="Recorrido visual por los xoloitzcuintles de la comunidad Xolos Ramirez: eventos culturales, ejemplares y familias."
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
+  </head>
+  <body>
+    <header>
+      <div class="site-header">
+        <a class="brand" href="index.html">
+          <img src="img/logo-xolos-ramirez.svg" alt="Logo de Xolos Ramirez" width="44" height="44" />
+          <span>Xolos Ramirez</span>
+        </a>
+        <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false">
+          Menú
+        </button>
+        <nav aria-label="Menú principal">
+          <ul data-menu-list data-open="false">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="xolos-disponibles.html">Xolos disponibles</a></li>
+            <li><a href="galeria.html">Galería</a></li>
+            <li><a href="testimonios.html">Testimonios</a></li>
+            <li><a href="blog/index.html">Blog</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <section class="hero">
+      <h1>Galería Xoloitzcuintle</h1>
+      <p>
+        Imágenes seleccionadas que muestran la diversidad, elegancia y
+        compañerismo del xoloitzcuintle dentro de nuestra comunidad.
+      </p>
+    </section>
+
+    <main>
+      <section>
+        <h2>Momentos destacados</h2>
+        <div class="grid grid-2">
+          <figure class="card">
+            <img src="img/hero/ceremonia.svg" alt="Ceremonia cultural con un xoloitzcuintle" />
+            <figcaption>Ceremonia tradicional en Tepoztlán.</figcaption>
+          </figure>
+          <figure class="card">
+            <img src="img/xolos/pareja.svg" alt="Pareja de xolos posando en un jardín" />
+            <figcaption>Xolos de talla mediana en sesión fotográfica.</figcaption>
+          </figure>
+          <figure class="card">
+            <img src="img/xolos/familia.svg" alt="Familia con su nuevo xolo" />
+            <figcaption>Entrega oficial de adopción responsable.</figcaption>
+          </figure>
+          <figure class="card">
+            <img src="img/blog/artesania.svg" alt="Artesanía inspirada en xoloitzcuintles" />
+            <figcaption>Artesanías de barro inspiradas en el xolo.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section>
+        <h2>Eventos y talleres</h2>
+        <p>
+          Compartimos momentos de nuestras actividades mensuales: talleres de
+          cuidado dermatológico, caminatas históricas y convivencias familiares.
+          Cada evento fomenta la educación y el respeto por la raza.
+        </p>
+        <a href="contacto.html">Solicitar calendario de eventos</a>
+      </section>
+    </main>
+
+    <footer>
+      <div class="site-footer">
+        <nav class="footer-nav" aria-label="Enlaces secundarios">
+          <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="xolos-disponibles.html">Xolos disponibles</a></li>
+            <li><a href="galeria.html">Galería</a></li>
+            <li><a href="testimonios.html">Testimonios</a></li>
+            <li><a href="blog/index.html">Blog</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
+          </ul>
+        </nav>
+        <small>&copy; <span id="year"></span> Xolos Ramirez. Todos los derechos reservados.</small>
+      </div>
+    </footer>
+    <script src="js/main.js" defer></script>
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>

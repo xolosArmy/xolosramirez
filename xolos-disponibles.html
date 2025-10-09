@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Xolos disponibles | Xolos Ramirez</title>
+    <meta
+      name="description"
+      content="Perfiles actualizados de xoloitzcuintles disponibles para adopción responsable con información de salud y temperamento."
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
+  </head>
+  <body>
+    <header>
+      <div class="site-header">
+        <a class="brand" href="index.html">
+          <img src="img/logo-xolos-ramirez.svg" alt="Logo de Xolos Ramirez" width="44" height="44" />
+          <span>Xolos Ramirez</span>
+        </a>
+        <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false">
+          Menú
+        </button>
+        <nav aria-label="Menú principal">
+          <ul data-menu-list data-open="false">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="xolos-disponibles.html">Xolos disponibles</a></li>
+            <li><a href="galeria.html">Galería</a></li>
+            <li><a href="testimonios.html">Testimonios</a></li>
+            <li><a href="blog/index.html">Blog</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <section class="hero">
+      <h1>Xolos disponibles</h1>
+      <p>
+        Conoce a los xolositzcuintles que buscan un hogar. Cada ficha incluye
+        edad, tamaño, personalidad y requisitos de adopción.
+      </p>
+    </section>
+
+    <main>
+      <section>
+        <h2>Proceso de adopción responsable</h2>
+        <p>
+          Realizamos una evaluación completa para asegurar que cada ejemplar
+          llegue a la familia ideal. Nuestras alianzas con veterinarios y
+          entrenadores garantizan que los xolos estén esterilizados, vacunados y
+          socializados.
+        </p>
+      </section>
+
+      <section>
+        <h2>Perfiles destacados</h2>
+        <div class="grid grid-2">
+          <article class="card">
+            <img src="img/xolos/tonatiuh.svg" alt="Xoloitzcuintle joven llamado Tonatiuh" />
+            <h3>Tonatiuh</h3>
+            <p>
+              Macho de 1 año, energético y sociable. Ideal para familias activas
+              con espacio al aire libre.
+            </p>
+            <p><strong>Salud:</strong> Vacunado, desparasitado, esterilizado.</p>
+            <a href="contacto.html">Solicitar entrevista</a>
+          </article>
+          <article class="card">
+            <img src="img/xolos/itzel.svg" alt="Xoloitzcuintle adulta llamada Itzel" />
+            <h3>Itzel</h3>
+            <p>
+              Hembra de 4 años, tranquila y cariñosa. Se adapta perfectamente a
+              departamentos y convive con niños pequeños.
+            </p>
+            <p><strong>Salud:</strong> Chequeo dental reciente, esterilizada.</p>
+            <a href="contacto.html">Concertar visita</a>
+          </article>
+          <article class="card">
+            <img src="img/xolos/xolo-mini.svg" alt="Xoloitzcuintle miniatura en adopción" />
+            <h3>Citlali</h3>
+            <p>
+              Xolo miniatura de 8 meses. Necesita rutinas de estimulación mental y
+              compañía constante.
+            </p>
+            <p><strong>Salud:</strong> Certificado genético y plan de vacunas completo.</p>
+            <a href="contacto.html">Más información</a>
+          </article>
+          <article class="card">
+            <img src="img/xolos/ancestro.svg" alt="Xoloitzcuintle senior descansando" />
+            <h3>Huehue</h3>
+            <p>
+              Senior de 9 años con carácter noble. Requiere controles veterinarios
+              trimestrales y paseos cortos.
+            </p>
+            <p><strong>Salud:</strong> Tratamiento articular supervisado.</p>
+            <a href="contacto.html">Apadrinar</a>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <h2>Calendario de seguimientos</h2>
+        <table class="table" aria-label="Calendario de seguimiento post adopción">
+          <thead>
+            <tr>
+              <th scope="col">Semana</th>
+              <th scope="col">Actividad</th>
+              <th scope="col">Objetivo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>Visita inicial</td>
+              <td>Verificar adaptación al nuevo hogar.</td>
+            </tr>
+            <tr>
+              <th scope="row">4</th>
+              <td>Sesión con etólogo</td>
+              <td>Refuerzo de rutinas y socialización.</td>
+            </tr>
+            <tr>
+              <th scope="row">12</th>
+              <td>Examen veterinario</td>
+              <td>Monitoreo de salud integral.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+
+    <footer>
+      <div class="site-footer">
+        <nav class="footer-nav" aria-label="Enlaces secundarios">
+          <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="xolos-disponibles.html">Xolos disponibles</a></li>
+            <li><a href="galeria.html">Galería</a></li>
+            <li><a href="testimonios.html">Testimonios</a></li>
+            <li><a href="blog/index.html">Blog</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
+          </ul>
+        </nav>
+        <small>&copy; <span id="year"></span> Xolos Ramirez. Todos los derechos reservados.</small>
+      </div>
+    </footer>
+    <script src="js/main.js" defer></script>
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>

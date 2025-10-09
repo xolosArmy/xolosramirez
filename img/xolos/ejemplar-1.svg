@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f1f5f9" />
+      <stop offset="100%" stop-color="#e2e8f0" />
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)" />
+  <path d="M160 260c60-40 80-120 160-120s120 80 120 120" fill="#cbd5f5" opacity="0.6" />
+  <path d="M180 260c40-44 56-120 120-120s100 76 100 120" fill="#94a3b8" opacity="0.6" />
+  <text x="300" y="210" text-anchor="middle" font-size="42" fill="#1e293b" font-family="'Segoe UI', sans-serif" font-weight="600">
+    Xolo joven
+  </text>
+</svg>
