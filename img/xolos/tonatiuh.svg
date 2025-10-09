@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <rect width="600" height="400" fill="#ffedd5" />
+  <circle cx="300" cy="200" r="140" fill="#fb923c" opacity="0.6" />
+  <text x="300" y="215" text-anchor="middle" font-size="48" fill="#7c2d12" font-family="'Segoe UI', sans-serif" font-weight="700">
+    Tonatiuh
+  </text>
+</svg>

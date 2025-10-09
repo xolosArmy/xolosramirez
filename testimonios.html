@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Testimonios | Xolos Ramirez</title>
+    <meta
+      name="description"
+      content="Historias reales de familias y especialistas que forman parte de la comunidad Xolos Ramirez."
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
+  </head>
+  <body>
+    <header>
+      <div class="site-header">
+        <a class="brand" href="index.html">
+          <img src="img/logo-xolos-ramirez.svg" alt="Logo de Xolos Ramirez" width="44" height="44" />
+          <span>Xolos Ramirez</span>
+        </a>
+        <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false">
+          Menú
+        </button>
+        <nav aria-label="Menú principal">
+          <ul data-menu-list data-open="false">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="xolos-disponibles.html">Xolos disponibles</a></li>
+            <li><a href="galeria.html">Galería</a></li>
+            <li><a href="testimonios.html">Testimonios</a></li>
+            <li><a href="blog/index.html">Blog</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <section class="hero">
+      <h1>Voces de la comunidad</h1>
+      <p>
+        Experiencias de familias adoptantes, criadores responsables y expertos en
+        bienestar animal que impulsan la misión de Xolos Ramirez.
+      </p>
+    </section>
+
+    <main>
+      <section class="grid">
+        <article class="card">
+          <h2>Familia Hernández — Ciudad de México</h2>
+          <blockquote>
+            “Adoptar a Malinalli ha sido transformar nuestro hogar. Recibimos
+            asesoría constante y ahora participamos en los encuentros comunitarios
+            mensuales.”
+          </blockquote>
+        </article>
+        <article class="card">
+          <h2>Dra. Camila Ríos — Médica veterinaria</h2>
+          <blockquote>
+            “Xolos Ramirez fomenta protocolos de salud integrales. Cada adopción
+            incluye un plan preventivo dermatológico y charlas sobre nutrición.”
+          </blockquote>
+        </article>
+        <article class="card">
+          <h2>César y Nayeli — Querétaro</h2>
+          <blockquote>
+            “Nos unimos para apadrinar a Huehue. A través del programa de
+            voluntariado aprendimos rutinas de enriquecimiento para xolos senior.”
+          </blockquote>
+        </article>
+        <article class="card">
+          <h2>Laura Martínez — Artesana</h2>
+          <blockquote>
+            “El xoloitzcuintle es un símbolo ancestral que inspira mi trabajo. En
+            los talleres de Xolos Ramirez compartimos técnicas tradicionales de
+            barro negro.”
+          </blockquote>
+        </article>
+      </section>
+
+      <section>
+        <h2>Comparte tu historia</h2>
+        <p>
+          Queremos escuchar cómo el xoloitzcuintle ha marcado tu vida. Envía tu
+          experiencia y ayúdanos a inspirar a más familias a cuidar de esta raza
+          emblemática.
+        </p>
+        <a href="contacto.html">Enviar testimonio</a>
+      </section>
+    </main>
+
+    <footer>
+      <div class="site-footer">
+        <nav class="footer-nav" aria-label="Enlaces secundarios">
+          <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="xolos-disponibles.html">Xolos disponibles</a></li>
+            <li><a href="galeria.html">Galería</a></li>
+            <li><a href="testimonios.html">Testimonios</a></li>
+            <li><a href="blog/index.html">Blog</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
+          </ul>
+        </nav>
+        <small>&copy; <span id="year"></span> Xolos Ramirez. Todos los derechos reservados.</small>
+      </div>
+    </footer>
+    <script src="js/main.js" defer></script>
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>

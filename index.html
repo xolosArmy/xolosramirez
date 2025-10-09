@@ -1,133 +1,121 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Criadero especializado en Xoloitzcuintles en Mexico.">
-  <meta property="og:title" content="Xolos Ramirez"/>
-  <meta property="og:description" content="El mejor criadero de Xoloitzcuintles"/>
-  <meta property="og:type" content="website"/>
-  <title>Xolos Ramírez - El Mejor Criadero de Xoloitzcuintles</title>
-  
-  <!-- Google Fonts: Poppins -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  
-  <!-- Enlace a CSS -->
-  <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
-
-  <!-- HEADER -->
-  <header>
-    <div class="container header-content">
-      <div class="logo">
-        <h1>Xolos Ramírez</h1>
-        <p>El mejor criadero de Xoloitzcuintles</p>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Xolos Ramirez | Comunidad dedicada al xoloitzcuintle</title>
+    <meta
+      name="description"
+      content="Conoce la comunidad Xolos Ramirez: historia, ejemplares disponibles, galería fotográfica, testimonios y recursos sobre el xoloitzcuintle."
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
+  </head>
+  <body>
+    <header>
+      <div class="site-header">
+        <a class="brand" href="index.html">
+          <img src="img/logo-xolos-ramirez.svg" alt="Logo de Xolos Ramirez" width="44" height="44" />
+          <span>Xolos Ramirez</span>
+        </a>
+        <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false">
+          Menú
+        </button>
+        <nav aria-label="Menú principal">
+          <ul data-menu-list data-open="false">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="xolos-disponibles.html">Xolos disponibles</a></li>
+            <li><a href="galeria.html">Galería</a></li>
+            <li><a href="testimonios.html">Testimonios</a></li>
+            <li><a href="blog/index.html">Blog</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
+          </ul>
+        </nav>
       </div>
-      <div class="menu-toggle" id="mobile-menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-      <nav>
-        <ul id="nav-menu">
-          <li><a href="#inicio">Inicio</a></li>
-          <li><a href="#sobre-nosotros">Nosotros</a></li>
-          <li><a href="#nuestros-xolos">Nuestros Xolos</a></li>
-          <li><a href="blog/">Blog</a></li>
-          <li><a href="#contacto" class="btn">Contacto</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+    </header>
 
-  <!-- SECCIÓN HERO -->
-  <section class="hero" id="inicio">
-    <div class="hero-content">
-      <h1>Bienvenidos a Xolos Ramírez</h1>
-      <p>El legado del Xoloitzcuintle en México</p>
-      <a href="#contacto" class="btn">Contáctanos</a>
-    </div>
-  </section>
-
-  <!-- SOBRE NOSOTROS -->
-  <section id="sobre-nosotros">
-    <div class="container">
-      <h2>Sobre Nosotros</h2>
+    <section class="hero">
+      <h1>Xolos Ramirez</h1>
       <p>
-        En <strong>Xolos Ramírez</strong>, nos dedicamos a la crianza y cuidado del Xoloitzcuintle con pasión y responsabilidad. 
-        Nuestro compromiso es garantizar la salud, bienestar y pureza de cada uno de nuestros ejemplares.
+        Celebramos al xoloitzcuintle, el perro nacional de México. Descubre su
+        legado histórico, conoce ejemplares disponibles para adopción
+        responsable y únete a nuestra comunidad.
       </p>
-    </div>
-  </section>
+    </section>
 
-  <!-- GALERÍA -->
-  <section id="nuestros-xolos">
-    <div class="container">
-      <h2>Nuestros Xolos</h2>
-      <div class="gallery">
-        <img src="xolo1.jpg" alt="Xoloitzcuintle en su hábitat">
-        <img src="xolo2.jpg" alt="Xoloitzcuintle posando">
-        <img src="xolo3.jpg" alt="Xoloitzcuintle en acción">
-      </div>
-    </div>
-  </section>
+    <main>
+      <section>
+        <h2>¿Quiénes somos?</h2>
+        <p>
+          Somos un colectivo apasionado por la preservación y difusión del
+          xoloitzcuintle. Trabajamos en colaboración con criadores certificados,
+          historiadores y amantes de la cultura mexicana para brindar información
+          confiable y promover la tenencia responsable.
+        </p>
+      </section>
 
-  <!-- BLOG -->
-  <section id="blog">
-    <div class="container">
-      <h2>Blog</h2>
-      <div class="blog-grid">
-        <article class="blog-post">
-          <img src="blog1.jpg" alt="Artículo">
-          <div class="blog-content">
-            <h3>Historia del Xoloitzcuintle</h3>
-            <p>Descubre la historia de esta raza mexicana milenaria...</p>
-            <a href="blog/entrada-1.html">Leer más</a>
-          </div>
+      <section class="grid grid-2">
+        <article class="card">
+          <img src="img/xolos/ejemplar-1.svg" alt="Xoloitzcuintle joven color oscuro" />
+          <h3>Conoce a los xolos disponibles</h3>
+          <p>
+            Perfiles detallados con información de salud, temperamento y
+            requisitos de adopción.
+          </p>
+          <a href="xolos-disponibles.html">Explorar ejemplares</a>
         </article>
+        <article class="card">
+          <img src="img/blog/historia.svg" alt="Representación histórica de un xoloitzcuintle" />
+          <h3>Aprende sobre su historia</h3>
+          <p>
+            Recopilamos relatos, investigaciones y datos arqueológicos que
+            muestran el papel del xoloitzcuintle en la cosmovisión mesoamericana.
+          </p>
+          <a href="blog/historia-xoloitzcuintle.html">Leer más</a>
+        </article>
+      </section>
+
+      <section class="grid grid-2">
+        <article class="card">
+          <h3>Actividades comunitarias</h3>
+          <p>
+            Organizamos recorridos culturales, charlas con especialistas y
+            encuentros familiares donde los xolos son protagonistas.
+          </p>
+          <p class="callout">
+            Suscríbete al boletín para recibir invitaciones y contenido exclusivo
+            de la comunidad.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Últimas publicaciones del blog</h3>
+          <ul>
+            <li><a href="blog/cultura-mexicana.html">El xoloitzcuintle en la cultura mexicana</a></li>
+            <li><a href="blog/cuidados-basicos.html">Cuidados básicos para tu xolo</a></li>
+            <li><a href="blog/historia-xoloitzcuintle.html">Historia y simbolismo ancestral</a></li>
+          </ul>
+        </article>
+      </section>
+    </main>
+
+    <footer>
+      <div class="site-footer">
+        <nav class="footer-nav" aria-label="Enlaces secundarios">
+          <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="xolos-disponibles.html">Xolos disponibles</a></li>
+            <li><a href="galeria.html">Galería</a></li>
+            <li><a href="testimonios.html">Testimonios</a></li>
+            <li><a href="blog/index.html">Blog</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
+          </ul>
+        </nav>
+        <small>&copy; <span id="year"></span> Xolos Ramirez. Todos los derechos reservados.</small>
       </div>
-      <div class="blog-more">
-        <a href="blog/" class="btn">Ver más artículos</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACTO -->
-  <section id="contacto">
-    <div class="container">
-      <h2>Contacto</h2>
-      <div class="contact-form">
-        <form action="#" method="POST">
-          <label for="nombre">Nombre:</label>
-          <input type="text" id="nombre" name="nombre" required>
-
-          <label for="email">Correo Electrónico:</label>
-          <input type="email" id="email" name="email" required>
-
-          <label for="mensaje">Mensaje:</label>
-          <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
-
-          <button type="submit" class="btn">Enviar</button>
-        </form>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="container">
-      <p>&copy; 2025 Xolos Ramírez. Todos los derechos reservados.</p>
-    </div>
-  </footer>
-
-  <script>
-    // Menú móvil
-    document.getElementById('mobile-menu').addEventListener('click', function() {
-      document.getElementById('nav-menu').classList.toggle('active');
-    });
-  </script>
-</body>
+    </footer>
+    <script src="js/main.js" defer></script>
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+  </body>
 </html>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <rect width="600" height="400" fill="#fef3c7" />
+  <path d="M140 320l60-180 80 120 80-160 100 220" fill="none" stroke="#b45309" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
+  <text x="300" y="220" text-anchor="middle" font-size="40" fill="#92400e" font-family="'Segoe UI', sans-serif" font-weight="600">
+    Artesanía xolo
+  </text>
+</svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <rect width="600" height="400" fill="#fdf2f8" />
+  <ellipse cx="300" cy="220" rx="180" ry="120" fill="#f9a8d4" opacity="0.5" />
+  <text x="300" y="220" text-anchor="middle" font-size="48" fill="#831843" font-family="'Segoe UI', sans-serif" font-weight="700">
+    Itzel
+  </text>
+</svg>

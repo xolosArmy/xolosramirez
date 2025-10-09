@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <rect width="600" height="400" fill="#f1f5f9" />
+  <path d="M100 300c40-90 110-150 200-150s160 60 200 150" fill="#bae6fd" />
+  <text x="300" y="220" text-anchor="middle" font-size="44" fill="#0f172a" font-family="'Segoe UI', sans-serif" font-weight="600">
+    Familia xolo
+  </text>
+</svg>

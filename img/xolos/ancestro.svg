@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <rect width="600" height="400" fill="#ede9fe" />
+  <path d="M120 300c60-100 120-150 200-150s140 60 200 150" fill="#a855f7" opacity="0.45" />
+  <text x="300" y="220" text-anchor="middle" font-size="46" fill="#4c1d95" font-family="'Segoe UI', sans-serif" font-weight="700">
+    Xolo ancestro
+  </text>
+</svg>
