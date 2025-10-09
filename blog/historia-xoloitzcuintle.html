@@ -2,12 +2,21 @@
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Historia del xoloitzcuintle | Xolos Ramirez</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Historia y simbolismo del xoloitzcuintle | Xolos Ramirez</title>
     <meta
       name="description"
-      content="Explora la historia ancestral del xoloitzcuintle y su papel en la cosmovisión mesoamericana y contemporánea."
+      content="Recorre la historia del xoloitzcuintle desde sus orígenes prehispánicos hasta su resurgimiento moderno con testimonios culturales."
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      as="style"
+      crossorigin
+    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" />
     <link rel="stylesheet" href="../css/styles.css" />
     <link rel="icon" type="image/svg+xml" href="../img/favicon.svg" />
     <script type="application/ld+json">
@@ -42,7 +51,14 @@
     <header>
       <div class="site-header">
         <a class="brand" href="../index.html">
-          <img src="../img/logo-xolos-ramirez.svg" alt="Logo de Xolos Ramirez" width="44" height="44" loading="lazy" />
+          <img
+            src="../img/logo-xolos-ramirez.svg"
+            alt="Logo de Xolos Ramirez"
+            width="44"
+            height="44"
+            loading="eager"
+            decoding="async"
+          />
           <span>Xolos Ramirez</span>
         </a>
         <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false">
@@ -76,7 +92,12 @@
           <p><strong>Lectura:</strong> 6 minutos</p>
         </header>
         <figure>
-          <img src="../img/blog/historia.svg" alt="Escultura prehispánica de un xoloitzcuintle" loading="lazy" />
+          <img
+            src="../img/blog/historia.svg"
+            alt="Escultura prehispánica de un xoloitzcuintle"
+            loading="lazy"
+            decoding="async"
+          />
           <figcaption>Figura de barro encontrada en Colima, siglo XIII.</figcaption>
         </figure>
         <section>
@@ -132,8 +153,5 @@
       </div>
     </footer>
     <script src="../js/main.js" defer></script>
-    <script>
-      document.getElementById('year').textContent = new Date().getFullYear();
-    </script>
   </body>
 </html>

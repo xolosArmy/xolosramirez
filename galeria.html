@@ -2,12 +2,21 @@
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Galería | Xolos Ramirez</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Galería fotográfica de xoloitzcuintles | Xolos Ramirez</title>
     <meta
       name="description"
-      content="Recorrido visual por los xoloitzcuintles de la comunidad Xolos Ramirez: eventos culturales, ejemplares y familias."
+      content="Explora la galería de Xolos Ramirez con fotografías en alta calidad de eventos, adopciones y artesanías inspiradas en el xoloitzcuintle."
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      as="style"
+      crossorigin
+    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" />
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
   </head>
@@ -15,7 +24,14 @@
     <header>
       <div class="site-header">
         <a class="brand" href="index.html">
-          <img src="img/logo-xolos-ramirez.svg" alt="Logo de Xolos Ramirez" width="44" height="44" loading="lazy" />
+          <img
+            src="img/logo-xolos-ramirez.svg"
+            alt="Logo de Xolos Ramirez"
+            width="44"
+            height="44"
+            loading="eager"
+            decoding="async"
+          />
           <span>Xolos Ramirez</span>
         </a>
         <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false">
@@ -47,19 +63,39 @@
         <h2>Momentos destacados</h2>
         <div class="grid grid-2">
           <figure class="card">
-            <img src="img/hero/ceremonia.svg" alt="Ceremonia cultural con un xoloitzcuintle" loading="lazy" />
+            <img
+              src="img/hero/ceremonia.svg"
+              alt="Ceremonia cultural con un xoloitzcuintle"
+              loading="lazy"
+              decoding="async"
+            />
             <figcaption>Ceremonia tradicional en Tepoztlán.</figcaption>
           </figure>
           <figure class="card">
-            <img src="img/xolos/pareja.svg" alt="Pareja de xolos posando en un jardín" loading="lazy" />
+            <img
+              src="img/xolos/pareja.svg"
+              alt="Pareja de xolos posando en un jardín"
+              loading="lazy"
+              decoding="async"
+            />
             <figcaption>Xolos de talla mediana en sesión fotográfica.</figcaption>
           </figure>
           <figure class="card">
-            <img src="img/xolos/familia.svg" alt="Familia con su nuevo xolo" loading="lazy" />
+            <img
+              src="img/xolos/familia.svg"
+              alt="Familia con su nuevo xolo"
+              loading="lazy"
+              decoding="async"
+            />
             <figcaption>Entrega oficial de adopción responsable.</figcaption>
           </figure>
           <figure class="card">
-            <img src="img/blog/artesania.svg" alt="Artesanía inspirada en xoloitzcuintles" loading="lazy" />
+            <img
+              src="img/blog/artesania.svg"
+              alt="Artesanía inspirada en xoloitzcuintles"
+              loading="lazy"
+              decoding="async"
+            />
             <figcaption>Artesanías de barro inspiradas en el xolo.</figcaption>
           </figure>
         </div>
@@ -92,8 +128,5 @@
       </div>
     </footer>
     <script src="js/main.js" defer></script>
-    <script>
-      document.getElementById('year').textContent = new Date().getFullYear();
-    </script>
   </body>
 </html>
