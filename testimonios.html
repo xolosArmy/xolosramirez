@@ -21,6 +21,7 @@
     <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
   </head>
   <body>
+    <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
     <header>
       <div class="site-header">
         <a class="brand" href="index.html">
@@ -37,7 +38,7 @@
         <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false">
           Menú
         </button>
-        <nav aria-label="Menú principal">
+        <nav role="navigation" aria-label="Navegación principal">
           <ul data-menu-list data-open="false">
             <li><a href="index.html">Inicio</a></li>
             <li><a href="xolos-disponibles.html">Xolos disponibles</a></li>
@@ -50,15 +51,15 @@
       </div>
     </header>
 
-    <section class="hero">
-      <h1>Voces de la comunidad</h1>
-      <p>
-        Experiencias de familias adoptantes, criadores responsables y expertos en
-        bienestar animal que impulsan la misión de Xolos Ramirez.
-      </p>
-    </section>
+    <main id="contenido-principal">
+      <section class="hero">
+        <h1>Voces de la comunidad</h1>
+        <p>
+          Experiencias de familias adoptantes, criadores responsables y expertos
+          en bienestar animal que impulsan la misión de Xolos Ramirez.
+        </p>
+      </section>
 
-    <main>
       <section class="grid">
         <article class="card">
           <h2>Familia Hernández — Ciudad de México</h2>
