@@ -35,11 +35,17 @@
           />
           <span>Xolos Ramirez</span>
         </a>
-        <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false">
+        <button
+          class="menu-toggle"
+          type="button"
+          data-menu-toggle
+          aria-expanded="false"
+          aria-controls="menu-principal"
+        >
           Menú
         </button>
         <nav role="navigation" aria-label="Navegación principal">
-          <ul data-menu-list data-open="false">
+          <ul id="menu-principal" data-menu-list data-open="false">
             <li><a href="index.html">Inicio</a></li>
             <li><a href="xolos-disponibles.html">Xolos disponibles</a></li>
             <li><a href="galeria.html">Galería</a></li>
