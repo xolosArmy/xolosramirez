@@ -2,12 +2,21 @@
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Contacto | Xolos Ramirez</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contacto y asesoría sobre xoloitzcuintles | Xolos Ramirez</title>
     <meta
       name="description"
-      content="Comunícate con el equipo de Xolos Ramirez para adopciones responsables, colaboraciones y eventos culturales."
+      content="Solicita información de adopciones, colaboraciones y eventos del xoloitzcuintle con el equipo especializado de Xolos Ramirez."
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      as="style"
+      crossorigin
+    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" />
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
   </head>
@@ -15,7 +24,14 @@
     <header>
       <div class="site-header">
         <a class="brand" href="index.html">
-          <img src="img/logo-xolos-ramirez.svg" alt="Logo de Xolos Ramirez" width="44" height="44" loading="lazy" />
+          <img
+            src="img/logo-xolos-ramirez.svg"
+            alt="Logo de Xolos Ramirez"
+            width="44"
+            height="44"
+            loading="eager"
+            decoding="async"
+          />
           <span>Xolos Ramirez</span>
         </a>
         <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false">
@@ -105,8 +121,5 @@
       </div>
     </footer>
     <script src="js/main.js" defer></script>
-    <script>
-      document.getElementById('year').textContent = new Date().getFullYear();
-    </script>
   </body>
 </html>
