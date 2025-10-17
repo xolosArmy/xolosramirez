@@ -75,3 +75,9 @@
   background-attachment:fixed;
 }
 
+
+.parallax{background-attachment:fixed;background-position:center;background-size:cover;background-repeat:no-repeat;position:relative;isolation:isolate;color:var(--text-color);}
+.parallax::before{content:"";position:absolute;inset:0;background:rgba(0,0,0,0.55);z-index:0;pointer-events:none;}
+.parallax>*{position:relative;z-index:1;}
+.como-reservar.parallax{background-image:linear-gradient(180deg,rgba(19,19,19,0.6),rgba(19,19,19,0.9)),url('../img/xolos/1.webp');}
+.politica-reserva.parallax{background-image:linear-gradient(180deg,rgba(19,19,19,0.6),rgba(19,19,19,0.9)),url('../img/xolos/2.webp');}
