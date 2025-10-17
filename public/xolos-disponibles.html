@@ -1,201 +1,225 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Xolos disponibles para adopción responsable | Xolos Ramirez</title>
-    <meta
-      name="description"
-      content="Explora fichas completas de xoloitzcuintles listos para adopción responsable, con detalles de salud, personalidad y requisitos."
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="preload"
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
-      as="style"
-      crossorigin
-    />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" />
-    <link rel="stylesheet" href="css/styles.css" />
-    <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
-  </head>
-  <body>
-    <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
-    <header>
-      <div class="site-header">
-        <a class="brand" href="index.html">
-          <img
-            src="img/logo-xolos-ramirez.svg"
-            alt="Logo de Xolos Ramirez"
-            width="44"
-            height="44"
-            loading="eager"
-            decoding="async"
-          />
-          <span>Xolos Ramirez</span>
-        </a>
-        <button
-          class="menu-toggle"
-          type="button"
-          data-menu-toggle
-          aria-expanded="false"
-          aria-controls="menu-principal"
-        >
-          Menú
-        </button>
-        <nav role="navigation" aria-label="Navegación principal">
-          <ul id="menu-principal" data-menu-list data-open="false">
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="xolos-disponibles.html">Xolos disponibles</a></li>
-            <li><a href="galeria.html">Galería</a></li>
-            <li><a href="testimonios.html">Testimonios</a></li>
-            <li><a href="blog/index.html">Blog</a></li>
-            <li><a href="contacto.html">Contacto</a></li>
-          </ul>
-        </nav>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Xoloitzcuintles disponibles | Xolos Ramírez</title>
+  <meta name="description" content="Listado de cachorros Xoloitzcuintle disponibles con detalles de talla, color, sexo, edad y estado. Reserva el tuyo con Xolos Ramírez." />
+  <!-- Fuente y estilos globales -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css" />
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
+</head>
+<body>
+
+  <!-- Header / navegación principal -->
+  <header>
+    <div class="site-header">
+      <a class="brand" href="index.html">
+        <img src="img/logo-xolos-ramirez.svg" alt="Logo Xolos Ramírez" width="44" height="44" />
+        <span>Xolos Ramírez</span>
+      </a>
+      <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="menu-principal">Menú</button>
+      <nav aria-label="Navegación principal">
+        <ul id="menu-principal" data-menu-list>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="xolos-disponibles.html" class="active">Xolos disponibles</a></li>
+          <li><a href="galeria.html">Galería</a></li>
+          <li><a href="testimonios.html">Testimonios</a></li>
+          <li><a href="blog/index.html">Blog</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
+  <main id="contenido-principal">
+    <!-- Hero Section -->
+    <section class="hero">
+      <h1>Xoloitzcuintles disponibles</h1>
+      <p>Conoce a nuestros cachorros Xoloitzcuintle disponibles. Aquí encontrarás su talla, color, sexo, edad y estado. ¡El guardián de tu historia te espera!</p>
+    </section>
+
+    <!-- Filtros -->
+    <section class="filtros">
+      <h2>Filtrar por</h2>
+      <div class="filtro-categoria">
+        <span><strong>Talla:</strong></span>
+        <label><input type="checkbox" data-filter="talla" value="miniatura" checked> Miniatura</label>
+        <label><input type="checkbox" data-filter="talla" value="intermedia" checked> Intermedia</label>
+        <label><input type="checkbox" data-filter="talla" value="estándar" checked> Estándar</label>
       </div>
-    </header>
+      <div class="filtro-categoria">
+        <span><strong>Sexo:</strong></span>
+        <label><input type="checkbox" data-filter="sexo" value="macho" checked> Macho</label>
+        <label><input type="checkbox" data-filter="sexo" value="hembra" checked> Hembra</label>
+      </div>
+      <div class="filtro-categoria">
+        <span><strong>Estado:</strong></span>
+        <label><input type="checkbox" data-filter="estado" value="disponible" checked> Disponible</label>
+        <label><input type="checkbox" data-filter="estado" value="reservado" checked> Reservado</label>
+        <label><input type="checkbox" data-filter="estado" value="lista-espera" checked> Lista de espera</label>
+      </div>
+    </section>
 
-    <main id="contenido-principal">
-      <section class="hero">
-        <h1>Xolos disponibles</h1>
-        <p>
-          Conoce a los xolositzcuintles que buscan un hogar. Cada ficha incluye
-          edad, tamaño, personalidad y requisitos de adopción.
-        </p>
-      </section>
+    <!-- Listado de Cachorros -->
+    <section class="listado-cachorros">
+      <h2>Cachorros disponibles</h2>
+      <div class="grid grid-2">  <!-- grid flexible para las tarjetas -->
+        <!-- Tarjeta 1: Ejemplo Disponible -->
+        <article class="card" data-talla="intermedia" data-sexo="macho" data-estado="disponible">
+          <picture>
+            <source type="image/webp" srcset="img/cachorros/tliltic.webp">
+            <source type="image/jpeg" srcset="img/cachorros/tliltic.jpg">
+            <img src="img/cachorros/tliltic.jpg" loading="lazy" decoding="async" 
+                 alt="Cachorro Xoloitzcuintle macho intermedio color negro llamado Tliltic" width="300" height="200">
+          </picture>
+          <h3>Tliltic</h3>
+          <p><strong>Talla:</strong> Intermedia</p>
+          <p><strong>Color:</strong> Negro</p>
+          <p><strong>Sexo:</strong> Macho</p>
+          <p><strong>Nacimiento:</strong> 15/08/2023</p>
+          <p><strong>Estado:</strong> <span class="estado disponible">Disponible</span></p>
+          <a class="btn-whatsapp" href="https://wa.me/52XXXXXXXXXX?text=Hola%20Xolos%20Ramirez,%20me%20interesa%20Tliltic" target="_blank" rel="noopener">
+            📲 Reservar vía WhatsApp
+          </a>
+        </article>
 
-      <section>
-        <h2>Proceso de adopción responsable</h2>
-        <p>
-          Realizamos una evaluación completa para asegurar que cada ejemplar
-          llegue a la familia ideal. Nuestras alianzas con veterinarios y
-          entrenadores garantizan que los xolos estén esterilizados, vacunados y
-          socializados.
-        </p>
-      </section>
+        <!-- Tarjeta 2: Ejemplo Reservado -->
+        <article class="card" data-talla="estándar" data-sexo="hembra" data-estado="reservado">
+          <picture>
+            <source type="image/webp" srcset="img/cachorros/nikte.webp">
+            <source type="image/jpeg" srcset="img/cachorros/nikte.jpg">
+            <img src="img/cachorros/nikte.jpg" loading="lazy" decoding="async" 
+                 alt="Cachorro Xoloitzcuintle hembra estándar color rojizo llamada Nikté" width="300" height="200">
+          </picture>
+          <h3>Nikté</h3>
+          <p><strong>Talla:</strong> Estándar</p>
+          <p><strong>Color:</strong> Rojizo</p>
+          <p><strong>Sexo:</strong> Hembra</p>
+          <p><strong>Nacimiento:</strong> 01/06/2023</p>
+          <p><strong>Estado:</strong> <span class="estado reservado">Reservado</span></p>
+          <a class="btn-whatsapp" href="https://wa.me/52XXXXXXXXXX?text=Hola%20Xolos%20Ramirez,%20quiero%20informes%20de%20Nikt%C3%A9" target="_blank" rel="noopener">
+            📲 Consultar vía WhatsApp
+          </a>
+        </article>
 
-      <section>
-        <h2>Perfiles destacados</h2>
-        <div class="grid grid-2">
-          <article class="card">
-            <img
-              src="img/xolos/tonatiuh.svg"
-              alt="Xoloitzcuintle joven llamado Tonatiuh"
-              loading="lazy"
-              decoding="async"
-            />
-            <h3>Tonatiuh</h3>
-            <p>
-              Macho de 1 año, energético y sociable. Ideal para familias activas
-              con espacio al aire libre.
-            </p>
-            <p><strong>Salud:</strong> Vacunado, desparasitado, esterilizado.</p>
-            <a href="contacto.html">Solicitar entrevista</a>
-          </article>
-          <article class="card">
-            <img
-              src="img/xolos/itzel.svg"
-              alt="Xoloitzcuintle adulta llamada Itzel"
-              loading="lazy"
-              decoding="async"
-            />
-            <h3>Itzel</h3>
-            <p>
-              Hembra de 4 años, tranquila y cariñosa. Se adapta perfectamente a
-              departamentos y convive con niños pequeños.
-            </p>
-            <p><strong>Salud:</strong> Chequeo dental reciente, esterilizada.</p>
-            <a href="contacto.html">Concertar visita</a>
-          </article>
-          <article class="card">
-            <img
-              src="img/xolos/xolo-mini.svg"
-              alt="Xoloitzcuintle miniatura en adopción"
-              loading="lazy"
-              decoding="async"
-            />
-            <h3>Citlali</h3>
-            <p>
-              Xolo miniatura de 8 meses. Necesita rutinas de estimulación mental y
-              compañía constante.
-            </p>
-            <p><strong>Salud:</strong> Certificado genético y plan de vacunas completo.</p>
-            <a href="contacto.html">Más información</a>
-          </article>
-          <article class="card">
-            <img
-              src="img/xolos/ancestro.svg"
-              alt="Xoloitzcuintle senior descansando"
-              loading="lazy"
-              decoding="async"
-            />
-            <h3>Huehue</h3>
-            <p>
-              Senior de 9 años con carácter noble. Requiere controles veterinarios
-              trimestrales y paseos cortos.
-            </p>
-            <p><strong>Salud:</strong> Tratamiento articular supervisado.</p>
-            <a href="contacto.html">Apadrinar</a>
-          </article>
+        <!-- Tarjeta 3: Ejemplo Lista de espera -->
+        <article class="card" data-talla="miniatura" data-sexo="macho" data-estado="lista-espera">
+          <picture>
+            <source type="image/webp" srcset="img/cachorros/xolotl.webp">
+            <source type="image/jpeg" srcset="img/cachorros/xolotl.jpg">
+            <img src="img/cachorros/xolotl.jpg" loading="lazy" decoding="async" 
+                 alt="Cachorro Xoloitzcuintle macho miniatura color gris llamado Xólotl" width="300" height="200">
+          </picture>
+          <h3>Xólotl</h3>
+          <p><strong>Talla:</strong> Miniatura</p>
+          <p><strong>Color:</strong> Gris oscuro</p>
+          <p><strong>Sexo:</strong> Macho</p>
+          <p><strong>Nacimiento:</strong> 20/09/2023</p>
+          <p><strong>Estado:</strong> <span class="estado lista-espera">Lista de espera</span></p>
+          <a class="btn-whatsapp" href="https://wa.me/52XXXXXXXXXX?text=Hola%20Xolos%20Ramirez,%20pregunto%20por%20X\u00f3lotl" target="_blank" rel="noopener">
+            📲 Enviar mensaje WhatsApp
+          </a>
+        </article>
+
+        <!-- (Más tarjetas de cachorros si aplica...) -->
+      </div>
+    </section>
+
+    <!-- Sección ¿Cómo reservo? -->
+    <section class="como-reservar">
+      <h2>¿Cómo reservo?</h2>
+      <div class="pasos-reserva">
+        <div class="paso">
+          <img src="img/icono-eleccion.svg" alt="" width="50" height="50">
+          <p><strong>1. Elige a tu Xolo:</strong> Explora la lista y selecciona el cachorro que más te enamore.</p>
         </div>
-      </section>
-
-      <section>
-        <h2>Calendario de seguimientos</h2>
-        <table class="table" aria-label="Calendario de seguimiento post adopción">
-          <thead>
-            <tr>
-              <th scope="col">Semana</th>
-              <th scope="col">Actividad</th>
-              <th scope="col">Objetivo</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Visita inicial</td>
-              <td>Verificar adaptación al nuevo hogar.</td>
-            </tr>
-            <tr>
-              <th scope="row">4</th>
-              <td>Sesión con etólogo</td>
-              <td>Refuerzo de rutinas y socialización.</td>
-            </tr>
-            <tr>
-              <th scope="row">12</th>
-              <td>Examen veterinario</td>
-              <td>Monitoreo de salud integral.</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-    </main>
-
-    <footer>
-      <div class="footer-grid">
-        <div>
-          <h3>Xolos Ramírez</h3>
-          <p>Criadero oficial de Xoloitzcuintles — Ciudad de México</p>
+        <div class="paso">
+          <img src="img/icono-contacto.svg" alt="" width="50" height="50">
+          <p><strong>2. Escríbenos:</strong> Haz clic en el botón de WhatsApp o envíanos un correo para iniciar la reserva.</p>
         </div>
-        <div>
-          <h4>Enlaces</h4>
-          <ul>
-            <li><a href="xolos-disponibles.html">Xolos disponibles</a></li>
-            <li><a href="blog/index.html">Blog</a></li>
-            <li><a href="contacto.html">Contacto</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4>Redes</h4>
-          <a href="https://www.youtube.com/channel/UCKtNKCavbBmxtcdHSDd9BsA">YouTube</a><br>
-          <a href="https://x.com/xolosArmy">Twitter</a><br>
-          <a href="https://t.me/xolosramirez">Telegram</a>
+        <div class="paso">
+          <img src="img/icono-reserva.svg" alt="" width="50" height="50">
+          <p><strong>3. Reserva:</strong> Realiza el pago del anticipo para apartar tu cachorro y coordina la entrega con nosotros.</p>
         </div>
       </div>
-      <p class="copyright">© 2025 Xolos Ramírez. Todos los derechos reservados.</p>
-    </footer>
-    <script src="js/main.js" defer></script>
-  </body>
+    </section>
+
+    <!-- Sección Política de Reserva -->
+    <section class="politica-reserva">
+      <h2>Política de Reserva</h2>
+      <p><strong>Anticipo:</strong> Para apartar un cachorro, solicitamos un depósito inicial. Este anticipo confirma tu reservación y <u>no es reembolsable</u> en caso de cancelación.</p>
+      <p><strong>Métodos de pago:</strong> Puedes realizar el pago vía transferencia bancaria, depósito en OXXO o en efectivo (en CDMX). Te proporcionaremos los datos y opciones al momento de la reserva.</p>
+      <p><strong>Plazos de pago:</strong> Si tu cachorro tiene menos de 3 meses de edad, podrás liquidar el resto del pago hasta que cumpla los 3 meses:contentReference[oaicite:13]{index=13}. Si es mayor, acordaremos hasta 2 meses adicionales para completar el pago. La fecha exacta se definirá en el contrato de reserva.</p>
+      <p><strong>Entrega:</strong> La entrega se realiza en nuestro criadero en Ciudad de México una vez liquidado el pago. Si requieres envío nacional o internacional, lo podemos gestionar con costo adicional y cumpliendo todos los requisitos veterinarios:contentReference[oaicite:14]{index=14} (pedigrí, certificados de salud y permisos de viaje).</p>
+      <p><strong>Documentación incluida:</strong> Todos nuestros Xoloitzcuintles se entregan con pedigrí oficial, cartilla de vacunación al día, microchip y certificados de salud necesarios.</p>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <h3>Xolos Ramírez</h3>
+        <p>Criadero oficial de Xoloitzcuintles — Ciudad de México.</p>
+      </div>
+      <div>
+        <h4>Enlaces</h4>
+        <ul>
+          <li><a href="xolos-disponibles.html">Xolos disponibles</a></li>
+          <li><a href="blog/index.html">Blog</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Redes Sociales</h4>
+        <p>
+          <a href="https://www.youtube.com/channel/UCKtNKCavbBmxtcdHSDd9BsA" target="_blank">YouTube</a><br>
+          <a href="https://x.com/xolosArmy" target="_blank">Twitter</a><br>
+          <a href="https://t.me/xolosramirez" target="_blank">Telegram</a><br>
+          <a href="https://wa.me/52XXXXXXXXXX" target="_blank">WhatsApp</a>
+        </p>
+      </div>
+    </div>
+    <p class="copyright">© 2025 Xolos Ramírez. Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- Script de filtrado -->
+  <script>
+    // Referencias a elementos de filtro y tarjetas
+    const filtros = document.querySelectorAll('.filtros input[type="checkbox"]');
+    const tarjetas = document.querySelectorAll('.listado-cachorros .card');
+
+    filtros.forEach(chk => {
+      chk.addEventListener('change', () => {
+        // Obtener valores seleccionados de cada grupo de filtros
+        const tallasSel = [...document.querySelectorAll('input[data-filter="talla"]:checked')].map(c => c.value);
+        const sexosSel = [...document.querySelectorAll('input[data-filter="sexo"]:checked')].map(c => c.value);
+        const estadosSel = [...document.querySelectorAll('input[data-filter="estado"]:checked')].map(c => c.value);
+
+        tarjetas.forEach(card => {
+          const talla = card.dataset.talla;
+          const sexo = card.dataset.sexo;
+          const estado = card.dataset.estado;
+          // Verificar si la tarjeta cumple con todos los filtros seleccionados
+          if (
+            tallasSel.includes(talla) &&
+            sexosSel.includes(sexo) &&
+            estadosSel.includes(estado)
+          ) {
+            card.style.display = ""; // visible (usa el display por defecto, p. ej. grid item)
+          } else {
+            card.style.display = "none"; // ocultar
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
 </html>
