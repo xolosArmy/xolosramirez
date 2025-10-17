@@ -108,7 +108,7 @@
       </section>
 
       <section class="grid grid-2" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="150">
-        <article class="card" data-aos="fade-up" data-aos-delay="200">
+        <article class="card" data-aos="zoom-in" data-aos-delay="200">
           <h3>Actividades comunitarias</h3>
           <p>
             Organizamos recorridos culturales, charlas con especialistas y
@@ -119,7 +119,7 @@
             de la comunidad.
           </p>
         </article>
-        <article class="card" data-aos="fade-up" data-aos-delay="300">
+        <article class="card" data-aos="zoom-in" data-aos-delay="300">
           <h3>Últimas publicaciones del blog</h3>
           <ul>
             <li><a href="blog/cultura-mexicana.html">El xoloitzcuintle en la cultura mexicana</a></li>
@@ -197,7 +197,7 @@
     <script src="js/main.js" defer></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-      AOS.init();
+      AOS.init({ once: true, duration: 700, offset: 60, easing: 'ease-out' });
     </script>
   </body>
 </html>

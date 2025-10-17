@@ -79,7 +79,7 @@
       <section data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">
         <h2>Perfiles destacados</h2>
         <div class="grid grid-2">
-          <article class="card" data-aos="fade-up" data-aos-duration="900">
+          <article class="card" data-aos="zoom-in" data-aos-duration="900">
             <img
               src="img/xolos/tonatiuh.svg"
               alt="Xoloitzcuintle joven llamado Tonatiuh"
@@ -109,7 +109,7 @@
             <p><strong>Salud:</strong> Chequeo dental reciente, esterilizada.</p>
             <a href="contacto.html">Concertar visita</a>
           </article>
-          <article class="card" data-aos="fade-up" data-aos-duration="900" data-aos-delay="200">
+          <article class="card" data-aos="zoom-in" data-aos-duration="900" data-aos-delay="200">
             <img
               src="img/xolos/xolo-mini.svg"
               alt="Xoloitzcuintle miniatura en adopción"
@@ -199,7 +199,7 @@
     <script src="js/main.js" defer></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-      AOS.init();
+      AOS.init({ once: true, duration: 700, offset: 60, easing: 'ease-out' });
     </script>
   </body>
 </html>

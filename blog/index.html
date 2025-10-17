@@ -59,7 +59,7 @@
       </section>
 
       <section class="grid" aria-label="Listado de artículos del blog" data-aos="fade-up" data-aos-duration="1000">
-        <article class="card blog-card" data-aos="fade-up" data-aos-delay="150">
+        <article class="card blog-card" data-aos="zoom-in" data-aos-delay="150">
           <img
             src="../img/blog/historia.svg"
             alt="Ilustración histórica de un xoloitzcuintle"
@@ -79,7 +79,7 @@
             >Leer más</a
           >
         </article>
-        <article class="card blog-card" data-aos="fade-up" data-aos-delay="250">
+        <article class="card blog-card" data-aos="zoom-in" data-aos-delay="250">
           <img
             src="../img/xolos/ejemplar-1.svg"
             alt="Xoloitzcuintle oscuro en pose de pie"
@@ -99,7 +99,7 @@
             >Leer más</a
           >
         </article>
-        <article class="card blog-card" data-aos="fade-up" data-aos-delay="350">
+        <article class="card blog-card" data-aos="zoom-in" data-aos-delay="350">
           <img
             src="../img/blog/artesania.svg"
             alt="Artesanías mexicanas inspiradas en el xoloitzcuintle"
@@ -119,7 +119,7 @@
             >Leer más</a
           >
         </article>
-        <article class="card blog-card" data-aos="fade-up" data-aos-delay="450">
+        <article class="card blog-card" data-aos="zoom-in" data-aos-delay="450">
           <img
             src="../img/xolos/pareja.svg"
             alt="Pareja paseando con un xoloitzcuintle"
@@ -139,7 +139,7 @@
             >Leer más</a
           >
         </article>
-        <article class="card blog-card" data-aos="fade-up" data-aos-delay="550">
+        <article class="card blog-card" data-aos="zoom-in" data-aos-delay="550">
           <img
             src="../img/xolos/familia.svg"
             alt="Familia entrenando a su xoloitzcuintle"
@@ -188,7 +188,7 @@
     <script src="../js/main.js" defer></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-      AOS.init();
+      AOS.init({ once: true, duration: 700, offset: 60, easing: 'ease-out' });
     </script>
   </body>
 </html>
