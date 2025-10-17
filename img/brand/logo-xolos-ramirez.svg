@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 80">
+  <defs>
+    <linearGradient id="grad" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#f97316" />
+      <stop offset="100%" stop-color="#a21caf" />
+    </linearGradient>
+  </defs>
+  <rect width="240" height="80" rx="12" fill="#0f172a" />
+  <circle cx="48" cy="40" r="28" fill="url(#grad)" />
+  <path
+    d="M40 54c6-2 8-6 8-10s-3-8-3-12c0-8 7-14 15-14 8 0 15 6 15 14 0 12-12 20-23 26"
+    fill="none"
+    stroke="#f8fafc"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+  <text x="98" y="46" font-family="'Trebuchet MS', 'Segoe UI', sans-serif" font-size="26" fill="#f8fafc" font-weight="700">
+    Xolos
+  </text>
+  <text x="98" y="66" font-family="'Trebuchet MS', 'Segoe UI', sans-serif" font-size="18" fill="#f97316" font-weight="600">
+    Ramirez
+  </text>
+</svg>

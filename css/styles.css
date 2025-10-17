@@ -148,68 +148,21 @@ a:hover {
   outline-offset: 3px;
 }
 
-header {
-  background: linear-gradient(135deg, rgba(20, 18, 18, 0.95), rgba(41, 26, 18, 0.9));
-  color: var(--color-texto);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--color-borde);
-}
+.site-header{ position:sticky; top:0; z-index:50; background:#000; border-bottom:1px solid var(--border); }
+.header-row{ display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.75rem 0; }
+.brand{ display:flex; align-items:center; gap:.5rem; color:var(--text); font-weight:600; }
+.nav-menu ul{ display:flex; gap:1rem; list-style:none; margin:0; padding:0; }
+.nav-menu a{ color:var(--text); padding:.5rem .75rem; border-radius:.5rem; }
+.nav-menu a:hover{ background:var(--card); }
 
-.site-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 1rem;
-}
+.hamburger{ display:none; background:transparent; border:1px solid var(--border); color:var(--text); padding:.35rem .6rem; border-radius:.5rem; }
 
-.brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-weight: 700;
-  font-size: 1.1rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--color-dorado);
-}
-
-.brand img {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  object-fit: cover;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
-  background: var(--color-superficie);
-  padding: 0.25rem;
-  border: 1px solid var(--color-borde);
-}
-
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 1rem;
-  margin: 0;
-  padding: 0;
-}
-
-nav a {
-  font-weight: 600;
-  color: var(--color-texto);
-  padding: 0.35rem 0.5rem;
-  border-radius: 999px;
-  transition: color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
-}
-
-nav a:focus,
-nav a:hover {
-  color: #090909;
-  background: linear-gradient(135deg, rgba(212, 175, 55, 0.95), rgba(251, 146, 60, 0.9));
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+@media (max-width: 900px){
+  .hamburger{ display:block; }
+  .nav-menu{ display:none; position:absolute; right:1rem; top: calc(100% + .5rem); background:#000; border:1px solid var(--border); border-radius:.75rem; padding:.5rem; }
+  .nav-menu ul{ flex-direction:column; width: min(80vw, 320px); }
+  .nav-menu a{ display:block; }
+  .nav-menu.is-open{ display:block; }
 }
 
 .hero {
