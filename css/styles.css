@@ -484,7 +484,7 @@ img {
 .hero.blog-hero {
   background:
     linear-gradient(120deg, rgba(10, 9, 9, 0.78), rgba(68, 34, 24, 0.62)),
-    url('../img/hero/hero-placeholder.svg') center/cover no-repeat;
+    url('https://i.imgur.com/eMhsPcJ.jpeg') center/cover no-repeat;
   background-attachment: fixed;
 }
 
