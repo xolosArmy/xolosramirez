@@ -148,6 +148,35 @@ a:hover {
   outline-offset: 3px;
 }
 
+.grid{
+  display:grid; gap: clamp(.75rem, 2.5vw, 1.25rem);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.card{
+  background: var(--card);
+  border:1px solid var(--border);
+  border-radius: .85rem;
+  overflow:hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card:hover{ transform: translateY(-4px); }
+
+.card img{ width:100%; height:auto; display:block; }
+.card .content{ padding:1rem; }
+.card .meta{ color:var(--muted); font-size:.9rem; }
+
+.btn, .btn-whatsapp{
+  display:inline-block; background:var(--accent); color:#111;
+  padding:.6rem .9rem; border-radius:.6rem; font-weight:600;
+}
+.btn:hover, .btn-whatsapp:hover{ filter:brightness(1.05); }
+
+@media (max-width: 560px){
+  .card .content{ padding:.85rem; }
+  .btn, .btn-whatsapp{ width:100%; text-align:center; }
+}
+
 .site-header{ position:sticky; top:0; z-index:50; background:#000; border-bottom:1px solid var(--border); }
 .header-row{ display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.75rem 0; }
 .brand{ display:flex; align-items:center; gap:.5rem; color:var(--text); font-weight:600; }
