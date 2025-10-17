@@ -20,30 +20,24 @@
   </head>
   <body>
     <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
-    <header>
-      <div class="site-header">
+    <header class="site-header">
+      <div class="container header-row">
         <a class="brand" href="index.html">
           <img
-            src="https://i.imgur.com/Ix0CyN1.jpeg"
-            alt="Logo de Xolos Ramirez"
+            src="img/brand/logo-xolos-ramirez.svg"
+            alt="Xolos Ramírez"
             width="44"
             height="44"
             loading="eager"
             decoding="async"
           />
-          <span>Xolos Ramirez</span>
+          <span>Xolos Ramírez</span>
         </a>
-        <button
-          class="menu-toggle"
-          type="button"
-          data-menu-toggle
-          aria-expanded="false"
-          aria-controls="menu-principal"
-        >
-          Menú
-        </button>
-        <nav role="navigation" aria-label="Navegación principal">
-          <ul id="menu-principal" data-menu-list data-open="false">
+
+        <button class="hamburger" aria-expanded="false" aria-controls="menu">☰</button>
+
+        <nav id="menu" class="nav-menu">
+          <ul>
             <li><a href="index.html">Inicio</a></li>
             <li><a href="xolos-disponibles.html">Xolos disponibles</a></li>
             <li><a href="galeria.html">Galería</a></li>
