@@ -36,6 +36,34 @@ h3 {
 
 .section{ padding: clamp(2rem, 4vw, 4rem) 0; }
 
+.hero{
+  min-height: 100svh; /* mobile-safe viewport height */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  position:relative;
+  isolation:isolate;
+  padding: 3rem 1rem;
+  background-size: cover;
+  background-position: center;
+  background-repeat:no-repeat;
+  background-attachment: fixed; /* parallax en desktop */
+}
+.hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.65));
+}
+.hero h1{ font-size: clamp(2rem, 6vw, 3.5rem); }
+.hero p{ font-size: clamp(1rem, 2.6vw, 1.25rem); color:var(--muted); max-width:60ch; margin-inline:auto; }
+
+@media (max-width: 768px){
+  .hero{ background-attachment: scroll; } /* desactiva parallax en móvil */
+}
+
 :root {
   color-scheme: dark;
   font-family: 'Poppins', sans-serif;
