@@ -18,6 +18,7 @@
     />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
   </head>
@@ -80,7 +81,7 @@
       <section>
         <h2>Perfiles destacados</h2>
         <div class="grid grid-2">
-          <article class="card">
+          <article class="card" data-aos="fade-up">
             <img
               src="img/xolos/tonatiuh.svg"
               alt="Xoloitzcuintle joven llamado Tonatiuh"
@@ -95,7 +96,7 @@
             <p><strong>Salud:</strong> Vacunado, desparasitado, esterilizado.</p>
             <a href="contacto.html">Solicitar entrevista</a>
           </article>
-          <article class="card">
+          <article class="card" data-aos="zoom-in">
             <img
               src="img/xolos/itzel.svg"
               alt="Xoloitzcuintle adulta llamada Itzel"
@@ -110,7 +111,7 @@
             <p><strong>Salud:</strong> Chequeo dental reciente, esterilizada.</p>
             <a href="contacto.html">Concertar visita</a>
           </article>
-          <article class="card">
+          <article class="card" data-aos="fade-up">
             <img
               src="img/xolos/xolo-mini.svg"
               alt="Xoloitzcuintle miniatura en adopción"
@@ -125,7 +126,7 @@
             <p><strong>Salud:</strong> Certificado genético y plan de vacunas completo.</p>
             <a href="contacto.html">Más información</a>
           </article>
-          <article class="card">
+          <article class="card" data-aos="zoom-in">
             <img
               src="img/xolos/ancestro.svg"
               alt="Xoloitzcuintle senior descansando"
@@ -197,6 +198,10 @@
       </div>
       <p class="copyright">© 2025 Xolos Ramírez. Todos los derechos reservados.</p>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
     <script src="js/main.js" defer></script>
   </body>
 </html>
