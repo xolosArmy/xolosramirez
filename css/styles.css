@@ -884,3 +884,7 @@ h1,h2,h3,.site-header .brand span{font-family:'Cinzel',serif;text-transform:uppe
 @media (max-width: 600px){
   .footer-grid{ grid-template-columns: 1fr; text-align:center; }
 }
+
+@media (max-width: 768px){
+  html, body{ overflow-x:hidden; width:100%; }
+}
