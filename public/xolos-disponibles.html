@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css" />
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
@@ -39,13 +40,13 @@
   <!-- Contenido principal -->
   <main id="contenido-principal">
     <!-- Hero Section -->
-    <section class="hero hero-disponibles">
+    <section class="hero hero-disponibles" data-aos="fade-in">
       <h1>Xoloitzcuintles disponibles</h1>
       <p>Conoce a nuestros cachorros Xoloitzcuintle disponibles. Aquí encontrarás su talla, color, sexo, edad y estado. ¡El guardián de tu historia te espera!</p>
     </section>
 
     <!-- Filtros -->
-    <section class="filtros">
+    <section class="filtros" data-aos="fade-up">
       <h2>Filtrar por</h2>
       <div class="filtro-categoria">
         <span><strong>Talla:</strong></span>
@@ -71,7 +72,7 @@
       <h2>Cachorros disponibles</h2>
       <div class="grid grid-2">  <!-- grid flexible para las tarjetas -->
         <!-- Tarjeta 1: Ejemplo Disponible -->
-        <article class="card" data-talla="intermedia" data-sexo="macho" data-estado="disponible">
+        <article class="card" data-talla="intermedia" data-sexo="macho" data-estado="disponible" data-aos="zoom-in">
           <picture>
             <source type="image/webp" srcset="img/cachorros/tliltic.webp">
             <source type="image/jpeg" srcset="img/cachorros/tliltic.jpg">
@@ -90,7 +91,7 @@
         </article>
 
         <!-- Tarjeta 2: Ejemplo Reservado -->
-        <article class="card" data-talla="estándar" data-sexo="hembra" data-estado="reservado">
+        <article class="card" data-talla="estándar" data-sexo="hembra" data-estado="reservado" data-aos="zoom-in">
           <picture>
             <source type="image/webp" srcset="img/cachorros/nikte.webp">
             <source type="image/jpeg" srcset="img/cachorros/nikte.jpg">
@@ -109,7 +110,7 @@
         </article>
 
         <!-- Tarjeta 3: Ejemplo Lista de espera -->
-        <article class="card" data-talla="miniatura" data-sexo="macho" data-estado="lista-espera">
+        <article class="card" data-talla="miniatura" data-sexo="macho" data-estado="lista-espera" data-aos="zoom-in">
           <picture>
             <source type="image/webp" srcset="img/cachorros/xolotl.webp">
             <source type="image/jpeg" srcset="img/cachorros/xolotl.jpg">
@@ -219,6 +220,10 @@
         });
       });
     });
+  </script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({ once: true, duration: 700, offset: 60, easing: 'ease-out' });
   </script>
 
 </body>
