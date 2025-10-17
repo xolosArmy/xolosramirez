@@ -1,3 +1,5 @@
+body{ font-family:'Poppins', system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+
 :root{
   --bg: #111;             /* fondo oscuro cinematográfico */
   --text: #f1e6d6;        /* texto claro */
