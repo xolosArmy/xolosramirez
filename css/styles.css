@@ -209,7 +209,8 @@ a:hover {
   .nav-menu{ display:none; position:absolute; right:1rem; top: calc(100% + .5rem); background:#000; border:1px solid var(--border); border-radius:.75rem; padding:.5rem; }
   .nav-menu ul{ flex-direction:column; width: min(80vw, 320px); }
   .nav-menu a{ display:block; }
-  .nav-menu.is-open{ display:block; }
+  .nav-menu.is-open,
+  .nav-menu[data-visible="true"]{ display:block; }
 }
 
 .hero {
