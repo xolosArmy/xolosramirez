@@ -694,12 +694,18 @@ body :focus-visible {
 
 .parallax {
   background-attachment: fixed;
-  background-position: center;
   background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
   position: relative;
   isolation: isolate;
   color: var(--color-texto);
+}
+
+@media (max-width: 768px) {
+  .parallax {
+    background-attachment: scroll;
+  }
 }
 
 .parallax::before {
