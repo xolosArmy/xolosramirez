@@ -821,3 +821,41 @@ body :focus-visible {
 
 
 h1,h2,h3,.site-header .brand span{font-family:'Cinzel',serif;text-transform:uppercase;letter-spacing:2px;}
+/* Filtros de Xolos disponibles */
+.filtros{
+  background:#000;
+  border:1px solid var(--border);
+  border-radius:.85rem;
+  padding:1rem;
+  margin-bottom:1rem;
+}
+
+.filtro-categoria{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.75rem 1rem;
+  align-items:center;
+}
+
+.filtro-categoria span{
+  font-weight:600;
+  color:var(--accent);
+  margin-right:.5rem;
+}
+
+.filtro-categoria label{
+  display:flex;
+  align-items:center;
+  gap:.35rem;
+}
+
+@media (max-width: 768px){
+  .filtros{
+    padding:.85rem;
+  }
+
+  .filtro-categoria{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+}
