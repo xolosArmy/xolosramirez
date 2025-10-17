@@ -169,7 +169,7 @@ nav a:hover {
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
   background:
     linear-gradient(120deg, rgba(12, 10, 10, 0.75), rgba(65, 24, 19, 0.65)),
-    url('../img/hero/ceremonia.svg') center/cover no-repeat;
+    url('https://i.imgur.com/eMhsPcJ.jpeg') center/cover no-repeat;
   background-attachment: fixed;
   box-shadow: var(--sombra-suave);
   isolation: isolate;
