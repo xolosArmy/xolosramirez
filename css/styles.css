@@ -721,3 +721,6 @@ body :focus-visible {
 .parallax>*{position:relative;z-index:1;}
 .como-reservar.parallax{background-image:linear-gradient(180deg,rgba(19,19,19,0.6),rgba(19,19,19,0.9)),url('../img/xolos/1.webp');}
 .politica-reserva.parallax{background-image:linear-gradient(180deg,rgba(19,19,19,0.6),rgba(19,19,19,0.9)),url('../img/xolos/2.webp');}
+
+
+h1,h2,h3,.site-header .brand span{font-family:'Cinzel',serif;text-transform:uppercase;letter-spacing:2px;}
