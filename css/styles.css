@@ -873,3 +873,14 @@ h1,h2,h3,.site-header .brand span{font-family:'Cinzel',serif;text-transform:uppe
     align-items:flex-start;
   }
 }
+
+.footer-grid{
+  display:grid; gap:1rem;
+  grid-template-columns: repeat(3, 1fr);
+}
+@media (max-width: 900px){
+  .footer-grid{ grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px){
+  .footer-grid{ grid-template-columns: 1fr; text-align:center; }
+}
