@@ -10,7 +10,11 @@ body{ font-family:'Poppins', system-ui, -apple-system, Segoe UI, Roboto, sans-se
   --border: #3a2d10;
 }
 
-html{ box-sizing:border-box; font-size:16px; }
+html{
+  box-sizing:border-box;
+  font-size:16px;
+  overflow-x:hidden;
+}
 *,*::before,*::after{ box-sizing:inherit; }
 html,body{ margin:0; padding:0; background:var(--bg); color:var(--text); }
 img, picture, video, canvas{ max-width:100%; height:auto; display:block; }
@@ -35,6 +39,14 @@ h3 {
   letter-spacing: 1px;
   color: var(--accent);
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+  line-height: 1.2;
+}
+
+p {
+  font-size: clamp(1rem, 1.8vw, 1.15rem);
+  line-height: 1.7;
+  margin-block: 0 1.25rem;
+  color: var(--color-texto, var(--text));
 }
 
 .container{
@@ -77,8 +89,20 @@ h3 {
 .hero h1{ font-size: clamp(2rem, 6vw, 3.5rem); }
 .hero p{ font-size: clamp(1rem, 2.6vw, 1.25rem); color:var(--muted); max-width:60ch; margin-inline:auto; }
 
-@media (max-width: 768px){
-  .hero{ background-attachment: scroll; } /* desactiva parallax en móvil */
+@media (max-width: 900px){
+  .hero,
+  #cta,
+  .parallax {
+    background-attachment: scroll;
+  }
+
+  .hero,
+  #cta {
+    margin-inline: auto;
+    width: 100%;
+    border-radius: 1rem;
+    overflow: hidden;
+  }
 }
 
 :root {
@@ -111,6 +135,7 @@ body {
   color: var(--color-texto);
   font-family: 'Poppins', sans-serif;
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
 h4,
@@ -190,9 +215,16 @@ a:hover {
 }
 .btn:hover, .btn-whatsapp:hover{ filter:brightness(1.05); }
 
-@media (max-width: 560px){
+@media (max-width: 768px){
   .card .content{ padding:.85rem; }
-  .btn, .btn-whatsapp{ width:100%; text-align:center; }
+  .btn,
+  .btn-whatsapp{
+    display:flex;
+    width:100%;
+    max-width:100%;
+    justify-content:center;
+    text-align:center;
+  }
 }
 
 .site-header{ position:sticky; top:0; z-index:50; background:#000; border-bottom:1px solid var(--border); }
@@ -219,8 +251,8 @@ a:hover {
   justify-content: center;
   align-items: center;
   gap: clamp(1rem, 3vw, 1.75rem);
-  margin-inline: calc(50% - 50vw);
-  width: 100vw;
+  margin-inline: auto;
+  width: 100%;
   min-height: 100vh;
   padding: clamp(4rem, 6vw, 6rem) 1.5rem;
   text-align: center;
@@ -232,6 +264,13 @@ a:hover {
   background-attachment: fixed;
   box-shadow: var(--sombra-suave);
   isolation: isolate;
+}
+
+@media (min-width: 901px) {
+  .hero {
+    margin-inline: calc(50% - 50vw);
+    width: 100vw;
+  }
 }
 
 .hero h1 {
@@ -261,6 +300,10 @@ section {
   border: 1px solid rgba(255, 255, 255, 0.02);
 }
 
+section > * + * {
+  margin-top: clamp(1rem, 4vw, 1.5rem);
+}
+
 section h2 {
   margin-top: 0;
   color: var(--color-dorado);
@@ -273,6 +316,26 @@ section h2 {
 
 .grid-2 {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+@media (max-width: 768px) {
+  .grid,
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  section {
+    padding: clamp(2.5rem, 8vw, 3rem) 1.25rem;
+  }
+
+  section > * + * {
+    margin-top: clamp(1rem, 6vw, 1.5rem);
+  }
+
+  .gallery-grid,
+  #galeria .gallery-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .card {
@@ -709,12 +772,6 @@ body :focus-visible {
   position: relative;
   isolation: isolate;
   color: var(--color-texto);
-}
-
-@media (max-width: 768px) {
-  .parallax {
-    background-attachment: scroll;
-  }
 }
 
 .parallax::before {
