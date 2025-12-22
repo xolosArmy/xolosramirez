@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
+    <script>window.dataLayer = window.dataLayer || [];</script>
+    <!-- Google Tag Manager -->
+    <script>
+      (function(w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', 'GTM-XXXXXXX');
+    </script>
+    <!-- End Google Tag Manager -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Contacto y asesoría sobre xoloitzcuintles | Xolos Ramirez</title>
@@ -19,6 +34,16 @@
     <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
   </head>
   <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
     <header class="site-header">
       <div class="container header-row">
@@ -72,7 +97,13 @@
 
       <section data-aos="fade-up" data-aos-duration="1000">
         <h2>Formulario de contacto</h2>
-        <form aria-label="Formulario de contacto general" data-aos="fade-up" data-aos-delay="150">
+        <form
+          aria-label="Formulario de contacto general"
+          data-aos="fade-up"
+          data-aos-delay="150"
+          data-gtm="contact-form"
+          onsubmit="dataLayer.push({ event: 'submit_contact', form: 'contacto_general' })"
+        >
           <div>
             <label for="nombre">Nombre completo</label>
             <input id="nombre" name="nombre" type="text" required autocomplete="name" />
