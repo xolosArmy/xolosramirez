@@ -309,6 +309,67 @@ blockquote {
   color: var(--color-texto-suave);
 }
 
+.testimonios-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.testimonial-card {
+  background: rgba(20, 16, 16, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.85rem;
+  padding: 1.5rem;
+  box-shadow: var(--sombra-suave);
+}
+
+.testimonial-card cite {
+  display: block;
+  margin-top: 0.75rem;
+  color: var(--color-dorado);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.faq details {
+  background: rgba(15, 12, 12, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.faq summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--color-dorado);
+}
+
+.faq summary::marker {
+  color: var(--color-ambar);
+}
+
+.whatsapp-float {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  background: #25d366;
+  color: #0b0b0b;
+  padding: 0.85rem 1.2rem;
+  border-radius: 999px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 12px 30px rgba(37, 211, 102, 0.45);
+  z-index: 200;
+}
+
+.whatsapp-float:hover,
+.whatsapp-float:focus {
+  filter: brightness(1.1);
+  text-decoration: none;
+}
+
 .callout {
   background: rgba(251, 146, 60, 0.08);
   border-left: 4px solid var(--color-ambar);
