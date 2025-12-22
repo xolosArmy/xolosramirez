@@ -170,6 +170,30 @@ a:hover {
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 
+.trust-grid{
+  display:grid;
+  gap: clamp(1rem, 3vw, 1.5rem);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.trust-card{
+  padding: clamp(1.25rem, 2.5vw, 1.75rem);
+  text-align:center;
+}
+
+.trust-card h4{
+  margin: .75rem 0 .5rem;
+}
+
+.trust-icon{
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  color: var(--accent-2);
+}
+
+@media (max-width: 640px){
+  .trust-grid{ grid-template-columns: 1fr; }
+}
+
 .card{
   background: var(--card);
   border:1px solid var(--border);
