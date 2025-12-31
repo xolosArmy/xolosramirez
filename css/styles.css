@@ -975,3 +975,18 @@ h1,h2,h3,.site-header .brand span{font-family:'Cinzel',serif;text-transform:uppe
 @media (max-width: 768px){
   html, body{ overflow-x:hidden; width:100%; }
 }
+
+/* Corrección de visibilidad del texto en el formulario de contacto */
+form input,
+form select,
+form textarea {
+    color: #000000 !important; /* Fuerza el color negro para el texto introducido */
+    background-color: #ffffff; /* Asegura un fondo blanco para contraste */
+}
+
+/* Opcional: Asegura que el texto siga siendo negro mientras el usuario escribe */
+form input:focus,
+form select:focus,
+form textarea:focus {
+    color: #000000;
+}
