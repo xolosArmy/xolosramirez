@@ -1,5 +1,7 @@
-Total items RSS: 18
-Total posts creados: 18
-Posts idénticos omitidos: 0
-Conflictos/duplicados: 0
-Items sin fecha/slug de link: 0
+RSS: import/jimdo-blog.xml
+Items: 18
+Posts created: 18
+Filename conflicts handled: 0
+Images downloaded: 21
+Image download failures: 0
+Items without link: 0
