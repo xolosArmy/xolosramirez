@@ -262,6 +262,11 @@ a:hover {
   .nav-menu ul {
     flex-direction: column;
     gap: 2rem;
+    transform: none;
+    background: transparent;
+    position: static;
+    padding: 0;
+    box-shadow: none;
   }
 }
 
