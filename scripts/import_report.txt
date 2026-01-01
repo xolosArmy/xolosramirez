@@ -1,0 +1,5 @@
+Total items RSS: 18
+Total posts creados: 18
+Posts idénticos omitidos: 0
+Conflictos/duplicados: 0
+Items sin fecha/slug de link: 0
