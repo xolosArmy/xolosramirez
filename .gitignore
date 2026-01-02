@@ -1,1 +1,22 @@
+# Python
 .venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs / temp
+*.log
+
+# Node (si aplica en tu monorepo)
+node_modules/
+
+# Jekyll build (si lo usas)
+_site/
+.jekyll-cache/
