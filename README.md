@@ -1,2 +1,2 @@
 # xolosramirez
-Sitio web alternativo para Xolos Ramirez
+Sitio web para Xolos Ramirez
