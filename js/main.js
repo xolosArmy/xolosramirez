@@ -50,3 +50,26 @@ if (navMenu) {
     }
   });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const langLinks = document.querySelectorAll('.lang-switch a');
+
+  langLinks.forEach((link) => {
+    link.addEventListener('click', () => {
+      const selectedLang = link.getAttribute('lang');
+      if (!selectedLang) return;
+
+      localStorage.setItem('preferredLang', selectedLang);
+    });
+  });
+
+  const savedLang = localStorage.getItem('preferredLang');
+  const pageLang = document.documentElement.getAttribute('lang');
+
+  if (savedLang && savedLang !== pageLang) {
+    const preferredLink = document.querySelector(`.lang-switch a[lang="${savedLang}"]`);
+    if (preferredLink) {
+      window.location.href = preferredLink.href;
+    }
+  }
+});
