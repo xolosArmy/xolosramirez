@@ -70,6 +70,72 @@
       color: var(--muted);
       font-size: 0.95rem;
     }
+
+    .xan-banner {
+      margin: 26px 0 12px;
+      padding: 18px 18px 16px;
+      border-radius: 14px;
+      border: 1px solid #27272a;
+      background: radial-gradient(circle at 20% 20%, rgba(225, 29, 72, 0.14), rgba(20, 20, 20, 0.8)), #0f0f10;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .xan-banner__content {
+      flex: 1 1 240px;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .xan-banner__title {
+      margin: 0;
+      font-size: 1.1rem;
+      letter-spacing: 0.01em;
+    }
+
+    .xan-banner__text {
+      margin: 0;
+      color: #e6e6e6;
+      font-size: 1rem;
+    }
+
+    .xan-banner__cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #e11d48, #f43f5e);
+      color: #0b0b0b;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
+      outline: 2px solid transparent;
+      outline-offset: 3px;
+    }
+
+    .xan-banner__cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(244, 63, 94, 0.25);
+      filter: brightness(1.05);
+    }
+
+    .xan-banner__cta:focus-visible {
+      outline-color: #f472b6;
+      box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.35);
+    }
+
+    @media (max-width: 640px) {
+      .xan-banner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
   </style>
 </head>
 <body>
@@ -86,6 +152,14 @@
   <main class="wrap">
     <h1>Alergias en el Xoloitzcuintle: causas comunes y cómo prevenirlas</h1>
     <p><em>Guía práctica de Xolos Ramírez sobre los alérgenos más comunes en Xoloitzcuintles (piel, ambiente y alimentación), signos de alerta y cuidados naturales recomendados.</em></p>
+
+    <aside class="xan-banner" aria-label="Promoción xolosArmy Naturals">
+      <div class="xan-banner__content">
+        <p class="xan-banner__title">xolosArmy Naturals</p>
+        <p class="xan-banner__text">Cuidado natural para la piel del Xolo: bálsamos, jabones y productos pensados desde el criadero.</p>
+      </div>
+      <a class="xan-banner__cta" href="https://xolosarmy.xyz/productos-xoloitzcuintle" target="_blank" rel="noopener noreferrer">Ver productos naturales</a>
+    </aside>
 
     <h2>¿Por qué su piel es tan sensible?</h2>
     <p>El Xoloitzcuintle no tiene pelaje protector, lo que deja su piel expuesta. Esto lo hace más vulnerable a irritantes químicos, alimentos y factores ambientales. Sin embargo, responde bien a rutinas suaves de hidratación y cuidado.</p>
