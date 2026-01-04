@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Tallas del Xoloitzcuintle</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Chosen Palette: Warm Earth Tones (Stone, Amber, Warm Gray) to reflect the Aztec heritage and natural skin tones of the Xolo. -->
+    <!-- Application Structure Plan:
+        1. Hero Section: Sets the context about the importance of size in adoption.
+        2. Interactive Explorer (The Core): A tabbed interface allowing users to switch between the 3 sizes. This updates text, stats, and a CSS-based visual size comparison instantly.
+        3. Comparative Analytics: Chart.js visualizations comparing weight and height across all three varieties simultaneously for a "big picture" view.
+        4. "Fit Check" Calculator: A logic-based form where users input their living situation (Space/Activity) and the app recommends a size.
+        5. Technical Summary: A static reference table.
+        Rationale: This structure moves from specific detail (Explorer) to broad comparison (Analytics) to personal application (Calculator), guiding the user's decision-making process.
+    -->
+    <!-- Visualization & Content Choices:
+        1. Visual Size Scale: CSS-based Divs using height percentages. Goal: Inform/Compare. Interaction: Highlight active selection. No SVG used.
+        2. Weight Comparison Chart: Chart.js Bar Chart. Goal: Compare physical mass. Interaction: Tooltips.
+        3. Height Range Chart: Chart.js Bar Chart. Goal: Compare vertical stature.
+        4. Recommendation Engine: JS Logic. Goal: Decision Support. Interaction: Form inputs.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        xolo: {
+                            50: '#fafaf9',
+                            100: '#f5f5f4',
+                            200: '#e7e5e4',
+                            300: '#d6d3d1',
+                            400: '#a8a29e',
+                            500: '#78716c',
+                            600: '#57534e',
+                            700: '#44403c',
+                            800: '#292524',
+                            900: '#1c1917',
+                        },
+                        amber: {
+                            800: '#92400e', // Clay/Earth accent
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Helvetica', 'Arial', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .transition-height {
+            transition: height 0.5s ease-in-out, background-color 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-xolo-100 text-xolo-800 font-sans selection:bg-amber-800 selection:text-white">
+
+    <!-- Navbar -->
+    <nav class="bg-xolo-900 text-xolo-100 shadow-lg">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold tracking-wider">XOLO<span class="text-amber-600">GUIDE</span></h1>
+            <div class="text-xs md:text-sm text-xolo-400">Guía Oficial de Tallas</div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-white border-b border-xolo-200">
+        <div class="container mx-auto px-4 py-12 text-center max-w-4xl">
+            <h2 class="text-3xl md:text-5xl font-bold mb-6 text-xolo-900">Elige el Xoloitzcuintle Ideal</h2>
+            <p class="text-lg text-xolo-600 leading-relaxed mb-8">
+                El Xoloitzcuintle no es una talla única. La Federación Canófila reconoce tres variedades distintas: 
+                <span class="font-bold text-amber-800">Miniatura, Intermedio y Estándar</span>. 
+                Esta herramienta interactiva te ayudará a entender las diferencias técnicas y elegir el compañero perfecto para tu espacio y estilo de vida.
+            </p>
+
+            <!-- ✅ CTA Buttons -->
+            <div class="flex flex-wrap justify-center gap-4">
+                <button onclick="scrollToSection('explorer')" class="bg-xolo-800 hover:bg-xolo-700 text-white px-6 py-3 rounded-lg transition shadow-md font-semibold">
+                    Explorar Tallas
+                </button>
+                <button onclick="scrollToSection('calculator')" class="bg-white border-2 border-xolo-800 text-xolo-800 hover:bg-xolo-50 px-6 py-3 rounded-lg transition font-semibold">
+                    Calculadora de Espacio
+                </button>
+
+                <!-- ✅ Nuevo link a xolos disponibles -->
+                <a
+                    href="https://xolosramirez.com/xolos-disponibles.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="bg-amber-700 hover:bg-amber-600 text-white px-6 py-3 rounded-lg transition shadow-md font-semibold inline-flex items-center gap-2"
+                >
+                    Ver Xolos Disponibles
+                    <span aria-hidden="true">↗</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 space-y-16">
+
+        <!-- SECTION 1: Interactive Explorer -->
+        <section id="explorer" class="scroll-mt-8">
+            <div class="mb-6 border-l-4 border-amber-800 pl-4">
+                <h3 class="text-2xl font-bold text-xolo-900">Explorador de Variedades</h3>
+                <p class="text-xolo-600 mt-2">
+                    Selecciona una talla para ver sus especificaciones técnicas y visualizar su escala comparativa.
+                    Los datos mostrados se basan en el estándar racial oficial.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 bg-white p-6 rounded-xl shadow-sm border border-xolo-200">
+                
+                <!-- Controls (Left Column) -->
+                <div class="lg:col-span-4 flex flex-col gap-4">
+                    <div class="flex flex-col gap-2 bg-xolo-50 p-4 rounded-lg">
+                        <label class="text-sm font-bold uppercase tracking-wider text-xolo-500">Selecciona Variedad:</label>
+                        <button id="btn-mini" onclick="updateExplorer('mini')" class="explorer-btn text-left px-4 py-3 rounded-md transition border-2 border-transparent hover:bg-amber-100/50">
+                            <span class="block font-bold text-lg">Miniatura</span>
+                            <span class="text-xs text-xolo-500">25 - 35 cm</span>
+                        </button>
+                        <button id="btn-inter" onclick="updateExplorer('inter')" class="explorer-btn text-left px-4 py-3 rounded-md transition border-2 border-transparent hover:bg-amber-100/50">
+                            <span class="block font-bold text-lg">Intermedio</span>
+                            <span class="text-xs text-xolo-500">36 - 45 cm</span>
+                        </button>
+                        <button id="btn-std" onclick="updateExplorer('std')" class="explorer-btn text-left px-4 py-3 rounded-md transition border-2 border-transparent hover:bg-amber-100/50">
+                            <span class="block font-bold text-lg">Estándar</span>
+                            <span class="text-xs text-xolo-500">46 - 60 cm</span>
+                        </button>
+                    </div>
+
+                    <!-- Dynamic Details Card -->
+                    <div class="bg-xolo-900 text-white p-6 rounded-lg mt-auto shadow-lg">
+                        <h4 id="detail-title" class="text-2xl font-bold mb-4 text-amber-500">Estándar</h4>
+                        <div class="space-y-4">
+                            <div class="flex justify-between border-b border-xolo-700 pb-2">
+                                <span class="text-xolo-300">Altura a la cruz:</span>
+                                <span id="detail-height" class="font-mono font-bold">46 - 60 cm</span>
+                            </div>
+                            <div class="flex justify-between border-b border-xolo-700 pb-2">
+                                <span class="text-xolo-300">Peso aproximado:</span>
+                                <span id="detail-weight" class="font-mono font-bold">18 - 30 kg</span>
+                            </div>
+                            <div>
+                                <span class="block text-xolo-300 mb-1">Espacio Ideal:</span>
+                                <p id="detail-space" class="text-sm leading-snug">Casa con jardín mediano a grande. Requiere actividad física moderada a alta.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Representation (Right Column) -->
+                <div class="lg:col-span-8 bg-xolo-50 rounded-lg p-8 flex items-end justify-center gap-4 md:gap-12 relative overflow-hidden h-[400px]">
+                    <!-- Background Grid Lines -->
+                    <div class="absolute inset-0 z-0 pointer-events-none opacity-20" style="background-image: linear-gradient(#a8a29e 1px, transparent 1px); background-size: 100% 50px;"></div>
+                    
+                    <!-- Human Reference -->
+                    <div class="flex flex-col items-center z-10">
+                        <span class="text-xs text-xolo-500 mb-2">Humano (1.70m)</span>
+                        <div class="w-12 bg-xolo-300 rounded-t-lg h-[340px] relative"></div> <!-- 170cm represented as 340px (x2 scale) -->
+                    </div>
+
+                    <!-- Comparison Bars -->
+                    <!-- Scale: 2px = 1cm. -->
+                    
+                    <div class="flex flex-col items-center justify-end z-10 h-full pb-0">
+                         <span class="text-xs font-bold mb-2 transition-opacity opacity-50" id="label-std">Estándar</span>
+                        <div id="bar-std" class="w-12 md:w-16 bg-xolo-800 rounded-t-lg transition-height shadow-lg opacity-30 h-[120px]"></div> 
+                        <!-- Base height 60cm * 2 = 120px -->
+                    </div>
+
+                     <div class="flex flex-col items-center justify-end z-10 h-full pb-0">
+                         <span class="text-xs font-bold mb-2 transition-opacity opacity-50" id="label-inter">Intermedio</span>
+                        <div id="bar-inter" class="w-12 md:w-16 bg-xolo-600 rounded-t-lg transition-height shadow-lg opacity-30 h-[90px]"></div>
+                        <!-- Base height 45cm * 2 = 90px -->
+                    </div>
+
+                     <div class="flex flex-col items-center justify-end z-10 h-full pb-0">
+                         <span class="text-xs font-bold mb-2 transition-opacity opacity-50" id="label-mini">Miniatura</span>
+                        <div id="bar-mini" class="w-12 md:w-16 bg-xolo-500 rounded-t-lg transition-height shadow-lg opacity-30 h-[70px]"></div>
+                        <!-- Base height 35cm * 2 = 70px -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Analytics & Charts -->
+        <section class="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-xolo-200">
+            <div class="mb-6">
+                <h3 class="text-2xl font-bold text-xolo-900">Análisis Comparativo</h3>
+                <p class="text-xolo-600 mt-2">
+                    Visualiza las diferencias sustanciales entre las variedades. Mientras la altura crece linealmente, el peso aumenta exponencialmente, lo que impacta significativamente en el manejo del perro.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Weight Chart -->
+                <div class="flex flex-col">
+                    <h4 class="text-lg font-semibold text-center mb-4 text-xolo-700">Rango de Peso (kg)</h4>
+                    <div class="chart-container">
+                        <canvas id="weightChart"></canvas>
+                    </div>
+                    <p class="text-xs text-center text-xolo-400 mt-2">Los pesos pueden variar según la complexión.</p>
+                </div>
+
+                <!-- Height Chart -->
+                <div class="flex flex-col">
+                    <h4 class="text-lg font-semibold text-center mb-4 text-xolo-700">Altura Máxima a la Cruz (cm)</h4>
+                    <div class="chart-container">
+                        <canvas id="heightChart"></canvas>
+                    </div>
+                    <p class="text-xs text-center text-xolo-400 mt-2">Medida desde el suelo hasta el punto más alto del omóplato.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: Calculator / Recommender -->
+        <section id="calculator" class="scroll-mt-8 bg-xolo-900 text-xolo-100 rounded-xl p-8 shadow-xl">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-8">
+                    <h3 class="text-2xl md:text-3xl font-bold text-amber-500">¿Qué Xolo es para ti?</h3>
+                    <p class="text-xolo-300 mt-2">Responde dos preguntas simples para recibir una recomendación basada en el espacio.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                    <!-- Inputs -->
+                    <div class="space-y-4 md:col-span-1">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider mb-2 text-xolo-400">Tipo de Vivienda</label>
+                            <select id="calc-home" class="w-full bg-xolo-800 border border-xolo-600 rounded p-3 text-white focus:outline-none focus:border-amber-600">
+                                <option value="apt_small">Apartamento Pequeño</option>
+                                <option value="apt_large">Apartamento Amplio / Loft</option>
+                                <option value="house_small">Casa con Patio Pequeño</option>
+                                <option value="house_large">Casa con Jardín Grande</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider mb-2 text-xolo-400">Tiempo para Paseos</label>
+                            <select id="calc-activity" class="w-full bg-xolo-800 border border-xolo-600 rounded p-3 text-white focus:outline-none focus:border-amber-600">
+                                <option value="low">Bajo (Solo necesidades básicas)</option>
+                                <option value="med">Medio (30-45 mins diarios)</option>
+                                <option value="high">Alto (1 hora + / Correr)</option>
+                            </select>
+                        </div>
+                        <button onclick="calculateRecommendation()" class="w-full bg-amber-700 hover:bg-amber-600 text-white font-bold py-3 rounded transition mt-4">
+                            Ver Recomendación
+                        </button>
+                    </div>
+
+                    <!-- Result Output -->
+                    <div class="md:col-span-2 bg-xolo-800 rounded-lg p-6 border border-xolo-700 h-full flex flex-col justify-center items-center text-center relative overflow-hidden">
+                        <div id="result-placeholder" class="text-xolo-500 italic">
+                            Tu resultado aparecerá aquí...
+                        </div>
+                        <div id="result-content" class="hidden relative z-10">
+                            <span class="text-sm text-xolo-400 uppercase tracking-widest">Recomendamos:</span>
+                            <h4 id="res-title" class="text-4xl font-bold text-white my-2">Xolo Miniatura</h4>
+                            <p id="res-desc" class="text-xolo-200 text-lg mb-4">Ideal para espacios compactos.</p>
+                            <div class="inline-block bg-xolo-900/50 px-4 py-2 rounded text-sm text-amber-400 border border-amber-800/50">
+                                <span id="res-reason">Debido a que vives en un apartamento.</span>
+                            </div>
+                        </div>
+                        <!-- Decorative element -->
+                        <div class="absolute -bottom-10 -right-10 text-[10rem] opacity-5 select-none font-bold text-white pointer-events-none">X</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-xolo-500 text-sm py-8 border-t border-xolo-200">
+            <p>Datos basados en el Estándar de la Federación Canófila Internacional (FCI).</p>
+            <p class="mt-2">&copy; 2024 Guía de Adopción Xoloitzcuintle.</p>
+        </footer>
+
+    </main>
+
+    <script>
+        // --- Data Source ---
+        const xoloData = {
+            mini: {
+                title: "Miniatura",
+                height: "25 - 35 cm",
+                heightVal: 35, // for visualization scaling
+                weight: "4 - 8 kg",
+                desc: "La variedad más pequeña. Perfecta para la vida urbana en apartamentos o espacios reducidos. Aunque es pequeño, es robusto y un excelente perro de compañía y alerta.",
+                space: "Apartamento, Loft, Interior.",
+                color: "bg-xolo-500"
+            },
+            inter: {
+                title: "Intermedio",
+                height: "36 - 45 cm",
+                heightVal: 45,
+                weight: "8 - 15 kg",
+                desc: "El equilibrio perfecto. Lo suficientemente pequeño para ser manejable en interiores, pero con suficiente estructura para ser un buen guardián y compañero de caminatas.",
+                space: "Casa pequeña, Apartamento grande (con paseos), Patio.",
+                color: "bg-xolo-600"
+            },
+            std: {
+                title: "Estándar",
+                height: "46 - 60 cm",
+                heightVal: 60,
+                weight: "18 - 30+ kg",
+                desc: "El Xolo original e histórico. Un animal elegante y poderoso con una presencia imponente. Requiere educación firme y espacio para moverse.",
+                space: "Casa con jardín, Propiedades amplias. Requiere ejercicio.",
+                color: "bg-xolo-800"
+            }
+        };
+
+        // --- Interaction Logic: Explorer ---
+        let currentSelection = 'std';
+
+        function updateExplorer(type) {
+            currentSelection = type;
+            const data = xoloData[type];
+
+            // Update Text Content
+            document.getElementById('detail-title').textContent = data.title;
+            document.getElementById('detail-title').className = `text-2xl font-bold mb-4 ${type === 'mini' ? 'text-amber-300' : type === 'inter' ? 'text-amber-400' : 'text-amber-500'}`;
+            document.getElementById('detail-height').textContent = data.height;
+            document.getElementById('detail-weight').textContent = data.weight;
+            document.getElementById('detail-space').textContent = data.desc + " " + data.space;
+
+            // Update Buttons Styling
+            const buttons = document.querySelectorAll('.explorer-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-amber-100', 'border-amber-600', 'ring-2', 'ring-amber-200');
+                btn.classList.add('border-transparent');
+            });
+
+            const activeBtn = document.getElementById(`btn-${type}`);
+            activeBtn.classList.remove('border-transparent');
+            activeBtn.classList.add('bg-amber-100', 'border-amber-600', 'ring-2', 'ring-amber-200');
+
+            // Update Visual Bars
+            const keys = ['mini', 'inter', 'std'];
+            keys.forEach(k => {
+                const bar = document.getElementById(`bar-${k}`);
+                const label = document.getElementById(`label-${k}`);
+                
+                if (k === type) {
+                    bar.classList.remove('opacity-30', 'bg-gray-300');
+                    bar.classList.add('opacity-100');
+                    // Ensure color matches data
+                    if(k === 'mini') bar.className = "w-12 md:w-16 rounded-t-lg transition-height shadow-lg h-[70px] opacity-100 bg-amber-600 scale-105 origin-bottom";
+                    if(k === 'inter') bar.className = "w-12 md:w-16 rounded-t-lg transition-height shadow-lg h-[90px] opacity-100 bg-amber-700 scale-105 origin-bottom";
+                    if(k === 'std') bar.className = "w-12 md:w-16 rounded-t-lg transition-height shadow-lg h-[120px] opacity-100 bg-amber-800 scale-105 origin-bottom";
+
+                    label.classList.remove('opacity-50');
+                    label.classList.add('opacity-100', 'text-amber-800', 'font-bold');
+                } else {
+                    // Reset to dim
+                    label.classList.remove('opacity-100', 'text-amber-800', 'font-bold');
+                    label.classList.add('opacity-50');
+                    
+                    if(k === 'mini') bar.className = "w-12 md:w-16 bg-xolo-500 rounded-t-lg transition-height shadow-lg opacity-30 h-[70px]";
+                    if(k === 'inter') bar.className = "w-12 md:w-16 bg-xolo-600 rounded-t-lg transition-height shadow-lg opacity-30 h-[90px]";
+                    if(k === 'std') bar.className = "w-12 md:w-16 bg-xolo-800 rounded-t-lg transition-height shadow-lg opacity-30 h-[120px]";
+                }
+            });
+        }
+
+        // --- Interaction Logic: Calculator ---
+        function calculateRecommendation() {
+            const home = document.getElementById('calc-home').value;
+            const activity = document.getElementById('calc-activity').value;
+            
+            let resultKey = '';
+            let reason = '';
+
+            // Simple Decision Logic
+            if (home === 'apt_small') {
+                resultKey = 'mini';
+                reason = "Para un apartamento pequeño, la talla Miniatura asegura comodidad para ambos.";
+            } else if (home === 'apt_large' || home === 'house_small') {
+                if (activity === 'high') {
+                    resultKey = 'inter';
+                    reason = "Tu espacio permite un Intermedio, y tu nivel de actividad encaja con su energía.";
+                } else {
+                    resultKey = 'mini';
+                    reason = "Aunque tienes espacio, tu nivel de actividad sugiere un perro más manejable como el Miniatura.";
+                }
+            } else { // House Large
+                if (activity === 'low') {
+                    resultKey = 'inter';
+                    reason = "Tienes gran espacio, pero un Estándar requiere más actividad física de la que indicas.";
+                } else {
+                    resultKey = 'std';
+                    reason = "¡Perfecto! Tienes el espacio y la energía para manejar la majestuosidad de un Estándar.";
+                }
+            }
+
+            // Render Result
+            const data = xoloData[resultKey];
+            document.getElementById('result-placeholder').classList.add('hidden');
+            const resContent = document.getElementById('result-content');
+            resContent.classList.remove('hidden');
+            resContent.classList.add('animate-fade-in-up'); // Custom animation trigger if defined, or just appears
+            
+            document.getElementById('res-title').textContent = "Xolo " + data.title;
+            document.getElementById('res-desc').textContent = data.desc.split('.')[0] + ".";
+            document.getElementById('res-reason').textContent = reason;
+        }
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set default view
+            updateExplorer('std');
+
+            // --- Chart.js Config ---
+            Chart.defaults.font.family = "'Helvetica', 'Arial', sans-serif";
+            Chart.defaults.color = '#57534e'; // xolo-600
+
+            // Chart 1: Weight
+            const ctxWeight = document.getElementById('weightChart').getContext('2d');
+            new Chart(ctxWeight, {
+                type: 'bar',
+                data: {
+                    labels: ['Miniatura', 'Intermedio', 'Estándar'],
+                    datasets: [{
+                        label: 'Peso Mínimo (kg)',
+                        data: [4, 8, 18],
+                        backgroundColor: '#a8a29e', // xolo-400
+                        borderRadius: 4,
+                        barPercentage: 0.6
+                    }, {
+                        label: 'Peso Máximo (kg)',
+                        data: [8, 15, 30],
+                        backgroundColor: '#78716c', // xolo-500
+                        borderRadius: 4,
+                        barPercentage: 0.6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.raw + ' kg';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Kilogramos' }
+                        }
+                    }
+                }
+            });
+
+            // Chart 2: Height
+            const ctxHeight = document.getElementById('heightChart').getContext('2d');
+            new Chart(ctxHeight, {
+                type: 'bar',
+                data: {
+                    labels: ['Miniatura', 'Intermedio', 'Estándar'],
+                    datasets: [{
+                        label: 'Altura (cm)',
+                        data: [35, 45, 60],
+                        backgroundColor: [
+                            '#d97706', // amber-600
+                            '#b45309', // amber-700
+                            '#78350f'  // amber-900
+                        ],
+                        borderRadius: 4,
+                        barPercentage: 0.5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return 'Hasta ' + context.raw + ' cm';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Centímetros' }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
