@@ -38,13 +38,38 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="alternate" hreflang="x-default" href="https://www.xolosramirez.com/index.html" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@400;600&display=swap"
-      rel="stylesheet"
-    />
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@400;600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@400;600&display=swap"></noscript>
+    <link rel="preload" as="style" href="https://unpkg.com/aos@2.3.1/dist/aos.css" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"></noscript>
+    <link rel="preload" as="style" href="css/styles.css" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="css/styles.css"></noscript>
     <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
+      <style data-critical="true">
+:root{color-scheme:dark;--bg:#111;--text:#f1e6d6;--muted:#b8ac98;--accent:#cba135;--accent-2:#fb923c;--card:rgba(0,0,0,0.6);--border:#3a2d10;--color-primario:#161616;--color-texto:#f5efe6;}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:radial-gradient(circle at top, rgba(47, 33, 23, 0.35), transparent 60%), var(--color-primario);color:var(--color-texto);line-height:1.6;}
+img,picture{max-width:100%;height:auto;display:block;}
+a{color:var(--accent);text-decoration:none;}
+.container{width:min(96%,1200px);margin-inline:auto;}
+.site-header{position:sticky;top:0;z-index:50;background:#000;border-bottom:1px solid var(--border);}
+.header-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.75rem 0;}
+.brand{display:flex;align-items:center;gap:.5rem;color:var(--text);font-weight:600;}
+.nav-menu{display:flex;}
+.nav-menu ul{display:flex;gap:1rem;list-style:none;margin:0;padding:0;}
+.nav-menu a{color:var(--text);padding:.5rem .75rem;border-radius:.5rem;}
+.hamburger{display:none;background:transparent;border:0;color:var(--text);padding:.35rem .6rem;border-radius:.5rem;font-size:2rem;}
+.hero{min-height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;isolation:isolate;padding:3rem 1rem;overflow:hidden;}
+.hero__media{position:absolute;inset:0;z-index:-2;display:block;}
+.hero__media img{width:100%;height:100%;object-fit:cover;display:block;}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.65));}
+.hero h1{font-family:'Cinzel',serif;text-transform:uppercase;letter-spacing:1px;color:var(--accent);text-shadow:2px 2px 8px rgba(0,0,0,.6);font-size:clamp(2rem,6vw,3.5rem);}
+.hero p{font-size:clamp(1rem,2.6vw,1.25rem);color:var(--muted);max-width:60ch;margin-inline:auto;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#080808;padding:.85rem 1.75rem;border-radius:999px;border:1px solid var(--border);font-weight:600;letter-spacing:.05em;text-transform:uppercase;}
+.skip-link{position:absolute;left:0;top:-200px;background:var(--accent);color:#fff;padding:.75rem 1.5rem;font-weight:600;border-radius:0 0 .75rem .75rem;transition:top .3s ease;z-index:100;}
+.skip-link:focus-visible{top:0;}
+</style>
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->
@@ -54,7 +79,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         height="0"
         width="0"
         style="display: none; visibility: hidden"
-      ></iframe>
+       loading="lazy"></iframe>
     </noscript>
     <!-- End Google Tag Manager (noscript) -->
     <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
@@ -89,15 +114,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     <main id="contenido-principal">
       <section class="hero" data-aos="fade-in" data-aos-duration="1200">
-        <div class="hero__media" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1;">
-          <iframe 
-            src="https://www.youtube.com/embed/dSgxcEPBxws?si=LZZyFqWyxYAyKDkj&autoplay=1&mute=1&controls=0&loop=1&playlist=dSgxcEPBxws" 
-            title="YouTube video player" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        <div
+          class="hero__media"
+          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; background: url('https://img.youtube.com/vi/dSgxcEPBxws/maxresdefault.jpg') center/cover no-repeat;"
+        >
+          <iframe
+            data-src="https://www.youtube.com/embed/dSgxcEPBxws?si=LZZyFqWyxYAyKDkj&autoplay=1&mute=1&controls=0&loop=1&playlist=dSgxcEPBxws"
+            src="about:blank"
+            loading="lazy"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowfullscreen
-            style="position: absolute; top: 50%; left: 50%; width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; transform: translate(-50%, -50%); pointer-events: none;">
-          </iframe>
+            style="position: absolute; top: 50%; left: 50%; width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; transform: translate(-50%, -50%); pointer-events: none;"
+          ></iframe>
         </div>
         <div class="container">
           <h1>Qué dicen nuestros adoptantes</h1>
@@ -150,7 +180,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           
           <article class="post-card">
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-              <iframe src="https://www.youtube.com/embed/MpEkLAxhe_0?autoplay=1&mute=1&loop=1&playlist=MpEkLAxhe_0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/MpEkLAxhe_0?autoplay=1&mute=1&loop=1&playlist=MpEkLAxhe_0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <div class="post-card__body">
               <blockquote style="font-style: italic; margin-bottom: 1rem;">
@@ -166,7 +196,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="post-card">
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-              <iframe src="https://www.youtube.com/embed/F1A_BXLcD_Y?autoplay=1&mute=1&loop=1&playlist=F1A_BXLcD_Y" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/F1A_BXLcD_Y?autoplay=1&mute=1&loop=1&playlist=F1A_BXLcD_Y" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <div class="post-card__body">
               <blockquote style="font-style: italic; margin-bottom: 1rem;">
@@ -181,7 +211,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="post-card">
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-              <iframe src="https://www.youtube.com/embed/tdSDNNDZn1A?autoplay=1&mute=1&loop=1&playlist=tdSDNNDZn1A" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/tdSDNNDZn1A?autoplay=1&mute=1&loop=1&playlist=tdSDNNDZn1A" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <div class="post-card__body">
               <blockquote style="font-style: italic; margin-bottom: 1rem;">
@@ -194,7 +224,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="post-card">
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-              <iframe src="https://www.youtube.com/embed/ycDqbPtYufU?autoplay=1&mute=1&loop=1&playlist=ycDqbPtYufU" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/ycDqbPtYufU?autoplay=1&mute=1&loop=1&playlist=ycDqbPtYufU" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <div class="post-card__body">
               <blockquote style="font-style: italic; margin-bottom: 1rem;">
@@ -207,7 +237,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="post-card">
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-              <iframe src="https://www.youtube.com/embed/cAtgDgVBycg?autoplay=1&mute=1&loop=1&playlist=cAtgDgVBycg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/cAtgDgVBycg?autoplay=1&mute=1&loop=1&playlist=cAtgDgVBycg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <div class="post-card__body">
               <blockquote style="font-style: italic; margin-bottom: 1rem;">
@@ -220,7 +250,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="post-card">
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-              <iframe src="https://www.youtube.com/embed/dHM6Lpvl8qY?autoplay=1&mute=1&loop=1&playlist=dHM6Lpvl8qY" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/dHM6Lpvl8qY?autoplay=1&mute=1&loop=1&playlist=dHM6Lpvl8qY" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <div class="post-card__body">
               <blockquote style="font-style: italic; margin-bottom: 1rem;">
@@ -233,7 +263,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="post-card">
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-              <iframe src="https://www.youtube.com/embed/_6oSyUZft4Y?autoplay=1&mute=1&loop=1&playlist=_6oSyUZft4Y" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/_6oSyUZft4Y?autoplay=1&mute=1&loop=1&playlist=_6oSyUZft4Y" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <div class="post-card__body">
               <blockquote style="font-style: italic; margin-bottom: 1rem;">
@@ -246,7 +276,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="post-card">
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-              <iframe src="https://www.youtube.com/embed/ibvVwkalHeU?autoplay=1&mute=1&loop=1&playlist=ibvVwkalHeU" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/ibvVwkalHeU?autoplay=1&mute=1&loop=1&playlist=ibvVwkalHeU" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <div class="post-card__body">
               <blockquote style="font-style: italic; margin-bottom: 1rem;">
@@ -262,7 +292,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="post-card">
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-              <iframe src="https://www.youtube.com/embed/o3tioapUTg8?autoplay=1&mute=1&loop=1&playlist=o3tioapUTg8" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/o3tioapUTg8?autoplay=1&mute=1&loop=1&playlist=o3tioapUTg8" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <div class="post-card__body">
               <blockquote style="font-style: italic; margin-bottom: 1rem;">
@@ -277,7 +307,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="post-card">
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-              <iframe src="https://www.youtube.com/embed/dSgxcEPBxws?autoplay=1&mute=1&loop=1&playlist=dSgxcEPBxws" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/dSgxcEPBxws?autoplay=1&mute=1&loop=1&playlist=dSgxcEPBxws" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <div class="post-card__body">
               <blockquote style="font-style: italic; margin-bottom: 1rem;">
@@ -292,7 +322,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="post-card">
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-              <iframe src="https://www.youtube.com/embed/bdA7eC6wfd8?autoplay=1&mute=1&loop=1&playlist=bdA7eC6wfd8" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/bdA7eC6wfd8?autoplay=1&mute=1&loop=1&playlist=bdA7eC6wfd8" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <div class="post-card__body">
               <blockquote style="font-style: italic; margin-bottom: 1rem;">
@@ -307,7 +337,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="post-card">
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-              <iframe src="https://www.youtube.com/embed/VrUHRt_QNJg?autoplay=1&mute=1&loop=1&playlist=VrUHRt_QNJg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/VrUHRt_QNJg?autoplay=1&mute=1&loop=1&playlist=VrUHRt_QNJg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <div class="post-card__body">
               <blockquote style="font-style: italic; margin-bottom: 1rem;">
@@ -321,7 +351,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="post-card">
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-              <iframe src="https://www.youtube.com/embed/Ky0cn9cuJms?autoplay=1&mute=1&loop=1&playlist=Ky0cn9cuJms" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/Ky0cn9cuJms?autoplay=1&mute=1&loop=1&playlist=Ky0cn9cuJms" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <div class="post-card__body">
               <blockquote style="font-style: italic; margin-bottom: 1rem;">
@@ -336,7 +366,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="post-card">
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-              <iframe src="https://www.youtube.com/embed/FGe45Fc6V-U?autoplay=1&mute=1&loop=1&playlist=FGe45Fc6V-U" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/FGe45Fc6V-U?autoplay=1&mute=1&loop=1&playlist=FGe45Fc6V-U" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <div class="post-card__body">
               <blockquote style="font-style: italic; margin-bottom: 1rem;">
@@ -350,7 +380,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="post-card">
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-              <iframe src="https://www.youtube.com/embed/q_k3bTBjdeE?autoplay=1&mute=1&loop=1&playlist=q_k3bTBjdeE" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/q_k3bTBjdeE?autoplay=1&mute=1&loop=1&playlist=q_k3bTBjdeE" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <div class="post-card__body">
               <blockquote style="font-style: italic; margin-bottom: 1rem;">
@@ -364,7 +394,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="post-card">
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-              <iframe src="https://www.youtube.com/embed/yWazfZ2LNSs?autoplay=1&mute=1&loop=1&playlist=yWazfZ2LNSs" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/yWazfZ2LNSs?autoplay=1&mute=1&loop=1&playlist=yWazfZ2LNSs" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <div class="post-card__body">
               <blockquote style="font-style: italic; margin-bottom: 1rem;">
@@ -379,7 +409,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="post-card">
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-              <iframe src="https://www.youtube.com/embed/PqXigXN025s?autoplay=1&mute=1&loop=1&playlist=PqXigXN025s" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/PqXigXN025s?autoplay=1&mute=1&loop=1&playlist=PqXigXN025s" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <div class="post-card__body">
               <blockquote style="font-style: italic; margin-bottom: 1rem;">
@@ -393,7 +423,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="post-card">
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-              <iframe src="https://www.youtube.com/embed/u6GGwnYx790?autoplay=1&mute=1&loop=1&playlist=u6GGwnYx790" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/u6GGwnYx790?autoplay=1&mute=1&loop=1&playlist=u6GGwnYx790" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <div class="post-card__body">
               <blockquote style="font-style: italic; margin-bottom: 1rem;">
@@ -407,7 +437,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="post-card">
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-              <iframe src="https://www.youtube.com/embed/A1w_jSLy0tc?autoplay=1&mute=1&loop=1&playlist=A1w_jSLy0tc" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/A1w_jSLy0tc?autoplay=1&mute=1&loop=1&playlist=A1w_jSLy0tc" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <div class="post-card__body">
               <blockquote style="font-style: italic; margin-bottom: 1rem;">
@@ -422,7 +452,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="post-card">
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-              <iframe src="https://www.youtube.com/embed/jCTpsuSJRbE?autoplay=1&mute=1&loop=1&playlist=jCTpsuSJRbE" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/jCTpsuSJRbE?autoplay=1&mute=1&loop=1&playlist=jCTpsuSJRbE" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <div class="post-card__body">
               <blockquote style="font-style: italic; margin-bottom: 1rem;">
@@ -437,7 +467,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="post-card">
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-              <iframe src="https://www.youtube.com/embed/xaNziAkW5t4?autoplay=1&mute=1&loop=1&playlist=xaNziAkW5t4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/xaNziAkW5t4?autoplay=1&mute=1&loop=1&playlist=xaNziAkW5t4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <div class="post-card__body">
               <blockquote style="font-style: italic; margin-bottom: 1rem;">
@@ -450,7 +480,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="post-card">
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-              <iframe src="https://www.youtube.com/embed/GUN7IHP7WrU?autoplay=1&mute=1&loop=1&playlist=GUN7IHP7WrU" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/GUN7IHP7WrU?autoplay=1&mute=1&loop=1&playlist=GUN7IHP7WrU" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <div class="post-card__body">
               <blockquote style="font-style: italic; margin-bottom: 1rem;">
@@ -468,7 +498,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 src="https://www.youtube.com/embed/fg5EhvJcti4?si=PWjfFqrH0Iy7WiPy&autoplay=1&mute=1&loop=1&playlist=fg5EhvJcti4" 
                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowfullscreen>
+                allowfullscreen loading="lazy">
               </iframe>
             </div>
             <div class="post-card__body">
@@ -518,9 +548,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <p class="copyright">© 2025 Xolos Ramírez. Todos los derechos reservados.</p>
     </footer>
     <script src="js/main.js" defer></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script defer src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-      AOS.init({ once: true, duration: 700, offset: 60, easing: 'ease-out' });
+      document.addEventListener('DOMContentLoaded', () => {
+  AOS.init({ once: true, duration: 700, offset: 60, easing: 'ease-out' });
+});
     </script>
   </body>
 </html>

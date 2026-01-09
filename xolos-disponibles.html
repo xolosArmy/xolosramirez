@@ -42,14 +42,40 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="alternate" hreflang="x-default" href="https://www.xolosramirez.com/index.html" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@400;600&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" />
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@400;600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@400;600&display=swap"></noscript>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap"></noscript>
+    <link rel="preload" as="style" href="https://unpkg.com/aos@2.3.1/dist/aos.css" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"></noscript>
+    <link rel="preload" as="style" href="css/styles.css" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="css/styles.css"></noscript>
     <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
+      <style data-critical="true">
+:root{color-scheme:dark;--bg:#111;--text:#f1e6d6;--muted:#b8ac98;--accent:#cba135;--accent-2:#fb923c;--card:rgba(0,0,0,0.6);--border:#3a2d10;--color-primario:#161616;--color-texto:#f5efe6;}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:radial-gradient(circle at top, rgba(47, 33, 23, 0.35), transparent 60%), var(--color-primario);color:var(--color-texto);line-height:1.6;}
+img,picture{max-width:100%;height:auto;display:block;}
+a{color:var(--accent);text-decoration:none;}
+.container{width:min(96%,1200px);margin-inline:auto;}
+.site-header{position:sticky;top:0;z-index:50;background:#000;border-bottom:1px solid var(--border);}
+.header-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.75rem 0;}
+.brand{display:flex;align-items:center;gap:.5rem;color:var(--text);font-weight:600;}
+.nav-menu{display:flex;}
+.nav-menu ul{display:flex;gap:1rem;list-style:none;margin:0;padding:0;}
+.nav-menu a{color:var(--text);padding:.5rem .75rem;border-radius:.5rem;}
+.hamburger{display:none;background:transparent;border:0;color:var(--text);padding:.35rem .6rem;border-radius:.5rem;font-size:2rem;}
+.hero{min-height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;isolation:isolate;padding:3rem 1rem;overflow:hidden;}
+.hero__media{position:absolute;inset:0;z-index:-2;display:block;}
+.hero__media img{width:100%;height:100%;object-fit:cover;display:block;}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.65));}
+.hero h1{font-family:'Cinzel',serif;text-transform:uppercase;letter-spacing:1px;color:var(--accent);text-shadow:2px 2px 8px rgba(0,0,0,.6);font-size:clamp(2rem,6vw,3.5rem);}
+.hero p{font-size:clamp(1rem,2.6vw,1.25rem);color:var(--muted);max-width:60ch;margin-inline:auto;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#080808;padding:.85rem 1.75rem;border-radius:999px;border:1px solid var(--border);font-weight:600;letter-spacing:.05em;text-transform:uppercase;}
+.skip-link{position:absolute;left:0;top:-200px;background:var(--accent);color:#fff;padding:.75rem 1.5rem;font-weight:600;border-radius:0 0 .75rem .75rem;transition:top .3s ease;z-index:100;}
+.skip-link:focus-visible{top:0;}
+</style>
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->
@@ -59,7 +85,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         height="0"
         width="0"
         style="display: none; visibility: hidden"
-      ></iframe>
+       loading="lazy"></iframe>
     </noscript>
     <!-- End Google Tag Manager (noscript) -->
     <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
@@ -94,15 +120,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     <main id="contenido-principal">
       <section class="hero hero-disponibles" data-aos="fade-in" data-aos-duration="1200">
-        <div class="hero__media" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1;">
-          <iframe 
-            src="https://www.youtube.com/embed/0Z6luzI6TpY?si=oXn3PZc-2iz6NGWk&autoplay=1&mute=1&loop=1&playlist=0Z6luzI6TpY" 
-            title="YouTube video player" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        <div
+          class="hero__media"
+          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; background: url('https://img.youtube.com/vi/0Z6luzI6TpY/maxresdefault.jpg') center/cover no-repeat;"
+        >
+          <iframe
+            data-src="https://www.youtube.com/embed/0Z6luzI6TpY?si=oXn3PZc-2iz6NGWk&autoplay=1&mute=1&loop=1&playlist=0Z6luzI6TpY"
+            src="about:blank"
+            loading="lazy"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowfullscreen
-            style="position: absolute; top: 50%; left: 50%; width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; transform: translate(-50%, -50%); pointer-events: none;">
-          </iframe>
+            style="position: absolute; top: 50%; left: 50%; width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; transform: translate(-50%, -50%); pointer-events: none;"
+          ></iframe>
         </div>
         <div class="container">
           <h1>Xolos disponibles</h1>
@@ -172,7 +203,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 src="https://www.youtube.com/embed/fg5EhvJcti4?autoplay=1&mute=1&loop=1&playlist=fg5EhvJcti4"  
                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                allowfullscreen>
+                allowfullscreen loading="lazy">
               </iframe>
             </div>
             <h3>Tane Ramirez</h3>
@@ -211,7 +242,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 src="https://www.youtube.com/embed/xdWjsfQT75U?autoplay=1&mute=1&loop=1&playlist=xdWjsfQT75U" 
                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                allowfullscreen>
+                allowfullscreen loading="lazy">
               </iframe>
             </div>
 
@@ -251,7 +282,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 src="https://www.youtube.com/embed/5fdDGjSv0jA?si=Dm_sGJEYgvQURkcz&autoplay=1&mute=1&loop=1&playlist=5fdDGjSv0jA" 
                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                allowfullscreen>
+                allowfullscreen loading="lazy">
               </iframe>
             </div>
 
@@ -291,7 +322,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 src="https://www.youtube.com/embed/CZZTXGOGG_M?autoplay=1&mute=1&loop=1&playlist=CZZTXGOGG_M" 
                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                allowfullscreen>
+                allowfullscreen loading="lazy">
               </iframe>
             </div>
 
@@ -331,7 +362,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 src="https://www.youtube.com/embed/ld80l8bHMz8?autoplay=1&mute=1&loop=1&playlist=ld80l8bHMz8" 
                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                allowfullscreen>
+                allowfullscreen loading="lazy">
               </iframe>
             </div>
 
@@ -372,7 +403,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 src="https://www.youtube.com/embed/PdUJXNy30hA?si=tzx7LU-38J_Z5KH4&autoplay=1&mute=1&loop=1&playlist=PdUJXNy30hA"
                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                allowfullscreen>
+                allowfullscreen loading="lazy">
               </iframe>
             </div>
 
@@ -422,15 +453,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <h2>¿Cómo reservo?</h2>
         <div class="pasos-reserva">
           <div class="paso">
-            <img src="img/icono-eleccion.svg" alt="" width="50" height="50" loading="lazy" />
+            <img src="img/icono-eleccion.svg" alt="" width="50" height="50" loading="lazy" / decoding="async">
             <p><strong>1. Elige a tu Xolo:</strong> Revisa los perfiles y selecciona el que mejor se adapte a tu familia.</p>
           </div>
           <div class="paso">
-            <img src="img/icono-contacto.svg" alt="" width="50" height="50" loading="lazy" />
+            <img src="img/icono-contacto.svg" alt="" width="50" height="50" loading="lazy" / decoding="async">
             <p><strong>2. Escríbenos:</strong> Haz clic en WhatsApp o envíanos un correo para iniciar la reserva.</p>
           </div>
           <div class="paso">
-            <img src="img/icono-reserva.svg" alt="" width="50" height="50" loading="lazy" />
+            <img src="img/icono-reserva.svg" alt="" width="50" height="50" loading="lazy" / decoding="async">
             <p><strong>3. Reserva:</strong> Confirma el anticipo y coordinamos la entrega contigo.</p>
           </div>
         </div>
@@ -519,9 +550,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       📲 WhatsApp directo
     </a>
     <script src="js/main.js" defer></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script defer src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-      AOS.init({ once: true, duration: 700, offset: 60, easing: 'ease-out' });
+      document.addEventListener('DOMContentLoaded', () => {
+  AOS.init({ once: true, duration: 700, offset: 60, easing: 'ease-out' });
+});
     </script>
   </body>
 </html>

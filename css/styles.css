@@ -44,6 +44,11 @@ h3 {
 
 .section{ padding: clamp(2rem, 4vw, 4rem) 0; }
 
+main > section:not(.hero){
+  content-visibility: auto;
+  contain-intrinsic-size: 1000px;
+}
+
 .hero{
   min-height: 100svh; /* mobile-safe viewport height */
   display:flex;

@@ -29,15 +29,43 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <link href="https://www.xolosramirez.com/index.html" hreflang="x-default" rel="alternate"/>
   <link href="https://fonts.googleapis.com" rel="preconnect"/>
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet"/>
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
-  <link href="../css/styles.css" rel="stylesheet"/>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap"></noscript>
+  <link rel="preload" as="style" href="https://unpkg.com/aos@2.3.1/dist/aos.css" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"></noscript>
+<link rel="preload" as="style" href="../css/styles.css" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="../css/styles.css"></noscript>
   <link href="../img/favicon.svg" rel="icon" type="image/svg+xml"/>
- </head>
+     <style data-critical="true">
+:root{color-scheme:dark;--bg:#111;--text:#f1e6d6;--muted:#b8ac98;--accent:#cba135;--accent-2:#fb923c;--card:rgba(0,0,0,0.6);--border:#3a2d10;--color-primario:#161616;--color-texto:#f5efe6;}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:radial-gradient(circle at top, rgba(47, 33, 23, 0.35), transparent 60%), var(--color-primario);color:var(--color-texto);line-height:1.6;}
+img,picture{max-width:100%;height:auto;display:block;}
+a{color:var(--accent);text-decoration:none;}
+.container{width:min(96%,1200px);margin-inline:auto;}
+.site-header{position:sticky;top:0;z-index:50;background:#000;border-bottom:1px solid var(--border);}
+.header-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.75rem 0;}
+.brand{display:flex;align-items:center;gap:.5rem;color:var(--text);font-weight:600;}
+.nav-menu{display:flex;}
+.nav-menu ul{display:flex;gap:1rem;list-style:none;margin:0;padding:0;}
+.nav-menu a{color:var(--text);padding:.5rem .75rem;border-radius:.5rem;}
+.hamburger{display:none;background:transparent;border:0;color:var(--text);padding:.35rem .6rem;border-radius:.5rem;font-size:2rem;}
+.hero{min-height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;isolation:isolate;padding:3rem 1rem;overflow:hidden;}
+.hero__media{position:absolute;inset:0;z-index:-2;display:block;}
+.hero__media img{width:100%;height:100%;object-fit:cover;display:block;}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.65));}
+.hero h1{font-family:'Cinzel',serif;text-transform:uppercase;letter-spacing:1px;color:var(--accent);text-shadow:2px 2px 8px rgba(0,0,0,.6);font-size:clamp(2rem,6vw,3.5rem);}
+.hero p{font-size:clamp(1rem,2.6vw,1.25rem);color:var(--muted);max-width:60ch;margin-inline:auto;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#080808;padding:.85rem 1.75rem;border-radius:999px;border:1px solid var(--border);font-weight:600;letter-spacing:.05em;text-transform:uppercase;}
+.skip-link{position:absolute;left:0;top:-200px;background:var(--accent);color:#fff;padding:.75rem 1.5rem;font-weight:600;border-radius:0 0 .75rem .75rem;transition:top .3s ease;z-index:100;}
+.skip-link:focus-visible{top:0;}
+</style>
+  </head>
  <body>
   <!-- Google Tag Manager (noscript) -->
   <noscript>
-   <iframe height="0" src="https://www.googletagmanager.com/ns.html?id=GTM-MGTMWN7T" style="display: none; visibility: hidden" width="0">
+   <iframe height="0" src="https://www.googletagmanager.com/ns.html?id=GTM-MGTMWN7T" style="display: none; visibility: hidden" width="0" loading="lazy">
    </iframe>
   </noscript>
   <!-- End Google Tag Manager (noscript) -->
@@ -47,7 +75,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <header class="site-header">
    <div class="container header-row">
     <a class="brand" href="../index.html">
-     <img alt="Xolos Ramírez Logo" height="44" src="https://i.imgur.com/SbNsa4g.jpeg" style="border-radius: 50%; object-fit: cover;" width="44"/>
+     <img alt="Xolos Ramírez Logo" height="44" src="https://i.imgur.com/SbNsa4g.jpeg" style="border-radius: 50%; object-fit: cover;" width="44"/ decoding="async" loading="eager">
      <span>
       Xolos Ramírez
      </span>
@@ -93,15 +121,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </header>
    <main id="contenido-principal">
       <section class="hero hero-disponibles" data-aos="fade-in" data-aos-duration="1200">
-        <div class="hero__media" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1;">
-          <iframe 
-            src="https://www.youtube.com/embed/lWOCO2wkok8?si=I79unog5VKIjRZxd&autoplay=1&mute=1&loop=1" 
-            title="YouTube video player" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        <div
+          class="hero__media"
+          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; background: url('https://img.youtube.com/vi/lWOCO2wkok8/maxresdefault.jpg') center/cover no-repeat;"
+        >
+          <iframe
+            data-src="https://www.youtube.com/embed/lWOCO2wkok8?si=I79unog5VKIjRZxd&autoplay=1&mute=1&loop=1"
+            src="about:blank"
+            loading="lazy"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowfullscreen
-            style="position: absolute; top: 50%; left: 50%; width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; transform: translate(-50%, -50%); pointer-events: none;">
-          </iframe>
+            style="position: absolute; top: 50%; left: 50%; width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; transform: translate(-50%, -50%); pointer-events: none;"
+          ></iframe>
         </div>
         <div class="container">
           <h1>Xolos disponibles</h1>
@@ -115,7 +148,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
    <section aria-label="Listado de artículos del blog" class="grid" data-aos="fade-up" data-aos-duration="1000">
     <article class="post-card" data-aos="fade-up">
      <a aria-label="Leer: Café con Xolos Ramírez: Tzome Ramírez e Historia Viva" class="post-card__media" href="2026-01-06-cafe-con-xolos-ramirez-tzome.html">
-      <img alt="Café con Xolos Ramírez: Tzome Ramírez e Historia Viva" height="360" loading="lazy" src="https://img.youtube.com/vi/cLlFsAMoWUE/maxresdefault.jpg" width="640"/>
+      <img alt="Café con Xolos Ramírez: Tzome Ramírez e Historia Viva" height="360" loading="eager" src="https://img.youtube.com/vi/cLlFsAMoWUE/maxresdefault.jpg" width="640"/ decoding="async">
      </a>
      <div class="post-card__body">
       <time class="post-card__date" datetime="2026-01-06">
@@ -136,7 +169,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </article>
     <article class="post-card" data-aos="fade-up">
      <a aria-label="Leer: Xolos Ramírez: Crónica de una Nueva Unión" class="post-card__media" href="2026-01-05-entrega-xoloitzcuintle-miniatura-cdmx.html">
-      <img alt="Entrega Xoloitzcuintle Miniatura en CDMX" height="360" loading="lazy" src="https://img.youtube.com/vi/paCr5ImlrU8/maxresdefault.jpg" width="640"/>
+      <img alt="Entrega Xoloitzcuintle Miniatura en CDMX" height="360" loading="lazy" src="https://img.youtube.com/vi/paCr5ImlrU8/maxresdefault.jpg" width="640"/ decoding="async">
      </a>
      <div class="post-card__body">
       <time class="post-card__date" datetime="2026-01-05">
@@ -577,7 +610,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </article>
     <article class="post-card">
      <a aria-label="Leer: Malva Ramírez: Una Xoloitzcuintle de Xolos Ramírez que Viajará por el Mundo" class="post-card__media" href="2025-10-21-malva-ramirez-xoloitzcuintle-viajera.html">
-      <img alt="Malva Ramírez: Una Xoloitzcuintle de Xolos Ramírez que Viajará por el Mundo" decoding="async" height="360" loading="lazy" src="../img/hero/hero-placeholder.svg" width="640"/>
+      <img alt="Malva Ramírez: Una Xoloitzcuintle de Xolos Ramírez que Viajará por el Mundo" decoding="async" height="360" loading="eager" src="../img/hero/hero-placeholder.svg" width="640"/>
      </a>
      <div class="post-card__body">
       <time class="post-card__date" datetime="2025-10-21">
@@ -811,10 +844,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </script>
   <script defer="" src="../js/main.js">
   </script>
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js">
+  <script defer src="https://unpkg.com/aos@2.3.1/dist/aos.js">
   </script>
   <script>
-   AOS.init({ once: true, duration: 700, offset: 60, easing: 'ease-out' });
+   document.addEventListener('DOMContentLoaded', () => {
+  AOS.init({ once: true, duration: 700, offset: 60, easing: 'ease-out' });
+});
   </script>
  </body>
 </html>
