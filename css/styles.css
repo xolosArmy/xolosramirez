@@ -1148,3 +1148,77 @@ textarea {
   .nav-menu { transform: none; position: relative; inset: auto; width: auto; max-width: none; background: transparent; }
   .nav-menu ul { display: flex; flex-direction: row; gap: 1.5rem; list-style: none; }
 }
+
+/* ============================================================
+   FIX DEFINITIVO: RESPONSIVIDAD GLOBAL (HERO, IMÁGENES, GRIDS)
+   ============================================================ */
+
+/* 1. Ajuste Universal de Imágenes */
+img, picture, video {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block;
+    object-fit: cover; /* Cambia a 'contain' si NO quieres que se corte nada de la imagen */
+}
+
+/* 2. Fix para secciones Hero (Principal y Subpáginas) */
+.hero, 
+.hero.hero-disponibles, 
+#cta, 
+.parallax {
+    width: 100% !important;
+    max-width: 100vw !important;
+    margin-inline: 0 !important; /* Elimina márgenes negativos que causan scroll lateral */
+    min-height: 70vh; /* Altura generosa en desktop */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 3. Ajuste de Imágenes dentro de Hero (Evita que se corten demasiado) */
+.hero__media img, 
+.hero img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+}
+
+/* 4. MEDIA QUERIES PARA MÓVIL (Celulares) */
+@media (max-width: 768px) {
+    /* Reducimos la altura del hero para que la imagen no se pierda */
+    .hero, 
+    .hero.hero-disponibles, 
+    #cta, 
+    .parallax {
+        min-height: 350px !important; /* Altura fija razonable para móvil */
+        height: auto !important;
+        background-attachment: scroll !important; /* El parallax suele romperse en móvil */
+    }
+
+    .hero h1 {
+        font-size: 1.8rem !important;
+    }
+
+    /* Grids responsivas: 1 sola columna en móvil */
+    .grid, 
+    .grid-2, 
+    .trust-grid, 
+    .gallery-grid, 
+    .footer-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+
+    /* Contenedores */
+    .container {
+        width: 92% !important;
+        padding: 0 10px !important;
+    }
+
+    /* Forzar que las tarjetas no se desborden */
+    .card {
+        width: 100% !important;
+        margin-bottom: 1rem;
+    }
+}
