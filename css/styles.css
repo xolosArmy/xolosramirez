@@ -1007,15 +1007,88 @@ h1,h2,h3,.site-header .brand span{font-family:'Cinzel',serif;text-transform:uppe
     max-width: 100%;
   }
 
-  .hero__media iframe{
-    display: none;
-  }
-
   .nav-menu ul{
     transform: none;
     position: static;
     background: transparent;
     box-shadow: none;
+  }
+}
+
+/* Hero media + content mobile fixes */
+html,
+body{
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+*, *::before, *::after{
+  box-sizing: border-box;
+}
+
+.hero{
+  position: relative;
+  overflow: hidden;
+}
+
+.hero__media{
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+}
+
+.hero__media img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero__media iframe.hero__video{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%) scale(1.15);
+  border: 0;
+  max-width: none;
+  pointer-events: none;
+}
+
+.hero__content,
+.hero .container{
+  position: relative;
+  z-index: 2;
+}
+
+.hero__content{
+  width: 100%;
+  max-width: 100%;
+}
+
+@media (max-width: 768px){
+  .hero__content,
+  .hero .container{
+    width: 100%;
+    max-width: 100%;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .hero__content *{
+    max-width: 100%;
+  }
+
+  .hero .btn,
+  .hero .cta,
+  .hero button{
+    max-width: 92vw;
+    width: auto;
+    display: inline-flex;
+    justify-content: center;
   }
 }
 
