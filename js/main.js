@@ -3,15 +3,12 @@ const navToggle = document.querySelector('.hamburger');
 
 if (navToggle && navMenu) {
   navToggle.addEventListener('click', () => {
-    const visibility = navMenu.getAttribute('data-visible');
+    const isVisible = navMenu.getAttribute('data-visible') === 'true';
+    const nextState = String(!isVisible);
 
-    if (visibility === 'false') {
-      navMenu.setAttribute('data-visible', 'true');
-      navToggle.setAttribute('aria-expanded', 'true');
-    } else {
-      navMenu.setAttribute('data-visible', 'false');
-      navToggle.setAttribute('aria-expanded', 'false');
-    }
+    navMenu.setAttribute('data-visible', nextState);
+    navToggle.setAttribute('aria-expanded', nextState);
+    document.body.classList.toggle('menu-open', !isVisible);
   });
 
   // Cerrar el menú automáticamente al hacer clic en un enlace
@@ -19,6 +16,7 @@ if (navToggle && navMenu) {
     link.addEventListener('click', () => {
       navMenu.setAttribute('data-visible', 'false');
       navToggle.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('menu-open');
     });
   });
 }
