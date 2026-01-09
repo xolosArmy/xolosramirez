@@ -11,9 +11,36 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Available Xolos - Xolos Ramírez</title>
-  <link rel="stylesheet" href="../css/styles.css">
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-</head>
+  <link rel="preload" as="style" href="../css/styles.css" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="../css/styles.css"></noscript>
+  <link rel="preload" as="style" href="https://unpkg.com/aos@2.3.1/dist/aos.css" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"></noscript>
+    <style data-critical="true">
+:root{color-scheme:dark;--bg:#111;--text:#f1e6d6;--muted:#b8ac98;--accent:#cba135;--accent-2:#fb923c;--card:rgba(0,0,0,0.6);--border:#3a2d10;--color-primario:#161616;--color-texto:#f5efe6;}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:radial-gradient(circle at top, rgba(47, 33, 23, 0.35), transparent 60%), var(--color-primario);color:var(--color-texto);line-height:1.6;}
+img,picture{max-width:100%;height:auto;display:block;}
+a{color:var(--accent);text-decoration:none;}
+.container{width:min(96%,1200px);margin-inline:auto;}
+.site-header{position:sticky;top:0;z-index:50;background:#000;border-bottom:1px solid var(--border);}
+.header-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.75rem 0;}
+.brand{display:flex;align-items:center;gap:.5rem;color:var(--text);font-weight:600;}
+.nav-menu{display:flex;}
+.nav-menu ul{display:flex;gap:1rem;list-style:none;margin:0;padding:0;}
+.nav-menu a{color:var(--text);padding:.5rem .75rem;border-radius:.5rem;}
+.hamburger{display:none;background:transparent;border:0;color:var(--text);padding:.35rem .6rem;border-radius:.5rem;font-size:2rem;}
+.hero{min-height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;isolation:isolate;padding:3rem 1rem;overflow:hidden;}
+.hero__media{position:absolute;inset:0;z-index:-2;display:block;}
+.hero__media img{width:100%;height:100%;object-fit:cover;display:block;}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.65));}
+.hero h1{font-family:'Cinzel',serif;text-transform:uppercase;letter-spacing:1px;color:var(--accent);text-shadow:2px 2px 8px rgba(0,0,0,.6);font-size:clamp(2rem,6vw,3.5rem);}
+.hero p{font-size:clamp(1rem,2.6vw,1.25rem);color:var(--muted);max-width:60ch;margin-inline:auto;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#080808;padding:.85rem 1.75rem;border-radius:999px;border:1px solid var(--border);font-weight:600;letter-spacing:.05em;text-transform:uppercase;}
+.skip-link{position:absolute;left:0;top:-200px;background:var(--accent);color:#fff;padding:.75rem 1.5rem;font-weight:600;border-radius:0 0 .75rem .75rem;transition:top .3s ease;z-index:100;}
+.skip-link:focus-visible{top:0;}
+</style>
+  </head>
 <body>
   <!-- Google Tag Manager (noscript) -->
   <noscript>
@@ -22,13 +49,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       height="0"
       width="0"
       style="display: none; visibility: hidden"
-    ></iframe>
+     loading="lazy"></iframe>
   </noscript>
   <!-- End Google Tag Manager (noscript) -->
   <header class="site-header">
     <div class="container header-container">
       <a class="brand" href="index.html">
-        <img src="https://i.imgur.com/SbNsa4g.jpeg" alt="Xolos Ramírez Logo" width="44" height="44">
+        <img src="https://i.imgur.com/SbNsa4g.jpeg" alt="Xolos Ramírez Logo" width="44" height="44" decoding="async" loading="eager">
         <span>Xolos Ramírez</span>
       </a>
 
@@ -57,13 +84,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <main>
     <section class="hero hero-disponibles" data-aos="fade-in" data-aos-duration="1200">
-      <div class="hero__media" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1;">
-        <iframe 
-          src="https://www.youtube.com/embed/0Z6luzI6TpY?autoplay=1&mute=1&loop=1&playlist=0Z6luzI6TpY&controls=0&showinfo=0" 
-          frameborder="0" 
-          allow="autoplay; encrypted-media" 
-          style="position: absolute; top: 50%; left: 50%; width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; transform: translate(-50%, -50%); pointer-events: none;">
-        </iframe>
+      <div
+        class="hero__media"
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; background: url('https://img.youtube.com/vi/0Z6luzI6TpY/maxresdefault.jpg') center/cover no-repeat;"
+      >
+        <iframe
+          data-src="https://www.youtube.com/embed/0Z6luzI6TpY?autoplay=1&mute=1&loop=1&playlist=0Z6luzI6TpY&controls=0&showinfo=0"
+          src="about:blank"
+          loading="lazy"
+          frameborder="0"
+          allow="autoplay; encrypted-media"
+          style="position: absolute; top: 50%; left: 50%; width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; transform: translate(-50%, -50%); pointer-events: none;"
+        ></iframe>
       </div>
       <div class="container">
         <h1>Available Xolos</h1>
@@ -78,7 +110,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           
           <article class="card" data-aos="zoom-in">
             <picture class="card__media">
-              <img src="https://i.imgur.com/nqOoRXL.jpeg" alt="Tane Ramirez" loading="lazy">
+              <img src="https://i.imgur.com/nqOoRXL.jpeg" alt="Tane Ramirez" loading="lazy" decoding="async" width="910" height="910">
             </picture>
             <h3>Tane Ramirez</h3>
             <p>(male xoloitzcuintle, miniature size, hairless variety, black color)</p>
@@ -89,10 +121,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="card" data-aos="zoom-in" data-aos-delay="100">
             <picture class="card__media">
-              <img src="https://i.imgur.com/5xGxPmU.jpeg" alt="Humo Ramirez" loading="lazy">
+              <img src="https://i.imgur.com/5xGxPmU.jpeg" alt="Humo Ramirez" loading="lazy" decoding="async" width="910" height="1138">
             </picture>
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin-top: 1rem;">
-              <iframe src="https://www.youtube.com/embed/xdWjsfQT75U?autoplay=1&mute=1&loop=1&playlist=xdWjsfQT75U" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/xdWjsfQT75U?autoplay=1&mute=1&loop=1&playlist=xdWjsfQT75U" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <h3>Humo Ramirez</h3>
             <p>(male xoloitzcuintle, miniature size, hairless variety, black color)</p>
@@ -103,10 +135,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="card" data-aos="zoom-in" data-aos-delay="200">
             <picture class="card__media">
-              <img src="https://i.imgur.com/mm59sZ7.jpeg" alt="Tonatiuh Ramirez" loading="lazy">
+              <img src="https://i.imgur.com/mm59sZ7.jpeg" alt="Tonatiuh Ramirez" loading="lazy" decoding="async" width="708" height="885">
             </picture>
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin-top: 1rem;">
-              <iframe src="https://www.youtube.com/embed/5fdDGjSv0jA?autoplay=1&mute=1&loop=1&playlist=5fdDGjSv0jA" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/5fdDGjSv0jA?autoplay=1&mute=1&loop=1&playlist=5fdDGjSv0jA" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <h3>Tonatiuh Ramirez</h3>
             <p>(male xoloitzcuintle, intermediate size, hairless variety, black color)</p>
@@ -117,10 +149,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="card" data-aos="zoom-in" data-aos-delay="300">
             <picture class="card__media">
-              <img src="https://i.imgur.com/o2137yg.jpeg" alt="Tzontli Ramirez" loading="lazy">
+              <img src="https://i.imgur.com/o2137yg.jpeg" alt="Tzontli Ramirez" loading="lazy" decoding="async" width="910" height="910">
             </picture>
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin-top: 1rem;">
-              <iframe src="https://www.youtube.com/embed/CZZTXGOGG_M?autoplay=1&mute=1&loop=1&playlist=CZZTXGOGG_M" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/CZZTXGOGG_M?autoplay=1&mute=1&loop=1&playlist=CZZTXGOGG_M" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <h3>Tzontli Ramirez</h3>
             <p>(male xoloitzcuintle, standard size, hairless variety, black color)</p>
@@ -131,10 +163,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           <article class="card" data-aos="zoom-in" data-aos-delay="400">
             <picture class="card__media">
-              <img src="https://i.imgur.com/pDWIcED.jpeg" alt="Axia Ramirez" loading="lazy">
+              <img src="https://i.imgur.com/pDWIcED.jpeg" alt="Axia Ramirez" loading="lazy" decoding="async" width="910" height="910">
             </picture>
             <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin-top: 1rem;">
-              <iframe src="https://www.youtube.com/embed/ld80l8bHMz8?autoplay=1&mute=1&loop=1&playlist=ld80l8bHMz8" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+              <iframe src="https://www.youtube.com/embed/ld80l8bHMz8?autoplay=1&mute=1&loop=1&playlist=ld80l8bHMz8" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen loading="lazy"></iframe>
             </div>
             <h3>Axia Ramirez</h3>
             <p>(female xoloitzcuintle, intermediate size, hairless variety, black color)</p>
@@ -151,7 +183,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <footer class="site-footer">
     <div class="container footer-grid">
       <div class="footer-brand">
-        <img src="https://i.imgur.com/SbNsa4g.jpeg" alt="Xolos Ramírez" width="60">
+        <img src="https://i.imgur.com/SbNsa4g.jpeg" alt="Xolos Ramírez" width="60" decoding="async" loading="eager" height="400">
         <p>&copy; 2025 Xolos Ramírez. All rights reserved.</p>
       </div>
       <div>
@@ -168,8 +200,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
   </footer>
 
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script src="../js/main.js"></script>
-  <script>AOS.init();</script>
+  <script defer src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script defer src="../js/main.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', () => {
+  AOS.init();
+});</script>
 </body>
 </html>
