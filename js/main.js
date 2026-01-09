@@ -2,41 +2,23 @@ const navMenu = document.getElementById('menu');
 const navToggle = document.querySelector('.hamburger');
 
 if (navToggle && navMenu) {
-  const openMenu = () => {
-    navMenu.setAttribute('data-visible', 'true');
-    navToggle.setAttribute('aria-expanded', 'true');
-    document.body.classList.add('nav-open');
-  };
-
-  const closeMenu = () => {
-    navMenu.setAttribute('data-visible', 'false');
-    navToggle.setAttribute('aria-expanded', 'false');
-    document.body.classList.remove('nav-open');
-  };
-
   navToggle.addEventListener('click', () => {
     const visibility = navMenu.getAttribute('data-visible');
-    if (visibility === 'true') {
-      closeMenu();
-      return;
+
+    if (visibility === 'false') {
+      navMenu.setAttribute('data-visible', 'true');
+      navToggle.setAttribute('aria-expanded', 'true');
+    } else {
+      navMenu.setAttribute('data-visible', 'false');
+      navToggle.setAttribute('aria-expanded', 'false');
     }
-    openMenu();
   });
 
   navMenu.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', closeMenu);
-  });
-
-  document.addEventListener('click', (event) => {
-    if (navMenu.getAttribute('data-visible') !== 'true') return;
-    if (navMenu.contains(event.target) || navToggle.contains(event.target)) return;
-    closeMenu();
-  });
-
-  document.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape') return;
-    if (navMenu.getAttribute('data-visible') !== 'true') return;
-    closeMenu();
+    link.addEventListener('click', () => {
+      navMenu.setAttribute('data-visible', 'false');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
   });
 }
 
