@@ -6,18 +6,18 @@ document.addEventListener('DOMContentLoaded', () => {
     navToggle.addEventListener('click', () => {
       const isVisible = navMenu.getAttribute('data-visible') === 'true';
 
-      // Cambiar estado
+      // Alternar visibilidad
       navMenu.setAttribute('data-visible', !isVisible);
       navToggle.setAttribute('aria-expanded', !isVisible);
 
-      // Cambiar icono (opcional)
+      // Cambiar el icono de ☰ a ✕
       navToggle.innerHTML = !isVisible ? '✕' : '☰';
 
-      // Bloquear scroll del body
+      // Bloquear el scroll del cuerpo
       document.body.classList.toggle('menu-open', !isVisible);
     });
 
-    // Cerrar menú al hacer click en un enlace (útil en One-Page)
+    // Cerrar el menú automáticamente al hacer clic en cualquier enlace
     navMenu.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', () => {
         navMenu.setAttribute('data-visible', 'false');
