@@ -1036,14 +1036,19 @@ picture,
 video {
   max-width: 100%;
   height: auto;
+  display: block;
+}
+
+img {
+  object-fit: cover;
 }
 
 h2 {
-  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
 }
 
 h3 {
-  font-size: clamp(1.2rem, 3vw, 1.35rem);
+  font-size: clamp(1.25rem, 3vw, 2rem);
 }
 
 button,
@@ -1058,15 +1063,50 @@ textarea {
   min-height: 44px;
 }
 
+.cards-container,
+.testimonials-grid,
+.gallery-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.cards-container {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.testimonials-grid {
+  grid-template-columns: 1fr;
+}
+
+.gallery-grid {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+@media (min-width: 768px) {
+  .testimonials-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 /* --- Estilos base del Header --- */
 .site-header { position: sticky; top: 0; z-index: 50; background: #000; border-bottom: 1px solid var(--border); }
 .header-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .75rem 0; }
 .hamburger { display: none; background: transparent; border: 0; color: var(--text); padding: .35rem .6rem; border-radius: .5rem; font-size: 2rem; cursor: pointer; min-height: 44px; min-width: 44px; }
+.nav-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 70%;
+  max-width: 300px;
+  background: var(--color-secundario);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+}
 
 /* --- Navegación para MÓVILES (Max 768px) --- */
 @media (max-width: 768px) {
   .nav-menu {
-    position: fixed;
     inset: 0 0 0 30%; /* Ocupa el 70% derecho de la pantalla */
     flex-direction: column;
     padding: min(30vh, 10rem) 2rem;
@@ -1105,6 +1145,6 @@ textarea {
 /* --- Navegación para DESKTOP (Min 769px) --- */
 @media (min-width: 769px) {
   .hamburger { display: none; }
-  .nav-menu { transform: none; position: relative; inset: auto; background: transparent; }
+  .nav-menu { transform: none; position: relative; inset: auto; width: auto; max-width: none; background: transparent; }
   .nav-menu ul { display: flex; flex-direction: row; gap: 1.5rem; list-style: none; }
 }
