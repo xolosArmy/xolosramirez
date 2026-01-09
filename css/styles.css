@@ -1011,3 +1011,46 @@ form textarea:focus {
     color: #000000;
     outline: 2px solid var(--accent-color, #d4af37); /* Opcional: resalta el campo activo */
 }
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img,
+picture,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+h2 {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+}
+
+h3 {
+  font-size: clamp(1.2rem, 3vw, 1.35rem);
+}
+
+button,
+input,
+select,
+textarea {
+  min-height: 44px;
+}
+
+.btn,
+.btn-whatsapp {
+  min-height: 44px;
+}
+
+.hamburger {
+  min-height: 44px;
+  min-width: 44px;
+}
