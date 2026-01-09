@@ -115,9 +115,6 @@ a{color:var(--accent);text-decoration:none;}
             <li><a href="contacto.html">Contacto</a></li>
           </ul>
         </nav>
-        <div class="lang-switch">
-          <a href="en/available-xolos.html" lang="en" aria-label="View site in English">EN</a>
-        </div>
       </div>
     </header>
 
@@ -125,7 +122,7 @@ a{color:var(--accent);text-decoration:none;}
       <section class="hero hero-disponibles" data-aos="fade-in" data-aos-duration="1200">
         <div
           class="hero__media"
-          style="background: url('https://img.youtube.com/vi/0Z6luzI6TpY/maxresdefault.jpg') center/cover no-repeat;"
+          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; background: url('https://img.youtube.com/vi/0Z6luzI6TpY/maxresdefault.jpg') center/cover no-repeat;"
         >
           <iframe
             data-src="https://www.youtube.com/embed/0Z6luzI6TpY?si=oXn3PZc-2iz6NGWk&autoplay=1&mute=1&loop=1&playlist=0Z6luzI6TpY"
@@ -135,7 +132,7 @@ a{color:var(--accent);text-decoration:none;}
             frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowfullscreen
-            class="hero__video"
+            style="position: absolute; top: 50%; left: 50%; width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; transform: translate(-50%, -50%); pointer-events: none;"
           ></iframe>
         </div>
         <div class="container">
