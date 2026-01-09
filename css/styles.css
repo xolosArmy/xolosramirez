@@ -224,13 +224,6 @@ a:hover {
   .btn, .btn-whatsapp{ width:100%; text-align:center; }
 }
 
-.header-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.75rem 1rem;
-}
-
 .brand {
   display: flex;
   align-items: center;
@@ -1019,62 +1012,49 @@ textarea {
   min-width: 44px;
 }
 
-/* --- NAVEGACIÓN UNIFICADA --- */
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 2000;
-  background: #000;
-  border-bottom: 1px solid var(--border);
-}
+/* --- Estilos base del Header --- */
+.site-header { position: sticky; top: 0; z-index: 50; background: #000; border-bottom: 1px solid var(--border); }
+.header-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .75rem 0; }
+.hamburger { display: none; background: transparent; border: 0; color: var(--text); padding: .35rem .6rem; border-radius: .5rem; font-size: 2rem; cursor: pointer; }
 
-.hamburger {
-  display: none; /* Oculto en PC */
-  background: transparent;
-  border: none;
-  color: var(--accent);
-  font-size: 2.2rem;
-  padding: 0.5rem;
-  cursor: pointer;
-  z-index: 3000;
-}
-
+/* --- Navegación para MÓVILES (Max 768px) --- */
 @media (max-width: 768px) {
-  .hamburger {
-    display: block; /* Visible solo en móviles */
-  }
-
   .nav-menu {
     position: fixed;
-    inset: 0 0 0 25%; /* Aparece desde la derecha ocupando el 75% */
-    background: rgba(15, 15, 15, 0.98);
-    backdrop-filter: blur(12px);
-    padding: 8rem 2rem;
-    z-index: 2500;
-    /* Estado inicial: oculto a la derecha */
-    transform: translateX(100%);
-    transition: transform 0.4s ease-in-out;
+    inset: 0 0 0 30%; /* Ocupa el 70% derecho de la pantalla */
+    flex-direction: column;
+    padding: min(30vh, 10rem) 2rem;
+    background: rgba(20, 20, 20, 0.95);
+    backdrop-filter: blur(1rem);
+    z-index: 1000;
+    transform: translateX(100%); /* Oculto a la derecha */
+    transition: transform 350ms ease-out;
   }
 
-  /* Clase que activa la visibilidad */
+  /* Cuando el JS activa el menú */
   .nav-menu[data-visible="true"] {
     transform: translateX(0%);
-    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.8);
+  }
+
+  .hamburger {
+    display: block;
+    position: absolute;
+    z-index: 9999;
+    right: 2rem;
+    top: 1rem;
   }
 
   .nav-menu ul {
     flex-direction: column;
-    gap: 2.5rem;
+    gap: 2rem;
+    list-style: none;
+    padding: 0;
   }
+}
 
-  .nav-menu a {
-    font-size: 1.4rem;
-    display: block;
-    width: 100%;
-  }
-
-  /* Bloqueo de scroll cuando el menú está abierto */
-  body.menu-open {
-    overflow: hidden;
-  }
+/* --- Navegación para DESKTOP (Min 769px) --- */
+@media (min-width: 769px) {
+  .hamburger { display: none; }
+  .nav-menu { transform: none; position: relative; inset: auto; background: transparent; }
+  .nav-menu ul { display: flex; flex-direction: row; gap: 1.5rem; list-style: none; }
 }
