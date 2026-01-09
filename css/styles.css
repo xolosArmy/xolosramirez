@@ -953,6 +953,50 @@ h1,h2,h3,.site-header .brand span{font-family:'Cinzel',serif;text-transform:uppe
   html, body{ overflow-x:hidden; width:100%; }
 }
 
+@media (max-width: 768px) {
+  .hero,
+  #cta,
+  .hero.hero-disponibles,
+  .parallax {
+    width: 100vw;
+    max-width: 100%;
+  }
+
+  .hero__media,
+  .card__media,
+  .gallery-grid,
+  picture,
+  figure {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .hero__media img,
+  .card__media img,
+  .gallery-grid img,
+  .article img,
+  picture img,
+  figure img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  .blog-card .card__media img {
+    height: auto;
+  }
+
+  .brand img {
+    width: clamp(32px, 10vw, 44px);
+    height: clamp(32px, 10vw, 44px);
+  }
+
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Corrección de visibilidad del texto en el formulario de contacto */
 form input,
 form select,
