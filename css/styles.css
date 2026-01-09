@@ -13,6 +13,7 @@ body{ font-family:'Poppins', system-ui, -apple-system, Segoe UI, Roboto, sans-se
 html{ box-sizing:border-box; font-size:16px; }
 *,*::before,*::after{ box-sizing:inherit; }
 html,body{ margin:0; padding:0; background:var(--bg); color:var(--text); }
+body.nav-open{ overflow:hidden; }
 img, picture, video, canvas{ max-width:100%; height:auto; display:block; }
 a{ color:var(--accent); text-decoration:none; }
 a:hover{ text-decoration:underline; }
@@ -243,6 +244,8 @@ a:hover {
     background: rgba(20, 20, 20, 0.95);
     backdrop-filter: blur(1rem);
     z-index: 1000;
+    max-width: 100%;
+    overflow-y: auto;
     transform: translateX(100%);
     transition: transform 350ms ease-out;
   }
@@ -994,6 +997,26 @@ h1,h2,h3,.site-header .brand span{font-family:'Cinzel',serif;text-transform:uppe
 
 @media (max-width: 768px){
   html, body{ overflow-x:hidden; width:100%; }
+}
+
+@media (max-width: 768px){
+  .hero,
+  #cta{
+    margin-inline: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .hero__media iframe{
+    display: none;
+  }
+
+  .nav-menu ul{
+    transform: none;
+    position: static;
+    background: transparent;
+    box-shadow: none;
+  }
 }
 
 /* Corrección de visibilidad del texto en el formulario de contacto */
