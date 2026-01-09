@@ -1,26 +1,35 @@
-const navMenu = document.getElementById('menu');
-const navToggle = document.querySelector('.hamburger');
+document.addEventListener('DOMContentLoaded', () => {
+  const navMenu = document.getElementById('menu');
+  const navToggle = document.getElementById('nav-toggle');
 
-if (navToggle && navMenu) {
-  navToggle.addEventListener('click', () => {
-    const visibility = navMenu.getAttribute('data-visible');
+  if (navToggle && navMenu) {
+    navToggle.addEventListener('click', () => {
+      const isVisible = navMenu.getAttribute('data-visible') === 'true';
 
-    if (visibility === 'false') {
-      navMenu.setAttribute('data-visible', 'true');
-      navToggle.setAttribute('aria-expanded', 'true');
-    } else {
-      navMenu.setAttribute('data-visible', 'false');
-      navToggle.setAttribute('aria-expanded', 'false');
-    }
-  });
+      // Cambiar estado
+      navMenu.setAttribute('data-visible', !isVisible);
+      navToggle.setAttribute('aria-expanded', !isVisible);
 
-  navMenu.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      navMenu.setAttribute('data-visible', 'false');
-      navToggle.setAttribute('aria-expanded', 'false');
+      // Cambiar icono (opcional)
+      navToggle.innerHTML = !isVisible ? '✕' : '☰';
+
+      // Bloquear scroll del body
+      document.body.classList.toggle('menu-open', !isVisible);
     });
-  });
-}
+
+    // Cerrar menú al hacer click en un enlace (útil en One-Page)
+    navMenu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        navMenu.setAttribute('data-visible', 'false');
+        navToggle.setAttribute('aria-expanded', 'false');
+        navToggle.innerHTML = '☰';
+        document.body.classList.remove('menu-open');
+      });
+    });
+  }
+});
+
+const navMenu = document.getElementById('menu');
 
 const yearElement = document.getElementById('year');
 if (yearElement) {
