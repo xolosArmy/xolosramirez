@@ -58,7 +58,7 @@ main > section:not(.hero){
   gap: clamp(1rem, 3vw, 1.75rem);
   margin-inline: calc(50% - 50vw);
   width: 100vw;
-  min-height: 100svh; /* mobile-safe viewport height */
+  min-height: auto;
   padding: clamp(4rem, 6vw, 6rem) 1.5rem;
   text-align: center;
   color: #fff;
@@ -76,8 +76,17 @@ main > section:not(.hero){
 .hero__media video{
   width:100%;
   height:100%;
-  object-fit:cover;
+  object-fit: cover !important;
+  object-position: center !important;
   display:block;
+}
+.hero__content{
+  display:flex;
+  flex-direction: column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  gap: 1rem;
 }
 .hero::after{
   content:"";
@@ -737,7 +746,7 @@ body :focus-visible {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 70vh;
+  min-height: auto;
   padding: 0 1.5rem;
   text-align: center;
 }
@@ -946,7 +955,6 @@ img, picture, video {
 .hero, .hero.hero-disponibles, #cta, .parallax {
   width: 100% !important;
   max-width: 100vw !important;
-  min-height: 70vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -954,12 +962,28 @@ img, picture, video {
 .hero__media img, .hero img {
   width: 100% !important;
   height: 100% !important;
+  object-fit: cover !important;
   object-position: center !important;
+}
+
+@media (min-width: 769px) {
+  .hero,
+  .hero.hero-disponibles {
+    min-height: 90vh !important;
+  }
 }
 
 /* MEDIA QUERY MÓVIL */
 @media (max-width: 768px) {
-  .hero, .hero.hero-disponibles, #cta, .parallax {
+  .hero {
+    min-height: 250px !important;
+    height: auto !important;
+  }
+  .hero__media img,
+  .hero img {
+    height: 250px !important;
+  }
+  .hero.hero-disponibles, #cta, .parallax {
     min-height: 350px !important;
     height: auto !important;
     background-attachment: scroll !important;
