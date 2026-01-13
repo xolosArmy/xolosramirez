@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial: Pagos con eCash y RMZ Token | Xolos Ramírez</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="blog.css">
+    <style>
+        :root {
+            --xolo-gold: #d4af37;
+            --xolo-dark: #1a1a1a;
+            --xolo-red: #8b0000;
+        }
+        .tutorial-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .step {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        .step.active {
+            display: block;
+        }
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--xolo-red);
+            border-bottom: 2px solid var(--xolo-gold);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .wallet-ui {
+            background: #2c2c2c;
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            margin: 20px 0;
+            border: 4px solid var(--xolo-gold);
+        }
+        .btn-nav {
+            background: var(--xolo-dark);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-nav:hover {
+            background: var(--xolo-gold);
+            color: black;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+    <div class="tutorial-container">
+        <h1>Guía Interactiva: Tonalli Wallet</h1>
+        <p>Aprende a usar la tecnología <strong>eCash (XEC)</strong> y nuestro eToken <strong>RMZ</strong> para adquirir tu próximo guardián ancestral.</p>
+
+        <div class="step active" id="step1">
+            <div class="step-header">
+                <h2>Paso 1: Configura tu Tonalli Wallet</h2>
+            </div>
+            <p>Descarga la <strong>Tonalli Wallet</strong> (basada en Cashtab). Al abrirla, se generará tu "Mictlán Digital" (tu dirección pública).</p>
+            <div class="wallet-ui">
+                <p><small>Dirección eCash:</small><br>ecash:qzp...xolosramirez</p>
+            </div>
+            <button class="btn-nav" onclick="nextStep(2)">Siguiente: Recibir RMZ</button>
+        </div>
+
+        <div class="step" id="step2">
+            <div class="step-header">
+                <h2>Paso 2: Visualiza tus Tokens RMZ</h2>
+            </div>
+            <p>En la pestaña <strong>"Tokens"</strong>, verás el ícono de Xolos Ramírez. Aquí se almacenan tus eTokens RMZ, usados para beneficios exclusivos.</p>
+            <div class="wallet-ui" style="text-align: center;">
+                <span style="font-size: 40px;">🐕</span>
+                <p><strong>Balance: 5,000 RMZ</strong></p>
+            </div>
+            <button class="btn-nav" onclick="nextStep(1)">Atrás</button>
+            <button class="btn-nav" onclick="nextStep(3)">Siguiente: Cómo Pagar</button>
+        </div>
+
+        <div class="step" id="step3">
+            <div class="step-header">
+                <h2>Paso 3: Realizar un Pago</h2>
+            </div>
+            <p>Para pagar una reserva o accesorio:</p>
+            <ol>
+                <li>Haz clic en <strong>"Send"</strong>.</li>
+                <li>Escanea el QR de Xolos Ramírez o pega nuestra dirección.</li>
+                <li>Selecciona si envías <strong>XEC</strong> o <strong>RMZ</strong>.</li>
+            </ol>
+            <div class="wallet-ui">
+                <p>Enviar a: <em>xolos_ramirez_official</em></p>
+                <p>Monto: 1,000,000 XEC</p>
+            </div>
+            <button class="btn-nav" onclick="nextStep(2)">Atrás</button>
+            <button class="btn-nav" onclick="finish()">Finalizar Tutorial</button>
+        </div>
+    </div>
+
+    <script>
+        function nextStep(stepNum) {
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.getElementById('step' + stepNum).classList.add('active');
+        }
+        function finish() {
+            alert('¡Excelente! Ahora estás listo para usar la Tonalli Wallet con Xolos Ramírez.');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
