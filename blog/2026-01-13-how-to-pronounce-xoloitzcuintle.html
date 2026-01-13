@@ -271,6 +271,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       const pronunciationCard = document.querySelector('.pronunciation-card');
       const syllables = document.querySelectorAll('[data-syllable]');
 
+      // Cargar el audio desde la carpeta assets
+      const audioPronunciacion = new Audio('../assets/Xoloitzcuintle.mp3');
+
       const flash = (element) => {
         element.classList.add('is-active');
         setTimeout(() => {
@@ -279,6 +282,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       };
 
       const playFull = () => {
+        // Reiniciar audio para permitir clics repetitivos
+        audioPronunciacion.currentTime = 0;
+
+        // Reproducir audio con manejo de promesa para evitar errores de navegador
+        audioPronunciacion.play().catch((error) => {
+          console.error('Error al reproducir el audio:', error);
+        });
+
         console.log('Pronouncing: Xoloitzcuintle');
       };
 
