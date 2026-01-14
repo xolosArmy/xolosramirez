@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xoloitzcuintle: El Guardián del Inframundo | Xolos Ramírez</title>
+    <meta name="description" content="Una experiencia interactiva sobre la leyenda del Xoloitzcuintle y su papel sagrado en el Día de Muertos.">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root { --cempasuchil: #FF9800; --mictlan-dark: #1a1a1a; }
+        .mini-app-container { background: var(--mictlan-dark); color: #fff; padding: 2rem; border-radius: 15px; border: 1px solid var(--cempasuchil); margin: 2rem 0; font-family: 'Poppins', sans-serif; }
+        .story-step { display: none; min-height: 300px; }
+        .story-step.active { display: block; animation: fadeIn 0.8s ease; }
+        .progress-bar { height: 4px; background: #333; margin-bottom: 2rem; border-radius: 2px; }
+        .progress-fill { height: 100%; background: var(--cempasuchil); width: 0%; transition: width 0.4s; }
+        .story-nav { display: flex; justify-content: space-between; margin-top: 2rem; }
+        .btn-story { background: var(--cempasuchil); color: #000; border: none; padding: 0.8rem 1.5rem; cursor: pointer; font-weight: bold; font-family: 'Cinzel'; transition: transform 0.2s; }
+        .btn-story:hover { transform: scale(1.05); }
+        .btn-story:disabled { background: #555; cursor: not-allowed; }
+        .fact-box { background: rgba(255, 152, 0, 0.1); border-left: 4px solid var(--cempasuchil); padding: 1rem; margin-top: 1rem; font-style: italic; font-size: 0.9rem; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-row">
+            <a class="brand" href="../index.html"><span>Xolos Ramírez</span></a>
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="index.html">Volver al Blog</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container article">
+        <section data-aos="fade-up">
+            <h1 style="color: var(--cempasuchil); text-align: center;">El Guía de las Almas</h1>
+            <p style="text-align: center;">Interactúa con esta mini-experiencia para conocer la conexión milenaria entre el Xolo y el Mictlán.</p>
+
+            <div class="mini-app-container">
+                <div class="progress-bar"><div class="progress-fill" id="progressBar"></div></div>
+
+                <div class="story-step active" id="step1">
+                    <h2 class="post-card__title">I. El Regalo de Xólotl</h2>
+                    <p>Cuenta la leyenda que el dios Xólotl creó al perro de una astilla del Hueso de la Vida. No lo hizo como una simple mascota, sino como un guardián sagrado para la transición más importante del ser humano.</p>
+                    <div class="fact-box">
+                        <strong>Dato Documental:</strong> Los hallazgos arqueológicos en entierros prehispánicos muestran que los Xoloitzcuintles eran sacrificados para acompañar a sus dueños en el viaje post-mortem.
+                    </div>
+                </div>
+
+                <div class="story-step" id="step2">
+                    <h2 class="post-card__title">II. El Cruce del Gran Río</h2>
+                    <p>Para llegar al Mictlán, el alma debe cruzar el Apanohuacalhuia (el primer nivel del inframundo). Aquí, el perro reconoce a su dueño. Solo si fuiste bueno con los animales en vida, el Xolo te permitirá subir a su lomo para cruzar las aguas profundas.</p>
+                    <div class="fact-box">
+                        <strong>Storytelling:</strong> Imagina la oscuridad total, solo interrumpida por el calor térmico que emana de la piel de tu guía.
+                    </div>
+                </div>
+
+                <div class="story-step" id="step3">
+                    <h2 class="post-card__title">III. Luz en la Ofrenda</h2>
+                    <p>Hoy, en cada altar de Día de Muertos, la figura del Xolo (ya sea en barro o presente en la casa) asegura que el camino de regreso de nuestros ancestros esté protegido y libre de distracciones.</p>
+                    <div class="fact-box">
+                        <strong>Preservación:</strong> En Xolos Ramírez, criamos a estos guardianes manteniendo la pureza y la mística que los convirtió en símbolos nacionales.
+                    </div>
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <a href="https://xolosramirez.com/xolos-disponibles" class="btn">Conoce a tu futuro guardián aquí</a>
+                    </div>
+                </div>
+
+                <div class="story-nav">
+                    <button class="btn-story" id="prevBtn" onclick="changeStep(-1)" disabled>Anterior</button>
+                    <button class="btn-story" id="nextBtn" onclick="changeStep(1)">Siguiente</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 3;
+
+        function changeStep(n) {
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            currentStep += n;
+            document.getElementById(`step${currentStep}`).classList.add('active');
+
+            document.getElementById('prevBtn').disabled = currentStep === 1;
+            document.getElementById('nextBtn').style.display = currentStep === totalSteps ? 'none' : 'block';
+
+            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+    </script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>AOS.init();</script>
+</body>
+</html>
