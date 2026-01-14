@@ -1006,3 +1006,41 @@ form textarea:focus {
     color: #000000;
     outline: 2px solid var(--accent-color, #d4af37); /* Opcional: resalta el campo activo */
 }
+
+/* Estilo para el botón flotante Tonalli */
+.tonalli-float-btn {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    background-color: #000000; /* Fondo negro */
+    color: #d4af37;           /* Texto dorado/ocre */
+    padding: 12px 24px;
+    border: 1px solid #d4af37; /* Borde dorado */
+    border-radius: 50px;       /* Forma redondeada moderna */
+    text-decoration: none;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    z-index: 9999;             /* Asegura que esté por encima de todo */
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.tonalli-float-btn:hover {
+    background-color: #d4af37;
+    color: #000000;
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Ajuste para móviles */
+@media (max-width: 768px) {
+    .tonalli-float-btn {
+        top: 15px;
+        right: 15px;
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+}
