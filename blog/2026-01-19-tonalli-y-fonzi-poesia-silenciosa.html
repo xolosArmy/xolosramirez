@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tonalli y Fonzi: Poesía en Silencio | Xolos Ramírez</title>
+    <link rel="stylesheet" href="blog.css">
+    <style>
+        :root {
+            --gold: #c5a059;
+            --dark: #1a1a1a;
+            --soft-white: #f4f4f4;
+        }
+        .poem-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+            background: var(--dark);
+            color: var(--soft-white);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .poem-body {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            line-height: 1.8;
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+        }
+        .poem-body p {
+            transition: transform 0.3s ease, color 0.3s ease;
+            cursor: default;
+        }
+        .poem-body p:hover {
+            transform: scale(1.05);
+            color: var(--gold);
+        }
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border: 2px solid var(--gold);
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .links-section {
+            margin-top: 40px;
+            border-top: 1px solid #444;
+            padding-top: 20px;
+        }
+        .btn-tonalli {
+            display: inline-block;
+            margin: 10px;
+            padding: 12px 25px;
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s;
+        }
+        .btn-tonalli:hover {
+            background: var(--gold);
+            color: var(--dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="poem-container">
+        <h1>Tonalli y Fonzi</h1>
+        <h3 style="color: var(--gold);">Una danza de sombras y luz</h3>
+
+        <div class="poem-body">
+            <p>Piel de noche antigua, calor que emana del sol,<br>
+            Tizoc camina el presente con pasos de antepasado.<br>
+            En los brazos de Fonzi, el tiempo pierde su rol,<br>
+            un lazo de tinta y latido, en silencio forjado.</p>
+            
+            <p>No hacen falta palabras donde sobra la mirada,<br>
+            el Xolo es el guía, el hombre es el guardián.<br>
+            Entre mimos y juegos, la esencia queda grabada,<br>
+            en el alma "Tonalli", donde las almas se dan.</p>
+        </div>
+
+        <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/CaFq2rbF4Io" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+        <div class="links-section">
+            <a href="https://colosramirez.com" class="btn-tonalli" target="_blank">Xolos Ramírez</a>
+            <a href="https://xolosArmy.xyz/productos-xoloitzcuintle.html" class="btn-tonalli" target="_blank">XolosArmy Naturals</a>
+            <a href="https://tonalli.cash" class="btn-tonalli" target="_blank">Tonalli Wallet</a>
+        </div>
+    </div>
+</body>
+</html>
