@@ -1,136 +1,516 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tutorial Interactivo: Domina la Tonalli Wallet | xolosArmy Network</title>
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="blog.css">
-    <style>
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            max-width: 100%;
-            background: #000;
-            border-radius: 12px;
-            margin: 2rem 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-        .interactive-challenge {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2c1a05 100%);
-            border: 2px solid #f39c12;
-            padding: 2rem;
-            border-radius: 15px;
-            margin: 2rem 0;
-            text-align: center;
-        }
-        .challenge-box {
-            display: inline-block;
-            background: #000;
-            padding: 1rem;
-            border-radius: 8px;
-            font-family: monospace;
-            color: #f39c12;
-            margin: 1rem 0;
-            filter: blur(5px);
-            transition: filter 0.3s ease;
-            cursor: pointer;
-        }
-        .challenge-box:hover {
-            filter: blur(0);
-        }
-        .step-card {
-            background: rgba(255,255,255,0.05);
-            padding: 1.5rem;
-            border-left: 4px solid #f39c12;
-            margin-bottom: 1.5rem;
-            border-radius: 0 10px 10px 0;
-        }
-        .badge {
-            background: #f39c12;
-            color: #000;
-            padding: 0.2rem 0.6rem;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tutorial Interactivo: Domina la Tonalli Wallet | xolosArmy Network</title>
+
+  <!-- Mantén tus estilos existentes -->
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="blog.css" />
+
+  <style>
+    :root{
+      --bg0:#070707;
+      --bg1:#0c0c0c;
+      --panel:rgba(255,255,255,.06);
+      --panel2:rgba(255,255,255,.08);
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.72);
+      --line:rgba(255,255,255,.12);
+      --xolo:#f39c12;
+      --xolo2:#ffb347;
+      --shadow:0 14px 40px rgba(0,0,0,.55);
+      --r12:12px;
+      --r16:16px;
+      --r24:24px;
+    }
+
+    body{ background: radial-gradient(1200px 600px at 15% 10%, rgba(243,156,18,.12), transparent 55%),
+                   radial-gradient(900px 500px at 85% 20%, rgba(0,200,180,.10), transparent 60%),
+                   linear-gradient(180deg, var(--bg0), var(--bg1));
+          color:var(--text); }
+
+    .content-wrapper{ max-width: 980px; margin: 0 auto; padding: 2rem 1rem 3rem; }
+
+    .blog-post{ background: rgba(0,0,0,.25); border: 1px solid var(--line); border-radius: var(--r24);
+                padding: clamp(1.25rem, 2.5vw, 2rem); box-shadow: var(--shadow); }
+
+    .badge{
+      display:inline-flex; align-items:center; gap:.45rem;
+      background: linear-gradient(135deg, var(--xolo), var(--xolo2));
+      color:#000; padding:.25rem .65rem; border-radius: 999px;
+      font-weight: 800; letter-spacing:.04em; font-size:.78rem; text-transform: uppercase;
+    }
+    .badge::before{ content:"✦"; font-weight:900; }
+
+    h1{ margin:.85rem 0 .25rem; line-height:1.15; }
+    .post-meta{ margin:.15rem 0 1.25rem; color: var(--muted); font-size:.95rem; }
+
+    .lead{
+      margin: 0 0 1.25rem;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    /* Video */
+    .video-wrap{
+      margin: 1.5rem 0 1.25rem;
+      border-radius: var(--r16);
+      overflow:hidden;
+      border:1px solid rgba(243,156,18,.35);
+      background:#000;
+      box-shadow: 0 16px 48px rgba(0,0,0,.6);
+      position: relative;
+    }
+    .video-wrap::after{
+      content:"AUTOPLAY";
+      position:absolute;
+      top:.75rem; left:.75rem;
+      font-size:.7rem; letter-spacing:.08em;
+      padding:.2rem .5rem;
+      border-radius:999px;
+      background: rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.15);
+      color: rgba(255,255,255,.78);
+      pointer-events:none;
+    }
+    .video-container{
+      position:relative;
+      padding-bottom:56.25%;
+      height:0;
+      overflow:hidden;
+    }
+    .video-container iframe{
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      border:0;
+    }
+    .video-note{
+      display:flex; gap:.75rem; align-items:flex-start;
+      padding: .9rem 1rem;
+      background: rgba(255,255,255,.04);
+      border-top: 1px solid rgba(255,255,255,.10);
+      color: var(--muted);
+      font-size:.95rem;
+    }
+    .video-note strong{ color: rgba(255,255,255,.9); }
+    .pill{
+      display:inline-flex; align-items:center;
+      border:1px solid rgba(243,156,18,.35);
+      color: rgba(243,156,18,.95);
+      padding:.1rem .55rem;
+      border-radius:999px;
+      font-size:.78rem;
+      background: rgba(243,156,18,.08);
+      white-space: nowrap;
+    }
+
+    /* Reto */
+    .challenge{
+      margin: 1.5rem 0 2rem;
+      border-radius: var(--r16);
+      border: 1px solid rgba(243,156,18,.35);
+      background: linear-gradient(135deg, rgba(255,255,255,.05), rgba(243,156,18,.06));
+      overflow:hidden;
+      box-shadow: 0 14px 42px rgba(0,0,0,.45);
+    }
+    .challenge-header{
+      padding: 1.1rem 1.15rem .9rem;
+      display:flex; align-items:center; justify-content:space-between; gap:1rem;
+      background: rgba(0,0,0,.35);
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .challenge-header h2{ margin:0; font-size:1.15rem; }
+    .challenge-body{ padding: 1.1rem 1.15rem 1.2rem; }
+    .challenge-body p{ margin:.35rem 0; color: var(--muted); line-height:1.65; }
+
+    /* Interactividad sin JS: checkbox toggle */
+    .reveal{
+      margin-top: .9rem;
+      padding: .95rem 1rem;
+      border-radius: var(--r12);
+      background: rgba(0,0,0,.45);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .reveal-top{
+      display:flex; align-items:center; justify-content:space-between; gap:1rem;
+    }
+    .reveal-label{
+      display:inline-flex; align-items:center; gap:.55rem;
+      cursor:pointer;
+      user-select:none;
+      color: rgba(255,255,255,.88);
+      font-weight: 700;
+    }
+    .reveal-label .dot{
+      width:10px; height:10px; border-radius:999px;
+      background: rgba(243,156,18,.9);
+      box-shadow: 0 0 0 6px rgba(243,156,18,.12);
+    }
+    .reveal input{ position:absolute; opacity:0; pointer-events:none; }
+
+    .seed-box{
+      margin-top: .85rem;
+      padding: .9rem 1rem;
+      border-radius: var(--r12);
+      border: 1px dashed rgba(243,156,18,.45);
+      background: rgba(0,0,0,.55);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      color: rgba(243,156,18,.95);
+      letter-spacing: .06em;
+      line-height: 1.8;
+      position: relative;
+      overflow:hidden;
+    }
+
+    /* Estado por defecto: “censurado” */
+    .seed-box .seed-text{
+      filter: blur(7px);
+      opacity: .85;
+      transition: filter .25s ease, opacity .25s ease;
+    }
+    .seed-box:hover .seed-text{
+      filter: blur(0);
+      opacity: 1;
+    }
+
+    /* Toggle: revela “modo ejemplo” */
+    .seed-box .seed-hint{
+      display:none;
+      margin-top:.65rem;
+      color: rgba(255,255,255,.72);
+      letter-spacing: normal;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+      font-size:.92rem;
+    }
+    #toggle-seed:checked ~ .seed-box .seed-hint{ display:block; }
+    #toggle-seed:checked ~ .seed-box .seed-text{ filter: blur(0); opacity: 1; }
+
+    .seed-mini{
+      margin-top:.65rem;
+      display:flex; gap:.6rem; flex-wrap:wrap; align-items:center;
+      color: rgba(255,255,255,.78);
+      font-size:.92rem;
+    }
+    .seed-mini a{ color: rgba(243,156,18,.95); text-decoration:none; border-bottom: 1px solid rgba(243,156,18,.35); }
+    .seed-mini a:hover{ border-bottom-color: rgba(243,156,18,.8); }
+
+    /* Steps + checklist */
+    .section-title{
+      margin: 0 0 .75rem;
+      font-size: 1.2rem;
+    }
+    .steps{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: .85rem;
+      margin: 0 0 1.75rem;
+    }
+    .step-card{
+      border-radius: var(--r16);
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,.10);
+      overflow:hidden;
+    }
+    .step-card > summary{
+      list-style:none;
+      cursor:pointer;
+      padding: 1rem 1.1rem;
+      display:flex; align-items:center; justify-content:space-between; gap:1rem;
+      border-left: 4px solid rgba(243,156,18,.95);
+      user-select:none;
+    }
+    .step-card > summary::-webkit-details-marker{ display:none; }
+    .step-card > summary .title{
+      display:flex; flex-direction:column; gap:.15rem;
+    }
+    .step-card > summary .title strong{ font-size:1.02rem; }
+    .step-card > summary .title span{ color: var(--muted); font-size:.92rem; }
+    .step-card > summary .chev{
+      width: 10px; height: 10px;
+      border-right: 2px solid rgba(255,255,255,.65);
+      border-bottom: 2px solid rgba(255,255,255,.65);
+      transform: rotate(-45deg);
+      transition: transform .2s ease;
+      margin-right:.25rem;
+      flex: 0 0 auto;
+    }
+    .step-card[open] > summary{ background: rgba(255,255,255,.04); }
+    .step-card[open] > summary .chev{ transform: rotate(45deg); }
+
+    .step-card .body{
+      padding: .2rem 1.1rem 1.05rem;
+      color: rgba(255,255,255,.84);
+      line-height: 1.7;
+    }
+    .step-card .body ul{
+      margin: .6rem 0 0 1.15rem;
+      color: var(--muted);
+    }
+    .kbd{
+      font-family: ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      font-size: .9em;
+      padding: .15rem .4rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.35);
+      color: rgba(255,255,255,.88);
+    }
+
+    .checklist{
+      margin-top: .9rem;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: .55rem;
+    }
+    .check{
+      display:flex; gap:.7rem; align-items:flex-start;
+      padding: .7rem .8rem;
+      border-radius: var(--r12);
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.25);
+    }
+    .check input{ margin-top:.22rem; accent-color: var(--xolo); }
+    .check label{ color: rgba(255,255,255,.82); cursor:pointer; line-height:1.45; }
+    .check input:checked + label{
+      color: rgba(255,255,255,.70);
+      text-decoration: line-through;
+      text-decoration-color: rgba(243,156,18,.55);
+    }
+
+    /* CTA */
+    .cta{
+      margin-top: 1.75rem;
+      padding: 1.25rem 1.1rem;
+      border-radius: var(--r16);
+      border: 1px solid rgba(243,156,18,.35);
+      background: radial-gradient(700px 240px at 20% 20%, rgba(243,156,18,.16), transparent 55%),
+                  rgba(0,0,0,.35);
+      text-align:center;
+    }
+    .cta p{ margin:.2rem 0 1rem; color: var(--muted); }
+    .btn-primary{
+      display:inline-flex; align-items:center; justify-content:center; gap:.55rem;
+      background: linear-gradient(135deg, var(--xolo), var(--xolo2));
+      color:#000;
+      padding: .95rem 1.25rem;
+      border-radius: 999px;
+      text-decoration:none;
+      font-weight: 900;
+      letter-spacing:.02em;
+      box-shadow: 0 10px 30px rgba(243,156,18,.22);
+      border: 1px solid rgba(0,0,0,.25);
+    }
+    .btn-primary:hover{ filter: brightness(1.04); transform: translateY(-1px); }
+    .btn-primary:active{ transform: translateY(0); }
+
+    @media (max-width: 520px){
+      .video-note{ flex-direction:column; }
+      .challenge-header{ flex-direction:column; align-items:flex-start; }
+    }
+  </style>
 </head>
+
 <body>
-    <header>
-        <nav>
-            <div class="logo">
-                <a href="../index.html"><img src="../img/brand/logo-xolos-ramirez.svg" alt="Xolos Ramirez"></a>
+  <header>
+    <nav>
+      <div class="logo">
+        <a href="../index.html">
+          <img src="../img/brand/logo-xolos-ramirez.svg" alt="Xolos Ramirez" />
+        </a>
+      </div>
+      <ul>
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="index.html">Blog</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="content-wrapper">
+    <article class="blog-post">
+      <!-- SIN HERO (quitado) -->
+      <span class="badge">Tutorial + Reto</span>
+      <h1>Tutorial Interactivo: Domina tu Tonalli Wallet</h1>
+      <p class="post-meta">Publicado el 21 de enero de 2026 | Por Xolos Ramirez</p>
+
+      <p class="lead">
+        Bienvenido a la era de soberanía digital con <strong>xolosArmy Network</strong>.
+        En este tutorial aprenderás el flujo esencial de <strong>Tonalli Wallet (RMZWallet)</strong>:
+        <strong>crear/importar</strong>, <strong>recibir</strong>, <strong>enviar</strong> y usar <strong>Mensajes Tonalli (OP_RETURN)</strong>.
+        Todo con una estética minimal y práctica para entrar al ecosistema de <strong>eCash (XEC)</strong> y el marketplace <strong>XoloLegend</strong>.
+      </p>
+
+      <!-- VIDEO (autoplay + mute + loop) -->
+      <div class="video-wrap">
+        <div class="video-container">
+          <iframe
+            src="https://www.youtube.com/embed/vTgxeQWUJTk?autoplay=1&mute=1&loop=1&playlist=vTgxeQWUJTk&controls=1&rel=0&modestbranding=1"
+            title="Tutorial Tonalli Wallet"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+          </iframe>
+        </div>
+        <div class="video-note">
+          <span class="pill">Tip</span>
+          <div>
+            Si el autoplay no inicia por políticas del navegador, presiona <strong>Play</strong>. El video está configurado con
+            <strong>autoplay + mute + loop</strong> para que funcione en la mayoría de casos.
+          </div>
+        </div>
+      </div>
+
+      <!-- RETO INTERACTIVO -->
+      <section class="challenge" aria-label="Reto de la Semilla">
+        <div class="challenge-header">
+          <h2>🚨 DESAFÍO: Caza la Semilla 🚨</h2>
+          <span class="pill">Sin JavaScript</span>
+        </div>
+
+        <div class="challenge-body">
+          <p>
+            Dentro del video se muestra una <strong>frase semilla de 12 palabras</strong>.
+            El primero en importarla podrá reclamar el saldo en eCash que contiene.
+          </p>
+          <p>
+            <strong>Pista:</strong> el cuadro de abajo está “censurado”. Pasa el mouse para ver el formato.
+            Si estás en móvil, activa el modo ejemplo con el interruptor.
+          </p>
+
+          <!-- Toggle accesible (sin JS) -->
+          <div class="reveal">
+            <div class="reveal-top">
+              <label class="reveal-label" for="toggle-seed">
+                <span class="dot"></span>
+                Activar modo ejemplo (móvil / accesibilidad)
+              </label>
             </div>
+
+            <input id="toggle-seed" type="checkbox" />
+
+            <div class="seed-box" title="Pasa el mouse para revelar el formato">
+              <div class="seed-text">
+                ____ ____ ____ ____ ____ ____<br />
+                ____ ____ ____ ____ ____ ____
+              </div>
+              <div class="seed-hint">
+                Modo ejemplo activo: aquí solo ves el <strong>formato</strong>. Las palabras reales están en el video.
+              </div>
+
+              <div class="seed-mini">
+                Importa en <a href="https://tonalli.cash" target="_blank" rel="noopener">tonalli.cash</a>
+                <span style="opacity:.75">·</span>
+                Consejo: anótala offline.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PASOS (mejor interactividad con details/summary) -->
+      <h2 class="section-title">Pasos clave del tutorial</h2>
+      <section class="steps" aria-label="Pasos del tutorial">
+        <details class="step-card" open>
+          <summary>
+            <div class="title">
+              <strong>1) Onboarding y seguridad</strong>
+              <span>Crear / importar wallet y respaldar tu semilla</span>
+            </div>
+            <span class="chev" aria-hidden="true"></span>
+          </summary>
+          <div class="body">
+            Protege tu acceso local y guarda tu semilla con cuidado.
             <ul>
-                <li><a href="../index.html">Inicio</a></li>
-                <li><a href="index.html">Blog</a></li>
+              <li>Configura un PIN fuerte (no reutilices contraseñas).</li>
+              <li>Respalda tu semilla fuera de línea (papel/metal, sin capturas).</li>
+              <li>Regla: <strong>si pierdes la semilla, pierdes el acceso</strong>.</li>
             </ul>
-        </nav>
-    </header>
 
-    <main class="content-wrapper">
-        <article class="blog-post">
-            <span class="badge">Reto Web3</span>
-            <h1>Tutorial Interactivo: Domina tu Tonalli Wallet y xolosArmy Network</h1>
-            <p class="post-meta">Publicado el 21 de enero de 2026 | Por Xolos Ramirez</p>
-
-            <section class="intro">
-                <p>Bienvenido a la nueva era de soberanía digital con <strong>xolosArmy Network</strong>. En este tutorial, te enseñamos a utilizar la <strong>RMZWallet (Tonalli Wallet)</strong>, tu puerta de entrada al ecosistema eCash (XEC) y al marketplace de leyendas <strong>XoloLegend</strong>.</p>
-            </section>
-
-            <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/vTgxeQWUJTk?si=rTktp9M7Qgsx2QYD" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <div class="checklist" role="group" aria-label="Checklist de seguridad">
+              <div class="check">
+                <input id="c1" type="checkbox" />
+                <label for="c1">Ya guardé la semilla offline (sin fotos).</label>
+              </div>
+              <div class="check">
+                <input id="c2" type="checkbox" />
+                <label for="c2">Ya configuré un PIN fuerte.</label>
+              </div>
             </div>
+          </div>
+        </details>
 
-            <div class="interactive-challenge">
-                <h2>🚨 DESAFÍO: ¡Caza la Semilla! 🚨</h2>
-                <p>Dentro del video se muestra una frase semilla de 12 palabras. El primero en importarla podrá reclamar el saldo en eCash que contiene.</p>
-                <p><strong>Pista:</strong> Pasa el mouse (o toca) el cuadro de abajo para ver el formato, pero las palabras reales están en el video.</p>
-                <div class="challenge-box">
-                    ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ ____
-                </div>
-                <p><small>Usa estas palabras en <a href="https://tonalli.cash" target="_blank" style="color: #f39c12;">tonalli.cash</a></small></p>
+        <details class="step-card">
+          <summary>
+            <div class="title">
+              <strong>2) Recibir y enviar XEC</strong>
+              <span>Dirección / QR para recibir y envío peer-to-peer</span>
             </div>
+            <span class="chev" aria-hidden="true"></span>
+          </summary>
+          <div class="body">
+            Flujo base:
+            <ul>
+              <li><strong>Recibir:</strong> copia tu dirección o usa QR.</li>
+              <li><strong>Enviar:</strong> pega dirección, monto y confirma.</li>
+              <li>Tip: verifica 2 veces el destino antes de enviar.</li>
+            </ul>
+            <p style="margin-top:.75rem;color:var(--muted);">
+              Atajo útil: usa <span class="kbd">Ctrl</span> + <span class="kbd">L</span> para enfocar la barra del navegador cuando alternes ventanas en tu grabación.
+            </p>
+          </div>
+        </details>
 
-            <section class="steps">
-                <h2>Pasos Clave del Tutorial</h2>
+        <details class="step-card">
+          <summary>
+            <div class="title">
+              <strong>3) Mensajes Tonalli (OP_RETURN)</strong>
+              <span>Mensajería on-chain: notas públicas que quedan registradas</span>
+            </div>
+            <span class="chev" aria-hidden="true"></span>
+          </summary>
+          <div class="body">
+            Aprende a enviar mensajes que viven en la blockchain de eCash:
+            <ul>
+              <li>Certificar una transacción</li>
+              <li>Dejar un mensaje público grabado en el tiempo</li>
+              <li>Firmar simbólicamente un evento (mint, entrega, prueba)</li>
+            </ul>
+          </div>
+        </details>
 
-                <div class="step-card">
-                    <h3>1. Onboarding y Seguridad</h3>
-                    <p>Configura tu billetera estableciendo un PIN local fuerte. Recuerda: <strong>"Sin Seed, no hay $RMZ"</strong>. El video muestra cómo realizar el respaldo correctamente.</p>
-                </div>
+        <details class="step-card">
+          <summary>
+            <div class="title">
+              <strong>4) XoloLegend: listar NFTs</strong>
+              <span>Publicar tu activo, definir precio en XEC y ponerlo en mercado</span>
+            </div>
+            <span class="chev" aria-hidden="true"></span>
+          </summary>
+          <div class="body">
+            En el marketplace descentralizado puedes listar NFTs (ej: “Agent 001 to Obsidian”):
+            <ul>
+              <li>Define precio en XEC</li>
+              <li>Agrega imagen desde tu dispositivo o URL</li>
+              <li>Revisa visualización previa antes de publicar</li>
+            </ul>
+          </div>
+        </details>
+      </section>
 
-                <div class="step-card">
-                    <h3>2. Mensajería On-Chain (OP_RETURN)</h3>
-                    <p>Aprende a enviar mensajes públicos que vivirán para siempre en la blockchain de eCash. Ideal para certificar transacciones o dejar mensajes grabados en el tiempo.</p>
-                </div>
+      <!-- CTA -->
+      <section class="cta" aria-label="Llamado a la acción">
+        <h2 style="margin:.25rem 0 .4rem;">Abrir Tonalli Wallet</h2>
+        <p>Entra a la wallet y repite el flujo del tutorial: crear/importar → recibir → enviar → Mensajes Tonalli.</p>
+        <a class="btn-primary" href="https://tonalli.cash" target="_blank" rel="noopener">
+          Ir a tonalli.cash <span aria-hidden="true">→</span>
+        </a>
+      </section>
+    </article>
+  </main>
 
-                <div class="step-card">
-                    <h3>3. Venta de NFTs en XoloLegend</h3>
-                    <p>Mira cómo listar tus activos, como el <em>"Agent 001 to Obsidian"</em>, configurar el precio en XEC y publicarlo en el Marketplace descentralizado.</p>
-                </div>
-            </section>
-
-            <section class="cta" style="text-align: center; margin-top: 3rem;">
-                <a href="https://tonalli.cash" class="btn-primary" style="background: #f39c12; color: #000; padding: 1rem 2rem; border-radius: 50px; text-decoration: none; font-weight: bold;">Abrir Tonalli Wallet</a>
-            </section>
-        </article>
-    </main>
-
-    <footer>
-        <p>&copy; 2026 xolosArmy Network. Cultura y Tecnología sobre eCash.</p>
-    </footer>
+  <footer>
+    <p>&copy; 2026 xolosArmy Network. Cultura y Tecnología sobre eCash.</p>
+  </footer>
 </body>
 </html>
