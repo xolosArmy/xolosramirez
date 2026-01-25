@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ceniza Ramírez: Una entrega especial | Xolos Ramírez</title>
+    <style>
+        /* CSS GENERAL */
+        :root {
+            --primario: #2c2c2c; /* Gris Xolo */
+            --acento: #d35400;   /* Terracota */
+            --fondo: #f9f9f9;
+            --texto: #333;
+            --blanco: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--fondo);
+            color: var(--texto);
+            line-height: 1.6;
+        }
+
+        /* HERO SECTION CON VIDEO */
+        .hero {
+            position: relative;
+            height: 80vh;
+            min-height: 500px;
+            background-color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero iframe {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100vw;
+            height: 100vh;
+            transform: translate(-50%, -50%);
+            pointer-events: none; /* Evita que el usuario pause si es fondo */
+        }
+
+        /* Si prefieres que el video sea interactivo dentro del hero */
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px; /* Tamaño ideal para YouTube Shorts */
+            aspect-ratio: 9/16;
+            z-index: 2;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, transparent 100%);
+            z-index: 1;
+        }
+
+        /* CONTENIDO DEL BLOG */
+        .container {
+            max-width: 800px;
+            margin: -50px auto 50px auto;
+            background: var(--blanco);
+            padding: 40px;
+            position: relative;
+            z-index: 3;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: var(--primario);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .meta {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #777;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .content h2 {
+            color: var(--acento);
+            border-bottom: 2px solid var(--acento);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .content p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        /* IMAGEN CENTRAL */
+        .featured-image {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* BLOCKQUOTE */
+        blockquote {
+            background: #fdf2e9;
+            border-left: 5px solid var(--acento);
+            padding: 20px;
+            margin: 30px 0;
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+
+        /* FOOTER / CTA */
+        .cta {
+            text-align: center;
+            background: var(--primario);
+            color: var(--blanco);
+            padding: 40px;
+            border-radius: 8px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--acento);
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #a04000;
+            transform: scale(1.05);
+        }
+
+        /* RESPONSIVO */
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <div class="hero-overlay"></div>
+        <div class="video-container">
+            <iframe 
+                src="https://www.youtube.com/embed/iK2iVj4TKWo?autoplay=1&mute=1&loop=1&playlist=iK2iVj4TKWo" 
+                title="Ceniza Ramírez" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="meta">Entregas Especiales | Criadero Xolos Ramírez</div>
+        <h1>Ceniza Ramírez: Un puente entre México y Texas</h1>
+
+        <div class="content">
+            <p>
+                En <strong>Xolos Ramírez</strong>, cada entrega es mucho más que un trámite; es el inicio de una nueva historia para nuestros ejemplares y sus familias. Recientemente, el Aeropuerto Internacional de Reynosa fue el escenario de un encuentro muy especial: la entrega de <strong>Ceniza Ramírez</strong>.
+            </p>
+
+            <h2>La Belleza del Xolo "Mariposa"</h2>
+            <p>
+                Ceniza no es una cachorra cualquiera. Es una <strong>Xoloitzcuintle de variedad mariposa</strong>, una pigmentación única que destaca por sus manchas y tonos rosados que contrastan con su piel oscura. Esta característica la convierte en una joya viviente de nuestra cultura mexicana.
+            </p>
+
+            <img src="https://imgur.com/a/60SNKrE" alt="Ceniza Ramírez con su nueva familia" class="featured-image">
+
+            <blockquote>
+                "Vino con él a recibir a Ceniza su papá y un pariente más joven. Ellos viven en Texas y cruzaron a Reynosa para recibirla, demostrando el amor y compromiso por esta raza ancestral."
+            </blockquote>
+
+            <h2>Cruzando Fronteras</h2>
+            <p>
+                La entrega se realizó a <strong>Edgar y su familia</strong>, quienes viajaron desde Texas para encontrarse con su nueva compañera. Para facilitar su traslado internacional, Ceniza viajó con su documentación completa, incluyendo su credencial de perro de servicio, garantizando un cruce seguro y legal hacia su nuevo hogar en Estados Unidos.
+            </p>
+
+            <p>
+                Ver la sonrisa de Edgar al cargar por primera vez a Ceniza nos recuerda por qué dedicamos nuestra vida a la crianza responsable del Xoloitzcuintle. No solo preservamos una raza, unimos corazones a través de la historia.
+            </p>
+        </div>
+
+        <section class="cta">
+            <h3>¿Buscas un compañero ancestral?</h3>
+            <p>En Criadero Xolos Ramírez contamos con ejemplares únicos y asesoría completa para entregas nacionales e internacionales.</p>
+            <a href="#" class="btn">Contáctanos por WhatsApp</a>
+        </section>
+    </main>
+
+    <footer style="text-align: center; padding: 20px; color: #888; font-size: 0.8rem;">
+        &copy; 2024 Criadero Xoloitzcuintle Xolos Ramírez. Todos los derechos reservados.
+    </footer>
+
+</body>
+</html>
