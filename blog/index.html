@@ -33,6 +33,83 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="../css/styles.css" rel="stylesheet"/>
   <link href="../assets/xolosramirez.ico" rel="icon" type="image/x-icon"/>
+  <style>
+   .blog-card {
+     background: #fff;
+     border-radius: 12px;
+     overflow: hidden;
+     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+     transition: transform 0.3s ease;
+     max-width: 400px;
+     font-family: "Segoe UI", sans-serif;
+   }
+
+   .blog-card:hover {
+     transform: translateY(-5px);
+   }
+
+   .card-image {
+     position: relative;
+     height: 200px;
+   }
+
+   .card-image img {
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+   }
+
+   .category {
+     position: absolute;
+     top: 15px;
+     left: 15px;
+     background: #d35400;
+     color: #fff;
+     padding: 5px 12px;
+     border-radius: 20px;
+     font-size: 0.75rem;
+     font-weight: bold;
+   }
+
+   .card-content {
+     padding: 20px;
+   }
+
+   .post-date {
+     color: #888;
+     font-size: 0.85rem;
+     display: block;
+     margin-bottom: 8px;
+   }
+
+   .card-content h3 {
+     margin: 0 0 12px 0;
+     color: #2c2c2c;
+     font-size: 1.25rem;
+     line-height: 1.4;
+   }
+
+   .card-content p {
+     color: #555;
+     font-size: 0.95rem;
+     margin-bottom: 20px;
+     display: -webkit-box;
+     -webkit-line-clamp: 3;
+     -webkit-box-orient: vertical;
+     overflow: hidden;
+   }
+
+   .read-more {
+     color: #d35400;
+     text-decoration: none;
+     font-weight: bold;
+     font-size: 0.9rem;
+   }
+
+   .read-more:hover {
+     text-decoration: underline;
+   }
+  </style>
  </head>
  <body>
   <!-- Google Tag Manager (noscript) -->
@@ -113,6 +190,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       </section>
 
    <section aria-label="Listado de artículos del blog" class="grid" data-aos="fade-up" data-aos-duration="1000">
+   <article class="blog-card">
+    <div class="card-image">
+     <img alt="Entrega de Ceniza Ramírez" src="https://imgur.com/a/60SNKrE"/>
+     <span class="category">
+      Entregas
+     </span>
+    </div>
+    <div class="card-content">
+     <span class="post-date">
+      24 de Enero, 2026
+     </span>
+     <h3>
+      Ceniza Ramírez: Una entrega especial en Reynosa
+     </h3>
+     <p>
+      Acompañamos a esta hermosa Xoloitzcuintle color mariposa en su viaje para conocer a su nueva familia de Texas...
+     </p>
+     <a class="read-more" href="2026-01-24-entrega-ceniza-ramirez.html">
+      Leer historia completa →
+     </a>
+    </div>
+   </article>
    <article class="blog-card">
     <div class="card-image">
      <img alt="Tonalli Wallet Tutorial" src="../img/blog/AlergiasXolo.png"/>
