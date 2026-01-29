@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Gen FOXI3: Genética del Xoloitzcuintle</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'xolo-stone': '#E6E2DD', // Light background
+                        'xolo-dark': '#2D2A26',  // Text
+                        'xolo-earth': '#8C7B6C', // Secondary text
+                        'xolo-amber': '#D97706', // Accent
+                        'xolo-clay': '#A65D3D',  // Chart color 1
+                        'xolo-bone': '#D1D5DB',  // Chart color 2
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Lato"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #E6E2DD; /* xolo-stone */
+            color: #2D2A26; /* xolo-dark */
+        }
+        
+        /* Custom Chart Container Styling - MANDATORY */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .interactive-btn {
+            transition: all 0.3s ease;
+        }
+        .interactive-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .mutation-sequence span {
+            display: inline-block;
+            padding: 2px 4px;
+            margin: 1px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="font-sans leading-relaxed selection:bg-xolo-amber selection:text-white">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-xolo-stone/90 backdrop-blur-md border-b border-xolo-earth/20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center gap-2">
+                    <span class="text-2xl">🐕</span>
+                    <span class="font-serif text-xl font-bold tracking-tight text-xolo-dark">XoloGenetics</span>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-8">
+                    <button onclick="scrollToSection('intro')" class="text-xolo-dark hover:text-xolo-amber font-medium transition-colors">Introducción</button>
+                    <button onclick="scrollToSection('genetics')" class="text-xolo-dark hover:text-xolo-amber font-medium transition-colors">Simulador de Cruza</button>
+                    <button onclick="scrollToSection('phenotype')" class="text-xolo-dark hover:text-xolo-amber font-medium transition-colors">Fenotipo y Dientes</button>
+                    <button onclick="scrollToSection('molecular')" class="text-xolo-dark hover:text-xolo-amber font-medium transition-colors">La Mutación</button>
+
+                    <!-- ✅ Link añadido -->
+                    <a href="https://xolosramirez.com/" target="_blank" rel="noopener noreferrer"
+                       class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-xolo-dark text-white hover:bg-xolo-amber transition-colors text-sm font-bold shadow-sm">
+                        <span>Visitar XolosRamirez.com</span>
+                        <span aria-hidden="true">↗</span>
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-xolo-dark focus:outline-none">
+                        <span class="text-2xl">☰</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-xolo-earth/20 p-4 space-y-2">
+            <button onclick="scrollToSection('intro')" class="block w-full text-left py-2 px-4 hover:bg-stone-100 rounded">Introducción</button>
+            <button onclick="scrollToSection('genetics')" class="block w-full text-left py-2 px-4 hover:bg-stone-100 rounded">Simulador de Cruza</button>
+            <button onclick="scrollToSection('phenotype')" class="block w-full text-left py-2 px-4 hover:bg-stone-100 rounded">Fenotipo y Dientes</button>
+            <button onclick="scrollToSection('molecular')" class="block w-full text-left py-2 px-4 hover:bg-stone-100 rounded">La Mutación</button>
+
+            <!-- ✅ Link añadido (mobile) -->
+            <a href="https://xolosramirez.com/" target="_blank" rel="noopener noreferrer"
+               class="block w-full text-left py-2 px-4 rounded bg-xolo-dark text-white hover:bg-xolo-amber transition-colors font-bold">
+                Visitar XolosRamirez.com ↗
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="intro" class="relative pt-12 pb-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+        <div class="text-center space-y-6">
+            <div class="inline-block px-4 py-1 rounded-full bg-xolo-amber/10 text-xolo-amber font-bold text-sm tracking-wide mb-4">
+                INVESTIGACIÓN CIENTÍFICA
+            </div>
+            <h1 class="text-4xl md:text-6xl font-serif font-bold text-xolo-dark">
+                La Paradoja de FOXI3
+            </h1>
+            <p class="text-xl md:text-2xl text-xolo-earth font-light max-w-3xl mx-auto">
+                Haploinsuficiencia, displasia ectodérmica y la genética detrás del Xoloitzcuintle.
+            </p>
+            <p class="max-w-2xl mx-auto text-stone-600">
+                El Xoloitzcuintle no es solo una raza antigua; es un ejemplo viviente de un mecanismo genético complejo. 
+                Este tablero interactivo explora cómo una mutación en el gen <strong>FOXI3</strong> del cromosoma 17 canino define su identidad.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+                <div class="glass-panel p-6 rounded-xl hover:bg-white/40 transition duration-300">
+                    <div class="text-3xl mb-3">🧬</div>
+                    <h3 class="font-bold text-lg mb-2">Mutación Dominante</h3>
+                    <p class="text-sm text-stone-600">Heredado de forma autosómica semidominante. Una copia causa la falta de pelo.</p>
+                </div>
+                <div class="glass-panel p-6 rounded-xl hover:bg-white/40 transition duration-300">
+                    <div class="text-3xl mb-3">☠️</div>
+                    <h3 class="font-bold text-lg mb-2">Letalidad Embrionaria</h3>
+                    <p class="text-sm text-stone-600">Los homocigotos (dos copias del gen mutado) no sobreviven al desarrollo fetal.</p>
+                </div>
+                <div class="glass-panel p-6 rounded-xl hover:bg-white/40 transition duration-300">
+                    <div class="text-3xl mb-3">🦷</div>
+                    <h3 class="font-bold text-lg mb-2">Pleiotropía</h3>
+                    <p class="text-sm text-stone-600">El gen afecta múltiples rasgos: folículos pilosos, dientes y glándulas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 1: Breeding Simulator (Genetics) -->
+    <section id="genetics" class="py-16 bg-white rounded-3xl mx-4 lg:mx-8 shadow-sm mb-12">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-serif font-bold text-xolo-dark mb-4">Simulador de Herencia Mendeliana</h2>
+                <p class="text-stone-600 max-w-2xl mx-auto mb-6">
+                    Explora la dinámica de la herencia del gen FOXI3. La variedad "Sin Pelo" es heterocigota (H/h), mientras que la variedad "Con Pelo" es homocigota salvaje (h/h). La combinación (H/H) es letal.
+                </p>
+                <div class="p-4 bg-stone-100 rounded-lg inline-block text-left text-sm text-stone-700">
+                    <p><strong>Clave Genética:</strong></p>
+                    <ul class="list-disc ml-5 mt-1">
+                        <li><span class="font-bold text-stone-800">h</span> = Alelo Silvestre (Normal)</li>
+                        <li><span class="font-bold text-xolo-amber">H</span> = Alelo Mutado FOXI3 (Sin Pelo)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Controls -->
+                <div class="space-y-8">
+                    <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200">
+                        <h3 class="font-bold text-lg mb-4 text-xolo-dark">Selecciona los Padres</h3>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-bold mb-2 text-stone-600">Padre (Macho)</label>
+                            <div class="flex gap-4">
+                                <button onclick="setParent('father', 'hairless')" id="btn-father-hairless" class="interactive-btn flex-1 py-3 px-4 rounded-lg bg-xolo-dark text-white font-medium border-2 border-transparent">
+                                    Sin Pelo (H/h)
+                                </button>
+                                <button onclick="setParent('father', 'coated')" id="btn-father-coated" class="interactive-btn flex-1 py-3 px-4 rounded-lg bg-white text-stone-600 font-medium border-2 border-stone-200">
+                                    Con Pelo (h/h)
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-sm font-bold mb-2 text-stone-600">Madre (Hembra)</label>
+                            <div class="flex gap-4">
+                                <button onclick="setParent('mother', 'hairless')" id="btn-mother-hairless" class="interactive-btn flex-1 py-3 px-4 rounded-lg bg-xolo-dark text-white font-medium border-2 border-transparent">
+                                    Sin Pelo (H/h)
+                                </button>
+                                <button onclick="setParent('mother', 'coated')" id="btn-mother-coated" class="interactive-btn flex-1 py-3 px-4 rounded-lg bg-white text-stone-600 font-medium border-2 border-stone-200">
+                                    Con Pelo (h/h)
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="breeding-result-text" class="mt-4 p-4 bg-white rounded border-l-4 border-xolo-amber text-stone-700 italic">
+                            Selecciona una combinación para ver el resultado.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visualization -->
+                <div class="flex flex-col items-center">
+                    <h3 class="text-sm font-bold tracking-widest text-stone-500 uppercase mb-4">Probabilidad de la Camada</h3>
+                    <div class="chart-container">
+                        <canvas id="breedingChart"></canvas>
+                    </div>
+                    <div id="lethal-warning" class="hidden mt-4 text-center">
+                        <span class="inline-block px-3 py-1 bg-red-100 text-red-800 text-xs font-bold rounded-full">⚠️ Factor Letal Detectado</span>
+                        <p class="text-xs text-stone-500 mt-2 max-w-xs mx-auto">
+                            Estadísticamente, el 25% de los embriones (H/H) son reabsorbidos en el útero, resultando en camadas más pequeñas.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Phenotype (Teeth & Skin) -->
+    <section id="phenotype" class="py-16 max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-serif font-bold text-xolo-dark mb-4">El Vínculo Ectodérmico: Piel y Dientes</h2>
+            <p class="text-stone-600 max-w-3xl mx-auto">
+                El gen FOXI3 regula el desarrollo del ectodermo. Su insuficiencia no solo detiene el crecimiento del folículo piloso, sino que también interrumpe la formación dental (odontogénesis). Existe una correlación directa: <strong>a menos pelo, menos dientes.</strong>
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Dental Chart -->
+            <div class="glass-panel p-6 rounded-2xl">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-bold text-xl text-xolo-dark">Oligodoncia (Ausencia Dental)</h3>
+                    <span class="text-2xl">🦷</span>
+                </div>
+                <p class="text-sm text-stone-500 mb-4">
+                    Comparación del promedio de dientes faltantes por tipo. Los premolares son los más afectados.
+                </p>
+                <div class="chart-container">
+                    <canvas id="dentalChart"></canvas>
+                </div>
+                <div class="mt-4 text-xs text-stone-500 text-center">
+                    *Datos basados en estudios de Drögemüller et al. (2008) y estándares de raza.
+                </div>
+            </div>
+
+            <!-- Skin & Traits Interactive List -->
+            <div class="flex flex-col gap-6">
+                <!-- Interactive Toggle Card -->
+                <div class="glass-panel p-6 rounded-2xl flex-grow">
+                    <h3 class="font-bold text-xl text-xolo-dark mb-4">Manifestaciones Dermatológicas</h3>
+                    
+                    <div class="space-y-3">
+                        <button onclick="toggleTrait('trait1')" class="w-full text-left p-3 rounded-lg bg-white hover:bg-stone-50 border border-stone-200 shadow-sm flex justify-between items-center group">
+                            <span class="font-bold text-stone-700">Folículos Pilosos</span>
+                            <span class="text-xolo-amber transform group-hover:rotate-180 transition-transform">▼</span>
+                        </button>
+                        <div id="trait1" class="hidden p-3 bg-stone-50 rounded-b-lg border-x border-b border-stone-200 text-sm text-stone-600">
+                            Los perros heterocigotos muestran una displasia folicular severa. Los folículos son rudimentarios o inexistentes, lo que impide la producción del tallo del pelo. Solo quedan parches residuales en la cabeza, patas y cola.
+                        </div>
+
+                        <button onclick="toggleTrait('trait2')" class="w-full text-left p-3 rounded-lg bg-white hover:bg-stone-50 border border-stone-200 shadow-sm flex justify-between items-center group">
+                            <span class="font-bold text-stone-700">Glándulas Sebáceas</span>
+                            <span class="text-xolo-amber transform group-hover:rotate-180 transition-transform">▼</span>
+                        </button>
+                        <div id="trait2" class="hidden p-3 bg-stone-50 rounded-b-lg border-x border-b border-stone-200 text-sm text-stone-600">
+                            A pesar de la falta de pelo, las glándulas sebáceas suelen ser funcionales y pueden ser hiperactivas para proteger la piel expuesta, lo que requiere baños regulares para evitar el acné comedónico.
+                        </div>
+
+                        <button onclick="toggleTrait('trait3')" class="w-full text-left p-3 rounded-lg bg-white hover:bg-stone-50 border border-stone-200 shadow-sm flex justify-between items-center group">
+                            <span class="font-bold text-stone-700">Termorregulación</span>
+                            <span class="text-xolo-amber transform group-hover:rotate-180 transition-transform">▼</span>
+                        </button>
+                        <div id="trait3" class="hidden p-3 bg-stone-50 rounded-b-lg border-x border-b border-stone-200 text-sm text-stone-600">
+                            Mito común: "Tienen temperatura más alta". Falso. Su temperatura corporal es normal (38-39°C), pero al no tener pelo como aislante, se <em>sienten</em> más calientes al tacto y pierden calor más rápido.
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Insight Box -->
+                <div class="bg-xolo-dark text-stone-200 p-6 rounded-2xl">
+                    <h4 class="font-bold text-xolo-amber mb-2 uppercase text-xs tracking-widest">Dato Curioso</h4>
+                    <p class="text-sm italic">
+                        "La ausencia de premolares en el Xoloitzcuintle no se considera una falta en las exposiciones caninas para la variedad sin pelo, ya que es una consecuencia genética directa de su condición."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Molecular Mutation -->
+    <section id="molecular" class="py-16 bg-stone-100 border-y border-stone-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-serif font-bold text-xolo-dark mb-4">La Mutación: Duplicación de 7 Pares de Bases</h2>
+                <p class="text-stone-600">
+                    En el Exón 1 del gen FOXI3, una simple duplicación cambia todo el marco de lectura del ADN. Esto genera un codón de parada prematuro, truncando la proteína.
+                </p>
+            </div>
+
+            <div class="bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-stone-200">
+                <!-- Controls for DNA -->
+                <div class="flex justify-center gap-4 mb-8">
+                    <button onclick="showDNA('wild')" id="btn-dna-wild" class="px-6 py-2 rounded-full text-sm font-bold bg-stone-200 text-stone-600 hover:bg-stone-300 transition-colors">
+                        Secuencia Normal (Wild Type)
+                    </button>
+                    <button onclick="showDNA('mutant')" id="btn-dna-mutant" class="px-6 py-2 rounded-full text-sm font-bold bg-xolo-amber text-white hover:bg-yellow-600 transition-colors shadow-md">
+                        Secuencia Mutada (Xolo)
+                    </button>
+                </div>
+
+                <!-- Visualization Container -->
+                <div class="font-mono overflow-x-auto bg-stone-900 rounded-xl p-6 text-stone-300 text-lg md:text-xl leading-relaxed whitespace-nowrap shadow-inner">
+                    <div id="dna-display" class="mutation-sequence">
+                        <!-- Content injected by JS -->
+                    </div>
+                </div>
+
+                <!-- Explanation -->
+                <div id="dna-explanation" class="mt-6 text-center text-sm font-medium text-stone-600 min-h-[60px]">
+                    <!-- Text injected by JS -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-xolo-dark text-stone-400 py-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center">
+            <h3 class="font-serif text-2xl text-stone-200 mb-4">XoloGenetics</h3>
+            <p class="max-w-md mx-auto text-sm mb-6">
+                Una exploración visual de la haploinsuficiencia del gen FOXI3 y su impacto en la morfología canina.
+            </p>
+
+            <!-- ✅ Link añadido en footer -->
+            <a href="https://xolosramirez.com/" target="_blank" rel="noopener noreferrer"
+               class="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-xolo-amber text-white font-bold hover:bg-yellow-600 transition-colors shadow-md">
+                Ir a XolosRamirez.com <span aria-hidden="true">↗</span>
+            </a>
+
+            <div class="border-t border-stone-700 pt-8 text-xs mt-8">
+                <p>&copy; 2023 Visualización Educativa. Basado en investigaciones de Drögemüller et al. (Science, 2008) y Wiener et al. (2013).</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // State
+        const state = {
+            father: 'hairless', // 'hairless' or 'coated'
+            mother: 'hairless',
+            charts: {}
+        };
+
+        // DOM Elements
+        const dnaDisplay = document.getElementById('dna-display');
+        const dnaExplanation = document.getElementById('dna-explanation');
+
+        // --- Logic 1: DNA Visualization ---
+        const dnaSequences = {
+            wild: {
+                seq: "GGC ACG GCG ... ATC GCG TGG ... (Proteína Funcional)",
+                desc: "La secuencia normal produce la proteína FOXI3 completa, necesaria para el desarrollo del pelo y dientes."
+            },
+            mutant: {
+                // Simplified representation of the 7bp duplication
+                seq: "GGC ACG GCG ... ATC GCG GCG TGG ... (STOP Prematuro)",
+                desc: "La duplicación de 7 pares de bases provoca un 'Frameshift'. La lectura se altera, aparece un codón de parada y la proteína se corta."
+            }
+        };
+
+        function showDNA(type) {
+            // Update UI buttons
+            document.getElementById('btn-dna-wild').className = type === 'wild' 
+                ? "px-6 py-2 rounded-full text-sm font-bold bg-green-600 text-white shadow-md transition-colors"
+                : "px-6 py-2 rounded-full text-sm font-bold bg-stone-200 text-stone-600 hover:bg-stone-300 transition-colors";
+            
+            document.getElementById('btn-dna-mutant').className = type === 'mutant'
+                ? "px-6 py-2 rounded-full text-sm font-bold bg-xolo-amber text-white shadow-md transition-colors"
+                : "px-6 py-2 rounded-full text-sm font-bold bg-stone-200 text-stone-600 hover:bg-stone-300 transition-colors";
+
+            // Update Text
+            const data = dnaSequences[type];
+            let html = "";
+            
+            if (type === 'mutant') {
+                html = `GGC ACG <span class="text-stone-500">...</span> ATC <span class="bg-xolo-amber/30 text-xolo-amber border border-xolo-amber rounded px-1 animate-pulse">GCG GCG T</span> GG <span class="text-red-400">STOP</span>`;
+            } else {
+                html = `GGC ACG <span class="text-stone-500">...</span> ATC <span class="text-green-400">GCG T</span> GG <span class="text-stone-500">...</span>`;
+            }
+
+            dnaDisplay.innerHTML = html;
+            dnaExplanation.innerHTML = data.desc;
+            dnaExplanation.className = type === 'mutant' 
+                ? "mt-6 text-center text-sm font-medium text-xolo-amber min-h-[60px]" 
+                : "mt-6 text-center text-sm font-medium text-stone-600 min-h-[60px]";
+        }
+
+        // --- Logic 2: Breeding Simulator ---
+        function setParent(parent, type) {
+            state[parent] = type;
+            updateBreedingUI();
+            updateBreedingChart();
+        }
+
+        function updateBreedingUI() {
+            // Update button styles
+            const parents = ['father', 'mother'];
+            parents.forEach(p => {
+                const isHairless = state[p] === 'hairless';
+                
+                const btnH = document.getElementById(`btn-${p}-hairless`);
+                const btnC = document.getElementById(`btn-${p}-coated`);
+
+                if (isHairless) {
+                    btnH.className = "interactive-btn flex-1 py-3 px-4 rounded-lg bg-xolo-dark text-white font-medium border-2 border-transparent shadow-lg";
+                    btnC.className = "interactive-btn flex-1 py-3 px-4 rounded-lg bg-white text-stone-400 font-medium border-2 border-stone-100 opacity-60";
+                } else {
+                    btnH.className = "interactive-btn flex-1 py-3 px-4 rounded-lg bg-white text-stone-400 font-medium border-2 border-stone-100 opacity-60";
+                    btnC.className = "interactive-btn flex-1 py-3 px-4 rounded-lg bg-xolo-clay text-white font-medium border-2 border-transparent shadow-lg";
+                }
+            });
+
+            // Update Text Description
+            const resultText = document.getElementById('breeding-result-text');
+            const lethalWarning = document.getElementById('lethal-warning');
+            
+            if (state.father === 'coated' && state.mother === 'coated') {
+                resultText.innerHTML = "Cruza de <strong>Con Pelo x Con Pelo</strong>.<br>Resultado: 100% Cachorros con pelo. (h/h)";
+                lethalWarning.classList.add('hidden');
+            } else if (state.father === 'hairless' && state.mother === 'hairless') {
+                resultText.innerHTML = "Cruza de <strong>Sin Pelo x Sin Pelo</strong>.<br>Resultado Teórico: 25% Con Pelo, 50% Sin Pelo, 25% Letal.";
+                lethalWarning.classList.remove('hidden');
+            } else {
+                resultText.innerHTML = "Cruza de <strong>Sin Pelo x Con Pelo</strong>.<br>Resultado: 50% Sin Pelo, 50% Con Pelo.";
+                lethalWarning.classList.add('hidden');
+            }
+        }
+
+        function updateBreedingChart() {
+            let data = [];
+            let labels = [];
+            let colors = [];
+
+            if (state.father === 'coated' && state.mother === 'coated') {
+                data = [100];
+                labels = ['Con Pelo (h/h)'];
+                colors = ['#A65D3D']; // Clay
+            } else if (state.father === 'hairless' && state.mother === 'hairless') {
+                // 25 lethal, 50 hairless, 25 coated
+                data = [25, 50, 25];
+                labels = ['Con Pelo (h/h)', 'Sin Pelo (H/h)', 'Letal (H/H)'];
+                colors = ['#A65D3D', '#2D2A26', '#EF4444']; // Clay, Dark, Red
+            } else {
+                // Mixed
+                data = [50, 50];
+                labels = ['Con Pelo (h/h)', 'Sin Pelo (H/h)'];
+                colors = ['#A65D3D', '#2D2A26'];
+            }
+
+            state.charts.breeding.data.labels = labels;
+            state.charts.breeding.data.datasets[0].data = data;
+            state.charts.breeding.data.datasets[0].backgroundColor = colors;
+            state.charts.breeding.update();
+        }
+
+        // --- Logic 3: Traits Toggle ---
+        function toggleTrait(id) {
+            const el = document.getElementById(id);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        // --- Logic 4: Navigation ---
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth' });
+                // Close mobile menu if open
+                const menu = document.getElementById('mobile-menu');
+                if (!menu.classList.contains('hidden')) {
+                    menu.classList.add('hidden');
+                }
+            }
+        }
+
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // --- Initialization ---
+        window.addEventListener('load', () => {
+            
+            // 1. Breeding Chart
+            const ctxBreeding = document.getElementById('breedingChart').getContext('2d');
+            state.charts.breeding = new Chart(ctxBreeding, {
+                type: 'doughnut',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        backgroundColor: [],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ` ${context.label}: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 2. Dental Chart
+            const ctxDental = document.getElementById('dentalChart').getContext('2d');
+            new Chart(ctxDental, {
+                type: 'bar',
+                data: {
+                    labels: ['Incisivos', 'Caninos', 'Premolares', 'Molares'],
+                    datasets: [
+                        {
+                            label: 'Xolo Con Pelo (Normal)',
+                            data: [0, 0, 0, 0], // Usually full dentition
+                            backgroundColor: '#A65D3D',
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Xolo Sin Pelo (Haploinsuficiente)',
+                            data: [1.5, 0.1, 3.2, 0.5], // Avg missing teeth approx
+                            backgroundColor: '#2D2A26',
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Promedio de Dientes Faltantes' }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                footer: (items) => {
+                                    if(items[0].datasetIndex === 1) return "Los premolares son los más afectados.";
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Initialize views
+            updateBreedingUI();
+            updateBreedingChart();
+            showDNA('wild');
+        });
+
+    </script>
+</body>
+</html>
