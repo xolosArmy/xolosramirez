@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>De Mictlán a Hollywood: El Efecto Coco</title>
+    
+    <!-- Chosen Palette: Warm Neutrals (Stone/Sand) with Cempasúchil Orange and Mystical Purple Accents. 
+         This palette reflects the duality of the earth/ancient roots and the magical/cinematic portrayal of the afterlife. -->
+
+    <!-- Application Structure Plan: 
+         1. Hero Section: Emotional hook, contrasting the ancient and modern.
+         2. Dashboard "El Guardián": Interactive cards explaining the pre-Hispanic role (Context).
+         3. Section "El Fenómeno": Bar chart comparison of box office success to establish reach.
+         4. Section "La Curva del Xolo": Line chart showing the correlation between the movie release and breed popularity/search trends.
+         5. Section "Globalización": Interactive list showing key markets where the Xolo is now a luxury icon.
+         6. Conclusion: Synthesis of cultural appreciation vs. appropriation.
+         
+         WHY: A linear narrative allows the user to understand the *cause* (history + movie) before seeing the *effect* (trends + economy). 
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Comparison Chart (Chart.js Bar): To show the sheer scale of Coco's success in Mexico vs. other films. Goal: Inform/Compare.
+         2. Trend Line (Chart.js Line): To visualize the "2017 Spike" in interest for Xoloitzcuintles. Goal: Change/Correlate.
+         3. Interactive Cards (HTML/JS): To explain mythological concepts without overwhelming text. Goal: Inform/Engage.
+         4. NO SVG/Mermaid used. All visuals are Canvas or CSS-styled HTML.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: #fafaf9; /* stone-50 */
+            color: #44403c; /* stone-700 */
+        }
+        h1, h2, h3, .serif-font {
+            font-family: 'Cinzel', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            margin: 0 auto;
+        }
+        .active-tab {
+            border-bottom: 2px solid #f97316; /* orange-500 */
+            color: #c2410c; /* orange-700 */
+            font-weight: bold;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-[#fafaf9]/95 backdrop-blur-sm border-b border-stone-200 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <span class="text-xl font-bold serif-font text-stone-800">Mictlán <span class="text-orange-600">→</span> Hollywood</span>
+                <div class="hidden md:flex space-x-8">
+                    <button onclick="scrollToSection('origen')" class="hover:text-orange-600 transition-colors">Origen</button>
+                    <button onclick="scrollToSection('impacto')" class="hover:text-orange-600 transition-colors">Impacto Cine</button>
+                    <button onclick="scrollToSection('tendencia')" class="hover:text-orange-600 transition-colors">Tendencia Xolo</button>
+                    <button onclick="scrollToSection('economia')" class="hover:text-orange-600 transition-colors">Turismo</button>
+                    <!-- ✅ LINK A XOLOS RAMÍREZ (CTA) -->
+                    <a href="https://xolosramirez.com/" target="_blank" rel="noopener"
+                       class="ml-2 inline-flex items-center gap-2 bg-stone-900 text-white px-4 py-2 rounded-full font-bold
+                              hover:bg-orange-600 transition-colors shadow-sm">
+                        Xolos Ramírez
+                        <span aria-hidden="true">↗</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative bg-stone-900 text-stone-100 py-24 px-4 overflow-hidden">
+        <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/black-scales.png')]"></div>
+        <div class="max-w-4xl mx-auto text-center relative z-10 fade-in">
+            <span class="uppercase tracking-widest text-orange-500 font-bold mb-4 block">Informe de Impacto Cultural</span>
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">Del Inframundo a la Alfombra Roja</h1>
+            <p class="text-xl md:text-2xl font-light text-stone-300 max-w-2xl mx-auto mb-10">
+                Cómo la película <span class="italic text-orange-400">Coco</span> transformó la percepción global de la muerte en México y convirtió al Xoloitzcuintle de un "perro extraño" a un ícono de lujo mundial.
+            </p>
+            <button onclick="scrollToSection('origen')" class="bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 rounded-full font-bold transition-all shadow-lg transform hover:scale-105">
+                Iniciar Recorrido
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-6xl mx-auto px-4 py-12 space-y-24">
+
+        <!-- Section 1: El Origen (Context) -->
+        <section id="origen" class="scroll-mt-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4">El Guardián Ancestral</h2>
+                <p class="text-lg text-stone-600 max-w-3xl mx-auto">
+                    Antes de ser una estrella de cine, el Xoloitzcuintle tenía una misión sagrada. Esta sección explora su rol histórico para entender la magnitud de su renacimiento moderno.
+                </p>
+            </div>
+
+            <!-- Interactive Mythology Cards -->
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm card-hover transition-all duration-300 cursor-pointer" onclick="toggleCard(1)">
+                    <div class="text-orange-600 text-4xl mb-4">✦</div>
+                    <h3 class="text-xl font-bold mb-2">Guía de Almas</h3>
+                    <p class="text-stone-600 text-sm mb-4">Conocido como el psicopompo de la mitología mexica.</p>
+                    <div id="card-desc-1" class="hidden text-stone-500 text-sm border-t pt-4 mt-2">
+                        Se creía que el Xolo debía ayudar al difunto a cruzar el río Apanohuacalhuia, el primer nivel del Mictlán. Si el difunto había tratado mal a los perros en vida, el Xolo se negaría a ayudarlo.
+                    </div>
+                    <button class="text-orange-600 text-sm font-bold mt-2" id="btn-card-1">Leer más +</button>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm card-hover transition-all duration-300 cursor-pointer" onclick="toggleCard(2)">
+                    <div class="text-orange-600 text-4xl mb-4">♨</div>
+                    <h3 class="text-xl font-bold mb-2">Sanador Viviente</h3>
+                    <p class="text-stone-600 text-sm mb-4">Su falta de pelo lo convierte en una fuente de calor.</p>
+                    <div id="card-desc-2" class="hidden text-stone-500 text-sm border-t pt-4 mt-2">
+                        Históricamente, se usaban como "bolsas de agua caliente" vivientes para tratar reumatismo, asma y dolores musculares. Dormían junto a los enfermos para transferir su calor corporal.
+                    </div>
+                    <button class="text-orange-600 text-sm font-bold mt-2" id="btn-card-2">Leer más +</button>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm card-hover transition-all duration-300 cursor-pointer" onclick="toggleCard(3)">
+                    <div class="text-orange-600 text-4xl mb-4">⚔</div>
+                    <h3 class="text-xl font-bold mb-2">Casi Extinto</h3>
+                    <p class="text-stone-600 text-sm mb-4">Sobreviviente de la conquista y la marginación.</p>
+                    <div id="card-desc-3" class="hidden text-stone-500 text-sm border-t pt-4 mt-2">
+                        Durante la colonia, fueron perseguidos por considerarse paganos y fuente de alimento. En el siglo XX, artistas como Frida Kahlo y Diego Rivera rescataron la raza de la extinción total.
+                    </div>
+                    <button class="text-orange-600 text-sm font-bold mt-2" id="btn-card-3">Leer más +</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: El Efecto Coco (Data Viz) -->
+        <section id="impacto" class="scroll-mt-24 bg-white p-8 rounded-2xl shadow-sm border border-stone-200">
+            <div class="grid md:grid-cols-3 gap-8 items-center">
+                <div class="md:col-span-1">
+                    <h2 class="text-3xl font-bold text-stone-800 mb-4">El Fenómeno Mediático</h2>
+                    <p class="text-stone-600 mb-6">
+                        El lanzamiento de <em>Coco</em> en 2017 no fue solo un éxito de taquilla; fue un evento sociológico. La película validó tradiciones locales ante una audiencia global masiva.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-3 bg-stone-50 rounded-lg">
+                            <span class="font-bold text-stone-700">Taquilla Global</span>
+                            <span class="text-orange-600 font-bold">$807 Millones USD</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-stone-50 rounded-lg">
+                            <span class="font-bold text-stone-700">Premios Oscar</span>
+                            <span class="text-orange-600 font-bold">2 (Mejor Película/Canción)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CHART CONTAINER 1: Box Office -->
+                <div class="md:col-span-2">
+                    <div class="chart-container">
+                        <canvas id="chartBoxOffice"></canvas>
+                    </div>
+                    <p class="text-center text-xs text-stone-400 mt-2">Comparativa de ingresos históricos en taquilla mexicana (al momento de su estreno).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: La Fiebre del Xolo (Trends) -->
+        <section id="tendencia" class="scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-stone-800 mb-2">Globalización del Xoloitzcuintle</h2>
+                <p class="text-lg text-stone-600">De "perro callejero" a símbolo de estatus internacional.</p>
+            </div>
+
+            <!-- Tab Navigation for Stats -->
+            <div class="flex justify-center space-x-4 mb-8">
+                <button onclick="updateTrendChart('search')" id="tab-search" class="active-tab px-4 py-2 font-medium transition-colors">Interés de Búsqueda</button>
+                <button onclick="updateTrendChart('price')" id="tab-price" class="text-stone-500 hover:text-stone-800 px-4 py-2 font-medium transition-colors">Valor de Mercado</button>
+            </div>
+
+            <!-- CHART CONTAINER 2: Trends -->
+            <div class="bg-white p-6 rounded-2xl shadow-lg border border-stone-100">
+                <div class="chart-container">
+                    <canvas id="chartXoloTrends"></canvas>
+                </div>
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-center border-t border-stone-100 pt-6">
+                    <div>
+                        <div class="text-2xl font-bold text-stone-800">+400%</div>
+                        <div class="text-sm text-stone-500">Búsquedas globales post-2017</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold text-stone-800">Patrimonio</div>
+                        <div class="text-sm text-stone-500">Declarado Patrimonio de la CDMX</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold text-stone-800">Estatus</div>
+                        <div class="text-sm text-stone-500">Mascota de lujo en Europa/Asia</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Impacto Económico y Turismo -->
+        <section id="economia" class="scroll-mt-24 grid md:grid-cols-2 gap-12">
+            <div>
+                <h2 class="text-3xl font-bold text-stone-800 mb-6">La Ruta de los Muertos</h2>
+                <p class="text-stone-600 mb-4">
+                    La película creó un nuevo tipo de turismo. Michoacán y Oaxaca vieron incrementos históricos en visitantes que buscaban la "experiencia Coco".
+                </p>
+                <ul class="space-y-4">
+                    <li class="flex items-start">
+                        <span class="bg-orange-100 text-orange-600 p-2 rounded-full mr-4 text-sm font-bold">1</span>
+                        <div>
+                            <h4 class="font-bold text-stone-800">Turismo en Michoacán</h4>
+                            <p class="text-sm text-stone-600">Aumento del 20% en ocupación hotelera durante Día de Muertos en 2018 y 2019.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="bg-orange-100 text-orange-600 p-2 rounded-full mr-4 text-sm font-bold">2</span>
+                        <div>
+                            <h4 class="font-bold text-stone-800">Venta de Alebrijes</h4>
+                            <p class="text-sm text-stone-600">Aunque en la película los "guías espirituales" son alebrijes (una fusión creativa, ya que tradicionalmente es el Xolo), la demanda de estas artesanías oaxaqueñas se disparó mundialmente.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="bg-orange-100 text-orange-600 p-2 rounded-full mr-4 text-sm font-bold">3</span>
+                        <div>
+                            <h4 class="font-bold text-stone-800">Exportación Canina</h4>
+                            <p class="text-sm text-stone-600">Criadores mexicanos reportaron listas de espera de hasta 2 años para clientes en Rusia, Estados Unidos y Francia.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bg-stone-800 text-white p-8 rounded-2xl flex flex-col justify-center relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-10 text-9xl font-serif">"</div>
+                <h3 class="text-2xl font-serif mb-6 relative z-10">La Re-apropiación Cultural</h3>
+                <p class="text-stone-300 italic mb-6 relative z-10">
+                    "Disney intentó registrar la frase 'Día de los Muertos'. La indignación pública forzó a la compañía a contratar asesores culturales. El resultado fue un producto que, irónicamente, reforzó el orgullo nacional mexicano más que cualquier campaña gubernamental."
+                </p>
+                <div class="mt-auto border-t border-stone-600 pt-4 relative z-10">
+                    <span class="text-orange-400 font-bold text-sm uppercase">Conclusión Clave</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-900 text-stone-400 py-12 border-t border-stone-800 mt-12">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="font-serif text-lg mb-4 text-stone-200">De Mictlán a Hollywood</p>
+            <p class="text-sm mb-8">Análisis interactivo basado en tendencias culturales y datos de mercado 2017-2023.</p>
+            <div class="text-xs text-stone-600">
+                Datos simulados para propósitos de demostración basados en reportes públicos de taquilla y tendencias de búsqueda.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- State Management ---
+        const state = {
+            activeTrend: 'search' // 'search' or 'price'
+        };
+
+        // --- Data Source ---
+        const data = {
+            boxOffice: {
+                labels: ['Coco (2017)', 'Avengers (2012)', 'Toy Story 3 (2010)', 'Minions (2015)'],
+                values: [1100, 827, 772, 724] // Millions MXN (Approx at time of release in Mexico)
+            },
+            trends: {
+                search: {
+                    labels: ['2015', '2016', '2017 (Estreno)', '2018', '2019', '2020'],
+                    values: [20, 25, 100, 85, 70, 75],
+                    label: 'Índice de Búsqueda Google (Normalizado)'
+                },
+                price: {
+                    labels: ['2015', '2016', '2017', '2018', '2019', '2020'],
+                    values: [500, 600, 2500, 3000, 2800, 3500],
+                    label: 'Precio Promedio Cachorro (USD)'
+                }
+            }
+        };
+
+        // --- Navigation Functions ---
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function toggleCard(id) {
+            const desc = document.getElementById(`card-desc-${id}`);
+            const btn = document.getElementById(`btn-card-${id}`);
+            
+            if (desc.classList.contains('hidden')) {
+                desc.classList.remove('hidden');
+                btn.innerText = "Leer menos -";
+                btn.classList.add('text-stone-800');
+            } else {
+                desc.classList.add('hidden');
+                btn.innerText = "Leer más +";
+                btn.classList.remove('text-stone-800');
+            }
+        }
+
+        // --- Chart Initialization ---
+        let trendChartInstance = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initBoxOfficeChart();
+            initTrendChart();
+        });
+
+        function initBoxOfficeChart() {
+            const ctx = document.getElementById('chartBoxOffice').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.boxOffice.labels,
+                    datasets: [{
+                        label: 'Recaudación en México (Millones MXN)',
+                        data: data.boxOffice.values,
+                        backgroundColor: [
+                            'rgba(234, 88, 12, 0.8)', // Coco Orange
+                            'rgba(120, 113, 108, 0.4)',
+                            'rgba(120, 113, 108, 0.4)',
+                            'rgba(120, 113, 108, 0.4)'
+                        ],
+                        borderColor: [
+                            'rgba(234, 88, 12, 1)',
+                            'rgba(120, 113, 108, 1)',
+                            'rgba(120, 113, 108, 1)',
+                            'rgba(120, 113, 108, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(28, 25, 23, 0.9)',
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw + ' Millones MXN';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function initTrendChart() {
+            const ctx = document.getElementById('chartXoloTrends').getContext('2d');
+            const dataset = data.trends.search;
+
+            trendChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dataset.labels,
+                    datasets: [{
+                        label: dataset.label,
+                        data: dataset.values,
+                        borderColor: '#ea580c', // Orange 600
+                        backgroundColor: 'rgba(234, 88, 12, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#ea580c',
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: {
+                            backgroundColor: 'rgba(28, 25, 23, 0.9)',
+                            padding: 12
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateTrendChart(type) {
+            // Update active tab styles
+            document.querySelectorAll('button[id^="tab-"]').forEach(btn => {
+                btn.classList.remove('active-tab', 'text-stone-800');
+                btn.classList.add('text-stone-500');
+            });
+            const activeBtn = document.getElementById(`tab-${type}`);
+            activeBtn.classList.add('active-tab');
+            activeBtn.classList.remove('text-stone-500');
+
+            // Update chart data
+            const dataset = data.trends[type];
+            trendChartInstance.data.labels = dataset.labels;
+            trendChartInstance.data.datasets[0].data = dataset.values;
+            trendChartInstance.data.datasets[0].label = dataset.label;
+            
+            // Adjust styling based on type (optional nuance)
+            if(type === 'price') {
+                trendChartInstance.data.datasets[0].borderColor = '#7c3aed'; // Purple for luxury/price
+                trendChartInstance.data.datasets[0].backgroundColor = 'rgba(124, 58, 237, 0.1)';
+                trendChartInstance.data.datasets[0].pointBorderColor = '#7c3aed';
+            } else {
+                trendChartInstance.data.datasets[0].borderColor = '#ea580c'; // Orange for search/hot
+                trendChartInstance.data.datasets[0].backgroundColor = 'rgba(234, 88, 12, 0.1)';
+                trendChartInstance.data.datasets[0].pointBorderColor = '#ea580c';
+            }
+
+            trendChartInstance.update();
+        }
+
+    </script>
+</body>
+</html>
