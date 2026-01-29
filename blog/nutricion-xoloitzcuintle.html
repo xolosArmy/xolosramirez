@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nutrición Funcional del Xoloitzcuintle: Guía Técnica (Arqueozoología + Dietética Clínica)</title>
+  <meta name="description" content="Artículo técnico con guía visual y tabla de nutrientes para optimizar piel, dentición y metabolismo térmico del Xoloitzcuintle (variedad sin pelo y con pelo). Enfoque arqueozoológico y dietética clínica avanzada." />
+
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --panel:#121218;
+      --panel2:#171723;
+      --text:#f3f3f5;
+      --muted:#b9bac6;
+      --muted2:#8f91a3;
+      --line:rgba(255,255,255,.10);
+      --gold:#f2c14e;
+      --jade:#46d2a1;
+      --ember:#ff6b4a;
+      --sky:#7aa8ff;
+      --shadow: 0 16px 44px rgba(0,0,0,.45);
+      --radius: 18px;
+      --radius2: 24px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      --serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      background: radial-gradient(1200px 700px at 20% -10%, rgba(242,193,78,.10), transparent 60%),
+                  radial-gradient(1000px 700px at 90% 0%, rgba(70,210,161,.10), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+      line-height:1.55;
+    }
+
+    a{ color: var(--gold); text-decoration:none; }
+    a:hover{ text-decoration:underline; }
+
+    .wrap{ max-width: 1120px; margin: 0 auto; padding: 28px 18px 64px; }
+
+    /* Topbar */
+    .topbar{
+      display:flex; gap:14px; align-items:center; justify-content:space-between;
+      padding:14px 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position: sticky; top: 10px; z-index: 50;
+      backdrop-filter: blur(10px);
+    }
+    .brand{
+      display:flex; gap:12px; align-items:center;
+      min-width: 240px;
+    }
+    .sigil{
+      width:38px; height:38px; border-radius:12px;
+      background: radial-gradient(18px 18px at 30% 30%, rgba(242,193,78,.55), rgba(242,193,78,.12));
+      border: 1px solid rgba(242,193,78,.25);
+      display:grid; place-items:center;
+    }
+    .sigil svg{ opacity:.95; }
+    .brand h1{
+      font-size:14px; margin:0;
+      letter-spacing:.3px;
+    }
+    .brand p{
+      margin:0; font-size:12px; color:var(--muted2);
+    }
+    .top-actions{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end;
+    }
+    .btn{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 12px;
+      border-radius: 14px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      font-size:13px;
+      text-decoration:none;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space:nowrap;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.06);
+      border-color: rgba(242,193,78,.25);
+      text-decoration:none;
+    }
+    .btn.primary{
+      border-color: rgba(242,193,78,.30);
+      background: linear-gradient(180deg, rgba(242,193,78,.22), rgba(242,193,78,.10));
+      color: var(--text);
+    }
+    .pill{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(243,243,245,.9);
+      padding: 6px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+    }
+
+    /* Hero */
+    .hero{
+      margin-top: 18px;
+      padding: 26px 22px;
+      border-radius: var(--radius2);
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 18px;
+      align-items: start;
+    }
+    @media (max-width: 900px){
+      .hero-grid{ grid-template-columns: 1fr; }
+      .brand{ min-width:auto; }
+    }
+    .kicker{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+      margin-bottom: 10px;
+    }
+    .kicker .tag{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .title{
+      font-family: var(--serif);
+      font-size: 34px;
+      line-height:1.15;
+      margin: 6px 0 10px;
+      letter-spacing:.2px;
+    }
+    .lead{
+      margin:0;
+      color: var(--muted);
+      font-size: 15.5px;
+      max-width: 78ch;
+    }
+    .hero-card{
+      padding: 16px 16px;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.25);
+    }
+    .hero-card h3{
+      margin:0 0 8px;
+      font-size: 14px;
+      letter-spacing:.2px;
+    }
+    .hero-card ul{
+      margin:0; padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .hero-card li{ margin: 6px 0; }
+
+    /* Section */
+    .section{
+      margin-top: 18px;
+      padding: 20px 22px;
+      border-radius: var(--radius2);
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+    }
+    .section h2{
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing:.2px;
+    }
+    .section p{ color: var(--muted); margin: 10px 0; }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+    }
+    .card{
+      grid-column: span 6;
+      padding: 16px;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.22);
+    }
+    .card h3{ margin:0 0 8px; font-size: 14px; letter-spacing:.2px; }
+    .card p{ margin:0; font-size: 13px; color: var(--muted); }
+    .card .meta{
+      margin-top:10px;
+      display:flex; gap:8px; flex-wrap:wrap;
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      color: rgba(243,243,245,.92);
+      font-size: 12px;
+    }
+    .chip b{ color: var(--gold); font-weight:600; }
+
+    @media (max-width: 900px){
+      .card{ grid-column: span 12; }
+    }
+
+    /* Visual guide blocks */
+    .flow{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 10px;
+    }
+    @media (max-width: 900px){ .flow{ grid-template-columns: 1fr; } }
+
+    .step{
+      padding: 14px;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.25));
+      position: relative;
+    }
+    .step .num{
+      width: 34px; height: 34px;
+      border-radius: 12px;
+      display:grid; place-items:center;
+      border:1px solid rgba(242,193,78,.30);
+      background: rgba(242,193,78,.12);
+      font-family: var(--mono);
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+    .step h4{ margin: 0 0 6px; font-size: 14px; }
+    .step p{ margin: 0; color: var(--muted); font-size: 13px; }
+
+    /* Table */
+    .table-wrap{
+      overflow:auto;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.22);
+    }
+    table{
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 860px;
+    }
+    th, td{
+      padding: 12px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      vertical-align: top;
+      text-align:left;
+      font-size: 13px;
+    }
+    th{
+      position: sticky; top: 0;
+      background: rgba(18,18,24,.92);
+      backdrop-filter: blur(8px);
+      color: rgba(243,243,245,.96);
+      font-weight: 600;
+      letter-spacing:.2px;
+    }
+    td{ color: var(--muted); }
+    .badge{
+      display:inline-flex; align-items:center;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      font-size: 12px;
+      color: rgba(243,243,245,.92);
+      white-space:nowrap;
+    }
+    .b-gold{ border-color: rgba(242,193,78,.28); background: rgba(242,193,78,.10); }
+    .b-jade{ border-color: rgba(70,210,161,.28); background: rgba(70,210,161,.10); }
+    .b-ember{ border-color: rgba(255,107,74,.28); background: rgba(255,107,74,.10); }
+    .b-sky{ border-color: rgba(122,168,255,.28); background: rgba(122,168,255,.10); }
+
+    /* Details / FAQ */
+    details{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      background: rgba(0,0,0,.22);
+      padding: 12px 14px;
+      margin-top: 10px;
+    }
+    summary{
+      cursor:pointer;
+      list-style:none;
+      font-weight:600;
+      color: rgba(243,243,245,.92);
+      font-size: 14px;
+    }
+    summary::-webkit-details-marker{ display:none; }
+    details p{ margin: 10px 0 0; color: var(--muted); font-size: 13px; }
+    .note{
+      margin-top: 12px;
+      padding: 14px 14px;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(70,210,161,.10), rgba(0,0,0,.22));
+      color: rgba(243,243,245,.92);
+      font-size: 13px;
+    }
+    .note b{ color: var(--jade); }
+
+    /* Footer */
+    .footer{
+      margin-top: 18px;
+      padding: 18px 22px;
+      border-radius: var(--radius2);
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.28);
+      color: var(--muted2);
+      font-size: 13px;
+    }
+    .footer .row{
+      display:flex; gap: 10px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+    }
+    .hr{ height:1px; background: rgba(255,255,255,.08); margin: 12px 0; border:0; }
+    .toc{
+      display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px;
+    }
+    .toc a{
+      color: rgba(243,243,245,.92);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      text-decoration:none;
+    }
+    .toc a:hover{
+      border-color: rgba(242,193,78,.25);
+      background: rgba(255,255,255,.05);
+    }
+
+    /* Print */
+    @media print{
+      .topbar{ position:static; box-shadow:none; }
+      body{ background:#fff; color:#111; }
+      .section,.hero,.footer,.topbar{ background:#fff; border-color:#ddd; }
+      .lead,.section p, td{ color:#333; }
+      a{ color:#111; text-decoration:underline; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <!-- Sticky top bar -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="sigil" aria-hidden="true">
+          <!-- minimal glyph -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2l8 4v6c0 5-3 9-8 10C7 21 4 17 4 12V6l8-4z" stroke="rgba(243,243,245,.9)" stroke-width="1.6"/>
+            <path d="M9 12h6" stroke="rgba(242,193,78,.9)" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M12 9v6" stroke="rgba(70,210,161,.9)" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <h1>Guía Técnica — Nutrición Funcional del Xoloitzcuintle</h1>
+          <p>Arqueozoología • Dietética clínica • Piel • Dentición • Termorregulación</p>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <span class="pill">Actualizable por temporadas</span>
+        <a class="btn primary" href="https://xolosramirez.com" target="_blank" rel="noopener">Visitar Xolos Ramírez →</a>
+        <a class="btn" href="#tabla-nutrientes">Tabla de nutrientes</a>
+        <a class="btn" href="#guia-visual">Guía visual</a>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero" id="inicio">
+      <div class="hero-grid">
+        <div>
+          <div class="kicker">
+            <span class="tag">Enfoque: <b>primitivismo canino + FoxI3 (DEC)</b></span>
+            <span class="tag">Uso: <b>criadores</b>, tutores, profesionales</span>
+            <span class="tag">Objetivo: <b>retención + marca experta</b></span>
+          </div>
+
+          <h2 class="title">Nutrición funcional y determinantes biológicos del Xoloitzcuintle “primitivo”</h2>
+          <p class="lead">
+            Esta guía convierte la teoría (genética FoxI3, costos energéticos de la desnudez, hipodoncia y eje intestino–piel)
+            en decisiones prácticas de alimentación. Incluye una <b>guía visual</b> y una <b>tabla técnica de nutrientes</b>
+            para diferenciar necesidades entre <b>variedad sin pelo</b> y <b>variedad con pelo</b>.
+          </p>
+
+          <div class="toc" aria-label="Tabla de contenidos">
+            <a href="#determinantes">Determinantes biológicos</a>
+            <a href="#guia-visual">Guía visual</a>
+            <a href="#tabla-nutrientes">Tabla de nutrientes</a>
+            <a href="#modelos">Modelos de alimentación</a>
+            <a href="#etapas">Etapas de vida</a>
+            <a href="#protocolos">Protocolos por piel</a>
+            <a href="#faq">FAQ clínico</a>
+          </div>
+        </div>
+
+        <aside class="hero-card">
+          <h3>Checklist (rápido)</h3>
+          <ul>
+            <li><b>Sin pelo:</b> prioriza lípidos (barrera cutánea) + textura (hipodoncia).</li>
+            <li><b>Clima frío:</b> aumenta densidad energética (grasa de calidad), sin “inflar” carbohidratos.</li>
+            <li><b>Piel:</b> omega-3/6 + zinc + vitamina A (con control veterinario).</li>
+            <li><b>Intestino:</b> prebiótico (inulina/fibra) + probiótico para eje intestino–piel.</li>
+            <li><b>Práctica:</b> hidrata croqueta o usa dieta cocinada (masticación limitada).</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Determinants -->
+    <section class="section" id="determinantes">
+      <h2>1) Determinantes biológicos que cambian la dieta (lo no-negociable)</h2>
+      <p>
+        En el Xoloitzcuintle, tres factores condicionan la nutrición de forma distinta a razas modernas:
+        <b>(a)</b> la displasia ectodérmica asociada a <b>FoxI3</b> (piel + dentición),
+        <b>(b)</b> el <b>costo térmico</b> de la desnudez (conductancia elevada) y
+        <b>(c)</b> la necesidad de mantener <b>masa magra</b> sin obesidad.
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <h3>FoxI3 / DEC (piel + dientes)</h3>
+          <p>
+            La variedad sin pelo suele presentar hipodoncia: menos capacidad mecánica para triturar, más dependencia de
+            textura (húmeda / hidratada / cocinada). A la vez, la piel expuesta requiere soporte lipídico y micronutrientes
+            para su barrera.
+          </p>
+          <div class="meta">
+            <span class="chip"><b>Prioridad:</b> textura + lípidos</span>
+            <span class="chip"><b>Riesgo:</b> estrés gingival</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Termorregulación (más gasto en frío)</h3>
+          <p>
+            Sin “cámara de aire” del pelaje, hay mayor pérdida de calor. En estaciones frías, el ajuste práctico es
+            subir densidad energética mediante grasas de calidad (no azúcar). En calor, vigilar hidratación y piel.
+          </p>
+          <div class="meta">
+            <span class="chip"><b>Invierno:</b> +energía</span>
+            <span class="chip"><b>Verano:</b> +hidratación</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Eje intestino–piel (inflamación y barrera)</h3>
+          <p>
+            Cuando la piel es el órgano “visible”, cualquier desbalance intestinal se manifiesta más rápido:
+            comedones, resequedad, brotes. Prebióticos (fibra fermentable) + probióticos pueden modular respuesta.
+          </p>
+          <div class="meta">
+            <span class="chip"><b>Herramienta:</b> prebiótico</span>
+            <span class="chip"><b>Herramienta:</b> probiótico</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Composición corporal (atlético, no obeso)</h3>
+          <p>
+            El Xolo “muestra” el exceso de grasa de inmediato. La meta es masa magra, cintura definida y energía estable.
+            Ajusta por actividad y estación; evita “premios” calóricos sin control.
+          </p>
+          <div class="meta">
+            <span class="chip"><b>Meta:</b> músculo</span>
+            <span class="chip"><b>Evitar:</b> sobrealimentación</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="note">
+        <b>Nota de práctica segura:</b> este documento es educativo. Para patologías (dermatitis atópica, acné severo,
+        pérdida dental marcada, enfermedad renal/hepática), define dieta con tu veterinario.
+      </div>
+    </section>
+
+    <!-- Visual guide -->
+    <section class="section" id="guia-visual">
+      <h2>2) Guía visual de decisiones (en 3 pasos)</h2>
+      <p>
+        Este flujo está diseñado para que el lector vuelva cada temporada o cuando cambie el estado de piel/dientes.
+        Úsalo como protocolo de evaluación rápida.
+      </p>
+
+      <div class="flow">
+        <div class="step">
+          <div class="num">1</div>
+          <h4>Identifica la “variante” y el entorno</h4>
+          <p>
+            ¿Sin pelo o con pelo? ¿Clima frío/templado/caluroso? La desnudez aumenta costo térmico.
+            Ajusta energía por estación antes de “cambiar de marca”.
+          </p>
+        </div>
+
+        <div class="step">
+          <div class="num">2</div>
+          <h4>Evalúa dentición y textura necesaria</h4>
+          <p>
+            Si hay hipodoncia, prioriza húmedo / hidratado / cocinado. Reduce croquetas duras.
+            Objetivo: comer sin dolor, sin inflamación gingival.
+          </p>
+        </div>
+
+        <div class="step">
+          <div class="num">3</div>
+          <h4>Optimiza piel con lípidos + micronutrientes</h4>
+          <p>
+            Balance omega-6 (barrera) y omega-3 (modulación inflamatoria). Añade soporte intestinal
+            (fibra fermentable + probióticos) para el eje intestino–piel.
+          </p>
+        </div>
+      </div>
+
+      <details>
+        <summary>Atajo: señales que indican que debes ajustar la dieta esta semana</summary>
+        <p>
+          Resequedad y descamación marcada • brotes de comedones • “piel opaca” • heces inconsistentes
+          • baja tolerancia al frío • pérdida de apetito por molestia oral • rascado persistente.
+        </p>
+      </details>
+    </section>
+
+    <!-- Nutrient table -->
+    <section class="section" id="tabla-nutrientes">
+      <h2>3) Tabla técnica de nutrientes (qué hace cada uno en Xolo)</h2>
+      <p>
+        Tabla orientada a práctica clínica y crianza: <b>función</b>, <b>fuentes</b>, <b>cuándo priorizar</b> y
+        una guía de <b>implementación prudente</b>. (Los rangos exactos dependen de talla, actividad y diagnóstico).
+      </p>
+
+      <div class="table-wrap" role="region" aria-label="Tabla de nutrientes">
+        <table>
+          <thead>
+            <tr>
+              <th>Nutriente / Eje</th>
+              <th>Función crítica en Xolo</th>
+              <th>Fuentes funcionales (prácticas)</th>
+              <th>Cuándo priorizar</th>
+              <th>Notas de implementación</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge b-gold">Proteína (alta calidad)</span></td>
+              <td>Regeneración cutánea, masa magra, soporte inmunitario.</td>
+              <td>Pavo/guajolote, pescado, conejo; huevo (según tolerancia).</td>
+              <td>Siempre; más en crecimiento, piel activa, recuperación.</td>
+              <td>En hipodoncia: preferir texturas suaves y proteínas de fácil digestión.</td>
+            </tr>
+            <tr>
+              <td><span class="badge b-jade">Omega-6 (linoleico)</span></td>
+              <td>Barrera lipídica (ceramidas), retención de agua, “piel elástica”.</td>
+              <td>Aceites ricos en linoleico (uso moderado), dietas balanceadas de calidad.</td>
+              <td>Resequedad, descamación, piel frágil.</td>
+              <td>Evita exceso sin omega-3: el balance importa para inflamación.</td>
+            </tr>
+            <tr>
+              <td><span class="badge b-sky">Omega-3 (EPA/DHA)</span></td>
+              <td>Modulación inflamatoria; apoyo a brotes de piel y sensibilidad.</td>
+              <td>Aceite de pescado; pescados grasos (según dieta).</td>
+              <td>Acné/comedones recurrentes, piel reactiva, prurito.</td>
+              <td>Introduce gradual; vigila heces. Dosis terapéutica: definir con veterinario.</td>
+            </tr>
+            <tr>
+              <td><span class="badge b-ember">Zinc</span></td>
+              <td>Regula sebo, soporte a cicatrización, función barrera.</td>
+              <td>Dietas completas; suplementación solo con guía profesional.</td>
+              <td>Comedones, mala cicatrización, piel “apagada”.</td>
+              <td>El exceso puede ser tóxico; no “duplicar” suplementos.</td>
+            </tr>
+            <tr>
+              <td><span class="badge b-gold">Vitamina A</span></td>
+              <td>Queratinización, control de poros y renovación epidérmica.</td>
+              <td>Fuentes naturales en dietas completas; uso clínico supervisado.</td>
+              <td>Acné canino, hiperqueratosis superficial.</td>
+              <td>Evitar megadosis. En cachorro: especial cautela.</td>
+            </tr>
+            <tr>
+              <td><span class="badge b-jade">Vitamina E</span></td>
+              <td>Antioxidante; apoyo frente a estrés oxidativo (piel expuesta).</td>
+              <td>Dietas completas; aceites y alimentos ricos en tocoferoles.</td>
+              <td>Exposición solar frecuente, piel irritada.</td>
+              <td>Útil junto a omegas; no sustituye fotoprotección externa.</td>
+            </tr>
+            <tr>
+              <td><span class="badge b-sky">Fibra fermentable (prebiótico)</span></td>
+              <td>Microbiota, eje intestino–piel, consistencia fecal.</td>
+              <td>Inulina/achicoria; vegetales tolerados (porciones pequeñas).</td>
+              <td>Heces blandas/irregulares, piel reactiva.</td>
+              <td>Sube lento para evitar gases. Ajusta según tolerancia.</td>
+            </tr>
+            <tr>
+              <td><span class="badge b-gold">Probióticos</span></td>
+              <td>Modulación inmune intestinal; soporte a alergias cutáneas.</td>
+              <td>Probióticos veterinarios; fermentados solo si hay tolerancia.</td>
+              <td>Dermatitis atópica, sensibilidad ambiental.</td>
+              <td>No todos los productos son iguales: cepas y CFU importan.</td>
+            </tr>
+            <tr>
+              <td><span class="badge b-jade">Hidratación / electrolitos</span></td>
+              <td>Elasticidad cutánea; prevención de resequedad; termorregulación.</td>
+              <td>Agua fresca; alimento húmedo; croqueta hidratada con caldo simple.</td>
+              <td>Verano, actividad alta, piel descamada.</td>
+              <td>Evita caldos salados/condimentados. Mantén simple.</td>
+            </tr>
+            <tr>
+              <td><span class="badge b-ember">Calcio (controlado)</span></td>
+              <td>Estructura ósea y dental remanente (sobre todo cachorro).</td>
+              <td>Dieta completa formulada; ajustes solo con profesional.</td>
+              <td>Crecimiento, hembras gestantes (bajo control).</td>
+              <td>Exceso en cachorros grandes puede ser problemático.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <details>
+        <summary>Ingredientes autóctonos “funcionales” (uso prudente)</summary>
+        <p>
+          <b>Nopal</b> (cocido, sin espinas, en porción pequeña): fibra + mucílagos (soporte intestinal/hidratación).
+          <b>Chía</b> (molida o hidratada): ALA; mejor como complemento, no “base”. <b>Amaranto</b>: perfil aminoacídico útil
+          como parte de una dieta cocinada balanceada. Si hay historial de intolerancias, introduce uno por uno.
+        </p>
+      </details>
+    </section>
+
+    <!-- Models -->
+    <section class="section" id="modelos">
+      <h2>4) Modelos de alimentación: ¿BARF, cocinado o pienso?</h2>
+      <p>
+        No es “religión”: es <b>seguridad + adherencia + dentición</b>. En Xolo sin pelo con hipodoncia, la textura
+        es parte del tratamiento.
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <h3>BARF (crudo)</h3>
+          <p>
+            Ventaja: alta palatabilidad. Riesgo: huesos enteros pueden lesionar encías o provocar atragantamiento.
+            Si se usa, preferir formulaciones seguras y control veterinario.
+          </p>
+          <div class="meta">
+            <span class="chip"><b>+:</b> palatabilidad</span>
+            <span class="chip"><b>–:</b> riesgo mecánico</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Cocinado (baja temperatura / suave)</h3>
+          <p>
+            Excelente para hipodoncia: mejora digestión y reduce estrés oral. Requiere formulación completa
+            (no “recetas sueltas” sin balance mineral).
+          </p>
+          <div class="meta">
+            <span class="chip"><b>Ideal:</b> sin pelo</span>
+            <span class="chip"><b>Clave:</b> balance</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Pienso premium (extruido)</h3>
+          <p>
+            Conveniencia y perfil garantizado. Para Xolo: hidratar con agua tibia o caldo simple para mejorar
+            ingestión e hidratación.
+          </p>
+          <div class="meta">
+            <span class="chip"><b>+:</b> práctico</span>
+            <span class="chip"><b>Tip:</b> hidratar</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Regla de oro (para retención)</h3>
+          <p>
+            Si la piel empeora o hay dolor al comer: <b>no cambies 5 cosas a la vez</b>. Ajusta primero textura,
+            después lípidos (omegas), después microbiota (pre/probióticos).
+          </p>
+          <div class="meta">
+            <span class="chip"><b>Orden:</b> textura → lípidos → microbiota</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Life stages -->
+    <section class="section" id="etapas">
+      <h2>5) Etapas de vida: ajustes por edad (y por estación)</h2>
+      <p>
+        El mismo Xolo no come igual a los 4 meses que a los 10 años. Usa esta guía como “mapa” y ajústala con condición corporal.
+      </p>
+
+      <div class="table-wrap" role="region" aria-label="Etapas de vida">
+        <table>
+          <thead>
+            <tr>
+              <th>Etapa</th>
+              <th>Objetivo clínico</th>
+              <th>Enfoque de dieta</th>
+              <th>Frecuencia</th>
+              <th>Notas para Xolo sin pelo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge b-sky">Cachorro (destete–12m)</span></td>
+              <td>Hueso + inmunidad + barrera cutánea.</td>
+              <td>Proteína de calidad; energía controlada; antioxidantes en dieta completa.</td>
+              <td>4–5 (8–12 sem) → 3 (3–6m) → 2 (6m+)</td>
+              <td>Textura suave si hay hipodoncia; evitar excesos minerales sin guía.</td>
+            </tr>
+            <tr>
+              <td><span class="badge b-jade">Adulto (1–9a)</span></td>
+              <td>Masa magra, peso óptimo, piel estable.</td>
+              <td>Proteína 25–30% (según fórmula); grasa moderada; omegas balanceados.</td>
+              <td>2 comidas/día</td>
+              <td>Hidratar croqueta o alternar con cocinado para confort oral.</td>
+            </tr>
+            <tr>
+              <td><span class="badge b-ember">Senior (9a+)</span></td>
+              <td>Movilidad, digestión, apetito, dentición.</td>
+              <td>Menos calorías, mejor digestibilidad; fibra útil; condroprotectores (con guía).</td>
+              <td>2 (o 3 pequeñas)</td>
+              <td>Frecuente transición a 100% húmedo/cocinado si hay pérdida dental.</td>
+            </tr>
+            <tr>
+              <td><span class="badge b-gold">Ajuste estacional</span></td>
+              <td>Compensar costo térmico e hidratación.</td>
+              <td>Invierno: subir densidad energética (grasas de calidad). Verano: hidratar.</td>
+              <td>Reevaluar cada 2–4 semanas</td>
+              <td>En frío: abrigo + dieta; no solo “más comida”.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Skin protocols -->
+    <section class="section" id="protocolos">
+      <h2>6) Protocolos por piel (nutrición como herramienta clínica)</h2>
+      <p>
+        La piel del Xolo es un “panel de control”: responde a grasa, micronutrientes y microbiota. Aquí tienes protocolos por patrón.
+      </p>
+
+      <details>
+        <summary>Comedones / acné canino (piel grasa + poros obstruidos)</summary>
+        <p>
+          Prioriza <b>omega-3</b> (modulación inflamatoria) y revisa exceso de grasas oxidables.
+          Asegura <b>zinc</b> y soporte de <b>vitamina A</b> solo con supervisión.
+          Controla premios y mantén higiene suave (sin resecar en exceso).
+        </p>
+      </details>
+
+      <details>
+        <summary>Resequedad / descamación (barrera débil)</summary>
+        <p>
+          Refuerza el eje de <b>omega-6 (linoleico)</b> + <b>vitamina E</b> y aumenta hidratación sistémica
+          (más húmedo / croqueta hidratada). Considera fibra fermentable si heces son irregulares.
+        </p>
+      </details>
+
+      <details>
+        <summary>Dermatitis atópica (piel reactiva a ambiente)</summary>
+        <p>
+          Enfoque triple: (1) omegas balanceados, (2) <b>microbiota</b> (pre + probiótico), (3) control de ingredientes
+          para identificar sensibilidades. Introduce cambios de uno en uno por 2–3 semanas.
+        </p>
+      </details>
+
+      <div class="note">
+        <b>Regla clínica:</b> si el Xolo “empeora” tras un cambio, vuelve al último punto estable,
+        espera estabilización y reintroduce más lento. Esto reduce rebotes y mejora adherencia del tutor.
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="faq">
+      <h2>7) FAQ clínico (respuestas rápidas para tutores y criadores)</h2>
+
+      <details>
+        <summary>¿El Xolo es “vegetariano” por tener menos dientes?</summary>
+        <p>
+          No. Es un carnívoro facultativo con alta adaptabilidad. El reto real es la <b>textura</b> del alimento,
+          no la naturaleza de la proteína.
+        </p>
+      </details>
+
+      <details>
+        <summary>¿Qué hago si mi Xolo “tiembla” en invierno?</summary>
+        <p>
+          Primero: abrigo y entorno (cama térmica segura). Segundo: ajusta densidad energética con grasas de calidad.
+          Evita “subir carbohidratos” sin control. Revisa condición corporal.
+        </p>
+      </details>
+
+      <details>
+        <summary>¿Croqueta o cocinado?</summary>
+        <p>
+          Ambos pueden funcionar. Si hay hipodoncia o molestia oral, cocinado o croqueta hidratada suele mejorar
+          consumo y bienestar.
+        </p>
+      </details>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="row">
+        <div>
+          <b>Artículo técnico</b> • Nutrición funcional del Xoloitzcuintle • Guía visual + tabla de nutrientes
+        </div>
+        <div>
+          <a class="btn primary" href="https://xolosramirez.com" target="_blank" rel="noopener">Ir a Xolos Ramírez</a>
+        </div>
+      </div>
+
+      <hr class="hr" />
+
+      <div class="row">
+        <div>
+          Sugerencia para tráfico recurrente: publica una actualización por estación (invierno/primavera/verano/otoño)
+          y enlaza desde tus posts con el texto: <b>“Revisa la tabla de nutrientes (actualizada)”</b>.
+        </div>
+        <div class="pill">Xolos Ramírez • Marca experta</div>
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>
