@@ -165,6 +165,68 @@ a:hover {
   outline-offset: 3px;
 }
 
+.cta-secondary-mobile {
+  margin-top: 14px;
+  text-align: center;
+}
+
+.cta-secondary-mobile a {
+  font-size: 0.9rem;
+  color: var(--color-dorado);
+  text-decoration: none;
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+.cta-secondary-mobile a:hover {
+  text-decoration: underline;
+}
+
+.trust-mobile {
+  text-align: center;
+  padding: 18px 14px;
+  background: rgba(212, 175, 55, 0.08);
+}
+
+.trust-mobile p {
+  font-size: 0.85rem;
+  color: var(--color-texto-suave);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.sticky-xolo-cta {
+  position: fixed;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-secundario);
+  color: var(--color-dorado);
+  padding: 14px 26px;
+  border: 1px solid var(--color-dorado);
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  z-index: 999;
+  text-decoration: none;
+  border-radius: 2px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+@media (min-width: 769px) {
+  .cta-secondary-mobile,
+  .trust-mobile,
+  .sticky-xolo-cta {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-bottom: 90px;
+  }
+}
+
 .grid{
   display:grid; gap: clamp(.75rem, 2.5vw, 1.25rem);
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
