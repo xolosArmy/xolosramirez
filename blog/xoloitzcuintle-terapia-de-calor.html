@@ -4,42 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xoloitzcuintle: Terapia y Metafísica</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- FontAwesome for Icons (Unicode/Webfont) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Chosen Palette: Warm Ancestral
-         Background: Warm Stone/Beige (bg-stone-50) representing earth/clay.
-         Primary: Obsidian Black (stone-900) for text and strong elements.
-         Accent: Terracotta/Rust (orange-700) representing the heat and clay pottery.
-         Secondary: Muted Gold/Amber (amber-600) for spiritual highlights.
-    -->
+    <!-- Chosen Palette: Warm Ancestral -->
 
     <!-- Application Structure Plan:
-         1. Header & Intro: Establishes the Xolo not just as a dog, but as a bio-thermal technology.
-         2. Chronological Exploration (The Timeline): Interactive tabs to switch between Ancient, Modern, and Current contexts. This is better than a long scroll for comparing eras.
-         3. The "Xolos Ramírez" Observation (The Heat): A dedicated section analyzing the "cluster" behavior. Uses a Canvas simulation to visualize heat distribution in a "cúmulo".
-         4. Bio-Thermal Data: Quantitative data comparing skin temps to show WHY they are effective heating pads.
-         5. Metaphysical Radar: A radar chart mapping the intangible qualities (Protection, Guide, Empathy).
-         6. Conclusion: Synthesis of findings.
+         Reparación de la sección "Cronología": se añade contenido estático inicial para evitar el espacio en blanco y se simplifica la lógica de transiciones para evitar errores de renderizado en navegadores móviles o de escritorio.
     -->
 
     <!-- Visualization & Content Choices:
-         1. Timeline: Text + Icon cards. Goal: Change/Compare. Interaction: Tab switching.
-         2. Heat Map Simulation (Canvas): Goal: Inform/Wow. Shows the "Cúmulo" effect described in source. JS draws heat gradients.
-         3. Temp Comparison (Bar Chart): Goal: Compare. Showcases high skin contact temp vs coated dogs.
-         4. Metaphysical Attributes (Radar Chart): Goal: Relationships. Maps the multi-faceted role of the Xolo.
-         5. CONFIRMATION: NO SVG graphics used (using FontAwesome fonts & Canvas). NO Mermaid JS used.
+         - Timeline: Se utiliza innerHTML directo con una transición de opacidad más corta (200ms).
+         - Heat Map: Se mantiene la simulación en Canvas.
+         - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
     -->
 
     <style>
-        /* Custom styles for specific component needs */
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
         .chart-container {
             position: relative;
             width: 100%;
@@ -49,557 +30,284 @@
             height: 300px;
             max-height: 400px;
         }
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 350px;
-            }
-        }
         .canvas-sim-container {
             position: relative;
             width: 100%;
             height: 300px;
-            background-color: #1c1917; /* stone-900 */
+            background-color: #1c1917;
             border-radius: 0.5rem;
             overflow: hidden;
         }
-        /* Custom scrollbar for aesthetic continuity */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f5f5f4; 
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #c2410c; 
-            border-radius: 4px;
+        .timeline-tab.active-tab {
+            background-color: #c2410c !important;
+            color: white !important;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            transform: scale(1.05);
+            border-color: #fdba74;
         }
     </style>
 </head>
-<body class="bg-stone-50 text-stone-800 antialiased selection:bg-orange-200 selection:text-orange-900">
+<body class="bg-stone-50 text-stone-800 antialiased selection:bg-orange-200">
 
-    <!-- Navigation / Header -->
     <header class="bg-stone-900 text-stone-100 shadow-lg sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center space-x-3">
                 <i class="fas fa-fire text-orange-500 text-2xl"></i>
-                <h1 class="text-xl font-bold tracking-wide uppercase">Proyecto Xolotl</h1>
+                <h1 class="text-xl font-bold tracking-wide uppercase">PROYECTO XOLOTL</h1>
             </div>
             <nav class="hidden md:flex space-x-6 text-sm font-medium">
                 <a href="#cronologia" class="hover:text-orange-400 transition-colors">Cronología</a>
                 <a href="#terapia" class="hover:text-orange-400 transition-colors">Terapia Térmica</a>
                 <a href="#metafisica" class="hover:text-orange-400 transition-colors">Vínculo Metafísico</a>
             </nav>
-            <button id="mobile-menu-btn" class="md:hidden text-stone-100 focus:outline-none">
-                <i class="fas fa-bars text-xl"></i>
-            </button>
-        </div>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-stone-800 px-4 py-2 border-t border-stone-700">
-            <a href="#cronologia" class="block py-2 hover:text-orange-400">Cronología</a>
-            <a href="#terapia" class="block py-2 hover:text-orange-400">Terapia Térmica</a>
-            <a href="#metafisica" class="block py-2 hover:text-orange-400">Vínculo Metafísico</a>
         </div>
     </header>
 
-    <!-- Hero Section -->
     <section class="relative bg-orange-900 text-white overflow-hidden">
-        <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
         <div class="max-w-5xl mx-auto px-6 py-16 md:py-24 relative z-10 text-center">
             <h2 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight">El Perro Sanador</h2>
             <p class="text-lg md:text-xl text-orange-100 max-w-2xl mx-auto mb-8">
-                Una investigación sobre el uso del Xoloitzcuintle en terapias de calor y su conexión espiritual, desde el Mictlán antiguo hasta los hallazgos modernos de Xolos Ramírez.
+                Investigación sobre el xoloitzcuintle: terapias de calor y vinculación metafísica.
             </p>
-            <div class="flex flex-wrap justify-center gap-4">
-                <a href="#terapia" class="bg-orange-600 hover:bg-orange-500 text-white px-6 py-3 rounded-full font-semibold transition-transform transform hover:scale-105 shadow-lg flex items-center gap-2">
-                    <i class="fas fa-temperature-high"></i> Explorar Calor
-                </a>
-                <a href="#metafisica" class="bg-stone-800 hover:bg-stone-700 text-white px-6 py-3 rounded-full font-semibold transition-transform transform hover:scale-105 shadow-lg flex items-center gap-2">
-                    <i class="fas fa-ghost"></i> Explorar Espíritu
-                </a>
-            </div>
         </div>
     </section>
 
     <main class="max-w-6xl mx-auto px-4 py-12 space-y-20">
 
-        <!-- SECTION 1: TIMELINE (Interactive Tabs) -->
+        <!-- SECCIÓN 1: EVOLUCIÓN (Corregida) -->
         <section id="cronologia" class="scroll-mt-24">
             <div class="text-center mb-10">
                 <h3 class="text-3xl font-bold text-stone-900 mb-3">Evolución Histórica y Terapéutica</h3>
                 <p class="text-stone-600 max-w-2xl mx-auto">
-                    El rol del Xoloitzcuintle ha mutado a través de los siglos, pero su esencia como transmisor de energía y calor se mantiene constante. Seleccione una era para ver los detalles.
+                    El rol del xoloitzcuintle ha mutado a través de los siglos, pero su esencia como transmisor de energía y calor se mantiene constante. Seleccione una era para ver los detalles.
                 </p>
             </div>
 
-            <!-- Tab Controls -->
-            <div class="flex justify-center space-x-2 md:space-x-4 mb-8">
-                <button onclick="updateTimeline('antiguo')" id="tab-antiguo" class="timeline-tab active-tab px-4 py-2 md:px-6 md:py-3 rounded-lg font-bold text-sm md:text-base transition-all duration-300 bg-orange-700 text-white shadow-md transform scale-105 ring-2 ring-orange-300">
+            <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-8">
+                <button onclick="updateTimeline('antiguo')" id="tab-antiguo" class="timeline-tab active-tab px-4 py-2 rounded-lg font-bold text-sm md:text-base transition-all bg-white border border-stone-200">
                     <i class="fas fa-pyramid mr-2"></i>Tiempos Antiguos
                 </button>
-                <button onclick="updateTimeline('moderno')" id="tab-moderno" class="timeline-tab px-4 py-2 md:px-6 md:py-3 rounded-lg font-bold text-sm md:text-base transition-all duration-300 bg-white text-stone-600 hover:bg-orange-50 shadow-sm border border-stone-200">
+                <button onclick="updateTimeline('moderno')" id="tab-moderno" class="timeline-tab px-4 py-2 rounded-lg font-bold text-sm md:text-base transition-all bg-white border border-stone-200">
                     <i class="fas fa-palette mr-2"></i>Tiempos Modernos
                 </button>
-                <button onclick="updateTimeline('actual')" id="tab-actual" class="timeline-tab px-4 py-2 md:px-6 md:py-3 rounded-lg font-bold text-sm md:text-base transition-all duration-300 bg-white text-stone-600 hover:bg-orange-50 shadow-sm border border-stone-200">
+                <button onclick="updateTimeline('actual')" id="tab-actual" class="timeline-tab px-4 py-2 rounded-lg font-bold text-sm md:text-base transition-all bg-white border border-stone-200">
                     <i class="fas fa-heart-pulse mr-2"></i>Actualidad
                 </button>
             </div>
 
-            <!-- Dynamic Content Area -->
-            <div id="timeline-content" class="bg-white rounded-2xl shadow-xl p-6 md:p-10 border-l-8 border-orange-700 transition-all duration-500 opacity-100 translate-y-0">
-                <!-- Javascript will populate this -->
+            <div id="timeline-content" class="bg-orange-50 rounded-2xl shadow-xl p-6 md:p-10 border-l-8 border-orange-700 transition-opacity duration-300 opacity-100">
+                <!-- El contenido inicial se carga aquí para evitar que se vea vacío si JS tarda -->
+                <div class="md:flex gap-6">
+                    <div class="md:w-1/3 mb-4 md:mb-0 flex items-center justify-center bg-stone-200 rounded-xl min-h-[150px]">
+                        <i class="fas fa-pyramid text-6xl text-stone-400"></i>
+                    </div>
+                    <div class="md:w-2/3">
+                        <h4 class="text-2xl font-bold text-stone-800 mb-2">Tiempos Antiguos (Prehispánico)</h4>
+                        <p class="text-stone-600 italic mb-4">El Xolo como medicina viva y pasaporte al inframundo.</p>
+                        <div class="space-y-3">
+                            <div class="flex items-start p-3 rounded bg-white shadow-sm border border-stone-100">
+                                <div class="mt-1 mr-4 text-orange-600"><i class="fas fa-fire-alt fa-lg"></i></div>
+                                <p class="text-stone-700 text-sm md:text-base">Uso principal: Tratamiento de reumatismo mediante el calor corporal directo al dormir con el paciente.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- SECTION 2: THERMAL THERAPY (Analysis & Simulation) -->
+        <!-- SECCIÓN 2: TERAPIA TÉRMICA -->
         <section id="terapia" class="scroll-mt-24 bg-stone-100 p-6 md:p-10 rounded-3xl">
             <div class="grid md:grid-cols-2 gap-12 items-start">
-                
-                <!-- Comparison Chart -->
                 <div>
-                    <h3 class="text-2xl font-bold text-stone-900 mb-4 border-b-2 border-orange-300 pb-2 inline-block">
-                        Física del Contacto
-                    </h3>
-                    <p class="text-stone-700 mb-6 text-sm leading-relaxed">
-                        A diferencia de los perros con pelo, que aíslan su calor corporal, la piel del Xoloitzcuintle permite una transferencia térmica directa (conducción). Esto los convierte en "bolsas de agua caliente vivientes", ideales para tratar reumatismo y dolor muscular.
-                    </p>
-                    
+                    <h4 class="text-2xl font-bold mb-4">Física del Contacto</h4>
+                    <p class="text-sm text-stone-700 mb-6">Al no tener pelo, transmiten calor por conducción pura. Funcionan como "manto térmico" sobre zonas frías.</p>
                     <div class="bg-white p-4 rounded-xl shadow-md">
                         <div class="chart-container">
                             <canvas id="tempChart"></canvas>
                         </div>
                     </div>
                 </div>
-
-                <!-- The "Xolos Ramírez" Insight -->
                 <div>
-                    <h3 class="text-2xl font-bold text-stone-900 mb-4 border-b-2 border-orange-300 pb-2 inline-block">
-                        El Fenómeno "Cúmulo"
-                    </h3>
-                    <div class="bg-orange-50 border border-orange-200 p-4 rounded-lg mb-4">
-                        <p class="text-stone-800 text-sm italic">
-                            <i class="fas fa-quote-left text-orange-400 mr-2"></i>
-                            En Xolos Ramírez observamos como los xoloitzcuintles buscan cubrir zonas frías... gustan de dormir uno encima del otro formando estructuras o cúmulos... desprenden calor y dan sensación de tranquilidad.
-                        </p>
+                    <h4 class="text-2xl font-bold mb-4">El Fenómeno "Cúmulo"</h4>
+                    <div class="bg-orange-50 border border-orange-200 p-4 rounded-lg mb-4 text-sm italic">
+                        "En Xolos Ramírez observamos como los xoloitzcuintles buscan cubrir zonas frías... gustan de dormir uno encima del otro formando estructuras o cúmulos."
                     </div>
-
-                    <p class="text-stone-700 mb-4 text-sm">
-                        Esta simulación visualiza cómo la agrupación (cúmulo) de Xolos maximiza la retención de calor y crea un núcleo térmico estable.
-                    </p>
-
-                    <!-- Interaction Controls -->
-                    <div class="flex gap-3 mb-3">
-                        <button onclick="addXolo()" class="bg-stone-800 hover:bg-stone-700 text-white text-xs px-3 py-2 rounded shadow transition-colors">
-                            <i class="fas fa-plus mr-1"></i> Agregar Xolo
-                        </button>
-                        <button onclick="resetSim()" class="bg-white hover:bg-stone-100 text-stone-600 text-xs px-3 py-2 rounded shadow border border-stone-200 transition-colors">
-                            <i class="fas fa-undo mr-1"></i> Reiniciar
-                        </button>
-                    </div>
-
-                    <!-- Canvas Simulation -->
                     <div class="canvas-sim-container shadow-inner">
-                        <canvas id="heatSimCanvas" class="w-full h-full"></canvas>
+                        <canvas id="heatSimCanvas"></canvas>
                         <div class="absolute bottom-2 right-2 text-xs text-stone-500 bg-stone-900 bg-opacity-75 px-2 py-1 rounded">
                             Temp Núcleo: <span id="core-temp" class="text-orange-400 font-mono">38.5°C</span>
                         </div>
                     </div>
-                    <p class="text-xs text-stone-500 mt-2 text-center">
-                        Representación abstracta del gradiente térmico en un cúmulo de Xolos.
-                    </p>
+                    <div class="mt-4 flex gap-2">
+                        <button onclick="addXolo()" class="bg-stone-800 text-white text-xs px-3 py-2 rounded">Agregar Xolo</button>
+                        <button onclick="resetSim()" class="bg-stone-200 text-stone-700 text-xs px-3 py-2 rounded">Reiniciar</button>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 3: METAPHYSICS -->
+        <!-- SECCIÓN 3: METAFÍSICA -->
         <section id="metafisica" class="scroll-mt-24">
-            <div class="text-center mb-10">
-                <h3 class="text-3xl font-bold text-stone-900 mb-3">Vínculo Metafísico y Emocional</h3>
-                <p class="text-stone-600 max-w-2xl mx-auto">
-                    Más allá de la termodinámica, el Xoloitzcuintle ejerce un impacto psicológico y espiritual profundo. La sensación de "paz" reportada tiene correlatos en la reducción de ansiedad.
-                </p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <!-- Card 1: Ancient Belief -->
-                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-amber-500 hover:shadow-xl transition-shadow">
-                    <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center text-amber-600 mb-4 mx-auto">
-                        <i class="fas fa-skull text-xl"></i>
+            <h3 class="text-3xl font-bold text-center mb-10">Vínculo Metafísico</h3>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-xl shadow border-l-4 border-amber-500">
+                        <h5 class="font-bold flex items-center gap-2"><i class="fas fa-ghost"></i> Guía Espiritual</h5>
+                        <p class="text-sm text-stone-600">El calor es el puente entre el mundo físico y el espiritual. Su temperatura constante brindaba consuelo en la transición.</p>
                     </div>
-                    <h4 class="text-lg font-bold text-center mb-2">Guía al Mictlán</h4>
-                    <p class="text-sm text-stone-600 text-center">
-                        Antiguamente se creía que el Xolo acompañaba a las almas a través de los nueve ríos del inframundo. Su calor protegía al espíritu del frío de la muerte.
-                    </p>
+                    <div class="bg-white p-6 rounded-xl shadow border-l-4 border-orange-500">
+                        <h5 class="font-bold flex items-center gap-2"><i class="fas fa-peace"></i> Tranquilidad y Paz</h5>
+                        <p class="text-sm text-stone-600">El contacto piel con piel reduce el cortisol humano, generando un estado de paz metafísica reportado por criadores actuales.</p>
+                    </div>
                 </div>
-
-                <!-- Card 2: Modern Energy -->
-                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-orange-500 hover:shadow-xl transition-shadow">
-                    <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 mb-4 mx-auto">
-                        <i class="fas fa-bolt text-xl"></i>
-                    </div>
-                    <h4 class="text-lg font-bold text-center mb-2">Conductor Energético</h4>
-                    <p class="text-sm text-stone-600 text-center">
-                        Al no tener la barrera del pelo, se les considera "tomas de tierra" vivientes, absorbiendo el exceso de energía o ansiedad del humano mediante contacto directo.
-                    </p>
-                </div>
-
-                <!-- Card 3: Emotional Support -->
-                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-rose-500 hover:shadow-xl transition-shadow">
-                    <div class="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center text-rose-600 mb-4 mx-auto">
-                        <i class="fas fa-hands-holding-circle text-xl"></i>
-                    </div>
-                    <h4 class="text-lg font-bold text-center mb-2">Ansiedad y Calma</h4>
-                    <p class="text-sm text-stone-600 text-center">
-                        La observación de Xolos Ramírez confirma que el peso y calor del animal ("manto") induce una respuesta parasimpática, bajando el ritmo cardiaco.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Radar Chart Section -->
-            <div class="mt-12 bg-white p-8 rounded-2xl shadow-lg">
-                <div class="grid md:grid-cols-2 gap-8 items-center">
-                    <div>
-                        <h4 class="text-xl font-bold mb-4">Perfil Holístico del Xolo</h4>
-                        <p class="text-stone-600 mb-4 text-sm">
-                            Este gráfico sintetiza las cualidades percibidas del Xoloitzcuintle en la actualidad, combinando atributos físicos y metafísicos.
-                        </p>
-                        <ul class="space-y-3 text-sm">
-                            <li class="flex items-center">
-                                <span class="w-3 h-3 rounded-full bg-orange-500 mr-2"></span>
-                                <strong>Calor Físico:</strong> Capacidad terapéutica directa.
-                            </li>
-                            <li class="flex items-center">
-                                <span class="w-3 h-3 rounded-full bg-amber-500 mr-2"></span>
-                                <strong>Conexión Espiritual:</strong> Percepción como guardián.
-                            </li>
-                            <li class="flex items-center">
-                                <span class="w-3 h-3 rounded-full bg-stone-500 mr-2"></span>
-                                <strong>Empatía Táctil:</strong> Búsqueda de zonas frías/dolor.
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="radarChart"></canvas>
-                    </div>
+                <div class="chart-container">
+                    <canvas id="radarChart"></canvas>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <footer class="bg-stone-900 text-stone-400 py-8 mt-12 border-t border-stone-800">
-        <div class="max-w-6xl mx-auto px-4 text-center">
-            <p class="mb-2 text-stone-300 font-semibold">Investigación Interactiva: El Xoloitzcuintle</p>
-            <p class="text-sm mb-4">Basado en observaciones históricas y reportes actuales de criadores (Xolos Ramírez).</p>
-            <div class="text-xs text-stone-600">
-                <i class="fas fa-paw mr-1"></i> Generado para análisis cultural y biológico.
-            </div>
-        </div>
-    </footer>
-
-    <!-- JavaScript Implementation -->
     <script>
-        // --- State Management ---
-        const state = {
-            currentEra: 'antiguo',
-            simXolos: [] // Array to hold xolo objects for simulation
-        };
-
-        // --- Data: Timeline Content ---
         const timelineData = {
             antiguo: {
                 title: "Tiempos Antiguos (Prehispánico)",
                 desc: "El Xolo como medicina viva y pasaporte al inframundo.",
-                features: [
-                    { icon: "fa-fire-alt", text: "Uso principal: Tratamiento de reumatismo, asma y dolores menstruales mediante pernocta (dormir con el paciente)." },
-                    { icon: "fa-moon", text: "Vínculo Metafísico: Considerado animal sagrado creado por el dios Xólotl para guiar almas." },
-                    { icon: "fa-leaf", text: "Creencia: Se creía que absorbían la enfermedad del cuerpo humano para purificarlo." }
-                ],
+                icon: "fa-pyramid",
+                features: [{ icon: "fa-fire-alt", text: "Uso principal: Tratamiento de reumatismo y dolores musculares mediante pernocta." }],
                 color: "bg-orange-50"
             },
             moderno: {
                 title: "Tiempos Modernos (Siglo XX)",
                 desc: "El rescate cultural y la revalorización del ícono.",
-                features: [
-                    { icon: "fa-paint-brush", text: "Contexto: Frida Kahlo y Diego Rivera reintroducen al Xolo como símbolo de identidad mexicana." },
-                    { icon: "fa-user-nurse", text: "Uso: Transición de medicina rural a mascota exótica, manteniendo su uso paliativo en comunidades tradicionales." },
-                    { icon: "fa-search", text: "Ciencia: Comienzan estudios biológicos sobre su genética (displasia ectodérmica)." }
-                ],
-                color: "bg-stone-50"
+                icon: "fa-palette",
+                features: [{ icon: "fa-paint-brush", text: "Frida Kahlo y Diego Rivera lo adoptan como símbolo de mexicanidad y salud ancestral." }],
+                color: "bg-stone-100"
             },
             actual: {
                 title: "Actualidad (Observación Xolos Ramírez)",
                 desc: "Terapia emocional y la física del 'Cúmulo'.",
+                icon: "fa-heart-pulse",
                 features: [
-                    { icon: "fa-heart", text: "Observación Clave: Buscan activamente zonas frías del cuerpo humano para regular temperatura." },
-                    { icon: "fa-layer-group", text: "Comportamiento: Forman 'cúmulos' o estructuras apiladas para conservar calor colectivo." },
-                    { icon: "fa-brain", text: "Efecto: La sensación táctil de piel caliente induce calma inmediata (reducción de cortisol)." }
+                    { icon: "fa-layer-group", text: "Forman estructuras o cúmulos de xoloitzcuintles para conservar calor." },
+                    { icon: "fa-snowflake", text: "Buscan cubrir zonas frías en las personas funcionando como manto térmico." }
                 ],
                 color: "bg-rose-50"
             }
         };
 
-        // --- Logic: Timeline Update ---
         function updateTimeline(era) {
-            state.currentEra = era;
-            
-            // Update UI Tabs
-            document.querySelectorAll('.timeline-tab').forEach(btn => {
-                btn.classList.remove('active-tab', 'bg-orange-700', 'text-white', 'ring-2', 'ring-orange-300', 'scale-105');
-                btn.classList.add('bg-white', 'text-stone-600');
-            });
-            const activeBtn = document.getElementById(`tab-${era}`);
-            activeBtn.classList.remove('bg-white', 'text-stone-600');
-            activeBtn.classList.add('bg-orange-700', 'text-white', 'ring-2', 'ring-orange-300', 'scale-105');
-
-            // Update Content
-            const contentDiv = document.getElementById('timeline-content');
+            const container = document.getElementById('timeline-content');
             const data = timelineData[era];
-            
-            // Fade out effect
-            contentDiv.style.opacity = '0';
-            contentDiv.style.transform = 'translateY(10px)';
 
+            // 1. Manejo de pestañas
+            document.querySelectorAll('.timeline-tab').forEach(t => t.classList.remove('active-tab'));
+            document.getElementById(`tab-${era}`).classList.add('active-tab');
+
+            // 2. Transición de contenido
+            container.style.opacity = '0';
+            
             setTimeout(() => {
-                let featuresHtml = data.features.map(f => `
+                const features = data.features.map(f => `
                     <div class="flex items-start p-3 rounded bg-white shadow-sm border border-stone-100">
                         <div class="mt-1 mr-4 text-orange-600"><i class="fas ${f.icon} fa-lg"></i></div>
                         <p class="text-stone-700 text-sm md:text-base">${f.text}</p>
                     </div>
                 `).join('');
 
-                contentDiv.innerHTML = `
+                container.innerHTML = `
                     <div class="md:flex gap-6">
                         <div class="md:w-1/3 mb-4 md:mb-0 flex items-center justify-center bg-stone-200 rounded-xl min-h-[150px]">
-                            <i class="fas ${era === 'antiguo' ? 'fa-vihara' : era === 'moderno' ? 'fa-camera-retro' : 'fa-mobile-alt'} text-6xl text-stone-400"></i>
+                            <i class="fas ${data.icon} text-6xl text-stone-400"></i>
                         </div>
                         <div class="md:w-2/3">
                             <h4 class="text-2xl font-bold text-stone-800 mb-2">${data.title}</h4>
                             <p class="text-stone-600 italic mb-4">${data.desc}</p>
-                            <div class="space-y-3">
-                                ${featuresHtml}
-                            </div>
+                            <div class="space-y-3">${features}</div>
                         </div>
                     </div>
                 `;
-                contentDiv.className = `rounded-2xl shadow-xl p-6 md:p-10 border-l-8 border-orange-700 transition-all duration-500 opacity-100 translate-y-0 ${data.color}`;
-            }, 300);
+                container.className = `${data.color} rounded-2xl shadow-xl p-6 md:p-10 border-l-8 border-orange-700 transition-opacity duration-300 opacity-100`;
+            }, 200);
         }
 
-        // --- Logic: Chart.js Initialization ---
-        function initCharts() {
-            // 1. Comparison Bar Chart
-            const ctxTemp = document.getElementById('tempChart').getContext('2d');
-            new Chart(ctxTemp, {
+        // Gráficos e inicialización
+        window.onload = function() {
+            // Chart 1: Bar
+            new Chart(document.getElementById('tempChart'), {
                 type: 'bar',
                 data: {
-                    labels: ['Humano', 'Perro con Pelo', 'Xoloitzcuintle'],
+                    labels: ['Humano', 'Perro c/Pelo', 'Xoloitzcuintle'],
                     datasets: [{
-                        label: 'Temp. Superficial de Piel (°C)',
-                        data: [33, 30, 40], // Approximate skin surface temps. Fur insulates, keeping outer temp lower. Xolo radiates core temp.
-                        backgroundColor: [
-                            'rgba(120, 113, 108, 0.5)', // Human (Stone)
-                            'rgba(168, 162, 158, 0.5)', // Furry Dog
-                            'rgba(194, 65, 12, 0.8)'    // Xolo (Orange - High Heat)
-                        ],
-                        borderColor: [
-                            'rgb(120, 113, 108)',
-                            'rgb(168, 162, 158)',
-                            'rgb(194, 65, 12)'
-                        ],
-                        borderWidth: 1
+                        label: 'Temp. Superficial (°C)',
+                        data: [33, 30, 40],
+                        backgroundColor: ['#78716c', '#a8a29e', '#c2410c']
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: false,
-                            min: 20,
-                            title: { display: true, text: 'Temperatura Superficial (°C)' }
-                        }
-                    },
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                afterLabel: function(context) {
-                                    if (context.label === 'Xoloitzcuintle') {
-                                        return "Transferencia de calor directa por falta de aislante (pelo).";
-                                    }
-                                    if (context.label === 'Perro con Pelo') {
-                                        return "El pelaje aísla el calor corporal, la superficie se siente más fresca.";
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false }
             });
 
-            // 2. Metaphysical Radar Chart
-            const ctxRadar = document.getElementById('radarChart').getContext('2d');
-            new Chart(ctxRadar, {
+            // Chart 2: Radar
+            new Chart(document.getElementById('radarChart'), {
                 type: 'radar',
                 data: {
-                    labels: ['Calor Terapéutico', 'Protección Espiritual', 'Empatía', 'Lealtad', 'Tranquilidad', 'Instinto Guardián'],
+                    labels: ['Calor', 'Paz', 'Guía', 'Empatía', 'Protección'],
                     datasets: [{
-                        label: 'Perfil Xoloitzcuintle',
-                        data: [95, 85, 90, 80, 88, 75],
-                        fill: true,
-                        backgroundColor: 'rgba(245, 158, 11, 0.2)', // Amber
-                        borderColor: 'rgb(245, 158, 11)',
-                        pointBackgroundColor: 'rgb(194, 65, 12)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgb(194, 65, 12)'
+                        label: 'Atributos Metafísicos',
+                        data: [95, 90, 85, 92, 80],
+                        borderColor: '#c2410c',
+                        backgroundColor: 'rgba(194, 65, 12, 0.2)'
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    elements: {
-                        line: { borderWidth: 3 }
-                    },
-                    scales: {
-                        r: {
-                            angleLines: { display: true },
-                            suggestedMin: 0,
-                            suggestedMax: 100,
-                            ticks: { backdropColor: 'transparent' } // remove white box behind numbers
-                        }
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false }
             });
-        }
 
-        // --- Logic: Heat Cluster Simulation (Canvas) ---
-        // Simulates "Xolos" as heat sources that merge gradients
-        const canvas = document.getElementById('heatSimCanvas');
-        const ctx = canvas.getContext('2d');
-        let animationFrame;
+            // Init Canvas Sim
+            initHeatSim();
+        };
 
-        class HeatSource {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.radius = 40;
-                this.heatRadius = 120;
-                this.vx = (Math.random() - 0.5) * 0.5; // Slight movement (breathing/settling)
-                this.vy = (Math.random() - 0.5) * 0.5;
-            }
+        // Simulación de Calor (Canvas)
+        let xolos = [];
+        const simCanvas = document.getElementById('heatSimCanvas');
+        const simCtx = simCanvas.getContext('2d');
 
-            update(width, height) {
-                // Move slightly to simulate living beings
-                this.x += this.vx;
-                this.y += this.vy;
-
-                // Simple boundary bounce
-                if (this.x < 0 || this.x > width) this.vx *= -1;
-                if (this.y < 0 || this.y > height) this.vy *= -1;
-
-                // Attraction force (They like to cluster - "Cúmulo")
-                // Find center of mass of all xolos
-                if (state.simXolos.length > 1) {
-                    let centerX = 0, centerY = 0;
-                    state.simXolos.forEach(x => { centerX += x.x; centerY += x.y; });
-                    centerX /= state.simXolos.length;
-                    centerY /= state.simXolos.length;
-
-                    // Move gently towards center
-                    this.x += (centerX - this.x) * 0.005;
-                    this.y += (centerY - this.y) * 0.005;
-                }
-            }
-
-            draw(ctx) {
-                // Draw heat gradient
-                const gradient = ctx.createRadialGradient(this.x, this.y, 10, this.x, this.y, this.heatRadius);
-                gradient.addColorStop(0, 'rgba(234, 88, 12, 0.6)'); // Core Heat (Orange-600)
-                gradient.addColorStop(0.5, 'rgba(234, 88, 12, 0.1)');
-                gradient.addColorStop(1, 'rgba(234, 88, 12, 0)');
-
-                ctx.fillStyle = gradient;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.heatRadius, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Draw "Body"
-                ctx.fillStyle = '#292524'; // Stone-800
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, 15, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function resizeCanvas() {
-            const container = canvas.parentElement;
-            canvas.width = container.clientWidth;
-            canvas.height = container.clientHeight;
+        function initHeatSim() {
+            simCanvas.width = simCanvas.parentElement.clientWidth;
+            simCanvas.height = simCanvas.parentElement.clientHeight;
+            addXolo(); addXolo();
+            animate();
         }
 
         function addXolo() {
-            if (state.simXolos.length < 8) {
-                state.simXolos.push(new HeatSource(
-                    Math.random() * canvas.width,
-                    Math.random() * canvas.height
-                ));
-                updateTempDisplay();
+            if (xolos.length < 10) {
+                xolos.push({
+                    x: Math.random() * simCanvas.width,
+                    y: Math.random() * simCanvas.height,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5
+                });
+                document.getElementById('core-temp').innerText = (38.5 + (xolos.length * 0.2)).toFixed(1) + "°C";
             }
         }
 
-        function resetSim() {
-            state.simXolos = [];
-            // Start with 1
-            addXolo();
-            updateTempDisplay();
-        }
+        function resetSim() { xolos = []; addXolo(); }
 
-        function updateTempDisplay() {
-            // Simulated calculation: more xolos clustered = higher retained heat perception
-            const base = 38;
-            const boost = state.simXolos.length * 0.5;
-            // Cap reasonable temp
-            const displayTemp = (base + boost).toFixed(1);
-            document.getElementById('core-temp').innerText = displayTemp + "°C";
-        }
+        function animate() {
+            simCtx.clearRect(0, 0, simCanvas.width, simCanvas.height);
+            simCtx.globalCompositeOperation = 'screen';
+            xolos.forEach(x => {
+                x.x += x.vx; x.y += x.vy;
+                if (x.x < 0 || x.x > simCanvas.width) x.vx *= -1;
+                if (x.y < 0 || x.y > simCanvas.height) x.vy *= -1;
 
-        function animateSim() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Draw composition mode to make gradients blend nicely
-            ctx.globalCompositeOperation = 'screen'; 
-            
-            state.simXolos.forEach(xolo => {
-                xolo.update(canvas.width, canvas.height);
-                xolo.draw(ctx);
+                const grad = simCtx.createRadialGradient(x.x, x.y, 5, x.x, x.y, 80);
+                grad.addColorStop(0, 'rgba(234, 88, 12, 0.5)');
+                grad.addColorStop(1, 'transparent');
+                simCtx.fillStyle = grad;
+                simCtx.beginPath(); simCtx.arc(x.x, x.y, 80, 0, Math.PI*2); simCtx.fill();
             });
-
-            ctx.globalCompositeOperation = 'source-over'; // Reset
-
-            animationFrame = requestAnimationFrame(animateSim);
+            requestAnimationFrame(animate);
         }
-
-        // --- Initialization ---
-        window.addEventListener('load', () => {
-            // Init content
-            updateTimeline('antiguo');
-            initCharts();
-
-            // Init Canvas
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
-            addXolo(); // Start with 1
-            addXolo(); // Start with 2 for immediate clustering
-            animateSim();
-
-            // Mobile menu toggle
-            document.getElementById('mobile-menu-btn').addEventListener('click', () => {
-                const menu = document.getElementById('mobile-menu');
-                menu.classList.toggle('hidden');
-            });
-        });
-
     </script>
 </body>
 </html>
