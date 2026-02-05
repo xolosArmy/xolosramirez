@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xoloitzcuintle: Terapia y Metafísica</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome for Icons (Unicode/Webfont) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 350px; }
+        }
+        .canvas-sim-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background-color: #1c1917;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f5f5f4; }
+        ::-webkit-scrollbar-thumb { background: #c2410c; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800 antialiased selection:bg-orange-200 selection:text-orange-900">
+
+    <!-- Navigation / Header -->
+    <header class="bg-stone-900 text-stone-100 shadow-lg sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-fire text-orange-500 text-2xl"></i>
+                <h1 class="text-xl font-bold tracking-wide uppercase">Proyecto Xolotl</h1>
+            </div>
+
+            <nav class="hidden md:flex space-x-6 text-sm font-medium items-center">
+                <a href="#cronologia" class="hover:text-orange-400 transition-colors">Cronología</a>
+                <a href="#terapia" class="hover:text-orange-400 transition-colors">Terapia Térmica</a>
+                <a href="#metafisica" class="hover:text-orange-400 transition-colors">Vínculo Metafísico</a>
+
+                <!-- XolosRamirezLink (Desktop) -->
+                <a
+                    href="https://xolosramirez.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="ml-2 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-600 hover:bg-orange-500 text-white transition-colors shadow"
+                    title="Visitar Xolos Ramírez"
+                >
+                    <i class="fas fa-paw"></i>
+                    <span class="text-xs font-semibold tracking-wide">Xolos Ramírez</span>
+                    <i class="fas fa-arrow-up-right-from-square text-[10px] opacity-90"></i>
+                </a>
+            </nav>
+
+            <button id="mobile-menu-btn" class="md:hidden text-stone-100 focus:outline-none">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-stone-800 px-4 py-2 border-t border-stone-700">
+            <a href="#cronologia" class="block py-2 hover:text-orange-400">Cronología</a>
+            <a href="#terapia" class="block py-2 hover:text-orange-400">Terapia Térmica</a>
+            <a href="#metafisica" class="block py-2 hover:text-orange-400">Vínculo Metafísico</a>
+
+            <!-- XolosRamirezLink (Mobile) -->
+            <a
+                href="https://xolosramirez.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="block py-2 text-orange-300 hover:text-orange-200"
+                title="Visitar Xolos Ramírez"
+            >
+                <i class="fas fa-paw mr-2"></i>Visitar Xolos Ramírez
+                <i class="fas fa-arrow-up-right-from-square ml-2 text-[10px] opacity-90"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative bg-orange-900 text-white overflow-hidden">
+        <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+        <div class="max-w-5xl mx-auto px-6 py-16 md:py-24 relative z-10 text-center">
+            <h2 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight">El Perro Sanador</h2>
+            <p class="text-lg md:text-xl text-orange-100 max-w-2xl mx-auto mb-8">
+                Una investigación sobre el uso del Xoloitzcuintle en terapias de calor y su conexión espiritual, desde el Mictlán antiguo hasta los hallazgos modernos de Xolos Ramírez.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#terapia" class="bg-orange-600 hover:bg-orange-500 text-white px-6 py-3 rounded-full font-semibold transition-transform transform hover:scale-105 shadow-lg flex items-center gap-2">
+                    <i class="fas fa-temperature-high"></i> Explorar Calor
+                </a>
+                <a href="#metafisica" class="bg-stone-800 hover:bg-stone-700 text-white px-6 py-3 rounded-full font-semibold transition-transform transform hover:scale-105 shadow-lg flex items-center gap-2">
+                    <i class="fas fa-ghost"></i> Explorar Espíritu
+                </a>
+
+                <!-- XolosRamirezLink (Hero CTA) -->
+                <a
+                    href="https://xolosramirez.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="bg-white/10 hover:bg-white/15 text-white px-6 py-3 rounded-full font-semibold transition-transform transform hover:scale-105 shadow-lg flex items-center gap-2 border border-white/20"
+                >
+                    <i class="fas fa-paw"></i> Ir a Xolos Ramírez
+                    <i class="fas fa-arrow-up-right-from-square text-[10px] opacity-90"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <main class="max-w-6xl mx-auto px-4 py-12 space-y-20">
+
+        <!-- SECTION 1: TIMELINE (Interactive Tabs) -->
+        <section id="cronologia" class="scroll-mt-24">
+            <div class="text-center mb-10">
+                <h3 class="text-3xl font-bold text-stone-900 mb-3">Evolución Histórica y Terapéutica</h3>
+                <p class="text-stone-600 max-w-2xl mx-auto">
+                    El rol del Xoloitzcuintle ha mutado a través de los siglos, pero su esencia como transmisor de energía y calor se mantiene constante. Seleccione una era para ver los detalles.
+                </p>
+            </div>
+
+            <!-- Tab Controls -->
+            <div class="flex justify-center space-x-2 md:space-x-4 mb-8">
+                <button onclick="updateTimeline('antiguo')" id="tab-antiguo" class="timeline-tab active-tab px-4 py-2 md:px-6 md:py-3 rounded-lg font-bold text-sm md:text-base transition-all duration-300 bg-orange-700 text-white shadow-md transform scale-105 ring-2 ring-orange-300">
+                    <i class="fas fa-pyramid mr-2"></i>Tiempos Antiguos
+                </button>
+                <button onclick="updateTimeline('moderno')" id="tab-moderno" class="timeline-tab px-4 py-2 md:px-6 md:py-3 rounded-lg font-bold text-sm md:text-base transition-all duration-300 bg-white text-stone-600 hover:bg-orange-50 shadow-sm border border-stone-200">
+                    <i class="fas fa-palette mr-2"></i>Tiempos Modernos
+                </button>
+                <button onclick="updateTimeline('actual')" id="tab-actual" class="timeline-tab px-4 py-2 md:px-6 md:py-3 rounded-lg font-bold text-sm md:text-base transition-all duration-300 bg-white text-stone-600 hover:bg-orange-50 shadow-sm border border-stone-200">
+                    <i class="fas fa-heart-pulse mr-2"></i>Actualidad
+                </button>
+            </div>
+
+            <!-- Dynamic Content Area -->
+            <div id="timeline-content" class="bg-white rounded-2xl shadow-xl p-6 md:p-10 border-l-8 border-orange-700 transition-all duration-500 opacity-100 translate-y-0">
+                <!-- Javascript will populate this -->
+            </div>
+        </section>
+
+        <!-- SECTION 2: THERMAL THERAPY (Analysis & Simulation) -->
+        <section id="terapia" class="scroll-mt-24 bg-stone-100 p-6 md:p-10 rounded-3xl">
+            <div class="grid md:grid-cols-2 gap-12 items-start">
+
+                <!-- Comparison Chart -->
+                <div>
+                    <h3 class="text-2xl font-bold text-stone-900 mb-4 border-b-2 border-orange-300 pb-2 inline-block">
+                        Física del Contacto
+                    </h3>
+                    <p class="text-stone-700 mb-6 text-sm leading-relaxed">
+                        A diferencia de los perros con pelo, que aíslan su calor corporal, la piel del Xoloitzcuintle permite una transferencia térmica directa (conducción). Esto los convierte en "bolsas de agua caliente vivientes", ideales para tratar reumatismo y dolor muscular.
+                    </p>
+
+                    <div class="bg-white p-4 rounded-xl shadow-md">
+                        <div class="chart-container">
+                            <canvas id="tempChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- The "Xolos Ramírez" Insight -->
+                <div>
+                    <h3 class="text-2xl font-bold text-stone-900 mb-4 border-b-2 border-orange-300 pb-2 inline-block">
+                        El Fenómeno "Cúmulo"
+                    </h3>
+                    <div class="bg-orange-50 border border-orange-200 p-4 rounded-lg mb-4">
+                        <p class="text-stone-800 text-sm italic">
+                            <i class="fas fa-quote-left text-orange-400 mr-2"></i>
+                            En Xolos Ramírez observamos como los xoloitzcuintles buscan cubrir zonas frías... gustan de dormir uno encima del otro formando estructuras o cúmulos... desprenden calor y dan sensación de tranquilidad.
+                        </p>
+                    </div>
+
+                    <p class="text-stone-700 mb-4 text-sm">
+                        Esta simulación visualiza cómo la agrupación (cúmulo) de Xolos maximiza la retención de calor y crea un núcleo térmico estable.
+                    </p>
+
+                    <!-- Interaction Controls -->
+                    <div class="flex gap-3 mb-3">
+                        <button onclick="addXolo()" class="bg-stone-800 hover:bg-stone-700 text-white text-xs px-3 py-2 rounded shadow transition-colors">
+                            <i class="fas fa-plus mr-1"></i> Agregar Xolo
+                        </button>
+                        <button onclick="resetSim()" class="bg-white hover:bg-stone-100 text-stone-600 text-xs px-3 py-2 rounded shadow border border-stone-200 transition-colors">
+                            <i class="fas fa-undo mr-1"></i> Reiniciar
+                        </button>
+                    </div>
+
+                    <!-- Canvas Simulation -->
+                    <div class="canvas-sim-container shadow-inner">
+                        <canvas id="heatSimCanvas" class="w-full h-full"></canvas>
+                        <div class="absolute bottom-2 right-2 text-xs text-stone-500 bg-stone-900 bg-opacity-75 px-2 py-1 rounded">
+                            Temp Núcleo: <span id="core-temp" class="text-orange-400 font-mono">38.5°C</span>
+                        </div>
