@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xoloitzcuintle: El Vínculo Terapéutico | Xolos Ramírez</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Lora:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* Chosen Palette: Warm Earth & Calming Clay */
+        :root {
+            --color-bg: #FDFBF7; /* Creamy off-white */
+            --color-text-main: #3E3E3E; /* Soft charcoal */
+            --color-accent-warm: #C07F5E; /* Terracotta/Clay */
+            --color-accent-calm: #7FA99B; /* Sage Green */
+            --color-highlight: #E6D5C3; /* Pale Sand */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text-main);
+        }
+        h1, h2, h3, .serif-font {
+            font-family: 'Lora', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .interactive-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .interactive-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .active-tab {
+            background-color: var(--color-accent-warm);
+            color: white;
+            border-color: var(--color-accent-warm);
+        }
+    </style>
+    <!-- Chosen Palette: Warm Neutrals (Background: #FDFBF7, Text: #3E3E3E, Accents: #C07F5E (Terracotta), #7FA99B (Sage)) -->
+    <!-- Application Structure Plan: 
+         1. Hero Section: Introduction to the concept "More than a breed, a presence".
+         2. Core Traits Dashboard: Interactive 3-column layout exploring Temperament, Size, and Socialization. Uses a Radar Chart to visualize the unique profile.
+         3. Case Study (Hannah & Zote): A storytelling section with a Line Chart showing anxiety regulation over time in different scenarios.
+         4. The Physics of Therapy: Focus on "Size & Warmth". Interactive buttons to compare sizes and their therapeutic benefits (Bar Chart).
+         5. The Journey (Socialization): A step-by-step process flow showing how a service Xolo is raised.
+         6. Philosophy/Conclusion: Final reflective thoughts on the long-term bond.
+         WHY: This structure breaks the dense text into digestible, thematic chunks, allowing the user to explore the "Why" (Traits), the "Evidence" (Case Study), and the "How" (Socialization) linearly or non-linearly. -->
+    <!-- Visualization & Content Choices:
+         1. Radar Chart: Visualizes the abstract "Service Profile" (Silence, Heat, Sensitivity, etc.) to show why Xolos are unique compared to generic dogs.
+         2. Line Chart: Simulates the "Anxiety Reduction" described in Hannah's story, making the qualitative benefit quantitative and visual.
+         3. Bar Chart: Compares "Portability" and "Access" across sizes to justify the preference for Mini/Intermediate.
+         4. Process Cards: Breaks down the socialization text into a clear timeline.
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="antialiased selection:bg-[#E6D5C3]">
+
+    <!-- Navigation (Simple Anchor Links) -->
+    <nav class="sticky top-0 z-50 bg-[#FDFBF7]/90 backdrop-blur-md border-b border-[#E6D5C3]">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center">
+                    <span class="font-bold text-xl serif-font text-[#C07F5E]">Xolos Ramírez</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <button onclick="scrollToSection('intro')" class="text-gray-600 hover:text-[#C07F5E] transition px-3 py-2 text-sm font-medium">El Xolo</button>
+                    <button onclick="scrollToSection('traits')" class="text-gray-600 hover:text-[#C07F5E] transition px-3 py-2 text-sm font-medium">Perfil Terapéutico</button>
+                    <button onclick="scrollToSection('case-study')" class="text-gray-600 hover:text-[#C07F5E] transition px-3 py-2 text-sm font-medium">Caso Real</button>
+                    <button onclick="scrollToSection('size')" class="text-gray-600 hover:text-[#C07F5E] transition px-3 py-2 text-sm font-medium">La Talla Importa</button>
+                    <button onclick="scrollToSection('process')" class="text-gray-600 hover:text-[#C07F5E] transition px-3 py-2 text-sm font-medium">Crianza</button>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-[#C07F5E] focus:outline-none">
+                        <span class="text-2xl">≡</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-[#FDFBF7] border-t border-[#E6D5C3]">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <button onclick="scrollToSection('intro'); toggleMobileMenu()" class="block w-full text-left text-gray-600 hover:text-[#C07F5E] px-3 py-2 rounded-md text-base font-medium">El Xolo</button>
+                <button onclick="scrollToSection('traits'); toggleMobileMenu()" class="block w-full text-left text-gray-600 hover:text-[#C07F5E] px-3 py-2 rounded-md text-base font-medium">Perfil Terapéutico</button>
+                <button onclick="scrollToSection('case-study'); toggleMobileMenu()" class="block w-full text-left text-gray-600 hover:text-[#C07F5E] px-3 py-2 rounded-md text-base font-medium">Caso Real</button>
+                <button onclick="scrollToSection('size'); toggleMobileMenu()" class="block w-full text-left text-gray-600 hover:text-[#C07F5E] px-3 py-2 rounded-md text-base font-medium">La Talla Importa</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="intro" class="relative bg-[#F4EFE9] py-20 lg:py-32 overflow-hidden">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
+            <span class="text-[#C07F5E] font-bold tracking-widest uppercase text-sm mb-4 block">Presencia, Terapia y Vínculo Real</span>
+            <h1 class="text-4xl md:text-6xl font-bold text-[#3E3E3E] mb-6 leading-tight">
+                El Xoloitzcuintle como <br/><span class="italic text-[#C07F5E]">Perro de Servicio</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+                Más allá de la belleza ancestral, descubrimos una capacidad única para el acompañamiento terapéutico. 
+                Silencioso, observador y profundamente conectado.
+            </p>
+            <button onclick="scrollToSection('traits')" class="bg-[#3E3E3E] text-white px-8 py-4 rounded-full font-semibold hover:bg-[#C07F5E] transition duration-300 shadow-lg transform hover:-translate-y-1">
+                Descubrir su Perfil
+            </button>
+        </div>
+        <!-- Decorative circles -->
+        <div class="absolute top-0 left-0 w-64 h-64 bg-[#E6D5C3] rounded-full mix-blend-multiply filter blur-3xl opacity-30 -translate-x-1/2 -translate-y-1/2"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-[#C07F5E] rounded-full mix-blend-multiply filter blur-3xl opacity-10 translate-x-1/3 translate-y-1/3"></div>
+    </header>
+
+    <!-- Section 1: The Therapeutic Profile (Dashboard) -->
+    <section id="traits" class="py-16 md:py-24 max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-[#3E3E3E] mb-4 serif-font">Un Perfil Único para el Servicio</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                En Xolos Ramírez hemos confirmado que el xoloitzcuintle posee un conjunto de cualidades naturales que lo diferencian de otras razas de servicio tradicionales. Explore los pilares de su temperamento.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Sidebar: Selectors -->
+            <div class="space-y-4">
+                <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100 interactive-card active-tab" onclick="updateTrait('temperamento', this)">
+                    <h3 class="text-xl font-bold mb-2">Temperamento</h3>
+                    <p class="text-sm opacity-90">Atento, silencioso y observador. No invade, permanece.</p>
+                </div>
+                <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100 interactive-card" onclick="updateTrait('sensibilidad', this)">
+                    <h3 class="text-xl font-bold mb-2">Sensibilidad Sensorial</h3>
+                    <p class="text-sm text-gray-600">Alta temperatura corporal y lectura fina de emociones.</p>
+                </div>
+                <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100 interactive-card" onclick="updateTrait('adaptabilidad', this)">
+                    <h3 class="text-xl font-bold mb-2">Adaptabilidad</h3>
+                    <p class="text-sm text-gray-600">Presencia discreta en espacios públicos y rutinas diarias.</p>
+                </div>
+            </div>
+
+            <!-- Center: Visual (Radar Chart) -->
+            <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-lg border border-[#E6D5C3] flex flex-col items-center justify-center">
+                <div class="w-full mb-4">
+                    <h4 id="trait-title" class="text-2xl font-bold text-[#C07F5E] serif-font mb-2">Análisis de Temperamento</h4>
+                    <p id="trait-desc" class="text-gray-600 text-sm leading-relaxed min-h-[3rem]">
+                        El Xolo destaca por ser un perro que no "hace ruido". Su presencia regula emociones y genera seguridad sin exigir atención constante.
+                    </p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="traitsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Case Study (Storytelling) -->
+    <section id="case-study" class="bg-[#3E3E3E] text-[#FDFBF7] py-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                
+                <!-- Text Content -->
+                <div>
+                    <span class="text-[#C07F5E] font-bold tracking-widest uppercase text-xs mb-2 block">Caso Real</span>
+                    <h2 class="text-3xl md:text-5xl font-bold mb-6 serif-font">Hannah y Zote Ramírez</h2>
+                    <p class="text-gray-300 text-lg mb-6 leading-relaxed">
+                        "Zote es indispensable para mi salud emocional. No como metáfora, sino como realidad diaria."
+                    </p>
+                    <div class="space-y-6">
+                        <div class="border-l-4 border-[#C07F5E] pl-4 cursor-pointer hover:bg-white/5 p-2 rounded transition" onclick="updateCaseStudy(0)">
+                            <h4 class="font-bold text-lg text-white">El Torneo de Ajedrez</h4>
+                            <p class="text-sm text-gray-400 mt-1">Entornos de alta concentración y silencio. Zote espera pacientemente sin distraer.</p>
+                        </div>
+                        <div class="border-l-4 border-[#7FA99B] pl-4 cursor-pointer hover:bg-white/5 p-2 rounded transition" onclick="updateCaseStudy(1)">
+                            <h4 class="font-bold text-lg text-white">Citas y Rutina</h4>
+                            <p class="text-sm text-gray-400 mt-1">Desde un manicure hasta trámites. Zote reduce la ansiedad social mediante contacto físico.</p>
+                        </div>
+                        <div class="border-l-4 border-[#E6D5C3] pl-4 cursor-pointer hover:bg-white/5 p-2 rounded transition" onclick="updateCaseStudy(2)">
+                            <h4 class="font-bold text-lg text-white">Regulación Emocional</h4>
+                            <p class="text-sm text-gray-400 mt-1">Detección de tensión corporal. Respuesta intuitiva mediante presión o cercanía.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visualization: Anxiety Regulation -->
+                <div class="bg-[#FDFBF7] text-[#3E3E3E] p-6 rounded-2xl shadow-2xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-lg">Impacto en Niveles de Ansiedad</h3>
+                        <span id="scenario-badge" class="bg-[#C07F5E] text-white text-xs px-2 py-1 rounded-full">Torneo de Ajedrez</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="anxietyChart"></canvas>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-4 text-center italic">
+                        *Visualización conceptual basada en el testimonio de Hannah. Muestra la reducción de estrés ante la intervención del Xolo.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Size & Warmth (The Physics of Therapy) -->
+    <section id="size" class="py-20 bg-[#F4EFE9]">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#3E3E3E] serif-font mb-4">La Talla Importa</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    En el servicio terapéutico, la logística es tan importante como el temperamento. Las tallas miniatura e intermedia chica ofrecen ventajas cruciales.
+                </p>
+            </div>
+
+            <!-- Comparison Interactive -->
+            <div class="bg-white rounded-3xl shadow-xl overflow-hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2">
+                    <div class="p-8 md:p-12 flex flex-col justify-center">
+                        <h3 class="text-2xl font-bold mb-6 text-[#C07F5E]">¿Por qué Miniatura o Intermedio?</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <span class="bg-[#E6D5C3] p-1 rounded-full mr-3 text-xs mt-1">✓</span>
+                                <span class="text-gray-700"><strong>Cercanía:</strong> Permite contacto directo sobre piernas o pecho para regulación térmica.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-[#E6D5C3] p-1 rounded-full mr-3 text-xs mt-1">✓</span>
+                                <span class="text-gray-700"><strong>Logística:</strong> Fácil acceso a transporte, restaurantes y espacios reducidos.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-[#E6D5C3] p-1 rounded-full mr-3 text-xs mt-1">✓</span>
+                                <span class="text-gray-700"><strong>Discreción:</strong> No intimidan socialmente; pasan desapercibidos bajo una mesa o silla.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-[#E6D5C3] p-1 rounded-full mr-3 text-xs mt-1">✓</span>
+                                <span class="text-gray-700"><strong>Calor Terapéutico:</strong> Su temperatura elevada funciona como calmante natural inmediato.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-[#FDFBF7] p-8 md:p-12 flex flex-col justify-center items-center border-l border-gray-100">
+                        <h4 class="text-lg font-bold mb-4 text-center">Comparativa de Accesibilidad</h4>
+                        <div class="w-full chart-container h-64">
+                            <canvas id="sizeChart"></canvas>
+                        </div>
+                        <div class="mt-6 flex justify-center space-x-4">
+                            <button onclick="updateSizeChart('mini')" class="px-4 py-2 text-xs font-bold bg-[#C07F5E] text-white rounded-full shadow hover:bg-[#a86545] transition">Miniatura</button>
+                            <button onclick="updateSizeChart('std')" class="px-4 py-2 text-xs font-bold bg-gray-200 text-gray-600 rounded-full hover:bg-gray-300 transition">Estándar (Comparación)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Socialization Process -->
+    <section id="process" class="py-20 max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-[#3E3E3E] serif-font mb-4">El Origen: Socialización Temprana</h2>
+            <p class="text-gray-600 max-w-3xl">
+                Ningún perro nace sabiendo servir. En Xolos Ramírez, el proceso comienza en las primeras semanas. No es entrenamiento forzado, es una construcción de confianza.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
+            <!-- Connecting Line (Desktop) -->
+            <div class="hidden md:block absolute top-8 left-0 w-full h-1 bg-[#E6D5C3] -z-10"></div>
+
+            <!-- Step 1 -->
+            <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100 relative group hover:-translate-y-2 transition duration-300">
+                <div class="w-16 h-16 bg-[#3E3E3E] text-white rounded-full flex items-center justify-center text-2xl font-bold mb-4 border-4 border-[#FDFBF7]">1</div>
+                <h3 class="text-lg font-bold text-[#C07F5E] mb-2">Selección</h3>
+                <p class="text-sm text-gray-600">Evaluación de estructura, temperamento y salud. No todos los ejemplares son aptos para servicio.</p>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100 relative group hover:-translate-y-2 transition duration-300">
+                <div class="w-16 h-16 bg-[#C07F5E] text-white rounded-full flex items-center justify-center text-2xl font-bold mb-4 border-4 border-[#FDFBF7]">2</div>
+                <h3 class="text-lg font-bold text-[#C07F5E] mb-2">Estímulos</h3>
+                <p class="text-sm text-gray-600">Exposición gradual a superficies, ruidos y manipulación. Normalizar el mundo para evitar el miedo.</p>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100 relative group hover:-translate-y-2 transition duration-300">
+                <div class="w-16 h-16 bg-[#7FA99B] text-white rounded-full flex items-center justify-center text-2xl font-bold mb-4 border-4 border-[#FDFBF7]">3</div>
+                <h3 class="text-lg font-bold text-[#C07F5E] mb-2">Conexión</h3>
+                <p class="text-sm text-gray-600">El perro aprende a "leer" al humano. Contacto físico constante y validación de la calma.</p>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100 relative group hover:-translate-y-2 transition duration-300">
+                <div class="w-16 h-16 bg-[#E6D5C3] text-[#3E3E3E] rounded-full flex items-center justify-center text-2xl font-bold mb-4 border-4 border-[#FDFBF7]">4</div>
+                <h3 class="text-lg font-bold text-[#C07F5E] mb-2">Vínculo Real</h3>
+                <p class="text-sm text-gray-600">Entrega consciente. El perro no obedece ciegamente, acompaña y decide estar.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Epilogue / Footer -->
+    <footer class="bg-[#2A2A2A] text-white py-16 text-center">
+        <div class="max-w-3xl mx-auto px-6">
+            <h2 class="text-3xl font-serif italic mb-6 text-[#E6D5C3]">"El xoloitzcuintle no acompaña un momento, acompaña una vida."</h2>
+            <p class="text-gray-400 mb-8 leading-relaxed">
+                Su misión más antigua y más vigente es recordarnos que cuidar también es saber estar.
+                En Xolos Ramírez, criamos aliados para la salud emocional, preservando un patrimonio que cura en silencio.
+            </p>
+            <div class="w-16 h-1 bg-[#C07F5E] mx-auto rounded-full mb-8"></div>
+            <p class="text-sm text-gray-500">
+                Basado en la investigación y experiencia de Xolos Ramírez.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // --- DATA & STATE ---
+
+        // Chart 1: Traits Radar Data
+        const traitsData = {
+            labels: ['Silencio', 'Temp. Corporal', 'Sensibilidad', 'Discreción', 'Energía Baja/Media', 'Apego'],
+            datasets: [{
+                label: 'Xolo de Servicio (Mini/Int)',
+                data: [9, 10, 9, 9, 8, 10],
+                backgroundColor: 'rgba(192, 127, 94, 0.4)', // #C07F5E
+                borderColor: 'rgba(192, 127, 94, 1)',
+                borderWidth: 2,
+                pointBackgroundColor: '#fff',
+                pointBorderColor: '#C07F5E'
+            }, {
+                label: 'Perro Promedio',
+                data: [5, 6, 7, 5, 5, 7], // Hypothetical average for contrast
+                backgroundColor: 'rgba(200, 200, 200, 0.1)',
+                borderColor: 'rgba(200, 200, 200, 0.5)',
+                borderWidth: 1,
+                borderDash: [5, 5],
+                pointRadius: 0
+            }]
+        };
+
+        // Chart 2: Anxiety Case Study Data
+        const anxietyScenarios = [
+            {
+                label: "Torneo de Ajedrez",
+                description: "Entorno de alta tensión silenciosa. Sin el perro, la ansiedad crece con el tiempo. Con Zote, la presencia física mantiene la calma.",
+                dataWithout: [20, 40, 60, 75, 80, 85, 90],
+                dataWith: [20, 25, 25, 30, 25, 30, 25]
+            },
+            {
+                label: "Citas y Trámites",
+                description: "Interacción social obligatoria. Zote actúa como barrera suave y punto de enfoque, reduciendo el pico de estrés inicial.",
+                dataWithout: [30, 60, 80, 50, 40, 70, 60],
+                dataWith: [30, 40, 35, 30, 25, 25, 20]
+            },
+            {
+                label: "Regulación Diaria",
+                description: "Ansiedad flotante en casa. La temperatura corporal del Xolo al contacto induce relajación fisiológica rápida.",
+                dataWithout: [40, 45, 50, 55, 60, 65, 70],
+                dataWith: [40, 35, 30, 25, 20, 15, 10]
+            }
+        ];
+
+        // Chart 3: Size Comparison Data
+        const sizeData = {
+            mini: [95, 90, 100, 85], // Portability, Access, Physical Contact Ease, Discretion
+            std: [40, 50, 60, 50]
+        };
+
+        // --- CHART INITIALIZATION ---
+        
+        // 1. Radar Chart
+        let radarChart;
+        function initRadarChart() {
+            const ctx = document.getElementById('traitsChart').getContext('2d');
+            radarChart = new Chart(ctx, {
+                type: 'radar',
+                data: traitsData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: '#E5E7EB' },
+                            grid: { color: '#E5E7EB' },
+                            pointLabels: {
+                                font: { family: 'Inter', size: 12 },
+                                color: '#4B5563'
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 10,
+                            ticks: { display: false } // Hide numbers for cleaner look
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        // 2. Line Chart (Anxiety)
+        let lineChart;
+        function initLineChart() {
+            const ctx = document.getElementById('anxietyChart').getContext('2d');
+            lineChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['0m', '10m', '20m', '30m', '40m', '50m', '60m'],
+                    datasets: [
+                        {
+                            label: 'Nivel de Ansiedad (Sin apoyo)',
+                            data: anxietyScenarios[0].dataWithout,
+                            borderColor: '#9CA3AF', // Gray
+                            borderDash: [5, 5],
+                            tension: 0.4,
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'Con Zote (Xolo)',
+                            data: anxietyScenarios[0].dataWith,
+                            borderColor: '#7FA99B', // Sage Green
+                            backgroundColor: 'rgba(127, 169, 155, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: { display: true, text: 'Nivel de Estrés/Ansiedad' }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // 3. Bar Chart (Size)
+        let barChart;
+        function initBarChart() {
+            const ctx = document.getElementById('sizeChart').getContext('2d');
+            barChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Facilidad de Transporte', 'Acceso a Lugares', 'Facilidad de Contacto Corporal', 'Discreción'],
+                    datasets: [{
+                        label: 'Xolo Miniatura/Intermedio',
+                        data: sizeData.mini,
+                        backgroundColor: '#C07F5E',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y', // Horizontal Bar Chart
+                    scales: {
+                        x: { beginAtZero: true, max: 100 }
+                    },
+                    plugins: {
+                        legend: { display: true, position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        // --- INTERACTION LOGIC ---
+
+        // Update Traits Section
+        function updateTrait(traitKey, element) {
+            // Update active state visuals
+            document.querySelectorAll('.interactive-card').forEach(card => {
+                card.classList.remove('active-tab');
+                card.querySelector('h3').classList.remove('text-[#C07F5E]');
+                card.querySelector('p').classList.remove('text-gray-800');
+                card.querySelector('p').classList.add('text-gray-600');
+            });
+            element.classList.add('active-tab');
+            
+            const titleEl = document.getElementById('trait-title');
+            const descEl = document.getElementById('trait-desc');
+
+            if (traitKey === 'temperamento') {
+                titleEl.textContent = 'Temperamento Observador';
+                descEl.textContent = 'El xoloitzcuintle es atento y silencioso. No exige atención, sino que "acompaña". Esta cualidad es vital para personas que requieren estabilidad y contención sin ruido extra.';
+                radarChart.data.datasets[0].data = [9, 8, 9, 9, 8, 9]; // Adjust slightly for emphasis
+            } else if (traitKey === 'sensibilidad') {
+                titleEl.textContent = 'Sensibilidad y Calor';
+                descEl.textContent = 'Su temperatura corporal elevada actúa como un regulador biológico para el humano. Además, detectan tensión muscular y cambios de ánimo al instante.';
+                radarChart.data.datasets[0].data = [8, 10, 10, 8, 7, 10]; // Focus on Heat/Sensitivity
+            } else if (traitKey === 'adaptabilidad') {
+                titleEl.textContent = 'Adaptabilidad Total';
+                descEl.textContent = 'Las tallas pequeñas permiten que el perro esté en un torneo de ajedrez o bajo una mesa de restaurante sin causar problemas logísticos ni sociales.';
+                radarChart.data.datasets[0].data = [9, 8, 8, 10, 9, 8]; // Focus on Discretion/Energy
+            }
+            radarChart.update();
+        }
+
+        // Update Case Study Section
+        function updateCaseStudy(index) {
+            const scenario = anxietyScenarios[index];
+            
+            // Update Badge
+            const badge = document.getElementById('scenario-badge');
+            badge.textContent = scenario.label;
+
+            // Update Chart Data
+            lineChart.data.datasets[0].data = scenario.dataWithout;
+            lineChart.data.datasets[1].data = scenario.dataWith;
+            lineChart.update();
+
+            // Highlight selected text
+            // (Simple visual feedback would be added here via class toggling in a full framework, 
+            // but relying on the click handler context is sufficient for this scope)
+        }
+
+        // Update Size Chart
+        function updateSizeChart(size) {
+            if (size === 'mini') {
+                barChart.data.datasets[0].label = 'Xolo Miniatura/Intermedio';
+                barChart.data.datasets[0].data = sizeData.mini;
+                barChart.data.datasets[0].backgroundColor = '#C07F5E';
+            } else {
+                barChart.data.datasets[0].label = 'Perro Talla Estándar/Grande';
+                barChart.data.datasets[0].data = sizeData.std;
+                barChart.data.datasets[0].backgroundColor = '#9CA3AF';
+            }
+            barChart.update();
+        }
+
+        // Navigation
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Init
+        window.addEventListener('load', () => {
+            initRadarChart();
+            initLineChart();
+            initBarChart();
+        });
+
+    </script>
+</body>
+</html>
