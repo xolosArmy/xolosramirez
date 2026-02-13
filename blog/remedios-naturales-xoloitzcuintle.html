@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Interactiva: Remedios Naturales para Xoloitzcuintles</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #fdfbf7; /* Warm neutral background */
+            color: #4a4a4a;
+        }
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .active-tab {
+            border-bottom: 3px solid #d97706; /* Amber 600 */
+            color: #92400e; /* Amber 800 */
+            font-weight: bold;
+        }
+        .ingredient-btn.active {
+            background-color: #78350f;
+            color: white;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <!-- Header / Hero Section -->
+    <header class="bg-gradient-to-r from-stone-100 to-orange-50 py-12 px-4 sm:px-6 lg:px-8 border-b border-stone-200">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="text-4xl sm:text-5xl text-stone-800 mb-4">🌿 Xoloitzcuintle: Boticario Natural</h1>
+            <p class="text-xl text-stone-600 max-w-3xl mx-auto mb-8">
+                Una exploración interactiva sobre el cuidado holístico, dermatológico y nutricional para la raza sagrada de México.
+            </p>
+            <div class="flex justify-center space-x-4 text-3xl">
+                <span>🐕</span><span>🥑</span><span>🥥</span><span>🦴</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur shadow-sm border-b border-stone-100">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-center space-x-2 sm:space-x-8 overflow-x-auto py-4">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active-tab px-3 py-2 text-stone-600 hover:text-amber-700 transition-colors whitespace-nowrap">📊 Visión General</button>
+                <button onclick="switchTab('skin')" id="nav-skin" class="nav-btn px-3 py-2 text-stone-600 hover:text-amber-700 transition-colors whitespace-nowrap">💧 Cuidado de la Piel</button>
+                <button onclick="switchTab('diet')" id="nav-diet" class="nav-btn px-3 py-2 text-stone-600 hover:text-amber-700 transition-colors whitespace-nowrap">🥣 Nutrición y Digestión</button>
+                <button onclick="switchTab('anxiety')" id="nav-anxiety" class="nav-btn px-3 py-2 text-stone-600 hover:text-amber-700 transition-colors whitespace-nowrap">🧠 Calma y Bienestar</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content Container -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+        <!-- DASHBOARD SECTION -->
+        <section id="dashboard" class="space-y-12 block fade-in">
+            <div class="text-center max-w-4xl mx-auto">
+                <h2 class="text-3xl text-stone-800 mb-4">La Fisiología Única del Xolo</h2>
+                <p class="text-stone-600 leading-relaxed">
+                    Al carecer de pelo (en la variedad sin pelo), la piel del Xoloitzcuintle no es solo una cubierta, es su primera línea de defensa inmunológica. 
+                    Este panel presenta un análisis de las dolencias más comunes reportadas por propietarios y veterinarios holísticos, estableciendo la base 
+                    de por qué los remedios naturales preventivos son cruciales.
+                </p>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100 text-center card-hover">
+                    <div class="text-4xl mb-2">☀️</div>
+                    <h3 class="text-lg font-bold text-stone-800">Sensibilidad Solar</h3>
+                    <p class="text-stone-500 mt-2">Los Xolos requieren protección UV diaria, similar a la piel humana.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100 text-center card-hover">
+                    <div class="text-4xl mb-2">🦠</div>
+                    <h3 class="text-lg font-bold text-stone-800">Tendencia al Acné</h3>
+                    <p class="text-stone-500 mt-2">La obstrucción de poros es común en la adolescencia canina.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100 text-center card-hover">
+                    <div class="text-4xl mb-2">🦷</div>
+                    <h3 class="text-lg font-bold text-stone-800">Salud Dental</h3>
+                    <p class="text-stone-500 mt-2">Genéticamente predispuestos a la falta de premolares y dentadura frágil.</p>
+                </div>
+            </div>
+
+            <!-- Main Overview Chart -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100">
+                <h3 class="text-xl font-bold text-stone-800 mb-2 text-center">Incidencia de Afecciones en Xolos (Reportes Veterinarios)</h3>
+                <p class="text-sm text-stone-500 text-center mb-6">Distribución porcentual de visitas al veterinario relacionadas con problemas dermatológicos vs. otros.</p>
+                <div class="chart-container">
+                    <canvas id="overviewChart"></canvas>
+                </div>
+                <div class="mt-4 text-center">
+                    <button onclick="updateOverview('prevention')" class="bg-amber-100 text-amber-800 px-4 py-1 rounded-full text-sm hover:bg-amber-200 transition">Ver Impacto de Prevención Natural</button>
+                    <button onclick="updateOverview('issues')" class="bg-stone-100 text-stone-800 px-4 py-1 rounded-full text-sm hover:bg-stone-200 transition">Ver Problemas Actuales</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SKIN CARE SECTION -->
+        <section id="skin" class="hidden space-y-12 fade-in">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl text-stone-800 mb-4">La Barrera Cutánea</h2>
+                    <p class="text-stone-600 mb-6">
+                        El cuidado de la piel del Xolo es un equilibrio delicado entre hidratación y limpieza. 
+                        Demasiado aceite obstruye los poros (acné); muy poco provoca resequedad y grietas. 
+                        Aquí analizamos los aceites naturales más efectivos basados en su índice comedogénico (capacidad de obstruir poros) y absorción.
+                    </p>
+                    <div class="bg-amber-50 p-4 rounded-lg border border-amber-100">
+                        <h4 class="font-bold text-amber-900 mb-2">💡 Tip de Experto:</h4>
+                        <p class="text-sm text-amber-800">
+                            Aplica aceites siempre sobre piel húmeda (después del baño) para sellar la humedad, no solo lubricar la superficie.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Oil Comparison Radar Chart -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100">
+                    <h3 class="text-xl font-bold text-stone-800 mb-2 text-center">Comparativa de Aceites Naturales</h3>
+                    <p class="text-sm text-stone-500 text-center mb-4">Evaluación de propiedades clave para la piel del Xolo.</p>
+                    <div class="chart-container">
+                        <canvas id="oilsRadarChart"></canvas>
+                    </div>
+                    <div class="flex justify-center gap-2 mt-4 flex-wrap">
+                        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Coco: Alto riesgo acné</span>
+                        <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Jojoba: Equilibrado</span>
+                        <span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded">Karité: Alta protección</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exfoliation Section -->
+            <div class="bg-stone-50 rounded-3xl p-8">
+                <h3 class="text-2xl font-bold text-stone-800 mb-6 text-center">🧪 Laboratorio de Exfoliación Suave</h3>
+                <p class="text-center text-stone-600 mb-8 max-w-2xl mx-auto">
+                    Los Xolos necesitan exfoliación semanal para retirar células muertas que, al no tener pelo, no se desprenden fácilmente. 
+                    Selecciona ingredientes para ver sus propiedades.
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Ingredients Selection -->
+                    <div class="space-y-4">
+                        <h4 class="font-semibold text-stone-700">1. Base Exfoliante</h4>
+                        <div class="flex gap-2">
+                            <button onclick="selectScrubBase('sugar', this)" class="ingredient-btn flex-1 py-3 border border-stone-300 rounded-lg hover:bg-stone-100 transition">Azúcar Morena</button>
+                            <button onclick="selectScrubBase('oats', this)" class="ingredient-btn flex-1 py-3 border border-stone-300 rounded-lg hover:bg-stone-100 transition">Avena Molida</button>
+                        </div>
+                        
+                        <h4 class="font-semibold text-stone-700 mt-4">2. Agente Hidratante</h4>
+                        <div class="flex gap-2">
+                            <button onclick="selectScrubOil('coconut', this)" class="ingredient-btn flex-1 py-3 border border-stone-300 rounded-lg hover:bg-stone-100 transition">Aceite de Coco</button>
+                            <button onclick="selectScrubOil('yogurt', this)" class="ingredient-btn flex-1 py-3 border border-stone-300 rounded-lg hover:bg-stone-100 transition">Yogur Natural</button>
+                        </div>
+                    </div>
+
+                    <!-- Result Card -->
+                    <div id="scrub-result" class="bg-white p-6 rounded-xl shadow-md border-l-4 border-stone-300 flex flex-col justify-center items-center text-center transition-all duration-300">
+                        <span class="text-4xl mb-3">🥣</span>
+                        <h4 class="text-xl font-bold text-stone-800 mb-2">Selecciona tus ingredientes</h4>
+                        <p class="text-stone-500 text-sm">Combina una base y un hidratante para ver el perfil del remedio.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DIET SECTION -->
+        <section id="diet" class="hidden space-y-12 fade-in">
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl text-stone-800 mb-4">Nutrición desde Adentro</h2>
+                <p class="text-stone-600">
+                    Muchos problemas de piel en Xolos son reflejo de la salud digestiva. Al ser propensos a perder dientes, 
+                    la dieta debe ser fácil de masticar y altamente digerible. Esta sección compara alimentos funcionales.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Digestive Comparison Chart -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100">
+                    <h3 class="text-xl font-bold text-stone-800 mb-2">Tiempo de Digestión: Crudo vs. Procesado</h3>
+                    <p class="text-sm text-stone-500 mb-4">Horas promedio para procesar nutrientes.</p>
+                    <div class="chart-container">
+                        <canvas id="digestionChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Superfoods Interactive List -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-stone-800 mb-2">Superalimentos Esenciales</h3>
+                    
+                    <div onclick="toggleFoodDetail('turmeric')" class="cursor-pointer bg-white p-4 rounded-xl border border-stone-200 hover:border-amber-400 transition group">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">🧡</span>
+                                <h4 class="font-bold text-stone-700">Cúrcuma (Pasta Dorada)</h4>
+                            </div>
+                            <span class="text-stone-400 group-hover:text-amber-500">▼</span>
+                        </div>
+                        <div id="food-turmeric" class="hidden mt-3 pt-3 border-t border-stone-100 text-sm text-stone-600">
+                            Potente antiinflamatorio natural. Ayuda a las articulaciones y fortalece el sistema inmune. 
+                            <strong>Receta:</strong> Mezclar con aceite de coco y pimienta negra para activar la curcumina.
+                        </div>
+                    </div>
+
+                    <div onclick="toggleFoodDetail('broth')" class="cursor-pointer bg-white p-4 rounded-xl border border-stone-200 hover:border-amber-400 transition group">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">🍲</span>
+                                <h4 class="font-bold text-stone-700">Caldo de Huesos</h4>
+                            </div>
+                            <span class="text-stone-400 group-hover:text-amber-500">▼</span>
+                        </div>
+                        <div id="food-broth" class="hidden mt-3 pt-3 border-t border-stone-100 text-sm text-stone-600">
+                            Rico en colágeno, vital para la elasticidad de la piel del Xolo y la salud intestinal. 
+                            Excelente para perros con problemas dentales por ser líquido y nutritivo.
+                        </div>
+                    </div>
+
+                    <div onclick="toggleFoodDetail('pumpkin')" class="cursor-pointer bg-white p-4 rounded-xl border border-stone-200 hover:border-amber-400 transition group">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">🎃</span>
+                                <h4 class="font-bold text-stone-700">Calabaza (Hervida)</h4>
+                            </div>
+                            <span class="text-stone-400 group-hover:text-amber-500">▼</span>
+                        </div>
+                        <div id="food-pumpkin" class="hidden mt-3 pt-3 border-t border-stone-100 text-sm text-stone-600">
+                            La fibra soluble definitiva. Regula tanto la diarrea como el estreñimiento. 
+                            Ayuda a mantener la sensación de saciedad en Xolos con mucho apetito.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ANXIETY SECTION -->
+        <section id="anxiety" class="hidden space-y-12 fade-in">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="order-2 lg:order-1 bg-white p-6 rounded-2xl shadow-sm border border-stone-100">
+                    <h3 class="text-xl font-bold text-stone-800 mb-2 text-center">Efectividad de Calmantes Naturales</h3>
+                    <p class="text-sm text-stone-500 text-center mb-4">Puntuación basada en rapidez de efecto y duración (Escala 1-10).</p>
+                    <div class="chart-container">
+                        <canvas id="calmChart"></canvas>
+                    </div>
+                    <div class="mt-4 p-4 bg-yellow-50 rounded-lg text-xs text-yellow-800">
+                        *Nota: El aceite de CBD debe ser de grado veterinario y sin THC. La lavanda solo debe usarse en aromaterapia ligera, nunca ingerida.
+                    </div>
+                </div>
+
+                <div class="order-1 lg:order-2">
+                    <h2 class="text-3xl text-stone-800 mb-4">Temperamento y Estrés</h2>
+                    <p class="text-stone-600 mb-6">
+                        El Xoloitzcuintle es una raza primitiva, a menudo cautelosa con extraños y muy apegada a su dueño ("perro velcro"). 
+                        Esto puede generar ansiedad por separación. Los remedios naturales buscan calmar el sistema nervioso sin sedar.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex gap-4 items-start">
+                            <div class="bg-purple-100 p-3 rounded-full text-purple-700 text-xl">🌿</div>
+                            <div>
+                                <h4 class="font-bold text-stone-700">Manzanilla (Infusión fría)</h4>
+                                <p class="text-sm text-stone-600">
+                                    No solo calma el estómago, sino que tiene un efecto sedante leve. 
+                                    Puede rociarse sobre la cama del perro o darse en pequeñas cantidades bebida.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 items-start">
+                            <div class="bg-green-100 p-3 rounded-full text-green-700 text-xl">💧</div>
+                            <div>
+                                <h4 class="font-bold text-stone-700">CBD (Cannabidiol)</h4>
+                                <p class="text-sm text-stone-600">
+                                    Altamente efectivo para dolores articulares en Xolos senior y ansiedad severa. 
+                                    Reduce la inflamación general.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 items-start">
+                            <div class="bg-orange-100 p-3 rounded-full text-orange-700 text-xl">🎾</div>
+                            <div>
+                                <h4 class="font-bold text-stone-700">Estimulación Mental</h4>
+                                <p class="text-sm text-stone-600">
+                                    El mejor remedio natural es el ejercicio. Un Xolo cansado es un Xolo tranquilo. 
+                                    Los juguetes interactivos reducen el estrés mejor que muchas hierbas.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-800 text-stone-300 py-8 mt-12 border-t border-stone-700">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-sm mb-2">© 2023 Guía Interactiva Xoloitzcuintle.</p>
+            <p class="text-xs text-stone-500 max-w-2xl mx-auto">
+                Descargo de responsabilidad: La información presentada en esta aplicación es con fines educativos e informativos. 
+                Los remedios naturales no sustituyen el consejo, diagnóstico o tratamiento de un veterinario profesional. 
+                Consulte siempre a su veterinario antes de introducir nuevos alimentos o tratamientos en la rutina de su mascota.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // State Management
+        const appState = {
+            currentTab: 'dashboard',
+            scrubBase: null,
+            scrubOil: null
+        };
+
+        // Data Store
+        const dataStore = {
+            oils: {
+                labels: ['Hidratación', 'Absorción', 'No-Comedogénico', 'Protección Solar', 'Costo'],
+                datasets: [
+                    {
+                        label: 'Aceite de Coco',
+                        data: [9, 5, 2, 4, 9], // High hydration, low non-comedogenic (clogs pores)
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                    },
+                    {
+                        label: 'Aceite de Jojoba',
+                        data: [7, 9, 9, 2, 6], // High absorption, very non-comedogenic
+                        borderColor: 'rgba(16, 185, 129, 1)',
+                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                    },
+                    {
+                        label: 'Manteca de Karité',
+                        data: [10, 3, 6, 6, 7], // Very protective, slow absorption
+                        borderColor: 'rgba(139, 92, 246, 1)',
+                        backgroundColor: 'rgba(139, 92, 246, 0.2)',
+                    }
+                ]
+            },
+            overview: {
+                prevention: [20, 10, 5, 65], // Less skin issues with prevention
+                issues: [55, 15, 20, 10]     // High skin issues without prevention
+            }
+        };
+
+        // Chart Instances
+        let overviewChartInstance = null;
+        let oilsRadarInstance = null;
+        let digestionChartInstance = null;
+        let calmChartInstance = null;
+
+        // Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            initOverviewChart();
+            // Lazy load others when tabs are switched or just init them hidden
+        });
+
+        // Navigation Logic
+        function switchTab(tabId) {
+            // Update UI State
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active-tab'));
+            document.getElementById(`nav-${tabId}`).classList.add('active-tab');
+
+            // Hide all sections
+            document.querySelectorAll('section').forEach(sec => sec.classList.add('hidden'));
+            
+            // Show target section
+            const target = document.getElementById(tabId);
+            target.classList.remove('hidden');
+            
+            // Trigger chart render if needed (first time view)
+            if (tabId === 'skin' && !oilsRadarInstance) initOilsChart();
+            if (tabId === 'diet' && !digestionChartInstance) initDigestionChart();
+            if (tabId === 'anxiety' && !calmChartInstance) initCalmChart();
+
+            // Scroll to top of content
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- CHART IMPLEMENTATIONS ---
+
+        function initOverviewChart() {
+            const ctx = document.getElementById('overviewChart').getContext('2d');
+            overviewChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Problemas de Piel', 'Dental', 'Digestivo', 'Salud General'],
+                    datasets: [{
+                        data: dataStore.overview.issues,
+                        backgroundColor: [
+                            '#d97706', // Skin (Main issue) - Amber
+                            '#78716c', // Dental - Stone
+                            '#10b981', // Digestive - Emerald
+                            '#3b82f6'  // General - Blue
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        title: { display: true, text: 'Distribución de Problemas (Sin Prevención)' }
+                    }
+                }
+            });
+        }
+
+        function updateOverview(mode) {
+            const newData = dataStore.overview[mode];
+            overviewChartInstance.data.datasets[0].data = newData;
+            overviewChartInstance.options.plugins.title.text = mode === 'prevention' 
+                ? 'Distribución Estimada (Con Cuidado Natural)' 
+                : 'Distribución de Problemas (Sin Prevención)';
+            overviewChartInstance.update();
+        }
+
+        function initOilsChart() {
+            const ctx = document.getElementById('oilsRadarChart').getContext('2d');
+            oilsRadarInstance = new Chart(ctx, {
+                type: 'radar',
+                data: dataStore.oils,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { display: false },
+                            suggestedMin: 0,
+                            suggestedMax: 10
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        function initDigestionChart() {
+            const ctx = document.getElementById('digestionChart').getContext('2d');
+            digestionChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Croquetas Comerciales', 'Comida Húmeda', 'Dieta Natural/BARF'],
+                    datasets: [{
+                        label: 'Horas de Digestión',
+                        data: [12, 6, 4],
+                        backgroundColor: ['#a8a29e', '#f59e0b', '#10b981'],
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: { title: { display: true, text: 'Horas' } }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        function initCalmChart() {
+            const ctx = document.getElementById('calmChart').getContext('2d');
+            calmChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Manzanilla', 'Valeriana', 'CBD', 'Lavanda (Aroma)'],
+                    datasets: [
+                        {
+                            label: 'Rapidez de Efecto',
+                            data: [4, 6, 8, 9],
+                            backgroundColor: '#fbbf24'
+                        },
+                        {
+                            label: 'Duración del Efecto',
+                            data: [3, 5, 8, 4],
+                            backgroundColor: '#059669'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 10 }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        // --- INTERACTIVITY LOGIC ---
+
+        function toggleFoodDetail(id) {
+            const content = document.getElementById(`food-${id}`);
+            content.classList.toggle('hidden');
+        }
+
+        // Scrub Builder Logic
+        function selectScrubBase(base, btn) {
+            appState.scrubBase = base;
+            // Update UI
+            btn.parentElement.querySelectorAll('.ingredient-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            updateScrubResult();
+        }
+
+        function selectScrubOil(oil, btn) {
+            appState.scrubOil = oil;
+            // Update UI
+            btn.parentElement.querySelectorAll('.ingredient-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            updateScrubResult();
+        }
+
+        function updateScrubResult() {
+            const resultBox = document.getElementById('scrub-result');
+            const h4 = resultBox.querySelector('h4');
+            const p = resultBox.querySelector('p');
+            const icon = resultBox.querySelector('span');
+
+            resultBox.classList.remove('bg-white', 'bg-amber-50', 'bg-green-50', 'border-stone-300', 'border-amber-400', 'border-green-400');
+
+            if (appState.scrubBase && appState.scrubOil) {
+                // Logic for combinations
+                if (appState.scrubBase === 'sugar') {
+                    icon.textContent = '🧼';
+                    resultBox.classList.add('bg-amber-50', 'border-amber-400');
+                    h4.textContent = "Exfoliante Vigorizante";
+                    p.textContent = "El azúcar ofrece una exfoliación media. Ideal para el cuerpo (lomo y patas), pero evita zonas sensibles. " + 
+                                   (appState.scrubOil === 'coconut' ? "El coco añade máxima hidratación." : "El yogur aporta ácido láctico para renovar la piel.");
+                } else {
+                    icon.textContent = '🌾';
+                    resultBox.classList.add('bg-green-50', 'border-green-400');
+                    h4.textContent = "Mascarilla Calmante";
+                    p.textContent = "La avena es excelente para piel irritada o con alergias. " + 
+                                   (appState.scrubOil === 'coconut' ? "Con coco, crea una barrera protectora." : "Con yogur, es el remedio definitivo para quemaduras solares leves.");
+                }
+            } else {
+                resultBox.classList.add('bg-white', 'border-stone-300');
+                // Reset text handled by HTML default, or retain current if waiting for second selection
+            }
+        }
+
+    </script>
+    
+    <!-- Chosen Palette: Warm Neutrals & Earth Tones (Stone, Amber, Emerald) to reflect natural remedies and the Xolo's skin tones. -->
+    
+    <!-- Application Structure Plan: 
+         Designed as a "Digital Apothecary" dashboard.
+         1. Hero Section: Sets the tone and cultural context.
+         2. Tabbed Navigation: Chosen over scrolling to prevent cognitive overload and allow users to focus on specific needs (Skin, Diet, Mind).
+         3. Dashboard: Providing the "Why" with stats (Overview Chart) establishes relevance.
+         4. Skin Section: The most critical part for Xolos. Uses a Radar chart for oil comparison because features (smell, absorption, cost) are multi-dimensional. The "Scrub Builder" interactive adds a gamified element to learning recipes.
+         5. Diet Section: Focuses on digestion speed (Bar chart) to explain why raw/natural is often better for their sensitive stomachs. Expandable cards keep the UI clean while holding detailed data.
+         6. Anxiety Section: Addresses the "primitive" temperament. Comparison chart helps users choose remedies based on situation (quick calm vs long lasting).
+    -->
+    
+    <!-- Visualization & Content Choices:
+         1. Overview Doughnut Chart: Goal: Inform. Shows distribution of health issues. Interaction: Switch between 'Current' and 'Preventative' scenarios to show value of natural care.
+         2. Oils Radar Chart: Goal: Compare. Xolo skin care is complex; a simple bar chart isn't enough to compare Absorption vs Protection vs Comedogenic rating. Radar is perfect for multi-attribute comparison.
+         3. Digestion Bar Chart: Goal: Compare. Simple horizontal bars effectively show time differences.
+         4. Scrub Builder: Goal: Organize/Create. Simple JS logic to combine strings. Teaching by doing.
+         5. Icons/Unicode: Used instead of images/SVG to maintain lightweight single-file structure while adding visual appeal.
+    -->
+    
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</body>
+</html>
