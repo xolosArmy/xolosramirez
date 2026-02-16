@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Xoloitzcuintle: El Retorno de Mictlán</title>
+
+  <meta name="description" content="De las selvas del Balsas a la inmutabilidad de la blockchain: la odisea biocultural del rescate del xoloitzcuintle." />
+  <meta name="theme-color" content="#3e3b36" />
+
+  <!-- Open Graph (opcional pero recomendado) -->
+  <meta property="og:title" content="Xoloitzcuintle: El Retorno de Mictlán" />
+  <meta property="og:description" content="Historia, expedición de 1954, renacimiento y futuro digital del perro sagrado." />
+  <!-- <meta property="og:image" content="https://TU_DOMINIO/og-xolo.jpg" /> -->
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap');
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background-color: #f7f3e8;
+      color: #3e3b36;
+    }
+
+    h1, h2, h3, .serif-font {
+      font-family: 'Cinzel', serif;
+    }
+
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      height: 350px;
+      max-height: 400px;
+    }
+    @media (min-width: 768px) {
+      .chart-container { height: 400px; }
+    }
+
+    .fade-in {
+      animation: fadeIn 1s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .blockchain-card {
+      background: linear-gradient(135deg, #3e3b36 0%, #2c2a26 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .blockchain-card::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(197, 160, 89, 0.1) 0%, transparent 70%);
+      animation: pulse-bg 8s infinite linear;
+    }
+    @keyframes pulse-bg {
+      0% { transform: translate(0,0); }
+      50% { transform: translate(10%, 10%); }
+      100% { transform: translate(0,0); }
+    }
+  </style>
+</head>
+
+<body class="antialiased selection:bg-stone-300 selection:text-stone-800">
+
+  <!-- Navigation -->
+  <nav class="bg-[#3e3b36] text-[#f7f3e8] sticky top-0 z-50 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center">
+          <span class="text-xl font-bold serif-font tracking-wider">Xoloitzcuintle</span>
+        </div>
+
+        <div class="hidden md:block">
+          <div class="ml-10 flex items-baseline space-x-4">
+            <button aria-label="Ir a Inicio" onclick="scrollToSection('hero')" class="hover:text-[#c5a059] px-3 py-2 rounded-md text-sm font-medium transition-colors">Inicio</button>
+            <button aria-label="Ir a La Caída" onclick="scrollToSection('decline')" class="hover:text-[#c5a059] px-3 py-2 rounded-md text-sm font-medium transition-colors">La Caída</button>
+            <button aria-label="Ir a La Misión 1954" onclick="scrollToSection('expedition')" class="hover:text-[#c5a059] px-3 py-2 rounded-md text-sm font-medium transition-colors">La Misión '54</button>
+            <button aria-label="Ir a Renacimiento" onclick="scrollToSection('renaissance')" class="hover:text-[#c5a059] px-3 py-2 rounded-md text-sm font-medium transition-colors">Renacimiento</button>
+            <button aria-label="Ir a Futuro Digital" onclick="scrollToSection('blockchain')" class="hover:text-[#c5a059] px-3 py-2 rounded-md text-sm font-medium transition-colors font-bold">Futuro Digital</button>
+          </div>
+        </div>
+
+        <div class="-mr-2 flex md:hidden">
+          <button id="mobile-menu-btn" aria-label="Abrir menú" class="inline-flex items-center justify-center p-2 rounded-md text-gray-200 hover:text-white hover:bg-gray-700">
+            <span class="text-2xl">≡</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden bg-[#2c2a26]">
+      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <button onclick="scrollToSection('hero', true)" class="text-gray-200 block px-3 py-2 w-full text-left">Inicio</button>
+        <button onclick="scrollToSection('decline', true)" class="text-gray-200 block px-3 py-2 w-full text-left">La Caída</button>
+        <button onclick="scrollToSection('expedition', true)" class="text-gray-200 block px-3 py-2 w-full text-left">La Misión '54</button>
+        <button onclick="scrollToSection('renaissance', true)" class="text-gray-200 block px-3 py-2 w-full text-left">Renacimiento</button>
+        <button onclick="scrollToSection('blockchain', true)" class="text-[#c5a059] block px-3 py-2 w-full text-left font-bold">Futuro Digital</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header id="hero" class="relative bg-[#9a3e36] text-[#f7f3e8] py-20 px-4">
+    <div class="max-w-5xl mx-auto text-center">
+      <div class="mb-4 text-[#c5a059] text-6xl opacity-80" aria-hidden="true">🐕</div>
+      <h1 class="text-4xl md:text-6xl font-bold mb-6 fade-in">Inmortalidad y Resurrección</h1>
+      <p class="text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-8 fade-in text-gray-100">
+        De las selvas del Balsas a la inmutabilidad de la cadena de bloques: la odisea por salvar al perro sagrado.
+      </p>
+      <button onclick="scrollToSection('decline')" class="bg-[#f7f3e8] text-[#9a3e36] px-8 py-3 rounded-full font-bold shadow-lg hover:bg-[#c5a059] hover:text-white transition-all transform hover:scale-105">
+        Ver Historia Completa
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-24">
+
+    <!-- Section 1: The Decline -->
+    <section id="decline" class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      <div class="lg:col-span-5 space-y-6">
+        <h2 class="text-3xl font-bold text-[#9a3e36] border-b-2 border-[#c5a059] inline-block pb-2">El Siglo de la Oscuridad</h2>
+        <p class="text-gray-700 leading-relaxed">
+          A principios del siglo XX, el Xoloitzcuintle enfrentó su mayor amenaza. Tras siglos de persecución y mestizaje, la pureza de la raza se desvanecía.
+        </p>
+        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-[#9a3e36]">
+          <h3 class="font-bold text-lg mb-2">Estado Crítico (1940–1950):</h3>
+          <p class="text-sm text-gray-600">Se consideraba que no quedaban ejemplares puros fuera de zonas indígenas impenetrables.</p>
+        </div>
+      </div>
+
+      <div class="lg:col-span-7 bg-white p-6 rounded-xl shadow-xl">
+        <div class="mb-4 text-center">
+          <h3 class="text-xl font-bold serif-font">Población Estimada vs. Tiempo</h3>
+          <p class="text-xs text-gray-500 mt-1">Valores ilustrativos para narrativa histórica.</p>
+        </div>
+        <div class="chart-container">
+          <canvas id="declineChart" aria-label="Gráfico de declive poblacional" role="img"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: The Expedition (Interactive) -->
+    <section id="expedition" class="bg-[#e8e4d9] -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-16 rounded-3xl">
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-[#3e3b36] mb-4">La Misión de Norman Pelham Wright (1954)</h2>
+          <p class="text-gray-700">Explora las zonas donde se rescataron los ejemplares fundadores de la raza moderna.</p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-3">
+          <div class="bg-[#2c2a26] text-white p-8">
+            <h3 class="text-[#c5a059] font-bold mb-4">Log de Expedición</h3>
+            <div id="log-entry" class="text-sm italic text-gray-300">
+              Selecciona un punto en el mapa para iniciar la búsqueda...
+            </div>
+
+            <div class="mt-6">
+              <span class="text-xs uppercase">Hallazgos:</span>
+              <div class="text-3xl font-bold text-[#c5a059]">
+                <span id="dogs-count">0</span>/10
+              </div>
+              <button id="reset-btn" class="mt-4 text-xs underline text-gray-300 hover:text-white" type="button">
+                Reiniciar expedición
+              </button>
+            </div>
+          </div>
+
+          <div class="md:col-span-2 p-8 grid grid-cols-2 gap-4 bg-stone-100">
+            <button data-loc="Rio Balsas" data-count="6" class="loc-btn bg-white p-4 rounded shadow hover:border-[#9a3e36] border-2 border-transparent transition">📍 Río Balsas</button>
+            <button data-loc="Costa Oaxaca" data-count="2" class="loc-btn bg-white p-4 rounded shadow hover:border-[#9a3e36] border-2 border-transparent transition">📍 Costa Oaxaca</button>
+            <button data-loc="Iguala" data-count="2" class="loc-btn bg-white p-4 rounded shadow hover:border-[#9a3e36] border-2 border-transparent transition">📍 Iguala</button>
+            <button data-loc="CDMX (Base)" data-count="0" class="loc-btn bg-white p-4 rounded shadow hover:border-[#9a3e36] border-2 border-transparent transition">📍 CDMX (Base)</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Digital Future -->
+    <section id="blockchain" class="fade-in">
+      <div class="blockchain-card rounded-3xl p-8 md:p-16 text-white shadow-2xl relative">
+        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <div class="inline-block bg-[#c5a059] text-[#3e3b36] px-4 py-1 rounded-full text-xs font-bold mb-6 uppercase tracking-widest">
+              Inmortalidad Digital
+            </div>
+            <h2 class="text-3xl md:text-4xl font-bold mb-6 serif-font leading-tight">Xolos Ramirez y el Legado Inmutable</h2>
+            <p class="text-gray-300 leading-relaxed mb-6">
+              En la era contemporánea, la preservación ha trascendido el mundo físico. La visión de <strong>Xolos Ramirez</strong> integra el patrimonio cultural del Xoloitzcuintle con tecnologías de vanguardia. A través de <strong>xolosArmy Network</strong>, inicia una documentación on-chain del linaje y la memoria cultural.
+            </p>
+            <p class="text-gray-300 leading-relaxed">
+              El objetivo no es solo registrar pedigrís: es construir un archivo histórico y simbólico descentralizado para proteger la identidad del Xoloitzcuintle contra el olvido digital.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-sm text-center">
+              <span class="block text-3xl mb-2" aria-hidden="true">🔗</span>
+              <span class="text-xs text-[#c5a059] font-bold uppercase">Tecnología</span>
+              <span class="block font-bold">Web3 / On-Chain</span>
+            </div>
+            <div class="bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-sm text-center">
+              <span class="block text-3xl mb-2" aria-hidden="true">📄</span>
+              <span class="text-xs text-[#c5a059] font-bold uppercase">Proyecto</span>
+              <span class="block font-bold">xolosArmy</span>
+            </div>
+            <div class="bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-sm text-center">
+              <span class="block text-3xl mb-2" aria-hidden="true">🧬</span>
+              <span class="text-xs text-[#c5a059] font-bold uppercase">Objetivo</span>
+              <span class="block font-bold">Registro y Memoria</span>
+            </div>
+            <div class="bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-sm text-center">
+              <span class="block text-3xl mb-2" aria-hidden="true">🛡️</span>
+              <span class="text-xs text-[#c5a059] font-bold uppercase">Seguridad</span>
+              <span class="block font-bold">Descentralizada</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Renaissance -->
+    <section id="renaissance" class="grid grid-cols-1 md:grid-cols-2 gap-12">
+      <div class="bg-white p-8 rounded-2xl shadow-lg border-b-8 border-[#c5a059]">
+        <h3 class="text-xl font-bold mb-4 text-[#9a3e36]">Recuperación Estadística</h3>
+        <div class="chart-container">
+          <canvas id="recoveryChart" aria-label="Gráfico de recuperación por registros" role="img"></canvas>
+        </div>
+      </div>
+
+      <div class="flex flex-col justify-center space-y-6">
+        <h2 class="text-3xl font-bold">El Renacer en Cifras</h2>
+        <p class="text-gray-600">
+          Desde el reconocimiento oficial de la FCM en 1956, el registro de ejemplares creció: de un núcleo rescatado a una presencia global.
+        </p>
+        <div class="flex gap-4">
+          <div class="bg-[#f7f3e8] p-4 rounded-lg flex-1 text-center">
+            <span class="block text-2xl font-bold text-[#9a3e36]">8,000+</span>
+            <span class="text-xs uppercase text-gray-500">Registros (ilustrativo)</span>
+          </div>
+          <div class="bg-[#f7f3e8] p-4 rounded-lg flex-1 text-center">
+            <span class="block text-2xl font-bold text-[#9a3e36]">1956</span>
+            <span class="text-xs uppercase text-gray-500">Estatus Oficial</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-[#2c2a26] text-gray-400 py-12 text-center mt-24">
+    <p class="text-[#c5a059] serif-font text-lg mb-2">Xoloitzcuintle</p>
+    <p class="text-sm px-4">Investigación sobre la conservación ancestral y tecnológica de la raza.</p>
+  </footer>
+
+  <script>
+    // Smooth scroll + close mobile menu option
+    function scrollToSection(id, closeMobile = false) {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+      if (closeMobile) document.getElementById('mobile-menu')?.classList.add('hidden');
+    }
+
+    document.getElementById('mobile-menu-btn')?.addEventListener('click', () => {
+      document.getElementById('mobile-menu')?.classList.toggle('hidden');
+    });
+
+    // Chart shared styling
+    const baseChartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { enabled: true }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { color: '#6b7280' }
+        },
+        y: {
+          grid: { color: 'rgba(0,0,0,0.06)' },
+          ticks: { color: '#6b7280' }
+        }
+      }
+    };
+
+    // Decline chart
+    const ctx1 = document.getElementById('declineChart').getContext('2d');
+    new Chart(ctx1, {
+      type: 'line',
+      data: {
+        labels: ['1500', '1700', '1850', '1900', '1940', '1954'],
+        datasets: [{
+          label: 'Población Estimada',
+          data: [1000, 400, 150, 40, 5, 1],
+          borderColor: '#9a3e36',
+          tension: 0.35,
+          fill: true,
+          pointRadius: 3,
+          backgroundColor: 'rgba(154, 62, 54, 0.06)'
+        }]
+      },
+      options: baseChartOptions
+    });
+
+    // Recovery chart
+    const ctx2 = document.getElementById('recoveryChart').getContext('2d');
+    new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: ['1956', '1980', '2000', '2010', '2024'],
+        datasets: [{
+          label: 'Ejemplares Registrados',
+          data: [10, 200, 1500, 4000, 8500],
+          backgroundColor: '#c5a059',
+          borderRadius: 8
+        }]
+      },
+      options: baseChartOptions
+    });
+
+    // Expedition logic (robust)
+    let found = 0;
+
+    const logEl = document.getElementById('log-entry');
+    const countEl = document.getElementById('dogs-count');
+    const resetBtn = document.getElementById('reset-btn');
+    const locButtons = Array.from(document.querySelectorAll('.loc-btn'));
+
+    function setSuccess() {
+      logEl.innerHTML = "<span class='text-green-400 font-bold'>¡ÉXITO! Núcleo fundador asegurado.</span>";
+    }
+
+    function updateCount() {
+      countEl.textContent = String(found);
+      if (found >= 10) setSuccess();
+    }
+
+    locButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.disabled) return;
+
+        const name = btn.dataset.loc || 'Zona desconocida';
+        const count = Number(btn.dataset.count || 0);
+
+        // CDMX (Base) no “consume” intento si count=0
+        if (count === 0) {
+          logEl.textContent = `Base establecida en ${name}. Reabasteciendo y documentando hallazgos...`;
+          return;
+        }
+
+        found = Math.min(10, found + count);
+        updateCount();
+
+        logEl.textContent = `Explorando ${name}... Encontrados: ${count} ejemplares compatibles.`;
+
+        btn.disabled = true;
+        btn.classList.add('bg-stone-200', 'text-stone-400');
+      });
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      found = 0;
+      countEl.textContent = '0';
+      logEl.textContent = 'Selecciona un punto en el mapa para iniciar la búsqueda...';
+      locButtons.forEach(btn => {
+        btn.disabled = false;
+        btn.classList.remove('bg-stone-200', 'text-stone-400');
+      });
+    });
+  </script>
+
+</body>
+</html>
