@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Xoloitzcuintle: Frida y Diego</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Configuration and Styles -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'terracotta': '#9c4221',
+                        'terracotta-light': '#c05621',
+                        'obsidian': '#1a202c',
+                        'jade': '#2c7a7b',
+                        'jade-light': '#38b2ac',
+                        'bone': '#f7fafc',
+                        'warm-gray': '#e2e8f0',
+                        'mictlan': '#2d3748'
+                    },
+                    fontFamily: {
+                        'sans': ['Helvetica Neue', 'Arial', 'sans-serif'],
+                        'serif': ['Georgia', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #fcfbf9; /* Warm off-white background */
+            color: #2d3748;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 350px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (max-width: 640px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+        .nav-active {
+            border-bottom: 3px solid #9c4221;
+            color: #9c4221;
+            font-weight: bold;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-terracotta selection:text-white">
+
+    <!-- Chosen Palette: Earthy "Mexican Modernism" - Terracotta (Clay), Obsidian (Volcanic glass), Jade (Pre-Hispanic), and Bone (Background) -->
+    <!-- Application Structure Plan:
+         1. Header/Intro: Establishes the cultural context of the Xoloitzcuintle.
+         2. Navigation: Functional tabs to switch between thematic views (Origins, Frida, Diego, Comparative Analysis).
+         3. Section 1 (Origins): Interactive cards explaining the mythological role (Mictlán) vs. biological reality.
+         4. Section 2 (Frida): Focus on psychological depth. Uses a Donut chart to break down thematic usage (Companionship, Nature, Surrogate).
+         5. Section 3 (Diego): Focus on historical breadth. Uses a Bar chart to show media usage (Murals vs Canvas) and context.
+         6. Section 4 (Comparison): The core analytical engine. Uses a Radar chart to compare the *attributes* of their representations (Intimacy vs. Monumentality).
+         7. Interactive Elements: Buttons to update charts and filter text details.
+    -->
+    <!-- Visualization & Content Choices:
+         - Radar Chart: Chosen to visualize the multi-dimensional differences in artistic intent (Personal vs. Political).
+         - Donut/Bar Charts: To quantify qualitative art historical themes for easier consumption.
+         - Interactive Cards: To break down complex mythology into digestible bites.
+         - NO SVG/Mermaid: All visuals use Chart.js Canvas or styled HTML/CSS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-[#fcfbf9]/95 backdrop-blur-sm border-b border-warm-gray shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-serif font-bold text-terracotta mr-2">🐕</span>
+                    <span class="text-xl font-bold tracking-tight text-obsidian hidden sm:block">El Xolo en el Arte</span>
+                </div>
+                <div class="flex space-x-1 sm:space-x-8 overflow-x-auto">
+                    <button onclick="switchTab('intro')" id="nav-intro" class="nav-btn nav-active whitespace-nowrap px-3 py-5 text-sm font-medium transition-colors hover:text-terracotta">
+                        Orígenes
+                    </button>
+                    <button onclick="switchTab('frida')" id="nav-frida" class="nav-btn whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-500 transition-colors hover:text-terracotta">
+                        Frida: Interior
+                    </button>
+                    <button onclick="switchTab('diego')" id="nav-diego" class="nav-btn whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-500 transition-colors hover:text-terracotta">
+                        Diego: Historia
+                    </button>
+                    <button onclick="switchTab('compare')" id="nav-compare" class="nav-btn whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-500 transition-colors hover:text-terracotta">
+                        Análisis Comparativo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-20">
+
+        <!-- Header Section -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl sm:text-5xl font-serif font-bold text-obsidian mb-4">
+                Guardián de Dos Mundos
+            </h1>
+            <p class="max-w-2xl mx-auto text-lg text-gray-600 leading-relaxed">
+                Investigación interactiva sobre cómo <strong>Frida Kahlo</strong> y <strong>Diego Rivera</strong> utilizaron la figura del perro Xoloitzcuintle para reconstruir la identidad mexicana, desde la intimidad psicológica hasta la narrativa histórica.
+            </p>
+        </header>
+
+        <!-- VIEW 1: INTRO / ORIGINS -->
+        <div id="view-intro" class="view-section animate-fade-in block">
+            <div class="bg-white rounded-xl shadow-sm border border-warm-gray p-6 sm:p-8 mb-8">
+                <h2 class="text-2xl font-bold text-jade mb-4 border-b border-gray-100 pb-2">El Perro Sagrado de México</h2>
+                <p class="text-gray-700 mb-6">
+                    Antes de ser un ícono del arte moderno, el Xoloitzcuintle ("Perro Extraño" en náhuatl) poseía una profunda carga cosmogónica. Para entender su presencia en la obra de Kahlo y Rivera, primero debemos entender su función ancestral.
+                </p>
+
+                <!-- Interactive Mythology Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Card 1 -->
+                    <div class="bg-bone rounded-lg p-6 border border-warm-gray card-hover transition-all cursor-pointer group" onclick="highlightCard(this)">
+                        <div class="text-3xl mb-3">💀</div>
+                        <h3 class="text-lg font-bold text-obsidian mb-2">Guía del Inframundo</h3>
+                        <p class="text-sm text-gray-600">
+                            Asociado a <strong>Xólotl</strong>, dios de la muerte y el rayo. Su misión era guiar las almas de los difuntos a través de los nueve niveles del Mictlán.
+                        </p>
+                        <div class="mt-4 text-xs font-semibold text-terracotta opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-wide">
+                            Ver importancia →
+                        </div>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="bg-bone rounded-lg p-6 border border-warm-gray card-hover transition-all cursor-pointer group" onclick="highlightCard(this)">
+                        <div class="text-3xl mb-3">🌡️</div>
+                        <h3 class="text-lg font-bold text-obsidian mb-2">Curandero Vivo</h3>
+                        <p class="text-sm text-gray-600">
+                            Por su falta de pelo y alta temperatura corporal, se usaban como "bolsas de agua caliente" vivas para tratar reumatismo y asma.
+                        </p>
+                        <div class="mt-4 text-xs font-semibold text-terracotta opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-wide">
+                            Ver importancia →
+                        </div>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="bg-bone rounded-lg p-6 border border-warm-gray card-hover transition-all cursor-pointer group" onclick="highlightCard(this)">
+                        <div class="text-3xl mb-3">🌵</div>
+                        <h3 class="text-lg font-bold text-obsidian mb-2">Símbolo de Identidad</h3>
+                        <p class="text-sm text-gray-600">
+                            En la década de 1920, tras la Revolución, el Xolo se convirtió en un símbolo de la <strong>Mexicanidad</strong>, rechazando las razas europeas en favor de lo autóctono.
+                        </p>
+                        <div class="mt-4 text-xs font-semibold text-terracotta opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-wide">
+                            Ver importancia →
+                        </div>
+                    </div>
+                </div>
+                <div id="myth-detail" class="mt-6 p-4 bg-terracotta/10 rounded-lg text-terracotta-light text-sm hidden border border-terracotta/20">
+                    <!-- Dynamic Text will appear here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 2: FRIDA KAHLO -->
+        <div id="view-frida" class="view-section hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Left: Text Analysis -->
+                <div class="flex flex-col justify-center">
+                    <div class="bg-white rounded-xl shadow-sm border border-warm-gray p-6 sm:p-8 h-full">
+                        <div class="flex items-center mb-4">
+                            <span class="text-3xl mr-3">🌺</span>
+                            <h2 class="text-2xl font-bold text-obsidian">Frida: El Espejo Emocional</h2>
+                        </div>
+                        <p class="text-gray-700 mb-6 text-sm leading-relaxed">
+                            En la obra de Frida Kahlo, el Xoloitzcuintle raramente es un accesorio; es una <strong>extensión de su propio ser</strong>. A diferencia de los grandes murales históricos, los Xolos de Frida habitan espacios íntimos y oníricos.
+                        </p>
+                        <ul class="space-y-4 mb-6">
+                            <li class="flex items-start">
+                                <span class="flex-shrink-0 h-6 w-6 rounded-full bg-terracotta flex items-center justify-center text-white text-xs font-bold mr-3">1</span>
+                                <span class="text-sm text-gray-600"><strong>Alter Ego:</strong> El "Señor Xólotl" (su perro favorito) a menudo aparece observando al espectador con la misma intensidad que la propia Frida.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="flex-shrink-0 h-6 w-6 rounded-full bg-jade flex items-center justify-center text-white text-xs font-bold mr-3">2</span>
+                                <span class="text-sm text-gray-600"><strong>Hijo Sustituto:</strong> Ante la imposibilidad de tener hijos, sus mascotas, y en especial los Xolos, ocupan un rol maternal y protector.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="flex-shrink-0 h-6 w-6 rounded-full bg-obsidian flex items-center justify-center text-white text-xs font-bold mr-3">3</span>
+                                <span class="text-sm text-gray-600"><strong>Conexión Terrenal:</strong> Representan su conexión con la tierra mexicana y la naturaleza pre-hispánica.</span>
+                            </li>
+                        </ul>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Obras Clave Analizadas</h4>
+                            <p class="text-xs text-gray-600 italic">"Perro Itzcuintli conmigo" (1938), "El abrazo de amor del universo" (1949), "Autorretrato con changuito y perro" (1945).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Chart -->
+                <div class="bg-white rounded-xl shadow-sm border border-warm-gray p-6 sm:p-8">
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">Distribución Temática en Retratos</h3>
+                    <p class="text-xs text-gray-500 mb-6">Análisis de la función simbólica del Xolo en 15 obras clave.</p>
+                    
+                    <div class="chart-container">
+                        <canvas id="fridaChart"></canvas>
+                    </div>
+                    
+                    <div class="mt-6 flex justify-center space-x-2">
+                        <button onclick="updateFridaData('emotional')" class="px-3 py-1 bg-terracotta text-white text-xs rounded-full hover:bg-terracotta-light transition">Enfoque Emocional</button>
+                        <button onclick="updateFridaData('symbolic')" class="px-3 py-1 bg-jade text-white text-xs rounded-full hover:bg-jade-light transition">Enfoque Simbólico</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 3: DIEGO RIVERA -->
+        <div id="view-diego" class="view-section hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Left: Chart -->
+                <div class="bg-white rounded-xl shadow-sm border border-warm-gray p-6 sm:p-8 order-2 lg:order-1">
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">Contexto de Representación</h3>
+                    <p class="text-xs text-gray-500 mb-6">Frecuencia de aparición según el entorno representado (Muralismo vs Caballete).</p>
+                    
+                    <div class="chart-container">
+                        <canvas id="diegoChart"></canvas>
+                    </div>
+
+                    <div class="mt-4 p-3 bg-gray-50 text-xs text-gray-600 rounded border border-gray-200">
+                        <p><strong>Nota:</strong> En los murales (ej. Palacio Nacional), el Xolo aparece como parte de la vida cotidiana del Mercado de Tlatelolco, no como individuo, sino como especie histórica.</p>
+                    </div>
+                </div>
+
+                <!-- Right: Text Analysis -->
+                <div class="flex flex-col justify-center order-1 lg:order-2">
+                    <div class="bg-white rounded-xl shadow-sm border border-warm-gray p-6 sm:p-8 h-full">
+                        <div class="flex items-center mb-4">
+                            <span class="text-3xl mr-3">🎨</span>
+                            <h2 class="text-2xl font-bold text-obsidian">Diego: La Historia Viva</h2>
+                        </div>
+                        <p class="text-gray-700 mb-6 text-sm leading-relaxed">
+                            Para Diego Rivera, el Xoloitzcuintle es un <strong>artefacto arqueológico viviente</strong>. Su interés radica en la continuidad histórica. Él fue fundamental en la reintroducción de la raza, viéndolos como una pieza necesaria para recuperar el pasado precolombino.
+                        </p>
+                        <div class="space-y-4">
+                            <div class="border-l-4 border-jade pl-4 py-1">
+                                <h4 class="font-bold text-sm text-jade-light">El Coleccionista</h4>
+                                <p class="text-sm text-gray-600 mt-1">Diego criaba Xolos en la Casa Azul y el Anahuacalli. Para él, eran esculturas vivas que complementaban su vasta colección de piezas prehispánicas.</p>
+                            </div>
+                            <div class="border-l-4 border-terracotta pl-4 py-1">
+                                <h4 class="font-bold text-sm text-terracotta">En los Murales</h4>
+                                <p class="text-sm text-gray-600 mt-1">Representados comiendo maíz, interactuando con comerciantes o en escenas rituales. Valida la existencia del perro en la vida cotidiana azteca.</p>
+                            </div>
+                            <div class="border-l-4 border-obsidian pl-4 py-1">
+                                <h4 class="font-bold text-sm text-obsidian">Mito Azteca</h4>
+                                <p class="text-sm text-gray-600 mt-1">En el mural <em>El agua, origen de la vida</em> (Cárcamo de Dolores), el Xolo aparece vinculado a teorías evolutivas y orígenes biológicos.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 4: COMPARATIVE ANALYSIS -->
+        <div id="view-compare" class="view-section hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-warm-gray p-6 sm:p-8 mb-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold text-obsidian">Divergencia en la Identidad</h2>
+                    <p class="text-sm text-gray-500 mt-2 max-w-2xl mx-auto">
+                        Aunque ambos artistas compartían ideales políticos y amor por la raza, su representación artística difiere drásticamente en escala, propósito y emoción.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                    <!-- Control Panel -->
+                    <div class="col-span-1 space-y-4">
+                        <div class="bg-bone p-4 rounded-lg border border-warm-gray">
+                            <h4 class="font-bold text-sm text-gray-700 mb-3">Dimensiones de Análisis</h4>
+                            <p class="text-xs text-gray-500 mb-4">Compare cómo cada artista puntúa en diferentes atributos artísticos.</p>
+                            
+                            <div class="space-y-2">
+                                <div class="flex items-center text-sm">
+                                    <span class="w-3 h-3 rounded-full bg-terracotta mr-2"></span>
+                                    <span class="font-medium text-gray-700">Frida:</span>
+                                    <span class="ml-auto text-gray-500 text-xs">Introspección</span>
+                                </div>
+                                <div class="flex items-center text-sm">
+                                    <span class="w-3 h-3 rounded-full bg-obsidian mr-2"></span>
+                                    <span class="font-medium text-gray-700">Diego:</span>
+                                    <span class="ml-auto text-gray-500 text-xs">Exposición</span>
+                                </div>
+                            </div>
+                            
+                            <hr class="my-4 border-gray-200">
+                            
+                            <button onclick="toggleRadarDataset()" class="w-full py-2 bg-jade text-white text-sm rounded hover:bg-jade-light transition text-center shadow-sm">
+                                Alternar Capas de Datos
+                            </button>
+                        </div>
+                        
+                        <div class="bg-orange-50 p-4 rounded-lg border border-orange-100">
+                            <h4 class="font-bold text-sm text-terracotta mb-1">Conclusión Clave</h4>
+                            <p class="text-xs text-gray-700">
+                                Para Frida, el Xolo es un <strong>sujeto</strong> con alma. Para Diego, es un <strong>objeto</strong> cultural e histórico.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Radar Chart -->
+                    <div class="col-span-1 md:col-span-2">
+                        <div class="chart-container">
+                            <canvas id="comparisonChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Legacy Footer -->
+            <div class="bg-mictlan rounded-xl shadow-lg p-8 text-center text-white relative overflow-hidden">
+                <div class="relative z-10">
+                    <h3 class="text-xl font-bold font-serif mb-2">El Legado Conjunto</h3>
+                    <p class="max-w-3xl mx-auto text-gray-300 text-sm leading-relaxed mb-6">
+                        Más allá de las diferencias estilísticas, la pareja logró su cometido: rescataron al Xoloitzcuintle de la extinción y el olvido. Hoy, el perro no es solo una mascota, es un monumento vivo a la herencia indígena de México, inmortalizado tanto en los murales públicos como en los autorretratos más dolorosos.
+                    </p>
+                    <button onclick="switchTab('intro')" class="inline-flex items-center px-4 py-2 border border-gray-500 rounded-full text-xs font-medium text-gray-300 hover:text-white hover:border-white transition">
+                        <span>↺ Volver al inicio</span>
+                    </button>
+                </div>
+                <!-- Decorative background circle -->
+                <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-terracotta opacity-10 rounded-full blur-3xl"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- JavaScript Implementation -->
+    <script>
+        // --- STATE MANAGEMENT ---
+        const state = {
+            currentTab: 'intro',
+            fridaDataset: 'emotional', // emotional | symbolic
+            radarVisible: 'both' // both | frida | diego
+        };
+
+        // --- DATA OBJECTS ---
+        
+        // Frida Data: Breakdown of how she used the Xolo image
+        const fridaData = {
+            emotional: {
+                labels: ['Compañía / Soledad', 'Hijo Sustituto', 'Protección', 'Conexión Naturaleza'],
+                data: [40, 30, 15, 15],
+                colors: ['#9c4221', '#e53e3e', '#2c7a7b', '#2b6cb0']
+            },
+            symbolic: {
+                labels: ['Alter Ego', 'Guía Mictlán', 'Símbolo Mexicanidad', 'Elemento Decorativo'],
+                data: [45, 25, 25, 5],
+                colors: ['#9c4221', '#1a202c', '#38a169', '#cbd5e0']
+            }
+        };
+
+        // Diego Data: Where Xolos appear in his work
+        const diegoData = {
+            labels: ['Murales Históricos', 'Retratos de Sociedad', 'Bocetos Arqueológicos', 'Acuarelas Costumbristas'],
+            data: [55, 10, 25, 10]
+        };
+
+        // Comparison Data: Radar Chart Attributes
+        // Attributes: Intimacy (Personal connection), History (Ref to past), Myth (Ref to religion), Realism (Anatomical), Scale (Size in comp)
+        const comparisonData = {
+            labels: ['Intimidad Psicológica', 'Contexto Histórico', 'Carga Mitológica', 'Realismo Anatómico', 'Escala Monumental'],
+            frida: [95, 20, 60, 40, 10], // High intimacy, low history/monumentality
+            diego: [20, 90, 50, 85, 95]  // High history/monumentality, low intimacy
+        };
+
+        // --- CHART INSTANCES ---
+        let fridaChartInstance = null;
+        let diegoChartInstance = null;
+        let comparisonChartInstance = null;
+
+        // --- DOM ELEMENTS ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            // Show intro tab by default
+        });
+
+        // --- NAVIGATION LOGIC ---
+        function switchTab(tabId) {
+            // Update State
+            state.currentTab = tabId;
+
+            // Update UI: Hide all views, show current
+            document.querySelectorAll('.view-section').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block', 'animate-fade-in');
+            });
+            const activeView = document.getElementById(`view-${tabId}`);
+            activeView.classList.remove('hidden');
+            activeView.classList.add('block', 'animate-fade-in');
+
+            // Update Nav Styles
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('nav-active', 'text-terracotta');
+                btn.classList.add('text-gray-500');
+            });
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            activeBtn.classList.add('nav-active', 'text-terracotta');
+            activeBtn.classList.remove('text-gray-500');
+
+            // Trigger chart resize/update if necessary when tab becomes visible
+            if (tabId === 'frida' && fridaChartInstance) fridaChartInstance.resize();
+            if (tabId === 'diego' && diegoChartInstance) diegoChartInstance.resize();
+            if (tabId === 'compare' && comparisonChartInstance) comparisonChartInstance.resize();
+        }
+
+        // --- INTERACTIVITY: CARDS ---
+        function highlightCard(element) {
+            // Reset others
+            document.querySelectorAll('.group').forEach(el => el.classList.remove('ring-2', 'ring-terracotta'));
+            // Highlight clicked
+            element.classList.add('ring-2', 'ring-terracotta');
+            
+            // Get content based on title
+            const title = element.querySelector('h3').innerText;
+            const detailBox = document.getElementById('myth-detail');
+            let content = "";
+
+            if (title.includes("Guía")) {
+                content = "<strong>El Dato Curioso:</strong> Se creía que si tratabas mal a un perro en vida, el Xolo se negaría a ayudarte a cruzar el río Apanohuacalhuia en el inframundo, dejándote vagar eternamente.";
+            } else if (title.includes("Curandero")) {
+                content = "<strong>El Dato Curioso:</strong> Frida misma usaba a sus Xolos para calentar su cuerpo dolorido tras sus múltiples cirugías de columna. Eran terapia física y emocional.";
+            } else if (title.includes("Identidad")) {
+                content = "<strong>El Dato Curioso:</strong> Diego y Frida regalaron cachorros de Xolo a Dolores Olmedo, quien preservó el linaje. Gracias a ellos, la raza sobrevivió al siglo XX.";
+            }
+
+            detailBox.innerHTML = content;
+            detailBox.classList.remove('hidden');
+            detailBox.classList.add('block', 'animate-pulse-once');
+        }
+
+        // --- CHART INITIALIZATION ---
+        function initCharts() {
+            // 1. Frida Chart (Donut)
+            const ctxFrida = document.getElementById('fridaChart').getContext('2d');
+            fridaChartInstance = new Chart(ctxFrida, {
+                type: 'doughnut',
+                data: {
+                    labels: fridaData.emotional.labels,
+                    datasets: [{
+                        data: fridaData.emotional.data,
+                        backgroundColor: fridaData.emotional.colors,
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { boxWidth: 12, font: { family: 'Helvetica Neue', size: 11 } } },
+                        title: { display: true, text: 'Temas en los Autorretratos', font: { size: 14 } }
+                    },
+                    layout: { padding: 10 }
+                }
+            });
+
+            // 2. Diego Chart (Bar)
+            const ctxDiego = document.getElementById('diegoChart').getContext('2d');
+            diegoChartInstance = new Chart(ctxDiego, {
+                type: 'bar',
+                data: {
+                    labels: diegoData.labels,
+                    datasets: [{
+                        label: 'Frecuencia de Aparición (%)',
+                        data: diegoData.data,
+                        backgroundColor: '#2c7a7b',
+                        borderRadius: 4,
+                        barThickness: 30
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#f7fafc' } },
+                        x: { grid: { display: false } }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: (ctx) => `${ctx.raw}% de las representaciones` } }
+                    }
+                }
+            });
+
+            // 3. Comparison Chart (Radar)
+            const ctxCompare = document.getElementById('comparisonChart').getContext('2d');
+            comparisonChartInstance = new Chart(ctxCompare, {
+                type: 'radar',
+                data: {
+                    labels: comparisonData.labels,
+                    datasets: [
+                        {
+                            label: 'Frida Kahlo',
+                            data: comparisonData.frida,
+                            fill: true,
+                            backgroundColor: 'rgba(156, 66, 33, 0.2)', // Terracotta alpha
+                            borderColor: '#9c4221',
+                            pointBackgroundColor: '#9c4221',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: '#9c4221'
+                        },
+                        {
+                            label: 'Diego Rivera',
+                            data: comparisonData.diego,
+                            fill: true,
+                            backgroundColor: 'rgba(26, 32, 44, 0.2)', // Obsidian alpha
+                            borderColor: '#1a202c',
+                            pointBackgroundColor: '#1a202c',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: '#1a202c'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    elements: { line: { borderWidth: 3 } },
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e2e8f0' },
+                            grid: { color: '#e2e8f0' },
+                            pointLabels: {
+                                font: { size: 12, weight: 'bold', family: 'Helvetica Neue' },
+                                color: '#4a5568'
+                            },
+                            ticks: { display: false, max: 100 }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- CHART UPDATE FUNCTIONS ---
+        
+        function updateFridaData(mode) {
+            const data = fridaData[mode];
+            fridaChartInstance.data.labels = data.labels;
+            fridaChartInstance.data.datasets[0].data = data.data;
+            fridaChartInstance.data.datasets[0].backgroundColor = data.colors;
+            fridaChartInstance.update();
+        }
+
+        function toggleRadarDataset() {
+            // Simple toggle logic: Hide Frida -> Hide Diego -> Show Both
+            const metaFrida = comparisonChartInstance.getDatasetMeta(0);
+            const metaDiego = comparisonChartInstance.getDatasetMeta(1);
+
+            if (state.radarVisible === 'both') {
+                metaDiego.hidden = true;
+                state.radarVisible = 'frida';
+            } else if (state.radarVisible === 'frida') {
+                metaFrida.hidden = true;
+                metaDiego.hidden = false;
+                state.radarVisible = 'diego';
+            } else {
+                metaFrida.hidden = false;
+                metaDiego.hidden = false;
+                state.radarVisible = 'both';
+            }
+            comparisonChartInstance.update();
+        }
+
+    </script>
+</body>
+</html>
