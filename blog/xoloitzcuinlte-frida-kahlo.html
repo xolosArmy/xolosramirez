@@ -1,585 +1,866 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Xoloitzcuintle: Frida y Diego</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>La Iconografía del Xoloitzcuintle en el Modernismo Mexicano — Frida Kahlo & Diego Rivera</title>
+  <meta name="description" content="Reportaje investigativo en HTML/CSS sobre la iconografía del xoloitzcuintle en el modernismo mexicano, con enfoque en Frida Kahlo y Diego Rivera."/>
+  <style>
+    :root{
+      --bg:#0b0c10;
+      --paper:#0f1117;
+      --card:#121525;
+      --ink:#e9eef7;
+      --muted:#aeb7c6;
+      --accent:#e8b15a; /* dorado-terracota */
+      --accent2:#77d4c5; /* jade */
+      --line:rgba(255,255,255,.10);
+      --shadow: 0 14px 40px rgba(0,0,0,.35);
+      --radius:22px;
+      --max: 1100px;
+    }
 
-    <!-- Configuration and Styles -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'terracotta': '#9c4221',
-                        'terracotta-light': '#c05621',
-                        'obsidian': '#1a202c',
-                        'jade': '#2c7a7b',
-                        'jade-light': '#38b2ac',
-                        'bone': '#f7fafc',
-                        'warm-gray': '#e2e8f0',
-                        'mictlan': '#2d3748'
-                    },
-                    fontFamily: {
-                        'sans': ['Helvetica Neue', 'Arial', 'sans-serif'],
-                        'serif': ['Georgia', 'serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body {
-            background-color: #fcfbf9; /* Warm off-white background */
-            color: #2d3748;
-        }
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 600px;
-            height: 350px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        @media (max-width: 640px) {
-            .chart-container {
-                height: 300px;
-            }
-        }
-        .nav-active {
-            border-bottom: 3px solid #9c4221;
-            color: #9c4221;
-            font-weight: bold;
-        }
-        .card-hover:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-        .transition-all {
-            transition: all 0.3s ease;
-        }
-    </style>
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1000px 600px at 15% -10%, rgba(232,177,90,.25), transparent 60%),
+        radial-gradient(900px 600px at 85% 0%, rgba(119,212,197,.22), transparent 55%),
+        linear-gradient(180deg, #07080b, var(--bg) 40%, #07080b);
+      color:var(--ink);
+      line-height:1.7;
+    }
+
+    a{color:inherit}
+    .wrap{max-width:var(--max); margin:0 auto; padding:0 18px}
+
+    /* Topbar */
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(14px);
+      background: rgba(11,12,16,.62);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar .row{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px; padding:12px 0;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      text-decoration:none;
+    }
+    .mark{
+      width:38px; height:38px; border-radius:14px;
+      background: linear-gradient(135deg, rgba(232,177,90,.85), rgba(119,212,197,.75));
+      box-shadow: 0 10px 24px rgba(0,0,0,.35);
+      position:relative;
+      overflow:hidden;
+    }
+    .mark:before{
+      content:"";
+      position:absolute; inset:-40%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.55), transparent 55%);
+      transform: rotate(25deg);
+    }
+    .brand strong{
+      font-weight:800; letter-spacing:.3px;
+      font-size:14px;
+    }
+    .brand span{
+      display:block; font-size:12px; color:var(--muted); margin-top:2px;
+    }
+
+    .nav{
+      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;
+    }
+    .nav a{
+      text-decoration:none;
+      font-size:12px;
+      color:var(--muted);
+      border:1px solid var(--line);
+      padding:8px 10px;
+      border-radius:999px;
+      transition:.2s ease;
+      background: rgba(255,255,255,.03);
+    }
+    .nav a:hover{color:var(--ink); border-color: rgba(232,177,90,.45); transform: translateY(-1px);}
+
+    /* Hero */
+    .hero{
+      padding:34px 0 18px;
+    }
+    .heroGrid{
+      display:grid;
+      grid-template-columns: 1.12fr .88fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    @media (max-width: 900px){
+      .heroGrid{grid-template-columns:1fr}
+    }
+    .heroCard{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(18,21,37,.92), rgba(10,12,18,.78));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .heroCard .pad{padding:26px}
+    .kicker{
+      display:inline-flex; align-items:center; gap:8px;
+      font-size:12px; letter-spacing:.16em;
+      text-transform:uppercase;
+      color: rgba(232,177,90,.95);
+    }
+    .dot{
+      width:7px; height:7px; border-radius:50%;
+      background: rgba(232,177,90,.95);
+      box-shadow: 0 0 0 6px rgba(232,177,90,.12);
+    }
+    h1{
+      margin:12px 0 12px;
+      font-size: clamp(26px, 3.2vw, 42px);
+      line-height:1.1;
+      letter-spacing:.2px;
+    }
+    .sub{
+      color: var(--muted);
+      margin:0;
+      font-size: 15px;
+      max-width: 70ch;
+    }
+    .meta{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:16px;
+    }
+    .pill{
+      font-size:12px;
+      color: rgba(233,238,247,.92);
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      padding:7px 10px;
+      border-radius:999px;
+    }
+    .pill b{color: rgba(119,212,197,.95)}
+
+    .heroImg{
+      height:100%;
+      display:flex;
+      flex-direction:column;
+    }
+    figure{
+      margin:0;
+    }
+    .media{
+      width:100%;
+      aspect-ratio: 4/5;
+      object-fit: cover;
+      display:block;
+      filter: contrast(1.05) saturate(1.02);
+    }
+    .figcap{
+      padding:12px 14px;
+      border-top:1px solid var(--line);
+      font-size:12px;
+      color: var(--muted);
+      background: rgba(0,0,0,.18);
+    }
+
+    /* Body layout */
+    .content{
+      padding: 12px 0 60px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 320px;
+      gap:18px;
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    article{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(15,17,23,.72);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    article .inner{padding:24px}
+    h2{
+      margin:26px 0 10px;
+      font-size: 22px;
+      letter-spacing:.2px;
+    }
+    h3{
+      margin:18px 0 8px;
+      font-size: 16px;
+      color: rgba(233,238,247,.96);
+    }
+    p{margin: 10px 0; color: rgba(233,238,247,.92)}
+    .lead{
+      font-size: 16px;
+      color: rgba(233,238,247,.94);
+    }
+    .rule{
+      height:1px; background: var(--line); margin:18px 0;
+    }
+
+    /* Pull quote */
+    .quote{
+      margin:18px 0;
+      padding:18px 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(232,177,90,.22);
+      background:
+        radial-gradient(500px 220px at 10% 20%, rgba(232,177,90,.20), transparent 60%),
+        rgba(255,255,255,.03);
+      position:relative;
+    }
+    .quote:before{
+      content:"“";
+      position:absolute; top:-20px; left:14px;
+      font-size:60px; color: rgba(232,177,90,.45);
+      font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    }
+    .quote p{margin:0; color: rgba(233,238,247,.92)}
+    .quote small{display:block; margin-top:8px; color: var(--muted)}
+
+    /* Tables */
+    .tableWrap{
+      margin:16px 0;
+      border:1px solid var(--line);
+      border-radius: 16px;
+      overflow:auto;
+      background: rgba(255,255,255,.02);
+    }
+    table{
+      border-collapse:collapse;
+      width:100%;
+      min-width: 680px;
+      font-size: 13px;
+    }
+    th,td{
+      padding:12px 12px;
+      border-bottom:1px solid var(--line);
+      vertical-align:top;
+    }
+    th{
+      text-align:left;
+      font-size:12px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color: rgba(174,183,198,.95);
+      background: rgba(255,255,255,.03);
+      position:sticky; top:0;
+    }
+    tr:hover td{background: rgba(232,177,90,.05)}
+
+    /* Sidebar */
+    aside{
+      position:sticky; top:72px;
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(15,17,23,.60);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    @media (max-width: 980px){ aside{position:relative; top:auto} }
+    .asidePad{padding:18px}
+    .tocTitle{
+      display:flex; align-items:center; justify-content:space-between;
+      margin:0 0 10px;
+      font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+      color: rgba(119,212,197,.90);
+    }
+    .toc a{
+      display:block;
+      padding:10px 10px;
+      margin:6px 0;
+      border-radius: 14px;
+      text-decoration:none;
+      color: rgba(233,238,247,.88);
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.02);
+      transition:.18s ease;
+      font-size: 13px;
+    }
+    .toc a:hover{
+      border-color: rgba(119,212,197,.45);
+      transform: translateY(-1px);
+    }
+    .asideCard{
+      margin-top:14px;
+      border-radius: 18px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background: rgba(255,255,255,.02);
+    }
+    .asideCard img{
+      width:100%;
+      display:block;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+    }
+    .asideCard .cap{
+      padding:10px 12px;
+      font-size:12px;
+      color: var(--muted);
+      border-top:1px solid var(--line);
+    }
+
+    /* Footer credits */
+    footer{
+      margin-top:22px;
+      border-top:1px solid var(--line);
+      padding:18px 0 42px;
+      color: var(--muted);
+      font-size:12px;
+    }
+    .credits{
+      border:1px solid var(--line);
+      border-radius: 18px;
+      padding:14px 14px;
+      background: rgba(255,255,255,.02);
+    }
+    .credits code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      font-size: 11px;
+      color: rgba(233,238,247,.88);
+      background: rgba(0,0,0,.28);
+      padding:2px 6px;
+      border-radius: 8px;
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .note{
+      margin-top:10px;
+      padding:12px 14px;
+      border-radius: 16px;
+      border:1px solid rgba(119,212,197,.22);
+      background: rgba(119,212,197,.08);
+      color: rgba(233,238,247,.92);
+    }
+  </style>
 </head>
-<body class="font-sans antialiased selection:bg-terracotta selection:text-white">
 
-    <!-- Chosen Palette: Earthy "Mexican Modernism" - Terracotta (Clay), Obsidian (Volcanic glass), Jade (Pre-Hispanic), and Bone (Background) -->
-    <!-- Application Structure Plan:
-         1. Header/Intro: Establishes the cultural context of the Xoloitzcuintle.
-         2. Navigation: Functional tabs to switch between thematic views (Origins, Frida, Diego, Comparative Analysis).
-         3. Section 1 (Origins): Interactive cards explaining the mythological role (Mictlán) vs. biological reality.
-         4. Section 2 (Frida): Focus on psychological depth. Uses a Donut chart to break down thematic usage (Companionship, Nature, Surrogate).
-         5. Section 3 (Diego): Focus on historical breadth. Uses a Bar chart to show media usage (Murals vs Canvas) and context.
-         6. Section 4 (Comparison): The core analytical engine. Uses a Radar chart to compare the *attributes* of their representations (Intimacy vs. Monumentality).
-         7. Interactive Elements: Buttons to update charts and filter text details.
-    -->
-    <!-- Visualization & Content Choices:
-         - Radar Chart: Chosen to visualize the multi-dimensional differences in artistic intent (Personal vs. Political).
-         - Donut/Bar Charts: To quantify qualitative art historical themes for easier consumption.
-         - Interactive Cards: To break down complex mythology into digestible bites.
-         - NO SVG/Mermaid: All visuals use Chart.js Canvas or styled HTML/CSS.
-    -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <div class="row">
+        <a class="brand" href="#inicio">
+          <div class="mark" aria-hidden="true"></div>
+          <div>
+            <strong>Reportaje investigativo</strong>
+            <span>Iconografía del Xoloitzcuintle — Modernismo Mexicano</span>
+          </div>
+        </a>
+        <nav class="nav" aria-label="Navegación principal">
+          <a href="#sustrato">Sustrato mitológico</a>
+          <a href="#rivera">Rivera</a>
+          <a href="#kahlo">Kahlo</a>
+          <a href="#foto">Fotografía</a>
+          <a href="#olmedo">Olmedo</a>
+          <a href="#conclusion">Conclusión</a>
+        </nav>
+      </div>
+    </div>
+  </header>
 
-    <!-- Navigation -->
-    <nav class="sticky top-0 z-50 bg-[#fcfbf9]/95 backdrop-blur-sm border-b border-warm-gray shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <span class="text-2xl font-serif font-bold text-terracotta mr-2">🐕</span>
-                    <span class="text-xl font-bold tracking-tight text-obsidian hidden sm:block">El Xolo en el Arte</span>
-                </div>
-                <div class="flex space-x-1 sm:space-x-8 overflow-x-auto">
-                    <button onclick="switchTab('intro')" id="nav-intro" class="nav-btn nav-active whitespace-nowrap px-3 py-5 text-sm font-medium transition-colors hover:text-terracotta">
-                        Orígenes
-                    </button>
-                    <button onclick="switchTab('frida')" id="nav-frida" class="nav-btn whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-500 transition-colors hover:text-terracotta">
-                        Frida: Interior
-                    </button>
-                    <button onclick="switchTab('diego')" id="nav-diego" class="nav-btn whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-500 transition-colors hover:text-terracotta">
-                        Diego: Historia
-                    </button>
-                    <button onclick="switchTab('compare')" id="nav-compare" class="nav-btn whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-500 transition-colors hover:text-terracotta">
-                        Análisis Comparativo
-                    </button>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Main Content Area -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-20">
-
-        <!-- Header Section -->
-        <header class="text-center mb-12">
-            <h1 class="text-4xl sm:text-5xl font-serif font-bold text-obsidian mb-4">
-                Guardián de Dos Mundos
-            </h1>
-            <p class="max-w-2xl mx-auto text-lg text-gray-600 leading-relaxed">
-                Investigación interactiva sobre cómo <strong>Frida Kahlo</strong> y <strong>Diego Rivera</strong> utilizaron la figura del perro Xoloitzcuintle para reconstruir la identidad mexicana, desde la intimidad psicológica hasta la narrativa histórica.
+  <main id="inicio" class="wrap">
+    <section class="hero">
+      <div class="heroGrid">
+        <div class="heroCard">
+          <div class="pad">
+            <div class="kicker"><span class="dot" aria-hidden="true"></span> Ensayo analítico / Historia del arte</div>
+            <h1>La Iconografía del Xoloitzcuintle en el Modernismo Mexicano: una perspectiva analítica sobre la obra de Frida Kahlo y Diego Rivera</h1>
+            <p class="sub">
+              La integración del xoloitzcuintle en la plástica de la primera mitad del siglo XX en México representa uno de los fenómenos más fascinantes
+              de la historia del arte contemporáneo, donde la biología, la arqueología y el nacionalismo convergen para redefinir la identidad de una nación
+              en reconstrucción.
             </p>
-        </header>
-
-        <!-- VIEW 1: INTRO / ORIGINS -->
-        <div id="view-intro" class="view-section animate-fade-in block">
-            <div class="bg-white rounded-xl shadow-sm border border-warm-gray p-6 sm:p-8 mb-8">
-                <h2 class="text-2xl font-bold text-jade mb-4 border-b border-gray-100 pb-2">El Perro Sagrado de México</h2>
-                <p class="text-gray-700 mb-6">
-                    Antes de ser un ícono del arte moderno, el Xoloitzcuintle ("Perro Extraño" en náhuatl) poseía una profunda carga cosmogónica. Para entender su presencia en la obra de Kahlo y Rivera, primero debemos entender su función ancestral.
-                </p>
-
-                <!-- Interactive Mythology Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Card 1 -->
-                    <div class="bg-bone rounded-lg p-6 border border-warm-gray card-hover transition-all cursor-pointer group" onclick="highlightCard(this)">
-                        <div class="text-3xl mb-3">💀</div>
-                        <h3 class="text-lg font-bold text-obsidian mb-2">Guía del Inframundo</h3>
-                        <p class="text-sm text-gray-600">
-                            Asociado a <strong>Xólotl</strong>, dios de la muerte y el rayo. Su misión era guiar las almas de los difuntos a través de los nueve niveles del Mictlán.
-                        </p>
-                        <div class="mt-4 text-xs font-semibold text-terracotta opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-wide">
-                            Ver importancia →
-                        </div>
-                    </div>
-                    <!-- Card 2 -->
-                    <div class="bg-bone rounded-lg p-6 border border-warm-gray card-hover transition-all cursor-pointer group" onclick="highlightCard(this)">
-                        <div class="text-3xl mb-3">🌡️</div>
-                        <h3 class="text-lg font-bold text-obsidian mb-2">Curandero Vivo</h3>
-                        <p class="text-sm text-gray-600">
-                            Por su falta de pelo y alta temperatura corporal, se usaban como "bolsas de agua caliente" vivas para tratar reumatismo y asma.
-                        </p>
-                        <div class="mt-4 text-xs font-semibold text-terracotta opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-wide">
-                            Ver importancia →
-                        </div>
-                    </div>
-                    <!-- Card 3 -->
-                    <div class="bg-bone rounded-lg p-6 border border-warm-gray card-hover transition-all cursor-pointer group" onclick="highlightCard(this)">
-                        <div class="text-3xl mb-3">🌵</div>
-                        <h3 class="text-lg font-bold text-obsidian mb-2">Símbolo de Identidad</h3>
-                        <p class="text-sm text-gray-600">
-                            En la década de 1920, tras la Revolución, el Xolo se convirtió en un símbolo de la <strong>Mexicanidad</strong>, rechazando las razas europeas en favor de lo autóctono.
-                        </p>
-                        <div class="mt-4 text-xs font-semibold text-terracotta opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-wide">
-                            Ver importancia →
-                        </div>
-                    </div>
-                </div>
-                <div id="myth-detail" class="mt-6 p-4 bg-terracotta/10 rounded-lg text-terracotta-light text-sm hidden border border-terracotta/20">
-                    <!-- Dynamic Text will appear here -->
-                </div>
+            <div class="meta">
+              <span class="pill">Eje: <b>mexicanidad</b></span>
+              <span class="pill">Símbolo: <b>Xólotl / Mictlán</b></span>
+              <span class="pill">Enfoque: <b>público vs. íntimo</b></span>
+              <span class="pill">Método: <b>lectura iconográfica</b></span>
             </div>
+
+            <div class="quote" style="margin-top:18px">
+              <p>
+                El xoloitzcuintle pasó de ser una especie al borde de la extinción —relegada a las zonas rurales y considerada por la estética colonial como una criatura
+                “deforme” o “monstruosa”— a convertirse en el guardián de la memoria colectiva en los muros de los edificios públicos y en el refugio íntimo de la Casa Azul.
+              </p>
+              <small>— Tesis central del reportaje</small>
+            </div>
+
+            <p class="lead">
+              Este perro ancestral, cuya presencia en el territorio mexicano data de hace más de tres mil quinientos años, no fue simplemente una mascota para la pareja
+              conformada por Frida Kahlo y Diego Rivera; se erigió como un potente significante de la mexicanidad, un concepto polivalente que buscaba en las raíces indígenas
+              la legitimidad de un proyecto estético y político posrevolucionario.
+            </p>
+
+            <p>
+              Para Rivera y Kahlo, el perro no solo poseía un valor estético intrínseco por su forma escultural y su linaje prehispánico, sino que también funcionaba como un
+              puente ontológico hacia el pasado precolombino que ambos artistas deseaban resucitar y dignificar.
+            </p>
+          </div>
         </div>
 
-        <!-- VIEW 2: FRIDA KAHLO -->
-        <div id="view-frida" class="view-section hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- Left: Text Analysis -->
-                <div class="flex flex-col justify-center">
-                    <div class="bg-white rounded-xl shadow-sm border border-warm-gray p-6 sm:p-8 h-full">
-                        <div class="flex items-center mb-4">
-                            <span class="text-3xl mr-3">🌺</span>
-                            <h2 class="text-2xl font-bold text-obsidian">Frida: El Espejo Emocional</h2>
-                        </div>
-                        <p class="text-gray-700 mb-6 text-sm leading-relaxed">
-                            En la obra de Frida Kahlo, el Xoloitzcuintle raramente es un accesorio; es una <strong>extensión de su propio ser</strong>. A diferencia de los grandes murales históricos, los Xolos de Frida habitan espacios íntimos y oníricos.
-                        </p>
-                        <ul class="space-y-4 mb-6">
-                            <li class="flex items-start">
-                                <span class="flex-shrink-0 h-6 w-6 rounded-full bg-terracotta flex items-center justify-center text-white text-xs font-bold mr-3">1</span>
-                                <span class="text-sm text-gray-600"><strong>Alter Ego:</strong> El "Señor Xólotl" (su perro favorito) a menudo aparece observando al espectador con la misma intensidad que la propia Frida.</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="flex-shrink-0 h-6 w-6 rounded-full bg-jade flex items-center justify-center text-white text-xs font-bold mr-3">2</span>
-                                <span class="text-sm text-gray-600"><strong>Hijo Sustituto:</strong> Ante la imposibilidad de tener hijos, sus mascotas, y en especial los Xolos, ocupan un rol maternal y protector.</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="flex-shrink-0 h-6 w-6 rounded-full bg-obsidian flex items-center justify-center text-white text-xs font-bold mr-3">3</span>
-                                <span class="text-sm text-gray-600"><strong>Conexión Terrenal:</strong> Representan su conexión con la tierra mexicana y la naturaleza pre-hispánica.</span>
-                            </li>
-                        </ul>
-                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                            <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Obras Clave Analizadas</h4>
-                            <p class="text-xs text-gray-600 italic">"Perro Itzcuintli conmigo" (1938), "El abrazo de amor del universo" (1949), "Autorretrato con changuito y perro" (1945).</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right: Chart -->
-                <div class="bg-white rounded-xl shadow-sm border border-warm-gray p-6 sm:p-8">
-                    <h3 class="text-lg font-bold text-gray-800 mb-2">Distribución Temática en Retratos</h3>
-                    <p class="text-xs text-gray-500 mb-6">Análisis de la función simbólica del Xolo en 15 obras clave.</p>
-                    
-                    <div class="chart-container">
-                        <canvas id="fridaChart"></canvas>
-                    </div>
-                    
-                    <div class="mt-6 flex justify-center space-x-2">
-                        <button onclick="updateFridaData('emotional')" class="px-3 py-1 bg-terracotta text-white text-xs rounded-full hover:bg-terracotta-light transition">Enfoque Emocional</button>
-                        <button onclick="updateFridaData('symbolic')" class="px-3 py-1 bg-jade text-white text-xs rounded-full hover:bg-jade-light transition">Enfoque Simbólico</button>
-                    </div>
-                </div>
-            </div>
+        <div class="heroCard heroImg" aria-label="Imagen principal">
+          <figure>
+            <img class="media" src="https://upload.wikimedia.org/wikipedia/commons/5/54/Diego_Rivera_with_a_xoloitzcuintle_dog_in_the_Blue_House%2C_Coyoacan_-_Google_Art_Project.jpg" alt="Diego Rivera junto a un xoloitzcuintle en la Casa Azul (fotografía en blanco y negro)."/>
+            <figcaption class="figcap">
+              Diego Rivera con un xoloitzcuintle en la Casa Azul (Coyoacán). Imagen usada como ancla visual del “xolo” en el imaginario modernista.
+            </figcaption>
+          </figure>
         </div>
+      </div>
+    </section>
 
-        <!-- VIEW 3: DIEGO RIVERA -->
-        <div id="view-diego" class="view-section hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- Left: Chart -->
-                <div class="bg-white rounded-xl shadow-sm border border-warm-gray p-6 sm:p-8 order-2 lg:order-1">
-                    <h3 class="text-lg font-bold text-gray-800 mb-2">Contexto de Representación</h3>
-                    <p class="text-xs text-gray-500 mb-6">Frecuencia de aparición según el entorno representado (Muralismo vs Caballete).</p>
-                    
-                    <div class="chart-container">
-                        <canvas id="diegoChart"></canvas>
-                    </div>
+    <section class="content">
+      <div class="grid">
+        <article>
+          <div class="inner">
 
-                    <div class="mt-4 p-3 bg-gray-50 text-xs text-gray-600 rounded border border-gray-200">
-                        <p><strong>Nota:</strong> En los murales (ej. Palacio Nacional), el Xolo aparece como parte de la vida cotidiana del Mercado de Tlatelolco, no como individuo, sino como especie histórica.</p>
-                    </div>
-                </div>
+            <h2 id="sustrato">El Sustrato Mitológico y la Recuperación Histórica del Canino Sagrado</h2>
 
-                <!-- Right: Text Analysis -->
-                <div class="flex flex-col justify-center order-1 lg:order-2">
-                    <div class="bg-white rounded-xl shadow-sm border border-warm-gray p-6 sm:p-8 h-full">
-                        <div class="flex items-center mb-4">
-                            <span class="text-3xl mr-3">🎨</span>
-                            <h2 class="text-2xl font-bold text-obsidian">Diego: La Historia Viva</h2>
-                        </div>
-                        <p class="text-gray-700 mb-6 text-sm leading-relaxed">
-                            Para Diego Rivera, el Xoloitzcuintle es un <strong>artefacto arqueológico viviente</strong>. Su interés radica en la continuidad histórica. Él fue fundamental en la reintroducción de la raza, viéndolos como una pieza necesaria para recuperar el pasado precolombino.
-                        </p>
-                        <div class="space-y-4">
-                            <div class="border-l-4 border-jade pl-4 py-1">
-                                <h4 class="font-bold text-sm text-jade-light">El Coleccionista</h4>
-                                <p class="text-sm text-gray-600 mt-1">Diego criaba Xolos en la Casa Azul y el Anahuacalli. Para él, eran esculturas vivas que complementaban su vasta colección de piezas prehispánicas.</p>
-                            </div>
-                            <div class="border-l-4 border-terracotta pl-4 py-1">
-                                <h4 class="font-bold text-sm text-terracotta">En los Murales</h4>
-                                <p class="text-sm text-gray-600 mt-1">Representados comiendo maíz, interactuando con comerciantes o en escenas rituales. Valida la existencia del perro en la vida cotidiana azteca.</p>
-                            </div>
-                            <div class="border-l-4 border-obsidian pl-4 py-1">
-                                <h4 class="font-bold text-sm text-obsidian">Mito Azteca</h4>
-                                <p class="text-sm text-gray-600 mt-1">En el mural <em>El agua, origen de la vida</em> (Cárcamo de Dolores), el Xolo aparece vinculado a teorías evolutivas y orígenes biológicos.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+            <p>
+              Para comprender la profundidad de la representación de este animal en la obra de Rivera y Kahlo, es imperativo analizar su origen en la cosmogonía nahua.
+              El término xoloitzcuintle deriva de las voces náhuatl Xólotl, el dios del ocaso, la dualidad y los gemelos —hermano de Quetzalcóatl—, e itzcuintli, que significa perro.
+              Según la mitología azteca, el perro fue creado por Xólotl para servir como guía a las almas de los difuntos en su peligroso tránsito a través de los nueve niveles del Mictlán,
+              el inframundo.
+            </p>
 
-        <!-- VIEW 4: COMPARATIVE ANALYSIS -->
-        <div id="view-compare" class="view-section hidden">
-            <div class="bg-white rounded-xl shadow-sm border border-warm-gray p-6 sm:p-8 mb-8">
-                <div class="text-center mb-8">
-                    <h2 class="text-2xl font-bold text-obsidian">Divergencia en la Identidad</h2>
-                    <p class="text-sm text-gray-500 mt-2 max-w-2xl mx-auto">
-                        Aunque ambos artistas compartían ideales políticos y amor por la raza, su representación artística difiere drásticamente en escala, propósito y emoción.
-                    </p>
-                </div>
+            <p>
+              El xoloitzcuintle tenía la tarea específica de ayudar al alma a cruzar el caudaloso río Apanohuacalhuia; si el perro reconocía en el alma a su antiguo dueño, y este había sido
+              bondadoso con los animales en vida, el canino lo cargaba sobre su lomo para completar el viaje. Esta función psicopompa imbuyó al animal de una sacralidad que los artistas del
+              modernismo mexicano supieron capitalizar para dotar a sus obras de una capa de misticismo y profundidad histórica.
+            </p>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-                    <!-- Control Panel -->
-                    <div class="col-span-1 space-y-4">
-                        <div class="bg-bone p-4 rounded-lg border border-warm-gray">
-                            <h4 class="font-bold text-sm text-gray-700 mb-3">Dimensiones de Análisis</h4>
-                            <p class="text-xs text-gray-500 mb-4">Compare cómo cada artista puntúa en diferentes atributos artísticos.</p>
-                            
-                            <div class="space-y-2">
-                                <div class="flex items-center text-sm">
-                                    <span class="w-3 h-3 rounded-full bg-terracotta mr-2"></span>
-                                    <span class="font-medium text-gray-700">Frida:</span>
-                                    <span class="ml-auto text-gray-500 text-xs">Introspección</span>
-                                </div>
-                                <div class="flex items-center text-sm">
-                                    <span class="w-3 h-3 rounded-full bg-obsidian mr-2"></span>
-                                    <span class="font-medium text-gray-700">Diego:</span>
-                                    <span class="ml-auto text-gray-500 text-xs">Exposición</span>
-                                </div>
-                            </div>
-                            
-                            <hr class="my-4 border-gray-200">
-                            
-                            <button onclick="toggleRadarDataset()" class="w-full py-2 bg-jade text-white text-sm rounded hover:bg-jade-light transition text-center shadow-sm">
-                                Alternar Capas de Datos
-                            </button>
-                        </div>
-                        
-                        <div class="bg-orange-50 p-4 rounded-lg border border-orange-100">
-                            <h4 class="font-bold text-sm text-terracotta mb-1">Conclusión Clave</h4>
-                            <p class="text-xs text-gray-700">
-                                Para Frida, el Xolo es un <strong>sujeto</strong> con alma. Para Diego, es un <strong>objeto</strong> cultural e histórico.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Radar Chart -->
-                    <div class="col-span-1 md:col-span-2">
-                        <div class="chart-container">
-                            <canvas id="comparisonChart"></canvas>
-                        </div>
-                    </div>
-                </div>
+            <div class="tableWrap" role="region" aria-label="Tabla Mictlán">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Nivel del Mictlán</th>
+                    <th>Desafío para el Alma</th>
+                    <th>Rol del Xoloitzcuintle / Simbología</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><b>Primer Nivel (Itzcuintlán)</b></td>
+                    <td>El río Apanohuacalhuia</td>
+                    <td>El perro reconoce y ayuda al dueño a cruzar.</td>
+                  </tr>
+                  <tr>
+                    <td><b>Quinta Dimensión</b></td>
+                    <td>La dualidad de la vida y la muerte</td>
+                    <td>Representación de la transformación de la materia.</td>
+                  </tr>
+                  <tr>
+                    <td><b>Tránsito Final</b></td>
+                    <td>El encuentro con Mictlantecuhtli</td>
+                    <td>Finalización del ciclo existencial de la materia orgánica.</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
-            <!-- Legacy Footer -->
-            <div class="bg-mictlan rounded-xl shadow-lg p-8 text-center text-white relative overflow-hidden">
-                <div class="relative z-10">
-                    <h3 class="text-xl font-bold font-serif mb-2">El Legado Conjunto</h3>
-                    <p class="max-w-3xl mx-auto text-gray-300 text-sm leading-relaxed mb-6">
-                        Más allá de las diferencias estilísticas, la pareja logró su cometido: rescataron al Xoloitzcuintle de la extinción y el olvido. Hoy, el perro no es solo una mascota, es un monumento vivo a la herencia indígena de México, inmortalizado tanto en los murales públicos como en los autorretratos más dolorosos.
-                    </p>
-                    <button onclick="switchTab('intro')" class="inline-flex items-center px-4 py-2 border border-gray-500 rounded-full text-xs font-medium text-gray-300 hover:text-white hover:border-white transition">
-                        <span>↺ Volver al inicio</span>
-                    </button>
-                </div>
-                <!-- Decorative background circle -->
-                <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-terracotta opacity-10 rounded-full blur-3xl"></div>
+            <p>
+              Además de su rol espiritual, el xoloitzcuintle poseía atributos curativos empíricos. Su piel, carente de pelaje, mantiene una temperatura corporal aproximada de 40&nbsp;°C,
+              lo que lo convertía en un “analgésico vivo” para las comunidades indígenas que padecían reumatismo, asma o dolores musculares. Esta característica biológica no pasó desapercibida
+              para Frida Kahlo, quien, atormentada por dolores crónicos derivados de su accidente de 1925, encontró en el contacto físico con estos animales un alivio tanto físico como emocional.
+            </p>
+
+            <p>
+              Tras la conquista española, la población de xoloitzcuintles sufrió un declive catastrófico. Los colonizadores los persiguieron por ser considerados ídolos paganos y, en momentos de
+              hambruna, los consumieron como alimento, basándose en la tradición indígena de engordarlos para banquetes rituales. Fue a principios del siglo XX cuando el movimiento de la mexicanidad
+              —un nacionalismo populista que celebraba las culturas indígenas como el fundamento de la nación moderna— rescató al perro de las zonas rurales de Guerrero y Oaxaca para integrarlo en el
+              imaginario urbano y artístico.
+            </p>
+
+            <div class="rule"></div>
+
+            <h2 id="rivera">Diego Rivera: El Xoloitzcuintle como Testigo de la Historia Colectiva</h2>
+
+            <p>
+              Diego Rivera abordó la representación del xoloitzcuintle desde una perspectiva sociológica, histórica y pedagógica. Para el muralista, el perro no era un ente aislado, sino una pieza
+              fundamental del engranaje cultural mesoamericano que debía ser mostrado en su contexto original para educar a las masas sobre la sofisticación de sus ancestros. Rivera integró al animal
+              en sus frescos monumentales como un elemento de “arqueología vivificada”, dándole un sentido vital a las formas que anteriormente solo se encontraban en cerámicas de tumbas antiguas.
+            </p>
+
+            <h3>El Mercado de Tlatelolco y la Vida Comercial Indígena</h3>
+            <p>
+              En el ciclo mural de la escalera principal del Palacio Nacional, específicamente en la obra <i>El mercado de Tlatelolco</i> (1945), Rivera realiza una reconstrucción exhaustiva de la actividad
+              económica en la Gran Tenochtitlán. El xoloitzcuintle aparece aquí en múltiples roles. En primer lugar, se observa como un animal doméstico que acompaña a las familias indígenas, subrayando su carácter
+              de guardián y compañero leal. En segundo lugar, el mural documenta su comercialización para fines rituales y alimenticios, reflejando las crónicas de Sahagún que describían cómo estos perros eran vendidos
+              en jaulas en los mercados prehispánicos.
+            </p>
+
+            <p>
+              Rivera utiliza la figura del xoloitzcuintle para dotar de autenticidad a la escena. La precisión con la que retrata la musculatura del animal, su piel arrugada y su postura alerta indica una observación directa de
+              los ejemplares que poseía en su propia casa. Al incluir al perro en este contexto, Rivera eleva lo cotidiano a la categoría de historia nacional, argumentando que la grandeza de México reside en estos detalles de la
+              vida precolombina que lograron sobrevivir a la imposición europea.
+            </p>
+
+            <h3>Sueño de una tarde dominical en la Alameda Central</h3>
+            <p>
+              En esta obra de 1947, Rivera despliega una síntesis de la historia de México, desde la conquista hasta el siglo XX, bajo la lógica del sueño y la memoria. En el centro del mural, un Diego Rivera niño aparece tomado de la
+              mano de La Catrina, flanqueado por Frida Kahlo y el grabador José Guadalupe Posada. En esta sección, que representa el corazón de la identidad mexicana, la presencia del xoloitzcuintle funciona como un ancla simbólica.
+            </p>
+
+            <p>
+              A diferencia de otros elementos del mural que remiten a influencias francesas o victorianas de la era porfirista, el xoloitzcuintle permanece como un signo de pureza autóctona. Su inclusión en una obra que explora la genealogía
+              política y social de México posiciona al perro no como un simple accesorio, sino como un co-protagonista de la narrativa nacional, un testigo mudo de la resistencia cultural del pueblo.
+            </p>
+
+            <h3>El Museo Anahuacalli y la Colección de Perros de Barro</h3>
+            <p>
+              La obsesión de Rivera por el xoloitzcuintle trascendió el muralismo para convertirse en una labor de coleccionismo y arquitectura. El Museo Anahuacalli, diseñado por Rivera con piedra volcánica del Pedregal para albergar su colección de
+              más de sesenta mil piezas prehispánicas, es en sí mismo un homenaje a la cosmogonía de la cual el perro es parte integral.
+            </p>
+
+            <p>
+              Dentro del museo, Rivera organizó las salas para simular un descenso al inframundo y un ascenso hacia el sol. Las piezas de cerámica de “perritos de Colima” —muchas de las cuales representan xoloitzcuintles con vientres prominentes y
+              expresiones alegres— ocupan lugares estratégicos. Rivera veía en estas figuras no solo objetos artísticos, sino la evidencia de un afecto milenario entre el ser humano y el perro en el México antiguo. La arquitectura del Anahuacalli, con su
+              estética de teocalli moderno, sirve como el marco definitivo para la inmortalización del xoloitzcuintle como una “entidad viva” que conecta la prehistoria con el futuro de México.
+            </p>
+
+            <figure class="heroCard" style="margin:18px 0;">
+              <img class="media" style="aspect-ratio:16/10" src="https://upload.wikimedia.org/wikipedia/commons/6/65/Anahuacalli_museum_mexico_city.JPG" alt="Fachada del Museo Anahuacalli en Ciudad de México"/>
+              <figcaption class="figcap">
+                Museo Anahuacalli (Coyoacán): arquitectura como “teocalli moderno” para custodiar la cosmogonía material. 
+              </figcaption>
+            </figure>
+
+            <div class="tableWrap" role="region" aria-label="Tabla obras Rivera">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Obra Mural / Proyecto de Rivera</th>
+                    <th>Ubicación</th>
+                    <th>Rol del Xoloitzcuintle</th>
+                    <th>Contexto Artístico</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><b>La Lluvia (Fragmento)</b></td>
+                    <td>SEP, CDMX</td>
+                    <td>Compañero del campesino</td>
+                    <td>La dignificación del trabajo rural.</td>
+                  </tr>
+                  <tr>
+                    <td><b>El mercado de Tlatelolco</b></td>
+                    <td>Palacio Nacional</td>
+                    <td>Mercancía y animal doméstico</td>
+                    <td>Reconstrucción de la economía azteca.</td>
+                  </tr>
+                  <tr>
+                    <td><b>Cultura purépecha</b></td>
+                    <td>Palacio Nacional</td>
+                    <td>Parte de la biodiversidad regional</td>
+                    <td>Diversidad étnica y biológica de México.</td>
+                  </tr>
+                  <tr>
+                    <td><b>Sueño de una tarde dominical…</b></td>
+                    <td>Museo Mural Diego Rivera</td>
+                    <td>Símbolo de identidad nacional</td>
+                    <td>Historia y memoria colectiva.</td>
+                  </tr>
+                  <tr>
+                    <td><b>Museo Anahuacalli</b></td>
+                    <td>Coyoacán</td>
+                    <td>Colección de esculturas votivas</td>
+                    <td>Arqueología y cosmogonía mesoamericana.</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-        </div>
 
-    </main>
+            <div class="rule"></div>
 
-    <!-- JavaScript Implementation -->
-    <script>
-        // --- STATE MANAGEMENT ---
-        const state = {
-            currentTab: 'intro',
-            fridaDataset: 'emotional', // emotional | symbolic
-            radarVisible: 'both' // both | frida | diego
-        };
+            <h2 id="kahlo">Frida Kahlo: El Xoloitzcuintle como Tótem, Compañero y Sustituto</h2>
 
-        // --- DATA OBJECTS ---
-        
-        // Frida Data: Breakdown of how she used the Xolo image
-        const fridaData = {
-            emotional: {
-                labels: ['Compañía / Soledad', 'Hijo Sustituto', 'Protección', 'Conexión Naturaleza'],
-                data: [40, 30, 15, 15],
-                colors: ['#9c4221', '#e53e3e', '#2c7a7b', '#2b6cb0']
-            },
-            symbolic: {
-                labels: ['Alter Ego', 'Guía Mictlán', 'Símbolo Mexicanidad', 'Elemento Decorativo'],
-                data: [45, 25, 25, 5],
-                colors: ['#9c4221', '#1a202c', '#38a169', '#cbd5e0']
-            }
-        };
+            <p>
+              Si Rivera representó al xoloitzcuintle como un icono colectivo de la nación, Frida Kahlo lo transformó en un elemento central de su mitología personal.
+              En la obra de Kahlo, el perro no es un testigo de la historia externa, sino un habitante del espacio psíquico y emocional de la artista. El animal aparece como
+              un confidente en la soledad, un receptor del dolor físico y un sustituto simbólico de los hijos que nunca pudo tener debido a las secuelas de su accidente.
+            </p>
 
-        // Diego Data: Where Xolos appear in his work
-        const diegoData = {
-            labels: ['Murales Históricos', 'Retratos de Sociedad', 'Bocetos Arqueológicos', 'Acuarelas Costumbristas'],
-            data: [55, 10, 25, 10]
-        };
+            <h3>El Abrazo de Amor del Universo: Una Cosmovisión en Capas</h3>
+            <p>
+              En su obra maestra de 1949, <i>El abrazo de amor del Universo, la Tierra (México), Yo, Diego y el Señor Xólotl</i>, Kahlo articula una de las declaraciones más poderosas sobre su identidad
+              y sus afectos. La pintura presenta múltiples niveles de protección: el Universo dual (día y noche) abraza a la Tierra (México), personificada como una mujer indígena con pechos lactantes
+              que brotan leche; a su vez, la Tierra sostiene a Frida, quien mece en sus brazos a un Diego Rivera desnudo y con el tercer ojo de la sabiduría en su frente.
+            </p>
 
-        // Comparison Data: Radar Chart Attributes
-        // Attributes: Intimacy (Personal connection), History (Ref to past), Myth (Ref to religion), Realism (Anatomical), Scale (Size in comp)
-        const comparisonData = {
-            labels: ['Intimidad Psicológica', 'Contexto Histórico', 'Carga Mitológica', 'Realismo Anatómico', 'Escala Monumental'],
-            frida: [95, 20, 60, 40, 10], // High intimacy, low history/monumentality
-            diego: [20, 90, 50, 85, 95]  // High history/monumentality, low intimacy
-        };
+            <p>
+              En la esquina inferior derecha, reposa un xoloitzcuintle, identificado como el perro real de Frida, “Señor Xólotl”. La ubicación del perro no es casual; se encuentra sobre la superficie de la Tierra,
+              actuando como el guardián terrenal de este complejo sistema de afectos. Su presencia vincula la mitología cósmica con la realidad doméstica de Coyoacán. Además, al llevar el nombre del dios de la muerte
+              (Xólotl), el perro introduce una nota de finitud en una escena que, por lo demás, celebra la fertilidad y la vida, recordando la dualidad inherente al pensamiento prehispánico que Frida tanto admiraba.
+            </p>
 
-        // --- CHART INSTANCES ---
-        let fridaChartInstance = null;
-        let diegoChartInstance = null;
-        let comparisonChartInstance = null;
+            <h3>Escuintle y yo: La Mímesis de la Vulnerabilidad</h3>
+            <p>
+              En la pintura <i>Escuintle y yo</i> (1938), Frida explora la identificación física y emocional con el animal. En este autorretrato, la artista aparece sentada, sosteniendo un cigarrillo, mientras un pequeño
+              xoloitzcuintle posa a su lado con una seriedad que imita el gesto de la pintora. La ausencia de pelo en el perro permite observar sus pliegues, su fragilidad ante la temperatura y su piel expuesta, características
+              que Frida sentía como propias tras haber sido sometida a más de treinta operaciones que dejaron su cuerpo “abierto” y vulnerable.
+            </p>
 
-        // --- DOM ELEMENTS ---
-        document.addEventListener('DOMContentLoaded', () => {
-            initCharts();
-            // Show intro tab by default
-        });
+            <p>
+              El xoloitzcuintle se convierte aquí en un alter ego. Al retratarse con él, Kahlo afirma su pertenencia a un linaje de seres que sufren y resisten. La “extrañeza” del perro, su apariencia escultural pero “monstruosa” para
+              los cánones occidentales, resuena con la propia percepción de Frida sobre su cuerpo fragmentado. El perro no juzga sus cicatrices; él mismo es una cicatriz viviente de la historia de México, lo que crea un vínculo de hermandad
+              ontológica entre la artista y su mascota.
+            </p>
 
-        // --- NAVIGATION LOGIC ---
-        function switchTab(tabId) {
-            // Update State
-            state.currentTab = tabId;
+            <h3>El Diario de Frida Kahlo y el Señor Xólotl como Guía Curativo</h3>
+            <p>
+              El diario íntimo de Frida Kahlo ofrece una ventana adicional hacia la importancia del xoloitzcuintle en su proceso de sanación y resistencia política. En sus páginas, Frida realizó al menos cinco dibujos de perros, incluyendo piezas como
+              <i>Xibalba-Alado-Xólotl</i> y <i>Danza al Sol</i>. Estos bocetos, a menudo acompañados de anotaciones automáticas y poemas dirigidos a Diego, muestran que el perro habitaba sus sueños y sus estados de trance inducidos por el dolor y los medicamentos.
+            </p>
 
-            // Update UI: Hide all views, show current
-            document.querySelectorAll('.view-section').forEach(el => {
-                el.classList.add('hidden');
-                el.classList.remove('block', 'animate-fade-in');
-            });
-            const activeView = document.getElementById(`view-${tabId}`);
-            activeView.classList.remove('hidden');
-            activeView.classList.add('block', 'animate-fade-in');
+            <p>
+              Frida escribía sobre el “Señor Xólotl” no solo como una mascota, sino como un “testimonio vivo de su conexión con México”. En momentos de parálisis, el calor del perro sobre sus piernas servía para aliviar la sensación de frío que le provocaba la mala
+              circulación. Esta relación es documentada también por el fotógrafo Nickolas Muray, quien le regaló al Señor Xólotl, reconociendo en el animal el compañero perfecto para la soledad de la pintora. El diario revela que para Frida, la lucha revolucionaria
+              y el dolor personal eran inseparables, y el perro era la “puerta abierta a la inteligencia” y al afecto que le permitía seguir viviendo.
+            </p>
 
-            // Update Nav Styles
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('nav-active', 'text-terracotta');
-                btn.classList.add('text-gray-500');
-            });
-            const activeBtn = document.getElementById(`nav-${tabId}`);
-            activeBtn.classList.add('nav-active', 'text-terracotta');
-            activeBtn.classList.remove('text-gray-500');
+            <div class="tableWrap" role="region" aria-label="Tabla pinturas Kahlo">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Pintura de Frida Kahlo</th>
+                    <th>Año</th>
+                    <th>Elementos de Identidad / Simbología</th>
+                    <th>Función del Xoloitzcuintle</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><b>Escuintle y yo</b></td>
+                    <td>1938</td>
+                    <td>Cigarrillo, mirada directa, soledad</td>
+                    <td>Compañero de soledad y mimetismo corporal.</td>
+                  </tr>
+                  <tr>
+                    <td><b>Autorretrato con changuito</b></td>
+                    <td>1945</td>
+                    <td>Fauna endémica, vegetación densa</td>
+                    <td>Parte de la biodiversidad protectora del yo.</td>
+                  </tr>
+                  <tr>
+                    <td><b>El Abrazo de Amor…</b></td>
+                    <td>1949</td>
+                    <td>Cosmogonía dual, Tierra lactante</td>
+                    <td>Guardián terrenal y símbolo de lealtad.</td>
+                  </tr>
+                  <tr>
+                    <td><b>Naturaleza Muerta</b></td>
+                    <td>1951</td>
+                    <td>Objetos domésticos, frutas mexicanas</td>
+                    <td>Presencia cotidiana y arraigo cultural.</td>
+                  </tr>
+                  <tr>
+                    <td><b>Xibalba-Alado-Xólotl</b></td>
+                    <td>s/f</td>
+                    <td>Mitología, sueños, inframundo</td>
+                    <td>Guía en el espacio onírico y psicopompo.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
-            // Trigger chart resize/update if necessary when tab becomes visible
-            if (tabId === 'frida' && fridaChartInstance) fridaChartInstance.resize();
-            if (tabId === 'diego' && diegoChartInstance) diegoChartInstance.resize();
-            if (tabId === 'compare' && comparisonChartInstance) comparisonChartInstance.resize();
-        }
+            <div class="rule"></div>
 
-        // --- INTERACTIVITY: CARDS ---
-        function highlightCard(element) {
-            // Reset others
-            document.querySelectorAll('.group').forEach(el => el.classList.remove('ring-2', 'ring-terracotta'));
-            // Highlight clicked
-            element.classList.add('ring-2', 'ring-terracotta');
-            
-            // Get content based on title
-            const title = element.querySelector('h3').innerText;
-            const detailBox = document.getElementById('myth-detail');
-            let content = "";
+            <h2 id="foto">La Fotografía como Documento de una Identidad Construida</h2>
 
-            if (title.includes("Guía")) {
-                content = "<strong>El Dato Curioso:</strong> Se creía que si tratabas mal a un perro en vida, el Xolo se negaría a ayudarte a cruzar el río Apanohuacalhuia en el inframundo, dejándote vagar eternamente.";
-            } else if (title.includes("Curandero")) {
-                content = "<strong>El Dato Curioso:</strong> Frida misma usaba a sus Xolos para calentar su cuerpo dolorido tras sus múltiples cirugías de columna. Eran terapia física y emocional.";
-            } else if (title.includes("Identidad")) {
-                content = "<strong>El Dato Curioso:</strong> Diego y Frida regalaron cachorros de Xolo a Dolores Olmedo, quien preservó el linaje. Gracias a ellos, la raza sobrevivió al siglo XX.";
-            }
+            <p>
+              La representación del xoloitzcuintle en el arte de Kahlo y Rivera no se limitó a la pintura; la fotografía desempeñó un papel crucial en la cristalización de su imagen pública como los “herederos de la mexicanidad”.
+              La Casa Azul de Coyoacán funcionó como un escenario donde la pareja recibía a intelectuales y artistas de todo el mundo, siempre acompañados por sus perros.
+            </p>
 
-            detailBox.innerHTML = content;
-            detailBox.classList.remove('hidden');
-            detailBox.classList.add('block', 'animate-pulse-once');
-        }
+            <h3>Lola Álvarez Bravo: La Piel de Obsidiana en Blanco y Negro</h3>
+            <p>
+              Lola Álvarez Bravo capturó algunas de las imágenes más icónicas de Frida con sus xoloitzcuintles en la década de 1940. En la serie tomada en el patio de la Casa Azul, se observa a Frida sentada en el suelo, con su falda de tehuana desplegada,
+              acariciando a sus perros. La técnica de plata sobre gelatina de Álvarez Bravo resalta la textura de la piel de los xolos, que bajo la luz del sol adquiere una apariencia pétrea o metálica.
+            </p>
 
-        // --- CHART INITIALIZATION ---
-        function initCharts() {
-            // 1. Frida Chart (Donut)
-            const ctxFrida = document.getElementById('fridaChart').getContext('2d');
-            fridaChartInstance = new Chart(ctxFrida, {
-                type: 'doughnut',
-                data: {
-                    labels: fridaData.emotional.labels,
-                    datasets: [{
-                        data: fridaData.emotional.data,
-                        backgroundColor: fridaData.emotional.colors,
-                        borderWidth: 0,
-                        hoverOffset: 10
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'right', labels: { boxWidth: 12, font: { family: 'Helvetica Neue', size: 11 } } },
-                        title: { display: true, text: 'Temas en los Autorretratos', font: { size: 14 } }
-                    },
-                    layout: { padding: 10 }
-                }
-            });
+            <p>
+              Estas fotografías no son meros retratos domésticos; son declaraciones políticas. Al posar con estos animales, Frida y Diego afirmaban su rechazo a los estándares de belleza europeos y su abrazo a lo “auténticamente mexicano”.
+              La fotografía permitió que el xoloitzcuintle se asociara indisolublemente con la figura de Frida, convirtiéndose en un atributo iconográfico tan potente como sus cejas unidas o sus trajes regionales.
+            </p>
 
-            // 2. Diego Chart (Bar)
-            const ctxDiego = document.getElementById('diegoChart').getContext('2d');
-            diegoChartInstance = new Chart(ctxDiego, {
-                type: 'bar',
-                data: {
-                    labels: diegoData.labels,
-                    datasets: [{
-                        label: 'Frecuencia de Aparición (%)',
-                        data: diegoData.data,
-                        backgroundColor: '#2c7a7b',
-                        borderRadius: 4,
-                        barThickness: 30
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: { beginAtZero: true, grid: { color: '#f7fafc' } },
-                        x: { grid: { display: false } }
-                    },
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: { callbacks: { label: (ctx) => `${ctx.raw}% de las representaciones` } }
-                    }
-                }
-            });
+            <h3>Otros Testigos Ópticos: De Gisèle Freund a Héctor García</h3>
+            <p>
+              La presencia del canino fue constante en el lente de fotógrafos nacionales y extranjeros. En 1951, Gisèle Freund fotografió a Frida en los jardines de Coyoacán con sus perros y patos, mostrando la armonía que reinaba en su ecosistema privado.
+              Sin embargo, es quizás Héctor García quien, en 1952, capturó la imagen más desgarradora y trascendental: Frida postrada en su cama, abrazando fuertemente a su xoloitzcuintle.
+            </p>
 
-            // 3. Comparison Chart (Radar)
-            const ctxCompare = document.getElementById('comparisonChart').getContext('2d');
-            comparisonChartInstance = new Chart(ctxCompare, {
-                type: 'radar',
-                data: {
-                    labels: comparisonData.labels,
-                    datasets: [
-                        {
-                            label: 'Frida Kahlo',
-                            data: comparisonData.frida,
-                            fill: true,
-                            backgroundColor: 'rgba(156, 66, 33, 0.2)', // Terracotta alpha
-                            borderColor: '#9c4221',
-                            pointBackgroundColor: '#9c4221',
-                            pointBorderColor: '#fff',
-                            pointHoverBackgroundColor: '#fff',
-                            pointHoverBorderColor: '#9c4221'
-                        },
-                        {
-                            label: 'Diego Rivera',
-                            data: comparisonData.diego,
-                            fill: true,
-                            backgroundColor: 'rgba(26, 32, 44, 0.2)', // Obsidian alpha
-                            borderColor: '#1a202c',
-                            pointBackgroundColor: '#1a202c',
-                            pointBorderColor: '#fff',
-                            pointHoverBackgroundColor: '#fff',
-                            pointHoverBorderColor: '#1a202c'
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    elements: { line: { borderWidth: 3 } },
-                    scales: {
-                        r: {
-                            angleLines: { color: '#e2e8f0' },
-                            grid: { color: '#e2e8f0' },
-                            pointLabels: {
-                                font: { size: 12, weight: 'bold', family: 'Helvetica Neue' },
-                                color: '#4a5568'
-                            },
-                            ticks: { display: false, max: 100 }
-                        }
-                    }
-                }
-            });
-        }
+            <p>
+              En esta etapa final de su vida, cuando la desintegración física era inminente —tras la amputación de su pierna en 1953—, el perro se convirtió en su ancla con la realidad. La foto de García documenta la función psicopompa del animal en tiempo real;
+              el perro no se separa de su dueña, cumpliendo su promesa mitológica de no dejarla sola en el umbral de la muerte. Esta imagen cierra el ciclo de representaciones del xoloitzcuintle en la vida de Kahlo, pasando del juego y la ostentación cultural
+              a la compañía existencial más profunda.
+            </p>
 
-        // --- CHART UPDATE FUNCTIONS ---
-        
-        function updateFridaData(mode) {
-            const data = fridaData[mode];
-            fridaChartInstance.data.labels = data.labels;
-            fridaChartInstance.data.datasets[0].data = data.data;
-            fridaChartInstance.data.datasets[0].backgroundColor = data.colors;
-            fridaChartInstance.update();
-        }
+            <div class="rule"></div>
 
-        function toggleRadarDataset() {
-            // Simple toggle logic: Hide Frida -> Hide Diego -> Show Both
-            const metaFrida = comparisonChartInstance.getDatasetMeta(0);
-            const metaDiego = comparisonChartInstance.getDatasetMeta(1);
+            <h2 id="olmedo">Dolores Olmedo y la Institucionalización del Legado Canino</h2>
 
-            if (state.radarVisible === 'both') {
-                metaDiego.hidden = true;
-                state.radarVisible = 'frida';
-            } else if (state.radarVisible === 'frida') {
-                metaFrida.hidden = true;
-                metaDiego.hidden = false;
-                state.radarVisible = 'diego';
-            } else {
-                metaFrida.hidden = false;
-                metaDiego.hidden = false;
-                state.radarVisible = 'both';
-            }
-            comparisonChartInstance.update();
-        }
+            <p>
+              La historia del xoloitzcuintle en el arte de Rivera y Kahlo no termina con su fallecimiento. La figura de Dolores Olmedo, mecenas y amiga íntima de Diego Rivera, fue fundamental para que la representación artística del perro se transformara en una labor
+              de conservación biológica y cultural.
+            </p>
 
-    </script>
+            <h3>El Encargo de Diego y el Criadero de La Noria</h3>
+            <p>
+              Poco antes de morir en 1957, Diego Rivera le confió a Dolores Olmedo una misión especial: la preservación de la raza xoloitzcuintle. Rivera le regaló a Olmedo sus ejemplares y le pidió que continuara su crianza para evitar que el símbolo de la nación
+              volviera a caer en el olvido. Olmedo cumplió con este deseo en su finca de Xochimilco, La Noria, donde hoy se ubica el Museo Dolores Olmedo.
+            </p>
+
+            <p>
+              Hoy en día, el museo no solo alberga la colección más grande de obras de Rivera y Kahlo, sino que mantiene una manada de trece xoloitzcuintles que habitan sus jardines de forma permanente. Estos perros son descendientes directos de los canes de Rivera,
+              lo que convierte al museo en una “institución viva”. La presencia física de los perros entre las esculturas prehispánicas y las pinturas de los maestros crea una experiencia estética inmersiva que refuerza la idea de Rivera de que el arte y la vida indígena
+              son una continuidad indivisible.
+            </p>
+
+            <figure class="heroCard" style="margin:18px 0;">
+              <img class="media" style="aspect-ratio:16/10" src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Xoloitzcuintles_en_el_Museo_Dolores_Olmedo_Pati%C3%B1o_%28M%C3%A9xico%2C_D.F.%29_10.JPG" alt="Xoloitzcuintles en los jardines del Museo Dolores Olmedo en Ciudad de México"/>
+              <figcaption class="figcap">
+                Xoloitzcuintles en el Museo Dolores Olmedo: el símbolo se vuelve “presencia viva” y continuidad biocultural.
+              </figcaption>
+            </figure>
+
+            <div class="tableWrap" role="region" aria-label="Tabla instituciones">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Institución / Espacio</th>
+                    <th>Relación con el Xoloitzcuintle</th>
+                    <th>Importancia para el Arte / Historia</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><b>Museo Casa Azul</b></td>
+                    <td>Hogar original de los perros de Frida y Diego.</td>
+                    <td>Conservación del entorno íntimo de creación.</td>
+                  </tr>
+                  <tr>
+                    <td><b>Museo Anahuacalli</b></td>
+                    <td>Colección de perros de cerámica de Colima.</td>
+                    <td>Estudio de la iconografía canina prehispánica.</td>
+                  </tr>
+                  <tr>
+                    <td><b>Museo Dolores Olmedo</b></td>
+                    <td>Criadero de descendientes de los perros de Rivera.</td>
+                    <td>Preservación biológica del símbolo cultural.</td>
+                  </tr>
+                  <tr>
+                    <td><b>Palacio Nacional</b></td>
+                    <td>Murales con representaciones históricas del can.</td>
+                    <td>Educación pública sobre la raíz indígena.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="rule"></div>
+
+            <h2>Análisis Comparativo: Visión Pública vs. Visión Íntima</h2>
+
+            <p>
+              Al contrastar las representaciones del xoloitzcuintle en ambos artistas, emerge una dialéctica fundamental del modernismo mexicano. Diego Rivera utiliza al perro para construir una narrativa nacional. En sus manos, el xolo es un documento, una prueba de la
+              resiliencia del pueblo mexicano. Su técnica muralista, de formas sólidas y monumentales, trata al perro con la misma importancia que a los líderes revolucionarios o a los trabajadores, integrándolo en la gran épica de la lucha de clases y la soberanía cultural.
+            </p>
+
+            <p>
+              Frida Kahlo, por el contrario, utiliza al perro para construir una narrativa del yo. Para ella, el xolo es un espejo, una extensión de su sistema nervioso y una herramienta para procesar su soledad y su maternidad frustrada. Mientras Rivera mira hacia afuera,
+              hacia la plaza pública y el mercado, Kahlo mira hacia adentro, hacia la recámara y el jardín cerrado de Coyoacán. El perro es el único testigo que cruza ambas fronteras, siendo al mismo tiempo un icono de la patria para Diego y un refugio de ternura para Frida.
+            </p>
+
+            <h2>El Xoloitzcuintle en la Era Contemporánea: De la Revolución a la Cultura Pop</h2>
+
+            <p>
+              El esfuerzo de Rivera y Kahlo por dignificar al xoloitzcuintle ha tenido un impacto que se extiende hasta el siglo XXI. La raza, que estuvo a punto de desaparecer, goza hoy de un renacimiento impulsado por su estatus como ícono artístico.
+              En 1956, fue oficialmente reconocido como símbolo cultural nacional, un título que encaja perfectamente con su presencia en los museos.
+            </p>
+
+            <p>
+              La cultura popular global ha heredado esta iconografía. Películas como <i>Coco</i> de Pixar (2017) han llevado la función psicopompa del xoloitzcuintle a audiencias mundiales, utilizando el personaje de “Dante” de una manera que resuena directamente con la
+              espiritualidad prehispánica que Rivera y Kahlo buscaron proteger. El perro ha pasado de ser un habitante de los murales a ser un protagonista de la industria del entretenimiento, validando la visión de los artistas sobre la potencia simbólica de este animal.
+            </p>
+
+            <div class="rule"></div>
+
+            <h2 id="conclusion">Conclusión: El Triunfo de la Estética de la Desnudez</h2>
+
+            <p>
+              La investigación sobre las representaciones del xoloitzcuintle en el arte de Frida Kahlo y Diego Rivera revela que el perro no fue un elemento decorativo, sino un actor político y emocional de primer orden. Rivera lo rescató de la oscuridad histórica para ponerlo
+              al servicio de la educación del pueblo, convirtiéndolo en un pilar de la arqueología viviente. Kahlo lo integró en su lenguaje del dolor y la identidad, transformándolo en un símbolo de resiliencia y en su compañero final hacia el inframundo.
+            </p>
+
+            <p>
+              Gracias a su intervención, el xoloitzcuintle dejó de ser percibido como una criatura “extraña” para ser valorado como una obra de arte biológica, una escultura de piel y hueso que camina entre nosotros. El legado de la pareja, custodiado por instituciones como el
+              Museo Dolores Olmedo y el Anahuacalli, garantiza que el xoloitzcuintle siga siendo el guardián de la memoria de México, recordándonos que la verdadera modernidad no consiste en imitar modelos extranjeros, sino en abrazar con orgullo la propia piel, por más desnuda y
+              arrugada que esta sea.
+            </p>
+
+            <div class="note">
+              <b>Nota editorial:</b> este HTML está listo para pegarse en tu blog/servidor. Si lo quieres como página “interactiva” (con tabs, timeline, lightbox de imágenes, etc.), dímelo y lo adapto.
+            </div>
+
+            <footer>
+              <div class="credits">
+                <b>Créditos de imágenes (fuentes y licencias):</b><br/>
+                1) Foto Rivera + xolo (Google Art Project / Commons). <code>upload.wikimedia.org/.../Diego_Rivera_with_a_xoloitzcuintle...</code><br/>
+                2) Museo Anahuacalli (PD-self / Commons). <code>upload.wikimedia.org/.../Anahuacalli_museum_mexico_city.JPG</code><br/>
+                3) Xoloitzcuintles en Museo Dolores Olmedo (CC BY-SA 3.0 / Commons). <code>upload.wikimedia.org/.../Xoloitzcuintles_en_el_Museo_Dolores_Olmedo...</code><br/>
+                4) “Perrito de Colima” (PDM / Commons). <code>upload.wikimedia.org/.../Pot-bellied_Dog_Figure...IMG_7646.JPG</code><br/>
+                5) Grupo de xoloitzcuintles (CC BY-SA 2.0 / Commons). <code>upload.wikimedia.org/.../Mexico.Xoloitzcuintle.01.jpg</code>
+              </div>
+            </footer>
+
+          </div>
+        </article>
+
+        <aside aria-label="Panel lateral">
+          <div class="asidePad">
+            <div class="tocTitle">
+              <span>Índice rápido</span>
+              <span aria-hidden="true">↘</span>
+            </div>
+            <nav class="toc" aria-label="Tabla de contenidos">
+              <a href="#inicio">Inicio / Tesis central</a>
+              <a href="#sustrato">Sustrato mitológico (Mictlán)</a>
+              <a href="#rivera">Diego Rivera (visión pública)</a>
+              <a href="#kahlo">Frida Kahlo (visión íntima)</a>
+              <a href="#foto">Fotografía (identidad construida)</a>
+              <a href="#olmedo">Dolores Olmedo (institución viva)</a>
+              <a href="#conclusion">Conclusión</a>
+            </nav>
+
+            <div class="asideCard" aria-label="Imagen: perrito de Colima">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/b/bd/Pot-bellied_Dog_Figure%2C_Mexico%2C_State_of_Colima%2C_200_BC_-_500_AD%2C_ceramic%2C_Pre-Columbian_collection%2C_Worcester_Art_Museum_-_IMG_7646.JPG" alt="Figura cerámica precolombina tipo 'perrito de Colima'"/>
+              <div class="cap">
+                “Perrito de Colima”: el antecedente material que Rivera convierte en “arqueología vivificada”.
+              </div>
+            </div>
+
+            <div class="asideCard" aria-label="Imagen: grupo de xolos">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/c/c2/Mexico.Xoloitzcuintle.01.jpg" alt="Tres xoloitzcuintles en exterior"/>
+              <div class="cap">
+                El xolo como “escultura biológica”: forma, piel y presencia como signo estético.
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
 </body>
 </html>
