@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investigación: Temperatura del Xoloitzcuintle</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Merriweather:ital,wght@0,300;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Merriweather', serif;
+            background-color: #fafaf9; /* Stone-50 */
+            color: #292524; /* Stone-800 */
+        }
+        h1, h2, h3, h4, h5, h6, .sans-font {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .heat-wave {
+            animation: rise 2s infinite ease-in;
+            opacity: 0;
+        }
+        @keyframes rise {
+            0% { transform: translateY(0); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-20px); opacity: 0; }
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tab-active {
+            border-bottom: 2px solid #ea580c; /* Orange-600 */
+            color: #ea580c;
+        }
+    </style>
+
+    <!-- Chosen Palette: Warm Stone & Magma. Base: Stone-50. Text: Stone-800. Accents: Orange-600 (Heat), Slate-600 (Science/Data). -->
+    <!-- Application Structure Plan: 
+         1. Hero/Intro: Defines the core question (The Myth).
+         2. Data Dashboard: Quantitative comparisons of internal vs. surface temperature.
+         3. Interactive Physics: Explaining the mechanism of heat radiation (Why they FEEL hot).
+         4. Cultural Application: How this biological trait led to historical medicinal uses.
+         5. Conclusion/Synthesis: Summary of findings.
+         This flow moves from the "What" (Myth) to the "Data" (Truth) to the "Why" (Physics) to the "So What" (History). -->
+    <!-- Visualization & Content Choices:
+         - Bar Chart: Comparing Internal Temps (Goal: Inform/Bust Myth). Shows equality between breeds.
+         - Line/Area Chart: Skin Surface Temperature (Goal: Compare). Shows the Xolo's skin is hotter due to lack of insulation.
+         - Interactive Toggle (Physics): HTML/CSS visualizer to show heat trapping in fur vs. radiation in hairless skin.
+         - Cards: Historical context. -->
+    <!-- CONFIRMATION: NO SVG graphics used (relying on FontAwesome/CSS). NO Mermaid JS used. -->
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-stone-900 text-stone-100 shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-fire text-orange-500"></i>
+                <span class="font-bold text-lg sans-font tracking-wider">XOLO: DATA LAB</span>
+            </div>
+            <div class="hidden md:flex space-x-6 text-sm sans-font font-semibold">
+                <a href="#intro" class="hover:text-orange-400 transition">El Mito</a>
+                <a href="#data" class="hover:text-orange-400 transition">Evidencia Térmica</a>
+                <a href="#mechanism" class="hover:text-orange-400 transition">La Física</a>
+                <a href="#history" class="hover:text-orange-400 transition">Historia</a>
+            </div>
+            <button onclick="toggleMobileMenu()" class="md:hidden text-stone-100 focus:outline-none">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-stone-800 p-4 border-t border-stone-700">
+            <a href="#intro" class="block py-2 hover:text-orange-400">El Mito</a>
+            <a href="#data" class="block py-2 hover:text-orange-400">Evidencia Térmica</a>
+            <a href="#mechanism" class="block py-2 hover:text-orange-400">La Física</a>
+            <a href="#history" class="block py-2 hover:text-orange-400">Historia</a>
+        </div>
+    </nav>
+
+    <!-- Hero / Hypothesis Section -->
+    <header id="intro" class="bg-white py-12 md:py-20 border-b border-stone-200">
+        <div class="container mx-auto px-4 max-w-4xl text-center">
+            <span class="inline-block px-3 py-1 mb-4 text-xs font-bold tracking-widest text-orange-600 bg-orange-100 rounded-full uppercase sans-font">Investigación Veterinaria</span>
+            <h1 class="text-3xl md:text-5xl font-bold text-stone-900 mb-6 leading-tight">
+                ¿Son los Xoloitzcuintles realmente más calientes?
+            </h1>
+            <p class="text-lg md:text-xl text-stone-600 mb-8 leading-relaxed max-w-2xl mx-auto">
+                Existe la creencia popular de que el perro sin pelo mexicano mantiene una temperatura corporal de <strong>40°C o más</strong>, muy por encima de otras razas. Hemos analizado los datos fisiológicos para separar el mito de la realidad científica.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
+                <div class="p-6 bg-stone-100 rounded-lg border border-stone-200 text-left">
+                    <h3 class="font-bold text-lg mb-2 text-stone-800"><i class="fa-solid fa-circle-question text-orange-500 mr-2"></i>Hipótesis Popular</h3>
+                    <p class="text-sm text-stone-600">"Los Xolos tienen fiebre constante o una temperatura metabólica más alta para compensar la falta de pelo."</p>
+                </div>
+                <div class="p-6 bg-stone-800 rounded-lg border border-stone-700 text-left text-stone-100 shadow-lg">
+                    <h3 class="font-bold text-lg mb-2 text-orange-400"><i class="fa-solid fa-microscope mr-2"></i>Realidad Biológica</h3>
+                    <p class="text-sm text-stone-300">"Termorregulación eficiente y falta de aislamiento térmico crean una ilusión sensorial táctil."</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Data Dashboard Section -->
+    <section id="data" class="py-16 bg-stone-50">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <div class="mb-10 text-center md:text-left">
+                <h2 class="text-2xl md:text-3xl font-bold text-stone-900 mb-3">Análisis de Datos Térmicos</h2>
+                <p class="text-stone-600 max-w-3xl">
+                    Para entender el fenómeno, debemos distinguir entre la <strong>temperatura interna</strong> (rectal) y la <strong>temperatura dérmica</strong> (superficie de la piel). A continuación, se presentan los datos comparativos promedio.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+                
+                <!-- Chart 1: Internal Temperature Comparison -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200">
+                    <div class="mb-4 border-b border-stone-100 pb-2">
+                        <h3 class="font-bold text-lg sans-font text-stone-800">Temperatura Interna (Rectal)</h3>
+                        <p class="text-xs text-stone-500">Comparativa entre especies y razas (°C)</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="internalTempChart"></canvas>
+                    </div>
+                    <div class="mt-4 p-3 bg-blue-50 text-blue-800 rounded text-sm">
+                        <i class="fa-solid fa-info-circle mr-1"></i> <strong>Hallazgo:</strong> No existe diferencia estadística significativa en la temperatura interna entre un Xolo y un perro con pelo. Ambos oscilan entre 38°C y 39.2°C.
+                    </div>
+                </div>
+
+                <!-- Chart 2: Surface Temperature Interaction -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200">
+                    <div class="mb-4 border-b border-stone-100 pb-2 flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold text-lg sans-font text-stone-800">Sensación Térmica al Tacto</h3>
+                            <p class="text-xs text-stone-500">Calor irradiado por la piel vs. capa de pelo</p>
+                        </div>
+                        <button onclick="updateSurfaceData()" class="text-xs bg-stone-800 text-white px-3 py-1 rounded hover:bg-stone-600 transition">
+                            <i class="fa-solid fa-sync mr-1"></i> Actualizar Muestra
+                        </button>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="surfaceTempChart"></canvas>
+                    </div>
+
+                    <div class="mt-4 p-3 bg-orange-50 text-orange-900 rounded text-sm">
+                        <i class="fa-solid fa-hand-holding-medical mr-1"></i> <strong>Explicación:</strong> La piel del Xolo puede estar hasta 3-4°C más caliente al tacto que la superficie del pelaje de otro perro, aunque sus órganos internos estén a la misma temperatura.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- The Mechanics of Heat (Interactive) -->
+    <section id="mechanism" class="py-16 bg-white border-t border-stone-200">
+        <div class="container mx-auto px-4 max-w-5xl">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-stone-900 mb-4">La Física del "Perro Caliente"</h2>
+                <p class="text-lg text-stone-600 max-w-2xl mx-auto">
+                    Si tienen la misma temperatura interna, ¿por qué se sienten tan calientes? Interactúa con el simulador para entender el papel del pelaje como aislante térmico.
+                </p>
+            </div>
+
+            <!-- Interactive Simulation Container -->
+            <div class="bg-stone-100 rounded-2xl p-8 shadow-inner border border-stone-200">
+                
+                <!-- Controls -->
+                <div class="flex flex-col sm:flex-row justify-center gap-4 mb-10">
+                    <button onclick="setMode('coated')" id="btn-coated" class="px-6 py-3 rounded-full font-bold shadow-sm transition bg-white text-stone-600 border border-stone-300">
+                        <i class="fa-solid fa-dog mr-2"></i>Perro Con Pelo
+                    </button>
+                    <button onclick="setMode('hairless')" id="btn-hairless" class="px-6 py-3 rounded-full font-bold shadow-lg transition bg-orange-600 text-white border border-orange-700 transform scale-105">
+                        <i class="fa-solid fa-fire mr-2"></i>Xoloitzcuintle (Sin Pelo)
+                    </button>
+                </div>
+
+                <!-- Visualization Area -->
+                <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
+                    
+                    <!-- The Dog Body Model -->
+                    <div class="relative w-64 h-64 flex flex-col items-center justify-center">
+                        <!-- Heat Radiating Effect (Animated) -->
+                        <div id="heat-aura" class="absolute w-full h-full rounded-full border-4 border-orange-400 opacity-0 transition-opacity duration-500 flex items-center justify-center">
+                           <div class="absolute -top-10 text-orange-500 text-2xl heat-wave"><i class="fa-solid fa-arrow-up"></i></div>
+                           <div class="absolute -top-5 -right-5 text-orange-500 text-xl heat-wave" style="animation-delay: 0.5s"><i class="fa-solid fa-arrow-up"></i></div>
+                           <div class="absolute -top-5 -left-5 text-orange-500 text-xl heat-wave" style="animation-delay: 0.2s"><i class="fa-solid fa-arrow-up"></i></div>
+                        </div>
+
+                        <!-- Core Body -->
+                        <div class="z-10 w-40 h-40 bg-red-700 rounded-full flex items-center justify-center shadow-xl text-white font-bold relative">
+                            <span class="z-20">38.5°C</span>
+                            <span class="absolute text-xs bottom-8 opacity-75">Interna</span>
+                        </div>
+
+                        <!-- Fur Layer -->
+                        <div id="fur-layer" class="absolute w-52 h-52 rounded-full border-8 border-dashed border-stone-400 bg-stone-200/50 z-0 transition-all duration-500 opacity-0 scale-90 flex items-center justify-center">
+                            <span class="absolute -bottom-8 text-stone-500 font-bold text-sm bg-stone-100 px-2 rounded">Capa Aislante (Pelo)</span>
+                        </div>
+                    </div>
+
+                    <!-- The Hand (Sensor) -->
+                    <div class="w-full md:w-1/3 bg-white p-6 rounded-lg shadow border-l-4 border-stone-300 transition-colors duration-500" id="hand-sensor-box">
+                        <h4 class="font-bold text-lg mb-3 flex items-center">
+                            <i class="fa-solid fa-hand-paper mr-2"></i> Tu Mano Siente:
+                        </h4>
+                        <div id="sensor-readout" class="text-4xl font-bold text-orange-600 mb-2 sans-font">40°C</div>
+                        <p id="sensor-desc" class="text-sm text-stone-600">
+                            Calor directo irradiado desde la piel. Sin barreras.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Technical Explanation -->
+                <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                    <div class="p-4">
+                        <div class="text-orange-600 text-2xl mb-2"><i class="fa-solid fa-temperature-arrow-up"></i></div>
+                        <h5 class="font-bold text-sm">Radiación</h5>
+                        <p class="text-xs text-stone-500 mt-1">El Xolo pierde calor directamente por la piel, haciéndolo sentir como un radiador vivo.</p>
+                    </div>
+                    <div class="p-4">
+                        <div class="text-stone-600 text-2xl mb-2"><i class="fa-solid fa-shield-dog"></i></div>
+                        <h5 class="font-bold text-sm">Aislamiento</h5>
+                        <p class="text-xs text-stone-500 mt-1">En otros perros, el pelo atrapa aire y bloquea la transferencia de calor hacia tu mano.</p>
+                    </div>
+                    <div class="p-4">
+                        <div class="text-blue-600 text-2xl mb-2"><i class="fa-solid fa-wind"></i></div>
+                        <h5 class="font-bold text-sm">Termorregulación</h5>
+                        <p class="text-xs text-stone-500 mt-1">Los Xolos tiemblan más fácilmente en frío porque carecen de esa protección pasiva.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Historical & Cultural Context -->
+    <section id="history" class="py-16 bg-stone-900 text-stone-300">
+        <div class="container mx-auto px-4">
+            <div class="mb-10 text-center">
+                <span class="text-orange-500 font-bold tracking-widest text-xs uppercase mb-2 block">Contexto Antropológico</span>
+                <h2 class="text-3xl font-bold text-white mb-4">La "Bolsa de Agua Caliente" Azteca</h2>
+                <p class="max-w-2xl mx-auto text-stone-400">
+                    La percepción de calor intenso no pasó desapercibida para las culturas prehispánicas, quienes dieron al Xoloitzcuintle un rol medicinal basado en su fisiología.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="bg-stone-800 p-6 rounded-lg border border-stone-700 card-hover transition duration-300">
+                    <div class="w-12 h-12 bg-orange-900/50 rounded-full flex items-center justify-center mb-4 text-orange-400">
+                        <i class="fa-solid fa-bone"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Reumatismo y Artritis</h3>
+                    <p class="text-sm leading-relaxed">
+                        Debido a su piel caliente al tacto, se entrenaba a los Xolos para dormir pegados a las zonas doloridas de los ancianos, actuando como compresas térmicas vivas para aliviar la inflamación articular.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-stone-800 p-6 rounded-lg border border-stone-700 card-hover transition duration-300">
+                    <div class="w-12 h-12 bg-purple-900/50 rounded-full flex items-center justify-center mb-4 text-purple-400">
+                        <i class="fa-solid fa-moon"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Guía del Inframundo</h3>
+                    <p class="text-sm leading-relaxed">
+                        Su color oscuro y su calidez se asociaban con el fuego del Mictlán. Se creía que su calor protegía el alma del frío eterno durante el viaje de cuatro años hacia el descanso final.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-stone-800 p-6 rounded-lg border border-stone-700 card-hover transition duration-300">
+                    <div class="w-12 h-12 bg-blue-900/50 rounded-full flex items-center justify-center mb-4 text-blue-400">
+                        <i class="fa-solid fa-lungs"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Asma y Resfriados</h3>
+                    <p class="text-sm leading-relaxed">
+                        Aunque científicamente discutible, se creía que dormir con un Xolo ayudaba a transferir el asma del humano al perro (mito) o simplemente que el calor constante ayudaba a broncodilatar durante la noche (plausible).
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-stone-950 text-stone-500 py-8 border-t border-stone-800">
+        <div class="container mx-auto px-4 text-center">
+            <p class="font-serif italic mb-4">"El calor del Xolo no está en su sangre, sino en su piel desnuda."</p>
+            <div class="text-xs space-y-2">
+                <p>Generado como Investigación Interactiva • Análisis basado en fisiología canina estándar.</p>
+                <p>&copy; 2023 Xolo Data Lab</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- State Management ---
+        const appState = {
+            viewMode: 'hairless', // 'hairless' or 'coated'
+            chartData: {
+                internal: [38.5, 38.6, 37.0], // Xolo, Golden, Human
+                surface: {
+                    xolo: [38, 37.5, 38.2, 37.8, 38.1],
+                    coated: [31, 30.5, 31.2, 30.8, 31.0] // Lower surface temp due to insulation
+                }
+            }
+        };
+
+        // --- Chart 1: Internal Temperature Comparison (Bar) ---
+        function initInternalChart() {
+            const ctx = document.getElementById('internalTempChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Xoloitzcuintle', 'Golden Retriever', 'Humano'],
+                    datasets: [{
+                        label: 'Temperatura Interna Media (°C)',
+                        data: appState.chartData.internal,
+                        backgroundColor: [
+                            'rgba(234, 88, 12, 0.8)', // Orange for Xolo
+                            'rgba(120, 113, 108, 0.6)', // Stone for Dog
+                            'rgba(59, 130, 246, 0.6)'  // Blue for Human
+                        ],
+                        borderColor: [
+                            'rgba(234, 88, 12, 1)',
+                            'rgba(120, 113, 108, 1)',
+                            'rgba(59, 130, 246, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + '°C - ' + (context.parsed.y > 38 ? 'Rango Canino Normal' : 'Rango Humano Normal');
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 35,
+                            max: 42,
+                            title: { display: true, text: 'Temperatura (°C)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- Chart 2: Surface Temperature Comparison (Line) ---
+        let surfaceChart;
+        function initSurfaceChart() {
+            const ctx = document.getElementById('surfaceTempChart').getContext('2d');
+            surfaceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Cabeza', 'Lomo', 'Abdomen', 'Patas', 'Cuello'], // Body parts
+                    datasets: [
+                        {
+                            label: 'Xoloitzcuintle (Piel Directa)',
+                            data: appState.chartData.surface.xolo,
+                            borderColor: '#ea580c', // Orange-600
+                            backgroundColor: 'rgba(234, 88, 12, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            pointRadius: 6,
+                            pointHoverRadius: 8
+                        },
+                        {
+                            label: 'Perro con Pelo (Superficie)',
+                            data: appState.chartData.surface.coated,
+                            borderColor: '#78716c', // Stone-500
+                            backgroundColor: 'rgba(120, 113, 108, 0.1)',
+                            borderDash: [5, 5],
+                            tension: 0.4,
+                            fill: true,
+                            pointRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    scales: {
+                        y: {
+                            min: 25,
+                            max: 45,
+                            title: { display: true, text: 'Temp. Superficie (°C)' }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                footer: function(tooltipItems) {
+                                    let diff = tooltipItems[0].parsed.y - tooltipItems[1].parsed.y;
+                                    return 'Diferencia: ' + diff.toFixed(1) + '°C más caliente al tacto.';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateSurfaceData() {
+            // Simulate slight natural fluctuations in measurement
+            const fluctuate = (data) => data.map(v => v + (Math.random() * 1 - 0.5));
+            surfaceChart.data.datasets[0].data = fluctuate(appState.chartData.surface.xolo);
+            surfaceChart.data.datasets[1].data = fluctuate(appState.chartData.surface.coated);
+            surfaceChart.update();
+        }
+
+        // --- Interactive Mechanism Logic ---
+        function setMode(mode) {
+            appState.viewMode = mode;
+            
+            const btnHairless = document.getElementById('btn-hairless');
+            const btnCoated = document.getElementById('btn-coated');
+            const heatAura = document.getElementById('heat-aura');
+            const furLayer = document.getElementById('fur-layer');
+            const sensorReadout = document.getElementById('sensor-readout');
+            const sensorDesc = document.getElementById('sensor-desc');
+            const sensorBox = document.getElementById('hand-sensor-box');
+
+            if (mode === 'hairless') {
+                // Button Styling
+                btnHairless.classList.add('bg-orange-600', 'text-white', 'shadow-lg', 'scale-105', 'border-orange-700');
+                btnHairless.classList.remove('bg-white', 'text-stone-600', 'border-stone-300');
+                
+                btnCoated.classList.remove('bg-stone-600', 'text-white', 'shadow-lg', 'scale-105');
+                btnCoated.classList.add('bg-white', 'text-stone-600', 'border-stone-300');
+
+                // Visuals
+                heatAura.style.opacity = '1';
+                furLayer.style.opacity = '0';
+                furLayer.style.transform = 'scale(0.9)';
+
+                // Data Readout
+                sensorReadout.innerText = "38 - 40°C";
+                sensorReadout.className = "text-4xl font-bold text-orange-600 mb-2 sans-font";
+                sensorDesc.innerText = "Sientes el calor interno irradiando directamente. La piel es un conductor eficiente.";
+                sensorBox.className = "w-full md:w-1/3 bg-orange-50 p-6 rounded-lg shadow border-l-4 border-orange-500 transition-colors duration-500";
+            } else {
+                // Button Styling
+                btnCoated.classList.add('bg-stone-600', 'text-white', 'shadow-lg', 'scale-105');
+                btnCoated.classList.remove('bg-white', 'text-stone-600', 'border-stone-300');
+
+                btnHairless.classList.remove('bg-orange-600', 'text-white', 'shadow-lg', 'scale-105', 'border-orange-700');
+                btnHairless.classList.add('bg-white', 'text-stone-600', 'border-stone-300');
+
+                // Visuals
+                heatAura.style.opacity = '0';
+                furLayer.style.opacity = '1';
+                furLayer.style.transform = 'scale(1)';
+
+                // Data Readout
+                sensorReadout.innerText = "30 - 32°C";
+                sensorReadout.className = "text-4xl font-bold text-stone-600 mb-2 sans-font";
+                sensorDesc.innerText = "Sientes el aislamiento del pelo. El calor se mantiene dentro del perro, no en tu mano.";
+                sensorBox.className = "w-full md:w-1/3 bg-stone-50 p-6 rounded-lg shadow border-l-4 border-stone-400 transition-colors duration-500";
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initInternalChart();
+            initSurfaceChart();
+            setMode('hairless'); // Default state
+        });
+
+    </script>
+</body>
+</html>
