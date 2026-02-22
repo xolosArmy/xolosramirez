@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protección Térmica: El Xoloitzcuintle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Chart Container Styling as per requirements */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        
+        /* Custom Utilities */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(231, 229, 228, 0.5);
+        }
+        
+        body {
+            background-color: #fcfbf9; /* Warm neutral background */
+            color: #44403c; /* Stone 700 for text */
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        .active-tab {
+            border-bottom: 2px solid #ea580c; /* Orange 600 */
+            color: #ea580c;
+            font-weight: 600;
+        }
+    </style>
+    <!-- Chosen Palette: Tierra Caliente (Warm Neutrals & Terracotta) -->
+    <!-- Application Structure Plan: 
+         1. Hero Section: Emotional hook and introduction to the Xolo's unique physiology.
+         2. Thermal Vulnerability Analysis: Data visualization comparing Xolos to coated dogs to justify the need for clothing.
+         3. Interactive Wardrobe Calculator: The core tool. Users input environmental conditions to get specific clothing recommendations. This turns static report rules into actionable advice.
+         4. Material Science: Interactive comparison of fabrics (Warmth vs. Sensitivity) to prevent skin issues.
+         5. Measurement Guide: A functional interaction to teach users how to measure their dog correctly.
+         6. Care Checklist: Daily maintenance routine.
+         Why: This structure moves from "Why" (Physiology) to "What" (Calculator) to "How" (Materials/Sizing), prioritizing the user's immediate need to keep their pet safe.
+    -->
+    <!-- Visualization & Content Choices:
+         - Vulnerability Chart (Bar Chart): Shows heat loss rates. Goal: Inform/Convince.
+         - Material Radar (Radar Chart): Compares fabric properties (Warmth, Breathability, Softness). Goal: Compare/Select.
+         - Calculator (JS Logic): Dynamic text/icon output based on inputs. Goal: Personalize/Inform.
+         - Measurement Guide (CSS/HTML Interactive): Toggles to show measure points. Goal: Instruct.
+         - Care Checklist (Interactive List): Checkboxes. Goal: Track/Verify.
+         - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+</head>
+<body class="bg-stone-50 min-h-screen flex flex-col">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 glass-panel shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center">
+                    <span class="text-2xl font-bold text-stone-800">Xolo<span class="text-orange-600">Guard</span></span>
+                </div>
+                <div class="hidden sm:flex space-x-8" id="desktop-nav">
+                    <button onclick="scrollToSection('hero')" class="text-stone-600 hover:text-orange-600 px-3 py-2 text-sm font-medium">Inicio</button>
+                    <button onclick="scrollToSection('why-clothing')" class="text-stone-600 hover:text-orange-600 px-3 py-2 text-sm font-medium">Fisiología</button>
+                    <button onclick="scrollToSection('calculator')" class="text-stone-600 hover:text-orange-600 px-3 py-2 text-sm font-medium">Calculadora</button>
+                    <button onclick="scrollToSection('materials')" class="text-stone-600 hover:text-orange-600 px-3 py-2 text-sm font-medium">Materiales</button>
+                    <button onclick="scrollToSection('care')" class="text-stone-600 hover:text-orange-600 px-3 py-2 text-sm font-medium">Cuidados</button>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="sm:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-stone-600 hover:text-orange-600 focus:outline-none">
+                        <span class="text-2xl">☰</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Nav Panel -->
+        <div id="mobile-nav" class="hidden sm:hidden bg-white border-t border-stone-200">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <button onclick="scrollToSection('hero')" class="block w-full text-left px-3 py-2 text-base font-medium text-stone-700 hover:bg-stone-50">Inicio</button>
+                <button onclick="scrollToSection('why-clothing')" class="block w-full text-left px-3 py-2 text-base font-medium text-stone-700 hover:bg-stone-50">Fisiología</button>
+                <button onclick="scrollToSection('calculator')" class="block w-full text-left px-3 py-2 text-base font-medium text-stone-700 hover:bg-stone-50">Calculadora</button>
+                <button onclick="scrollToSection('materials')" class="block w-full text-left px-3 py-2 text-base font-medium text-stone-700 hover:bg-stone-50">Materiales</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="pt-10 pb-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+        <div class="text-center space-y-6">
+            <div class="inline-block bg-orange-100 text-orange-800 px-4 py-1 rounded-full text-sm font-semibold tracking-wide uppercase">Informe Veterinario Especializado</div>
+            
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-stone-900 tracking-tight">
+                Protección contra el Frío: <br>
+                <span class="text-orange-600">El Xoloitzcuintle</span>
+            </h1>
+            <p class="max-w-2xl mx-auto text-lg text-stone-600">
+                A diferencia de otras razas, el Xoloitzcuintle carece de la primera línea de defensa contra los elementos: el pelaje. 
+                Esta guía interactiva traduce las necesidades fisiológicas de esta raza ancestral en estrategias prácticas de protección térmica y cuidado de la piel.
+            </p>
+            
+            <div class="flex justify-center gap-4 pt-4">
+                <button onclick="scrollToSection('calculator')" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300 transform hover:-translate-y-1">
+                    Analizar mi Clima
+                </button>
+                <button onclick="scrollToSection('why-clothing')" class="bg-white hover:bg-stone-50 text-stone-700 font-semibold py-3 px-8 rounded-lg border border-stone-300 shadow-sm transition duration-300">
+                    Ver Datos
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Physiology & Data Section -->
+    <section id="why-clothing" class="py-16 bg-white border-y border-stone-200">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <!-- Text Content -->
+                <div class="space-y-6">
+                    <h2 class="text-3xl font-bold text-stone-900">Vulnerabilidad Térmica</h2>
+                    <p class="text-stone-600">
+                        Esta sección analiza por qué el Xolo requiere atención especial. Sin una capa de aire atrapada por el pelo (aislamiento natural), 
+                        el Xolo pierde calor corporal significativamente más rápido que un perro promedio. Además, su piel expuesta es susceptible a la resequedad 
+                        inducida por el viento y el frío.
+                    </p>
+                    
+                    <div class="bg-stone-50 p-6 rounded-xl border border-stone-200">
+                        <h3 class="font-bold text-stone-800 mb-3">Factores de Riesgo Clave:</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <span class="text-orange-500 mr-2 text-xl">❄</span>
+                                <span class="text-sm text-stone-600"><strong>Hipotermia Rápida:</strong> Su alta relación superficie-masa acelera la pérdida de calor.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-orange-500 mr-2 text-xl">💧</span>
+                                <span class="text-sm text-stone-600"><strong>Piel Reseca:</strong> El frío contrae los capilares, reduciendo la hidratación natural de la piel.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-orange-500 mr-2 text-xl">⚡</span>
+                                <span class="text-sm text-stone-600"><strong>Gasto Metabólico:</strong> Queman más calorías simplemente intentando mantenerse calientes.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Visualization -->
+                <div class="bg-stone-50 p-6 rounded-2xl shadow-sm border border-stone-100">
+                    <div class="mb-4 text-center">
+                        <h3 class="text-lg font-semibold text-stone-800">Tasa de Pérdida de Calor (Comparativa)</h3>
+                        <p class="text-xs text-stone-500">Pérdida de calor en Watts/m² a 5°C ambiente</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="heatLossChart"></canvas>
+                    </div>
+                    <p class="mt-4 text-xs text-center text-stone-400 italic">Datos simulados basados en fisiología canina comparada.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Calculator Section -->
+    <section id="calculator" class="py-16 bg-orange-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-stone-900">Calculadora de Equipamiento</h2>
+                <p class="text-stone-600 mt-2">
+                    Utilice esta herramienta para determinar la protección necesaria según las condiciones actuales.
+                    Basado en las recomendaciones de temperatura para perros sin pelo.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-orange-100">
+                <div class="grid grid-cols-1 md:grid-cols-2">
+                    
+                    <!-- Controls -->
+                    <div class="p-8 space-y-8 bg-stone-50">
+                        <div>
+                            <label class="block text-sm font-medium text-stone-700 mb-2">Temperatura Exterior (°C)</label>
+                            <input type="range" id="tempSlider" min="-5" max="30" value="15" class="w-full h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer accent-orange-600">
+                            <div class="flex justify-between mt-2">
+                                <span class="text-xs text-stone-500">-5°C</span>
+                                <span id="tempValue" class="text-xl font-bold text-orange-600">15°C</span>
+                                <span class="text-xs text-stone-500">30°C</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-stone-700 mb-2">Condiciones del Clima</label>
+                            <div class="grid grid-cols-3 gap-3">
+                                <button class="weather-btn active p-3 rounded-lg border border-stone-200 bg-white hover:border-orange-500 text-center transition" data-weather="sunny">
+                                    <div class="text-2xl">☀️</div>
+                                    <div class="text-xs mt-1">Soleado</div>
+                                </button>
+                                <button class="weather-btn p-3 rounded-lg border border-stone-200 bg-white hover:border-orange-500 text-center transition" data-weather="cloudy">
+                                    <div class="text-2xl">☁️</div>
+                                    <div class="text-xs mt-1">Nublado</div>
+                                </button>
+                                <button class="weather-btn p-3 rounded-lg border border-stone-200 bg-white hover:border-orange-500 text-center transition" data-weather="rainy">
+                                    <div class="text-2xl">🌧️</div>
+                                    <div class="text-xs mt-1">Lluvioso</div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-stone-700 mb-2">Duración del Paseo</label>
+                            <select id="durationSelect" class="w-full p-2 border border-stone-300 rounded-md bg-white">
+                                <option value="short">Salida Rápida (< 15 min)</option>
+                                <option value="medium">Paseo Normal (15-45 min)</option>
+                                <option value="long">Excursión (> 45 min)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Result Display -->
+                    <div class="p-8 bg-white flex flex-col justify-center items-center text-center relative">
+                        <div id="recommendationIcon" class="text-6xl mb-4 transition-all transform duration-500">👕</div>
+                        <h3 id="recommendationTitle" class="text-2xl font-bold text-stone-800 mb-2">Suéter Ligero</h3>
+                        <p id="recommendationDesc" class="text-stone-600 mb-6">
+                            Para temperaturas frescas, un suéter de algodón o punto ligero es suficiente para mantener la temperatura corporal sin sobrecalentar.
+                        </p>
+                        
+                        <div id="alertBox" class="w-full bg-blue-50 border-l-4 border-blue-500 p-4 text-left hidden">
+                            <p class="text-sm text-blue-700 font-semibold" id="alertText">Alert message</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Material Comparison Section -->
+    <section id="materials" class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Introduction -->
+                <div class="md:col-span-1 space-y-4">
+                    <h2 class="text-3xl font-bold text-stone-900">Ciencia de Materiales</h2>
+                    <p class="text-stone-600">
+                        La piel del Xolo es extremadamente sensible. Elegir el material incorrecto puede causar dermatitis por contacto o alergias, además de no proveer el calor adecuado.
+                    </p>
+                    <p class="text-stone-600">
+                        Analizamos los materiales más comunes basándonos en tres factores críticos:
+                    </p>
+                    <ul class="text-sm space-y-2 text-stone-700">
+                        <li><strong>Aislamiento:</strong> Capacidad de retener calor.</li>
+                        <li><strong>Suavidad:</strong> Riesgo de irritación (Bajo es mejor).</li>
+                        <li><strong>Transpirabilidad:</strong> Capacidad de dejar salir la humedad.</li>
+                    </ul>
+                </div>
+
+                <!-- Radar Chart -->
+                <div class="md:col-span-2">
+                    <div class="bg-stone-50 p-4 rounded-xl border border-stone-200">
+                        <div class="flex justify-center space-x-4 mb-4">
+                            <button onclick="updateMaterialChart('cotton')" class="mat-btn px-4 py-1 rounded-full text-xs font-bold bg-orange-600 text-white shadow-sm">Algodón</button>
+                            <button onclick="updateMaterialChart('wool')" class="mat-btn px-4 py-1 rounded-full text-xs font-bold bg-stone-200 text-stone-600 hover:bg-stone-300">Lana</button>
+                            <button onclick="updateMaterialChart('fleece')" class="mat-btn px-4 py-1 rounded-full text-xs font-bold bg-stone-200 text-stone-600 hover:bg-stone-300">Polar (Fleece)</button>
+                            <button onclick="updateMaterialChart('impermeable')" class="mat-btn px-4 py-1 rounded-full text-xs font-bold bg-stone-200 text-stone-600 hover:bg-stone-300">Impermeable</button>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="materialChart"></canvas>
+                        </div>
+                        <div id="material-info" class="mt-4 p-4 bg-white rounded-lg border border-stone-200 text-center">
+                            <h4 class="font-bold text-stone-800">Algodón</h4>
+                            <p class="text-sm text-stone-600">Ideal para interiores y pijamas. Hipoalergénico pero bajo aislamiento térmico.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Care & Measurement Guide -->
+    <section id="care" class="py-16 bg-stone-100">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-stone-900 mb-8 text-center">Guía de Cuidados y Medición</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- Measurement Visualization (CSS Construction) -->
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <h3 class="text-xl font-bold text-stone-800 mb-4">Cómo Medir a tu Xolo</h3>
+                    <div class="relative w-full h-64 bg-stone-100 rounded-lg flex items-center justify-center border-2 border-dashed border-stone-300">
+                        <!-- Simplified Dog Shape Representation using CSS/HTML -->
+                        <div class="relative w-48 h-32 bg-stone-800 rounded-lg opacity-80">
+                            <!-- Head -->
+                            <div class="absolute -top-10 left-0 w-16 h-16 bg-stone-800 rounded-full"></div>
+                            <!-- Ears -->
+                            <div class="absolute -top-16 left-0 w-6 h-10 bg-stone-800 rounded-t-lg rotate-[-15deg]"></div>
+                            <div class="absolute -top-16 left-8 w-6 h-10 bg-stone-800 rounded-t-lg rotate-[15deg]"></div>
+                            <!-- Legs -->
+                            <div class="absolute -bottom-10 left-4 w-4 h-12 bg-stone-800"></div>
+                            <div class="absolute -bottom-10 right-4 w-4 h-12 bg-stone-800"></div>
+                            
+                            <!-- Measurement Lines -->
+                            <div id="line-neck" class="absolute -top-6 left-2 w-12 h-1 bg-orange-500 transition-opacity duration-300"></div>
+                            <div id="line-chest" class="absolute top-8 left-8 w-24 h-32 border-2 border-blue-500 rounded-full transition-opacity duration-300 opacity-20"></div>
+                            <div id="line-back" class="absolute -top-2 left-8 w-36 h-1 bg-green-500 transition-opacity duration-300 opacity-20"></div>
+                        </div>
+                        
+                        <!-- Floating Labels -->
+                        <div class="absolute top-4 right-4 space-y-2 text-right">
+                            <button onclick="showMeasure('neck')" class="block text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded hover:bg-orange-100">1. Cuello</button>
+                            <button onclick="showMeasure('chest')" class="block text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded hover:bg-blue-100">2. Pecho</button>
+                            <button onclick="showMeasure('back')" class="block text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded hover:bg-green-100">3. Espalda</button>
+                        </div>
+                    </div>
+                    <div id="measure-desc" class="mt-4 text-sm text-stone-600 bg-stone-50 p-3 rounded border border-stone-200">
+                        <strong>Cuello:</strong> Mida la circunferencia en la base del cuello, donde se asienta el collar.
+                    </div>
+                </div>
+
+                <!-- Interactive Checklist -->
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <h3 class="text-xl font-bold text-stone-800 mb-4">Rutina de Invierno</h3>
+                    <div class="space-y-3">
+                        <label class="flex items-center space-x-3 p-3 rounded-lg hover:bg-stone-50 border border-transparent hover:border-stone-200 transition cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-orange-600 rounded focus:ring-orange-500 border-gray-300">
+                            <span class="text-stone-700">Hidratar piel antes de poner ropa (evita estática).</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 rounded-lg hover:bg-stone-50 border border-transparent hover:border-stone-200 transition cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-orange-600 rounded focus:ring-orange-500 border-gray-300">
+                            <span class="text-stone-700">Revisar axilas por roces de costuras.</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 rounded-lg hover:bg-stone-50 border border-transparent hover:border-stone-200 transition cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-orange-600 rounded focus:ring-orange-500 border-gray-300">
+                            <span class="text-stone-700">Lavar ropa con detergente hipoalergénico.</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 rounded-lg hover:bg-stone-50 border border-transparent hover:border-stone-200 transition cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 text-orange-600 rounded focus:ring-orange-500 border-gray-300">
+                            <span class="text-stone-700">Secar bien si se mojó en la lluvia (inmediatamente).</span>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-stone-900 text-stone-400 py-10">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="mb-4 text-lg font-semibold text-stone-200">XoloGuard</p>
+            <p class="text-sm max-w-md mx-auto">
+                Dedicado a la preservación y bienestar del perro Xoloitzcuintle. 
+                Consulte siempre a su veterinario para consejos específicos sobre la salud de su mascota.
+            </p>
+            <div class="mt-8 text-xs text-stone-600">
+                &copy; 2023 Guía Interactiva Xolo. Todos los derechos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- State Management ---
+        const state = {
+            temp: 15,
+            weather: 'sunny',
+            duration: 'medium',
+            activeMaterial: 'cotton'
+        };
+
+        // --- Data Sources ---
+        const clothingRules = [
+            { maxTemp: 5, items: { sunny: "Abrigo Térmico + Botas", cloudy: "Abrigo Térmico + Bufanda", rainy: "Impermeable con Forro Polar + Botas" }, desc: "CRÍTICO: Riesgo alto de hipotermia. Cubrir pecho, cuello y patas." },
+            { maxTemp: 12, items: { sunny: "Suéter de Lana/Polar", cloudy: "Suéter Grueso", rainy: "Impermeable Ligero" }, desc: "PRECAUCIÓN: Necesario para mantener calor en paseos mayores a 10 min." },
+            { maxTemp: 18, items: { sunny: "Camiseta de Algodón (Opcional)", cloudy: "Suéter Ligero", rainy: "Impermeable sin forro" }, desc: "MODERADO: Protección ligera recomendada, especialmente si no hay sol." },
+            { maxTemp: 25, items: { sunny: "Sin ropa (Protector Solar)", cloudy: "Sin ropa", rainy: "Impermeable muy ligero" }, desc: "CONFORT: Rango ideal. Priorizar protección solar sobre térmica." },
+            { maxTemp: 100, items: { sunny: "¡Cuidado con el calor!", cloudy: "Sin ropa", rainy: "Sin ropa" }, desc: "CALOR: Evitar ropa para prevenir golpe de calor." }
+        ];
+
+        const materialData = {
+            cotton: { 
+                label: 'Algodón', 
+                data: [3, 9, 8], // Isolation, Softness, Breathability
+                desc: 'Ideal para interiores y pijamas. Hipoalergénico, suave, pero bajo aislamiento térmico si se moja.'
+            },
+            wool: { 
+                label: 'Lana Natural', 
+                data: [9, 4, 6], 
+                desc: 'Excelente aislamiento, pero puede causar mucha picazón en la piel directa del Xolo. Usar solo sobre otra prenda.'
+            },
+            fleece: { 
+                label: 'Polar (Fleece)', 
+                data: [8, 8, 5], 
+                desc: 'El estándar de oro. Caliente, suave y seca rápido. Asegurar que sea de calidad para que respire.'
+            },
+            impermeable: { 
+                label: 'Sintético Impermeable', 
+                data: [5, 6, 2], 
+                desc: 'Vital para lluvia y viento, pero nula transpirabilidad. No usar por periodos prolongados sin descanso.'
+            }
+        };
+
+        // --- Chart Initialization ---
+        let heatChartInstance = null;
+        let materialChartInstance = null;
+
+        function initCharts() {
+            // 1. Heat Loss Chart
+            const ctxHeat = document.getElementById('heatLossChart').getContext('2d');
+            heatChartInstance = new Chart(ctxHeat, {
+                type: 'bar',
+                data: {
+                    labels: ['Pastor Alemán (Doble Capa)', 'Golden Retriever', 'Xoloitzcuintle'],
+                    datasets: [{
+                        label: 'Pérdida de Calor Relativa',
+                        data: [1, 1.2, 2.4], // Xolo loses heat ~2.4x faster
+                        backgroundColor: ['#d6d3d1', '#d6d3d1', '#ea580c'],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + 'x más rápido que promedio';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, display: false },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 2. Material Radar Chart
+            const ctxMat = document.getElementById('materialChart').getContext('2d');
+            materialChartInstance = new Chart(ctxMat, {
+                type: 'radar',
+                data: {
+                    labels: ['Aislamiento (Calor)', 'Suavidad (Piel)', 'Transpirabilidad'],
+                    datasets: [{
+                        label: 'Algodón',
+                        data: materialData.cotton.data,
+                        fill: true,
+                        backgroundColor: 'rgba(234, 88, 12, 0.2)',
+                        borderColor: 'rgb(234, 88, 12)',
+                        pointBackgroundColor: 'rgb(234, 88, 12)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(234, 88, 12)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { display: false },
+                            suggestedMin: 0,
+                            suggestedMax: 10,
+                            ticks: { display: false } // Hide numbers for cleaner UI
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        // --- Core Interactions ---
+
+        // 1. Calculator Logic
+        function updateCalculator() {
+            // Update UI State for Weather Buttons
+            document.querySelectorAll('.weather-btn').forEach(btn => {
+                if(btn.dataset.weather === state.weather) {
+                    btn.classList.add('border-orange-500', 'bg-orange-50');
+                    btn.classList.remove('border-stone-200', 'bg-white');
+                } else {
+                    btn.classList.remove('border-orange-500', 'bg-orange-50');
+                    btn.classList.add('border-stone-200', 'bg-white');
+                }
+            });
+
+            // Update Temp Display
+            document.getElementById('tempValue').innerText = state.temp + '°C';
+
+            // Calculate Recommendation
+            let rec = clothingRules.find(r => state.temp <= r.maxTemp);
+            
+            // Text Update
+            document.getElementById('recommendationTitle').innerText = rec.items[state.weather];
+            document.getElementById('recommendationDesc').innerText = rec.desc;
+
+            // Icon Update Logic
+            let icon = '👕';
+            if (state.weather === 'rainy') icon = '🧥';
+            if (state.temp < 5) icon = '🧣';
+            if (state.temp > 20) icon = '🧴'; // Sunscreen
+            document.getElementById('recommendationIcon').innerText = icon;
+
+            // Alert Logic
+            const alertBox = document.getElementById('alertBox');
+            if (state.weather === 'rainy' && state.temp < 10) {
+                alertBox.classList.remove('hidden');
+                document.getElementById('alertText').innerText = "Alerta: La combinación de frío y humedad es peligrosa. Seque al perro inmediatamente al volver.";
+            } else if (state.temp > 25 && state.weather === 'sunny') {
+                alertBox.classList.remove('hidden');
+                document.getElementById('alertText').innerText = "Alerta Solar: La piel oscura absorbe calor rápido. Use bloqueador solar específico para perros.";
+            } else {
+                alertBox.classList.add('hidden');
+            }
+        }
+
+        // 2. Material Chart Update
+        window.updateMaterialChart = function(type) {
+            state.activeMaterial = type;
+            const data = materialData[type];
+            
+            // Update UI Buttons
+            document.querySelectorAll('.mat-btn').forEach(btn => {
+                if(btn.innerText.includes(data.label.split(' ')[0])) { // Simple string match
+                    btn.classList.remove('bg-stone-200', 'text-stone-600');
+                    btn.classList.add('bg-orange-600', 'text-white');
+                } else {
+                    btn.classList.add('bg-stone-200', 'text-stone-600');
+                    btn.classList.remove('bg-orange-600', 'text-white');
+                }
+            });
+
+            // Update Chart Data
+            materialChartInstance.data.datasets[0].data = data.data;
+            materialChartInstance.data.datasets[0].label = data.label;
+            materialChartInstance.update();
+
+            // Update Info Text
+            const infoBox = document.getElementById('material-info');
+            infoBox.innerHTML = `<h4 class="font-bold text-stone-800">${data.label}</h4><p class="text-sm text-stone-600">${data.desc}</p>`;
+        };
+
+        // 3. Measurement Visualization Logic
+        window.showMeasure = function(part) {
+            // Reset lines opacity
+            document.getElementById('line-neck').style.opacity = '0.2';
+            document.getElementById('line-chest').style.opacity = '0.2';
+            document.getElementById('line-back').style.opacity = '0.2';
+            
+            // Highlight selected
+            document.getElementById(`line-${part}`).style.opacity = '1';
+
+            // Update text
+            const textMap = {
+                neck: "<strong>Cuello:</strong> Mida la parte más ancha del cuello. Deje espacio para dos dedos para asegurar que no apriete.",
+                chest: "<strong>Pecho:</strong> La medida más importante. Mida justo detrás de las patas delanteras, en la parte más ancha de la caja torácica.",
+                back: "<strong>Espalda:</strong> Desde la base del cuello hasta el inicio de la cola. La ropa no debe limitar el movimiento de la cola."
+            };
+            document.getElementById('measure-desc').innerHTML = textMap[part];
+        };
+
+        // 4. Navigation
+        window.scrollToSection = function(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+            // Close mobile menu if open
+            document.getElementById('mobile-nav').classList.add('hidden');
+        };
+
+        // --- Event Listeners ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            updateCalculator(); // Initial run
+
+            // Calculator Inputs
+            document.getElementById('tempSlider').addEventListener('input', (e) => {
+                state.temp = parseInt(e.target.value);
+                updateCalculator();
+            });
+
+            document.querySelectorAll('.weather-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    // Traverse up to button if icon clicked
+                    const target = e.target.closest('button');
+                    state.weather = target.dataset.weather;
+                    updateCalculator();
+                });
+            });
+
+            // Mobile Menu
+            document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+                const nav = document.getElementById('mobile-nav');
+                nav.classList.toggle('hidden');
+            });
+        });
+
+    </script>
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+<p class="mt-4 text-sm text-stone-600">
+  Visita la página oficial de
+  <a href="https://xolosramirez.com" target="_blank" rel="noopener noreferrer"
+     class="font-semibold text-orange-600 hover:text-orange-700 underline underline-offset-4">
+    Xolos Ramírez
+  </a>
+  para más guías, artículos y recursos sobre el Xoloitzcuintle.
+</p>
+</body>
+</html>
