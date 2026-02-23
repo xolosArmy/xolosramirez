@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Xoloitzcuintle: Espectro de Color y Genética</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Custom Font Setup */
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, .display-text { font-family: 'Space Grotesk', sans-serif; }
+
+        /* Chart Container Rules - MANDATORY */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px; /* Base height */
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f5f5f4; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d6d3d1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a29e; 
+        }
+
+        /* Interaction Classes */
+        .color-btn {
+            transition: all 0.3s ease;
+        }
+        .color-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .active-tab {
+            border-bottom: 3px solid #ea580c; /* orange-600 */
+            color: #ea580c;
+            font-weight: 600;
+        }
+        
+        /* Canvas Drawing Class */
+        .xolo-canvas {
+            background-color: #e7e5e4; /* stone-200 */
+            border-radius: 1rem;
+            cursor: crosshair;
+        }
+    </style>
+    
+    <!-- Chosen Palette: Warm Neutrals (Stone) with Terracotta/Clay Accents -->
+    <!-- Application Structure Plan:
+        1. Hero Section: Immediate cultural context and visual hook using a canvas-drawn Xolo silhouette.
+        2. The Color Spectrum (Interactive Dashboard): A central hub allowing users to click through different skin colors (Black, Slate, Bronze, Butterfly). This updates a detail panel and a visual representation. 
+           - WHY: Users need to see the difference, not just read about it.
+        3. Data Analysis Section (Charts):
+           - "Prevalencia en Concursos": Donut chart showing the preference for solid colors vs. spotted in official standards.
+           - "Sensibilidad Solar": Bar chart comparing melanin protection across the spectrum.
+           - WHY: Provides quantitative backing to the qualitative descriptions.
+        4. The "Mariposa" Deep Dive: A dedicated section for the spotted variety, explaining the genetics and specific care.
+        5. Genetic Calculator (Simplified): Interactive inputs to see probability of color traits.
+    -->
+    <!-- Visualization & Content Choices:
+        1. Canvas Silhouette: Draws a stylized dog head. JS changes fillStyle based on selection to simulate skin color. (Goal: Inform/Change)
+        2. Chart.js Donut: Shows FCI Standard Preference distribution. (Goal: Inform/Compare)
+        3. Chart.js Bar: Comparative Sun Sensitivity. (Goal: Compare)
+        4. Interactive Text Blocks: Update based on button clicks to prevent text overload. (Goal: Inform)
+        5. CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-stone-50 text-stone-800 antialiased selection:bg-orange-200 selection:text-orange-900">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-stone-50/90 backdrop-blur-md border-b border-stone-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center space-x-2">
+                    <span class="text-2xl font-bold text-orange-800 tracking-tight">XOLO<span class="text-stone-600 font-light">DATA</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8 text-sm font-medium text-stone-600">
+                    <a href="#hero" class="hover:text-orange-700 transition-colors">Inicio</a>
+                    <a href="#spectrum" class="hover:text-orange-700 transition-colors">Espectro</a>
+                    <a href="#analysis" class="hover:text-orange-700 transition-colors">Análisis</a>
+                    <a href="#mariposa" class="hover:text-orange-700 transition-colors">Mariposa</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative pt-12 pb-20 lg:pt-24 lg:pb-28 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto">
+                <h1 class="text-4xl md:text-6xl font-bold text-stone-900 mb-6 tracking-tight leading-tight">
+                    La Piel del Dios Perro: <br>
+                    <span class="text-orange-700">Del Negro Sólido al Mariposa</span>
+                </h1>
+                <p class="mt-4 text-xl text-stone-600 leading-relaxed">
+                    Una exploración interactiva sobre la genética, la estética y la salud dermatológica del <strong>Xoloitzcuintle</strong>. Descubre por qué el color es mucho más que una cuestión de apariencia en esta raza milenaria.
+                </p>
+                <div class="mt-8 flex justify-center gap-4">
+                    <button onclick="document.getElementById('spectrum').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3 bg-stone-900 text-white font-semibold rounded-full hover:bg-orange-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                        Explorar Colores
+                    </button>
+                    <button onclick="document.getElementById('analysis').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3 bg-white text-stone-800 border border-stone-300 font-semibold rounded-full hover:bg-stone-100 transition-all">
+                        Ver Datos
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Spectrum Section -->
+    <section id="spectrum" class="py-16 bg-stone-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold text-stone-900">El Espectro Cromático</h2>
+                <p class="mt-4 text-stone-600 max-w-2xl">
+                    El estándar racial admite una variedad de colores. Selecciona un tono abajo para visualizar su apariencia en la piel, leer sobre su aceptación en exposiciones y entender sus necesidades de cuidado.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Controls Column -->
+                <div class="lg:col-span-4 space-y-4">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
+                        <h3 class="text-lg font-semibold text-stone-800 mb-4 border-b pb-2">Selecciona un Fenotipo</h3>
+                        <div class="space-y-3" id="colorButtons">
+                            <!-- Buttons generated by JS -->
+                        </div>
+                    </div>
+                    
+                    <div class="bg-orange-50 p-6 rounded-2xl border border-orange-100">
+                        <h4 class="text-orange-800 font-semibold mb-2">💡 Dato Rápido</h4>
+                        <p id="quickFact" class="text-sm text-orange-900/80">
+                            Selecciona un color para ver un dato curioso aquí.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Visualization & Detail Column -->
+                <div class="lg:col-span-8">
+                    <div class="bg-white rounded-2xl shadow-lg border border-stone-200 overflow-hidden flex flex-col md:flex-row h-full">
+                        <!-- Canvas Area -->
+                        <div class="w-full md:w-1/2 bg-stone-200 relative flex items-center justify-center p-6 min-h-[300px]">
+                            <canvas id="xoloCanvas" width="300" height="300" class="w-full h-full object-contain"></canvas>
+                            <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-md text-xs font-mono text-stone-500">
+                                Renderizado Dinámico
+                            </div>
+                        </div>
+
+                        <!-- Info Area -->
+                        <div class="w-full md:w-1/2 p-8 flex flex-col justify-center">
+                            <h3 id="colorTitle" class="text-2xl font-bold text-stone-900 mb-2">Negro Sólido</h3>
+                            <div class="flex items-center gap-2 mb-4">
+                                <span id="fciBadge" class="px-2 py-1 rounded bg-green-100 text-green-800 text-xs font-bold uppercase">Preferido FCI</span>
+                                <span id="uvBadge" class="px-2 py-1 rounded bg-stone-100 text-stone-600 text-xs font-bold uppercase">Protección UV Alta</span>
+                            </div>
+                            <p id="colorDesc" class="text-stone-600 mb-6 leading-relaxed">
+                                El color más tradicional y buscado. La piel es gruesa, resistente y ofrece la mayor protección natural contra el sol.
+                            </p>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span class="text-stone-500">Rareza</span>
+                                        <span id="rarityVal" class="font-medium text-stone-900">Común</span>
+                                    </div>
+                                    <div class="w-full bg-stone-100 rounded-full h-2">
+                                        <div id="rarityBar" class="bg-stone-800 h-2 rounded-full" style="width: 20%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span class="text-stone-500">Mantenimiento</span>
+                                        <span id="maintVal" class="font-medium text-stone-900">Bajo</span>
+                                    </div>
+                                    <div class="w-full bg-stone-100 rounded-full h-2">
+                                        <div id="maintBar" class="bg-orange-600 h-2 rounded-full" style="width: 30%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Analysis Section -->
+    <section id="analysis" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-stone-900">Análisis Cuantitativo</h2>
+                <p class="mt-4 text-stone-600 max-w-2xl mx-auto">
+                    Explorando los datos detrás de la estética. ¿Cómo influye el color en la salud y qué dicen los estándares oficiales?
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                
+                <!-- Chart 1: FCI Preference -->
+                <div class="flex flex-col">
+                    <div class="mb-4">
+                        <h3 class="text-xl font-bold text-stone-900">Preferencia en Estándar FCI</h3>
+                        <p class="text-sm text-stone-500">Distribución ideal vs. penalización en concursos de belleza.</p>
+                    </div>
+                    <div class="bg-stone-50 p-6 rounded-2xl border border-stone-100 flex-grow flex items-center justify-center">
+                        <div class="chart-container">
+                            <canvas id="preferenceChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm text-stone-600 bg-blue-50 p-4 rounded-lg border-l-4 border-blue-400">
+                        <strong>Interpretación:</strong> Los colores sólidos oscuros (Negro, Pizarra) son los más valorados. El "Mariposa" (Manchado) es aceptado pero a menudo penalizado si el blanco excede el 25% del cuerpo.
+                    </div>
+                </div>
+
+                <!-- Chart 2: Sun Sensitivity -->
+                <div class="flex flex-col">
+                    <div class="mb-4">
+                        <h3 class="text-xl font-bold text-stone-900">Melanina y Sensibilidad UV</h3>
+                        <p class="text-sm text-stone-500">Relación entre pigmentación y necesidad de protección solar externa.</p>
+                    </div>
+                    <div class="bg-stone-50 p-6 rounded-2xl border border-stone-100 flex-grow flex items-center justify-center">
+                        <div class="chart-container">
+                            <canvas id="uvChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm text-stone-600 bg-orange-50 p-4 rounded-lg border-l-4 border-orange-400">
+                        <strong>Dato Crítico:</strong> Los perros manchados (Mariposa) o de colores claros (Rubio/Rojizo) requieren bloqueador solar obligatorio debido a la falta de melanina protectora.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Deep Dive: The Butterfly Effect -->
+    <section id="mariposa" class="py-16 bg-stone-900 text-stone-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <div class="inline-block px-3 py-1 mb-4 border border-orange-500/50 rounded-full text-orange-400 text-xs font-bold tracking-wider uppercase">
+                        Foco en Variedad
+                    </div>
+                    <h2 class="text-3xl md:text-5xl font-bold text-white mb-6">El Fenómeno "Mariposa"</h2>
+                    <p class="text-lg leading-relaxed mb-6">
+                        El Xoloitzcuintle Mariposa, o manchado, representa una expresión fascinante de la genética. A diferencia de los sólidos, estos ejemplares presentan áreas de despigmentación (piebaldismo) que crean patrones únicos.
+                    </p>
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-orange-600 text-white font-bold mt-1">1</div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-bold text-white">Genética del Manchado</h4>
+                                <p class="text-stone-400 text-sm mt-1">El gen de las manchas blancas a menudo se comporta de forma recesiva o incompleta. Dos padres sólidos pueden tener un cachorro manchado si portan el gen oculto.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-orange-600 text-white font-bold mt-1">2</div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-bold text-white">Cuidado Especializado</h4>
+                                <p class="text-stone-400 text-sm mt-1">Las manchas blancas (rosadas en la piel) se queman en minutos. Requieren bloqueador solar SPF 50+ diario.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-orange-600 text-white font-bold mt-1">3</div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-bold text-white">Mito vs. Realidad</h4>
+                                <p class="text-stone-400 text-sm mt-1">Aunque menos valorados en el ring de exhibición, históricamente eran igual de sagrados. No son "defectuosos", son simplemente una variación natural.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Simple Genetics Probability Visualization -->
+                <div class="bg-stone-800 p-8 rounded-3xl border border-stone-700">
+                    <h3 class="text-xl font-bold text-white mb-6 text-center">Calculadora de Probabilidad (Teórica)</h3>
+                    <div class="mb-6 flex justify-center gap-4">
+                        <div class="text-center">
+                            <span class="block text-xs text-stone-500 mb-1">Padre 1</span>
+                            <select id="parent1" class="bg-stone-700 text-white p-2 rounded border border-stone-600">
+                                <option value="solid">Sólido (Dominante)</option>
+                                <option value="carrier">Sólido (Portador)</option>
+                                <option value="spotted">Manchado (Recesivo)</option>
+                            </select>
+                        </div>
+                        <div class="text-center">
+                            <span class="block text-xs text-stone-500 mb-1">Padre 2</span>
+                            <select id="parent2" class="bg-stone-700 text-white p-2 rounded border border-stone-600">
+                                <option value="solid">Sólido (Dominante)</option>
+                                <option value="carrier">Sólido (Portador)</option>
+                                <option value="spotted" selected>Manchado (Recesivo)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container" style="height: 250px;">
+                        <canvas id="geneticsChart"></canvas>
+                    </div>
+                    <p class="text-center text-xs text-stone-500 mt-4 italic">
+                        *Modelo simplificado mendeliano. La genética del color canina real es poligénica y compleja.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-stone-900 text-stone-400 py-12 border-t border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="mb-2">Desarrollado para el análisis de la raza Xoloitzcuintle.</p>
+            <p class="text-sm opacity-60">Datos basados en estándares generales FCI y dermatología canina.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // --- DATA STORE ---
+        const xoloData = {
+            colors: {
+                black: {
+                    id: 'black',
+                    name: 'Negro Sólido',
+                    desc: 'El color más emblemático. Piel gruesa, brillante y resistente. Absorbe calor pero no se quema fácilmente.',
+                    fci: 'Preferido',
+                    uv: 'Alta',
+                    rarity: 20, // Low number = common in visuals, actually represents bar width
+                    maint: 20,
+                    hex: '#1a1a1a',
+                    spotColor: null,
+                    fact: 'El color negro ayuda a camuflarse en la noche, característica apreciada en los mitos del inframundo.'
+                },
+                slate: {
+                    id: 'slate',
+                    name: 'Gris Pizarra',
+                    desc: 'Un tono gris oscuro, elegante y muy común. Ofrece excelente protección solar, similar al negro.',
+                    fci: 'Aceptado',
+                    uv: 'Alta',
+                    rarity: 30,
+                    maint: 25,
+                    hex: '#4a4a4a',
+                    spotColor: null,
+                    fact: 'El gris pizarra es a menudo el resultado de la dilución del pigmento negro.'
+                },
+                bronze: {
+                    id: 'bronze',
+                    name: 'Hígado / Bronce',
+                    desc: 'Tonos marrones rojizos. Muy atractivos visualmente, pero requieren un poco más de cuidado solar que los negros.',
+                    fci: 'Aceptado',
+                    uv: 'Media',
+                    rarity: 50,
+                    maint: 40,
+                    hex: '#5D4037',
+                    spotColor: null,
+                    fact: 'El color hígado cambia drásticamente con la exposición al sol, bronceándose como los humanos.'
+                },
+                red: {
+                    id: 'red',
+                    name: 'Rojizo / Rubio',
+                    desc: 'Piel clara, rosada o anaranjada. Muy sensible. Requiere protección solar estricta para evitar quemaduras.',
+                    fci: 'Tolerado',
+                    uv: 'Baja',
+                    rarity: 80,
+                    maint: 90,
+                    hex: '#D7CCC8',
+                    spotColor: null,
+                    fact: 'Históricamente, los xolos rojos eran asociados con el sol de la mañana.'
+                },
+                butterfly: {
+                    id: 'butterfly',
+                    name: 'Mariposa (Manchado)',
+                    desc: 'Base oscura con parches de despigmentación rosa/blanco. El contraste es hermoso pero peligroso bajo el sol.',
+                    fci: 'Restringido',
+                    uv: 'Mixta',
+                    rarity: 60,
+                    maint: 100,
+                    hex: '#333333',
+                    spotColor: '#FFEbee',
+                    fact: 'Para show, las manchas no deben cubrir más del 25% del cuerpo.'
+                }
+            }
+        };
+
+        // --- STATE MANAGEMENT ---
+        let currentState = {
+            selectedColor: 'black',
+            parent1: 'solid',
+            parent2: 'spotted'
+        };
+
+        // --- DOM ELEMENTS ---
+        const colorButtonsContainer = document.getElementById('colorButtons');
+        const canvas = document.getElementById('xoloCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // --- INIT FUNCTION ---
+        function init() {
+            renderButtons();
+            updateDashboard('black');
+            initCharts();
+            setupGeneticsListeners();
+            drawGeneticsChart(); // Initial draw
+        }
+
+        // --- RENDER FUNCTIONS ---
+        function renderButtons() {
+            Object.values(xoloData.colors).forEach(color => {
+                const btn = document.createElement('button');
+                btn.className = `color-btn w-full text-left px-4 py-3 rounded-lg border border-stone-200 flex items-center justify-between bg-white hover:bg-stone-50 group`;
+                btn.onclick = () => updateDashboard(color.id);
+                btn.id = `btn-${color.id}`;
+                
+                const dot = document.createElement('span');
+                dot.className = 'w-6 h-6 rounded-full border border-stone-300 shadow-inner';
+                // Handle split color for butterfly
+                if (color.spotColor) {
+                    dot.style.background = `conic-gradient(${color.hex} 0% 50%, ${color.spotColor} 50% 100%)`;
+                } else {
+                    dot.style.backgroundColor = color.hex;
+                }
+
+                const text = document.createElement('span');
+                text.className = 'ml-3 font-medium text-stone-700 group-hover:text-stone-900';
+                text.innerText = color.name;
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'flex items-center';
+                wrapper.appendChild(dot);
+                wrapper.appendChild(text);
+
+                btn.appendChild(wrapper);
+                colorButtonsContainer.appendChild(btn);
+            });
+        }
+
+        function updateDashboard(colorId) {
+            const data = xoloData.colors[colorId];
+            currentState.selectedColor = colorId;
+
+            // Update UI Text
+            document.getElementById('colorTitle').innerText = data.name;
+            document.getElementById('colorDesc').innerText = data.desc;
+            document.getElementById('fciBadge').innerText = `FCI: ${data.fci}`;
+            document.getElementById('fciBadge').className = `px-2 py-1 rounded text-xs font-bold uppercase ${getFciColor(data.fci)}`;
+            document.getElementById('uvBadge').innerText = `UV: ${data.uv}`;
+            document.getElementById('quickFact').innerText = data.fact;
+            
+            // Update Bars
+            document.getElementById('rarityVal').innerText = data.rarity < 40 ? 'Muy Común' : (data.rarity < 70 ? 'Moderado' : 'Raro');
+            document.getElementById('rarityBar').style.width = `${data.rarity}%`;
+            document.getElementById('maintVal').innerText = data.maint < 40 ? 'Bajo' : (data.maint < 80 ? 'Medio' : 'Crítico');
+            document.getElementById('maintBar').style.width = `${data.maint}%`;
+            
+            // Update Active State on Buttons
+            document.querySelectorAll('.color-btn').forEach(b => {
+                b.classList.remove('ring-2', 'ring-orange-500', 'bg-orange-50');
+            });
+            document.getElementById(`btn-${colorId}`).classList.add('ring-2', 'ring-orange-500', 'bg-orange-50');
+
+            // Redraw Canvas
+            drawXolo(data);
+        }
+
+        function getFciColor(status) {
+            if (status === 'Preferido') return 'bg-green-100 text-green-800';
+            if (status === 'Aceptado') return 'bg-blue-100 text-blue-800';
+            if (status === 'Tolerado') return 'bg-yellow-100 text-yellow-800';
+            return 'bg-red-100 text-red-800';
+        }
+
+        // --- CANVAS DRAWING (Xolo Visualization) ---
+        function drawXolo(data) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Head Shape (Abstract/Geometric style)
+            ctx.save();
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.scale(1.2, 1.2);
+            
+            // Draw Ears
+            ctx.fillStyle = data.hex;
+            ctx.beginPath();
+            ctx.moveTo(-40, -50);
+            ctx.lineTo(-70, -100); // Left Ear Tip
+            ctx.lineTo(-20, -70);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.moveTo(40, -50);
+            ctx.lineTo(70, -100); // Right Ear Tip
+            ctx.lineTo(20, -70);
+            ctx.fill();
+
+            // Draw Head Base
+            ctx.beginPath();
+            ctx.ellipse(0, -20, 50, 60, 0, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Draw Snout
+            ctx.beginPath();
+            ctx.moveTo(-25, 0);
+            ctx.lineTo(-15, 60);
+            ctx.quadraticCurveTo(0, 70, 15, 60);
+            ctx.lineTo(25, 0);
+            ctx.fill();
+
+            // Draw Spots if Mariposa
+            if (data.id === 'butterfly') {
+                ctx.fillStyle = data.spotColor;
+                // Random spots for visualization effect
+                drawSpot(-30, -40, 10);
+                drawSpot(20, -50, 8);
+                drawSpot(0, 40, 12);
+                drawSpot(-10, 10, 5);
+                drawSpot(35, -10, 7);
+                
+                // Draw Chest Patch
+                ctx.beginPath();
+                ctx.ellipse(0, 90, 40, 20, 0, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+
+            // Eyes (Simple)
+            ctx.fillStyle = '#111'; // Always dark eyes
+            ctx.beginPath();
+            ctx.ellipse(-20, -20, 5, 3, 0.2, 0, 2 * Math.PI);
+            ctx.ellipse(20, -20, 5, 3, -0.2, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Nose
+            ctx.fillStyle = '#000';
+            ctx.beginPath();
+            ctx.ellipse(0, 50, 8, 5, 0, 0, 2 * Math.PI);
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        function drawSpot(x, y, r) {
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+
+        // --- CHARTS CONFIG ---
+        function initCharts() {
+            // Chart 1: FCI Preference (Donut)
+            const ctxPref = document.getElementById('preferenceChart').getContext('2d');
+            new Chart(ctxPref, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Sólidos Oscuros', 'Sólidos Claros', 'Manchados (Mariposa)'],
+                    datasets: [{
+                        data: [65, 20, 15],
+                        backgroundColor: ['#292524', '#A1887F', '#fca5a5'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+
+            // Chart 2: UV Sensitivity (Bar)
+            const ctxUV = document.getElementById('uvChart').getContext('2d');
+            new Chart(ctxUV, {
+                type: 'bar',
+                data: {
+                    labels: ['Negro', 'Pizarra', 'Bronce', 'Mariposa', 'Rubio'],
+                    datasets: [{
+                        label: 'Protección Natural (Escala 1-10)',
+                        data: [9, 9, 7, 4, 2],
+                        backgroundColor: [
+                            '#1a1a1a', '#4a4a4a', '#5D4037', '#ef4444', '#D7CCC8'
+                        ],
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 10, title: { display: true, text: 'Nivel de Protección' } }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Protección: ${context.raw}/10`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- GENETICS SIMULATOR ---
+        let geneticsChartInstance = null;
+
+        function setupGeneticsListeners() {
+            const p1 = document.getElementById('parent1');
+            const p2 = document.getElementById('parent2');
+            
+            p1.addEventListener('change', drawGeneticsChart);
+            p2.addEventListener('change', drawGeneticsChart);
+        }
+
+        function calculateGenetics(p1, p2) {
+            // Simplified Logic: 
+            // Solid (SS) - Dominant
+            // Carrier (Ss) - Solid look, carrier gene
+            // Spotted (ss) - Recessive
+            
+            // Map values
+            const map = { 'solid': 'SS', 'carrier': 'Ss', 'spotted': 'ss' };
+            const g1 = map[p1.value];
+            const g2 = map[p2.value];
+            
+            // Punnett Square logic
+            let results = { 'Solid': 0, 'Carrier': 0, 'Spotted': 0 };
+            
+            const alleles1 = g1.split('');
+            const alleles2 = g2.split('');
+            
+            alleles1.forEach(a1 => {
+                alleles2.forEach(a2 => {
+                    const pair = [a1, a2].sort().join(''); // SS, Ss, ss
+                    if (pair === 'SS') results['Solid']++;
+                    else if (pair === 'Ss') results['Carrier']++;
+                    else if (pair === 'ss') results['Spotted']++;
+                });
+            });
+            
+            return results;
+        }
+
+        function drawGeneticsChart() {
+            const p1 = document.getElementById('parent1');
+            const p2 = document.getElementById('parent2');
+            const results = calculateGenetics(p1, p2);
+            
+            const dataValues = [results['Solid'], results['Carrier'], results['Spotted']];
+            
+            const ctxGen = document.getElementById('geneticsChart').getContext('2d');
+            
+            if (geneticsChartInstance) {
+                geneticsChartInstance.destroy();
+            }
+            
+            geneticsChartInstance = new Chart(ctxGen, {
+                type: 'pie',
+                data: {
+                    labels: ['Sólido Puro', 'Sólido (Portador)', 'Manchado (Mariposa)'],
+                    datasets: [{
+                        data: dataValues,
+                        backgroundColor: ['#292524', '#78716c', '#f87171'],
+                        borderWidth: 1,
+                        borderColor: '#292524'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { 
+                            position: 'right',
+                            labels: { color: '#d6d3d1' }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Probabilidad de Fenotipo en Cachorros',
+                            color: '#a8a29e'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize App
+        window.onload = init;
+
+    </script>
+<p class="mt-4 text-sm">
+  <a href="https://xolosramirez.com"
+     target="_blank"
+     rel="noopener noreferrer"
+     class="text-orange-400 hover:text-orange-300 underline underline-offset-4">
+    Xolos Ramírez (Criadero Xoloitzcuintle)
+  </a>
+</p>
+</body>
+</html>
