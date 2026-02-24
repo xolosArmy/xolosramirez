@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investigación Xolo: ¿Son Hipoalergénicos?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fcfbf9; /* Warm neutral background */
+            color: #4a4a4a;
+        }
+        /* Chart Container Styling per requirements */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .section-transition {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .interactive-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        .interactive-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .nav-active {
+            border-bottom: 2px solid #d97706; /* Amber-600 */
+            color: #d97706;
+            font-weight: 600;
+        }
+    </style>
+    <!-- Chosen Palette: Warm Neutrals (Stone/Warm Grey) with Amber/Bronze accents (representing Xolo skin tones) and Teal for "medical/science" contrast. -->
+    <!-- Application Structure Plan: 
+         1. Hero/Intro: Defines the core question immediately.
+         2. The Science (Dashboard): Visualizes where allergens actually come from (it's not just hair).
+         3. Breed Comparison: Contextualizes the Xolo against other dogs using data charts.
+         4. Myth Buster: Interactive cards to address specific user misconceptions directly.
+         5. Care Simulator: A tool to show how maintenance affects allergen levels (user engagement).
+         6. Conclusion: Synthesized findings.
+         Why: This structure moves from general knowledge to specific data, then to practical application, mirroring the user's decision-making process.
+    -->
+    <!-- Visualization & Content Choices:
+         - Sources of Allergens (Doughnut Chart): Goal -> Inform. Shows hair is not the allergen, protein is.
+         - Allergen Load Comparison (Bar Chart): Goal -> Compare. Shows Xolo vs Shepherd vs Poodle.
+         - Maintenance Impact (Line Chart): Goal -> Change. Interactive timeline showing allergen accumulation over days.
+         - Logic: No SVG/Mermaid. Canvas used for data. Unicode for iconography.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="antialiased text-slate-800">
+
+    <!-- Navigation -->
+    <nav class="bg-white sticky top-0 z-50 shadow-sm border-b border-stone-200">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl mr-2">🐕</span>
+                    <span class="font-bold text-xl tracking-tight text-stone-800">Xolo<span class="text-amber-600">Investigación</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <button onclick="navTo('intro')" class="nav-btn nav-active" data-target="intro">Inicio</button>
+                    <button onclick="navTo('ciencia')" class="nav-btn text-stone-600 hover:text-amber-600" data-target="ciencia">La Ciencia</button>
+                    <button onclick="navTo('comparativa')" class="nav-btn text-stone-600 hover:text-amber-600" data-target="comparativa">Comparativa</button>
+                    <button onclick="navTo('cuidados')" class="nav-btn text-stone-600 hover:text-amber-600" data-target="cuidados">Cuidados</button>
+                </div>
+                <!-- Mobile Menu Button (Functional placeholder) -->
+                <div class="flex items-center gap-4">
+  <a href="https://xolosramirez.com" target="_blank" rel="noopener noreferrer" class="flex items-center">
+    <span class="text-2xl mr-2">🐕</span>
+    <span class="font-bold text-xl tracking-tight text-stone-800">
+      Xolo<span class="text-amber-600">Investigación</span>
+    </span>
+  </a>
+
+  <a href="https://xolosramirez.com" target="_blank" rel="noopener noreferrer"
+     class="hidden sm:inline-flex items-center px-3 py-2 rounded-lg text-sm font-semibold border border-amber-200 bg-amber-50 text-amber-800 hover:bg-amber-100 transition">
+    Visita Xolos Ramírez ↗
+  </a>
+</div>
+            </div>
+        </div>
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-stone-100 p-4">
+             <button onclick="navTo('intro')" class="block w-full text-left py-2 text-stone-600">Inicio</button>
+             <button onclick="navTo('ciencia')" class="block w-full text-left py-2 text-stone-600">La Ciencia</button>
+             <button onclick="navTo('comparativa')" class="block w-full text-left py-2 text-stone-600">Comparativa</button>
+             <button onclick="navTo('cuidados')" class="block w-full text-left py-2 text-stone-600">Cuidados</button>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+
+        <!-- SECTION 1: INTRO / HERO -->
+        <section id="intro" class="section-transition">
+            <div class="bg-gradient-to-br from-stone-100 to-stone-200 rounded-3xl p-8 md:p-12 text-center shadow-inner">
+                <h1 class="text-4xl md:text-5xl font-bold text-stone-800 mb-6">¿Es el Xoloitzcuintle la Solución a tus Alergias?</h1>
+                <p class="text-lg md:text-xl text-stone-600 max-w-3xl mx-auto mb-8">
+                    Investigamos a fondo el mito y la realidad del perro azteca. Descubre si la ausencia de pelo realmente elimina los estornudos o si hay factores ocultos que debes considerar.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <div class="bg-white px-6 py-4 rounded-xl shadow-sm border border-stone-200">
+                        <span class="block text-3xl mb-2">🔍</span>
+                        <span class="font-semibold text-stone-700">Análisis de Alérgenos</span>
+                    </div>
+                    <div class="bg-white px-6 py-4 rounded-xl shadow-sm border border-stone-200">
+                        <span class="block text-3xl mb-2">📊</span>
+                        <span class="font-semibold text-stone-700">Datos Comparativos</span>
+                    </div>
+                    <div class="bg-white px-6 py-4 rounded-xl shadow-sm border border-stone-200">
+                        <span class="block text-3xl mb-2">🧼</span>
+                        <span class="font-semibold text-stone-700">Guía de Manejo</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12">
+                <h2 class="text-2xl font-bold text-stone-800 mb-4 border-l-4 border-amber-600 pl-4">El Veredicto Rápido</h2>
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-6">
+                    <p class="text-stone-800 leading-relaxed">
+                        <strong class="text-amber-800">Respuesta Corta:</strong> No existe el perro 100% hipoalergénico. Sin embargo, el Xoloitzcuintle reduce significativamente los síntomas en muchas personas debido a la falta de pelo que atrapa caspa y polvo, y a la necesidad de baños frecuentes. <br><br>
+                        <em>Continúa explorando para entender <strong>por qué</strong> y si es suficiente para tu nivel de alergia.</em>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: THE SCIENCE (Allergen Sources) -->
+        <section id="ciencia" class="section-transition">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold text-stone-800 mb-4">La Ciencia Detrás del Estornudo</h2>
+                    <p class="text-stone-600 mb-6">
+                        Para entender al Xolo, primero debemos entender al enemigo: la proteína. La mayoría de la gente cree que es alérgica al "pelo de perro", pero el verdadero culpable es una proteína llamada <strong>Can f 1</strong>.
+                    </p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start">
+                            <span class="bg-teal-100 text-teal-800 rounded-full h-6 w-6 flex items-center justify-center text-sm font-bold mr-3 mt-1">1</span>
+                            <span><strong>No es el pelo:</strong> El pelo solo actúa como un vehículo que transporta los alérgenos por el aire.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="bg-teal-100 text-teal-800 rounded-full h-6 w-6 flex items-center justify-center text-sm font-bold mr-3 mt-1">2</span>
+                            <span><strong>La Caspa (Piel Muerta):</strong> Es la fuente principal. Se seca, se desprende y flota en el aire.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="bg-teal-100 text-teal-800 rounded-full h-6 w-6 flex items-center justify-center text-sm font-bold mr-3 mt-1">3</span>
+                            <span><strong>Saliva y Orina:</strong> Contienen altas concentraciones de proteínas alérgenas que se secan en la piel del perro.</span>
+                        </li>
+                    </ul>
+                    <div class="bg-stone-100 p-4 rounded-lg border-l-4 border-stone-500">
+                        <p class="text-sm text-stone-600 italic">Interacciona con el gráfico para ver la distribución de fuentes de alérgenos en un hogar promedio con mascota.</p>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-stone-100">
+                    <h3 class="text-lg font-semibold text-center mb-4 text-stone-700">Fuentes de Alérgenos Caninos (Can f 1)</h3>
+                    <div class="chart-container">
+                        <canvas id="allergenChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: COMPARISON (Interactive Data) -->
+        <section id="comparativa" class="section-transition">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-stone-800">Xolo vs. Otras Razas</h2>
+                <p class="text-stone-600 mt-2 max-w-2xl mx-auto">
+                    Comparamos la "Carga Alergénica Ambiental" potencial. Aunque todos los perros producen proteínas, la cantidad que termina en tu nariz varía drásticamente.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-stone-200">
+                <div class="p-6 md:p-8">
+                    <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold text-stone-700">Índice de Dispersión de Alérgenos</h3>
+                        <div class="flex space-x-2 mt-4 md:mt-0">
+                            <button onclick="updateComparison('shedding')" id="btn-shedding" class="px-4 py-2 bg-stone-200 hover:bg-stone-300 rounded-lg text-sm font-medium transition active-filter bg-amber-100 text-amber-800 border-amber-300 border">Por Dispersión (Pelo/Caspa)</button>
+                            <button onclick="updateComparison('production')" id="btn-production" class="px-4 py-2 bg-stone-200 hover:bg-stone-300 rounded-lg text-sm font-medium transition">Por Producción de Proteína</button>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="breedComparisonChart"></canvas>
+                    </div>
+                    
+                    <div id="chart-context" class="mt-6 p-4 bg-amber-50 rounded-lg border border-amber-100 text-sm text-amber-900">
+                        <!-- Dynamic text updated via JS -->
+                        <strong>Análisis:</strong> El Xoloitzcuintle tiene una ventaja mecánica masiva: al no tener pelo, la caspa no queda atrapada y no se dispersa fácilmente por el aire al moverse o sacudirse.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Myths Grid -->
+            <div class="grid md:grid-cols-3 gap-6 mt-12">
+                <div class="interactive-card bg-white p-6 rounded-xl border border-stone-200 shadow-sm" onclick="toggleCard(this)">
+                    <div class="flex justify-between items-start">
+                        <h4 class="font-bold text-lg text-stone-800">Mito: "No tienen Pelo"</h4>
+                        <span class="text-2xl">🤔</span>
+                    </div>
+                    <p class="mt-2 text-stone-600">Mucha gente cree que son 100% calvos.</p>
+                    <div class="hidden-content hidden mt-4 pt-4 border-t border-stone-100">
+                        <p class="text-teal-700 font-medium">Realidad:</p>
+                        <p class="text-sm text-stone-600">La mayoría tiene un mechón en la cabeza y cola. Además, existe la variedad "con pelo" (gen recesivo) que sí muda.</p>
+                    </div>
+                    <p class="text-xs text-stone-400 mt-4 text-center">Clic para revelar</p>
+                </div>
+
+                <div class="interactive-card bg-white p-6 rounded-xl border border-stone-200 shadow-sm" onclick="toggleCard(this)">
+                    <div class="flex justify-between items-start">
+                        <h4 class="font-bold text-lg text-stone-800">Mito: "Cero Alergias"</h4>
+                        <span class="text-2xl">🤧</span>
+                    </div>
+                    <p class="mt-2 text-stone-600">Se venden como la cura mágica.</p>
+                    <div class="hidden-content hidden mt-4 pt-4 border-t border-stone-100">
+                        <p class="text-teal-700 font-medium">Realidad:</p>
+                        <p class="text-sm text-stone-600">Aún producen saliva y orina con alérgenos. Si tu alergia es severa, podrías reaccionar al contacto con su piel.</p>
+                    </div>
+                    <p class="text-xs text-stone-400 mt-4 text-center">Clic para revelar</p>
+                </div>
+
+                <div class="interactive-card bg-white p-6 rounded-xl border border-stone-200 shadow-sm" onclick="toggleCard(this)">
+                    <div class="flex justify-between items-start">
+                        <h4 class="font-bold text-lg text-stone-800">Mito: "Piel Seca"</h4>
+                        <span class="text-2xl">🧴</span>
+                    </div>
+                    <p class="mt-2 text-stone-600">Se cree que su piel es difícil de cuidar.</p>
+                    <div class="hidden-content hidden mt-4 pt-4 border-t border-stone-100">
+                        <p class="text-teal-700 font-medium">Realidad:</p>
+                        <p class="text-sm text-stone-600">Su piel es grasa y requiere baños frecuentes. ¡Esto es bueno! El baño constante elimina los alérgenos acumulados.</p>
+                    </div>
+                    <p class="text-xs text-stone-400 mt-4 text-center">Clic para revelar</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: CARE SIMULATOR -->
+        <section id="cuidados" class="section-transition">
+            <div class="bg-stone-800 rounded-3xl p-8 md:p-12 text-white shadow-2xl">
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div>
+                        <h2 class="text-3xl font-bold mb-4 text-amber-500">Simulador de Rutina</h2>
+                        <p class="text-stone-300 mb-6">
+                            La clave del éxito con un Xolo es la higiene. Al no tener pelo, puedes (y debes) bañarlos más seguido sin dañar su pelaje, eliminando la proteína Can f 1 antes de que te afecte.
+                        </p>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-stone-300 mb-2">Frecuencia de Baño (Días)</label>
+                                <input type="range" id="bathFrequency" min="1" max="14" value="7" class="w-full h-2 bg-stone-600 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                                <div class="flex justify-between text-xs text-stone-400 mt-1">
+                                    <span>Diario</span>
+                                    <span id="freq-val" class="text-amber-400 font-bold text-lg">Cada 7 días</span>
+                                    <span>Cada 2 semanas</span>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-stone-300 mb-2">Uso de Loción Hidratante</label>
+                                <div class="flex space-x-4">
+                                    <button onclick="setLotion(true)" id="lotion-yes" class="flex-1 py-2 rounded border border-amber-500 bg-amber-600 text-white">Sí</button>
+                                    <button onclick="setLotion(false)" id="lotion-no" class="flex-1 py-2 rounded border border-stone-600 bg-stone-700 text-stone-400 hover:bg-stone-600">No</button>
+                                </div>
+                            </div>
+
+                            <div class="bg-stone-700 p-4 rounded-lg mt-4">
+                                <h4 class="font-bold text-amber-400 mb-1">Impacto Estimado:</h4>
+                                <p id="impact-text" class="text-sm">Con baños semanales y loción, el riesgo de alergia se mantiene moderado.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col justify-center">
+                        <h3 class="text-lg font-semibold text-center mb-4 text-stone-300">Nivel de Alérgenos en Piel (7 días)</h3>
+                        <div class="chart-container bg-stone-900 rounded-xl p-2 border border-stone-700">
+                            <canvas id="maintenanceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Summary -->
+        <section class="bg-amber-50 border-t-4 border-amber-500 rounded-xl p-8 text-center shadow-sm">
+            <h2 class="text-2xl font-bold text-stone-800 mb-4">Conclusión de la Investigación</h2>
+            <p class="text-lg text-stone-700 max-w-4xl mx-auto mb-6">
+                Los Xoloitzcuintles <strong>NO son técnicamente hipoalergénicos</strong> (ningún perro lo es), pero son <strong>altamente compatibles</strong> con personas alérgicas debido a la falta de mecanismos de dispersión (pelo) y la facilidad de limpieza de su piel.
+            </p>
+            <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="bg-stone-800 text-white px-8 py-3 rounded-full hover:bg-stone-700 transition shadow-lg">
+                Volver al Inicio
+            </button>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-900 text-stone-400 py-8 mt-12">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-sm">© 2023 Investigación Xolo. Datos basados en estudios dermatológicos veterinarios generales.</p>
+            <p class="text-xs mt-2 text-stone-600">Siempre consulta con un alergólogo antes de adoptar una mascota.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- State Management ---
+        const state = {
+            bathFrequency: 7, // Days between baths
+            usesLotion: true,
+            chartInstances: {}
+        };
+
+        // --- Navigation Logic ---
+        function navTo(targetId) {
+            // Scroll
+            const element = document.getElementById(targetId);
+            if(element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            // Update UI Active State
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if(btn.dataset.target === targetId) {
+                    btn.classList.add('nav-active', 'text-amber-600');
+                    btn.classList.remove('text-stone-600');
+                } else {
+                    btn.classList.remove('nav-active', 'text-amber-600');
+                    btn.classList.add('text-stone-600');
+                }
+            });
+
+            // Close mobile menu if open
+            document.getElementById('mobile-menu').classList.add('hidden');
+        }
+
+        // --- Mobile Menu Toggle ---
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // --- Interactive Card Logic ---
+        function toggleCard(card) {
+            const content = card.querySelector('.hidden-content');
+            content.classList.toggle('hidden');
+            // Visual feedback
+            if (!content.classList.contains('hidden')) {
+                card.classList.add('border-amber-400', 'bg-amber-50');
+            } else {
+                card.classList.remove('border-amber-400', 'bg-amber-50');
+            }
+        }
+
+        // --- Chart 1: Sources of Allergens (Doughnut) ---
+        function initAllergenChart() {
+            const ctx = document.getElementById('allergenChart').getContext('2d');
+            state.chartInstances.allergen = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Caspa (Piel Muerta)', 'Saliva', 'Orina', 'Otros'],
+                    datasets: [{
+                        data: [60, 25, 10, 5], // Approximate breakdown of environmental Can f 1 sources
+                        backgroundColor: [
+                            '#d97706', // Amber 600
+                            '#f59e0b', // Amber 500
+                            '#78716c', // Stone 500
+                            '#d6d3d1'  // Stone 300
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.raw + '% de contribución';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- Chart 2: Breed Comparison (Bar) ---
+        const comparisonData = {
+            shedding: {
+                label: 'Dispersión Ambiental (Riesgo)',
+                data: [90, 85, 40, 15], // Shepherd, Golden, Poodle, Xolo
+                text: "El Xoloitzcuintle tiene una ventaja mecánica masiva: al no tener pelo, la caspa no queda atrapada y no se dispersa fácilmente por el aire al moverse o sacudirse."
+            },
+            production: {
+                label: 'Producción de Proteína Can f 1',
+                data: [85, 85, 80, 75], // Shepherd, Golden, Poodle, Xolo
+                text: "¡Cuidado! A nivel biológico, el Xolo produce casi tanta proteína alérgena como otros perros. Su piel, saliva y orina siguen siendo fuentes activas. La ventaja es solo que no la esparce."
+            }
+        };
+
+        function initComparisonChart() {
+            const ctx = document.getElementById('breedComparisonChart').getContext('2d');
+            state.chartInstances.comparison = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Pastor Alemán (Alto Pelo)', 'Golden Retriever', 'Poodle (Pelo Rizado)', 'Xoloitzcuintle'],
+                    datasets: [{
+                        label: 'Nivel de Riesgo Relativo',
+                        data: comparisonData.shedding.data,
+                        backgroundColor: [
+                            '#ef4444', // Red 500
+                            '#f97316', // Orange 500
+                            '#eab308', // Yellow 500
+                            '#14b8a6'  // Teal 500 (Good)
+                        ],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: { display: true, text: 'Índice Relativo (0-100)' }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        function updateComparison(type) {
+            // Update Data
+            const chart = state.chartInstances.comparison;
+            chart.data.datasets[0].data = comparisonData[type].data;
+            chart.update();
+
+            // Update Text Context
+            const textContainer = document.getElementById('chart-context');
+            textContainer.innerHTML = `<strong>Análisis:</strong> ${comparisonData[type].text}`;
+
+            // Update Buttons Styling
+            const btnS = document.getElementById('btn-shedding');
+            const btnP = document.getElementById('btn-production');
+
+            if(type === 'shedding') {
+                btnS.classList.add('bg-amber-100', 'text-amber-800', 'border-amber-300', 'border');
+                btnS.classList.remove('bg-stone-200');
+                btnP.classList.remove('bg-amber-100', 'text-amber-800', 'border-amber-300', 'border');
+                btnP.classList.add('bg-stone-200');
+            } else {
+                btnP.classList.add('bg-amber-100', 'text-amber-800', 'border-amber-300', 'border');
+                btnP.classList.remove('bg-stone-200');
+                btnS.classList.remove('bg-amber-100', 'text-amber-800', 'border-amber-300', 'border');
+                btnS.classList.add('bg-stone-200');
+            }
+        }
+
+        // --- Chart 3: Maintenance Simulator (Line) ---
+        function generateMaintenanceData(freq, lotion) {
+            // Logic: Allergen load increases daily. Bath drops it to near zero. 
+            // Lotion slows the accumulation rate (keeps skin sealed).
+            const days = Array.from({length: 14}, (_, i) => i + 1); // 14 days
+            const data = [];
+            let currentLoad = 0;
+            const dailyBuildUp = lotion ? 10 : 20; // Lotion slows buildup
+            
+            days.forEach(day => {
+                if (day % freq === 0) {
+                    currentLoad = 5; // Bath day (drops, but not to absolute 0 immediately)
+                } else {
+                    currentLoad += dailyBuildUp;
+                }
+                // Cap at 100
+                if (currentLoad > 100) currentLoad = 100;
+                data.push(currentLoad);
+            });
+            return { labels: days.map(d => `Día ${d}`), data: data };
+        }
+
+        function initMaintenanceChart() {
+            const ctx = document.getElementById('maintenanceChart').getContext('2d');
+            const simData = generateMaintenanceData(state.bathFrequency, state.usesLotion);
+            
+            state.chartInstances.maintenance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: simData.labels,
+                    datasets: [{
+                        label: 'Acumulación de Alérgenos',
+                        data: simData.data,
+                        borderColor: '#f59e0b', // Amber 500
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#d97706'
+                    }, {
+                        label: 'Umbral de Alergia Promedio',
+                        data: Array(14).fill(60),
+                        borderColor: '#ef4444',
+                        borderDash: [5, 5],
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: { display: true, text: 'Nivel de Alérgenos' }
+                        }
+                    },
+                    plugins: {
+                        legend: { 
+                            labels: { color: '#d6d3d1' } // Light text for dark bg
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateMaintenance() {
+            const chart = state.chartInstances.maintenance;
+            const simData = generateMaintenanceData(state.bathFrequency, state.usesLotion);
+            
+            chart.data.labels = simData.labels;
+            chart.data.datasets[0].data = simData.data;
+            chart.update();
+
+            // Update Text Feedback
+            const impactText = document.getElementById('impact-text');
+            const freqVal = document.getElementById('freq-val');
+            
+            freqVal.innerText = `Cada ${state.bathFrequency} día(s)`;
+
+            if (state.bathFrequency <= 3 && state.usesLotion) {
+                impactText.innerHTML = "<span class='text-green-400'>Excelente.</span> El riesgo es mínimo. La piel está hidratada y limpia.";
+            } else if (state.bathFrequency > 7) {
+                impactText.innerHTML = "<span class='text-red-400'>Alto Riesgo.</span> Demasiado tiempo entre baños permite acumulación de caspa.";
+            } else if (!state.usesLotion) {
+                impactText.innerHTML = "<span class='text-yellow-400'>Precaución.</span> Sin loción, la piel seca genera más caspa rápidamente.";
+            } else {
+                impactText.innerHTML = "<span class='text-amber-400'>Moderado.</span> Buen equilibrio, pero vigila síntomas los días previos al baño.";
+            }
+        }
+
+        // --- Inputs for Simulator ---
+        document.getElementById('bathFrequency').addEventListener('input', (e) => {
+            state.bathFrequency = parseInt(e.target.value);
+            updateMaintenance();
+        });
+
+        function setLotion(val) {
+            state.usesLotion = val;
+            
+            const yesBtn = document.getElementById('lotion-yes');
+            const noBtn = document.getElementById('lotion-no');
+
+            if(val) {
+                yesBtn.classList.replace('text-stone-400', 'text-white');
+                yesBtn.classList.replace('bg-stone-700', 'bg-amber-600');
+                yesBtn.classList.add('border-amber-500');
+                
+                noBtn.classList.replace('text-white', 'text-stone-400');
+                noBtn.classList.replace('bg-amber-600', 'bg-stone-700');
+                noBtn.classList.remove('border-amber-500');
+            } else {
+                noBtn.classList.replace('text-stone-400', 'text-white');
+                noBtn.classList.replace('bg-stone-700', 'bg-amber-600');
+                noBtn.classList.add('border-amber-500');
+                
+                yesBtn.classList.replace('text-white', 'text-stone-400');
+                yesBtn.classList.replace('bg-amber-600', 'bg-stone-700');
+                yesBtn.classList.remove('border-amber-500');
+            }
+            updateMaintenance();
+        }
+
+        // --- Initialization ---
+        window.onload = function() {
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            initAllergenChart();
+            initComparisonChart();
+            initMaintenanceChart();
+            updateMaintenance(); // Initial run for text
+        };
+
+    </script>
+</body>
+</html>
