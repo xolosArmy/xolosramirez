@@ -1,0 +1,97 @@
+<!--?xml version="1.0" encoding="UTF-8"?-->
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny" width="512" height="512" viewBox="0 0 512 512">
+  <title>Xolos Ramirez BIMI</title>
+  <desc>SVG Tiny 1.2 BIMI mark for xolosramirez.com (vector-only, no external resources)</desc>
+
+  <!-- Background (keep solid for BIMI consistency) -->
+  <rect x="0" y="0" width="512" height="512" fill="#ffffff"></rect>
+
+  <!-- Red lightning / rays -->
+  <g fill="#c21f26">
+    <!-- top bolt -->
+    <polygon points="256,52 238,92 262,92 244,140 292,84 268,84 286,52"></polygon>
+    <!-- left rays -->
+    <polygon points="86,198 40,220 92,238 52,266 118,252 104,230 132,212"></polygon>
+    <polygon points="120,138 84,110 100,160 64,154 116,190 128,164 158,178"></polygon>
+    <!-- right rays -->
+    <polygon points="426,198 472,220 420,238 460,266 394,252 408,230 380,212"></polygon>
+    <polygon points="392,138 428,110 412,160 448,154 396,190 384,164 354,178"></polygon>
+  </g>
+
+  <!-- Xolo head mark (stylized) -->
+  <g>
+    <!-- neck/base shadow -->
+    <path d="M196 420
+             C210 360, 230 330, 250 310
+             C272 288, 300 274, 324 268
+             C350 262, 366 268, 386 292
+             C402 312, 410 346, 408 420
+             L196 420 Z" fill="#0b0b0d"></path>
+
+    <!-- main head silhouette -->
+    <path d="M150 314
+             C152 268, 170 236, 200 214
+             C220 198, 244 186, 270 182
+             C296 178, 322 182, 346 196
+             C372 212, 392 234, 404 264
+             C418 296, 418 332, 402 360
+             C386 388, 354 404, 312 404
+             C268 404, 232 394, 200 378
+             C172 364, 148 346, 150 314 Z" fill="#111114"></path>
+
+    <!-- left ear -->
+    <path d="M220 92
+             C188 128, 174 166, 178 206
+             C182 240, 200 256, 224 254
+             C244 252, 256 234, 256 204
+             C256 164, 246 126, 220 92 Z" fill="#0b0b0d"></path>
+    <!-- right ear -->
+    <path d="M324 92
+             C356 128, 370 166, 366 206
+             C362 240, 344 256, 320 254
+             C300 252, 288 234, 288 204
+             C288 164, 298 126, 324 92 Z" fill="#0b0b0d"></path>
+
+    <!-- inner ear highlights -->
+    <path d="M224 118
+             C206 144, 198 170, 200 194
+             C202 214, 212 226, 226 226
+             C236 226, 242 214, 242 194
+             C242 168, 236 142, 224 118 Z" fill="#2a2a2f"></path>
+    <path d="M320 118
+             C338 144, 346 170, 344 194
+             C342 214, 332 226, 318 226
+             C308 226, 302 214, 302 194
+             C302 168, 308 142, 320 118 Z" fill="#2a2a2f"></path>
+
+    <!-- muzzle -->
+    <path d="M176 308
+             C190 322, 212 332, 238 334
+             C256 336, 274 332, 292 326
+             C304 322, 314 318, 320 316
+             C310 338, 290 354, 262 360
+             C224 368, 192 354, 176 334
+             C168 324, 168 316, 176 308 Z" fill="#1a1a1f"></path>
+
+    <!-- nose -->
+    <path d="M162 300
+             C156 292, 156 282, 164 276
+             C176 266, 196 268, 204 280
+             C210 288, 206 300, 196 306
+             C186 312, 170 310, 162 300 Z" fill="#000000"></path>
+    <circle cx="176" cy="290" r="3" fill="#2c2c2c"></circle>
+
+    <!-- eye -->
+    <ellipse cx="302" cy="250" rx="10" ry="7" fill="#111114"></ellipse>
+    <ellipse cx="302" cy="250" rx="6" ry="4" fill="#b3131a"></ellipse>
+    <circle cx="304" cy="248" r="1.5" fill="#ffffff"></circle>
+
+    <!-- subtle face highlight -->
+    <path d="M214 230
+             C238 210, 270 202, 300 206
+             C322 210, 340 220, 356 236
+             C332 228, 308 224, 284 226
+             C256 228, 234 236, 214 230 Z" fill="#2b2b31" opacity="0.55"></path>
+  </g>
+</svg>
