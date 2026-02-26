@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xoloitzcuintle: Guardián del Inframundo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Chosen Palette: Tierra y Obsidiana -->
+    <!-- Palette Description:
+         - Background: #F9FAFB (Cool Gray 50) - Clean canvas.
+         - Primary Text: #1F2937 (Gray 800) - High readability.
+         - Accents: #9A3412 (Burnt Orange/Terracotta) for cultural warmth, #065F46 (Deep Jade) for vitality/nature, #111827 (Obsidian Black) for the deity Xolotl.
+    -->
+
+    <!-- Application Structure Plan: 
+         - **Hero Section:** Immediate immersion into the dual nature of the subject (Biological vs. Mythological).
+         - **Dashboard Layout:** Instead of a linear long-read, the app uses a "Tabbed Dashboard" approach to allow users to toggle between three main pillars: "El Mito (Xolotl)", "La Historia (Cronología)", and "La Biología (Datos)". This prevents scroll fatigue.
+         - **Interactive Timeline:** A scrollable or clickable timeline to visualize the dramatic population crash and revival.
+         - **Mictlán Simulator:** A step-by-step interactive guide explaining the soul's journey, gamifying the cultural belief.
+         - **Comparative Analysis:** Charts comparing the Xolo to European breeds to highlight its unique evolutionary traits.
+         WHY: The topic bridges hard biology and soft mythology. A dashboard allows users to switch mindsets (analytical vs. narrative) easily.
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. **Mictlán Journey (Interactive List):** Goal: Explain the ritual role. Method: JS-driven stepper. Interaction: Click to advance steps. Justification: Complex process broken down into digestible steps.
+         2. **Trait Radar (Chart.js Radar):** Goal: Compare Xolo temperament/physicality. Method: Radar chart showing "Loyalty", "Grooming Needs", "Heat Emission", "Health". Interaction: Hover for values. Justification: Visualizes the "primitive" nature vs modern breeds.
+         3. **Survival Timeline (Chart.js Line):** Goal: Show the near-extinction event. Method: Line chart with annotations (data points). Interaction: Click points to read historical context. Justification: Shows the impact of the Conquest quantitatively.
+         4. **Genetics Cards (CSS Grid):** Goal: Explain the FOXI3 gene. Method: Flip cards or toggle visibility. Justification: Simplifies complex genetics (dominant vs recessive).
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Lora', serif;
+            background-color: #F3F4F6;
+            color: #1F2937;
+        }
+        h1, h2, h3, h4, h5, button {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .tab-active {
+            border-bottom: 3px solid #9A3412;
+            color: #9A3412;
+            font-weight: 600;
+        }
+        .tab-inactive {
+            color: #6B7280;
+            border-bottom: 3px solid transparent;
+        }
+        .tab-inactive:hover {
+            color: #374151;
+            border-bottom: 3px solid #D1D5DB;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .step-active {
+            background-color: #9A3412;
+            color: white;
+        }
+        .step-inactive {
+            background-color: #E5E7EB;
+            color: #4B5563;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 min-h-screen flex flex-col">
+
+<nav class="bg-stone-900 text-stone-100 shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center gap-3">
+          <span class="text-2xl font-extrabold tracking-widest text-orange-500">XOLOTL</span>
+          <a href="https://xolosramirez.com" target="_blank" rel="noopener"
+             class="hidden sm:inline text-xs uppercase tracking-widest text-stone-300 hover:text-orange-300 transition">
+            Xolos Ramírez
+          </a>
+        </div>
+
+        <div class="flex items-center space-x-3">
+          <button onclick="scrollToSection('tab-container')"
+                  class="hover:text-orange-400 transition text-sm uppercase font-semibold">
+            Explorar
+          </button>
+
+          <button onclick="toggleManifesto()"
+                  class="border border-stone-700 hover:border-orange-600 px-3 py-1 rounded text-xs font-bold transition">
+            Manifiesto
+          </button>
+
+          <button onclick="scrollToTop()"
+                  class="bg-orange-700 hover:bg-orange-600 px-3 py-1 rounded text-xs font-bold transition">
+            Inicio
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-stone-800 text-white py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden border-b-4 border-orange-700">
+        <div class="absolute inset-0 opacity-10 flex justify-center items-center pointer-events-none select-none overflow-hidden">
+            <span style="font-size: 20rem;">🐕</span>
+        </div>
+        <div class="max-w-5xl mx-auto relative z-10 text-center">
+            <p class="text-orange-400 font-bold tracking-widest uppercase mb-2">Canis Lupus Familiaris</p>
+            <h1 class="text-4xl sm:text-6xl font-extrabold mb-6 tracking-tight">El Xoloitzcuintle</h1>
+            <p class="text-xl sm:text-2xl text-stone-300 font-light max-w-3xl mx-auto leading-relaxed">
+                Más que un perro, un <span class="text-orange-200 font-semibold">artefacto cultural vivo</span>. 
+                Compañero en la vida y guía espiritual en la muerte, forjado hace más de 3,000 años en el México prehispánico.
+            </p>
+            <div class="mt-8 flex justify-center gap-4">
+                <div class="text-center px-4">
+                    <div class="text-3xl font-bold text-orange-500">3500+</div>
+                    <div class="text-xs text-stone-400 uppercase tracking-wide">Años de Antigüedad</div>
+                </div>
+                <div class="text-center px-4 border-l border-stone-600">
+                    <div class="text-3xl font-bold text-orange-500">40°C</div>
+                    <div class="text-xs text-stone-400 uppercase tracking-wide">Temp. Corporal</div>
+                </div>
+                <div class="text-center px-4 border-l border-stone-600">
+                    <div class="text-3xl font-bold text-orange-500">0%</div>
+                    <div class="text-xs text-stone-400 uppercase tracking-wide">Pelo (Var. Estándar)</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Application Container -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+        <!-- Intro Text Block -->
+        <section class="mb-10 text-center max-w-4xl mx-auto">
+            <h2 class="text-2xl font-bold text-stone-800 mb-4">Investigación Interactiva</h2>
+            <p class="text-lg text-stone-600">
+                Esta aplicación sintetiza la relación simbiótica entre la biología del Xoloitzcuintle y la mitología del dios Xolotl.
+                Utilice las pestañas a continuación para analizar las dimensiones históricas, míticas y biológicas de esta especie endémica.
+            </p>
+        </section>
+
+        <!-- Tab Navigation -->
+        <div class="flex flex-wrap justify-center border-b border-stone-300 mb-8" id="tab-container">
+            <button onclick="switchTab('mito')" id="tab-btn-mito" class="tab-active px-6 py-3 text-lg focus:outline-none transition-colors">
+                I. El Mito (Xolotl)
+            </button>
+            <button onclick="switchTab('historia')" id="tab-btn-historia" class="tab-inactive px-6 py-3 text-lg focus:outline-none transition-colors">
+                II. Historia y Datos
+            </button>
+            <button onclick="switchTab('biologia')" id="tab-btn-biologia" class="tab-inactive px-6 py-3 text-lg focus:outline-none transition-colors">
+                III. Biología
+            </button>
+        </div>
+
+        <!-- CONTENT SECTIONS -->
+
+        <!-- SECTION 1: MYTHOLOGY & XOLOTL -->
+        <div id="section-mito" class="fade-in space-y-8 block">
+            <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6 md:p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h3 class="text-2xl font-bold text-stone-900 mb-4 flex items-center">
+                            <span class="text-3xl mr-3">⚡</span> ¿Quién es Xolotl?
+                        </h3>
+                        <p class="text-stone-700 leading-relaxed mb-4">
+                            En la cosmovisión mexica, <strong>Xolotl</strong> es el gemelo de Quetzalcóatl. Mientras Quetzalcóatl representa la estrella de la mañana (Venus) y la vida, Xolotl personifica la <strong>estrella de la tarde</strong>, el fuego, el rayo y la muerte.
+                        </p>
+                        <p class="text-stone-700 leading-relaxed mb-6">
+                            Xolotl tiene la misión de acompañar al Sol en su recorrido por el inframundo cada noche. Para asistir a la humanidad, creó al perro <em>(itzcuintli)</em> a partir de una astilla del Hueso de la Vida.
+                        </p>
+                        <div class="bg-orange-50 border-l-4 border-orange-500 p-4">
+                            <p class="text-sm italic text-orange-900">
+                                "El Xoloitzcuintle no se compra, se recibe. Y si lo cuidas bien, él guiará tu alma a través del río Apanohuacalhuia hacia el descanso eterno."
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Interactive Mictlan Guide -->
+                    <div class="bg-stone-900 text-stone-100 rounded-lg p-6">
+                        <h4 class="text-xl font-bold text-orange-400 mb-4 border-b border-stone-700 pb-2">El Viaje al Mictlán</h4>
+                        <p class="text-sm text-stone-400 mb-4">Haz clic en los niveles para ver el rol del perro guía.</p>
+                        
+                        <div class="space-y-3">
+                            <div onclick="updateMictlan(1)" class="cursor-pointer hover:bg-stone-800 p-3 rounded transition flex items-center group">
+                                <div id="step-circle-1" class="w-8 h-8 rounded-full bg-orange-600 flex items-center justify-center font-bold text-sm mr-3">1</div>
+                                <span class="font-semibold group-hover:text-orange-300">Itzcuintlán (Lugar de los Perros)</span>
+                            </div>
+                            <div onclick="updateMictlan(2)" class="cursor-pointer hover:bg-stone-800 p-3 rounded transition flex items-center group">
+                                <div id="step-circle-2" class="w-8 h-8 rounded-full bg-stone-700 flex items-center justify-center font-bold text-sm mr-3">2</div>
+                                <span class="font-semibold group-hover:text-orange-300">Tepéme Monamictía (Montañas)</span>
+                            </div>
+                            <div onclick="updateMictlan(3)" class="cursor-pointer hover:bg-stone-800 p-3 rounded transition flex items-center group">
+                                <div id="step-circle-3" class="w-8 h-8 rounded-full bg-stone-700 flex items-center justify-center font-bold text-sm mr-3">3</div>
+                                <span class="font-semibold group-hover:text-orange-300">Mictlán (El Descanso)</span>
+                            </div>
+                        </div>
+
+                        <div id="mictlan-desc" class="mt-6 p-4 bg-stone-800 rounded border border-stone-600 min-h-[100px]">
+                            <h5 class="font-bold text-orange-200 mb-1">Nivel 1: El Cruce del Río</h5>
+                            <p class="text-sm text-stone-300">
+                                Aquí es donde el Xoloitzcuintle espera a su amo. Si fuiste bueno con los perros en vida, te ayudará a cruzar el caudaloso río Apanohuacalhuia sobre su lomo. Si fuiste cruel, te quedarás en la orilla para siempre.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: HISTORY & DATA -->
+        <div id="section-historia" class="hidden fade-in space-y-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                <!-- Chart 1: Population Timeline -->
+                <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6">
+                    <div class="mb-4">
+                        <h3 class="text-xl font-bold text-stone-900">Auge, Caída y Renacimiento</h3>
+                        <p class="text-sm text-stone-500 mt-2">
+                            Estimación de la relevancia cultural y poblacional del Xoloitzcuintle a través de los siglos.
+                        </p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="historyChart"></canvas>
+                    </div>
+                    <div class="mt-4 text-xs text-stone-500 bg-stone-100 p-3 rounded">
+                        <strong>Nota de Análisis:</strong> La caída drástica en el siglo XVI se debe a que los conquistadores españoles asociaron al animal con ritos paganos y también lo utilizaron como fuente de alimento indiscriminada.
+                    </div>
+                </div>
+
+                <!-- Historical Context Text -->
+                <div class="space-y-6">
+                    <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6 h-full">
+                        <h3 class="text-xl font-bold text-stone-900 mb-4">Puntos Clave en la Historia</h3>
+                        <ul class="space-y-4">
+                            <li class="flex">
+                                <span class="flex-shrink-0 w-12 text-sm font-bold text-orange-600">1325</span>
+                                <div class="ml-4">
+                                    <h4 class="font-bold text-stone-800">Época Azteca</h4>
+                                    <p class="text-sm text-stone-600">El Xolo es altamente valorado. Se cría en mantas para proteger su piel y se utiliza en ceremonias sagradas y banquetes reales.</p>
+                                </div>
+                            </li>
+                            <li class="flex">
+                                <span class="flex-shrink-0 w-12 text-sm font-bold text-stone-500">1521</span>
+                                <div class="ml-4">
+                                    <h4 class="font-bold text-stone-800">La Conquista</h4>
+                                    <p class="text-sm text-stone-600">Edicto real para eliminar las tradiciones indígenas. El Xolo es cazado casi hasta la extinción y se refugia en las sierras de Oaxaca y Guerrero.</p>
+                                </div>
+                            </li>
+                            <li class="flex">
+                                <span class="flex-shrink-0 w-12 text-sm font-bold text-green-600">1950s</span>
+                                <div class="ml-4">
+                                    <h4 class="font-bold text-stone-800">Nacionalismo Cultural</h4>
+                                    <p class="text-sm text-stone-600">Diego Rivera y Frida Kahlo adoptan xolos como símbolos de identidad mexicana. En 1956, la Federación Canófila Mexicana lo reconoce oficialmente como raza.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: BIOLOGY -->
+        <div id="section-biologia" class="hidden fade-in space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- Chart 2: Trait Radar -->
+                <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6">
+                    <div class="mb-4">
+                        <h3 class="text-xl font-bold text-stone-900">Perfil del Temperamento</h3>
+                        <p class="text-sm text-stone-500 mt-2">Comparativa entre el Xoloitzcuintle (Primitivo) vs. Perro Pastor Moderno.</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="traitChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Biology Cards -->
+                <div class="grid grid-cols-1 gap-4">
+                    <!-- Heat Card -->
+                    <div class="bg-orange-50 rounded-xl p-6 border border-orange-100 flex items-start transform transition hover:scale-[1.01]">
+                        <div class="text-4xl mr-4">🔥</div>
+                        <div>
+                            <h4 class="font-bold text-stone-800 text-lg">Termoterapia Viva</h4>
+                            <p class="text-sm text-stone-600 mt-1">
+                                Al no tener pelo, el Xolo libera calor directamente a través de la piel. Históricamente, se usaban como "bolsas de agua caliente" vivas para tratar reumatismo y asma. Su piel se siente más caliente (aprox 40°C), aunque su temperatura interna es similar a otros perros.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Gene Card -->
+                    <div class="bg-stone-100 rounded-xl p-6 border border-stone-200 flex items-start transform transition hover:scale-[1.01]">
+                        <div class="text-4xl mr-4">🧬</div>
+                        <div>
+                            <h4 class="font-bold text-stone-800 text-lg">El Gen FOXI3</h4>
+                            <p class="text-sm text-stone-600 mt-1">
+                                La ausencia de pelo es causada por una mutación dominante en el gen FOXI3. Este mismo gen afecta la dentición; por ello, a la mayoría de los xolos les faltan premolares.
+                                <br><span class="text-xs font-bold text-stone-500 mt-2 block">Dato: 1 de cada 4 cachorros nace CON pelo (variedad recesiva).</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Sizes Card -->
+                    <div class="bg-white rounded-xl p-6 border border-stone-200 flex items-start transform transition hover:scale-[1.01]">
+                        <div class="text-4xl mr-4">📏</div>
+                        <div>
+                            <h4 class="font-bold text-stone-800 text-lg">Tres Tamaños</h4>
+                            <div class="flex justify-between mt-2 text-center text-sm">
+                                <div class="px-2">
+                                    <div class="h-8 w-1 bg-stone-300 mx-auto mb-1 rounded"></div>
+                                    <strong>Toy</strong><br>23-34cm
+                                </div>
+                                <div class="px-2">
+                                    <div class="h-12 w-1 bg-stone-400 mx-auto mb-1 rounded"></div>
+                                    <strong>Mini</strong><br>35-45cm
+                                </div>
+                                <div class="px-2">
+                                    <div class="h-16 w-1 bg-stone-600 mx-auto mb-1 rounded"></div>
+                                    <strong>Estándar</strong><br>46-60cm
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-stone-900 text-stone-400 py-8 border-t border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="mb-2 font-serif italic">"El perro es el único ser en la tierra que te ama más de lo que se ama a sí mismo."</p>
+            <p class="text-xs uppercase tracking-widest mt-4">Análisis de Patrimonio Cultural y Biológico</p>
+            <p class="text-xs text-stone-600 mt-2">Investigación generada por Canvas AI</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- State Management ---
+        const state = {
+            activeTab: 'mito',
+            mictlanStep: 1
+        };
+
+        const mictlanData = {
+            1: {
+                title: "Nivel 1: Itzcuintlán (Lugar de los Perros)",
+                desc: "Al morir, llegas a la orilla del gran río Apanohuacalhuia. Aquí encuentras a tu Xoloitzcuintle. Él te reconocerá por tu olor. Si lo trataste con dignidad, te ofrecerá su lomo para cruzar las aguas turbulentas. Es la prueba de la lealtad.",
+                color: "bg-orange-600"
+            },
+            2: {
+                title: "Nivel 2: Tepéme Monamictía (Donde las montañas chocan)",
+                desc: "Tras cruzar el río, el alma y el guía deben pasar entre dos grandes montañas que chocan constantemente entre sí. La agilidad del perro es vital para encontrar el momento exacto para pasar sin ser aplastados.",
+                color: "bg-stone-700"
+            },
+            3: {
+                title: "Nivel 9: Mictlán (El Descanso Eterno)",
+                desc: "Tras un viaje de 4 años atravesando 9 niveles de pruebas (viento de obsidiana, bestias, frío), llegas ante Mictlantecuhtli. Ofreces tus bienes y, finalmente, tu alma descansa. Tu perro guía se queda a tu lado como guardián eterno.",
+                color: "bg-stone-900"
+            }
+        };
+
+        // --- Core Interactions ---
+
+        function switchTab(tabId) {
+            // Update State
+            state.activeTab = tabId;
+
+            // DOM Elements
+            const tabs = ['mito', 'historia', 'biologia'];
+            const buttons = tabs.map(t => document.getElementById(`tab-btn-${t}`));
+            const sections = tabs.map(t => document.getElementById(`section-${t}`));
+
+            // Reset UI
+            buttons.forEach(btn => {
+                btn.classList.remove('tab-active');
+                btn.classList.add('tab-inactive');
+            });
+            sections.forEach(sec => {
+                sec.classList.add('hidden');
+                sec.classList.remove('block');
+            });
+
+            // Activate Selection
+            document.getElementById(`tab-btn-${tabId}`).classList.add('tab-active');
+            document.getElementById(`tab-btn-${tabId}`).classList.remove('tab-inactive');
+            
+            const activeSection = document.getElementById(`section-${tabId}`);
+            activeSection.classList.remove('hidden');
+            activeSection.classList.add('block');
+
+            // Trigger Chart Render if needed (delay slightly to ensure DOM visibility)
+            if(tabId === 'historia') renderHistoryChart();
+            if(tabId === 'biologia') renderTraitChart();
+        }
+
+        function updateMictlan(step) {
+            state.mictlanStep = step;
+            const data = mictlanData[step];
+            
+            // Update Text
+            const descContainer = document.getElementById('mictlan-desc');
+            descContainer.innerHTML = `
+                <h5 class="font-bold text-orange-200 mb-1 fade-in">${data.title}</h5>
+                <p class="text-sm text-stone-300 fade-in">${data.desc}</p>
+            `;
+
+            // Update Steps UI
+            [1, 2, 3].forEach(i => {
+                const circle = document.getElementById(`step-circle-${i}`);
+                if (i === step) {
+                    circle.classList.remove('bg-stone-700');
+                    circle.classList.add('bg-orange-600');
+                } else {
+                    circle.classList.add('bg-stone-700');
+                    circle.classList.remove('bg-orange-600');
+                }
+            });
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- Chart Management ---
+
+        let historyChartInstance = null;
+        let traitChartInstance = null;
+
+        function renderHistoryChart() {
+            if (historyChartInstance) return; // Prevent re-render
+
+            const ctx = document.getElementById('historyChart').getContext('2d');
+            historyChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['1300 (Azteca)', '1521 (Conquista)', '1700 (Colonia)', '1850 (México Ind.)', '1956 (FCM)', '2024 (Actual)'],
+                    datasets: [{
+                        label: 'Relevancia Cultural / Población Estimada',
+                        data: [100, 20, 5, 10, 60, 95],
+                        borderColor: '#9A3412', // Orange-700
+                        backgroundColor: 'rgba(154, 52, 18, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#9A3412',
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { display: false },
+                            grid: { color: '#E5E7EB' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const labels = [
+                                        "Sagrado y abundante",
+                                        "Casi exterminado por españoles",
+                                        "Oculto en zonas rurales",
+                                        "Considerado 'perro corriente'",
+                                        "Reconocimiento oficial raza",
+                                        "Icono nacional y popular"
+                                    ];
+                                    return labels[context.dataIndex];
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderTraitChart() {
+            if (traitChartInstance) return;
+
+            const ctx = document.getElementById('traitChart').getContext('2d');
+            traitChartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Instinto Primitivo', 'Salud General', 'Necesidad de Aseo', 'Lealtad al Dueño', 'Adaptabilidad Climática', 'Sociabilidad con Extraños'],
+                    datasets: [{
+                        label: 'Xoloitzcuintle',
+                        data: [90, 85, 10, 95, 60, 40],
+                        fill: true,
+                        backgroundColor: 'rgba(154, 52, 18, 0.2)',
+                        borderColor: '#9A3412',
+                        pointBackgroundColor: '#9A3412',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#9A3412'
+                    }, {
+                        label: 'Perro Promedio',
+                        data: [40, 60, 80, 70, 70, 80],
+                        fill: true,
+                        backgroundColor: 'rgba(75, 85, 99, 0.2)',
+                        borderColor: '#4B5563',
+                        pointBackgroundColor: '#4B5563',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#4B5563'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: '#E5E7EB' },
+                            grid: { color: '#E5E7EB' },
+                            pointLabels: {
+                                font: { size: 11, family: 'Montserrat' },
+                                color: '#374151'
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        // Initialize first render
+        document.addEventListener('DOMContentLoaded', () => {
+            // Pre-load logic if necessary
+        });
+
+    </script>
+</body>
+</html>
