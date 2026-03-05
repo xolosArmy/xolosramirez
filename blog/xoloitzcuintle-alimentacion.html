@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrición y Dieta del Xoloitzcuintle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Chosen Palette: Warm Mexican Earth (Terracotta, Sand, Charcoal, Amber) -->
+    <!-- Application Structure Plan: The SPA is structured as a continuous scrolling dashboard designed for pet owners and breeders. It flows logically from general breed requirements to specific macronutrients, specialized skin care (crucial for hairless breeds), life stage adaptations, and finally, toxic foods. This structure allows users to grasp the overarching needs before diving into specific, actionable data like feeding by age. Interactive charts and tabs are used to prevent information overload, encouraging active exploration of the data. -->
+    <!-- Visualization & Content Choices: 
+         1. Intro: Text & Emojis -> Goal: Set context -> Viz: Clean typography -> Interaction: Reading -> Justification: Establishes base knowledge. -> Library: HTML/Tailwind. (NO SVG/Mermaid)
+         2. Macronutrients: Percentages -> Goal: Inform on balance -> Viz: Doughnut Chart -> Interaction: Click slices to reveal specific ingredient recommendations -> Justification: Shows part-to-whole relationship clearly while hiding heavy text until requested. -> Library: Chart.js.
+         3. Skin Health: Micronutrients -> Goal: Compare importance -> Viz: Bar Chart -> Interaction: Hover tooltips -> Justification: Ranks the essential vitamins for the hairless skin. -> Library: Chart.js.
+         4. Life Stages: Dietary shifts -> Goal: Organize by age -> Viz: Interactive Tabs -> Interaction: Click tabs to change content -> Justification: Users only need to see the diet for their dog's current age, reducing clutter. -> Library: Vanilla JS + HTML.
+         5. Toxic Foods: List -> Goal: Warn -> Viz: Grid of red cards -> Interaction: Hover to see symptoms -> Justification: High visibility and instant recognition of danger. -> Library: HTML/CSS. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 280px;
+            }
+        }
+        .tab-active {
+            border-bottom: 4px solid #D97757;
+            color: #D97757;
+            font-weight: bold;
+        }
+        .toxic-card:hover .toxic-detail {
+            display: block;
+        }
+        .toxic-detail {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-[#FDFBF7] text-gray-800 font-sans antialiased selection:bg-[#D97757] selection:text-white">
+
+    <nav class="sticky top-0 z-50 bg-[#FDFBF7]/90 backdrop-blur border-b border-[#E2D8CE] shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="text-2xl font-bold text-[#8C624A]">🐕 XoloNutrición</div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#metabolismo" class="text-gray-600 hover:text-[#D97757] transition-colors">Metabolismo</a>
+                    <a href="#macronutrientes" class="text-gray-600 hover:text-[#D97757] transition-colors">Macronutrientes</a>
+                    <a href="#piel" class="text-gray-600 hover:text-[#D97757] transition-colors">Salud Dérmica</a>
+                    <a href="#etapas" class="text-gray-600 hover:text-[#D97757] transition-colors">Etapas de Vida</a>
+                  <a
+  href="https://xolosramirez.com/?utm_source=xolonutricion&utm_medium=nav_button&utm_campaign=nutrition_dashboard&utm_content=ver_mas_mobile"
+  target="_blank"
+  rel="noopener noreferrer"
+  class="md:hidden inline-flex items-center gap-2 rounded-full bg-[#D97757] px-3 py-2 text-xs font-semibold text-white shadow-sm hover:opacity-90 transition"
+>
+  Ver más
+  <span aria-hidden="true">↗</span>
+</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-[#2D3748] mb-4">Dieta Recomendada para el Xoloitzcuintle</h1>
+        <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+            Una guía interactiva sobre las necesidades nutricionales únicas del perro primitivo de México. Descubre cómo alimentar a tu Xolo para proteger su piel, mantener su energía y asegurar su longevidad.
+        </p>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 space-y-24">
+
+        <section id="metabolismo" class="scroll-mt-20">
+            <div class="bg-white rounded-2xl shadow-sm border border-[#E2D8CE] p-8 md:p-12">
+                <h2 class="text-3xl font-bold text-[#8C624A] mb-4">🐾 El Metabolismo de una Raza Primitiva</h2>
+                <p class="text-gray-600 mb-6 text-lg">
+                    Esta sección introduce las particularidades biológicas del Xoloitzcuintle. Comprender su fisiología es vital, ya que al ser una raza primitiva con pérdida de pelo (en su variedad pelona) y, a menudo, falta de premolares, requieren una dieta altamente digestible y enfocada en la termorregulación y protección dérmica.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-[#F8F5F0] p-6 rounded-xl border border-[#E2D8CE] hover:shadow-md transition-shadow">
+                        <div class="text-4xl mb-3">🦷</div>
+                        <h3 class="font-bold text-xl mb-2">Dentición Incompleta</h3>
+                        <p class="text-sm text-gray-600">El gen que causa la falta de pelo también afecta los dientes. Muchos Xolos carecen de premolares, por lo que la croqueta debe ser de tamaño adecuado o ligeramente humedecida para facilitar la masticación.</p>
+                    </div>
+                    <div class="bg-[#F8F5F0] p-6 rounded-xl border border-[#E2D8CE] hover:shadow-md transition-shadow">
+                        <div class="text-4xl mb-3">🔥</div>
+                        <h3 class="font-bold text-xl mb-2">Termorregulación</h3>
+                        <p class="text-sm text-gray-600">Al no tener pelo para aislar su temperatura corporal, los Xolos gastan más energía en climas fríos para mantenerse calientes. Su dieta debe ajustar las calorías según el clima y la actividad.</p>
+                    </div>
+                    <div class="bg-[#F8F5F0] p-6 rounded-xl border border-[#E2D8CE] hover:shadow-md transition-shadow">
+                        <div class="text-4xl mb-3">🛡️</div>
+                        <h3 class="font-bold text-xl mb-2">Sistema Inmunológico</h3>
+                        <p class="text-sm text-gray-600">Como raza rústica, tienen un sistema digestivo fuerte, pero se benefician enormemente de proteínas noveles (cordero, pescado) para evitar alergias alimentarias que se manifestarían inmediatamente en su piel.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="macronutrientes" class="scroll-mt-20">
+            <h2 class="text-3xl font-bold text-[#8C624A] mb-4">Balance de Macronutrientes</h2>
+            <p class="text-gray-600 mb-8 max-w-4xl text-lg">
+                Aquí exploramos la distribución ideal de energía para el Xolo. Haz clic en las diferentes secciones del gráfico de dona para descubrir las fuentes recomendadas y la función específica de cada macronutriente en el organismo de tu perro.
+            </p>
+            
+            <div class="flex flex-col lg:flex-row items-center gap-12 bg-white p-8 rounded-2xl shadow-sm border border-[#E2D8CE]">
+                <div class="w-full lg:w-1/2">
+                    <div class="chart-container">
+                        <canvas id="macroChart"></canvas>
+                    </div>
+                </div>
+                <div class="w-full lg:w-1/2">
+                    <div id="macro-details" class="bg-[#F8F5F0] p-8 rounded-xl border border-[#D97757] h-full flex flex-col justify-center transition-all duration-300">
+                        <div class="text-5xl mb-4">👈</div>
+                        <h3 class="text-2xl font-bold text-[#2D3748] mb-2">Interactúa con el gráfico</h3>
+                        <p class="text-gray-600">Haz clic en una sección del gráfico de dona a la izquierda para ver detalles sobre proteínas, grasas o carbohidratos específicos recomendados para el Xoloitzcuintle.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="piel" class="scroll-mt-20">
+            <h2 class="text-3xl font-bold text-[#8C624A] mb-4">Micronutrientes Críticos para la Piel</h2>
+            <p class="text-gray-600 mb-8 max-w-4xl text-lg">
+                La piel es el órgano más expuesto del Xoloitzcuintle pelón. Esta sección detalla los suplementos y vitaminas vitales que previenen la resequedad, el acné canino y protegen contra los rayos solares. Pasa el cursor sobre las barras para ver la función de cada nutriente.
+            </p>
+
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-[#E2D8CE]">
+                <div class="chart-container" style="max-width: 800px;">
+                    <canvas id="skinChart"></canvas>
+                </div>
+                <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                    <div class="p-4 bg-[#FDFBF7] rounded border border-[#E2D8CE]">
+                        <span class="block font-bold text-[#D97757]">Fuentes de Omega 3</span>
+                        <span class="text-sm text-gray-600">Salmón, Sardinas, Chía</span>
+                    </div>
+                    <div class="p-4 bg-[#FDFBF7] rounded border border-[#E2D8CE]">
+                        <span class="block font-bold text-[#D97757]">Fuentes de Zinc</span>
+                        <span class="text-sm text-gray-600">Carne roja magra, Pavo</span>
+                    </div>
+                    <div class="p-4 bg-[#FDFBF7] rounded border border-[#E2D8CE]">
+                        <span class="block font-bold text-[#D97757]">Fuentes Vitamina E</span>
+                        <span class="text-sm text-gray-600">Aceite de oliva, Espinaca</span>
+                    </div>
+                    <div class="p-4 bg-[#FDFBF7] rounded border border-[#E2D8CE]">
+                        <span class="block font-bold text-[#D97757]">Fuentes Vitamina A</span>
+                        <span class="text-sm text-gray-600">Zanahoria, Hígado, Calabaza</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="etapas" class="scroll-mt-20">
+            <h2 class="text-3xl font-bold text-[#8C624A] mb-4">Necesidades por Etapa de Vida</h2>
+            <p class="text-gray-600 mb-8 max-w-4xl text-lg">
+                Los requerimientos cambian drásticamente conforme el perro crece. Selecciona la etapa actual de tu Xoloitzcuintle para conocer las pautas de alimentación, control de peso y cuidados preventivos mediante la dieta.
+            </p>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-[#E2D8CE] overflow-hidden">
+                <div class="flex border-b border-[#E2D8CE] bg-[#F8F5F0]">
+                    <button class="flex-1 py-4 px-6 text-center font-medium text-gray-500 hover:text-[#D97757] focus:outline-none transition-colors tab-btn tab-active" data-target="tab-cachorro">
+                        Cachorro (0-12 meses)
+                    </button>
+                    <button class="flex-1 py-4 px-6 text-center font-medium text-gray-500 hover:text-[#D97757] focus:outline-none transition-colors tab-btn" data-target="tab-adulto">
+                        Adulto (1-7 años)
+                    </button>
+                    <button class="flex-1 py-4 px-6 text-center font-medium text-gray-500 hover:text-[#D97757] focus:outline-none transition-colors tab-btn" data-target="tab-senior">
+                        Senior (7+ años)
+                    </button>
+                </div>
+
+                <div class="p-8">
+                    <div id="tab-cachorro" class="tab-content block">
+                        <div class="flex flex-col md:flex-row gap-8 items-center">
+                            <div class="text-8xl">🍼</div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-[#2D3748] mb-3">Crecimiento y Desarrollo</h3>
+                                <p class="text-gray-600 mb-4">Durante el primer año, el Xoloitzcuintle (especialmente en sus tamaños intermedio y estándar) requiere un aporte calórico denso. El calcio y fósforo deben estar estrictamente balanceados para evitar deformaciones óseas.</p>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center text-sm text-gray-700"><span class="text-[#D97757] font-bold mr-2">✓</span> Proteína: Mínimo 28-30% de alta calidad.</li>
+                                    <li class="flex items-center text-sm text-gray-700"><span class="text-[#D97757] font-bold mr-2">✓</span> Frecuencia: 3 a 4 comidas pequeñas al día.</li>
+                                    <li class="flex items-center text-sm text-gray-700"><span class="text-[#D97757] font-bold mr-2">✓</span> Suplemento: Probióticos para establecer una flora intestinal robusta.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="tab-adulto" class="tab-content hidden">
+                        <div class="flex flex-col md:flex-row gap-8 items-center">
+                            <div class="text-8xl">🐕</div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-[#2D3748] mb-3">Mantenimiento y Protección Dérmica</h3>
+                                <p class="text-gray-600 mb-4">En la etapa adulta, el enfoque cambia a mantener un peso ideal y cuidar la salud de la piel. Es crucial evitar el sobrepeso, ya que las articulaciones de la raza son ligeras.</p>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center text-sm text-gray-700"><span class="text-[#D97757] font-bold mr-2">✓</span> Proteína: 22-26% basada en pescado o carnes magras.</li>
+                                    <li class="flex items-center text-sm text-gray-700"><span class="text-[#D97757] font-bold mr-2">✓</span> Frecuencia: 2 comidas diarias.</li>
+                                    <li class="flex items-center text-sm text-gray-700"><span class="text-[#D97757] font-bold mr-2">✓</span> Cuidado de Piel: Introducir aceites de pescado o linaza diariamente.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="tab-senior" class="tab-content hidden">
+                        <div class="flex flex-col md:flex-row gap-8 items-center">
+                            <div class="text-8xl">🛋️</div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-[#2D3748] mb-3">Soporte Articular y Digestivo</h3>
+                                <p class="text-gray-600 mb-4">Los Xolos son perros longevos (pueden vivir 14-16 años). En su vejez, su metabolismo se ralentiza. Dado que es común la falta de piezas dentales, la textura de la comida toma prioridad.</p>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center text-sm text-gray-700"><span class="text-[#D97757] font-bold mr-2">✓</span> Textura: Comida blanda, patés de alta calidad o croquetas remojadas.</li>
+                                    <li class="flex items-center text-sm text-gray-700"><span class="text-[#D97757] font-bold mr-2">✓</span> Suplementos: Condroitina y Glucosamina para las articulaciones.</li>
+                                    <li class="flex items-center text-sm text-gray-700"><span class="text-[#D97757] font-bold mr-2">✓</span> Calorías: Reducir grasas saturadas para proteger el hígado y evitar la obesidad.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="peligros">
+            <h2 class="text-3xl font-bold text-red-700 mb-4">⚠️ Alimentos Altamente Tóxicos</h2>
+            <p class="text-gray-600 mb-8 max-w-4xl text-lg">
+                Concluyendo nuestra guía, es imperativo conocer los alimentos que, aunque comunes en la dieta humana, representan un peligro mortal para el Xoloitzcuintle. Pasa el cursor sobre cada elemento para ver los síntomas de intoxicación.
+            </p>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="toxic-card bg-red-50 p-6 rounded-xl border border-red-200 text-center cursor-help transition-all relative overflow-hidden group">
+                    <div class="text-4xl mb-2 group-hover:opacity-10 transition-opacity">🍫</div>
+                    <h4 class="font-bold text-red-800 group-hover:opacity-10 transition-opacity">Chocolate / Cacao</h4>
+                    <div class="toxic-detail absolute inset-0 bg-red-600 text-white p-4 flex flex-col justify-center items-center text-sm font-medium">
+                        Contiene teobromina. Causa vómitos, arritmias cardíacas y convulsiones.
+                    </div>
+                </div>
+                <div class="toxic-card bg-red-50 p-6 rounded-xl border border-red-200 text-center cursor-help transition-all relative overflow-hidden group">
+                    <div class="text-4xl mb-2 group-hover:opacity-10 transition-opacity">🧅</div>
+                    <h4 class="font-bold text-red-800 group-hover:opacity-10 transition-opacity">Cebolla y Ajo</h4>
+                    <div class="toxic-detail absolute inset-0 bg-red-600 text-white p-4 flex flex-col justify-center items-center text-sm font-medium">
+                        Destruyen los glóbulos rojos, causando anemia severa y letargo agudo.
+                    </div>
+                </div>
+                <div class="toxic-card bg-red-50 p-6 rounded-xl border border-red-200 text-center cursor-help transition-all relative overflow-hidden group">
+                    <div class="text-4xl mb-2 group-hover:opacity-10 transition-opacity">🍇</div>
+                    <h4 class="font-bold text-red-800 group-hover:opacity-10 transition-opacity">Uvas y Pasas</h4>
+                    <div class="toxic-detail absolute inset-0 bg-red-600 text-white p-4 flex flex-col justify-center items-center text-sm font-medium">
+                        Altamente tóxicas. Pueden causar insuficiencia renal aguda e irreversible rápidamente.
+                    </div>
+                </div>
+                <div class="toxic-card bg-red-50 p-6 rounded-xl border border-red-200 text-center cursor-help transition-all relative overflow-hidden group">
+                    <div class="text-4xl mb-2 group-hover:opacity-10 transition-opacity">🥑</div>
+                    <h4 class="font-bold text-red-800 group-hover:opacity-10 transition-opacity">Aguacate</h4>
+                    <div class="toxic-detail absolute inset-0 bg-red-600 text-white p-4 flex flex-col justify-center items-center text-sm font-medium">
+                        Contiene persina. Provoca vómitos y diarrea extrema en caninos.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-[#2D3748] text-[#FDFBF7] py-8 text-center mt-12">
+        <div class="max-w-6xl mx-auto px-4">
+            <p class="opacity-80">Información Arquitectónica e Interactiva de la Dieta del Xoloitzcuintle.</p>
+            <p class="opacity-60 text-sm mt-2">Nota: Esta es una guía general. Siempre consulta a un médico veterinario para las necesidades específicas de tu mascota.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            // --- DATA FOR MACRO CHART INTERACTION ---
+            const macroDataContent = {
+                0: { 
+                    icon: '🥩', 
+                    title: 'Proteína (30%)', 
+                    desc: 'Esencial para el desarrollo muscular y la reparación de la piel. Para el Xolo, se recomiendan fuentes altamente digestibles como el salmón, pescado blanco, cordero o pavo para evitar alergias cutáneas.' 
+                },
+                1: { 
+                    icon: '🥑', 
+                    title: 'Grasas Saludables (20%)', 
+                    desc: 'El pilar de la salud dérmica del Xolo. Las grasas proveen los ácidos grasos esenciales (Omega 3 y 6) que actúan como barrera protectora de la piel, previniendo sequedad, descamación y acné.' 
+                },
+                2: { 
+                    icon: '🍠', 
+                    title: 'Carbohidratos Complejos (50%)', 
+                    desc: 'Fuente primaria de energía. Se deben evitar cereales de relleno (maíz, trigo). Optar por camote, calabaza, guisantes o arroz integral que ofrecen energía sostenida y fibra para una buena digestión.' 
+                }
+            };
+
+            // --- CHART 1: MACRONUTRIENTS (DOUGHNUT) ---
+            const ctxMacro = document.getElementById('macroChart').getContext('2d');
+            const macroChart = new Chart(ctxMacro, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Proteína', 'Grasas', 'Carbohidratos'],
+                    datasets: [{
+                        data: [30, 20, 50],
+                        backgroundColor: [
+                            '#8C624A', // Brown
+                            '#D97757', // Terracotta
+                            '#E2D8CE'  // Sand
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#FFFFFF',
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '65%',
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { family: 'sans-serif' } } },
+                        tooltip: {
+                            callbacks: { label: function(context) { return context.label + ': ' + context.parsed + '%'; } }
+                        }
+                    },
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            updateMacroDetails(index);
+                        }
+                    }
+                }
+            });
+
+            // Function to update the text box based on chart click
+            function updateMacroDetails(index) {
+                const detailBox = document.getElementById('macro-details');
+                const data = macroDataContent[index];
+                
+                detailBox.style.opacity = '0';
+                setTimeout(() => {
+                    detailBox.innerHTML = `
+                        <div class="text-5xl mb-4">${data.icon}</div>
+                        <h3 class="text-2xl font-bold text-[#2D3748] mb-2">${data.title}</h3>
+                        <p class="text-gray-600 leading-relaxed">${data.desc}</p>
+                    `;
+                    detailBox.style.opacity = '1';
+                }, 200);
+            }
+
+            // --- CHART 2: SKIN NUTRIENTS (BAR) ---
+            const ctxSkin = document.getElementById('skinChart').getContext('2d');
+            new Chart(ctxSkin, {
+                type: 'bar',
+                data: {
+                    labels: ['Omega 3 y 6', 'Zinc', 'Vitamina E', 'Vitamina A', 'Cobre'],
+                    datasets: [{
+                        label: 'Nivel de Importancia para la Piel (Escala 1-100)',
+                        data: [100, 95, 85, 80, 70],
+                        backgroundColor: '#D97757',
+                        borderRadius: 6,
+                        barPercentage: 0.6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 100, grid: { color: '#E2D8CE' } },
+                        x: { grid: { display: false } }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#2D3748',
+                            callbacks: {
+                                afterLabel: function(context) {
+                                    const tooltips = {
+                                        'Omega 3 y 6': 'Reduce inflamación y forma barrera lipídica.',
+                                        'Zinc': 'Esencial para renovar células de la epidermis.',
+                                        'Vitamina E': 'Antioxidante protector contra daño solar.',
+                                        'Vitamina A': 'Regula el crecimiento de la piel y previene caspa.',
+                                        'Cobre': 'Ayuda en la pigmentación de la piel oscura.'
+                                    };
+                                    return tooltips[context.label];
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // --- TAB NAVIGATION LOGIC ---
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remove active state from all buttons
+                    tabBtns.forEach(b => {
+                        b.classList.remove('tab-active');
+                        b.classList.replace('text-[#D97757]', 'text-gray-500');
+                    });
+                    
+                    // Add active state to clicked button
+                    btn.classList.add('tab-active');
+                    btn.classList.replace('text-gray-500', 'text-[#D97757]');
+
+                    // Hide all content
+                    tabContents.forEach(content => {
+                        content.classList.remove('block');
+                        content.classList.add('hidden');
+                    });
+
+                    // Show target content
+                    const targetId = btn.getAttribute('data-target');
+                    const targetContent = document.getElementById(targetId);
+                    targetContent.classList.remove('hidden');
+                    targetContent.classList.add('block');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
