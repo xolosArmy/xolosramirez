@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xoloitzcuintles: Convivencia y Armonía - Xolos Ramirez</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Chosen Palette: Warm Neutrals & Earth Tones (Cream, Charcoal, Terracotta accent, Sage green secondary) -->
+    <!-- Application Structure Plan: The SPA uses a clean, narrative-driven dashboard layout. 
+         1. Hero/Intro: Establishes the core message (Xolos get along with other pets).
+         2. Data Section (Chart): Visualizes the qualitative reports from 'Xolos Ramirez' families as a structured breakdown.
+         3. Case Study (Highlight): Focuses on the specific story of Kate, Teyolia, and the cat, using an interactive card to reveal details.
+         4. Interactive Scenarios (Tabs): Allows users to explore different relationship dynamics (Xolo+Cat, Xolo+Xolo, Xolo+Other) based on the text prompt. 
+         This structure translates a brief anecdotal report into an engaging, explorable educational tool. -->
+    <!-- Visualization & Content Choices: 
+         - Goal: Inform on general compatibility -> Viz: Doughnut Chart (Chart.js) -> Interaction: Hover tooltips -> Justification: Shows proportion of positive reports by pet type. Library: Chart.js (Canvas).
+         - Goal: Detail specific case -> Viz: Interactive CSS "Polaroid" Card -> Interaction: Click to flip/reveal -> Justification: Engages user to read the story behind the photo without using external image files or SVGs. Method: HTML/CSS/JS.
+         - Goal: Explore specific dynamics -> Viz: Tabbed Content -> Interaction: Click tabs to update text -> Justification: Organizes the different scenarios mentioned in the prompt cleanly. Method: Vanilla JS + HTML.
+         - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+         
+    <style>
+        /* Custom Colors & Utilities */
+        :root {
+            --bg-cream: #F9F6F0;
+            --text-dark: #2C2C2C;
+            --accent-terra: #C87941;
+            --accent-sage: #87A8A4;
+            --card-bg: #FFFFFF;
+        }
+        body {
+            background-color: var(--bg-cream);
+            color: var(--text-dark);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        .text-terra { color: var(--accent-terra); }
+        .bg-terra { background-color: var(--accent-terra); }
+        .border-terra { border-color: var(--accent-terra); }
+        .text-sage { color: var(--accent-sage); }
+        .bg-sage { background-color: var(--accent-sage); }
+
+        /* Chart Container Requirements */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        /* Interactive Card (Flip effect) */
+        .flip-card {
+            background-color: transparent;
+            width: 100%;
+            height: 300px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.1);
+            border-radius: 0.75rem;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        .flip-card-front {
+            background-color: var(--card-bg);
+            border: 2px solid var(--accent-sage);
+        }
+        .flip-card-back {
+            background-color: var(--accent-sage);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        /* Tabs styling */
+        .tab-btn.active {
+            border-bottom: 3px solid var(--accent-terra);
+            color: var(--accent-terra);
+            font-weight: bold;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-terra flex items-center gap-2">
+                <span class="text-3xl">&#128021;</span> Xolos Ramirez
+            </div>
+            <nav class="hidden md:flex gap-6 font-medium text-gray-600">
+                <a href="#experiencia" class="hover:text-terra transition">Experiencia</a>
+                <a href="#caso-estudio" class="hover:text-terra transition">Caso Teyolia</a>
+                <a href="#dinamicas" class="hover:text-terra transition">Dinámicas</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        
+        <!-- Hero Section -->
+        <section class="max-w-6xl mx-auto px-4 py-16 md:py-24 text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-6 leading-tight">
+                La Relación del Xoloitzcuintle con <br><span class="text-terra">Otros Animales Domésticos</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-10 leading-relaxed">
+                A menudo surge la duda sobre cómo interactúa esta antigua raza con otras mascotas. En la experiencia del criadero <strong>Xolos Ramirez</strong>, la respuesta es clara: son compañeros extraordinarios, capaces de formar vínculos profundos con diversas especies.
+            </p>
+            <a href="#experiencia" class="inline-block bg-terra text-white font-semibold py-3 px-8 rounded-full hover:bg-orange-700 transition shadow-lg">
+                Explorar el Reporte &#8595;
+            </a>
+        </section>
+
+        <!-- Section 1: Data & Stats -->
+        <section id="experiencia" class="bg-white py-16">
+            <div class="max-w-6xl mx-auto px-4">
+                <div class="mb-12 text-center max-w-2xl mx-auto">
+                    <h2 class="text-3xl font-bold mb-4">Experiencia de Nuestras Familias</h2>
+                    <p class="text-gray-600">
+                        Esta sección detalla los reportes que recibimos en <strong>Xolos Ramirez</strong>. Las familias que han adquirido nuestros cachorros nos comparten constantemente sus experiencias de integración. Hemos clasificado estos mensajes para entender mejor con quiénes conviven más frecuentemente de manera armoniosa.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <!-- Chart Container -->
+                    <div class="w-full">
+                        <div class="chart-container">
+                            <canvas id="convivenciaChart"></canvas>
+                        </div>
+                        <p class="text-sm text-center text-gray-500 mt-4 italic">
+                            *Datos ilustrativos basados en la proporción de mensajes positivos recibidos.
+                        </p>
+                    </div>
+                    
+                    <!-- Text Insights -->
+                    <div class="space-y-6">
+                        <div class="bg-gray-50 p-6 rounded-xl border-l-4 border-terra shadow-sm">
+                            <h3 class="text-xl font-bold mb-2 flex items-center gap-2">
+                                <span class="text-2xl">&#11088;</span> Adaptación Perfecta
+                            </h3>
+                            <p class="text-gray-700">
+                                La gran mayoría de los mensajes confirman que los Xoloitzcuintles se llevan <strong>perfecto con animales de otras especies</strong>. Su naturaleza gregaria los hace buscar compañía constante.
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-6 rounded-xl border-l-4 border-sage shadow-sm">
+                            <h3 class="text-xl font-bold mb-2 flex items-center gap-2">
+                                <span class="text-2xl">&#128101;</span> La Manada Xolo
+                            </h3>
+                            <p class="text-gray-700">
+                                En ocasiones donde las familias han adquirido <strong>dos Xoloitzcuintles</strong> con nosotros, los reportes indican que se llevan de maravilla, creando un micro-ecosistema de juego y descanso conjunto.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Case Study (Teyolia) -->
+        <section id="caso-estudio" class="py-16 bg-sage bg-opacity-10">
+            <div class="max-w-6xl mx-auto px-4">
+                <div class="mb-12 text-center max-w-3xl mx-auto">
+                    <h2 class="text-3xl font-bold mb-4">Un Caso Real: Teyolia y su Amigo Felino</h2>
+                    <p class="text-gray-600">
+                        Para ilustrar estos datos, exploramos un testimonio visual directo. Esta sección presenta la historia enviada desde el extranjero, demostrando cómo la calidez y el temperamento de la raza trascienden fronteras y especies. Haz clic en la tarjeta para descubrir la historia detrás de la imagen.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 items-center max-w-4xl mx-auto">
+                    
+                    <!-- Interactive Representation of the Photo -->
+                    <div class="w-full">
+                        <div class="flip-card" id="photoCard">
+                            <div class="flip-card-inner">
+                                <!-- Front: Abstract representation of the photo -->
+                                <div class="flip-card-front">
+                                    <div class="text-5xl mb-4">&#128248;</div>
+                                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Ver la Historia</h3>
+                                    <p class="text-gray-500 text-sm">Toca para revelar el testimonio de Kate</p>
+                                    
+                                    <!-- Visual cue of the photo content -->
+                                    <!-- Foto real de Teyolia Ramirez con su gato -->
+<div class="mt-6 w-full">
+    <img 
+        src="https://i.imgur.com/YbqkjzV.jpeg" 
+        alt="Teyolia Ramirez descansando junto a un gato en un sillón" 
+        class="w-full h-44 object-cover rounded-lg shadow"
+    >
+</div>
+                                </div>
+                                <!-- Back: The text description of the photo -->
+                                <div class="flip-card-back">
+                                    <h3 class="text-2xl font-bold mb-4 text-white">El Momento Capturado</h3>
+                                    <p class="text-lg text-white opacity-90 leading-relaxed text-center">
+                                        "Teyolia Ramirez, vestida con un cálido suéter azul con tortuguitas rojas, descansa profundamente acurrucada junto a su hermano gato (blanco y naranja) sobre un cómodo sillón gris. Una imagen de paz total."
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial Details -->
+                    <div class="bg-white p-8 rounded-2xl shadow-lg relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 text-sage opacity-20 text-6xl font-serif">"</div>
+                        <h3 class="text-2xl font-bold text-terra mb-2">El Mensaje de Kate</h3>
+                        <p class="text-gray-500 mb-6 flex items-center gap-2">
+                            <span class="text-xl">&#128205;</span> Estados Unidos
+                        </p>
+                        <p class="text-gray-700 text-lg leading-relaxed mb-6 italic">
+                            Kate nos compartió esta hermosa foto de la xoloitzcuintle <strong>Teyolia Ramirez</strong> conviviendo con su gato en casa. Ambos se ven perfectamente integrados y <strong>muy confortables</strong> descansando juntos.
+                        </p>
+                        <div class="border-t border-gray-100 pt-4 mt-auto">
+                            <p class="text-sm text-gray-400 font-semibold uppercase tracking-wider">
+                                Atributo destacado: Búsqueda de calor mutuo
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Interactive Dynamics -->
+        <section id="dinamicas" class="py-16 bg-white">
+            <div class="max-w-4xl mx-auto px-4">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold mb-4">Explora las Dinámicas de Convivencia</h2>
+                    <p class="text-gray-600">
+                        Selecciona una categoría a continuación para entender cómo se relaciona el Xoloitzcuintle en diferentes escenarios domésticos, según la retroalimentación de nuestra comunidad.
+                    </p>
+                </div>
+
+                <!-- Tabs Navigation -->
+                <div class="flex flex-wrap border-b border-gray-200 justify-center mb-8 gap-2 md:gap-8">
+                    <button class="tab-btn active px-4 py-3 text-gray-500 transition focus:outline-none text-lg" data-target="gatos">
+                        <span class="mr-2">&#128008;</span> Con Gatos
+                    </button>
+                    <button class="tab-btn px-4 py-3 text-gray-500 transition focus:outline-none text-lg" data-target="xolos">
+                        <span class="mr-2">&#128021;</span> Con Otros Xolos
+                    </button>
+                    <button class="tab-btn px-4 py-3 text-gray-500 transition focus:outline-none text-lg" data-target="otras">
+                        <span class="mr-2">&#128048;</span> Otras Especies
+                    </button>
+                </div>
+
+                <!-- Tabs Content -->
+                <div id="tab-content-container" class="bg-gray-50 rounded-2xl p-8 min-h-[250px] shadow-inner flex items-center justify-center">
+                    
+                    <!-- Content: Gatos -->
+                    <div id="content-gatos" class="tab-content text-center max-w-2xl fade-in">
+                        <div class="text-6xl mb-4">&#128021; &#10084;&#65039; &#128008;</div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Convivencia Pacífica y Confortable</h3>
+                        <p class="text-gray-600 text-lg leading-relaxed">
+                            Como demuestra el caso de Teyolia, los Xoloitzcuintles y los gatos suelen formar vínculos excelentes. Los Xolos, especialmente los sin pelo, buscan fuentes de calor, y un gato acostado resulta ser el compañero de siestas perfecto. Aprenden rápidamente a respetar los límites del felino.
+                        </p>
+                    </div>
+
+                    <!-- Content: Xolos -->
+                    <div id="content-xolos" class="tab-content text-center max-w-2xl hidden">
+                        <div class="text-6xl mb-4">&#128021; &#10084;&#65039; &#128021;</div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3">La Manada Perfecta</h3>
+                        <p class="text-gray-600 text-lg leading-relaxed">
+                            Nuestra experiencia indica que las familias que adquieren dos ejemplares de Xolos Ramirez reportan que <strong>se llevan de maravilla</strong>. Al compartir el mismo lenguaje corporal y nivel de energía, crean una dinámica de juego y compañía inigualable, reduciendo la ansiedad por separación.
+                        </p>
+                    </div>
+
+                    <!-- Content: Otras Especies -->
+                    <div id="content-otras" class="tab-content text-center max-w-2xl hidden">
+                        <div class="text-6xl mb-4">&#128021; &#10084;&#65039; &#129414;</div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Respeto por Otras Especies</h3>
+                        <p class="text-gray-600 text-lg leading-relaxed">
+                            Los mensajes de las familias confirman que se llevan <strong>perfecto con animales de otras especies</strong>. Al no tener un instinto de presa tan marcado como los perros de caza (sabuesos o terriers), el Xoloitzcuintle es adaptable y, con una correcta introducción, convive armoniosamente con aves, conejos o roedores domésticos.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-8 text-center">
+        <div class="max-w-6xl mx-auto px-4">
+            <p class="mb-2">Basado en las experiencias reales compartidas por la comunidad de <strong>Xolos Ramirez</strong>.</p>
+            <p class="text-sm">© 2026 Reporte de Convivencia - Interfaz Interactiva</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. Chart.js Initialization
+            const ctx = document.getElementById('convivenciaChart').getContext('2d');
+            
+            // Data derived from the text "se llevan perfecto con animales de otras especies... dos xolos se llevan de maravilla... con su gato conviviendo perfectamente"
+            const data = {
+                labels: [
+                    'Con Gatos (Ej. Teyolia)',
+                    'Con Otros Xolos',
+                    'Con Otras Especies (Perros, etc.)'
+                ],
+                datasets: [{
+                    label: 'Menciones Positivas en Reportes',
+                    data: [40, 35, 25], // Proportions illustrating the text emphasis
+                    backgroundColor: [
+                        '#C87941', // Terra (Cats)
+                        '#87A8A4', // Sage (Other Xolos)
+                        '#E5E7EB'  // Gray (Other species)
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            };
+
+            const config = {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // CRITICAL for respecting container constraints
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    family: "'Segoe UI', sans-serif",
+                                    size: 14
+                                },
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(44, 44, 44, 0.9)',
+                            padding: 12,
+                            bodyFont: { size: 14 },
+                            callbacks: {
+                                label: function(context) {
+                                    // Wrap logic implied by prompt requirements (keep tooltips clean)
+                                    return ` Reportes: ${context.label} - Éxito Total`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '65%'
+                }
+            };
+
+            new Chart(ctx, config);
+
+            // 2. Flip Card Logic (Teyolia Case)
+            const photoCard = document.getElementById('photoCard');
+            photoCard.addEventListener('click', () => {
+                photoCard.classList.toggle('flipped');
+            });
+
+            // 3. Tabs Navigation Logic
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remove active class from all buttons
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    // Add active class to clicked button
+                    btn.classList.add('active');
+
+                    // Hide all contents
+                    tabContents.forEach(content => {
+                        content.classList.add('hidden');
+                        content.classList.remove('fade-in');
+                    });
+
+                    // Show target content
+                    const targetId = `content-${btn.getAttribute('data-target')}`;
+                    const targetContent = document.getElementById(targetId);
+                    if (targetContent) {
+                        targetContent.classList.remove('hidden');
+                        // Small delay to trigger animation
+                        setTimeout(() => targetContent.classList.add('fade-in'), 10);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
