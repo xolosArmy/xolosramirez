@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Salud - Camada Ramírez</title>
+    <style>
+        :root {
+            --primary-color: #4a3b28; /* Café oscuro tierra */
+            --secondary-color: #8c7851; /* Dorado antiguo */
+            --bg-color: #f9f7f2;
+            --text-color: #333;
+            --accent-color: #2c2c2c;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-top: 10px solid var(--primary-color);
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 2px solid var(--bg-color);
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+        }
+
+        .logo-text {
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        h1 {
+            color: var(--accent-color);
+            font-size: 2.2rem;
+            margin: 10px 0;
+        }
+
+        .date {
+            font-style: italic;
+            color: #777;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .news-content {
+            margin-bottom: 30px;
+        }
+
+        .puppy-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .puppy-card {
+            background: var(--bg-color);
+            padding: 15px;
+            text-align: center;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .vaccine-info {
+            background: #fdfaf3;
+            border-left: 5px solid var(--secondary-color);
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .vaccine-info h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: 40px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 20px; }
+            h1 { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="logo-text">Xolos Ramírez</div>
+        <p>Criadero de Excelencia Xoloitzcuintle</p>
+        <h1>Compromiso con la Salud: Vacunación de Camada</h1>
+        <div class="date">Reporte Actualizado - Marzo 2026</div>
+    </header>
+
+    <div class="news-content">
+        <div class="status-badge">✓ ESQUEMA DE SALUD AL DÍA</div>
+        
+        <p>En <strong>Xolos Ramírez</strong>, la salud y el bienestar de nuestros ejemplares son la máxima prioridad. Nos enorgullece informar que los cachorros de nuestra camada más reciente han completado exitosamente su ciclo de vacunación programado.</p>
+
+        <h3>Protagonistas del Día:</h3>
+        <div class="puppy-list">
+            <div class="puppy-card">🐾 Amoxtli</div>
+            <div class="puppy-card">🐾 Ozomatli</div>
+            <div class="puppy-card">🐾 Tejocote</div>
+            <div class="puppy-card">🐾 Nox</div>
+            <div class="puppy-card">🐾 Mitla</div>
+        </div>
+
+        <div class="vaccine-info">
+            <h3>Protocolo Médico Aplicado</h3>
+            <p>Se administró la vacuna <strong>Canigen MHA2PPi/L</strong>, un biológico de alta eficiencia que garantiza protección contra:</p>
+            <ul>
+                <li>Moquillo Canino e Inmunización contra Adenovirus.</li>
+                <li>Hepatitis Infecciosa y Parvovirosis.</li>
+                <li>Parainfluenza y Leptospirosis (Canicola e Icterohaemorrhagiae).</li>
+            </ul>
+        </div>
+
+        <p>Tras la aplicación, los cachorros se encuentran bajo observación continua. Reportamos que todos presentan un estado de ánimo excelente, manteniendo su apetito y vitalidad característica. Este paso asegura que cada uno de ellos crezca con un sistema inmunológico fuerte, listos para integrarse a sus futuros hogares.</p>
+    </div>
+
+    <footer>
+        &copy; 2026 Xolos Ramírez - Criadero Xoloitzcuintle<br>
+        <em>Preservando la historia, cuidando el futuro.</em>
+    </footer>
+</div>
+
+</body>
+</html>
