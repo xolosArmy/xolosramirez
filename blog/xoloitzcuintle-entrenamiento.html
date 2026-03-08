@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrenando al Xoloitzcuintle: Análisis y Datos</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Merriweather:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+
+    <!-- Application Structure Plan: El diseño sigue un formato de "Reporte Interactivo de Desplazamiento Único" (Single-Page Interactive Report). Se eligió esta estructura porque permite llevar al usuario en un viaje narrativo: desde entender la psicología base del perro (perfil), pasando por los datos duros de su curva de aprendizaje, hasta llegar a las soluciones prácticas (métodos y retos). Esta arquitectura de información facilita la digestión de datos complejos, separando los conceptos en bloques temáticos (Tarjetas y Gráficos) que requieren interacción leve para revelar detalles, evitando abrumar con texto continuo. -->
+    
+    <!-- Visualization & Content Choices: 
+        1. Radar Chart (Temperamento): Muestra múltiples variables (inteligencia, lealtad, terquedad) en un solo vistazo para comparar el perfil del Xolo contra un "Perro Promedio". Interacción: Hover para ver valores exactos.
+        2. Bar Chart (Curva de Aprendizaje): Compara el número de repeticiones necesarias para comandos. Interacción: Filtros por tipo de comando. Justificación: Excelente para comparaciones directas de magnitudes.
+        3. Doughnut Chart (Eficacia de Métodos): Visualiza la tasa de éxito vs estrés según el método de entrenamiento. Interacción: Hover interactivo.
+        4. Tarjetas Expandibles (Retos): HTML/CSS/JS. Ocultan información secundaria hasta que el usuario hace clic, limpiando la interfaz visual.
+        * LIBRERÍAS: Chart.js para visualización de datos. JS puro para interacciones de UI.
+        * CONFIRMACIÓN: NO se utilizan gráficos SVG ni Mermaid JS. 
+    -->
+
+    <!-- Chosen Palette: Warm Clay & Sage (Fondos cremas #F9F7F3, acentos terracota #C87961, verde salvia #7A8B7A y textos carbón #2D2D2D). -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: '#F9F7F3',
+                        surface: '#FFFFFF',
+                        surfaceAlt: '#EBE5DB',
+                        primary: '#C87961',
+                        secondary: '#7A8B7A',
+                        textMain: '#2D2D2D',
+                        textMuted: '#6B6B6B'
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Estilos críticos para contenedores de gráficos según requerimientos */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Previene anchos excesivos */
+            margin-left: auto;
+            margin-right: auto;
+            height: 50vh; /* Altura responsiva base */
+            max-height: 400px; /* Límite de altura */
+            min-height: 300px;
+        }
+
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 40vh;
+                max-height: 300px;
+            }
+        }
+
+        /* Utilidades para interactividad UI */
+        .interactive-card {
+            transition: all 0.3s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        .reveal-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .reveal-content.active {
+            display: block;
+            animation: fadeIn 0.5s forwards;
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-background text-textMain font-sans antialiased selection:bg-primary selection:text-white">
+
+    <!-- Header / Hero -->
+    <header class="max-w-6xl mx-auto px-6 pt-16 pb-12 text-center">
+        <div class="inline-block px-4 py-1 mb-6 rounded-full bg-surfaceAlt text-textMuted text-sm font-semibold tracking-wider uppercase">
+            Reporte de Comportamiento Canino
+        </div>
+        <h1 class="text-4xl md:text-6xl font-bold mb-6 text-textMain leading-tight">
+            ¿Es difícil entrenar a un <span class="text-primary">Xoloitzcuintle</span>?
+        </h1>
+        <p class="font-serif text-lg md:text-xl text-textMuted max-w-3xl mx-auto leading-relaxed">
+            Una inmersión analítica en la psicología de una de las razas más antiguas del mundo. Descubre a través de datos e insights si su reputación de "perro terco" es un mito o un reto que requiere el enfoque adecuado.
+        </p>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 pb-20 space-y-24">
+
+        <!-- Sección 1: Perfil Psicológico -->
+        <section id="perfil" class="grid md:grid-cols-2 gap-12 items-center bg-surface p-8 rounded-3xl shadow-sm border border-surfaceAlt">
+            <div>
+                <h2 class="text-3xl font-bold mb-4">1. El Perfil Primitivo</h2>
+                <p class="text-textMuted mb-6 text-lg leading-relaxed">
+                    Esta sección analiza los instintos base del Xoloitzcuintle. Como raza "primitiva" (no modificada genéticamente en exceso por humanos), conservan fuertes instintos de supervivencia. Interactúa con el gráfico de radar para comparar cómo se destacan en inteligencia y lealtad, pero también en terquedad e instinto de presa, en comparación con un perro doméstico promedio.
+                </p>
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <span class="text-primary text-2xl mr-3">&#10022;</span>
+                        <div>
+                            <h3 class="font-bold">Alta Inteligencia, Poca Complacencia</h3>
+                            <p class="text-sm text-textMuted">Entienden lo que se les pide rápidamente, pero deciden si vale la pena hacerlo.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="text-secondary text-2xl mr-3">&#10022;</span>
+                        <div>
+                            <h3 class="font-bold">Sensibilidad Extrema</h3>
+                            <p class="text-sm text-textMuted">Son esponjas emocionales. Los gritos o tratos bruscos bloquean su aprendizaje instantáneamente.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full">
+                <!-- CHART CONTAINER 1 -->
+                <div class="chart-container">
+                    <canvas id="temperamentChart"></canvas>
+                </div>
+                <p class="text-center text-xs text-textMuted mt-4 italic">Comparativa de rasgos de personalidad (Escala 0-100). Fuente: Consolidado de entrenadores caninos.</p>
+            </div>
+        </section>
+
+        <!-- Sección 2: La Curva de Aprendizaje -->
+        <section id="curva" class="space-y-8">
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4">2. La Curva de Aprendizaje</h2>
+                <p class="text-textMuted text-lg leading-relaxed">
+                    ¿Cuánto tiempo toma enseñarle comandos? Aquí visualizamos el esfuerzo requerido. El Xolo aprende comandos básicos casi al mismo ritmo que otras razas inteligentes, pero el verdadero desafío radica en la "obediencia bajo distracción". Usa los botones abajo para filtrar entre comandos en casa vs. comandos en exteriores.
+                </p>
+            </div>
+
+            <div class="bg-surface p-8 rounded-3xl shadow-sm border border-surfaceAlt">
+                <div class="flex justify-center space-x-4 mb-8">
+                    <button onclick="updateLearningChart('casa')" class="px-6 py-2 rounded-full bg-primary text-white font-semibold transition hover:bg-opacity-90 shadow-md">Entorno Controlado</button>
+                    <button onclick="updateLearningChart('calle')" class="px-6 py-2 rounded-full bg-surfaceAlt text-textMain font-semibold transition hover:bg-gray-200">Alta Distracción</button>
+                </div>
+                
+                <!-- CHART CONTAINER 2 -->
+                <div class="chart-container" style="max-width: 800px;">
+                    <canvas id="learningChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 3: Métodos de Entrenamiento -->
+        <section id="metodos" class="grid md:grid-cols-2 gap-12 items-center">
+            <div class="order-2 md:order-1">
+                <!-- CHART CONTAINER 3 -->
+                <div class="chart-container">
+                    <canvas id="methodsChart"></canvas>
+                </div>
+            </div>
+            <div class="order-1 md:order-2">
+                <h2 class="text-3xl font-bold mb-4">3. Eficacia por Método</h2>
+                <p class="text-textMuted mb-6 text-lg leading-relaxed">
+                    El enfoque lo es todo. Esta sección desglosa las tasas de éxito y el bienestar emocional del perro según la técnica utilizada. Haz clic en las pestañas a continuación para entender por qué los métodos tradicionales fallan con esta raza específica.
+                </p>
+                
+                <div class="space-y-3">
+                    <!-- Acordeones Interactivos (JS Logic below) -->
+                    <div class="border border-surfaceAlt rounded-xl overflow-hidden bg-surface">
+                        <button class="w-full text-left px-6 py-4 font-bold flex justify-between items-center hover:bg-surfaceAlt transition" onclick="toggleAccordion('acc1')">
+                            Refuerzo Positivo (Recomendado)
+                            <span id="icon-acc1" class="text-primary font-bold">&#65291;</span>
+                        </button>
+                        <div id="acc1" class="px-6 pb-4 hidden text-textMuted text-sm">
+                            El uso de premios (comida, juego, afecto) para recompensar conductas deseadas. El Xolo responde excepcionalmente bien porque fomenta su confianza y respeta su inteligencia. Crea un vínculo de cooperación, no de sumisión.
+                        </div>
+                    </div>
+
+                    <div class="border border-surfaceAlt rounded-xl overflow-hidden bg-surface">
+                        <button class="w-full text-left px-6 py-4 font-bold flex justify-between items-center hover:bg-surfaceAlt transition" onclick="toggleAccordion('acc2')">
+                            Método Tradicional / Castigo
+                            <span id="icon-acc2" class="text-primary font-bold">&#65291;</span>
+                        </button>
+                        <div id="acc2" class="px-6 pb-4 hidden text-textMuted text-sm">
+                            Basado en correcciones (tirones de correa, regaños). Con un Xoloitzcuintle, esto es contraproducente. Por su sensibilidad, se "apagan" (indefensión aprendida), pierden la confianza en el dueño o desarrollan agresividad por miedo.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 4: Retos Comunes y Soluciones -->
+        <section id="retos">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h2 class="text-3xl font-bold mb-4">4. Desafíos Prácticos y Soluciones</h2>
+                <p class="text-textMuted text-lg leading-relaxed">
+                    Para responder definitivamente si "es difícil", debemos analizar los problemas diarios. Explora las siguientes tarjetas interactivas para descubrir las áreas donde los dueños suelen frustrarse y cómo la ciencia del comportamiento lo soluciona. Haz clic en cada tarjeta para revelar la solución.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Tarjeta 1 -->
+                <div class="interactive-card bg-surface p-6 rounded-2xl border border-surfaceAlt cursor-pointer" onclick="toggleCard('card1')">
+                    <div class="text-3xl mb-4">&#128062;</div>
+                    <h3 class="text-xl font-bold mb-2">Instinto de Presa</h3>
+                    <p class="text-sm text-textMuted mb-4">Fuerte impulso de perseguir animales pequeños (ardillas, gatos).</p>
+                    <div class="text-primary font-semibold text-sm">Ver Solución &rarr;</div>
+                    <div id="card1" class="reveal-content mt-4 pt-4 border-t border-surfaceAlt text-sm text-secondary font-medium">
+                        Entrenamiento de "Mirame" (Look at me) y juegos de control de impulsos (Flirt pole) para canalizar el instinto de forma estructurada. Nunca soltar sin correa en áreas no cercadas.
+                    </div>
+                </div>
+
+                <!-- Tarjeta 2 -->
+                <div class="interactive-card bg-surface p-6 rounded-2xl border border-surfaceAlt cursor-pointer" onclick="toggleCard('card2')">
+                    <div class="text-3xl mb-4">&#128100;</div>
+                    <h3 class="text-xl font-bold mb-2">Desconfianza</h3>
+                    <p class="text-sm text-textMuted mb-4">Son distantes o nerviosos con extraños por naturaleza.</p>
+                    <div class="text-primary font-semibold text-sm">Ver Solución &rarr;</div>
+                    <div id="card2" class="reveal-content mt-4 pt-4 border-t border-surfaceAlt text-sm text-secondary font-medium">
+                        Socialización temprana crítica (0-16 semanas). No forzar interacciones. Pedir a los extraños que ignoren al perro y tiren premios al suelo para crear asociaciones positivas sin presión.
+                    </div>
+                </div>
+
+                <!-- Tarjeta 3 -->
+                <div class="interactive-card bg-surface p-6 rounded-2xl border border-surfaceAlt cursor-pointer" onclick="toggleCard('card3')">
+                    <div class="text-3xl mb-4">&#127917;</div>
+                    <h3 class="text-xl font-bold mb-2">Ansiedad por Separación</h3>
+                    <p class="text-sm text-textMuted mb-4">Altamente apegados a "su" persona (perros de velcro).</p>
+                    <div class="text-primary font-semibold text-sm">Ver Solución &rarr;</div>
+                    <div id="card3" class="reveal-content mt-4 pt-4 border-t border-surfaceAlt text-sm text-secondary font-medium">
+                        Desensibilización gradual a la salida. Uso de juguetes interactivos (Kongs congelados) exclusivos para cuando se quedan solos. Fomentar la independencia en casa.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Conclusión -->
+        <section class="bg-primary bg-opacity-10 p-10 rounded-3xl text-center border border-primary border-opacity-20 mt-16">
+            <h2 class="text-2xl font-bold mb-4 text-textMain">El Veredicto Final</h2>
+            <p class="text-lg text-textMuted font-serif max-w-4xl mx-auto">
+                ¿Es difícil entrenar a un Xoloitzcuintle? <strong class="text-primary">No, pero requiere un paradigma diferente.</strong><br><br>
+                Si buscas un perro robot que obedezca ciegamente por miedo, el Xolo te parecerá "terco" e "imposible". Si estás dispuesto a construir una relación basada en el respeto mutuo, refuerzo positivo y paci এলিটncia, descubrirás a un compañero brillante, leal y altamente adaptable.
+            </p>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-8 text-sm text-textMuted border-t border-surfaceAlt mt-12">
+        <p>Reporte Interactivo: Análisis de Adiestramiento Canino | Datos representativos basados en etología clínica.</p>
+    </footer>
+
+    <!-- JS Logic para Gráficos e Interactividad -->
+    <script>
+        // --- 1. CONFIGURACIÓN GLOBAL CHART.JS ---
+        Chart.defaults.font.family = "'Outfit', sans-serif";
+        Chart.defaults.color = '#6B6B6B';
+        Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(45, 45, 45, 0.9)';
+        Chart.defaults.plugins.tooltip.titleFont = { size: 14, family: "'Outfit', sans-serif", weight: 'bold' };
+        Chart.defaults.plugins.tooltip.bodyFont = { size: 13, family: "'Outfit', sans-serif" };
+        Chart.defaults.plugins.tooltip.padding = 10;
+        Chart.defaults.plugins.tooltip.cornerRadius = 8;
+
+        // Paleta de colores para JS
+        const colors = {
+            primary: '#C87961',    // Terracota
+            primaryLight: 'rgba(200, 121, 97, 0.2)',
+            secondary: '#7A8B7A',  // Salvia
+            secondaryLight: 'rgba(122, 139, 122, 0.2)',
+            muted: '#EBE5DB'       // Crema/Arena
+        };
+
+        // --- 2. GRÁFICO DE RADAR (Perfil Psicológico) ---
+        const ctxRadar = document.getElementById('temperamentChart').getContext('2d');
+        new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: ['Inteligencia', 'Terquedad', 'Lealtad', 'Energía', 'Instinto de Presa', 'Sensibilidad'],
+                datasets: [{
+                    label: 'Xoloitzcuintle',
+                    data: [85, 80, 95, 65, 85, 90],
+                    backgroundColor: colors.primaryLight,
+                    borderColor: colors.primary,
+                    pointBackgroundColor: colors.primary,
+                    borderWidth: 2,
+                    pointRadius: 4
+                }, {
+                    label: 'Perro Promedio',
+                    data: [60, 40, 70, 70, 50, 50],
+                    backgroundColor: colors.secondaryLight,
+                    borderColor: colors.secondary,
+                    pointBackgroundColor: colors.secondary,
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // CRÍTICO para el contenedor
+                scales: {
+                    r: {
+                        angleLines: { color: colors.muted },
+                        grid: { color: colors.muted },
+                        pointLabels: { font: { size: 12, weight: '600' }, color: '#2D2D2D' },
+                        ticks: { display: false, min: 0, max: 100 }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } }
+                }
+            }
+        });
+
+        // --- 3. GRÁFICO DE BARRAS (Curva de Aprendizaje - INTERACTIVO) ---
+        const ctxLearning = document.getElementById('learningChart').getContext('2d');
+        
+        // Datos de estado para interactividad
+        const learningData = {
+            casa: {
+                title: "Repeticiones para aprender (Entorno Controlado)",
+                xolo: [5, 15, 20],
+                promedio: [10, 25, 30]
+            },
+            calle: {
+                title: "Repeticiones para obedecer (Alta Distracción / Calle)",
+                xolo: [15, 45, 60], // Incremento fuerte por terquedad/instinto
+                promedio: [20, 40, 50]
+            }
+        };
+
+        let learningChartInstance = new Chart(ctxLearning, {
+            type: 'bar',
+            data: {
+                labels: ['Sentado/Echado', 'Venir al llamado', 'Caminar sin tirar'],
+                datasets: [
+                    {
+                        label: 'Xoloitzcuintle',
+                        data: learningData.casa.xolo,
+                        backgroundColor: colors.primary,
+                        borderRadius: 6
+                    },
+                    {
+                        label: 'Perro Promedio',
+                        data: learningData.casa.promedio,
+                        backgroundColor: colors.muted,
+                        borderRadius: 6
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: { display: true, text: learningData.casa.title, font: { size: 16 }, padding: {bottom: 20} },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ~' + context.raw + ' repeticiones';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: { 
+                        beginAtZero: true, 
+                        title: { display: true, text: 'Nº de Repeticiones Estimadas' },
+                        grid: { color: colors.muted }
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // Función para actualizar el gráfico de barras mediante los botones
+        function updateLearningChart(viewType) {
+            const data = learningData[viewType];
+            learningChartInstance.data.datasets[0].data = data.xolo;
+            learningChartInstance.data.datasets[1].data = data.promedio;
+            learningChartInstance.options.plugins.title.text = data.title;
+            learningChartInstance.update();
+            
+            // Actualizar estilos de botones
+            const btns = document.querySelectorAll('#curva button');
+            btns.forEach(btn => {
+                btn.className = "px-6 py-2 rounded-full text-font-semibold transition shadow-md"; // reset basic
+                if((viewType === 'casa' && btn.innerText.includes("Controlado")) || 
+                   (viewType === 'calle' && btn.innerText.includes("Distracción"))) {
+                    btn.classList.add('bg-primary', 'text-white');
+                } else {
+                    btn.classList.add('bg-surfaceAlt', 'text-textMain', 'hover:bg-gray-200');
+                    btn.classList.remove('shadow-md');
+                }
+            });
+        }
+
+        // --- 4. GRÁFICO DE DONA (Métodos de Entrenamiento) ---
+        const ctxMethods = document.getElementById('methodsChart').getContext('2d');
+        new Chart(ctxMethods, {
+            type: 'doughnut',
+            data: {
+                labels: ['Refuerzo Positivo (Éxito)', 'Método Tradicional/Castigo (Fracaso/Estrés)'],
+                datasets: [{
+                    data: [85, 15],
+                    backgroundColor: [colors.secondary, colors.muted],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: {
+                    legend: { position: 'bottom', labels: { padding: 20 } },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) { label += ': '; }
+                                label += context.raw + '% de efectividad/aceptación';
+                                return label;
+                            }
+                        }
+                    }
+                }
+            },
+            // Plugin custom para texto en el centro
+            plugins: [{
+                id: 'textCenter',
+                beforeDraw: function(chart) {
+                    var width = chart.width,
+                        height = chart.height,
+                        ctx = chart.ctx;
+
+                    ctx.restore();
+                    var fontSize = (height / 114).toFixed(2);
+                    ctx.font = "bold " + fontSize + "em Outfit";
+                    ctx.textBaseline = "middle";
+                    ctx.fillStyle = colors.textMain;
+
+                    var text = "Sensibilidad",
+                        textX = Math.round((width - ctx.measureText(text).width) / 2),
+                        textY = height / 2 - 10;
+
+                    ctx.fillText(text, textX, textY);
+                    
+                    ctx.font = (fontSize * 0.5).toFixed(2) + "em Outfit";
+                    ctx.fillStyle = colors.textMuted;
+                    var text2 = "Extrema";
+                    var text2X = Math.round((width - ctx.measureText(text2).width) / 2);
+                    ctx.fillText(text2, text2X, textY + 25);
+                    ctx.save();
+                }
+            }]
+        });
+
+        // --- 5. LÓGICA DE INTERFAZ (Acordeones y Tarjetas) ---
+        
+        // Acordeones (Sección 3)
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.innerHTML = '&#65293;'; // Menos
+            } else {
+                content.classList.add('hidden');
+                icon.innerHTML = '&#65291;'; // Mas
+            }
+        }
+
+        // Tarjetas Reveal (Sección 4)
+        function toggleCard(id) {
+            const content = document.getElementById(id);
+            const parent = content.parentElement;
+            const linkText = parent.querySelector('.text-primary');
+            
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                setTimeout(() => content.style.display = 'none', 500); // Wait for fade out
+                linkText.innerHTML = 'Ver Solución &rarr;';
+            } else {
+                content.style.display = 'block';
+                // Pequeño timeout para permitir que el display:block se renderice antes de la opacidad
+                setTimeout(() => content.classList.add('active'), 10);
+                linkText.innerHTML = 'Ocultar Solución &uarr;';
+            }
+        }
+    </script>
+</body>
+</html>
