@@ -1,0 +1,635 @@
+<style>
+  :root{
+    --bg:#f7f1e8;
+    --paper:#fffdf9;
+    --ink:#1c1a17;
+    --muted:#6a6258;
+    --accent:#8c2f1b;
+    --accent-2:#b86a3d;
+    --line:#ddd2c4;
+    --quote:#f3e5d5;
+    --shadow:0 10px 30px rgba(0,0,0,.08);
+    --max:1180px;
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family: "Georgia", "Times New Roman", serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.75;
+  }
+
+  .xr-report{
+    max-width:var(--max);
+    margin:0 auto;
+    padding:32px 18px 80px;
+  }
+
+  .hero{
+    background:
+      linear-gradient(180deg, rgba(28,26,23,.45), rgba(28,26,23,.62)),
+      url('https://commons.wikimedia.org/wiki/Special:FilePath/Diego_Rivera_with_a_xoloitzcuintle_dog_in_the_Blue_House%2C_Coyoacan_-_Google_Art_Project.jpg') center/cover;
+    border-radius:28px;
+    min-height:520px;
+    display:flex;
+    align-items:flex-end;
+    padding:38px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    position:relative;
+  }
+
+  .hero::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(180deg, rgba(0,0,0,.05) 0%, rgba(0,0,0,.28) 40%, rgba(0,0,0,.68) 100%);
+  }
+
+  .hero-content{
+    position:relative;
+    z-index:1;
+    max-width:850px;
+    color:#fff;
+  }
+
+  .kicker{
+    display:inline-block;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    font-size:.8rem;
+    font-weight:bold;
+    padding:8px 12px;
+    border:1px solid rgba(255,255,255,.3);
+    border-radius:999px;
+    background:rgba(255,255,255,.09);
+    backdrop-filter: blur(4px);
+    margin-bottom:16px;
+  }
+
+  h1{
+    margin:0 0 16px;
+    font-size:clamp(2.1rem, 5vw, 4.2rem);
+    line-height:1.08;
+    letter-spacing:-0.02em;
+  }
+
+  .subtitle{
+    margin:0;
+    font-size:1.12rem;
+    max-width:760px;
+    color:rgba(255,255,255,.92);
+  }
+
+  .meta{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:14px;
+    margin:26px 0 34px;
+  }
+
+  .meta-card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:16px 18px;
+    box-shadow:var(--shadow);
+  }
+
+  .meta-card small{
+    display:block;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    margin-bottom:6px;
+    font-size:.73rem;
+  }
+
+  .lead{
+    background:var(--paper);
+    border-left:6px solid var(--accent);
+    border-radius:20px;
+    padding:26px 24px;
+    margin:0 0 34px;
+    box-shadow:var(--shadow);
+    font-size:1.1rem;
+  }
+
+  .layout{
+    display:grid;
+    grid-template-columns:minmax(0, 1.65fr) minmax(280px, .75fr);
+    gap:28px;
+    align-items:start;
+  }
+
+  .article{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:26px;
+    padding:34px 28px 36px;
+    box-shadow:var(--shadow);
+  }
+
+  .article h2{
+    font-size:2rem;
+    line-height:1.15;
+    margin:34px 0 14px;
+    color:var(--accent);
+  }
+
+  .article h3{
+    font-size:1.25rem;
+    margin:26px 0 10px;
+  }
+
+  .article p{
+    margin:0 0 18px;
+  }
+
+  .dropcap:first-letter{
+    float:left;
+    font-size:4.4rem;
+    line-height:.85;
+    padding-right:10px;
+    padding-top:8px;
+    color:var(--accent);
+  }
+
+  .pullquote{
+    margin:28px 0;
+    padding:24px 22px;
+    background:var(--quote);
+    border:1px solid #e4c9ad;
+    border-radius:22px;
+    font-size:1.3rem;
+    line-height:1.5;
+    font-style:italic;
+    color:#53291f;
+  }
+
+  .figure{
+    margin:28px 0 22px;
+    background:#faf6ef;
+    border:1px solid var(--line);
+    border-radius:22px;
+    overflow:hidden;
+  }
+
+  .figure img{
+    width:100%;
+    display:block;
+    height:auto;
+  }
+
+  .figure figcaption{
+    padding:14px 16px 16px;
+    font-size:.94rem;
+    color:var(--muted);
+  }
+
+  .gallery{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    margin:26px 0 12px;
+  }
+
+  .sidebar{
+    position:sticky;
+    top:24px;
+    display:grid;
+    gap:18px;
+  }
+
+  .side-box{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:22px 20px;
+    box-shadow:var(--shadow);
+  }
+
+  .side-box h4{
+    margin:0 0 14px;
+    font-size:1rem;
+    letter-spacing:.03em;
+    text-transform:uppercase;
+    color:var(--accent);
+  }
+
+  .side-box ul{
+    margin:0;
+    padding-left:18px;
+  }
+
+  .side-box li{
+    margin-bottom:10px;
+  }
+
+  .facts{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:14px;
+    margin:24px 0;
+  }
+
+  .fact{
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:16px;
+    background:#fcfaf7;
+  }
+
+  .fact strong{
+    display:block;
+    margin-bottom:8px;
+    color:var(--accent);
+  }
+
+  .timeline{
+    border-left:3px solid #d8b18c;
+    margin:26px 0 12px 8px;
+    padding-left:20px;
+  }
+
+  .timeline-item{
+    margin-bottom:20px;
+    position:relative;
+  }
+
+  .timeline-item::before{
+    content:"";
+    position:absolute;
+    left:-29px;
+    top:8px;
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 0 5px #f3e5d5;
+  }
+
+  .timeline-item small{
+    display:block;
+    color:var(--muted);
+    margin-bottom:4px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+  }
+
+  .refs{
+    margin-top:36px;
+    padding-top:24px;
+    border-top:1px solid var(--line);
+  }
+
+  .refs ol{
+    padding-left:20px;
+  }
+
+  .refs li{
+    margin-bottom:12px;
+    word-break:break-word;
+  }
+
+  .refs a{
+    color:var(--accent);
+  }
+
+  .note{
+    font-size:.93rem;
+    color:var(--muted);
+  }
+
+  @media (max-width: 960px){
+    .layout{
+      grid-template-columns:1fr;
+    }
+    .sidebar{
+      position:static;
+    }
+    .gallery{
+      grid-template-columns:1fr;
+    }
+    .hero{
+      min-height:460px;
+      padding:26px;
+    }
+    .article{
+      padding:28px 20px 30px;
+    }
+  }
+</style>
+
+<article class="xr-report">
+
+  <section class="hero">
+    <div class="hero-content">
+      <div class="kicker">Reportaje de investigación · Xolos Ramírez</div>
+      <h1>Crónica del Psicopompo Mesoamericano</h1>
+      <p class="subtitle">
+        Un reportaje de largo aliento sobre el xoloitzcuintle en el Códice Florentino, el Códice Vaticano A y la tradición ritual del horizonte Borgia: anatomía, mercado, medicina, escatología e iconografía del perro que acompañaba a las almas.
+      </p>
+    </div>
+  </section>
+
+  <section class="meta">
+    <div class="meta-card">
+      <small>Formato</small>
+      Reportaje de investigación para blog cultural
+    </div>
+    <div class="meta-card">
+      <small>Eje editorial</small>
+      Historia, códices, arqueología, cosmovisión y xoloitzcuintle
+    </div>
+    <div class="meta-card">
+      <small>Tesis central</small>
+      El xoloitzcuintle fue a la vez animal doméstico, auxiliar terapéutico, mediador funerario y signo de una divinidad liminal.
+    </div>
+  </section>
+
+  <section class="lead">
+    En las fuentes mesoamericanas y coloniales tempranas, el xoloitzcuintle no aparece como un simple perro. Surge como una criatura de frontera: doméstica y sagrada, corporal y metafísica, cotidiana y funeraria. Este reportaje examina cómo esa condición múltiple se articula en tres grandes registros documentales: la historia natural del <em>Códice Florentino</em>, la topografía del más allá en el <em>Códice Vaticano A</em> y la iconografía de las deidades caninas en la tradición ritual vinculada al horizonte Borgia.
+  </section>
+
+  <div class="layout">
+    <main class="article">
+
+      <p class="dropcap">
+        Comprender al xoloitzcuintle en el México antiguo exige abandonar la mirada puramente zoológica. En el universo nahua, los animales no eran solamente especies biológicas: eran entidades relacionales con agencia simbólica, médica y ritual. Entre todas ellas, pocas alcanzaron una densidad cultural comparable a la del perro sin pelo mexicano, cuya desnudez, calor corporal y cercanía con la muerte lo convirtieron en una figura central de la escatología mesoamericana.
+      </p>
+
+      <figure class="figure">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/General_History_of_the_Things_of_New_Spain_by_Fray_Bernardino_de_Sahag%C3%BAn-_The_Florentine_Codex._Book_XI-_Natural_Things_WDL10622.jpg" alt="Portada o página digitalizada del Libro XI del Códice Florentino">
+        <figcaption>
+          <strong>Figura 1.</strong> Imagen digital del <em>Florentine Codex, Book XI: Natural Things</em>. El Libro XI fue descrito por Library of Congress como el tratado de historia natural más extenso del manuscrito, con contenido en náhuatl y español y numerosas ilustraciones de animales. Fuente: Library of Congress / World Digital Library. [1]
+        </figcaption>
+      </figure>
+
+      <h2>1. El archivo colonial donde el perro se volvió documento</h2>
+
+      <p>
+        El <strong>Códice Florentino</strong>, compilado por fray Bernardino de Sahagún con la colaboración de intelectuales nahuas, ocupa un lugar singular en la historia del conocimiento. No es solamente una crónica colonial ni una enciclopedia misionera: es también un archivo de traducción cultural. En él, las voces indígenas y el marco clasificatorio europeo se entrelazan para producir uno de los testimonios más complejos del siglo XVI sobre el mundo mesoamericano.
+      </p>
+
+      <p>
+        Dentro de ese proyecto, el <strong>Libro XI</strong> se concentra en la naturaleza: animales, plantas, piedras y usos medicinales. Library of Congress subraya que se trata del libro más extenso del códice y que su discusión sobre animales combina observación natural con leyendas y conocimientos indígenas. [1] En ese espacio el xoloitzcuintle aparece no como curiosidad marginal, sino como parte de una taxonomía canina que deja ver la intimidad entre los nahuas y sus perros.
+      </p>
+
+      <div class="facts">
+        <div class="fact">
+          <strong>Dimensión documental</strong>
+          El <em>Florentine Codex</em> registra al perro en clave descriptiva: aspecto, temperamento, usos y nombres.
+        </div>
+        <div class="fact">
+          <strong>Dimensión lingüística</strong>
+          El manuscrito conserva terminología indígena y una clasificación canina que no depende solo del criterio europeo.
+        </div>
+        <div class="fact">
+          <strong>Dimensión cultural</strong>
+          El perro forma parte de la vida doméstica, del mercado, de la medicina y de la ritualidad.
+        </div>
+      </div>
+
+      <h2>2. El xoloitzcuintle del Florentino: desnudez, calor y cercanía humana</h2>
+
+      <p>
+        La descripción colonial del xoloitzcuintle destaca un rasgo que para los observadores europeos resultaba tan llamativo como desconcertante: <strong>la ausencia de pelo</strong>. En el marco nahua, esta singularidad no implicaba una deficiencia banal. Todo lo contrario: la anomalía visible acercaba al animal a la esfera de lo portentoso. Su cuerpo no era neutro; era un cuerpo marcado.
+      </p>
+
+      <p>
+        Sahagún transmite una explicación indígena-colonial según la cual algunos perros eran tratados con sustancias para hacer caer el pelo. Hoy esa idea no se sostiene biológicamente, pero sí revela algo crucial: la desnudez del xolo debía ser explicada porque era percibida como extraordinaria. La ciencia contemporánea ha relacionado esta condición con mutaciones del gen <strong>FOXI3</strong>, asociadas a la falta de pelo y a ciertas particularidades dentales; sin embargo, para los pueblos nahuas el dato decisivo no era genético, sino ontológico: se trataba de un animal distinto.
+      </p>
+
+      <div class="pullquote">
+        “La rareza corporal del xoloitzcuintle no lo apartó de la cultura nahua: lo volvió más central dentro de ella.”
+      </div>
+
+      <p>
+        A esa diferencia física se sumaba una cualidad decisiva: <strong>su calor</strong>. El perro desnudo irradia una temperatura perceptible al tacto, y esa condición alimentó una larga tradición terapéutica. El xolo no solo acompañaba; también curaba. Su cuerpo caliente funcionaba como una bolsa viva de calor, asociada al alivio de dolores musculares, reumatismos y malestares respiratorios. La medicina doméstica y la afectividad convergían así en un mismo gesto: dormir con el perro, cargarlo, recostarlo sobre el cuerpo.
+      </p>
+
+      <h2>3. El mercado, la casa y la política de la proximidad</h2>
+
+      <p>
+        Uno de los aportes más ricos del <em>Florentino</em> es que no reduce al perro al mito. También lo ubica en la economía concreta. Los perros se criaban, se vendían y circulaban en los tianguis. Esa información es valiosa porque muestra que la sacralidad del xoloitzcuintle no cancelaba su inserción en la vida material. La relación con lo sagrado no anulaba la domesticidad; la profundizaba.
+      </p>
+
+      <p>
+        En esas escenas aparece un perro manso, cercano, reconocible en su trato con la gente. Mueve la cola, baja las orejas, responde al cariño. Es precisamente esa condición afectiva la que permite comprender su futuro papel escatológico: el perro puede guiar al alma porque antes fue compañero de la vida ordinaria.
+      </p>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <small>Vida cotidiana</small>
+          El perro vive en casa, acompaña y genera lazos de reconocimiento y apego.
+        </div>
+        <div class="timeline-item">
+          <small>Mercado</small>
+          Entra al circuito de intercambio y selección, mostrando la diversidad de tipos caninos.
+        </div>
+        <div class="timeline-item">
+          <small>Ritual</small>
+          Pasa del ámbito doméstico al funerario sin romper su continuidad simbólica.
+        </div>
+      </div>
+
+      <h2>4. El Vaticano A y la geografía del más allá</h2>
+
+      <p>
+        Si el <em>Florentino</em> documenta al perro en la tierra, el <strong>Códice Vaticano A</strong> lo proyecta hacia el destino póstumo del ser humano. Tradicionalmente conocido también como <em>Códice Ríos</em> y conservado como <strong>Vat. Lat. 3738</strong>, este manuscrito colonial temprano reelabora materiales indígenas para explicar a una audiencia europea la cosmología del México antiguo. [2][3]
+      </p>
+
+      <figure class="figure">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/9infiernos.png" alt="Esquema de los nueve infiernos o niveles del Mictlán en el Códice Vaticano A">
+        <figcaption>
+          <strong>Figura 2.</strong> Esquema visual de los nueve niveles del inframundo descritos en el <em>Códice Vaticano A</em> o <em>Códice Ríos</em>. La pieza de Commons identifica explícitamente el manuscrito como <em>Vatican Codex A</em>. [4]
+        </figcaption>
+      </figure>
+
+      <p>
+        Allí emerge con nitidez una idea que marcaría la memoria mesoamericana durante siglos: <strong>el perro como psicopompo</strong>, es decir, como guía del alma en el tránsito post mortem. El viaje hacia el Mictlán no era instantáneo ni sencillo. Era una travesía larga, peligrosa y escalonada, llena de pruebas y accidentes cósmicos. En ese recorrido, el primer gran umbral era el cruce de un río profundo, identificado con el <strong>Chiconahuapan</strong>.
+      </p>
+
+      <p>
+        La solución no venía de una deidad abstracta ni de una liturgia despersonalizada. Venía del perro. El alma debía montar o asirse del lomo del animal para alcanzar la otra orilla. Pero esta ayuda no era automática. La relación ética entre el difunto y los perros en vida condicionaba la posibilidad de ser auxiliado después de la muerte. La lealtad del perro, por tanto, no era unilateral: exigía reciprocidad.
+      </p>
+
+      <h3>Un código moral inscrito en el más allá</h3>
+
+      <p>
+        Esta escena concentra una ética entera. No se trata solo de que el perro ayude a cruzar. Se trata de que el más allá juzga la conducta del humano hacia los animales. En términos culturales, la imagen es potentísima: la salvación depende también del trato dispensado a otras formas de vida. El xoloitzcuintle no es un instrumento servil del muerto; es un mediador con criterio.
+      </p>
+
+      <h2>5. El color del perro y la lógica del umbral</h2>
+
+      <p>
+        Diversas tradiciones coloniales y etnográficas asocian el éxito del cruce al <strong>color del perro</strong>. Los perros blancos y los negros aparecen en algunas versiones como inadecuados para el paso; los tonos bermejos o amarillos, en cambio, serían los más aptos. Aunque la literalidad de estas variantes debe manejarse con cuidado, el patrón simbólico es consistente: el perro útil para atravesar la frontera entre vida y muerte no pertenece a un extremo absoluto, sino a una gama intermedia, terrosa, ligada al tránsito.
+      </p>
+
+      <p>
+        Esa lógica cromática ayuda a entender por qué tantos entierros arqueológicos mesoamericanos incluyen perros o efigies caninas vinculadas a contextos funerarios. Más que un simple acompañante, el perro es un <strong>vehículo de paso</strong>.
+      </p>
+
+      <h2>6. Xólotl, la divinidad del borde</h2>
+
+      <p>
+        La dimensión divina del perro no puede comprenderse sin hablar de <strong>Xólotl</strong>, deidad asociada con la transformación, el ocaso, la deformidad sagrada, el fuego celeste y el acompañamiento solar. En la tradición del centro de México, Xólotl es el doble de Quetzalcóatl y una figura liminal por excelencia: ni completamente humana ni simplemente animal; ni plenamente celeste ni enteramente infernal.
+      </p>
+
+      <figure class="figure">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Xolotl_from_Codex_Borgia.jpg" alt="Representación de Xólotl en tradición códice Borgia">
+        <figcaption>
+          <strong>Figura 3.</strong> Imagen de Xólotl en la tradición del <em>Codex Borgia</em>, reutilizada aquí como referencia iconográfica del horizonte ritual mesoamericano donde el perro adquiere atributos divinos. Archivo en dominio público según Wikimedia Commons. [5]
+        </figcaption>
+      </figure>
+
+      <p>
+        En la tradición pictográfica vinculada al grupo Borgia, Xólotl se reconoce por su cabeza de perro, sus rasgos faciales marcados y una visualidad que combina monstruosidad, nobleza y potencia ritual. La iconografía no persigue naturalismo zoológico; persigue eficacia simbólica. El perro divino aparece cargado de atributos que lo conectan con la noche, la visión en la oscuridad y la capacidad de transitar entre niveles del cosmos.
+      </p>
+
+      <p>
+        Aquí conviene hacer una precisión editorial importante: para esta versión del reportaje se conserva el eje interpretativo sobre el <strong>Vaticano B / Vat. Lat. 3773</strong> como manuscrito ritual del grupo Borgia, pero la imagen visual más clara y fácil de incrustar para Xólotl procede del <strong>Codex Borgia</strong>, un manuscrito estrechamente emparentado dentro del mismo horizonte pictórico mesoamericano. [5][6]
+      </p>
+
+      <h2>7. Del manuscrito al siglo XX: Rivera, la Casa Azul y la reinvención del símbolo</h2>
+
+      <p>
+        El xoloitzcuintle no desapareció con la conquista, aunque su lugar social se redujo drásticamente. La persecución de prácticas indígenas, la transformación de los sistemas rituales y la violencia colonial afectaron tanto a las comunidades como a las especies asociadas con sus mundos simbólicos. Sin embargo, la raza sobrevivió en regiones donde persistieron memorias y prácticas locales.
+      </p>
+
+      <p>
+        En el siglo XX, la imagen del xolo volvió a cobrar fuerza en el imaginario nacional mexicano. No fue un rescate casual. Artistas e intelectuales vieron en él una condensación de pasado indígena, rareza estética y continuidad cultural. Diego Rivera se convirtió en uno de los rostros más visibles de esta reapropiación.
+      </p>
+
+      <figure class="figure">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Diego_Rivera_with_a_xoloitzcuintle_dog_in_the_Blue_House%2C_Coyoacan_-_Google_Art_Project.jpg" alt="Diego Rivera con un xoloitzcuintle en la Casa Azul">
+        <figcaption>
+          <strong>Figura 4.</strong> Fotografía de Diego Rivera con un xoloitzcuintle en la Casa Azul, conservada en el Museo Frida Kahlo y disponible en Wikimedia Commons. La ficha del museo describe la Casa Azul como el universo privado compartido por Frida y Diego. [7][8]
+        </figcaption>
+      </figure>
+
+      <p>
+        Esta fotografía funciona como una bisagra histórica. Une el archivo colonial con la modernidad artística mexicana. El perro que había sido mediador del Mictlán reaparece ahora como emblema de mexicanidad, de memoria prehispánica y de sofisticación estética. La continuidad no es lineal, pero sí poderosa: el xolo sigue funcionando como signo de identidad profunda.
+      </p>
+
+      <h2>8. Hallazgos centrales de la investigación</h2>
+
+      <div class="facts">
+        <div class="fact">
+          <strong>Hallazgo 1</strong>
+          En el <em>Códice Florentino</em>, el xoloitzcuintle es un animal descrito con atención empírica dentro de una historia natural de gran escala.
+        </div>
+        <div class="fact">
+          <strong>Hallazgo 2</strong>
+          En el <em>Vaticano A</em>, el perro es mediador funerario y condición del tránsito al Mictlán.
+        </div>
+        <div class="fact">
+          <strong>Hallazgo 3</strong>
+          En la tradición ritual vinculada al horizonte Borgia, el perro asciende a deidad liminal en la figura de Xólotl.
+        </div>
+        <div class="fact">
+          <strong>Hallazgo 4</strong>
+          La función terapéutica del xolo une medicina doméstica y simbolismo sagrado.
+        </div>
+        <div class="fact">
+          <strong>Hallazgo 5</strong>
+          La modernidad artística mexicana no inventó al xolo como símbolo: reactivó una memoria mucho más antigua.
+        </div>
+        <div class="fact">
+          <strong>Hallazgo 6</strong>
+          El xoloitzcuintle fue una tecnología cultural de compañía, curación y tránsito entre mundos.
+        </div>
+      </div>
+
+      <h2>9. Conclusión: el perro que no era solo perro</h2>
+
+      <p>
+        Lo que estas fuentes muestran, cuando se leen en conjunto, es una arquitectura simbólica extraordinaria. El xoloitzcuintle fue observado como cuerpo, criado como compañero, usado como auxiliar terapéutico, sacrificado en contextos rituales y venerado como emblema de una potencia divina. Ninguna de esas dimensiones cancela a las otras. Todas conviven.
+      </p>
+
+      <p>
+        En el <em>Florentino</em>, el perro es concreto: come, se vende, duerme, acompaña. En el <em>Vaticano A</em>, ese mismo perro se vuelve indispensable para la travesía del alma. Y en la tradición ritual del grupo Borgia, su forma alcanza la esfera teológica en la figura de Xólotl. Lo decisivo es que no se trata de tres perros distintos, sino de tres niveles de una misma ontología.
+      </p>
+
+      <div class="pullquote">
+        El xoloitzcuintle fue cuerpo que daba calor, animal que generaba apego, guía que cruzaba ríos y signo de una divinidad que habitaba los umbrales.
+      </div>
+
+      <p>
+        Por eso el xolo sigue siendo contemporáneo. No solo porque la raza sobrevivió, sino porque aún encarna algo que la modernidad no ha resuelto del todo: la necesidad de pensar la muerte no como una ruptura absoluta, sino como un tránsito que requiere compañía, memoria y fidelidad.
+      </p>
+
+      <section class="refs">
+        <h2>Fuentes y referencias</h2>
+        <ol>
+          <li>
+            Library of Congress / World Digital Library. <em>General History of the Things of New Spain by Fray Bernardino de Sahagún: The Florentine Codex. Book XI: Natural Things</em>.
+            <br><a href="https://www.loc.gov/item/2021667856/" target="_blank" rel="noopener noreferrer">https://www.loc.gov/item/2021667856/</a>
+          </li>
+          <li>
+            UNAM, Wiki Filológicas. <em>Vaticanus A, Códice</em>.
+            <br><a href="https://www.iifilologicas.unam.mx/wikfil/index.php/Vaticanus_A%2C_C%C3%B3dice" target="_blank" rel="noopener noreferrer">https://www.iifilologicas.unam.mx/wikfil/index.php/Vaticanus_A%2C_C%C3%B3dice</a>
+          </li>
+          <li>
+            Archivo / referencia del <em>Codex Vaticanus A (3738)</em>.
+            <br><a href="https://archive.org/details/codex-vaticanus-a" target="_blank" rel="noopener noreferrer">https://archive.org/details/codex-vaticanus-a</a>
+          </li>
+          <li>
+            Wikimedia Commons. <em>9infiernos.png</em>, imagen basada en el Códice Vaticano A.
+            <br><a href="https://commons.wikimedia.org/wiki/File:9infiernos.png" target="_blank" rel="noopener noreferrer">https://commons.wikimedia.org/wiki/File:9infiernos.png</a>
+          </li>
+          <li>
+            Wikimedia Commons. <em>Xolotl from Codex Borgia.jpg</em>.
+            <br><a href="https://commons.wikimedia.org/wiki/File:Xolotl_from_Codex_Borgia.jpg" target="_blank" rel="noopener noreferrer">https://commons.wikimedia.org/wiki/File:Xolotl_from_Codex_Borgia.jpg</a>
+          </li>
+          <li>
+            WorldCat / referencias bibliográficas sobre <em>Codex Vaticanus B (Vat. Lat. 3773)</em>.
+            <br><a href="https://search.worldcat.org/title/codex-vaticanus-no-3773-codex-vaticanus-b-an-old-mexican-pictorial-manuscript-in-the-vatican-library/oclc/10291895" target="_blank" rel="noopener noreferrer">https://search.worldcat.org/title/codex-vaticanus-no-3773-codex-vaticanus-b-an-old-mexican-pictorial-manuscript-in-the-vatican-library/oclc/10291895</a>
+          </li>
+          <li>
+            Wikimedia Commons. <em>Diego Rivera with a xoloitzcuintle dog in the Blue House, Coyoacan</em>.
+            <br><a href="https://commons.wikimedia.org/wiki/File:Diego_Rivera_with_a_xoloitzcuintle_dog_in_the_Blue_House,_Coyoacan_-_Google_Art_Project.jpg" target="_blank" rel="noopener noreferrer">https://commons.wikimedia.org/wiki/File:Diego_Rivera_with_a_xoloitzcuintle_dog_in_the_Blue_House,_Coyoacan_-_Google_Art_Project.jpg</a>
+          </li>
+          <li>
+            Museo Frida Kahlo. <em>The Casa Azul</em>.
+            <br><a href="https://www.museofridakahlo.org.mx/museo/?lang=en" target="_blank" rel="noopener noreferrer">https://www.museofridakahlo.org.mx/museo/?lang=en</a>
+          </li>
+        </ol>
+
+        <p class="note">
+          Nota editorial: las imágenes insertadas provienen de repositorios abiertos o de dominio público enlazados en esta sección. Para mejorar el rendimiento del blog, conviene descargar cada archivo, subirlo a tu propio servidor y reemplazar las URL externas por rutas locales.
+        </p>
+      </section>
+    </main>
+
+    <aside class="sidebar">
+      <section class="side-box">
+        <h4>Claves del reportaje</h4>
+        <ul>
+          <li>El xoloitzcuintle aparece como especie biológica y como ser liminal.</li>
+          <li>Su cuerpo desnudo reforzó su prestigio simbólico.</li>
+          <li>Su calor lo volvió auxiliar terapéutico.</li>
+          <li>Su lealtad doméstica fundamentó su papel funerario.</li>
+          <li>Xólotl elevó la imagen canina al plano divino.</li>
+        </ul>
+      </section>
+
+      <section class="side-box">
+        <h4>Ángulo editorial sugerido</h4>
+        <p>
+          Esta pieza funciona muy bien en Xolos Ramírez como puente entre historia, cultura y crianza, porque muestra que el xoloitzcuintle no es solo una raza: es una memoria viva de México.
+        </p>
+      </section>
+
+      <section class="side-box">
+        <h4>SEO sugerido</h4>
+        <p><strong>Título SEO:</strong> El Xoloitzcuintle en los códices: Florentino, Vaticano A y Xólotl</p>
+        <p><strong>Meta description:</strong> Reportaje de investigación sobre el xoloitzcuintle en el Códice Florentino, el Vaticano A y la tradición de Xólotl: historia, Mictlán, medicina y simbolismo.</p>
+      </section>
+    </aside>
+  </div>
+</article>
