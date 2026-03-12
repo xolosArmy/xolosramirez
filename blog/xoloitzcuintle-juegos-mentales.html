@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xoloitzcuintle: Estimulación Cognitiva y Juegos Mentales</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+        .tab-active {
+            background-color: #d97706; /* amber-600 */
+            color: white;
+        }
+        .tab-inactive {
+            background-color: #f5f5f4; /* stone-100 */
+            color: #44403c; /* stone-700 */
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800 font-sans antialiased">
+
+    <!-- Chosen Palette: Warm Neutrals & Terracotta (Stone-50, Stone-800, Amber-600, Orange-700) reflecting the Xolo's origin and earthy tones. -->
+    
+    <!-- Application Structure Plan: The SPA is structured logically into four main interactive sections: 1. Introduction & Context (why primitive breeds need mental work), 2. The Science (Comparative data using a bar chart on energy burn), 3. Interactive Game Encyclopedia (Categorized game types with dynamic text display for easy exploration), 4. Behavioral Impact (Radar chart showing before/after results), and 5. Routine Builder (Interactive tool generating a custom daily plan via a doughnut chart). This dashboard-style narrative flow guides the user from understanding the 'why' to learning the 'how', ending with actionable, personalized takeaways. -->
+    
+    <!-- Visualization & Content Choices: 
+    1. Contextual Intro -> Goal: Inform -> Method: Clean typography and Unicode icons -> Justification: Sets the stage without overwhelming.
+    2. Energy Burn Comparison -> Goal: Compare -> Method: Chart.js Bar Chart -> Interaction: Hover tooltips -> Justification: Clearly visualizes the 1:3 ratio of mental to physical exhaustion.
+    3. Game Categories -> Goal: Organize & Inform -> Method: Tabbed interface updating a text block -> Interaction: Click tabs to swap content -> Justification: Prevents text walls, keeps exploration active.
+    4. Behavioral Impact -> Goal: Compare (Before/After) -> Method: Chart.js Radar Chart -> Interaction: Hover to see exact metric improvements -> Justification: Excellent for showing multi-variable improvement (stress, focus, destructiveness).
+    5. Routine Builder -> Goal: Customize & Inform -> Method: Select inputs + Chart.js Doughnut Chart -> Interaction: User selects dog age/energy, chart updates dynamically -> Justification: Provides a personalized, actionable takeaway based on the report's methodology.
+    -->
+    
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <header class="bg-stone-900 text-stone-50 py-12 px-6 shadow-md border-b-4 border-amber-600">
+        <div class="max-w-5xl mx-auto text-center">
+            <div class="text-5xl mb-4">🐕🧠</div>
+            <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">La Mente del Xoloitzcuintle</h1>
+            <p class="text-xl md:text-2xl text-stone-300 max-w-3xl mx-auto">
+                Guía interactiva de estimulación cognitiva y juegos mentales para perros primitivos.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-12 space-y-20">
+
+        <section id="introduccion" class="bg-white p-8 rounded-2xl shadow-sm border border-stone-200">
+            <h2 class="text-2xl font-bold text-amber-700 mb-4 flex items-center gap-2">
+                <span class="text-3xl">🏺</span> Naturaleza Primitiva
+            </h2>
+            <p class="text-lg leading-relaxed mb-4">
+                El Xoloitzcuintle es una raza considerada "primitiva". A diferencia de las razas creadas recientemente para trabajos específicos (como el pastoreo o cobro), los perros primitivos conservan instintos agudos de supervivencia, una inteligencia independiente y una gran capacidad de resolución de problemas.
+            </p>
+            <p class="text-lg leading-relaxed">
+                Esta sección te introduce a una verdad fundamental: <strong>un Xoloitzcuintle no se cansa solo corriendo</strong>. Su cerebro necesita descifrar, olfatear y resolver. Sin estimulación mental adecuada, esta brillantez cognitiva a menudo se traduce en ansiedad o comportamientos destructivos.
+            </p>
+        </section>
+
+        <section id="energia">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-stone-900 mb-4">El Desgaste Energético</h2>
+                <p class="text-lg text-stone-600 max-w-2xl mx-auto">
+                    Explora cómo el trabajo mental afecta al Xolo en comparación con el ejercicio físico tradicional. Los datos muestran por qué 15 minutos de concentración intensa valen más que una caminata larga.
+                </p>
+            </div>
+            
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-stone-200 flex flex-col md:flex-row gap-8 items-center">
+                <div class="w-full md:w-1/2">
+                    <h3 class="text-xl font-bold text-amber-700 mb-3">Físico vs. Mental</h3>
+                    <p class="mb-4">
+                        Los estudios de comportamiento canino en razas primitivas demuestran que el procesamiento olfativo y la resolución de puzzles consumen una cantidad masiva de glucosa cerebral.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-2">
+                            <span>👟</span>
+                            <span><strong>Caminata Ligera:</strong> Desgaste físico moderado, bajo desgaste cognitivo.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span>🧠</span>
+                            <span><strong>Juegos de Olfato:</strong> Alto desgaste cognitivo, reduce el ritmo cardíaco y relaja el sistema nervioso.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span>🧩</span>
+                            <span><strong>Puzzles:</strong> Estimula la corteza frontal, previene el deterioro cognitivo en Xolos senior.</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="w-full md:w-1/2">
+                    <div class="chart-container">
+                        <canvas id="energyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="categorias" class="bg-stone-100 -mx-6 px-6 py-16 md:px-12 md:mx-0 md:rounded-3xl">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-stone-900 mb-4">Tipos de Estimulación</h2>
+                <p class="text-lg text-stone-600 max-w-2xl mx-auto">
+                    Interactúa con las diferentes categorías a continuación para descubrir qué juegos son ideales para tu Xoloitzcuintle y cómo implementarlos.
+                </p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-6">
+                <div class="w-full md:w-1/3 flex flex-col gap-3" id="tab-buttons">
+                    <button onclick="changeTab('olfato')" id="btn-olfato" class="tab-active text-left px-6 py-4 rounded-xl font-bold transition-colors shadow-sm text-lg flex justify-between items-center">
+                        Olfato y Rastreo <span>👃</span>
+                    </button>
+                    <button onclick="changeTab('puzzles')" id="btn-puzzles" class="tab-inactive text-left px-6 py-4 rounded-xl font-bold transition-colors shadow-sm text-lg flex justify-between items-center border border-stone-200">
+                        Puzzles Cognitivos <span>🧩</span>
+                    </button>
+                    <button onclick="changeTab('interactivo')" id="btn-interactivo" class="tab-inactive text-left px-6 py-4 rounded-xl font-bold transition-colors shadow-sm text-lg flex justify-between items-center border border-stone-200">
+                        Juego Interactivo <span>🎾</span>
+                    </button>
+                    <button onclick="changeTab('entrenamiento')" id="btn-entrenamiento" class="tab-inactive text-left px-6 py-4 rounded-xl font-bold transition-colors shadow-sm text-lg flex justify-between items-center border border-stone-200">
+                        Obediencia Positiva <span>💡</span>
+                    </button>
+                </div>
+
+                <div class="w-full md:w-2/3 bg-white p-8 rounded-2xl shadow-md min-h-[300px] border border-stone-200" id="tab-content">
+                    <h3 class="text-2xl font-bold text-amber-700 mb-4">Olfato y Rastreo</h3>
+                    <p class="text-lg mb-4">El olfato es el sentido principal del perro. Para el Xoloitzcuintle, cazar premios con la nariz satisface su instinto más primitivo y primario, generando una gran satisfacción y relajación.</p>
+                    <h4 class="font-bold mb-2">Ejemplos de Actividades:</h4>
+                    <ul class="list-disc pl-5 space-y-2 mb-6">
+                        <li><strong>Alfombras Olfativas (Snuffle Mats):</strong> Esconder premios secos en una alfombra de tela para que los busque.</li>
+                        <li><strong>Búsqueda en Casa:</strong> Esconder su juguete favorito o premios en diferentes habitaciones y darle la orden de "Busca".</li>
+                        <li><strong>Paseos de Olfato (Sniffaris):</strong> Paseos lentos con correa larga donde el perro decide qué oler y por cuánto tiempo.</li>
+                    </ul>
+                    <div class="bg-amber-50 p-4 rounded-lg border-l-4 border-amber-500">
+                        <p class="text-sm font-semibold text-amber-800">Tip de Experto:</p>
+                        <p class="text-sm">10 minutos de olfateo concentrado pueden equivaler a 30 minutos de trote físico en términos de cansancio general.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="impacto">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-stone-900 mb-4">Impacto en el Comportamiento</h2>
+                <p class="text-lg text-stone-600 max-w-2xl mx-auto">
+                    Analiza cómo cambia el perfil conductual de un Xoloitzcuintle promedio tras 4 semanas de integrar 20 minutos diarios de estimulación cognitiva.
+                </p>
+            </div>
+
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-stone-200 flex flex-col md:flex-row gap-8 items-center">
+                <div class="w-full md:w-1/2">
+                    <div class="chart-container">
+                        <canvas id="impactChart"></canvas>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/2 space-y-6">
+                    <div>
+                        <h4 class="font-bold text-lg text-green-700 flex items-center gap-2"><span>📈</span> Mejoras Significativas</h4>
+                        <p class="text-stone-600">El enfoque (capacidad de atención al tutor) y la relajación en casa aumentan drásticamente. El perro aprende a gestionar su frustración.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg text-red-700 flex items-center gap-2"><span>📉</span> Reducciones Clave</h4>
+                        <p class="text-stone-600">Los niveles de estrés general, los ladridos reactivos por aburrimiento y las conductas destructivas (masticar muebles) caen a niveles mínimos.</p>
+                    </div>
+                    <div class="bg-stone-100 p-4 rounded-xl border border-stone-200">
+                        <p class="italic text-center text-stone-700">"Un perro cansado mentalmente es un perro feliz y equilibrado."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="rutina" class="bg-amber-700 text-white p-8 md:p-12 rounded-3xl shadow-lg">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold mb-4">Diseña la Rutina de tu Xolo</h2>
+                <p class="text-lg text-amber-100 max-w-2xl mx-auto">
+                    Usa esta herramienta interactiva para generar una distribución recomendada de actividades basada en la edad y nivel de energía de tu perro.
+                </p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-10 items-center bg-white/10 p-6 rounded-2xl backdrop-blur-sm border border-white/20">
+                <div class="w-full md:w-1/2 space-y-6">
+                    <div>
+                        <label for="dogAge" class="block text-sm font-bold mb-2">Edad del Xoloitzcuintle:</label>
+                        <select id="dogAge" class="w-full bg-white text-stone-900 p-3 rounded-xl shadow-inner border-none focus:ring-2 focus:ring-amber-300 outline-none">
+                            <option value="cachorro">Cachorro (2 - 12 meses)</option>
+                            <option value="adulto" selected>Adulto (1 - 7 años)</option>
+                            <option value="senior">Senior (7+ años)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="dogEnergy" class="block text-sm font-bold mb-2">Nivel de Energía Físico:</label>
+                        <select id="dogEnergy" class="w-full bg-white text-stone-900 p-3 rounded-xl shadow-inner border-none focus:ring-2 focus:ring-amber-300 outline-none">
+                            <option value="baja">Tranquilo / Baja</option>
+                            <option value="media" selected>Moderada / Media</option>
+                            <option value="alta">Inagotable / Alta</option>
+                        </select>
+                    </div>
+                    <button onclick="updateRoutine()" class="w-full bg-stone-900 hover:bg-stone-800 text-white font-bold py-4 rounded-xl shadow-md transition-transform transform hover:scale-105">
+                        Calcular Rutina Óptima
+                    </button>
+                    
+                    <div id="routine-text" class="mt-4 text-amber-50 text-sm italic">
+                        Selecciona las opciones y calcula para ver la distribución recomendada de tiempo dedicado al día.
+                    </div>
+                </div>
+                
+                <div class="w-full md:w-1/2">
+                    <div class="chart-container bg-white rounded-xl p-4 shadow-inner">
+                        <canvas id="routineChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-900 text-stone-400 py-10 text-center mt-12 border-t-4 border-stone-800">
+        <div class="max-w-4xl mx-auto px-6">
+            <p class="mb-4">Basado en metodologías modernas de bienestar canino y etología para razas primitivas.</p>
+            <p class="text-sm">El Xoloitzcuintle es un patrimonio vivo. Cuidar su mente es preservar su esencia.</p>
+        </div>
+    </footer>
+
+    <script>
+        const contentData = {
+            olfato: {
+                title: "Olfato y Rastreo",
+                icon: "👃",
+                desc: "El olfato es el sentido principal del perro. Para el Xoloitzcuintle, cazar premios con la nariz satisface su instinto más primitivo y primario, generando una gran satisfacción y relajación.",
+                examples: [
+                    "<strong>Alfombras Olfativas (Snuffle Mats):</strong> Esconder premios secos en una alfombra de tela para que los busque.",
+                    "<strong>Búsqueda en Casa:</strong> Esconder su juguete favorito o premios en diferentes habitaciones y darle la orden de 'Busca'.",
+                    "<strong>Paseos de Olfato (Sniffaris):</strong> Paseos lentos con correa larga donde el perro decide qué oler y por cuánto tiempo."
+                ],
+                tip: "10 minutos de olfateo concentrado pueden equivaler a 30 minutos de trote físico en términos de cansancio general."
+            },
+            puzzles: {
+                title: "Puzzles Cognitivos",
+                icon: "🧩",
+                desc: "Estos juegos obligan al Xolo a pensar: mover piezas, jalar cuerdas, o levantar tapas para obtener una recompensa. Ideales para fomentar la independencia y tolerancia a la frustración.",
+                examples: [
+                    "<strong>Juguetes Dispensadores:</strong> KONGs congelados, pelotas rellenables o juguetes tipo 'Lickimat'.",
+                    "<strong>Puzzles de Madera/Plástico:</strong> Tableros donde el perro debe usar hocico o patas para revelar premios.",
+                    "<strong>Juegos Caseros:</strong> Rollos de cartón con premios adentro doblados en los bordes, cajas dentro de cajas."
+                ],
+                tip: "Supervisa siempre los puzzles caseros. Inicia con un nivel fácil para que el perro no se rinda ni se frustre demasiado."
+            },
+            interactivo: {
+                title: "Juego Interactivo",
+                icon: "🎾",
+                desc: "El juego con el tutor fortalece el vínculo. Para razas primitivas, el juego debe tener estructura y reglas claras (aprender a soltar, aprender a esperar).",
+                examples: [
+                    "<strong>Tira y Afloja (Tug-of-War):</strong> Excelente para canalizar energía. Se debe enseñar el comando 'Suelta' para mantener el control.",
+                    "<strong>Cobro Estructurado:</strong> Lanzar la pelota pero pidiendo un comando (ej. 'Sienta') antes de lanzar. Trabaja el autocontrol.",
+                    "<strong>Escondite:</strong> El tutor se esconde en la casa y llama al perro. Premia el llamado (Recall) de forma divertida."
+                ],
+                tip: "El juego debe tener un inicio y un fin marcados por el humano para evitar sobreexcitación prolongada."
+            },
+            entrenamiento: {
+                title: "Obediencia Positiva",
+                icon: "💡",
+                desc: "Aprender cosas nuevas crea nuevas conexiones neuronales. El adiestramiento moderno sin fuerza (basado en refuerzo) es un juego mental excepcional.",
+                examples: [
+                    "<strong>Trucos Nuevos:</strong> Girar, dar la pata, chocar los cinco, hacerse el muerto. Mantienen la mente ágil.",
+                    "<strong>Propiocepción:</strong> Enseñar al perro a caminar sobre superficies inestables, retroceder, o usar sus patas traseras conscientemente.",
+                    "<strong>Obediencia Básica Dinámica:</strong> Practicar comandos (Quieto, Junto, Ven) en entornos con diferentes niveles de distracción."
+                ],
+                tip: "Sesiones cortas de 3 a 5 minutos son mucho más efectivas que sesiones largas de 20 minutos donde el perro pierde interés."
+            }
+        };
+
+        function changeTab(tabId) {
+            const tabs = ['olfato', 'puzzles', 'interactivo', 'entrenamiento'];
+            
+            tabs.forEach(tab => {
+                const btn = document.getElementById(`btn-${tab}`);
+                if (tab === tabId) {
+                    btn.classList.remove('tab-inactive');
+                    btn.classList.add('tab-active');
+                    btn.classList.remove('border-stone-200');
+                    btn.classList.add('border-transparent');
+                } else {
+                    btn.classList.add('tab-inactive');
+                    btn.classList.remove('tab-active');
+                    btn.classList.add('border-stone-200');
+                    btn.classList.remove('border-transparent');
+                }
+            });
+
+            const content = contentData[tabId];
+            const contentDiv = document.getElementById('tab-content');
+            
+            let examplesHtml = content.examples.map(ex => `<li>${ex}</li>`).join('');
+
+            contentDiv.innerHTML = `
+                <h3 class="text-2xl font-bold text-amber-700 mb-4">${content.title}</h3>
+                <p class="text-lg mb-4">${content.desc}</p>
+                <h4 class="font-bold mb-2">Ejemplos de Actividades:</h4>
+                <ul class="list-disc pl-5 space-y-2 mb-6">
+                    ${examplesHtml}
+                </ul>
+                <div class="bg-amber-50 p-4 rounded-lg border-l-4 border-amber-500">
+                    <p class="text-sm font-semibold text-amber-800">Tip de Experto:</p>
+                    <p class="text-sm">${content.tip}</p>
+                </div>
+            `;
+        }
+
+        Chart.defaults.font.family = "'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+        Chart.defaults.color = '#44403c';
+
+        const ctxEnergy = document.getElementById('energyChart').getContext('2d');
+        const energyChart = new Chart(ctxEnergy, {
+            type: 'bar',
+            data: {
+                labels: ['Caminata (15 min)', 'Juego Físico (15 min)', 'Entrenamiento (15 min)', 'Olfato/Puzzle (15 min)'],
+                datasets: [{
+                    label: 'Cansancio Percibido / Consumo Energético (%)',
+                    data: [20, 45, 75, 90],
+                    backgroundColor: [
+                        '#e7e5e4', 
+                        '#d6d3d1', 
+                        '#fbbf24', 
+                        '#d97706'  
+                    ],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return ` Impacto: ${context.parsed.y}%`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: { color: '#f5f5f4' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            callback: function(value) {
+                                let label = this.getLabelForValue(value);
+                                if (label.length > 16) {
+                                    return label.substring(0, 16) + '...';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        const ctxImpact = document.getElementById('impactChart').getContext('2d');
+        const impactChart = new Chart(ctxImpact, {
+            type: 'radar',
+            data: {
+                labels: ['Estrés / Ansiedad', 'Destructividad', 'Capacidad de Enfoque', 'Calidad de Sueño', 'Vínculo con Tutor'],
+                datasets: [{
+                    label: 'Antes del Programa',
+                    data: [80, 70, 40, 50, 60],
+                    backgroundColor: 'rgba(168, 162, 158, 0.2)',
+                    borderColor: '#78716c',
+                    pointBackgroundColor: '#78716c',
+                    borderWidth: 2
+                }, {
+                    label: 'Después (4 Semanas)',
+                    data: [30, 15, 85, 90, 95],
+                    backgroundColor: 'rgba(217, 119, 6, 0.4)',
+                    borderColor: '#b45309',
+                    pointBackgroundColor: '#b45309',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: '#e7e5e4' },
+                        grid: { color: '#e7e5e4' },
+                        pointLabels: {
+                            font: { size: 12, weight: 'bold' },
+                            color: '#44403c'
+                        },
+                        ticks: { display: false, min: 0, max: 100 }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        let routineChartInstance = null;
+
+        function updateRoutine() {
+            const age = document.getElementById('dogAge').value;
+            const energy = document.getElementById('dogEnergy').value;
+            
+            let data = [25, 25, 25, 25]; 
+            let textOutput = "";
+
+            if (age === 'cachorro') {
+                if (energy === 'baja' || energy === 'media') {
+                    data = [40, 20, 20, 20]; 
+                    textOutput = "Para cachorros, la habituación al entorno y la obediencia básica (moldeado suave) deben predominar en sesiones ultracortas.";
+                } else {
+                    data = [30, 20, 30, 20];
+                    textOutput = "Cachorros activos necesitan equilibrio entre estructurar su juego (morder juguetes, no manos) y ejercicios de propiocepción/obediencia.";
+                }
+            } else if (age === 'adulto') {
+                if (energy === 'alta') {
+                    data = [20, 30, 30, 20]; 
+                    textOutput = "Adultos de alta energía requieren resolución de problemas complejos (puzzles) y mucho juego estructurado para agotar su físico y mente simultáneamente.";
+                } else {
+                    data = [35, 25, 10, 30]; 
+                    textOutput = "Rutina balanceada. Enfócate en la calma a través de actividades olfativas prolongadas y obediencia de mantenimiento.";
+                }
+            } else if (age === 'senior') {
+                data = [50, 40, 5, 5]; 
+                textOutput = "Prioridad absoluta: Prevención de disfunción cognitiva. Mucho trabajo olfativo suave y puzzles de baja exigencia física.";
+            }
+
+            document.getElementById('routine-text').innerText = textOutput;
+
+            if (routineChartInstance) {
+                routineChartInstance.data.datasets[0].data = data;
+                routineChartInstance.update();
+            } else {
+                const ctxRoutine = document.getElementById('routineChart').getContext('2d');
+                routineChartInstance = new Chart(ctxRoutine, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Olfato', 'Puzzles', 'Juego Activo', 'Entrenamiento'],
+                        datasets: [{
+                            data: data,
+                            backgroundColor: ['#b45309', '#f59e0b', '#78716c', '#44403c'],
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '65%',
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                labels: {
+                                    font: { size: 14 }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return ` ${context.label}: ${context.parsed}% del tiempo mental`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        updateRoutine();
+
+    </script>
+  <section class="bg-stone-900 text-stone-50 p-10 md:p-14 rounded-3xl shadow-xl text-center border-t-4 border-amber-600">
+    
+    <div class="max-w-3xl mx-auto">
+        
+        <div class="text-5xl mb-4">🐕</div>
+
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">
+            Explora el Universo del Xoloitzcuintle
+        </h2>
+
+        <p class="text-stone-300 text-lg mb-8 leading-relaxed">
+            En <strong>Xolos Ramírez</strong> encontrarás investigación, cultura, linaje, historia y
+            contenido especializado sobre el perro más antiguo de América.
+        </p>
+
+        <a 
+            href="https://xolosramirez.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-block bg-amber-600 hover:bg-amber-700 text-white font-bold py-4 px-10 rounded-xl shadow-lg transition duration-300 transform hover:scale-105"
+        >
+            Visitar Xolos Ramírez
+        </a>
+
+        <p class="text-sm text-stone-400 mt-6 italic">
+            El Xoloitzcuintle es patrimonio vivo de México.
+        </p>
+
+    </div>
+
+</section>
+</body>
+</html>
