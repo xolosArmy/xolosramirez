@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Análisis Etno-Bioacústico del Xoloitzcuintle | Xolos Ramírez</title>
+  <meta name="description" content="Reportaje interpretativo sobre la vocalización del Xoloitzcuintle: evidencia biológica, fisiología, simbolismo mesoamericano y fuentes documentales." />
+  <style>
+    :root{
+      --bg:#0b0b0f;
+      --bg-soft:#12131a;
+      --card:#171923;
+      --line:#2a2f3d;
+      --gold:#d4a84f;
+      --gold-soft:#f0d9a2;
+      --ink:#f5f1e8;
+      --muted:#b8b4ab;
+      --accent:#8fd3ff;
+      --danger:#ff8a8a;
+      --ok:#9ee6a0;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+      --radius:20px;
+      --max:1180px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: "Georgia", "Times New Roman", serif;
+      background:
+        radial-gradient(circle at top, rgba(212,168,79,.11), transparent 30%),
+        linear-gradient(180deg, #0a0b10 0%, #10121a 45%, #0a0b10 100%);
+      color:var(--ink);
+      line-height:1.75;
+    }
+
+    a{
+      color:var(--gold-soft);
+      text-decoration:none;
+    }
+    a:hover{color:#fff}
+
+    img{
+      max-width:100%;
+      display:block;
+      border-radius:16px;
+    }
+
+    .wrap{
+      width:min(100% - 32px, var(--max));
+      margin:auto;
+    }
+
+    .hero{
+      position:relative;
+      min-height:88vh;
+      display:flex;
+      align-items:end;
+      overflow:hidden;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      background:
+        linear-gradient(to top, rgba(10,11,16,.95) 0%, rgba(10,11,16,.55) 38%, rgba(10,11,16,.18) 100%),
+        url('https://commons.wikimedia.org/wiki/Special:FilePath/Perro_Xoloitzcuintle%2C_Mexico_%2829048770523%29.jpg') center/cover no-repeat;
+    }
+
+    .hero::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 80% 20%, rgba(143,211,255,.12), transparent 25%),
+        radial-gradient(circle at 20% 20%, rgba(212,168,79,.12), transparent 26%);
+      pointer-events:none;
+    }
+
+    .hero-content{
+      position:relative;
+      z-index:2;
+      padding:110px 0 72px;
+      max-width:900px;
+    }
+
+    .eyebrow{
+      display:inline-block;
+      font-size:.82rem;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:var(--gold-soft);
+      border:1px solid rgba(240,217,162,.25);
+      background:rgba(17,18,26,.55);
+      padding:10px 14px;
+      border-radius:999px;
+      backdrop-filter:blur(4px);
+      margin-bottom:18px;
+    }
+
+    h1,h2,h3{
+      font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+      line-height:1.12;
+      letter-spacing:-0.02em;
+      margin:0 0 18px;
+    }
+
+    h1{
+      font-size:clamp(2.3rem, 6vw, 4.8rem);
+      max-width:920px;
+    }
+
+    .hero p.lead{
+      font-size:1.12rem;
+      color:#ece6da;
+      max-width:820px;
+      margin:0 0 26px;
+    }
+
+    .meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:18px;
+    }
+
+    .meta span{
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.09);
+      color:#ddd6ca;
+      padding:9px 14px;
+      border-radius:999px;
+      font-size:.9rem;
+      backdrop-filter:blur(4px);
+    }
+
+    main{
+      padding:54px 0 90px;
+    }
+
+    .article-grid{
+      display:grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap:28px;
+      align-items:start;
+    }
+
+    .content{
+      min-width:0;
+    }
+
+    .sidebar{
+      position:sticky;
+      top:24px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+
+    .panel{
+      padding:22px 22px;
+    }
+
+    .toc h3,
+    .quick h3,
+    .source-box h3{
+      font-size:1rem;
+      margin-bottom:12px;
+      color:var(--gold-soft);
+    }
+
+    .toc a{
+      display:block;
+      padding:8px 0;
+      color:#e8e1d4;
+      border-bottom:1px dashed rgba(255,255,255,.08);
+      font-size:.96rem;
+    }
+
+    .toc a:last-child{border-bottom:none}
+
+    .quick ul,
+    .source-box ul{
+      margin:0;
+      padding-left:18px;
+      color:var(--muted);
+    }
+
+    .quick li,
+    .source-box li{
+      margin:8px 0;
+    }
+
+    .section{
+      margin-bottom:28px;
+      padding:30px;
+    }
+
+    .section h2{
+      font-size:clamp(1.5rem, 2.6vw, 2.25rem);
+      margin-bottom:16px;
+    }
+
+    .section h3{
+      font-size:1.18rem;
+      margin-top:28px;
+      margin-bottom:10px;
+      color:var(--gold-soft);
+    }
+
+    .section p{
+      margin:0 0 16px;
+      color:#f0ece4;
+    }
+
+    .dropcap:first-letter{
+      float:left;
+      font-size:4.1rem;
+      line-height:.86;
+      padding-right:10px;
+      color:var(--gold);
+      font-weight:700;
+    }
+
+    .notice{
+      border-left:4px solid var(--gold);
+      padding:16px 18px;
+      background:rgba(212,168,79,.08);
+      border-radius:14px;
+      margin:20px 0;
+      color:#f3ecdf;
+    }
+
+    .notice strong{color:#fff}
+
+    .hypothesis{
+      border-left-color:var(--accent);
+      background:rgba(143,211,255,.08);
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:18px;
+      margin:22px 0;
+    }
+
+    .figure{
+      overflow:hidden;
+    }
+
+    .figure img{
+      aspect-ratio:16/10;
+      object-fit:cover;
+      width:100%;
+      border-bottom-left-radius:0;
+      border-bottom-right-radius:0;
+    }
+
+    .figure .cap{
+      padding:14px 16px 16px;
+      color:var(--muted);
+      font-size:.93rem;
+      border-top:1px solid rgba(255,255,255,.06);
+    }
+
+    .quote{
+      margin:22px 0;
+      padding:22px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      color:#f2ecdf;
+      font-style:italic;
+      font-size:1.06rem;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      overflow:hidden;
+      border-radius:16px;
+      margin:18px 0 8px;
+      font-size:.96rem;
+    }
+
+    th, td{
+      border:1px solid rgba(255,255,255,.08);
+      padding:14px 14px;
+      text-align:left;
+      vertical-align:top;
+    }
+
+    th{
+      background:rgba(212,168,79,.12);
+      color:#fff1c7;
+      font-family:"Trebuchet MS", Arial, sans-serif;
+    }
+
+    td{
+      background:rgba(255,255,255,.02);
+      color:#ece7dc;
+    }
+
+    .tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:22px;
+    }
+
+    .tag{
+      font-size:.82rem;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.04);
+      color:#ddd2bd;
+    }
+
+    .sources{
+      padding:30px;
+    }
+
+    .source-list{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:16px;
+      margin-top:16px;
+    }
+
+    .source-item{
+      background:rgba(255,255,255,.025);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      padding:18px;
+    }
+
+    .source-item h4{
+      margin:0 0 10px;
+      font-family:"Trebuchet MS", Arial, sans-serif;
+      font-size:1rem;
+      color:#fff2cf;
+    }
+
+    .source-item p{
+      margin:0 0 10px;
+      color:var(--muted);
+      font-size:.95rem;
+    }
+
+    .cta{
+      margin-top:28px;
+      padding:26px;
+      border-radius:20px;
+      border:1px solid rgba(255,255,255,.08);
+      background:
+        linear-gradient(135deg, rgba(212,168,79,.12), rgba(143,211,255,.08));
+    }
+
+    .cta h3{
+      margin-top:0;
+      color:#fff4d2;
+    }
+
+    .cta a.button{
+      display:inline-block;
+      margin-top:10px;
+      padding:12px 18px;
+      border-radius:999px;
+      background:var(--gold);
+      color:#151515;
+      font-family:"Trebuchet MS", Arial, sans-serif;
+      font-weight:700;
+    }
+
+    footer{
+      padding:32px 0 70px;
+      color:var(--muted);
+      text-align:center;
+    }
+
+    @media (max-width: 980px){
+      .article-grid{
+        grid-template-columns:1fr;
+      }
+      .sidebar{
+        position:static;
+      }
+    }
+
+    @media (max-width: 720px){
+      .grid-2,
+      .source-list{
+        grid-template-columns:1fr;
+      }
+      .section{
+        padding:22px;
+      }
+      h1{
+        font-size:clamp(2rem, 10vw, 3.4rem);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="wrap">
+      <div class="hero-content">
+        <div class="eyebrow">Xolos Ramírez · Reportaje de investigación interpretativa</div>
+        <h1>Análisis Etno-Bioacústico del Xoloitzcuintle</h1>
+        <p class="lead">
+          Fenomenología de la vocalización, fisiología del aparato fonador y simbolismo del “grito”
+          en la raza primitiva mexicana. Un estudio divulgativo que distingue entre evidencia científica,
+          hipótesis bioacústica e interpretación cultural mesoamericana.
+        </p>
+        <div class="meta">
+          <span>Biología evolutiva</span>
+          <span>Etología canina</span>
+          <span>Patrimonio mesoamericano</span>
+          <span>Xoloitzcuintle</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap article-grid">
+
+      <article class="content">
+
+        <section class="section card" id="introduccion">
+          <div class="panel">
+            <p class="dropcap">
+              El Xoloitzcuintle no es solamente una raza canina antigua: es una figura biológica, cultural y simbólica
+              que sigue viva en México. Su aparente silencio, interrumpido por vocalizaciones agudas que muchos describen
+              como gritos, lamentos o alaridos, ha generado interpretaciones que van desde la observación etológica
+              hasta la lectura ritual. Pero para entender ese fenómeno sonoro conviene separar tres planos:
+              <strong>lo que la ciencia sí sostiene</strong>, <strong>lo que puede formularse como hipótesis anatómica o bioacústica</strong>,
+              y <strong>lo que pertenece al horizonte simbólico de la tradición mesoamericana</strong>.
+            </p>
+
+            <div class="notice">
+              <strong>Tesis central:</strong> el repertorio vocal del Xoloitzcuintle puede entenderse como la intersección
+              entre su condición de perro de tipo primitivo, su biología hairless asociada al gen <em>FOXI3</em>,
+              y la poderosa carga cultural que lo vincula con Xólotl, el umbral y el tránsito entre mundos.
+            </div>
+
+            <p>
+              El estándar oficial de la FCI ubica al Xoloitzcuintle en el <strong>Grupo 5, Sección 6: perros tipo primitivo</strong>.
+              Al mismo tiempo, la literatura genética asocia la variedad sin pelo con una mutación dominante del gen
+              <em>FOXI3</em>, vinculada a ausencia de pelo y alteraciones dentales. Ese punto es importante, porque sí
+              existe base científica para hablar de pelo y dentición; donde ya no conviene afirmar demasiado es en un
+              supuesto “órgano vocal único” del xolo, ya que esa parte sigue siendo un terreno más interpretativo que
+              demostrativo.
+            </p>
+          </div>
+        </section>
+
+        <section class="section card" id="imagenes-iniciales">
+          <div class="panel">
+            <h2>Imágenes de contexto</h2>
+            <div class="grid-2">
+              <figure class="figure card">
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Mexico.Xoloitzcuintle.01.jpg" alt="Grupo de xoloitzcuintles en México" />
+                <figcaption class="cap">
+                  Xoloitzcuintles en México. Imagen usada como apoyo visual del linaje vivo y la presencia contemporánea de la raza.
+                </figcaption>
+              </figure>
+
+              <figure class="figure card">
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Colima_-_Dog_Effigy_-_Walters_20092051_-_Three_Quarter_Front.jpg" alt="Perro de Colima en cerámica prehispánica" />
+                <figcaption class="cap">
+                  Efígie canina de tradición Colima. Estas representaciones muestran la profunda presencia simbólica del perro en Mesoamérica.
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+        </section>
+
+        <section class="section card" id="base-biologica">
+          <div class="panel">
+            <h2>1. Base biológica confirmada: tipo primitivo, pelo ausente y dentición</h2>
+
+            <p>
+              El primer punto firme es taxonómico y zootécnico: el Xoloitzcuintle está clasificado oficialmente
+              como perro de tipo primitivo. Esta designación no significa que sea “salvaje”, sino que conserva rasgos
+              fenotípicos y comportamentales menos hiper-especializados que los de muchas razas modernas sometidas a
+              selección artificial intensiva para funciones de pastoreo, cobro o guarda especializada.
+            </p>
+
+            <p>
+              El segundo punto firme es genético. La variedad sin pelo está asociada a una mutación dominante en
+              <em>FOXI3</em>, y los estudios sobre perros hairless muestran que esta condición forma parte de una
+              <strong>displasia ectodérmica</strong> que afecta principalmente piel, folículos pilosos y dentición.
+              En términos simples: el mismo sistema biológico que interviene en la ausencia de pelo también participa
+              en la formación dental, por eso la variedad sin pelo suele presentar dentición incompleta.
+            </p>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>Parámetro</th>
+                  <th>Variedad sin pelo</th>
+                  <th>Variedad con pelo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Base genética</td>
+                  <td>Mutación dominante asociada a <em>FOXI3</em></td>
+                  <td>Sin la expresión hairless dominante</td>
+                </tr>
+                <tr>
+                  <td>Pelaje</td>
+                  <td>Ausente o vestigial en algunas zonas</td>
+                  <td>Manto corto y completo</td>
+                </tr>
+                <tr>
+                  <td>Dentición</td>
+                  <td>Frecuentemente incompleta</td>
+                  <td>Usualmente más completa</td>
+                </tr>
+                <tr>
+                  <td>Valor interpretativo</td>
+                  <td>Importante para la hipótesis de resonancia oral</td>
+                  <td>Punto comparativo anatómico</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="notice">
+              <strong>Dato sólido:</strong> la relación entre <em>FOXI3</em>, desnudez y anomalías dentales sí está
+              documentada. <strong>Dato no firme:</strong> afirmar que esa mutación ya demostró por sí misma una
+              “acústica exclusiva” del xolo sería ir más allá de la evidencia disponible.
+            </div>
+          </div>
+        </section>
+
+        <section class="section card" id="hipotesis-bioacustica">
+          <div class="panel">
+            <h2>2. Hipótesis bioacústica: ¿puede la dentición alterar el timbre de la vocalización?</h2>
+
+            <p>
+              Aquí entramos al terreno de la hipótesis razonable. Todo sonido emitido por un mamífero depende
+              de una cadena anatómica: respiración, laringe, pliegues vocales y resonadores supraglóticos
+              como faringe, cavidad oral y cavidad nasal. Si la variedad sin pelo del xolo presenta una arquitectura
+              bucal modificada por la pérdida de premolares o molares, entonces es plausible pensar que la
+              <strong>resonancia oral</strong> cambie ligeramente respecto de otros perros.
+            </p>
+
+            <div class="notice hypothesis">
+              <strong>Hipótesis de trabajo:</strong> la dentición incompleta del Xoloitzcuintle sin pelo podría modificar
+              la forma en que ciertos armónicos se proyectan en la cavidad oral, produciendo una impresión acústica
+              más abierta, más penetrante o más “laminada” en algunas vocalizaciones agudas.
+            </div>
+
+            <p>
+              Lo importante es la prudencia: esta idea es compatible con principios generales de acústica vocal, pero
+              requeriría un estudio formal con espectrogramas, análisis de formantes y comparación entre individuos
+              hairless y coated para ser demostrada. Es decir, puede plantearse como una línea de investigación
+              seria, pero no como una conclusión cerrada.
+            </p>
+
+            <div class="quote">
+              “El ‘grito’ del xolo puede entenderse no como una anomalía, sino como un fenómeno en el que percepción
+              cultural y particularidad anatómica quizá se potencian mutuamente.”
+            </div>
+          </div>
+        </section>
+
+        <section class="section card" id="fisiologia">
+          <div class="panel">
+            <h2>3. Fisiología vocal: del pulmón a la impresión del “grito”</h2>
+
+            <h3>Presión de aire y emisión</h3>
+            <p>
+              Toda vocalización intensa comienza con el flujo de aire impulsado desde los pulmones. Un perro atlético,
+              de cuello largo, pecho bien desarrollado y gran vigilancia ambiental puede emitir sonidos breves y
+              contundentes cuando eleva la presión subglótica de manera súbita. En el caso del xolo, esto ayuda a
+              explicar por qué algunos dueños describen su voz como desproporcionadamente intensa para su tamaño.
+            </p>
+
+            <h3>Laringe y tensión</h3>
+            <p>
+              El tono percibido depende en buena medida de la vibración de los pliegues vocales. Una vocalización
+              de alarma, sostenida o estridente puede sentirse distinta a un ladrido corto porque cambia la
+              tensión laríngea, la duración del flujo y la forma en que el sonido se estabiliza antes de salir por
+              boca y nariz. Eso no convierte al xolo en una excepción anatómica probada, pero sí en un caso digno
+              de atención etológica.
+            </p>
+
+            <h3>Resonadores y percepción humana</h3>
+            <p>
+              A veces el fenómeno no solo está en el perro, sino en quien escucha. Un sonido agudo y sostenido,
+              emitido por un animal conocido por su apariencia arcaica y su fuerte simbolismo, puede sentirse más
+              “humano”, más “ritual” o más “fantasmal” de lo que indicaría un análisis puramente mecánico. La
+              bioacústica y la percepción cultural se entrelazan.
+            </p>
+          </div>
+        </section>
+
+        <section class="section card" id="tipologia">
+          <div class="panel">
+            <h2>4. Tipología de vocalizaciones observables</h2>
+
+            <p>
+              En el uso cotidiano, el llamado “grito” del xolo no parece ser un solo sonido, sino una familia de
+              vocalizaciones que los humanos agrupan bajo la misma impresión afectiva. En un marco divulgativo, puede
+              ser útil diferenciarlas así:
+            </p>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>Tipo</th>
+                  <th>Descripción perceptiva</th>
+                  <th>Función probable</th>
+                  <th>Contexto</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Alarido de alerta</td>
+                  <td>Agudo, súbito, penetrante</td>
+                  <td>Señal de alarma</td>
+                  <td>Extraños, ruidos anómalos, intrusión</td>
+                </tr>
+                <tr>
+                  <td>Gimoteo</td>
+                  <td>Oscilante, tenso, demandante</td>
+                  <td>Ansiedad, anticipación o vínculo</td>
+                  <td>Soledad, espera, deseo de contacto</td>
+                </tr>
+                <tr>
+                  <td>Aullido breve</td>
+                  <td>Sostenido, melódico, armónico</td>
+                  <td>Respuesta o cohesión</td>
+                  <td>Sirenas, otros perros, contagio vocal</td>
+                </tr>
+                <tr>
+                  <td>Gruñido afiliativo</td>
+                  <td>Grave, vibrante, no agresivo</td>
+                  <td>Juego o intensidad social</td>
+                  <td>Interacción cercana con humanos conocidos</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="notice">
+              Esta tabla es una <strong>tipología interpretativa</strong> útil para divulgación y observación doméstica;
+              no sustituye un estudio etológico controlado.
+            </div>
+          </div>
+        </section>
+
+        <section class="section card" id="comparada">
+          <div class="panel">
+            <h2>5. Bioacústica comparada: Basenji, Viringo y Xoloitzcuintle</h2>
+
+            <p>
+              Comparar al xolo con otras razas no convencionales ayuda a afinar el análisis. El Basenji es famoso por
+              su vocalización tipo yodel y por su baja propensión al ladrido clásico. El perro sin pelo del Perú
+              comparte con el xolo la condición hairless y ciertos rasgos de dentición alterada. La diferencia es que
+              el Xoloitzcuintle mexicano carga además con una densidad simbólica excepcional dentro de la historia
+              mesoamericana.
+            </p>
+
+            <p>
+              En términos culturales, el xolo no es solo un perro raro que suena raro. Es una voz que ya estaba
+              narrada por el mito antes de ser descrita por la etología moderna.
+            </p>
+          </div>
+        </section>
+
+        <section class="section card" id="simbolismo">
+          <div class="panel">
+            <h2>6. El simbolismo del “grito”: Xólotl, umbral y tránsito</h2>
+
+            <div class="grid-2">
+              <figure class="figure card">
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Xolotl_from_Codex_Borgia.jpg" alt="Xólotl en códice mesoamericano" />
+                <figcaption class="cap">
+                  Representación de Xólotl en tradición códice. Imagen de apoyo para el marco simbólico del xolo.
+                </figcaption>
+              </figure>
+
+              <figure class="figure card">
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Xoloitzcuintle_and_its_statue.jpg" alt="Xoloitzcuintle junto a una estatua" />
+                <figcaption class="cap">
+                  Presencia contemporánea del xolo como cuerpo vivo y memoria histórica al mismo tiempo.
+                </figcaption>
+              </figure>
+            </div>
+
+            <p>
+              En la tradición cultural mexicana, el Xoloitzcuintle ha sido asociado a Xólotl y al acompañamiento
+              de las almas hacia el Mictlán. Esa relación no debe leerse como un dato zoológico, sino como una
+              estructura simbólica de larga duración. Dentro de ese marco, la voz del xolo puede interpretarse como
+              una señal liminal: no solo avisa, también marca el umbral.
+            </p>
+
+            <p>
+              Por eso el “grito” del xolo impacta tanto en el imaginario. Un perro silencioso, sobrio y vigilante
+              que de pronto rompe el aire con una vocalización aguda no solo alerta; parece convocar algo más antiguo:
+              la memoria de un guardián, de un acompañante del tránsito, de un animal que en el arte y la narración
+              prehispánica jamás fue enteramente doméstico.
+            </p>
+
+            <div class="quote">
+              El xolo vigila puertas reales y también puertas simbólicas. Su voz, por breve que sea, parece anunciar
+              que algo cruza: una visita, un cambio, una presencia, una frontera.
+            </div>
+          </div>
+        </section>
+
+        <section class="section card" id="colima">
+          <div class="panel">
+            <h2>7. Arqueología del sonido: perros de Colima y memoria ritual</h2>
+
+            <p>
+              Las efígies caninas del occidente de México demuestran que el perro ocupó un lugar visual y ceremonial
+              privilegiado en el mundo prehispánico. Algunas piezas zoomorfas vinculadas a la tradición Colima
+              muestran hasta qué punto el perro fue una figura constante en el pensamiento ritual. Aunque no toda
+              efígie sea un instrumento sonoro, el hecho de que existan objetos rituales y escultóricos relacionados
+              con perros sugiere que su presencia excedía por mucho la utilidad doméstica.
+            </p>
+
+            <p>
+              En una lectura cultural amplia, la voz del xolo y su representación cerámica participan de la misma
+              lógica: el perro no solo estaba ahí; el perro significaba.
+            </p>
+          </div>
+        </section>
+
+        <section class="section card" id="etologia">
+          <div class="panel">
+            <h2>8. Etología aplicada: inteligencia, vínculo y sensibilidad vocal</h2>
+
+            <p>
+              El Xoloitzcuintle suele describirse como sensible, observador y muy unido a su núcleo humano. Esa
+              combinación hace que sus vocalizaciones a menudo estén ligadas no a hiperactividad, sino a
+              <strong>contextos significativos</strong>: alerta, ansiedad, anticipación, soledad o sobreestimulación.
+            </p>
+
+            <p>
+              En entornos urbanos puede adaptarse bien a interiores si recibe rutina, vínculo y manejo emocional
+              adecuado. Cuando no los tiene, el sonido emerge como descarga. Por eso cualquier lectura seria del
+              “grito” del xolo debe incluir no solo anatomía y mito, sino también bienestar, ambiente y relación.
+            </p>
+
+            <div class="notice">
+              Evita presentar cifras rígidas del tipo “X repeticiones para aprender” como si fueran universales.
+              En comportamiento canino, el individuo, el contexto y el método importan muchísimo más que la falsa
+              precisión de una cifra aislada.
+            </div>
+          </div>
+        </section>
+
+        <section class="section card" id="conclusion">
+          <div class="panel">
+            <h2>9. Conclusión</h2>
+
+            <p>
+              El Xoloitzcuintle puede ser leído como una convergencia rara y poderosa entre genética, forma corporal,
+              historia cultural y percepción humana. Sí sabemos que la variedad sin pelo está ligada a <em>FOXI3</em>
+              y a cambios dentales. Sí sabemos que la raza pertenece oficialmente al grupo de perros tipo primitivo.
+              Sí sabemos también que el xolo ocupa un lugar privilegiado en la imaginación mesoamericana como guía,
+              guardián y acompañante del umbral.
+            </p>
+
+            <p>
+              Lo que todavía no está demostrado de forma concluyente es una bioacústica exclusiva del xolo derivada
+              directamente de esa genética. Pero justamente ahí surge la belleza intelectual del tema: hay suficiente
+              base para investigar, suficiente experiencia doméstica para observar y suficiente densidad simbólica
+              para interpretar.
+            </p>
+
+            <p>
+              El “grito” del Xoloitzcuintle, entonces, puede entenderse como una frontera viva entre ciencia y mito:
+              un sonido real emitido por un cuerpo real, que sin embargo sigue siendo escuchado por México como una
+              voz ancestral.
+            </p>
+
+            <div class="tags">
+              <span class="tag">Xoloitzcuintle</span>
+              <span class="tag">Etología</span>
+              <span class="tag">Bioacústica</span>
+              <span class="tag">FOXI3</span>
+              <span class="tag">Mictlán</span>
+              <span class="tag">Xólotl</span>
+              <span class="tag">Patrimonio biocultural</span>
+            </div>
+
+            <div class="cta">
+              <h3>Descubre más en Xolos Ramírez</h3>
+              <p>
+                Explora más reportajes, crónicas, investigaciones y contenido visual sobre el Xoloitzcuintle como
+                patrimonio biológico, cultural y simbólico de México.
+              </p>
+              <a class="button" href="https://xolosramirez.com/" target="_blank" rel="noopener noreferrer">
+                Visitar Xolos Ramírez
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section class="sources card" id="fuentes">
+          <h2>Fuentes y referencias</h2>
+          <p>
+            Esta selección combina estándar oficial de raza, literatura científica y referencias culturales útiles para
+            divulgación. Puedes ampliar o sustituir enlaces según el enfoque editorial del blog.
+          </p>
+
+          <div class="source-list">
+            <div class="source-item">
+              <h4>FCI · Estándar oficial del Xoloitzcuintle</h4>
+              <p>Clasificación como perro de tipo primitivo, descripción funcional y observaciones de raza.</p>
+              <a href="https://www.fci.be/Nomenclature/Standards/234g05-es.pdf" target="_blank" rel="noopener noreferrer">Abrir fuente</a>
+            </div>
+
+            <div class="source-item">
+              <h4>Estudio sobre FOXI3 y dentición en perros sin pelo</h4>
+              <p>Base científica para la relación entre hairlessness, displasia ectodérmica y anomalías dentales.</p>
+              <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5511229/" target="_blank" rel="noopener noreferrer">Abrir fuente</a>
+            </div>
+
+            <div class="source-item">
+              <h4>Max Planck Society · FOXI3 y formación dental</h4>
+              <p>Divulgación científica útil para contextualizar el papel de FOXI3 en el desarrollo dental.</p>
+              <a href="https://www.mpg.de/11400186/hairless-dogs-tooth-evolution" target="_blank" rel="noopener noreferrer">Abrir fuente</a>
+            </div>
+
+            <div class="source-item">
+              <h4>UNAM Global · Xoloitzcuintle y tránsito funerario</h4>
+              <p>Referencia cultural de apoyo sobre la asociación del xolo con el camino al más allá en el imaginario mexicano.</p>
+              <a href="https://unamglobal.unam.mx/global_tv/xoloitzcuintle-el-perro-mexicano-asociado-a-la-muerte/" target="_blank" rel="noopener noreferrer">Abrir fuente</a>
+            </div>
+
+            <div class="source-item">
+              <h4>Natural History Museum · Colima Dogs</h4>
+              <p>Contexto museístico e histórico sobre las representaciones caninas precolombinas asociadas al xolo.</p>
+              <a href="https://nhm.org/stories/colima-dogs" target="_blank" rel="noopener noreferrer">Abrir fuente</a>
+            </div>
+
+            <div class="source-item">
+              <h4>Federación Canófila Mexicana</h4>
+              <p>Referencia complementaria en español para el estándar del Xoloitzcuintle en México.</p>
+              <a href="https://fcm.org.mx/razas/stdxolo.shtml" target="_blank" rel="noopener noreferrer">Abrir fuente</a>
+            </div>
+
+            <div class="source-item">
+              <h4>Wikimedia Commons · Imagen de Xoloitzcuintle</h4>
+              <p>Imagen de apoyo visual para uso editorial, revisar licencia específica en la página del archivo.</p>
+              <a href="https://commons.wikimedia.org/wiki/File:Perro_Xoloitzcuintle,_Mexico_(29048770523).jpg" target="_blank" rel="noopener noreferrer">Abrir archivo</a>
+            </div>
+
+            <div class="source-item">
+              <h4>Wikimedia Commons · Efígie canina de Colima</h4>
+              <p>Archivo visual de una pieza arqueológica de tradición canina prehispánica.</p>
+              <a href="https://commons.wikimedia.org/wiki/File:Colima_-_Dog_Effigy_-_Walters_20092051_-_Three_Quarter_Front.jpg" target="_blank" rel="noopener noreferrer">Abrir archivo</a>
+            </div>
+          </div>
+        </section>
+
+      </article>
+
+      <aside class="sidebar">
+        <div class="card panel toc">
+          <h3>Índice</h3>
+          <a href="#introduccion">Introducción</a>
+          <a href="#base-biologica">Base biológica</a>
+          <a href="#hipotesis-bioacustica">Hipótesis bioacústica</a>
+          <a href="#fisiologia">Fisiología vocal</a>
+          <a href="#tipologia">Tipología de sonidos</a>
+          <a href="#comparada">Comparación de razas</a>
+          <a href="#simbolismo">Simbolismo del “grito”</a>
+          <a href="#colima">Arqueología y Colima</a>
+          <a href="#etologia">Etología aplicada</a>
+          <a href="#conclusion">Conclusión</a>
+          <a href="#fuentes">Fuentes</a>
+        </div>
+
+        <div class="card panel quick">
+          <h3>Qué sostiene el artículo</h3>
+          <ul>
+            <li>La raza sí está reconocida oficialmente como tipo primitivo.</li>
+            <li><em>FOXI3</em> sí se relaciona con pelo ausente y dentición alterada.</li>
+            <li>La “acústica única” del xolo debe presentarse como hipótesis, no como certeza cerrada.</li>
+            <li>El simbolismo de Xólotl y Mictlán pertenece al plano cultural e interpretativo.</li>
+          </ul>
+        </div>
+
+        <div class="card panel source-box">
+          <h3>Sugerencia editorial</h3>
+          <ul>
+            <li>Si subirás imágenes propias de Xolos Ramírez, reemplaza los enlaces de Wikimedia por tus archivos.</li>
+            <li>Puedes añadir un bloque de “audio futuro” cuando tengas grabaciones reales de vocalización.</li>
+            <li>Este diseño funciona bien como reportaje largo en desktop y móvil.</li>
+          </ul>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <footer class="wrap">
+    Xolos Ramírez · Reportaje interpretativo sobre biología, sonido y simbolismo del Xoloitzcuintle.
+  </footer>
+
+</body>
+</html>
