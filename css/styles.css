@@ -580,6 +580,42 @@ footer {
   color: var(--color-dorado);
 }
 
+.footer-lineage-note {
+  font-size: 0.92rem;
+  color: var(--color-texto-suave);
+  margin-top: 0.35rem;
+}
+
+.network-bridge {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.08), rgba(17, 17, 17, 0.92));
+  border: 1px solid rgba(212, 175, 55, 0.28);
+}
+
+.network-bridge .container {
+  display: grid;
+  gap: 1rem;
+}
+
+.network-bridge p {
+  margin: 0;
+  max-width: 62ch;
+  color: var(--color-texto-suave);
+}
+
+.btn.btn-outline {
+  background: transparent;
+  color: var(--color-dorado);
+  border: 1px solid rgba(212, 175, 55, 0.55);
+  box-shadow: none;
+}
+
+.btn.btn-outline:focus,
+.btn.btn-outline:hover {
+  background: rgba(212, 175, 55, 0.12);
+  color: var(--color-texto);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+}
+
 .copyright {
   text-align: center;
   padding: 1.5rem 1rem;
