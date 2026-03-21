@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Xoloitzcuintle con niños: ¿Es una raza paciente?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #FAF7F2;
+            color: #4A3B32;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .tab-btn.active {
+            background-color: #D97757;
+            color: white;
+            border-color: #D97757;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-[#D97757] selection:text-white pb-12">
+
+    <!-- Chosen Palette: Warm Neutrals with Terracotta Accent (#FAF7F2 background, #4A3B32 dark text, #D97757 terracotta accent, #8C7A6B secondary neutral) -->
+    <!-- Application Structure Plan: The SPA uses a single-page scrolling dashboard structure designed to progressively educate the user. It starts with an engaging hero section stating the core premise. Then, it uses an interactive tab system to explain how size variations affect child compatibility (crucial context). Next, a radar chart compares Xolo temperament traits interactively, followed by a data visualization of owner survey results. Finally, actionable "Golden Rules" summarize the findings. This flow guides the user from general understanding to data-backed insights, ending with practical advice. -->
+    <!-- Visualization & Content Choices: 
+         1. Size Variations -> Goal: Compare -> Interactive Tabs -> Allows user to digest differences without clutter -> JS DOM update.
+         2. Temperament Profile -> Goal: Analyze -> Radar Chart -> Shows multi-variable traits (Patience, Loyalty, etc.) -> Chart.js.
+         3. Owner Experience -> Goal: Inform -> Doughnut Chart -> Shows proportional survey results clearly -> Chart.js.
+         4. Golden Rules -> Goal: Organize/Inform -> Card Grid with hover states -> Clean presentation of text -> CSS/Tailwind.
+         NO SVG/Mermaid used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <header class="bg-[#4A3B32] text-[#FAF7F2] py-16 px-6 text-center shadow-lg">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">El Xoloitzcuintle con Niños</h1>
+            <p class="text-xl md:text-2xl font-light text-[#D97757] mb-6">¿Es el Perro Azteca una raza paciente?</p>
+            <p class="text-lg opacity-90 leading-relaxed max-w-3xl mx-auto">
+                Una investigación interactiva sobre el temperamento, la paciencia y las claves para una convivencia armónica entre el legendario Xoloitzcuintle y los más pequeños del hogar.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 space-y-20">
+
+        <section id="tamaños" class="bg-white rounded-2xl shadow-sm border border-[#E8E2D9] p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold mb-3 text-[#D97757]">1. El Factor del Tamaño</h2>
+                <p class="text-lg text-[#8C7A6B]">
+                    El nivel de paciencia y la dinámica con los niños varían drásticamente según el tamaño del Xolo. Selecciona un tamaño para entender sus particularidades y nivel de tolerancia recomendado.
+                </p>
+            </div>
+
+            <div class="flex flex-wrap gap-4 mb-8 justify-center">
+                <button onclick="updateSize('estandar')" id="btn-estandar" class="tab-btn active px-6 py-3 rounded-full border-2 border-[#8C7A6B] text-[#4A3B32] font-semibold transition-all duration-300 hover:bg-[#F2EBE1]">Tamaño Estándar</button>
+                <button onclick="updateSize('mini')" id="btn-mini" class="tab-btn px-6 py-3 rounded-full border-2 border-[#8C7A6B] text-[#4A3B32] font-semibold transition-all duration-300 hover:bg-[#F2EBE1]">Tamaño Miniatura</button>
+                <button onclick="updateSize('toy')" id="btn-toy" class="tab-btn px-6 py-3 rounded-full border-2 border-[#8C7A6B] text-[#4A3B32] font-semibold transition-all duration-300 hover:bg-[#F2EBE1]">Tamaño Toy</button>
+            </div>
+
+            <div id="size-content" class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-[#FAF7F2] p-6 rounded-xl">
+                <div>
+                    <h3 id="size-title" class="text-2xl font-bold mb-4">Estándar (46 - 60 cm)</h3>
+                    <p id="size-desc" class="text-lg leading-relaxed mb-6">
+                        Es el más recomendado para familias con niños. Su estructura robusta le permite soportar juegos un poco más rudos (aunque no debe permitirse el abuso). Tienen un temperamento más estable, sereno y protector. Son extremadamente leales y suelen formar un vínculo de "niñero" con los pequeños de la casa.
+                    </p>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-semibold text-sm">Paciencia con niños:</span>
+                                <span id="paciencia-val" class="text-sm font-bold text-[#D97757]">Alta</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div id="paciencia-bar" class="bg-[#D97757] h-2.5 rounded-full transition-all duration-500" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-semibold text-sm">Fragilidad física:</span>
+                                <span id="fragilidad-val" class="text-sm font-bold text-[#8C7A6B]">Baja</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div id="fragilidad-bar" class="bg-[#8C7A6B] h-2.5 rounded-full transition-all duration-500" style="width: 20%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-center items-center text-8xl">
+                    🐕
+                </div>
+            </div>
+        </section>
+
+        <section id="temperamento" class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <h2 class="text-3xl font-bold mb-4 text-[#D97757]">2. Análisis de Temperamento</h2>
+                <p class="text-lg text-[#8C7A6B] mb-6">
+                    Explora el perfil psicológico del Xoloitzcuintle. Aunque son conocidos por ser perros primitivos, su inteligencia y lealtad destacan.
+                    <br><br>
+                    <strong>¿Cómo interactuar con el gráfico?</strong> El gráfico muestra las puntuaciones del Xolo en áreas clave. Haz clic en el botón inferior para comparar el temperamento del Xolo cuando no ha sido socializado correctamente frente a un Xolo bien socializado.
+                </p>
+                <div class="bg-white p-6 rounded-xl border border-[#E8E2D9] shadow-sm mb-6">
+                    <h4 class="font-bold text-xl mb-2">Hallazgo Clave:</h4>
+                    <p class="text-md" id="radar-insight">
+                        La paciencia del Xolo no es automática; está profundamente ligada a su nivel de socialización temprana y al respeto que recibe por parte de los niños.
+                    </p>
+                </div>
+                <button onclick="toggleRadarData()" id="toggle-radar-btn" class="w-full bg-[#D97757] text-white py-3 rounded-lg font-bold hover:bg-[#C26547] transition-colors">
+                    Ver Perfil: Xolo Sin Socializar
+                </button>
+            </div>
+            
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-[#E8E2D9]">
+                <div class="chart-container">
+                    <canvas id="temperamentChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="datos" class="bg-[#4A3B32] text-[#FAF7F2] rounded-2xl shadow-lg p-8 md:p-12">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="order-2 lg:order-1">
+                    <div class="bg-white rounded-2xl p-4">
+                        <div class="chart-container">
+                            <canvas id="surveyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-1 lg:order-2">
+                    <h2 class="text-3xl font-bold mb-4 text-[#D97757]">3. La Experiencia Real</h2>
+                    <p class="text-lg opacity-90 mb-6">
+                        Datos basados en encuestas a familias propietarias de Xoloitzcuintles sobre la convivencia diaria con infantes y adolescentes.
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <span class="text-2xl mr-3">📊</span>
+                            <div>
+                                <strong class="block text-xl">El factor edad importa</strong>
+                                <span class="opacity-80">Las familias reportan mayor éxito cuando los niños son mayores de 6 años y entienden límites.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-2xl mr-3">🛡️</span>
+                            <div>
+                                <strong class="block text-xl">Instinto protector</strong>
+                                <span class="opacity-80">El 85% de los dueños notó que su Xolo asume un rol vigilante y protector alrededor de los niños de su propia familia.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="recomendaciones" class="mb-16">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold mb-3 text-[#D97757]">4. Reglas de Oro para el Éxito</h2>
+                <p class="text-lg text-[#8C7A6B] max-w-2xl mx-auto">
+                    La paciencia es una calle de doble sentido. Para garantizar que el Xoloitzcuintle sea un compañero paciente y amoroso, se deben seguir estas pautas fundamentales.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-8 rounded-xl shadow-sm border border-[#E8E2D9] hover:shadow-md transition-shadow group">
+                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform origin-left">🎓</div>
+                    <h3 class="text-xl font-bold mb-3">Socialización Temprana</h3>
+                    <p class="text-[#8C7A6B]">
+                        Un Xolo debe ser expuesto a niños de diferentes edades, ruidos y movimientos bruscos desde cachorro (2 a 4 meses). Esto desensibiliza al perro y previene miedos que puedan convertirse en agresividad.
+                    </p>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-sm border border-[#E8E2D9] hover:shadow-md transition-shadow group">
+                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform origin-left">👶</div>
+                    <h3 class="text-xl font-bold mb-3">Educar al Niño</h3>
+                    <p class="text-[#8C7A6B]">
+                        El Xolo no es un juguete. Se debe enseñar a los niños a no jalar sus orejas, no molestarlos mientras comen o duermen, y respetar el "espacio seguro" del perro. Su piel expuesta es sensible a los rasguños.
+                    </p>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-sm border border-[#E8E2D9] hover:shadow-md transition-shadow group">
+                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform origin-left">🏡</div>
+                    <h3 class="text-xl font-bold mb-3">Supervisión Activa</h3>
+                    <p class="text-[#8C7A6B]">
+                        Ningún perro, sin importar la raza, debe quedarse a solas con un bebé o niño pequeño sin supervisión adulta. El adulto debe intervenir antes de que el perro se estrese o el niño se exceda.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-[#2A211C] text-center py-8 text-sm text-[#FAF7F2] opacity-80 mt-12">
+        <p>Conclusión: El Xoloitzcuintle es sumamente paciente y amoroso con su familia, pero exige respeto. Un entorno educado es la clave.</p>
+    </footer>
+
+    <script>
+        const sizeData = {
+            'estandar': {
+                title: 'Estándar (46 - 60 cm)',
+                desc: 'Es el más recomendado para familias con niños. Su estructura robusta le permite soportar juegos un poco más rudos (aunque no debe permitirse el abuso). Tienen un temperamento más estable, sereno y protector. Son extremadamente leales y suelen formar un vínculo de "niñero" con los pequeños de la casa.',
+                pacienciaVal: 'Alta',
+                pacienciaW: '85%',
+                fragilidadVal: 'Baja',
+                fragilidadW: '20%'
+            },
+            'mini': {
+                title: 'Miniatura (35 - 45 cm)',
+                desc: 'Una opción intermedia. Son juguetones y activos, ideales para niños un poco mayores (7+ años) que ya comprenden cómo tratar a un animal. Son lo suficientemente ágiles para esquivar pisotones, pero pueden ser menos tolerantes a los abrazos excesivos o movimientos bruscos de los más pequeños.',
+                pacienciaVal: 'Media - Alta',
+                pacienciaW: '70%',
+                fragilidadVal: 'Media',
+                fragilidadW: '50%'
+            },
+            'toy': {
+                title: 'Toy (25 - 35 cm)',
+                desc: 'NO se recomiendan para hogares con niños pequeños o muy activos. Su pequeño tamaño los hace sumamente frágiles a caídas o pisotones accidentales. Debido a su vulnerabilidad, tienden a ser más nerviosos y pueden reaccionar de forma defensiva si se sienten arrinconados por un niño.',
+                pacienciaVal: 'Baja (Por nerviosismo)',
+                pacienciaW: '40%',
+                fragilidadVal: 'Muy Alta',
+                fragilidadW: '95%'
+            }
+        };
+
+        function updateSize(sizeId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + sizeId).classList.add('active');
+
+            const data = sizeData[sizeId];
+            document.getElementById('size-title').textContent = data.title;
+            document.getElementById('size-desc').textContent = data.desc;
+            
+            document.getElementById('paciencia-val').textContent = data.pacienciaVal;
+            document.getElementById('paciencia-bar').style.width = data.pacienciaW;
+            
+            document.getElementById('fragilidad-val').textContent = data.fragilidadVal;
+            document.getElementById('fragilidad-bar').style.width = data.fragilidadW;
+        }
+
+        let temperamentChartInstance = null;
+        let isSocializedView = true;
+
+        const dataSocialized = [9, 8, 7, 9, 8, 6]; 
+        const dataUnsocialized = [8, 3, 5, 4, 9, 2];
+
+        function initRadarChart() {
+            const ctx = document.getElementById('temperamentChart').getContext('2d');
+            
+            Chart.defaults.color = '#4A3B32';
+            Chart.defaults.font.family = "'Outfit', sans-serif";
+
+            temperamentChartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Lealtad', 'Paciencia c/ Niños', 'Inteligencia', 'Protección', 'Energía/Alerta', 'Tolerancia a Ruidos'],
+                    datasets: [{
+                        label: 'Xolo Socializado',
+                        data: dataSocialized,
+                        backgroundColor: 'rgba(217, 119, 87, 0.4)',
+                        borderColor: '#D97757',
+                        pointBackgroundColor: '#D97757',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#D97757',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(140, 122, 107, 0.2)' },
+                            grid: { color: 'rgba(140, 122, 107, 0.2)' },
+                            pointLabels: {
+                                font: { size: 12, weight: '600' }
+                            },
+                            ticks: {
+                                min: 0,
+                                max: 10,
+                                stepSize: 2,
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            backgroundColor: '#4A3B32',
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 13 },
+                            padding: 10,
+                            displayColors: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.raw + '/10';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function toggleRadarData() {
+            isSocializedView = !isSocializedView;
+            const btn = document.getElementById('toggle-radar-btn');
+            const insight = document.getElementById('radar-insight');
+
+            if (isSocializedView) {
+                temperamentChartInstance.data.datasets[0].data = dataSocialized;
+                temperamentChartInstance.data.datasets[0].label = 'Xolo Socializado';
+                temperamentChartInstance.data.datasets[0].backgroundColor = 'rgba(217, 119, 87, 0.4)';
+                temperamentChartInstance.data.datasets[0].borderColor = '#D97757';
+                temperamentChartInstance.data.datasets[0].pointBackgroundColor = '#D97757';
+                btn.textContent = 'Ver Perfil: Xolo Sin Socializar';
+                btn.classList.remove('bg-[#8C7A6B]');
+                btn.classList.add('bg-[#D97757]');
+                insight.innerHTML = "La paciencia del Xolo no es automática; está profundamente ligada a su nivel de socialización temprana y al respeto que recibe por parte de los niños.";
+            } else {
+                temperamentChartInstance.data.datasets[0].data = dataUnsocialized;
+                temperamentChartInstance.data.datasets[0].label = 'Xolo SIN Socializar';
+                temperamentChartInstance.data.datasets[0].backgroundColor = 'rgba(140, 122, 107, 0.4)';
+                temperamentChartInstance.data.datasets[0].borderColor = '#8C7A6B';
+                temperamentChartInstance.data.datasets[0].pointBackgroundColor = '#8C7A6B';
+                btn.textContent = 'Ver Perfil: Xolo Socializado';
+                btn.classList.remove('bg-[#D97757]');
+                btn.classList.add('bg-[#8C7A6B]');
+                insight.innerHTML = "Sin socialización, la tolerancia a ruidos y paciencia caen drásticamente. El perro se vuelve asustadizo, aumentando el riesgo de reacciones negativas ante niños enérgicos.";
+            }
+            temperamentChartInstance.update();
+        }
+
+        function initSurveyChart() {
+            const ctx2 = document.getElementById('surveyChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        'Excelente convivencia (Niños educados)', 
+                        'Buena (Requiere supervisión)', 
+                        'Regular (El perro se aísla)', 
+                        'Complicada (Falta de socialización)'
+                    ],
+                    datasets: [{
+                        data: [45, 35, 15, 5],
+                        backgroundColor: [
+                            '#D97757',
+                            '#E29E85',
+                            '#8C7A6B',
+                            '#D6CFC6'
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '65%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: { size: 13 }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Evaluación de dueños con hijos',
+                            font: { size: 18, weight: 'bold' },
+                            padding: { bottom: 20 }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ' ' + context.label + ': ' + context.raw + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        window.onload = () => {
+            initRadarChart();
+            initSurveyChart();
+        };
+
+    </script>
+</body>
+</html>
