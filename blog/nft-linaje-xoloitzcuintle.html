@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xolos Ramirez: Explorador de NFTs de Linaje</title>
+    
+    <!-- Chosen Palette: Warm Terracotta & Clay (Inspirado en el Xoloitzcuintle) -->
+    <!-- Application Structure Plan: Diseño de página única (SPA) estructurado lógicamente para guiar a las familias desde el concepto básico (¿Qué es?) hasta los detalles técnicos y el proceso de adquisición. 
+         - Navegación superior pegajosa para fácil acceso.
+         - Sección 1: Introducción clara al concepto de pedigrí digital.
+         - Sección 2: Propiedades Únicas (Dashboard interactivo con gráficos para visualizar la pureza y atributos del linaje). Elegido para hacer tangibles los datos de crianza.
+         - Sección 3: Ecosistema (Explicación interactiva por pasos de RMZWallet y Xolos Explorer). Elegido para simplificar la tecnología subyacente.
+         - Sección 4: Proceso de Transferencia. Pasos claros y accionables. -->
+    <!-- Visualization & Content Choices: 
+         1. Radar Chart (Chart.js): Muestra las cualidades del linaje (Salud, Temperamento, Pureza). Justificación: Ideal para comparar múltiples variables cualitativas de un estándar de raza.
+         2. Bar Chart (Chart.js): Muestra la distribución de tamaños históricos de la camada. Justificación: Excelente para datos categóricos cuantitativos.
+         3. Diagrama de Pasos (HTML/CSS/JS): Para explicar el ecosistema (Wallet/Explorer) sin usar SVG, fomentando la lectura activa mediante clics. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'xolo-bg': '#F9F6F0',
+                        'xolo-dark': '#2D2825',
+                        'xolo-terracotta': '#C05621',
+                        'xolo-clay': '#8C6B5D',
+                        'xolo-light': '#EAE0D5'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #F9F6F0;
+            color: #2D2825;
+        }
+        
+        /* Contenedores de Gráficos Estrictos */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 35vh;
+            max-height: 350px;
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+                max-height: 400px;
+            }
+        }
+
+        /* Estilos para el diagrama interactivo HTML */
+        .step-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .step-card.active {
+            border-color: #C05621;
+            background-color: #fffaf0;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(192, 86, 33, 0.2);
+        }
+        
+        /* Utilidad para ocultar scrollbar */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="antialiased font-sans">
+
+    <!-- Navegación -->
+    <nav class="sticky top-0 z-50 bg-xolo-bg/90 backdrop-blur-md border-b border-xolo-clay/20 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl mr-2">🐕</span>
+                    <span class="font-bold text-xl tracking-tight text-xolo-dark">Xolos Ramirez</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#que-es" class="text-xolo-clay hover:text-xolo-terracotta transition-colors font-medium">¿Qué es el NFT?</a>
+                    <a href="#propiedades" class="text-xolo-clay hover:text-xolo-terracotta transition-colors font-medium">Propiedades</a>
+                    <a href="#ecosistema" class="text-xolo-clay hover:text-xolo-terracotta transition-colors font-medium">Ecosistema</a>
+                    <a href="#transferencia" class="bg-xolo-terracotta text-white px-4 py-2 rounded-full font-medium hover:bg-orange-700 transition-colors">Adquisición</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header / Hero -->
+    <header class="max-w-4xl mx-auto px-4 py-16 text-center">
+        <div class="inline-block bg-xolo-light text-xolo-terracotta px-4 py-1 rounded-full text-sm font-bold mb-6 tracking-wide uppercase">Reporte Oficial de Linaje Digital</div>
+        <h1 class="text-4xl md:text-6xl font-extrabold text-xolo-dark mb-6 leading-tight">El Pedigrí del Futuro:<br><span class="text-xolo-terracotta">NFTs de Linaje Xoloitzcuintle</span></h1>
+        <p class="text-lg md:text-xl text-xolo-clay mb-8 max-w-2xl mx-auto">
+            Descubra cómo <strong>Xolos Ramirez</strong> utiliza la tecnología blockchain para garantizar la autenticidad, salud e historia de su nuevo compañero de vida, asegurando la preservación de esta raza milenaria.
+        </p>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 pb-24 space-y-24">
+
+        <!-- Sección 1: ¿Qué es? -->
+        <section id="que-es" class="scroll-mt-24">
+            <div class="bg-white rounded-2xl p-8 md:p-12 shadow-sm border border-xolo-light grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold mb-4 text-xolo-dark">¿Qué es un NFT de Linaje?</h2>
+                    <p class="text-xolo-clay mb-4 leading-relaxed">
+                        En el contexto de <strong>Xolos Ramirez</strong>, un NFT (Token No Fungible) actúa como un <strong>certificado de pedigrí digital, inmutable y verificable</strong>. A diferencia de los papeles tradicionales que pueden perderse o falsificarse, este registro vive en la cadena de bloques.
+                    </p>
+                    <p class="text-xolo-clay leading-relaxed mb-6">
+                        Cada familia que adopta o adquiere un xoloitzcuintle recibe este token único. No es una imagen digital para especular, es un documento vivo que contiene la historia genética, el registro de vacunas y la identidad única de su perro.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <span class="text-xolo-terracotta mr-2">✔️</span>
+                            <span class="text-sm font-medium">Registro Genético Inmutable</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-xolo-terracotta mr-2">✔️</span>
+                            <span class="text-sm font-medium">Historial Médico Actualizable</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-xolo-terracotta mr-2">✔️</span>
+                            <span class="text-sm font-medium">Prueba de Propiedad Absoluta</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-xolo-bg rounded-xl p-6 text-center border-2 border-dashed border-xolo-clay/30">
+                    <div class="text-6xl mb-4">📜 🔗 🐕</div>
+                    <h3 class="font-bold text-xl mb-2 text-xolo-dark">El Vínculo Digital-Físico</h3>
+                    <p class="text-sm text-xolo-clay">El perro físico posee un microchip cuyo número de serie exacto está encriptado y registrado dentro de los metadatos del NFT, creando un vínculo inquebrantable.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 2: Propiedades Únicas (Dashboard Interactivo) -->
+        <section id="propiedades" class="scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold mb-4 text-xolo-dark">Propiedades Únicas del Linaje</h2>
+                <p class="max-w-2xl mx-auto text-xolo-clay">
+                    Explore los metadatos estadísticos que acompañan a cada NFT. Estos gráficos interactivos muestran el estándar de calidad mantenido por Xolos Ramirez a través de generaciones. Interactúe con las pestañas para explorar diferentes métricas.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-xolo-light">
+                <!-- Tabs -->
+                <div class="flex flex-wrap justify-center gap-2 mb-8 border-b border-xolo-light pb-4">
+                    <button onclick="switchTab('radar')" id="tab-radar" class="tab-btn px-6 py-2 rounded-full font-medium text-sm transition-colors bg-xolo-terracotta text-white">Evaluación de Estándar</button>
+                    <button onclick="switchTab('bar')" id="tab-bar" class="tab-btn px-6 py-2 rounded-full font-medium text-sm transition-colors bg-xolo-bg text-xolo-clay hover:bg-xolo-light">Distribución de Tamaños</button>
+                </div>
+
+                <!-- Contenedores de Gráficos -->
+                <div id="view-radar" class="block">
+                    <p class="text-center text-sm text-xolo-clay mb-4">Análisis cualitativo del linaje RMZ comparado con el estándar ideal de la raza.</p>
+                    <div class="chart-container">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+
+                <div id="view-bar" class="hidden">
+                    <p class="text-center text-sm text-xolo-clay mb-4">Distribución histórica de tamaños (Miniatura, Intermedio, Estándar) en las últimas 5 generaciones.</p>
+                    <div class="chart-container">
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 3: Ecosistema (xolos-explorer y RMZWallet) -->
+        <section id="ecosistema" class="scroll-mt-24">
+            <h2 class="text-3xl font-bold mb-4 text-xolo-dark text-center">¿Cómo Funciona el Ecosistema?</h2>
+            <p class="max-w-2xl mx-auto text-xolo-clay text-center mb-10">
+                Para gestionar esta tecnología sin complicaciones, Xolos Ramirez ha desarrollado herramientas específicas. Haga clic en los componentes a continuación para entender su función.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Elementos Interactivos -->
+                <div class="space-y-4">
+                    <div class="step-card active rounded-xl p-5 bg-white border-2 border-xolo-light" onclick="showEcosystemDetail('explorer', this)">
+                        <div class="flex items-center">
+                            <span class="text-3xl mr-4">🌐</span>
+                            <div>
+                                <h3 class="font-bold text-lg text-xolo-dark">Xolos Explorer</h3>
+                                <p class="text-sm text-xolo-clay">El registro público de transparencia.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-card rounded-xl p-5 bg-white border-2 border-xolo-light" onclick="showEcosystemDetail('wallet', this)">
+                        <div class="flex items-center">
+                            <span class="text-3xl mr-4">📱</span>
+                            <div>
+                                <h3 class="font-bold text-lg text-xolo-dark">RMZWallet</h3>
+                                <p class="text-sm text-xolo-clay">Su bóveda digital personal.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-card rounded-xl p-5 bg-white border-2 border-xolo-light" onclick="showEcosystemDetail('smartcontract', this)">
+                        <div class="flex items-center">
+                            <span class="text-3xl mr-4">⚙️</span>
+                            <div>
+                                <h3 class="font-bold text-lg text-xolo-dark">Contrato Inteligente</h3>
+                                <p class="text-sm text-xolo-clay">Las reglas inmutables de crianza.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel de Detalles Dinámico -->
+                <div class="bg-xolo-dark text-white rounded-2xl p-8 flex flex-col justify-center min-h-[300px]" id="ecosystem-detail-panel">
+                    <span class="text-5xl mb-4" id="eco-icon">🌐</span>
+                    <h3 class="text-2xl font-bold mb-3" id="eco-title">Xolos Explorer</h3>
+                    <p class="text-gray-300 leading-relaxed" id="eco-desc">
+                        Basado en el repositorio <code class="bg-gray-800 px-2 py-1 rounded text-xs">xolosArmy/xolos-explorer</code>. Es una plataforma web pública donde cualquier persona puede verificar la autenticidad de un linaje introduciendo el ID del microchip o el código del NFT. Muestra el árbol genealógico completo sin comprometer los datos personales del dueño actual.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 4: Transferencia -->
+        <section id="transferencia" class="scroll-mt-24">
+            <div class="bg-xolo-light rounded-2xl p-8 md:p-12">
+                <h2 class="text-3xl font-bold mb-4 text-xolo-dark text-center">Proceso de Transferencia y Adquisición</h2>
+                <p class="text-center text-xolo-clay max-w-2xl mx-auto mb-12">
+                    Cuando una familia es aprobada para adquirir un Xoloitzcuintle de Xolos Ramirez, el proceso de transferencia del NFT es inmediato y seguro, simbolizando la entrega formal de la custodia.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
+                    <!-- Línea conectora (solo desktop) -->
+                    <div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-xolo-clay/30 -translate-y-1/2 z-0"></div>
+
+                    <!-- Pasos -->
+                    <div class="relative z-10 bg-white p-6 rounded-xl shadow-sm border border-xolo-clay/20 text-center">
+                        <div class="w-12 h-12 bg-xolo-dark text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4 border-4 border-xolo-light">1</div>
+                        <h4 class="font-bold mb-2">Aprobación</h4>
+                        <p class="text-sm text-xolo-clay">La familia completa el proceso de evaluación tradicional de crianza responsable.</p>
+                    </div>
+
+                    <div class="relative z-10 bg-white p-6 rounded-xl shadow-sm border border-xolo-clay/20 text-center">
+                        <div class="w-12 h-12 bg-xolo-dark text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4 border-4 border-xolo-light">2</div>
+                        <h4 class="font-bold mb-2">Instalación</h4>
+                        <p class="text-sm text-xolo-clay">Descargan la <strong>RMZWallet</strong> en sus dispositivos móviles de manera gratuita y segura.</p>
+                    </div>
+
+                    <div class="relative z-10 bg-white p-6 rounded-xl shadow-sm border border-xolo-clay/20 text-center">
+                        <div class="w-12 h-12 bg-xolo-terracotta text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4 border-4 border-xolo-light shadow-lg">3</div>
+                        <h4 class="font-bold mb-2">Acuñación</h4>
+                        <p class="text-sm text-xolo-clay">Xolos Ramirez "mintea" (crea) el NFT vinculando el microchip del cachorro recién nacido.</p>
+                    </div>
+
+                    <div class="relative z-10 bg-white p-6 rounded-xl shadow-sm border border-xolo-clay/20 text-center">
+                        <div class="w-12 h-12 bg-xolo-dark text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4 border-4 border-xolo-light">4</div>
+                        <h4 class="font-bold mb-2">Transferencia</h4>
+                        <p class="text-sm text-xolo-clay">El NFT se envía a la RMZWallet de la familia, certificando la propiedad legal e histórica del ejemplar.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-xolo-dark text-xolo-bg py-12 text-center border-t-4 border-xolo-terracotta">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="text-2xl mb-4">🐕 🔗 📜</div>
+            <h3 class="font-bold text-xl mb-2">Xolos Ramirez - Crianza Responsable Web3</h3>
+            <p class="text-gray-400 text-sm mb-6">Esta es una visualización interactiva basada en la arquitectura tecnológica propuesta por xolosArmy.</p>
+            <div class="flex justify-center space-x-6 text-sm text-gray-500">
+                <span>Refs: RMZWallet.git</span>
+                <span>Refs: xolos-explorer</span>
+            </div>
+            <p class="text-xs text-gray-600 mt-8">&copy; 2026 Xolos Ramirez. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Lógica JavaScript -->
+    <script>
+        // ---------------------------------------------------------
+        // Datos para Gráficos
+        // ---------------------------------------------------------
+        const radarData = {
+            labels: ['Salud Genética', 'Temperamento', 'Afinidad al Estándar', 'Calidad de Piel', 'Estructura Ósea'],
+            datasets: [{
+                label: 'Promedio Linaje RMZ',
+                data: [98, 92, 95, 90, 94],
+                fill: true,
+                backgroundColor: 'rgba(192, 86, 33, 0.2)', // xolo-terracotta con opacidad
+                borderColor: 'rgba(192, 86, 33, 1)',
+                pointBackgroundColor: 'rgba(192, 86, 33, 1)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgba(192, 86, 33, 1)'
+            }, {
+                label: 'Mínimo Aceptable (Federación)',
+                data: [80, 80, 85, 80, 85],
+                fill: true,
+                backgroundColor: 'rgba(140, 107, 93, 0.2)', // xolo-clay con opacidad
+                borderColor: 'rgba(140, 107, 93, 1)',
+                pointBackgroundColor: 'rgba(140, 107, 93, 1)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgba(140, 107, 93, 1)'
+            }]
+        };
+
+        const barData = {
+            labels: ['Generación 1', 'Generación 2', 'Generación 3', 'Generación 4', 'Generación actual'],
+            datasets: [
+                {
+                    label: 'Miniatura',
+                    data: [2, 3, 2, 4, 3],
+                    backgroundColor: '#8C6B5D', // clay
+                },
+                {
+                    label: 'Intermedio',
+                    data: [4, 5, 6, 5, 7],
+                    backgroundColor: '#C05621', // terracotta
+                },
+                {
+                    label: 'Estándar',
+                    data: [3, 2, 4, 3, 5],
+                    backgroundColor: '#2D2825', // dark
+                }
+            ]
+        };
+
+        // ---------------------------------------------------------
+        // Inicialización de Gráficos (Chart.js)
+        // ---------------------------------------------------------
+        let radarChartInstance = null;
+        let barChartInstance = null;
+
+        function initCharts() {
+            // Radar Chart
+            const ctxRadar = document.getElementById('radarChart').getContext('2d');
+            radarChartInstance = new Chart(ctxRadar, {
+                type: 'radar',
+                data: radarData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // Vital para el contenedor restrictivo
+                    scales: {
+                        r: {
+                            angleLines: { display: true },
+                            suggestedMin: 50,
+                            suggestedMax: 100,
+                            ticks: { display: false } // Limpia la vista
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.formattedValue + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Bar Chart
+            const ctxBar = document.getElementById('barChart').getContext('2d');
+            barChartInstance = new Chart(ctxBar, {
+                type: 'bar',
+                data: barData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // Vital para el contenedor restrictivo
+                    scales: {
+                        x: { stacked: true },
+                        y: { stacked: true, beginAtZero: true, title: { display: true, text: 'Número de Ejemplares' } }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        // ---------------------------------------------------------
+        // Lógica de UI Interactiva
+        // ---------------------------------------------------------
+
+        // Función para cambiar pestañas de gráficos
+        function switchTab(tabId) {
+            // Referencias UI
+            const viewRadar = document.getElementById('view-radar');
+            const viewBar = document.getElementById('view-bar');
+            const btnRadar = document.getElementById('tab-radar');
+            const btnBar = document.getElementById('tab-bar');
+
+            // Clases para estilo activo/inactivo
+            const activeClasses = ['bg-xolo-terracotta', 'text-white'];
+            const inactiveClasses = ['bg-xolo-bg', 'text-xolo-clay', 'hover:bg-xolo-light'];
+
+            if (tabId === 'radar') {
+                viewRadar.classList.remove('hidden');
+                viewRadar.classList.add('block');
+                viewBar.classList.remove('block');
+                viewBar.classList.add('hidden');
+
+                btnRadar.classList.add(...activeClasses);
+                btnRadar.classList.remove(...inactiveClasses);
+                btnBar.classList.add(...inactiveClasses);
+                btnBar.classList.remove(...activeClasses);
+            } else {
+                viewBar.classList.remove('hidden');
+                viewBar.classList.add('block');
+                viewRadar.classList.remove('block');
+                viewRadar.classList.add('hidden');
+
+                btnBar.classList.add(...activeClasses);
+                btnBar.classList.remove(...inactiveClasses);
+                btnRadar.classList.add(...inactiveClasses);
+                btnRadar.classList.remove(...activeClasses);
+            }
+        }
+
+        // Datos para el panel interactivo del ecosistema
+        const ecosystemData = {
+            'explorer': {
+                icon: '🌐',
+                title: 'Xolos Explorer',
+                desc: 'Basado en el repositorio <code class="bg-gray-800 px-2 py-1 rounded text-xs">xolosArmy/xolos-explorer</code>. Es una plataforma web pública donde cualquier persona puede verificar la autenticidad de un linaje introduciendo el ID del microchip o el código del NFT. Muestra el árbol genealógico completo sin comprometer los datos personales del dueño actual.'
+            },
+            'wallet': {
+                icon: '📱',
+                title: 'RMZWallet',
+                desc: 'Basado en el repositorio <code class="bg-gray-800 px-2 py-1 rounded text-xs">RMZWallet.git</code>. Es una billetera digital diseñada específicamente para familias. A diferencia de wallets cripto complejas, RMZWallet se enfoca en mostrar la foto de su xoloitzcuintle, su historial de vacunas, recordatorios médicos y permite la transferencia segura del NFT en caso de cambio de titularidad legal.'
+            },
+            'smartcontract': {
+                icon: '⚙️',
+                title: 'Contrato Inteligente (Smart Contract)',
+                desc: 'El código invisible que rige todo. Garantiza que solo las billeteras autorizadas por Xolos Ramirez puedan "acuñar" nuevos pedigrís. También bloquea la alteración de datos médicos pasados, asegurando que el historial genético y de salud del perro sea 100% verídico e inmutable para siempre.'
+            }
+        };
+
+        // Función para mostrar detalles del ecosistema
+        function showEcosystemDetail(key, element) {
+            // Actualizar panel
+            const data = ecosystemData[key];
+            document.getElementById('eco-icon').innerHTML = data.icon;
+            document.getElementById('eco-title').innerText = data.title;
+            document.getElementById('eco-desc').innerHTML = data.desc;
+
+            // Actualizar estilos activos de las tarjetas
+            document.querySelectorAll('.step-card').forEach(card => {
+                card.classList.remove('active', 'border-xolo-terracotta');
+                card.classList.add('border-xolo-light');
+            });
+            element.classList.add('active', 'border-xolo-terracotta');
+            element.classList.remove('border-xolo-light');
+        }
+
+        // Inicializar al cargar la página
+        window.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+        });
+
+    </script>
+</body>
+</html>
