@@ -1,72 +1,595 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Entrega de Humo Ramírez | Blog Xolos Ramírez</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Entrega de Humo Ramírez | Blog Xolos Ramírez</title>
+  <meta
+    name="description"
+    content="Entrega de Humo Ramírez a su nueva familia. Xoloitzcuintle, linaje, registro NFT inmutable y transferencia digital en Tonalli Wallet."
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --bg: #f7f3ec;
+      --surface: #fffdf9;
+      --surface-2: #f3ece2;
+      --text: #1f1a17;
+      --muted: #6f655d;
+      --gold: #b08a48;
+      --gold-dark: #8e6c33;
+      --gold-soft: rgba(176, 138, 72, 0.12);
+      --border: rgba(176, 138, 72, 0.18);
+      --shadow: 0 18px 60px rgba(31, 26, 23, 0.08);
+      --shadow-soft: 0 10px 30px rgba(31, 26, 23, 0.06);
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --radius-sm: 12px;
+      --container: 860px;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      color: var(--text);
+      line-height: 1.8;
+      background:
+        radial-gradient(circle at top left, rgba(176, 138, 72, 0.08), transparent 28%),
+        radial-gradient(circle at top right, rgba(0, 0, 0, 0.03), transparent 25%),
+        linear-gradient(180deg, #fbf8f3 0%, #f4eee6 100%);
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(12px);
+      background: rgba(255, 253, 249, 0.84);
+      border-bottom: 1px solid rgba(176, 138, 72, 0.12);
+    }
+
+    .site-nav {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo {
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 800;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--text);
+      position: relative;
+    }
+
+    .logo::after {
+      content: "";
+      display: block;
+      width: 42px;
+      height: 2px;
+      margin: 10px auto 0;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      border-radius: 999px;
+    }
+
+    .container {
+      width: min(100% - 32px, var(--container));
+      margin: 56px auto 72px;
+    }
+
+    .blog-post {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,253,249,0.98));
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .blog-post::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, #6d5326, var(--gold), #d7b16d, var(--gold-dark));
+    }
+
+    .post-header {
+      padding: 54px 52px 28px;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(176, 138, 72, 0.06), rgba(255,255,255,0));
+    }
+
+    .category {
+      display: inline-block;
+      margin-bottom: 18px;
+      padding: 8px 14px;
+      border: 1px solid rgba(176, 138, 72, 0.22);
+      border-radius: 999px;
+      background: rgba(176, 138, 72, 0.09);
+      color: var(--gold-dark);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .post-header h1 {
+      margin: 0;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: #191512;
+    }
+
+    .post-meta {
+      margin: 18px 0 0;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .post-content {
+      padding: 10px 52px 24px;
+      font-size: 1.05rem;
+    }
+
+    .post-content p {
+      margin: 0 0 1.35em;
+      color: #2a2420;
+    }
+
+    .post-content .lead {
+      font-size: 1.12rem;
+      color: #241e1a;
+    }
+
+    .post-content strong {
+      color: #171310;
+    }
+
+    .post-content em {
+      color: var(--gold-dark);
+      font-style: italic;
+    }
+
+    .post-content h2,
+    .post-content h3 {
+      font-family: 'Playfair Display', serif;
+      color: #191512;
+      line-height: 1.2;
+      margin-top: 2.2em;
+      margin-bottom: 0.65em;
+    }
+
+    .post-content h2 {
+      font-size: clamp(1.7rem, 3vw, 2.25rem);
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .post-content h2::after {
+      content: "";
+      display: block;
+      width: 72px;
+      height: 3px;
+      margin-top: 12px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+    }
+
+    .post-content h3 {
+      font-size: 1.4rem;
+    }
+
+    .post-content a {
+      color: var(--gold-dark);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    .post-content a:hover {
+      color: #6f5223;
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      margin: 34px 0;
+      border-radius: 22px;
+      overflow: hidden;
+      background: #000;
+      box-shadow:
+        0 16px 36px rgba(0, 0, 0, 0.14),
+        0 0 0 1px rgba(176, 138, 72, 0.12);
+    }
+
+    .video-container iframe {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border: 0;
+    }
+
+    .highlight-box {
+      margin: 34px 0;
+      padding: 28px 28px 28px 30px;
+      border-left: 4px solid var(--gold);
+      background: linear-gradient(135deg, rgba(176, 138, 72, 0.10), rgba(255,255,255,0.72));
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.22rem;
+      line-height: 1.65;
+      color: #2a211a;
+      box-shadow: inset 0 0 0 1px rgba(176, 138, 72, 0.08);
+    }
+
+    .transaction-info {
+      margin: 36px 0 20px;
+      padding: 28px;
+      background: linear-gradient(180deg, #fcfaf6 0%, #f4ede3 100%);
+      border: 1px solid rgba(176, 138, 72, 0.16);
+      border-radius: 20px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.75);
+    }
+
+    .transaction-info h3 {
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+
+    .transaction-info ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .transaction-info li {
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(176, 138, 72, 0.14);
+      color: #2a2420;
+    }
+
+    .transaction-info li:last-child {
+      border-bottom: none;
+    }
+
+    .transaction-info a {
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .transaction-info a:hover {
+      text-decoration: underline;
+    }
+
+    .cta-box {
+      margin: 40px 0 10px;
+      padding: 30px 28px;
+      background: linear-gradient(180deg, rgba(176,138,72,0.08), rgba(255,255,255,0.9));
+      border: 1px solid rgba(176, 138, 72, 0.18);
+      border-radius: 20px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .cta-box h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    .cta-box p {
+      margin-bottom: 18px;
+    }
+
+    .cta-button {
+      display: inline-block;
+      text-decoration: none;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      color: #fff;
+      font-weight: 700;
+      padding: 14px 22px;
+      border-radius: 999px;
+      box-shadow: 0 10px 24px rgba(176, 138, 72, 0.22);
+      transition: transform 0.22s ease, box-shadow 0.22s ease, opacity 0.22s ease;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(176, 138, 72, 0.26);
+      opacity: 0.96;
+      color: #fff;
+    }
+
+    .post-footer {
+      padding: 28px 52px 42px;
+      border-top: 1px solid rgba(176, 138, 72, 0.12);
+      background: linear-gradient(180deg, rgba(176,138,72,0.03), rgba(255,255,255,0));
+      text-align: center;
+    }
+
+    .post-footer p {
+      margin: 0 0 20px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      color: #201915;
+    }
+
+    .share-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .share-buttons span {
+      font-size: 0.92rem;
+      color: var(--muted);
+      margin-right: 4px;
+    }
+
+    .share-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      border: 1px solid rgba(176, 138, 72, 0.2);
+      background: #fff;
+      color: #241d18;
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      box-shadow: 0 6px 18px rgba(31, 26, 23, 0.06);
+      transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+    }
+
+    .share-link:hover {
+      transform: translateY(-2px);
+      background: #fcf7ef;
+      box-shadow: 0 10px 24px rgba(31, 26, 23, 0.09);
+      color: #241d18;
+    }
+
+    @media (max-width: 860px) {
+      .post-header,
+      .post-content,
+      .post-footer {
+        padding-left: 28px;
+        padding-right: 28px;
+      }
+
+      .container {
+        width: min(100% - 18px, var(--container));
+        margin-top: 24px;
+      }
+
+      .blog-post {
+        border-radius: 18px;
+      }
+
+      .video-container {
+        border-radius: 16px;
+      }
+
+      .highlight-box,
+      .transaction-info,
+      .cta-box {
+        border-radius: 14px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .site-nav {
+        padding: 16px 14px;
+      }
+
+      .logo {
+        font-size: 0.8rem;
+        letter-spacing: 0.18em;
+      }
+
+      .post-header {
+        padding-top: 34px;
+        padding-bottom: 18px;
+      }
+
+      .post-content,
+      .post-footer {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .post-content {
+        font-size: 1rem;
+      }
+
+      .highlight-box {
+        padding: 22px 18px 22px 20px;
+        font-size: 1.08rem;
+      }
+
+      .transaction-info,
+      .cta-box {
+        padding: 20px;
+      }
+
+      .share-buttons {
+        gap: 10px;
+      }
+
+      .share-link {
+        padding: 9px 14px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
 </head>
 <body>
 
-    <header>
-        <nav>
-            <div class="logo">XOLOS RAMÍREZ</div>
-        </nav>
-    </header>
+  <header class="site-header">
+    <nav class="site-nav">
+      <a class="logo" href="https://xolosramirez.com/">XOLOS RAMÍREZ</a>
+    </nav>
+  </header>
 
-    <main class="container">
-        <article class="blog-post">
-            <header class="post-header">
-                <span class="category">Entregas Especiales</span>
-                <h1>Humo Ramírez: Tradición Milenaria y Seguridad Digital</h1>
-                <p class="post-meta">Publicado por Xolos Ramírez • 28 de Marzo, 2024</p>
-            </header>
+  <main class="container">
+    <article class="blog-post">
 
-            <section class="post-content">
-                <p>Hoy celebramos un hito en nuestra comunidad. Tuvimos el honor de realizar la entrega oficial de <strong>Humo Ramírez</strong> a su nueva familia, representada por Lucianna. Este encuentro no solo simboliza el inicio de una lealtad incondicional, sino también un paso hacia el futuro de la crianza responsable.</p>
-                
-                <div class="video-container">
-                    <iframe 
-                        src="https://www.youtube.com/embed/oHFwoKYpZgQ" 
-                        title="Entrega de Humo Ramírez" 
-                        frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                        allowfullscreen>
-                    </iframe>
-                </div>
+      <header class="post-header">
+        <span class="category">Entregas Especiales</span>
+        <h1>Humo Ramírez: Tradición Milenaria y Seguridad Digital</h1>
+        <p class="post-meta">Publicado por Xolos Ramírez • 28 de marzo de 2026</p>
+      </header>
 
-                <h2>Más que un registro: Un legado inmutable</h2>
-                <p>En Xolos Ramírez, creemos que la pureza y el linaje de nuestros ejemplares deben estar protegidos por la mejor tecnología disponible. Por ello, junto con la entrega física de Humo, realizamos la transferencia del <strong>registro NFT inmutable</strong> a la <em>Tonalli Wallet</em> de Lucianna.</p>
-                
-                <blockquote class="highlight-box">
-                    "La tecnología blockchain nos permite asegurar que la historia, salud y linaje de Humo Ramírez sean permanentes y transparentes para siempre."
-                </blockquote>
+      <section class="post-content">
+        <p class="lead">
+          Hoy celebramos un momento muy especial para nuestra comunidad:
+          la entrega oficial de <strong>Humo Ramírez</strong> a su nueva familia,
+          representada por <strong>Lucianna</strong>. Este encuentro no solo marca
+          el inicio de una nueva vida compartida, sino también la continuidad de un
+          legado que une tradición, linaje y tecnología.
+        </p>
 
-                <p>Humo ahora cuenta con una identidad digital única vinculada a su existencia física, garantizando que su lugar en la familia Ramírez y en el mundo sea reconocido oficialmente en la red <strong>Xolos Army</strong>.</p>
-                
-                <div class="transaction-info">
-                    <h3>Detalles de la Transferencia:</h3>
-                    <ul>
-                        <li><strong>Ejemplar:</strong> Humo Ramírez</li>
-                        <li><strong>Propietaria:</strong> Lucianna</li>
-                        <li><strong>Wallet de Destino:</strong> Tonalli Wallet</li>
-                        <li><strong>TXID:</strong> <a href="https://explorer.xolosarmy.xyz/tx/4f4c7701a5c01c279325422929ec63fdc0e78dc50fc925cab9e78b56745c042a" target="_blank">Ver en Explorador ↗</a></li>
-                    </ul>
-                </div>
-            </section>
+        <div class="video-container">
+          <iframe
+            src="https://www.youtube.com/embed/oHFwoKYpZgQ"
+            title="Entrega de Humo Ramírez"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+          </iframe>
+        </div>
 
-            <footer class="post-footer">
-                <p>¡Bienvenido a tu nueva familia, Humo! 🐾</p>
-                <div class="share-buttons">
-                    <span>Compartir:</span>
-                    <button>FB</button>
-                    <button>TW</button>
-                    <button>IG</button>
-                </div>
-            </footer>
-        </article>
-    </main>
+        <p>
+          El <strong>xoloitzcuintle</strong> ha acompañado a las familias mexicanas
+          desde tiempos ancestrales. Su presencia no es solamente estética o simbólica;
+          representa una conexión profunda entre el ser humano, la memoria cultural y el
+          cuidado del linaje. En cada entrega, en Xolos Ramírez buscamos honrar esa historia
+          con responsabilidad, respeto y visión de futuro.
+        </p>
+
+        <h2>Más que un registro: un legado inmutable</h2>
+
+        <p>
+          Junto con la entrega física de Humo, realizamos también la transferencia de su
+          <strong>registro NFT inmutable</strong> a la <em>Tonalli Wallet</em> de Lucianna.
+          Esto permite que la identidad digital del ejemplar quede asociada a su historia,
+          su procedencia y su linaje dentro del ecosistema de Xolos Ramírez y XolosArmy.
+        </p>
+
+        <blockquote class="highlight-box">
+          “La tecnología blockchain nos permite proteger la historia, el linaje y la identidad
+          de cada xoloitzcuintle de una forma permanente, transparente y verificable.”
+        </blockquote>
+
+        <p>
+          Este modelo de registro no sustituye la experiencia real ni el vínculo humano; al contrario,
+          lo fortalece. La familia que recibe a Humo no solo recibe a un compañero extraordinario:
+          recibe también un archivo vivo, una huella histórica y una constancia digital que lo acompaña
+          a lo largo del tiempo.
+        </p>
+
+        <p>
+          Humo Ramírez cuenta ahora con una identidad digital única vinculada a su existencia física,
+          consolidando así un estándar innovador en la crianza responsable y en la preservación del
+          linaje del xoloitzcuintle.
+        </p>
+
+        <div class="transaction-info">
+          <h3>Detalles de la Transferencia</h3>
+          <ul>
+            <li><strong>Ejemplar:</strong> Humo Ramírez</li>
+            <li><strong>Propietaria:</strong> Lucianna</li>
+            <li><strong>Tecnología:</strong> Registro NFT inmutable</li>
+            <li><strong>Wallet de destino:</strong> Tonalli Wallet</li>
+            <li>
+              <strong>Explorador:</strong>
+              <a
+                href="https://explorer.xolosarmy.xyz/tx/4f4c7701a5c01c279325422929ec63fdc0e78dc50fc925cab9e78b56745c042a"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Ver transacción en Xolos Explorer ↗
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="cta-box">
+          <h3>Conoce más ejemplares disponibles</h3>
+          <p>
+            Si deseas vivir esta experiencia junto a un xoloitzcuintle de Xolos Ramírez,
+            puedes conocer nuestros ejemplares disponibles aquí.
+          </p>
+          <a
+            class="cta-button"
+            href="https://xolosramirez.com/xolos-disponibles.html"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Ver xoloitzcuintles disponibles
+          </a>
+        </div>
+      </section>
+
+      <footer class="post-footer">
+        <p>¡Bienvenido a tu nueva familia, Humo! 🐾</p>
+
+        <div class="share-buttons">
+          <span>Compartir:</span>
+
+          <a
+            href="https://www.facebook.com/sharer/sharer.php?u=https://xolosramirez.com/blog/2026-03-28-entrega-humo-ramirez.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="share-link"
+          >
+            Facebook
+          </a>
+
+          <a
+            href="https://twitter.com/intent/tweet?text=Humo%20Ram%C3%ADrez%3A%20Tradici%C3%B3n%20Milenaria%20y%20Seguridad%20Digital&url=https://xolosramirez.com/blog/2026-03-28-entrega-humo-ramirez.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="share-link"
+          >
+            X
+          </a>
+
+          <a
+            href="https://t.me/share/url?url=https://xolosramirez.com/blog/2026-03-28-entrega-humo-ramirez.html&text=Humo%20Ram%C3%ADrez%3A%20Tradici%C3%B3n%20Milenaria%20y%20Seguridad%20Digital"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="share-link"
+          >
+            Telegram
+          </a>
+        </div>
+      </footer>
+
+    </article>
+  </main>
 
 </body>
 </html>
