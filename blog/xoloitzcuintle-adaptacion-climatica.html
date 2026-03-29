@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Análisis evolutivo y fisiotécnico del xoloitzcuintle | Xolos Ramírez</title>
+  <meta name="description" content="Versión académica y de dossier sobre la evolución, genética, termorregulación y adaptación climática del xoloitzcuintle en Mesoamérica." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f5f0e7;
+      --paper:#fbf8f2;
+      --ink:#1e1b16;
+      --muted:#6b6258;
+      --line:#d7cab7;
+      --gold:#9b6b2f;
+      --gold-soft:#b88b4a;
+      --earth:#7c4f2b;
+      --shadow:0 16px 40px rgba(35,24,13,.10);
+      --radius:22px;
+      --radius-sm:14px;
+      --max:1180px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      background:
+        radial-gradient(circle at top left, rgba(184,139,74,.08), transparent 25%),
+        linear-gradient(180deg, #f7f3eb 0%, #f2ebdf 100%);
+      color:var(--ink);
+      font-family:"Inter",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      line-height:1.75;
+    }
+
+    a{
+      color:var(--earth);
+      text-decoration:none;
+    }
+    a:hover{ text-decoration:underline; }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      backdrop-filter: blur(14px);
+      background:rgba(251,248,242,.82);
+      border-bottom:1px solid rgba(155,107,47,.12);
+    }
+
+    .nav{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:16px 22px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+    }
+
+    .brand{
+      letter-spacing:.22em;
+      font-size:.88rem;
+      font-weight:700;
+      color:var(--earth);
+      text-transform:uppercase;
+    }
+
+    .nav-links{
+      display:flex;
+      gap:18px;
+      flex-wrap:wrap;
+      font-size:.93rem;
+    }
+
+    .nav-links a{
+      color:var(--muted);
+      font-weight:600;
+    }
+
+    .hero{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:48px 22px 30px;
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:28px;
+      align-items:stretch;
+    }
+
+    .hero-copy,
+    .hero-visual{
+      background:rgba(251,248,242,.9);
+      border:1px solid rgba(155,107,47,.12);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .hero-copy{
+      padding:38px 34px 34px;
+      position:relative;
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 14px;
+      border:1px solid rgba(155,107,47,.18);
+      border-radius:999px;
+      color:var(--earth);
+      background:rgba(184,139,74,.08);
+      font-size:.82rem;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      margin-bottom:18px;
+    }
+
+    h1,h2,h3{
+      font-family:"Cormorant Garamond", Georgia, serif;
+      line-height:1.08;
+      margin:0 0 18px;
+      color:#1d140d;
+    }
+
+    h1{
+      font-size:clamp(2.5rem, 5vw, 4.65rem);
+      letter-spacing:-.02em;
+    }
+
+    .lead{
+      font-size:1.07rem;
+      color:#3f372f;
+      max-width:62ch;
+      margin:0 0 24px;
+    }
+
+    .hero-meta{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      margin-top:28px;
+    }
+
+    .meta-card{
+      background:linear-gradient(180deg, #fffdf9 0%, #f7f1e7 100%);
+      border:1px solid rgba(155,107,47,.13);
+      border-radius:18px;
+      padding:15px 14px;
+    }
+
+    .meta-kicker{
+      font-size:.73rem;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      color:var(--gold);
+      font-weight:700;
+      margin-bottom:8px;
+    }
+
+    .meta-card strong{
+      display:block;
+      font-size:1rem;
+      line-height:1.35;
+    }
+
+    .hero-visual{
+      position:relative;
+      min-height:100%;
+    }
+
+    .hero-visual img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      min-height:540px;
+    }
+
+    .caption{
+      font-size:.84rem;
+      color:var(--muted);
+      margin-top:10px;
+    }
+
+    .hero-overlay{
+      position:absolute;
+      left:20px;
+      right:20px;
+      bottom:20px;
+      background:rgba(24,18,13,.72);
+      color:#fff7eb;
+      padding:18px 18px 14px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.10);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-overlay strong{
+      display:block;
+      font-size:1rem;
+      margin-bottom:6px;
+    }
+
+    .wrapper{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:16px 22px 72px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: minmax(0, 1fr) 310px;
+      gap:28px;
+      align-items:start;
+    }
+
+    .article{
+      background:rgba(251,248,242,.92);
+      border:1px solid rgba(155,107,47,.12);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:36px 34px 42px;
+    }
+
+    .toc{
+      position:sticky;
+      top:88px;
+      background:rgba(251,248,242,.96);
+      border:1px solid rgba(155,107,47,.12);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:22px 20px;
+    }
+
+    .toc h3{
+      font-size:1.8rem;
+      margin-bottom:14px;
+    }
+
+    .toc a{
+      display:block;
+      padding:8px 0;
+      color:#4b4239;
+      border-bottom:1px dashed rgba(155,107,47,.16);
+      font-size:.95rem;
+    }
+
+    .toc a:last-child{ border-bottom:none; }
+
+    .summary-box,
+    .note-box,
+    .quote-box{
+      border-radius:20px;
+      padding:22px 22px;
+      margin:26px 0;
+    }
+
+    .summary-box{
+      background:linear-gradient(180deg,#fffdf7 0%,#f8efe1 100%);
+      border:1px solid rgba(155,107,47,.18);
+    }
+
+    .note-box{
+      background:linear-gradient(180deg,#f6efe4 0%,#f0e5d6 100%);
+      border-left:5px solid var(--gold);
+      border:1px solid rgba(155,107,47,.10);
+    }
+
+    .quote-box{
+      background:#231a13;
+      color:#f9f1e3;
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .quote-box p{
+      font-size:1.1rem;
+      margin:0;
+    }
+
+    .section{
+      margin-top:42px;
+      scroll-margin-top:94px;
+    }
+
+    .section h2{
+      font-size:2.4rem;
+      margin-bottom:10px;
+    }
+
+    .section h3{
+      font-size:1.7rem;
+      margin-top:28px;
+      margin-bottom:10px;
+    }
+
+    .section p{
+      margin:0 0 16px;
+      font-size:1.02rem;
+      color:#2f2924;
+    }
+
+    .section ul{
+      margin:0 0 16px 1.2rem;
+      padding:0;
+    }
+
+    .section li{
+      margin-bottom:10px;
+    }
+
+    .figure{
+      margin:30px 0 26px;
+      background:#fffdf9;
+      border:1px solid rgba(155,107,47,.12);
+      border-radius:20px;
+      overflow:hidden;
+    }
+
+    .figure img{
+      width:100%;
+      display:block;
+      object-fit:cover;
+      max-height:520px;
+    }
+
+    .figure figcaption{
+      padding:14px 16px 16px;
+      font-size:.9rem;
+      color:var(--muted);
+      background:linear-gradient(180deg,#fffdf9 0%,#f7f1e7 100%);
+    }
+
+    .data-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+      margin:24px 0;
+    }
+
+    .data-card{
+      background:linear-gradient(180deg,#fffdf9 0%,#f8f1e7 100%);
+      border:1px solid rgba(155,107,47,.13);
+      border-radius:18px;
+      padding:18px 16px;
+    }
+
+    .data-card span{
+      display:block;
+      color:var(--gold);
+      font-weight:700;
+      font-size:.78rem;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      margin-bottom:8px;
+    }
+
+    .data-card strong{
+      display:block;
+      font-size:1.1rem;
+      line-height:1.3;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin:22px 0 28px;
+      border-radius:18px;
+      overflow:hidden;
+      font-size:.95rem;
+    }
+
+    thead th{
+      background:#2b2018;
+      color:#fff4e2;
+      text-align:left;
+      padding:14px 14px;
+      font-weight:700;
+    }
+
+    tbody td{
+      padding:14px 14px;
+      border-bottom:1px solid rgba(155,107,47,.14);
+      background:#fffdf9;
+      vertical-align:top;
+    }
+
+    tbody tr:nth-child(even) td{
+      background:#faf5ed;
+    }
+
+    .two-col{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      margin:20px 0 8px;
+    }
+
+    .source-list{
+      display:grid;
+      gap:14px;
+      margin-top:20px;
+    }
+
+    .source-item{
+      padding:18px 18px;
+      border-radius:18px;
+      background:linear-gradient(180deg,#fffdf9 0%,#f6eee2 100%);
+      border:1px solid rgba(155,107,47,.13);
+    }
+
+    .source-item strong{
+      display:block;
+      margin-bottom:6px;
+      font-size:1rem;
+      color:#24180f;
+    }
+
+    .source-item span{
+      display:block;
+      color:var(--muted);
+      font-size:.92rem;
+      margin-bottom:8px;
+    }
+
+    .footer-cta{
+      margin-top:38px;
+      padding:26px 24px;
+      border-radius:22px;
+      background:linear-gradient(135deg,#2a1f16 0%, #4a2d17 100%);
+      color:#fff3e6;
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .footer-cta h3{
+      color:#fff3e6;
+      font-size:2rem;
+      margin-bottom:8px;
+    }
+
+    .footer-cta p{
+      color:#f0dfcb;
+      margin-bottom:16px;
+    }
+
+    .button{
+      display:inline-block;
+      padding:13px 18px;
+      border-radius:999px;
+      background:#f2d9ae;
+      color:#37200f;
+      font-weight:700;
+    }
+
+    footer.site-footer{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:0 22px 54px;
+      color:var(--muted);
+      font-size:.9rem;
+    }
+
+    @media (max-width: 1080px){
+      .hero,
+      .grid{
+        grid-template-columns:1fr;
+      }
+
+      .toc{
+        position:relative;
+        top:auto;
+        order:-1;
+      }
+    }
+
+    @media (max-width: 760px){
+      .hero-copy,
+      .article{
+        padding:26px 20px 28px;
+      }
+
+      .hero-meta,
+      .data-grid,
+      .two-col{
+        grid-template-columns:1fr;
+      }
+
+      .hero-visual img{
+        min-height:380px;
+      }
+
+      h1{
+        font-size:2.4rem;
+      }
+
+      .section h2{
+        font-size:2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="nav">
+      <div class="brand">XOLOS RAMÍREZ</div>
+      <div class="nav-links">
+        <a href="#resumen">Resumen</a>
+        <a href="#genetica">Genética</a>
+        <a href="#fisiologia">Fisiología</a>
+        <a href="#cultura">Cultura</a>
+        <a href="#fuentes">Fuentes</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="hero-copy">
+      <div class="eyebrow">Dossier académico</div>
+      <h1>Análisis evolutivo y fisiotécnico del xoloitzcuintle</h1>
+      <p class="lead">
+        Mecanismos de adaptación al clima tropical y semidesértico de Mesoamérica,
+        bases genéticas de la variedad sin pelo, fisiología térmica, protección del tegumento
+        y continuidad cultural de uno de los linajes caninos más singulares del continente americano.
+      </p>
+
+      <div class="hero-meta">
+        <div class="meta-card">
+          <div class="meta-kicker">Eje 1</div>
+          <strong>Mutación FOXI3 y displasia ectodérmica canina</strong>
+        </div>
+        <div class="meta-card">
+          <div class="meta-kicker">Eje 2</div>
+          <strong>Termorregulación, piel desnuda y adaptación climática</strong>
+        </div>
+        <div class="meta-card">
+          <div class="meta-kicker">Eje 3</div>
+          <strong>Persistencia histórica, cultural y zootécnica</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Diego_Rivera_with_a_xoloitzcuintle_dog_in_the_Blue_House%2C_Coyoacan_-_Google_Art_Project.jpg" alt="Diego Rivera con un xoloitzcuintle en la Casa Azul, Coyoacán" />
+      <div class="hero-overlay">
+        <strong>Xoloitzcuintle y memoria cultural de México</strong>
+        <span>
+          La imagen del xoloitzcuintle no solo pertenece a la historia biológica del perro en Mesoamérica,
+          sino también al imaginario artístico y nacional moderno.
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrapper">
+    <div class="grid">
+      <article class="article">
+        <section id="resumen" class="section">
+          <h2>Resumen ejecutivo</h2>
+          <div class="summary-box">
+            <p>
+              El xoloitzcuintle constituye una forma excepcional de adaptación biológica,
+              cultural y zootécnica. Su rasgo distintivo —la ausencia total o parcial de pelo—
+              se asocia a una mutación en el gen <strong>FOXI3</strong>, relacionada con la
+              displasia ectodérmica canina y con efectos pleiotrópicos en pelo, dentición
+              y desarrollo tegumentario.
+            </p>
+            <p>
+              Desde una perspectiva fisiológica, la piel desnuda del xoloitzcuintle favorece
+              la disipación de calor por radiación y convección, mientras que su pigmentación
+              y grosor epidérmico aportan protección frente a radiación solar, abrasión y desecación.
+              Estas características, combinadas con adaptaciones conductuales y con una prolongada
+              selección cultural en Mesoamérica, explican la persistencia de la raza en ambientes
+              tropicales y semidesérticos.
+            </p>
+          </div>
+
+          <p>
+            Este dossier reúne evidencias provenientes de genética molecular, fisiología comparada,
+            historia de la raza y documentación cultural para proponer una lectura integrada del
+            xoloitzcuintle como linaje antiguo, funcionalmente adaptado y profundamente vinculado
+            a la identidad mexicana.
+          </p>
+
+          <div class="data-grid">
+            <div class="data-card">
+              <span>Origen reconocido</span>
+              <strong>México</strong>
+            </div>
+            <div class="data-card">
+              <span>Base genética</span>
+              <strong>Mutación frameshift en FOXI3</strong>
+            </div>
+            <div class="data-card">
+              <span>Reconocimiento FCI</span>
+              <strong>Raza definitiva desde 1961</strong>
+            </div>
+          </div>
+        </section>
+
+        <section id="introduccion" class="section">
+          <h2>1. Introducción</h2>
+          <p>
+            El xoloitzcuintle, también conocido como perro sin pelo mexicano, es una de las razas
+            caninas más antiguas del continente americano. Su singularidad no reside únicamente en
+            su apariencia, sino en la convergencia de tres dimensiones: una base genética altamente
+            específica, un desempeño fisiológico compatible con climas exigentes y una larga continuidad
+            simbólica y cultural en Mesoamérica.
+          </p>
+          <p>
+            En contextos de baja altitud, humedad elevada, radiación solar intensa y oscilaciones térmicas
+            marcadas, la ausencia de pelaje puede ofrecer ventajas termodinámicas relevantes. Sin embargo,
+            esa misma desnudez exige compensaciones anatómicas y funcionales: mayor robustez epidérmica,
+            pigmentación protectora, eficiencia conductual y un manejo energético adecuado.
+          </p>
+
+          <figure class="figure">
+            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Colima_-_Dog_Effigy_Vessel_-_Walters_20092063_-_View_A.jpg" alt="Vasija efigie de perro de Colima" />
+            <figcaption>
+              Vasija efigie de perro de tradición Colima. La representación arqueológica de cánidos en el occidente de México
+              muestra la profundidad temporal del vínculo entre perro, ritualidad y paisaje mesoamericano.
+            </figcaption>
+          </figure>
+        </section>
+
+        <section id="genetica" class="section">
+          <h2>2. Fundamentos genéticos de la variedad sin pelo</h2>
+          <p>
+            La condición sin pelo del xoloitzcuintle forma parte de una <strong>displasia ectodérmica canina</strong>
+            de herencia semidominante. Estudios genómicos identificaron una mutación en el gen
+            <strong>FOXI3</strong>, un factor de transcripción clave en el desarrollo ectodérmico temprano.
+            La alteración produce un corrimiento del marco de lectura y una proteína truncada, lo que impacta
+            directamente la formación de folículos pilosos y elementos dentarios.
+          </p>
+
+          <h3>2.1. Implicaciones biológicas del genotipo</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Genotipo</th>
+                <th>Fenotipo esperado</th>
+                <th>Implicación biológica</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Hr/hr</strong></td>
+                <td>Variedad con pelo</td>
+                <td>Viable; dentición más completa y pelaje normal</td>
+              </tr>
+              <tr>
+                <td><strong>Hr/—</strong></td>
+                <td>Variedad sin pelo</td>
+                <td>Viable; alopecia parcial o marcada y alteraciones dentales frecuentes</td>
+              </tr>
+              <tr>
+                <td><strong>Hr/Hr</strong></td>
+                <td>No viable</td>
+                <td>Letalidad embrionaria, consistente con el papel pleiotrópico del gen</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>2.2. Dentición y marcador osteobiológico</h3>
+          <p>
+            Una consecuencia importante de la alteración de FOXI3 es la <strong>oligodontia</strong>.
+            En la variedad sin pelo es común la ausencia de premolares y, en distintos grados,
+            de otras piezas dentarias. Este rasgo ha sido particularmente relevante para la identificación
+            arqueozoológica del xoloitzcuintle en contextos prehispánicos y coloniales tempranos.
+          </p>
+
+          <div class="note-box">
+            <strong>Observación zootécnica.</strong>
+            En términos de conservación de raza, la coexistencia entre variedades con pelo y sin pelo
+            no debe interpretarse como una anomalía, sino como un elemento estructural del mantenimiento
+            genético del xoloitzcuintle.
+          </div>
+        </section>
+
+        <section id="fisiologia" class="section">
+          <h2>3. Fisiología de la termorregulación</h2>
+          <p>
+            La piel desnuda del xoloitzcuintle funciona como una amplia superficie de intercambio térmico.
+            A diferencia de razas con manto denso, en las que el pelo genera una barrera aislante, la
+            ausencia de pelaje permite una mayor disipación de calor por <strong>radiación</strong> y
+            <strong>convección</strong>, especialmente cuando existe flujo de aire o diferencia térmica
+            suficiente entre el cuerpo y el ambiente.
+          </p>
+
+          <h3>3.1. Ventana térmica corporal</h3>
+          <p>
+            En escenarios cálidos, la vasodilatación periférica incrementa el flujo sanguíneo dérmico y
+            favorece la transferencia de calor al exterior. Esta “ventana térmica” extensa puede contribuir
+            a reducir la carga sobre el jadeo, que en otros perros asume una función más dominante para la
+            pérdida de calor.
+          </p>
+
+          <div class="two-col">
+            <div class="summary-box">
+              <strong>Ventaja en calor húmedo</strong>
+              <p>
+                En ambientes donde la humedad relativa limita la evaporación asociada al jadeo,
+                la disipación cutánea adquiere especial importancia funcional.
+              </p>
+            </div>
+            <div class="summary-box">
+              <strong>Costo en frío nocturno</strong>
+              <p>
+                La falta de aislamiento incrementa el riesgo de pérdida térmica durante la noche
+                o en climas fríos, por lo que la conducta y el manejo adquieren un papel crítico.
+              </p>
+            </div>
+          </div>
+
+          <h3>3.2. Sudoración, perspiración y conductas auxiliares</h3>
+          <p>
+            El xoloitzcuintle no presenta una fisiología sudorípara equivalente a la humana. Como en otros
+            cánidos, las glándulas ecrinas funcionales se concentran principalmente en las almohadillas plantares.
+            Sin embargo, la piel desnuda favorece una mayor <strong>perspiración insensible</strong> y facilita
+            que conductas como lamerse la piel o colocarse en superficies frescas mejoren el intercambio térmico.
+          </p>
+
+          <figure class="figure">
+            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Xoloitzcuintle_sitting.jpg" alt="Xoloitzcuintle sentado" />
+            <figcaption>
+              Ejemplar moderno de xoloitzcuintle. La superficie corporal expuesta permite observar con claridad
+              la relevancia funcional del tegumento en la disipación de calor.
+            </figcaption>
+          </figure>
+        </section>
+
+        <section id="tegumento" class="section">
+          <h2>4. Tegumento, pigmentación y protección solar</h2>
+          <p>
+            La piel del xoloitzcuintle no debe entenderse como una simple “piel sin pelo”, sino como un
+            <strong>órgano especializado</strong>. El grosor epidérmico, la queratinización y la pigmentación
+            funcionan como mecanismos compensatorios frente a la pérdida de cobertura pilosa.
+          </p>
+
+          <h3>4.1. Grosor epidérmico y barrera física</h3>
+          <p>
+            El engrosamiento del estrato córneo mejora la resistencia frente a abrasiones, exposición a superficies
+            ásperas y microtraumas ambientales. En contextos de vegetación seca, suelo caliente y polvo fino,
+            esta mayor robustez del tegumento resulta especialmente valiosa.
+          </p>
+
+          <h3>4.2. Melanina y radiación UV</h3>
+          <p>
+            La pigmentación oscura incrementa la fotoprotección. La eumelanina absorbe radiación ultravioleta y
+            reduce el daño celular inducido por el sol. Por ello, los ejemplares de piel más oscura tienden a mostrar
+            mejor tolerancia a la exposición prolongada, mientras que zonas despigmentadas o patrones mariposa requieren
+            atención dermatológica más cuidadosa.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Coloración cutánea</th>
+                <th>Desempeño esperado frente a UV</th>
+                <th>Observación de manejo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Negro / gris carbón</td>
+                <td>Alta protección relativa</td>
+                <td>Mejor tolerancia a insolación moderada con manejo responsable</td>
+              </tr>
+              <tr>
+                <td>Bronce / cobrizo</td>
+                <td>Protección intermedia-alta</td>
+                <td>Buen desempeño en climas cálidos con vigilancia de hidratación</td>
+              </tr>
+              <tr>
+                <td>Mariposa / despigmentado parcial</td>
+                <td>Protección desigual</td>
+                <td>Mayor necesidad de sombra, monitoreo y cuidado cutáneo</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="metabolismo" class="section">
+          <h2>5. Bioenergética y costo metabólico</h2>
+          <p>
+            El rasgo sin pelo también tiene un costo. Al perder calor con mayor facilidad, el xoloitzcuintle
+            debe sostener una economía energética capaz de compensar esa disipación. Esto sugiere una relación
+            relevante entre <strong>nutrición</strong>, <strong>integridad dérmica</strong> y
+            <strong>termogénesis</strong>, en particular en tallas pequeñas.
+          </p>
+          <p>
+            En términos prácticos, esto refuerza la importancia de dietas de calidad, adecuadas en proteína y
+            ácidos grasos esenciales, así como de rutinas de hidratación y resguardo térmico compatibles con el
+            ambiente específico en el que vive el ejemplar.
+          </p>
+        </section>
+
+        <section id="cultura" class="section">
+          <h2>6. Persistencia cultural y selección antropogénica</h2>
+          <p>
+            La continuidad del xoloitzcuintle no se explica solo por selección natural. La intervención humana
+            fue decisiva. En distintas tradiciones mesoamericanas, el xoloitzcuintle ocupó un lugar espiritual,
+            doméstico y funerario. La asociación con Xólotl y con el tránsito al inframundo convirtió a la raza
+            en un animal de alto valor simbólico.
+          </p>
+          <p>
+            Ese valor cultural favoreció su preservación, crianza y diferenciación. De esta forma, una mutación
+            que en condiciones puramente ferales podría haber sido restringida, se mantuvo dentro de poblaciones
+            humanas que valoraban precisamente el rasgo que la producía.
+          </p>
+
+          <div class="quote-box">
+            <p>
+              El xoloitzcuintle puede leerse como una convergencia excepcional entre genética, fisiología y civilización:
+              un animal cuya biología fue preservada y resignificada por la cultura.
+            </p>
+          </div>
+        </section>
+
+        <section id="semidesierto" class="section">
+          <h2>7. Adaptación conductual al semidesierto</h2>
+          <p>
+            La adaptación climática del xoloitzcuintle no es exclusivamente fisiológica. En regiones semidesérticas,
+            la conducta cumple una función decisiva. La búsqueda de sombra, el reposo durante horas de mayor radiación
+            y la actividad al atardecer o durante la noche son estrategias compatibles con un manejo eficiente del balance
+            térmico e hídrico.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Franja horaria</th>
+                <th>Conducta adaptativa</th>
+                <th>Finalidad</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>11:00 – 16:00</td>
+                <td>Reposo en sombra o resguardo</td>
+                <td>Reducir exposición a radiación y sobrecalentamiento</td>
+              </tr>
+              <tr>
+                <td>17:00 – 21:00</td>
+                <td>Actividad locomotora y social</td>
+                <td>Aprovechar el descenso térmico ambiental</td>
+              </tr>
+              <tr>
+                <td>22:00 – 05:00</td>
+                <td>Gregarismo, abrigo o proximidad térmica</td>
+                <td>Compensar la pérdida de calor nocturna</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="modernidad" class="section">
+          <h2>8. Desafíos de manejo en la modernidad</h2>
+          <p>
+            En contextos domésticos contemporáneos, la especialización cutánea del xoloitzcuintle requiere una lectura
+            cuidadosa. Los baños excesivos, la fricción constante con textiles agresivos, la exposición solar prolongada
+            o el uso de productos inadecuados pueden afectar la homeostasis del tegumento.
+          </p>
+          <p>
+            El manejo responsable no implica “sobreproteger” a la raza, sino comprender su fisiología: equilibrio entre
+            higiene y sebo natural, nutrición funcional, exposición razonable al sol, monitoreo dermatológico y una crianza
+            que preserve tanto el temperamento como la diversidad genética.
+          </p>
+
+          <div class="note-box">
+            <strong>Implicación para criadores y familias.</strong>
+            La verdadera fortaleza del xoloitzcuintle no está en tratarlo como una rareza exótica, sino en respetar
+            su diseño biológico y su historia profunda.
+          </div>
+        </section>
+
+        <section id="conclusion" class="section">
+          <h2>9. Conclusión</h2>
+          <p>
+            El xoloitzcuintle es una de las expresiones más refinadas de adaptación canina en América. La mutación de FOXI3,
+            lejos de reducirse a una curiosidad estética, desencadenó una reorganización anatómica y fisiológica que encontró
+            viabilidad en los paisajes térmicos de Mesoamérica y permanencia en la selección cultural de sus pueblos.
+          </p>
+          <p>
+            Entender al xoloitzcuintle exige integrar biología molecular, termodinámica corporal, arqueología e historia cultural.
+            Bajo esa mirada, la raza aparece no como una excepción marginal, sino como un linaje mayor de la civilización mexicana:
+            resistente, simbólico, funcional y todavía vigente.
+          </p>
+        </section>
+
+        <section id="fuentes" class="section">
+          <h2>Fuentes y bibliografía digital</h2>
+          <div class="source-list">
+
+            <div class="source-item">
+              <strong>Drögemüller et al. (2008). A mutation in hairless dogs implicates FOXI3 in ectodermal development.</strong>
+              <span>Fuente biomédica / genética molecular</span>
+              <a href="https://pubmed.ncbi.nlm.nih.gov/18787161/" target="_blank" rel="noopener noreferrer">Ver en PubMed</a>
+            </div>
+
+            <div class="source-item">
+              <strong>Parker et al. (2017). The bald and the beautiful: hairlessness in domestic dog breeds.</strong>
+              <span>Revisión científica en acceso abierto</span>
+              <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5182420/" target="_blank" rel="noopener noreferrer">Ver en PMC</a>
+            </div>
+
+            <div class="source-item">
+              <strong>Federation Cynologique Internationale (FCI). Standard No. 234: Xoloitzcuintle.</strong>
+              <span>Estándar oficial de raza / origen México</span>
+              <a href="https://www.fci.be/Nomenclature/Standards/234g05-es.pdf" target="_blank" rel="noopener noreferrer">Ver PDF oficial en español</a>
+            </div>
+
+            <div class="source-item">
+              <strong>FCI Nomenclature: Xoloitzcuintle (234).</strong>
+              <span>Ficha institucional con reconocimiento y clasificación</span>
+              <a href="https://www.fci.be/es/nomenclature/XOLOITZCUINTLE-234.html" target="_blank" rel="noopener noreferrer">Ver ficha FCI</a>
+            </div>
+
+            <div class="source-item">
+              <strong>Smithsonian / National Museum of the American Indian.</strong>
+              <span>Historia cultural e identidad mexicana del xoloitzcuintle</span>
+              <a href="https://www.americanindianmagazine.org/story/Xoloitzcuintli-the-Hairless-Dog" target="_blank" rel="noopener noreferrer">Ver artículo</a>
+            </div>
+
+            <div class="source-item">
+              <strong>National Geographic History.</strong>
+              <span>Contexto histórico y cosmovisión asociada al perro de Xólotl</span>
+              <a href="https://www.nationalgeographic.com/history/article/hairless-dog-mexico-xolo-xoloitzcuintli-Aztec" target="_blank" rel="noopener noreferrer">Ver artículo</a>
+            </div>
+
+            <div class="source-item">
+              <strong>Imágenes utilizadas: Wikimedia Commons.</strong>
+              <span>Archivos visuales de carácter histórico y documental</span>
+              <a href="https://commons.wikimedia.org/wiki/File:Diego_Rivera_with_a_xoloitzcuintle_dog_in_the_Blue_House,_Coyoacan_-_Google_Art_Project.jpg" target="_blank" rel="noopener noreferrer">Imagen Diego Rivera con xoloitzcuintle</a><br>
+              <a href="https://commons.wikimedia.org/wiki/File:Colima_-_Dog_Effigy_Vessel_-_Walters_20092063_-_View_A.jpg" target="_blank" rel="noopener noreferrer">Vasija efigie de perro, Colima</a><br>
+              <a href="https://commons.wikimedia.org/wiki/File:Xoloitzcuintle_sitting.jpg" target="_blank" rel="noopener noreferrer">Xoloitzcuintle sentado</a>
+            </div>
+
+          </div>
+        </section>
+
+        <section class="footer-cta">
+          <h3>Sobre este dossier</h3>
+          <p>
+            Este material está redactado en formato de ensayo académico-divulgativo para el blog de Xolos Ramírez.
+            Puede adaptarse a una versión más institucional, una edición para dossier PDF o una versión con notas al pie formales.
+          </p>
+          <a class="button" href="https://xolosramirez.com" target="_blank" rel="noopener noreferrer">Visitar Xolos Ramírez</a>
+        </section>
+      </article>
+
+      <aside class="toc">
+        <h3>Contenido</h3>
+        <a href="#resumen">Resumen ejecutivo</a>
+        <a href="#introduccion">1. Introducción</a>
+        <a href="#genetica">2. Genética</a>
+        <a href="#fisiologia">3. Termorregulación</a>
+        <a href="#tegumento">4. Tegumento y UV</a>
+        <a href="#metabolismo">5. Metabolismo</a>
+        <a href="#cultura">6. Cultura y selección</a>
+        <a href="#semidesierto">7. Semidesierto</a>
+        <a href="#modernidad">8. Manejo moderno</a>
+        <a href="#conclusion">9. Conclusión</a>
+        <a href="#fuentes">Fuentes</a>
+
+        <div class="caption" style="margin-top:18px;">
+          Diseño editorial inspirado en un dossier patrimonial contemporáneo:
+          lectura amplia, estructura jerárquica y bibliografía visible.
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    © Xolos Ramírez — Dossier académico de referencia sobre el xoloitzcuintle.
+  </footer>
+
+</body>
+</html>
