@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tutorial Tonalli Wallet</title>
+<style>
+  /* Paleta de colores basada en Tonalli / RMZWallet */
+  :root {
+    --bg: #05070c;
+    --panel: #0f172a;
+    --accent: #ff7a1a;
+    --accent-hover: #ffa157;
+    --teal: #39d0c2;
+    --text: #f5f5f5;
+    --muted: #9fa6b2;
+    --border: rgba(255, 255, 255, 0.1);
+  }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+    margin: 0;
+  }
+
+  /* Marco del celular simulado */
+  .phone-mockup {
+    width: 340px;
+    height: 680px;
+    background-color: var(--bg);
+    border-radius: 40px;
+    border: 12px solid #1a1a1a;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Pantallas del tutorial */
+  .screen {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 80px;
+    padding: 30px 20px;
+    display: none;
+    flex-direction: column;
+    animation: fadeIn 0.4s ease forwards;
+    overflow-y: auto;
+  }
+  .screen.active {
+    display: flex;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* Tipografía y estilos interiores */
+  h2 { margin-top: 0; color: var(--accent); font-size: 22px; }
+  p { font-size: 15px; line-height: 1.5; color: var(--muted); }
+  
+  .card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 15px;
+    margin-top: 15px;
+  }
+
+  .pill {
+    display: inline-block;
+    background: rgba(57, 208, 194, 0.15);
+    color: var(--teal);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .qr-placeholder {
+    width: 120px; height: 120px;
+    background: white;
+    margin: 10px auto;
+    display: flex; justify-content: center; align-items: center;
+    border-radius: 10px;
+    color: black; font-weight: bold;
+  }
+
+  .address-box {
+    font-family: monospace;
+    background: rgba(255,255,255,0.05);
+    padding: 10px;
+    border-radius: 8px;
+    word-break: break-all;
+    font-size: 12px;
+    color: var(--teal);
+    text-align: center;
+    border: 1px dashed var(--border);
+  }
+
+  /* Botones de navegación (Fijos en la parte inferior) */
+  .nav-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 80px;
+    background: #0b1120;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  button {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  button:hover { background: var(--accent-hover); }
+  button:disabled { background: #555; color: #888; cursor: not-allowed; }
+  
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-outline:hover { background: rgba(255,255,255,0.1); }
+
+  /* Elementos visuales NFT */
+  .nft-img {
+    width: 100%;
+    height: 160px;
+    background: linear-gradient(45deg, #1e293b, #0f172a);
+    border-radius: 10px;
+    display: flex; justify-content: center; align-items: center;
+    font-size: 40px;
+    margin-bottom: 10px;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="phone-mockup">
+  
+  <div class="screen active" id="screen-1">
+    <div class="pill">Paso 1: Creación</div>
+    <h2>Crea tu Tonalli Wallet</h2>
+    <p>Tonalli Wallet es tu "templo seguro" para manejar <b>$RMZ</b>, <b>XEC (eCash)</b> y tus <b>NFTs de linaje</b>.</p>
+    <div class="card">
+      <p style="color:white; font-weight:bold; margin-top:0;">Cómo empezar:</p>
+      <ol style="color:var(--muted); font-size:14px; padding-left:20px;">
+        <li>Entra a la app y elige <b>"Crear nueva cartera"</b>.</li>
+        <li>Crea un PIN/Password local (mínimo 6 caracteres).</li>
+        <li>¡Listo! Tu dispositivo generará tus llaves privadas de forma segura.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-2">
+    <div class="pill" style="background: rgba(255,122,26,0.15); color: var(--accent);">Paso 2: Seguridad</div>
+    <h2>La Frase Semilla (Seed)</h2>
+    <p>Sin semilla, no hay $RMZ. Tu billetera generará <b>12 palabras secretas</b>.</p>
+    <div class="card" style="border-color: var(--accent);">
+      <p style="color:#ffb4b4; margin-top:0; font-weight:bold;">⚠️ Reglas de Oro:</p>
+      <ul style="color:var(--muted); font-size:14px; padding-left:20px;">
+        <li>Escríbelas en un <b>papel</b> físico.</li>
+        <li><b>NO</b> tomes capturas de pantalla.</li>
+        <li><b>NO</b> las guardes en la nube (Google Drive, iCloud).</li>
+        <li>Quien tenga estas palabras, tiene acceso a tus fondos y perros Xolos.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-3">
+    <div class="pill">Paso 3: Transacciones</div>
+    <h2>Enviar y Recibir</h2>
+    <p>Usa la misma dirección para recibir tanto <b>XEC</b> como <b>$RMZ</b>.</p>
+    
+    <div class="card" style="text-align: center;">
+      <p style="margin:0; font-size:13px;">Tu dirección siempre empieza con <b>ecash:</b></p>
+      <div class="qr-placeholder">🔳 QR</div>
+      <div class="address-box">ecash:qq7qn90ev23...tzsspvt5dtlk</div>
+    </div>
+    <p style="font-size: 13px;">💡 <b>Nota:</b> Para enviar tokens ($RMZ o NFTs) siempre necesitas una pequeña cantidad de XEC para pagar el "gas" (comisión de red).</p>
+  </div>
+
+  <div class="screen" id="screen-4">
+    <div class="pill">Paso 4: Tu Linaje</div>
+    <h2>Tus NFTs XolosArmy</h2>
+    <p>En la pestaña <b>NFTs</b> verás la colección de tus Xoloescuincles.</p>
+    
+    <div class="card">
+      <div class="nft-img">🐕</div>
+      <b style="color:white;">Xolo Guardián #001</b>
+      <p style="margin: 5px 0; font-size:12px;">Etapa: Joven | Color: Negro</p>
+      <a href="https://explorer.xolosarmy.xyz" target="_blank" style="text-decoration:none;">
+        <button style="width:100%; margin-top:10px; background:var(--teal); color:#000;">
+          Ver en Xolos Explorer ↗
+        </button>
+      </a>
+    </div>
+    <p style="font-size: 12px; text-align:center;">Toda la genealogía queda grabada en la blockchain para siempre.</p>
+  </div>
+
+  <div class="nav-bar">
+    <button id="btn-prev" class="btn-outline" disabled>Anterior</button>
+    <span id="page-indicator" style="font-size: 14px; font-weight:bold;">1 / 4</span>
+    <button id="btn-next">Siguiente</button>
+  </div>
+
+</div>
+
+<script>
+  let currentScreen = 1;
+  const totalScreens = 4;
+
+  const btnPrev = document.getElementById('btn-prev');
+  const btnNext = document.getElementById('btn-next');
+  const pageIndicator = document.getElementById('page-indicator');
+
+  function updateScreen() {
+    // Ocultar todas las pantallas
+    document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+    // Mostrar la actual
+    document.getElementById(`screen-${currentScreen}`).classList.add('active');
+    
+    // Actualizar botones
+    btnPrev.disabled = currentScreen === 1;
+    if (currentScreen === totalScreens) {
+      btnNext.innerText = "¡Terminar!";
+    } else {
+      btnNext.innerText = "Siguiente";
+    }
+    
+    // Actualizar texto
+    pageIndicator.innerText = `${currentScreen} / ${totalScreens}`;
+  }
+
+  btnNext.addEventListener('click', () => {
+    if (currentScreen < totalScreens) {
+      currentScreen++;
+      updateScreen();
+    } else {
+      alert("¡Estás listo para usar tu Tonalli Wallet!");
+      currentScreen = 1;
+      updateScreen();
+    }
+  });
+
+  btnPrev.addEventListener('click', () => {
+    if (currentScreen > 1) {
+      currentScreen--;
+      updateScreen();
+    }
+  });
+</script>
+
+</body>
+</html>
