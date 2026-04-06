@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teyolia y Tonalli: herramientas para impulsar la cultura xoloitzcuintle | Xolos Ramírez</title>
+  <style>
+    :root {
+      --bg: #f7f0e6;
+      --surface: #fffaf4;
+      --ink: #2b2118;
+      --muted: #6a5849;
+      --brand: #7a2e1f;
+      --brand-dark: #4e1d14;
+      --gold: #c8952d;
+      --border: #e7d7c2;
+      --shadow: 0 18px 48px rgba(61, 34, 16, 0.12);
+      --radius: 22px;
+      --max: 1120px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(circle at top right, rgba(200,149,45,0.12), transparent 28%),
+        linear-gradient(180deg, #fbf6ef 0%, var(--bg) 100%);
+      color: var(--ink);
+      line-height: 1.75;
+    }
+
+    a { color: inherit; }
+
+    .wrap {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 72px 0 36px;
+    }
+
+    .hero-card {
+      background: linear-gradient(135deg, rgba(122,46,31,0.96), rgba(78,29,20,0.98));
+      color: #fff7ef;
+      border-radius: 32px;
+      padding: 56px 34px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -40px -60px auto;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,149,45,0.35), transparent 65%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 16px;
+      padding: 8px 14px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.08);
+    }
+
+    h1, h2, h3 {
+      line-height: 1.15;
+      margin: 0 0 18px;
+      font-weight: 700;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 4.5rem);
+      max-width: 11ch;
+    }
+
+    .lead {
+      max-width: 760px;
+      font-size: 1.16rem;
+      color: rgba(255,247,239,0.9);
+      margin-bottom: 28px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 26px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      border-radius: 999px;
+      padding: 14px 22px;
+      font-weight: 700;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button-primary {
+      background: linear-gradient(135deg, #d5a33a, #b57f1e);
+      color: #2c1709;
+      box-shadow: 0 12px 26px rgba(200,149,45,0.24);
+    }
+
+    .button-secondary {
+      border: 1px solid rgba(255,255,255,0.24);
+      color: #fff7ef;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 34px;
+    }
+
+    .meta-item {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .meta-item strong {
+      display: block;
+      font-size: 1.04rem;
+      margin-bottom: 4px;
+    }
+
+    main {
+      padding: 26px 0 80px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+      gap: 28px;
+      align-items: start;
+    }
+
+    article, aside {
+      min-width: 0;
+    }
+
+    .section-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 34px 28px;
+      margin-bottom: 22px;
+    }
+
+    .section-card p {
+      margin: 0 0 16px;
+      color: var(--ink);
+    }
+
+    .section-card p:last-child,
+    .section-card ul:last-child,
+    .section-card ol:last-child,
+    .section-card blockquote:last-child { margin-bottom: 0; }
+
+    .section-card h2 {
+      font-size: clamp(1.5rem, 2vw, 2.15rem);
+      color: var(--brand-dark);
+    }
+
+    .section-card h3 {
+      font-size: 1.2rem;
+      color: var(--brand);
+      margin-top: 24px;
+    }
+
+    .intro-dropcap::first-letter {
+      float: left;
+      font-size: 4rem;
+      line-height: 0.88;
+      padding-right: 10px;
+      color: var(--brand);
+      font-weight: 700;
+    }
+
+    .highlight {
+      color: var(--brand);
+      font-weight: 700;
+    }
+
+    .quote {
+      margin: 22px 0;
+      padding: 22px 22px 22px 24px;
+      border-left: 5px solid var(--gold);
+      background: #fff5e4;
+      border-radius: 16px;
+      font-size: 1.06rem;
+      color: var(--brand-dark);
+    }
+
+    .checklist,
+    .ideas,
+    .steps {
+      padding-left: 0;
+      list-style: none;
+      margin: 18px 0;
+      display: grid;
+      gap: 14px;
+    }
+
+    .checklist li,
+    .ideas li,
+    .steps li {
+      background: #fffdf9;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px 18px;
+    }
+
+    .checklist li::before {
+      content: "✦ ";
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .ideas li strong,
+    .steps li strong {
+      color: var(--brand-dark);
+    }
+
+    .steps {
+      counter-reset: tutorial;
+    }
+
+    .steps li {
+      position: relative;
+      padding-left: 62px;
+      min-height: 52px;
+    }
+
+    .steps li::before {
+      counter-increment: tutorial;
+      content: counter(tutorial);
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .cta-box,
+    .side-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 20px;
+      position: sticky;
+      top: 22px;
+    }
+
+    .side-card + .side-card,
+    .cta-box + .side-card {
+      position: static;
+    }
+
+    .side-title {
+      margin-bottom: 12px;
+      font-size: 1.12rem;
+      color: var(--brand-dark);
+    }
+
+    .mini-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .mini-list li {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #fffdf9;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .link-card {
+      display: block;
+      text-decoration: none;
+      background: linear-gradient(135deg, #fff3dd, #fffaf1);
+      border: 1px solid #ecd4a7;
+      border-radius: 18px;
+      padding: 18px;
+      color: var(--brand-dark);
+      font-weight: 700;
+      margin-top: 14px;
+    }
+
+    .link-card span {
+      display: block;
+      font-weight: 400;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .footer-note {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+      padding: 14px 0 10px;
+    }
+
+    @media (max-width: 920px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-box,
+      .side-card {
+        position: static;
+      }
+
+      .meta {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-card {
+        padding: 42px 24px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .wrap {
+        width: min(calc(100% - 20px), var(--max));
+      }
+
+      .section-card,
+      .cta-box,
+      .side-card {
+        padding: 22px 18px;
+      }
+
+      .hero {
+        padding-top: 34px;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <div class="hero-card">
+        <div class="eyebrow">Xolos Ramírez · Cultura, comunidad y futuro</div>
+        <h1>Teyolia y Tonalli para impulsar la cultura xoloitzcuintle</h1>
+        <p class="lead">
+          La comunidad del xoloitzcuintle no tiene que esperar a que las grandes instituciones decidan qué proyectos merecen existir. Hoy podemos organizarnos, financiarnos y construir juntos iniciativas que beneficien, promuevan y fortalezcan la cultura xoloitzcuintle utilizando herramientas como <strong>Teyolia</strong> y <strong>Tonalli Wallet</strong>.
+        </p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="https://xolosarmy.xyz/blog/teyolia-flipstarter-tutorial.html" target="_blank" rel="noopener noreferrer">Abrir app interactiva</a>
+          <a class="button button-secondary" href="#ideas">Ver ideas de campañas</a>
+        </div>
+        <div class="meta">
+          <div class="meta-item">
+            <strong>Teyolia</strong>
+            Plataforma para crear campañas comunitarias con lógica de meta colectiva.
+          </div>
+          <div class="meta-item">
+            <strong>Tonalli Wallet</strong>
+            La herramienta para conectarte y firmar desde tu propia billetera.
+          </div>
+          <div class="meta-item">
+            <strong>Objetivo</strong>
+            Convertir el amor por el xoloitzcuintle en proyectos reales y financiables.
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap grid">
+      <article>
+        <section class="section-card">
+          <h2>Una nueva forma de organizar a la comunidad</h2>
+          <p class="intro-dropcap">
+            Durante mucho tiempo, muchos esfuerzos culturales han dependido de permisos, patrocinios inciertos o apoyos que tardan demasiado en llegar. Mientras tanto, las ideas siguen esperando. Pero la cultura xoloitzcuintle está viva hoy: en familias, artistas, criadores responsables, investigadores, fotógrafos, promotores culturales, diseñadores, artesanos y amantes de México que quieren aportar algo real.
+          </p>
+          <p>
+            <span class="highlight">Teyolia</span> permite transformar una intención colectiva en una campaña concreta. <span class="highlight">Tonalli Wallet</span> permite que cada persona participe desde su propia billetera, de forma directa. Juntas, estas herramientas abren una posibilidad muy valiosa: que la comunidad xoloitzcuintle pueda financiar sus propios proyectos sin perder su identidad.
+          </p>
+          <blockquote class="quote">
+            Cuando una comunidad aprende a financiar su propia memoria, también aprende a defender su futuro.
+          </blockquote>
+          <p>
+            En Xolos Ramírez creemos que esta infraestructura no debe verse solamente como “tecnología”. Debe verse como una herramienta cultural. Una herramienta para organizar el cuidado, la difusión, la creación y la permanencia del xoloitzcuintle dentro del imaginario contemporáneo.
+          </p>
+        </section>
+
+        <section class="section-card">
+          <h2>¿Qué tipo de campañas podría crear la comunidad?</h2>
+          <p>
+            No se trata únicamente de recaudar dinero. Se trata de dar forma a proyectos con un propósito claro. Algunas campañas pueden nacer desde el arte, otras desde la educación, otras desde la documentación o la preservación. Lo importante es que estén orientadas a fortalecer la presencia cultural del xoloitzcuintle en el mundo.
+          </p>
+          <ul class="ideas" id="ideas">
+            <li><strong>Exposiciones y muestras artísticas:</strong> campañas para imprimir obra, montar una galería, financiar marcos, transporte o producción visual inspirada en el xoloitzcuintle.</li>
+            <li><strong>Libros, cómics y publicaciones:</strong> recaudar fondos para escribir, ilustrar, editar e imprimir materiales que narren la historia, el simbolismo y la presencia contemporánea del xoloitzcuintle.</li>
+            <li><strong>Documentales, entrevistas y archivos audiovisuales:</strong> crear memoria viva mediante videos, podcasts y testimonios de familias, criadores, historiadores y artistas.</li>
+            <li><strong>Eventos culturales y educativos:</strong> organizar charlas, talleres, encuentros, presentaciones o conferencias sobre el xoloitzcuintle en su dimensión histórica, espiritual y social.</li>
+            <li><strong>Material pedagógico para niños y jóvenes:</strong> desarrollar recursos que acerquen a nuevas generaciones a la cultura xoloitzcuintle de manera clara, bella y accesible.</li>
+            <li><strong>Campañas de difusión internacional:</strong> traducir materiales, abrir espacios digitales, producir contenido en otros idiomas y llevar el mensaje cultural del xoloitzcuintle más allá de México.</li>
+          </ul>
+        </section>
+
+        <section class="section-card">
+          <h2>¿Por qué Teyolia tiene sentido para este propósito?</h2>
+          <p>
+            Porque obliga a pensar con claridad. Una campaña no es un deseo abstracto: es una meta, una narrativa, una razón de ser y una comunidad que decide apoyar. Eso disciplina la intención. Le da forma. Le exige al creador explicar qué quiere hacer, por qué importa y cómo beneficiará a otros.
+          </p>
+          <ul class="checklist">
+            <li>Permite reunir apoyo alrededor de una idea específica.</li>
+            <li>Ayuda a presentar proyectos con propósito, meta y dirección.</li>
+            <li>Fortalece la participación activa de la comunidad, no solo la observación pasiva.</li>
+            <li>Convierte a los seguidores de la cultura xoloitzcuintle en agentes de construcción cultural.</li>
+            <li>Hace visible qué tipo de iniciativas despiertan auténtico respaldo comunitario.</li>
+          </ul>
+          <p>
+            Eso es especialmente importante en un tema como el xoloitzcuintle, donde la cultura puede diluirse fácilmente entre clichés, modas superficiales o visiones desconectadas de su profundidad histórica. Una buena campaña puede servir como filtro: convoca a quienes de verdad quieren construir algo con sentido.
+          </p>
+        </section>
+
+        <section class="section-card">
+          <h2>¿Cómo entra Tonalli Wallet en este proceso?</h2>
+          <p>
+            Tonalli Wallet es la pieza que vuelve personal y soberana la participación. No es solo una herramienta técnica para “hacer clic”. Es el medio por el cual cada miembro de la comunidad conserva el control de su interacción y participa desde su propia billetera.
+          </p>
+          <p>
+            Esto importa porque refuerza una idea profunda: <strong>apoyar una campaña cultural también es un acto consciente</strong>. No es delegar. No es desaparecer detrás de una plataforma cerrada. Es decidir apoyar una visión y hacerlo directamente.
+          </p>
+          <p>
+            Para una comunidad como la del xoloitzcuintle, que está profundamente vinculada con identidad, linaje, memoria y permanencia, esa relación directa entre persona, intención y acción tiene una resonancia especial.
+          </p>
+        </section>
+
+        <section class="section-card">
+          <h2>Un ejemplo de ruta para lanzar una campaña</h2>
+          <p>
+            Una buena campaña no tiene que comenzar siendo gigantesca. Puede iniciar con una meta clara, un alcance realista y una narrativa honesta. La clave es proponer algo concreto que la comunidad pueda entender, sentir y apoyar.
+          </p>
+          <ol class="steps">
+            <li><strong>Define una causa concreta:</strong> por ejemplo, producir una serie de entrevistas sobre el xoloitzcuintle en distintas regiones de México.</li>
+            <li><strong>Explica el beneficio cultural:</strong> deja claro cómo ese proyecto ayudará a preservar, difundir o dignificar la cultura xoloitzcuintle.</li>
+            <li><strong>Establece una meta comprensible:</strong> cuánto necesitas y para qué se utilizará.</li>
+            <li><strong>Conecta tu Tonalli Wallet:</strong> prepara tu participación desde tu propia billetera.</li>
+            <li><strong>Crea la campaña en Teyolia:</strong> publica tu propuesta con una presentación clara y compartible.</li>
+            <li><strong>Activa a la comunidad:</strong> comparte la campaña con seguidores, amigos, familias, artistas y amantes del xoloitzcuintle.</li>
+            <li><strong>Documenta el proceso:</strong> muestra avances, explica hitos y honra a quienes hicieron posible el proyecto.</li>
+          </ol>
+        </section>
+
+        <section class="section-card">
+          <h2>La cultura también necesita infraestructura</h2>
+          <p>
+            A veces se piensa que la cultura depende solamente de inspiración. Pero no. La cultura también necesita medios para organizarse. Necesita canales para coordinar esfuerzos, herramientas para reunir apoyo y mecanismos para transformar ideas en realidad.
+          </p>
+          <p>
+            Si queremos ver más libros, más obras, más documentales, más encuentros, más materiales educativos y más difusión seria sobre el xoloitzcuintle, entonces necesitamos infraestructura cultural. Teyolia y Tonalli pueden convertirse en parte de esa infraestructura.
+          </p>
+          <blockquote class="quote">
+            No basta con amar al xoloitzcuintle. También hay que construir las herramientas que permitan que su cultura siga creciendo.
+          </blockquote>
+          <p>
+            Ese es el verdadero potencial de esta etapa: que la comunidad no solo admire el símbolo, sino que aprenda a colaborar en torno a él.
+          </p>
+        </section>
+
+        <section class="section-card">
+          <h2>Empieza con una campaña que tenga alma</h2>
+          <p>
+            Si tienes una idea que pueda beneficiar, promover o fomentar la cultura xoloitzcuintle, este es un buen momento para darle forma. No esperes a tener una gran organización detrás. Empieza con claridad, belleza y propósito. Empieza con algo que merezca existir.
+          </p>
+          <p>
+            La tecnología, cuando está bien orientada, puede convertirse en un puente entre comunidad y acción. Y cuando ese puente se pone al servicio del xoloitzcuintle, puede ayudar a abrir una nueva etapa de creación cultural desde abajo, desde la gente y desde la convicción.
+          </p>
+          <p>
+            Explora la aplicación interactiva, conoce el flujo y visualiza tu propia campaña:
+          </p>
+          <p>
+            <a class="button button-primary" href="https://xolosarmy.xyz/blog/teyolia-flipstarter-tutorial.html" target="_blank" rel="noopener noreferrer">Ir al tutorial interactivo</a>
+          </p>
+        </section>
+      </article>
+
+      <aside>
+        <div class="cta-box">
+          <h3 class="side-title">Tutorial interactivo</h3>
+          <p>
+            Aprende el flujo paso a paso para crear una campaña en Teyolia utilizando Tonalli Wallet.
+          </p>
+          <a class="link-card" href="https://xolosarmy.xyz/blog/teyolia-flipstarter-tutorial.html" target="_blank" rel="noopener noreferrer">
+            Abrir tutorial de Teyolia
+            <span>Guía visual para principiantes y comunidad xoloitzcuintle.</span>
+          </a>
+        </div>
+
+        <div class="side-card">
+          <h3 class="side-title">Ideas con potencial</h3>
+          <ul class="mini-list">
+            <li>Archivo fotográfico del xoloitzcuintle contemporáneo.</li>
+            <li>Serie de entrevistas sobre cultura y memoria ancestral.</li>
+            <li>Material educativo para niños sobre el xoloitzcuintle.</li>
+            <li>Exposición artística o publicación ilustrada.</li>
+          </ul>
+        </div>
+
+        <div class="side-card">
+          <h3 class="side-title">Enfoque recomendado</h3>
+          <ul class="mini-list">
+            <li>Propón una meta concreta.</li>
+            <li>Explica el beneficio cultural con claridad.</li>
+            <li>Usa imágenes, historia y propósito.</li>
+            <li>Comparte avances con la comunidad.</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <div class="wrap">
+      <p class="footer-note">
+        Xolos Ramírez · Cultura viva, comunidad activa y futuro para el xoloitzcuintle.
+      </p>
+    </div>
+  </main>
+</body>
+</html>
