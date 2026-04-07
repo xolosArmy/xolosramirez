@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía de Adquisición y Legado | Xolos Ramírez</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Marcellus&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --gold: #d4af37;
+      --gold-dim: rgba(212, 175, 55, 0.15);
+      --bg-dark: #0a0a0a;
+      --bg-panel: #161616;
+      --text-main: #e0e0e0;
+      --text-muted: #999;
+      --transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .app-container {
+      background-color: var(--bg-panel);
+      width: 100%;
+      max-width: 800px;
+      border-radius: 4px;
+      border: 1px solid var(--gold-dim);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .app-header {
+      text-align: center;
+      padding: 40px 20px 20px;
+      border-bottom: 1px solid var(--gold-dim);
+      background: linear-gradient(to bottom, rgba(212, 175, 55, 0.05), transparent);
+    }
+
+    .app-header h1 {
+      font-family: 'Cinzel', serif;
+      color: var(--gold);
+      font-size: 1.8rem;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    .app-header p {
+      font-family: 'Marcellus', serif;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    /* Stepper / Progress */
+    .progress-container {
+      padding: 30px 40px 0;
+    }
+
+    .stepper {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin-bottom: 30px;
+    }
+
+    .stepper::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      width: 100%;
+      height: 2px;
+      background-color: #333;
+      z-index: 1;
+    }
+
+    .progress-line {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      height: 2px;
+      background-color: var(--gold);
+      z-index: 2;
+      transition: var(--transition);
+      width: 0%; /* Dynamic */
+    }
+
+    .step-dot {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #333;
+      color: #888;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Cinzel', serif;
+      font-weight: 600;
+      z-index: 3;
+      position: relative;
+      transition: var(--transition);
+      border: 2px solid #222;
+    }
+
+    .step-dot.active {
+      background-color: var(--bg-panel);
+      border-color: var(--gold);
+      color: var(--gold);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    }
+
+    .step-dot.completed {
+      background-color: var(--gold);
+      border-color: var(--gold);
+      color: var(--bg-dark);
+    }
+
+    /* Slider Container */
+    .slider-wrapper {
+      position: relative;
+      height: 350px;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 100%;
+      width: 100%;
+      height: 100%;
+      padding: 0 40px;
+      opacity: 0;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .slide.active {
+      left: 0;
+      opacity: 1;
+    }
+
+    .slide.prev {
+      left: -100%;
+      opacity: 0;
+    }
+
+    .slide-icon {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .slide h2 {
+      font-family: 'Cinzel', serif;
+      color: var(--gold);
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .slide p {
+      color: var(--text-muted);
+      line-height: 1.7;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    .slide strong {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    /* Controls */
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px 40px 40px;
+    }
+
+    .btn {
+      padding: 12px 30px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      border: 1px solid var(--gold);
+      background: transparent;
+      color: var(--gold);
+      transition: var(--transition);
+      border-radius: 2px;
+      font-weight: 600;
+    }
+
+    .btn:hover:not(:disabled) {
+      background: var(--gold);
+      color: var(--bg-dark);
+      box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+    }
+
+    .btn:disabled {
+      border-color: #444;
+      color: #555;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--bg-dark);
+    }
+
+    .btn-primary:hover {
+      background: #e6c55e;
+      box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .slider-wrapper { height: 400px; }
+      .slide { padding: 0 20px; }
+      .controls { padding: 20px; }
+      .progress-container { padding: 20px 20px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <header class="app-header">
+      <h1>Soberanía y Legado</h1>
+      <p>Transacciones e Identidad Digital en Xolos Ramírez</p>
+    </header>
+
+    <div class="progress-container">
+      <div class="stepper" id="stepper">
+        <div class="progress-line" id="progress-line"></div>
+        <div class="step-dot active" data-step="0">I</div>
+        <div class="step-dot" data-step="1">II</div>
+        <div class="step-dot" data-step="2">III</div>
+        <div class="step-dot" data-step="3">IV</div>
+      </div>
+    </div>
+
+    <div class="slider-wrapper">
+      
+      <div class="slide active" id="slide-0">
+        <div class="slide-icon">🏦</div>
+        <h2>I. Adquisición de Activos</h2>
+        <p>Inicie su proceso adquiriendo <strong>eCash (XEC)</strong> en una plataforma de intercambio global como Binance.<br><br>Adquiera saldo inicial (ej. USDT) a través del mercado P2P para fondear su cuenta y, posteriormente, conviértalo a <strong>XEC</strong> en el mercado spot. Este es el primer paso hacia su autonomía financiera.</p>
+      </div>
+
+      <div class="slide" id="slide-1">
+        <div class="slide-icon">🛡️</div>
+        <h2>II. Gestión en Autocustodia</h2>
+        <p>Abra <strong>Tonalli Wallet</strong> desde su navegador, sin descargas ni registros. Guarde sus palabras semilla en un lugar seguro.<br><br>Copie su dirección receptora (comienza con <em>ecash:</em>) y retire sus XEC desde Binance hacia su nueva billetera. Ahora usted tiene el <strong>control absoluto</strong> de su patrimonio, sin intermediarios.</p>
+      </div>
+
+      <div class="slide" id="slide-2">
+        <div class="slide-icon">📱</div>
+        <h2>III. Confirmación de Adjudicación</h2>
+        <p>Con fondos en su poder, proceda a la adjudicación del ejemplar.<br><br>Solicite a Xolos Ramírez nuestro código QR o dirección de cobro oficial. Escanéelo con su Tonalli Wallet, ingrese el monto acordado y envíe. La transacción se liquida <strong>en segundos</strong> con tarifas imperceptibles. Conserve el hash de la transacción como su comprobante irrevocable.</p>
+      </div>
+
+      <div class="slide" id="slide-3">
+        <div class="slide-icon">⚜️</div>
+        <h2>IV. Recepción del Legado Digital</h2>
+        <p>La culminación de nuestra promesa.<br><br>Al realizarse la entrega física de su cachorro, Xolos Ramírez acuñará y enviará un <strong>NFT de Linaje</strong> (eToken) directamente a la misma dirección de su Tonalli Wallet. Este activo inmutable en la blockchain certifica la pureza, historia y propiedad ancestral de su nuevo guardián.</p>
+      </div>
+
+    </div>
+
+    <div class="controls">
+      <button class="btn" id="btn-prev" disabled>Atrás</button>
+      <button class="btn btn-primary" id="btn-next">Siguiente Paso</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const slides = document.querySelectorAll('.slide');
+      const dots = document.querySelectorAll('.step-dot');
+      const progressLine = document.getElementById('progress-line');
+      const btnPrev = document.getElementById('btn-prev');
+      const btnNext = document.getElementById('btn-next');
+      
+      let currentStep = 0;
+      const totalSteps = slides.length;
+
+      function updateUI() {
+        // Update Slides
+        slides.forEach((slide, index) => {
+          slide.classList.remove('active', 'prev');
+          if (index === currentStep) {
+            slide.classList.add('active');
+          } else if (index < currentStep) {
+            slide.classList.add('prev');
+          }
+        });
+
+        // Update Dots & Progress Line
+        dots.forEach((dot, index) => {
+          dot.classList.remove('active', 'completed');
+          if (index === currentStep) {
+            dot.classList.add('active');
+          } else if (index < currentStep) {
+            dot.classList.add('completed');
+          }
+        });
+
+        const progressPercentage = (currentStep / (totalSteps - 1)) * 100;
+        progressLine.style.width = `${progressPercentage}%`;
+
+        // Update Buttons
+        btnPrev.disabled = currentStep === 0;
+        
+        if (currentStep === totalSteps - 1) {
+          btnNext.textContent = "Abrir Tonalli Wallet";
+        } else {
+          btnNext.textContent = "Siguiente Paso";
+        }
+      }
+
+      btnNext.addEventListener('click', () => {
+        if (currentStep < totalSteps - 1) {
+          currentStep++;
+          updateUI();
+        } else {
+          // Accion al finalizar
+          window.open('https://app.tonalli.cash', '_blank');
+        }
+      });
+
+      btnPrev.addEventListener('click', () => {
+        if (currentStep > 0) {
+          currentStep--;
+          updateUI();
+        }
+      });
+
+      // Optional: Allow clicking on dots to navigate
+      dots.forEach(dot => {
+        dot.addEventListener('click', (e) => {
+          const step = parseInt(e.target.getAttribute('data-step'));
+          if(step <= currentStep) { // Only allow navigating back or to current
+              currentStep = step;
+              updateUI();
+          }
+        });
+      });
+
+      // Initialize
+      updateUI();
+    });
+  </script>
+
+</body>
+</html>
