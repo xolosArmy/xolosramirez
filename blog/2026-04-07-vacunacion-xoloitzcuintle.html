@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Vacunación: Teyolia y Huitzilopochtli - Xolos Ramirez</title>
+    <style>
+        /* --- Variables de Color y Estilos Base --- */
+        :root {
+            --primary-color: #8C3A21; /* Tono terracota/barro, muy ad hoc a los xolos */
+            --secondary-color: #1A1A1A; /* Negro azabache */
+            --bg-color: #F9F6F0; /* Fondo cálido */
+            --text-color: #333333;
+            --card-bg: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* --- Encabezado del Blog --- */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* --- Contenedor Principal --- */
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .date-badge {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            font-weight: bold;
+        }
+
+        .intro-text {
+            font-size: 1.15rem;
+            margin-bottom: 2rem;
+            color: #444;
+        }
+
+        /* --- Tarjetas de los Cachorros --- */
+        .puppies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .puppy-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .puppy-card.black-coated {
+            border-top: 5px solid var(--secondary-color);
+        }
+
+        .puppy-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .puppy-card h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 1.6rem;
+        }
+
+        .puppy-card.black-coated h2 {
+            color: var(--secondary-color);
+        }
+
+        .puppy-card ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .puppy-card li {
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .puppy-card li::before {
+            content: '🐾';
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 1rem;
+        }
+
+        /* --- Sección de Información de la Vacuna --- */
+        .vaccine-info {
+            background-color: #E8ECEF;
+            border-left: 6px solid #4A90E2; /* Tono clínico/salud */
+            padding: 2rem;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 2rem;
+        }
+
+        .vaccine-info h3 {
+            margin-top: 0;
+            color: #2C3E50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .vaccine-info ul {
+            columns: 2; /* Divide la lista en 2 columnas en pantallas grandes */
+        }
+
+        /* --- Pie de Página --- */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: var(--secondary-color);
+            color: white;
+            margin-top: 3rem;
+        }
+
+        /* --- Responsividad --- */
+        @media (max-width: 600px) {
+            .vaccine-info ul {
+                columns: 1; /* Una sola columna en celulares */
+            }
+            header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Blog de Xolos Ramirez</h1>
+        <p>Preservando el legado de México, un cachorro a la vez</p>
+    </header>
+
+    <div class="container">
+        <span class="date-badge">📅 7 de Abril de 2026</span>
+        
+        <p class="intro-text">
+            <strong>¡Día de clínica en Xolos Ramirez!</strong> Hoy dimos un paso importantísimo en el desarrollo y la protección de nuestros amados cachorros. Nos llena de orgullo anunciar que dos de nuestras estrellas más jóvenes acaban de recibir su segunda dosis dentro de su esquema de vacunación. ¡Siguen creciendo fuertes, sanos y llenos de energía!
+        </p>
+
+        <div class="puppies-grid">
+            <div class="puppy-card">
+                <h2>Teyolia Ramirez</h2>
+                <ul>
+                    <li><strong>Variedad:</strong> Xoloitzcuintle Miniatura</li>
+                    <li><strong>Estado:</strong> ¡Excelente! Superó la visita al veterinario con mucha valentía.</li>
+                    <li><strong>Nota del criador:</strong> Teyolia sigue mostrando un temperamento excepcional y un desarrollo físico perfecto para su tamaño miniatura.</li>
+                </ul>
+            </div>
+
+            <div class="puppy-card black-coated">
+                <h2>Huitzilopochtli</h2>
+                <ul>
+                    <li><strong>Variedad:</strong> Con pelo (Coat)</li>
+                    <li><strong>Color:</strong> Negro Azabache</li>
+                    <li><strong>Estado:</strong> ¡Fuerte como su nombre indica! Listo para seguir jugando.</li>
+                    <li><strong>Nota del criador:</strong> Su manto negro azabache está espectacular. Los xolos con pelo son una parte fundamental de la genética y preservación de la raza.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="vaccine-info">
+            <h3>💉 Reporte Médico: Vanguard® Plus 5 L4 CV</h3>
+            <p>
+                Para esta segunda aplicación, nuestro veterinario de confianza administró la <strong>Vanguard Plus 5 L4 CV</strong>. Nos gusta ser transparentes y educativos en <em>Xolos Ramirez</em>, por eso te explicamos qué cubre esta excelente vacuna múltiple de Zoetis. Protege a Teyolia y Huitzilopochtli contra los siguientes patógenos:
+            </p>
+            <ul>
+                <li><strong>Moquillo Canino (Distemper)</strong></li>
+                <li><strong>Adenovirus tipo 1 y 2</strong> (Hepatitis infecciosa y enfermedad respiratoria)</li>
+                <li><strong>Parainfluenza Canina</strong></li>
+                <li><strong>Parvovirus Canino</strong></li>
+                <li><strong>Leptospirosis</strong> (Protección contra 4 cepas: <em>L. canicola, L. grippotyphosa, L. icterohaemorrhagiae, L. pomona</em>)</li>
+                <li><strong>Coronavirus Canino (CV)</strong></li>
+            </ul>
+            <p><em>Con este espectro de protección, aseguramos que sus sistemas inmunológicos estén listos para enfrentar el mundo y garantizarles una vida larga y próspera.</em></p>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Criadero Xolos Ramirez. Criados con amor, respeto y tradición.</p>
+    </footer>
+
+</body>
+</html>
