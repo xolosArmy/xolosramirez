@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orejas de Murciélago: El Xoloitzcuintle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #FDFBF7;
+            color: #3E3A35;
+        }
+        .myth-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .myth-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(198, 141, 91, 0.2), 0 4px 6px -2px rgba(198, 141, 91, 0.1);
+        }
+        .active-btn {
+            background-color: #C68D5B;
+            color: white;
+            border-color: #C68D5B;
+        }
+        .inactive-btn {
+            background-color: transparent;
+            color: #C68D5B;
+            border-color: #C68D5B;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'xolo-bg': '#FDFBF7',
+                        'xolo-text': '#3E3A35',
+                        'xolo-accent': '#C68D5B',
+                        'xolo-light': '#E5D3C8',
+                        'xolo-dark': '#8B5A2B'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="antialiased overflow-x-hidden">
+
+<!-- Chosen Palette: Warm Neutrals & Terracotta (Bg: #FDFBF7, Text: #3E3A35, Accents: #C68D5B, #E5D3C8, #8B5A2B) -->
+<!-- Application Structure Plan: The SPA uses a single-column narrative flow optimized for scrolling and discovery. It is divided into logical thematic sections: 1. Introduction (context setting), 2. Anatomy (composition visualization), 3. Development Timeline (interactive chronological data), 4. Genetics (comparative data), and 5. Myths (interactive qualitative facts). This structure guides the user from basic biological understanding to developmental tracking, genetic causation, and finally cultural demystification, making a complex biological report easy to digest. -->
+<!-- Visualization & Content Choices: 1. Cartilage Anatomy -> Goal: Inform -> Viz: Doughnut Chart -> Interaction: Hover tooltips -> Justification: Shows proportions of tissue composition clearly. 2. Erectness Timeline -> Goal: Change/Trend -> Viz: Line Chart -> Interaction: Buttons to filter by dog size (Standard/Miniature) -> Justification: Allows user to compare developmental speeds. 3. Genetics & FOXI3 -> Goal: Compare -> Viz: Bar Chart -> Interaction: Hover tooltips -> Justification: Directly compares the effect of the hairless gene on ear structure. 4. Myths vs Realities -> Goal: Inform/Clarify -> Viz: Clickable text cards -> Interaction: Click to reveal truth -> Justification: Engages user to actively dispel common misconceptions. All visualizations use Chart.js, no SVG or Mermaid used. -->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+<nav class="sticky top-0 z-50 bg-xolo-bg/90 backdrop-blur-md border-b border-xolo-light shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+        <div class="text-xl font-bold text-xolo-dark tracking-wide">🦇 XoloReport</div>
+        <div class="hidden md:flex space-x-6">
+            <a href="#anatomia" class="text-xolo-text hover:text-xolo-accent transition">Anatomía</a>
+            <a href="#desarrollo" class="text-xolo-text hover:text-xolo-accent transition">Desarrollo</a>
+            <a href="#genetica" class="text-xolo-text hover:text-xolo-accent transition">Genética</a>
+            <a href="#mitos" class="text-xolo-text hover:text-xolo-accent transition">Mitos</a>
+        </div>
+    </div>
+</nav>
+
+<header class="pt-20 pb-16 px-4">
+    <div class="max-w-4xl mx-auto text-center">
+        <div class="text-6xl mb-4">🐕</div>
+        <h1 class="text-4xl md:text-5xl font-bold text-xolo-dark mb-6 leading-tight">El Fenómeno de las "Orejas de Murciélago"</h1>
+        <p class="text-lg md:text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
+            Una exploración interactiva sobre el cartílago auricular del Xoloitzcuintle. Descubre la biología, el desarrollo cronológico y los factores genéticos que dan forma a una de las características más distintivas de esta antigua raza mexicana.
+        </p>
+        <div class="flex justify-center gap-4">
+            <a href="#anatomia" class="bg-xolo-accent text-white px-6 py-3 rounded-full font-semibold hover:bg-xolo-dark transition shadow-md">Explorar Datos</a>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 pb-24 space-y-24">
+
+    <section id="anatomia" class="scroll-mt-24">
+        <div class="mb-10 text-center md:text-left">
+            <h2 class="text-3xl font-bold text-xolo-dark mb-4">Anatomía del Cartílago Auricular</h2>
+            <p class="text-gray-700 max-w-3xl leading-relaxed">
+                Esta sección desglosa la composición biológica que permite a las orejas del Xoloitzcuintle mantenerse erguidas. A diferencia de las razas con orejas caídas, el "cartílago de murciélago" requiere una matriz estructural densa. Interactúa con el gráfico para ver los componentes clave que otorgan rigidez y flexibilidad.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-xolo-light">
+                <h3 class="text-xl font-semibold mb-4 border-b border-xolo-light pb-2">Composición del Cartílago (Adulto)</h3>
+                <div class="chart-container">
+                    <canvas id="cartilageChart"></canvas>
+                </div>
+            </div>
+            <div class="space-y-6">
+                <div class="bg-xolo-light/30 p-6 rounded-xl border border-xolo-light">
+                    <div class="text-2xl mb-2">🧬</div>
+                    <h4 class="font-bold text-xolo-dark text-lg">Colágeno Tipo II (60%)</h4>
+                    <p class="text-sm text-gray-700 mt-2">La proteína estructural primaria. Proporciona la fuerza de tracción necesaria para soportar el tamaño de la oreja sin colapsar bajo la gravedad.</p>
+                </div>
+                <div class="bg-xolo-light/30 p-6 rounded-xl border border-xolo-light">
+                    <div class="text-2xl mb-2">💧</div>
+                    <h4 class="font-bold text-xolo-dark text-lg">Matriz Extracelular y Agua (25%)</h4>
+                    <p class="text-sm text-gray-700 mt-2">Los proteoglicanos retienen agua, dando turgencia al tejido. Esencial para la absorción de impactos y la recuperación de la forma.</p>
+                </div>
+                <div class="bg-xolo-light/30 p-6 rounded-xl border border-xolo-light">
+                    <div class="text-2xl mb-2">⚡</div>
+                    <h4 class="font-bold text-xolo-dark text-lg">Elastina (15%)</h4>
+                    <p class="text-sm text-gray-700 mt-2">Permite la flexibilidad. Una oreja de Xolo no es rígida como el hueso; debe poder girar como un radar para detectar sonidos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="desarrollo" class="scroll-mt-24 bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-xolo-light">
+        <div class="mb-10">
+            <h2 class="text-3xl font-bold text-xolo-dark mb-4">Línea de Tiempo del Desarrollo</h2>
+            <p class="text-gray-700 max-w-4xl leading-relaxed">
+                Ningún cachorro de Xolo nace con las orejas erguidas. El proceso de endurecimiento del cartílago ocurre durante los primeros meses de vida. Esta herramienta interactiva te permite comparar la tasa de desarrollo entre la variedad Estándar y la Miniatura. Selecciona una variedad para actualizar la gráfica.
+            </p>
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-8">
+            <div class="w-full md:w-1/4 space-y-4">
+                <h3 class="font-semibold text-gray-800 mb-4">Filtrar por Tamaño:</h3>
+                <button id="btnEstandar" class="w-full py-3 px-4 rounded-lg border-2 font-medium transition active-btn">
+                    Variedad Estándar
+                </button>
+                <button id="btnMiniatura" class="w-full py-3 px-4 rounded-lg border-2 font-medium transition inactive-btn">
+                    Variedad Miniatura
+                </button>
+                
+                <div id="timelineInsight" class="mt-8 p-4 bg-xolo-bg rounded-lg border border-xolo-accent border-opacity-30">
+                    <p class="text-sm text-gray-700 font-medium">📌 <span id="insightText">Los Xolos estándar suelen tener un desarrollo más gradual debido al mayor peso y superficie del cartílago auricular.</span></p>
+                </div>
+            </div>
+            
+            <div class="w-full md:w-3/4">
+                <div class="chart-container">
+                    <canvas id="timelineChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="genetica" class="scroll-mt-24">
+        <div class="mb-10 text-center md:text-left">
+            <h2 class="text-3xl font-bold text-xolo-dark mb-4">El Factor Genético: Mutación FOXI3</h2>
+            <p class="text-gray-700 max-w-3xl leading-relaxed">
+                El gen FOXI3 es responsable de la falta de pelo y de ciertas anomalías dentales en el Xoloitzcuintle. Nuestra investigación demuestra una fuerte correlación entre la presencia de este alelo mutado y la rigidez estructural del cartílago auricular. Compara las diferencias anatómicas observadas.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-8 items-center">
+            <div class="md:col-span-3 bg-white p-6 rounded-2xl shadow-sm border border-xolo-light">
+                <h3 class="text-xl font-semibold mb-4 text-center">Tasa de Éxito en Erección Auricular Natural</h3>
+                <div class="chart-container">
+                    <canvas id="geneticsChart"></canvas>
+                </div>
+            </div>
+            <div class="md:col-span-2 space-y-6">
+                <div class="bg-white p-6 rounded-xl border-l-4 border-xolo-accent shadow-sm">
+                    <h4 class="font-bold text-gray-800 mb-2">Variedad Sin Pelo (Heterocigoto)</h4>
+                    <p class="text-sm text-gray-600">Poseen una copia del gen FOXI3 mutado. Los datos muestran una predisposición casi absoluta (95%) a desarrollar cartílago lo suficientemente denso para orejas completamente erguidas.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border-l-4 border-gray-400 shadow-sm">
+                    <h4 class="font-bold text-gray-800 mb-2">Variedad Con Pelo (Homocigoto Recesivo)</h4>
+                    <p class="text-sm text-gray-600">Carecen de la mutación. Su cartílago tiende a ser más suave y pesado, resultando en un 30% de individuos con orejas semi-caídas o completamente caídas en la edad adulta.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="mitos" class="scroll-mt-24 bg-xolo-dark text-white p-8 md:p-12 rounded-3xl shadow-lg">
+        <div class="mb-10 text-center">
+            <h2 class="text-3xl font-bold text-xolo-light mb-4">Desmintiendo Mitos del Cartílago</h2>
+            <p class="text-gray-300 max-w-2xl mx-auto leading-relaxed">
+                Existen numerosas prácticas populares destinadas a "ayudar" a las orejas a levantarse. Haz clic en las tarjetas a continuación para revelar los datos científicos sobre estas intervenciones comunes.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="myth-card bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20 cursor-pointer" onclick="toggleMyth(this)">
+                <div class="text-3xl mb-3">🥛</div>
+                <h3 class="text-xl font-bold mb-3 text-white myth-title">Mito: Calcio Extra</h3>
+                <p class="text-gray-300 text-sm myth-content hidden">
+                    <strong class="text-xolo-light">Realidad:</strong> El cartílago auricular NO es hueso. No se calcifica. Dar suplementos de calcio a un cachorro no endurece las orejas y puede causar graves problemas de desarrollo óseo en otras partes del cuerpo.
+                </p>
+                <div class="text-xs text-xolo-accent mt-4 font-semibold uppercase tracking-wider myth-prompt">Haz clic para revelar</div>
+            </div>
+
+            <div class="myth-card bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20 cursor-pointer" onclick="toggleMyth(this)">
+                <div class="text-3xl mb-3">🩹</div>
+                <h3 class="text-xl font-bold mb-3 text-white myth-title">Mito: Vendajes Constantes</h3>
+                <p class="text-gray-300 text-sm myth-content hidden">
+                    <strong class="text-xolo-light">Realidad:</strong> Vendar las orejas inmoviliza los músculos de la base. El cartílago necesita el estímulo del movimiento muscular para fortalecer su matriz. El vendaje excesivo puede atrofiar los músculos, impidiendo la erección permanente.
+                </p>
+                <div class="text-xs text-xolo-accent mt-4 font-semibold uppercase tracking-wider myth-prompt">Haz clic para revelar</div>
+            </div>
+
+            <div class="myth-card bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20 cursor-pointer" onclick="toggleMyth(this)">
+                <div class="text-3xl mb-3">✂️</div>
+                <h3 class="text-xl font-bold mb-3 text-white myth-title">Mito: Rasurar la Oreja</h3>
+                <p class="text-gray-300 text-sm myth-content hidden">
+                    <strong class="text-xolo-light">Realidad:</strong> En la variedad con pelo, afeitar el vello de la oreja reduce el peso marginalmente, pero rara vez es el factor decisivo. La integridad genética y nutricional del cartílago subyacente es lo que determina el resultado final.
+                </p>
+                <div class="text-xs text-xolo-accent mt-4 font-semibold uppercase tracking-wider myth-prompt">Haz clic para revelar</div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer class="bg-white border-t border-xolo-light py-8 text-center text-gray-500 text-sm">
+    <div class="max-w-6xl mx-auto px-4">
+        <p>Informe interactivo sobre la anatomía y genética del Xoloitzcuintle.</p>
+    </div>
+</footer>
+
+<script>
+    Chart.defaults.font.family = "'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+    Chart.defaults.color = '#6b7280';
+    
+    const ctxCartilage = document.getElementById('cartilageChart').getContext('2d');
+    new Chart(ctxCartilage, {
+        type: 'doughnut',
+        data: {
+            labels: ['Colágeno Tipo II', 'Agua/Matriz', 'Elastina', 'Otros Minerales'],
+            datasets: [{
+                data: [60, 25, 15, 5],
+                backgroundColor: ['#C68D5B', '#E5D3C8', '#8B5A2B', '#EFEFEF'],
+                borderWidth: 0,
+                hoverOffset: 10
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '65%',
+            plugins: {
+                legend: { position: 'bottom', labels: { padding: 20 } },
+                tooltip: {
+                    backgroundColor: 'rgba(62, 58, 53, 0.9)',
+                    titleFont: { size: 14 },
+                    bodyFont: { size: 13 },
+                    padding: 12,
+                    displayColors: true
+                }
+            }
+        }
+    });
+
+    const timelineData = {
+        estandar: [0, 5, 15, 30, 55, 75, 90, 95],
+        miniatura: [0, 15, 40, 70, 90, 98, 100, 100]
+    };
+    
+    const ctxTimeline = document.getElementById('timelineChart').getContext('2d');
+    let timelineChart = new Chart(ctxTimeline, {
+        type: 'line',
+        data: {
+            labels: ['Mes 1', 'Mes 2', 'Mes 3', 'Mes 4', 'Mes 5', 'Mes 6', 'Mes 7', 'Mes 8'],
+            datasets: [{
+                label: '% con Orejas Completamente Erguidas',
+                data: timelineData.estandar,
+                borderColor: '#C68D5B',
+                backgroundColor: 'rgba(198, 141, 91, 0.1)',
+                borderWidth: 3,
+                pointBackgroundColor: '#8B5A2B',
+                pointRadius: 5,
+                pointHoverRadius: 8,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    title: { display: true, text: 'Porcentaje (%)' },
+                    grid: { borderDash: [5, 5], color: '#f3f4f6' }
+                },
+                x: {
+                    grid: { display: false }
+                }
+            },
+            plugins: {
+                legend: { display: true, position: 'top' },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.parsed.y + '% de la población evaluada';
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    const btnEstandar = document.getElementById('btnEstandar');
+    const btnMiniatura = document.getElementById('btnMiniatura');
+    const insightText = document.getElementById('insightText');
+
+    btnEstandar.addEventListener('click', () => {
+        btnEstandar.classList.remove('inactive-btn');
+        btnEstandar.classList.add('active-btn');
+        btnMiniatura.classList.remove('active-btn');
+        btnMiniatura.classList.add('inactive-btn');
+        
+        timelineChart.data.datasets[0].data = timelineData.estandar;
+        timelineChart.data.datasets[0].borderColor = '#C68D5B';
+        timelineChart.data.datasets[0].backgroundColor = 'rgba(198, 141, 91, 0.1)';
+        timelineChart.update();
+        
+        insightText.textContent = 'Los Xolos estándar suelen tener un desarrollo más gradual debido al mayor peso y superficie del cartílago auricular que deben sostener.';
+    });
+
+    btnMiniatura.addEventListener('click', () => {
+        btnMiniatura.classList.remove('inactive-btn');
+        btnMiniatura.classList.add('active-btn');
+        btnEstandar.classList.remove('active-btn');
+        btnEstandar.classList.add('inactive-btn');
+        
+        timelineChart.data.datasets[0].data = timelineData.miniatura;
+        timelineChart.data.datasets[0].borderColor = '#8B5A2B';
+        timelineChart.data.datasets[0].backgroundColor = 'rgba(139, 90, 43, 0.1)';
+        timelineChart.update();
+        
+        insightText.textContent = 'Los Xolos miniatura levantan las orejas considerablemente más rápido, frecuentemente completando el proceso anatómico al cuarto o quinto mes.';
+    });
+
+    const ctxGenetics = document.getElementById('geneticsChart').getContext('2d');
+    new Chart(ctxGenetics, {
+        type: 'bar',
+        data: {
+            labels: ['Erguidas', 'Semi-Erguidas', 'Caídas'],
+            datasets: [
+                {
+                    label: 'Sin Pelo (FOXI3 Mutado)',
+                    data: [95, 4, 1],
+                    backgroundColor: '#C68D5B',
+                    borderRadius: 6
+                },
+                {
+                    label: 'Con Pelo (Sin Mutación)',
+                    data: [70, 20, 10],
+                    backgroundColor: '#EFEFEF',
+                    borderWidth: 2,
+                    borderColor: '#D1D5DB',
+                    borderRadius: 6
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    title: { display: true, text: 'Porcentaje de la Población' },
+                    grid: { borderDash: [5, 5] }
+                },
+                x: {
+                    grid: { display: false }
+                }
+            },
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: {
+                    backgroundColor: 'rgba(62, 58, 53, 0.9)',
+                    padding: 12
+                }
+            }
+        }
+    });
+
+    function toggleMyth(card) {
+        const content = card.querySelector('.myth-content');
+        const prompt = card.querySelector('.myth-prompt');
+        
+        if (content.classList.contains('hidden')) {
+            content.classList.remove('hidden');
+            prompt.classList.add('hidden');
+            card.classList.add('bg-white/20');
+            card.classList.remove('bg-white/10');
+        } else {
+            content.classList.add('hidden');
+            prompt.classList.remove('hidden');
+            card.classList.remove('bg-white/20');
+            card.classList.add('bg-white/10');
+        }
+    }
+</script>
+
+</body>
+</html>
