@@ -1285,15 +1285,29 @@ form textarea:focus {
   border-color: #d4af37;
 }
 
+/* Animación para llamar la atención hacia el botón de video */
+@keyframes pulse-video {
+  0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.5); }
+  70% { box-shadow: 0 0 0 12px rgba(212, 175, 55, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+}
+
+/* Nuevos estilos para hacer notorio el botón "Ver video" */
 .btn-outline-small {
-  background-color: transparent;
-  color: #2c2c2c;
-  border: 1px solid #ccc;
+  background-color: rgba(212, 175, 55, 0.08); /* Fondo con un ligero tinte dorado */
+  color: #a67c00; /* Dorado oscuro para excelente contraste sobre fondo blanco */
+  border: 2px solid #d4af37; /* Borde dorado más grueso y llamativo */
+  animation: pulse-video 2.5s infinite; /* Efecto de latido continuo */
+  transition: all 0.3s ease;
 }
 
 .btn-outline-small:hover {
-  border-color: #2c2c2c;
-  background-color: #f9f9f9;
+  background-color: #d4af37;
+  color: #ffffff;
+  border-color: #d4af37;
+  animation: none; /* Detiene el latido al interactuar */
+  box-shadow: 0 6px 15px rgba(212, 175, 55, 0.4); /* Sombra elegante al pasar el cursor */
+  transform: translateY(-2px);
 }
 
 /* Botón Flotante de Email - Xolos Ramirez */
