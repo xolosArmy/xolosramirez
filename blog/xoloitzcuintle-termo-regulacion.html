@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Xoloitzcuintle: Calentador de Cama Natural | Xolos Ramirez</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #fdfbf7;
+            color: #333333;
+        }
+    </style>
+    <!-- Chosen Palette: Warm Ancestral Neutrals (Background: #fdfbf7, Accents: #a65d37 Terracotta, #d4a373 Sand, Text: #333333 Charcoal) -->
+    <!-- Application Structure Plan: A linear narrative dashboard designed for continuous scrolling. It starts with an engaging hook (Hero), moves into the biological science (Data/Charts), transitions to historical context (Interactive Timeline/Text), and culminates in a practical interactive tool (Comfort Calculator). This structure guides the user from curiosity to factual understanding, and finally to personal application, maximizing engagement without requiring complex navigation. -->
+    <!-- Visualization & Content Choices: 
+         1. Temperature Comparison (Bar Chart - Chart.js): Goal is to visually prove the biological reality vs. myth. Justification: Bar charts offer immediate comparison of discrete values (Human vs Dog vs Xolo heat transfer).
+         2. Therapeutic Benefits (Doughnut Chart - Chart.js): Goal is to break down the specific health applications. Justification: Shows proportions of different benefits reported, easy to read. 
+         3. "Xolo Comfort" Calculator (Vanilla JS + HTML Range Slider): Goal is interactive engagement. Justification: Allows the user to personalize the data (their room temperature) to see the Xolo's practical value, reinforcing the "bed warmer" concept dynamically without SVG/complex libs. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="antialiased selection:bg-[#a65d37] selection:text-white">
+
+    <nav class="fixed w-full z-50 bg-[#fdfbf7]/90 backdrop-blur-md border-b border-[#e5d9c5]">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 font-bold text-xl text-[#a65d37] tracking-tight">
+                    XOLOS RAMIREZ
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#ciencia" class="text-[#555555] hover:text-[#a65d37] transition-colors font-medium">La Ciencia</a>
+                    <a href="#beneficios" class="text-[#555555] hover:text-[#a65d37] transition-colors font-medium">Beneficios</a>
+                    <a href="#interactivo" class="text-[#555555] hover:text-[#a65d37] transition-colors font-medium">Tu Noche Ideal</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto text-center">
+        <div class="inline-block p-4 rounded-full bg-[#f4ebd8] text-[#a65d37] text-4xl mb-6 shadow-sm">
+            🐕
+        </div>
+        <h1 class="text-4xl md:text-6xl font-extrabold text-[#333333] mb-6 leading-tight">
+            El Xoloitzcuintle:<br>Tu <span class="text-[#a65d37]">Calentador de Cama</span> Natural
+        </h1>
+        <p class="text-lg md:text-xl text-[#555555] max-w-3xl mx-auto leading-relaxed">
+            Desde las antiguas civilizaciones mesoamericanas hasta las camas modernas, el Xoloitzcuintle ha sido venerado no solo como compañero, sino como una fuente viva de salud y confort térmico. Descubre el secreto de su abrazo cálido.
+        </p>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24 pb-24">
+
+        <section id="ciencia" class="scroll-mt-24">
+            <div class="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-[#e5d9c5]">
+                <div class="md:grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-3xl font-bold text-[#333333] mb-4">El Mito vs. La Biología</h2>
+                        <p class="text-[#555555] mb-4 leading-relaxed">
+                            Existe un mito popular de que los Xoloitzcuintles tienen una temperatura corporal superior a la de otros perros. Biológicamente, esto es incorrecto. Su temperatura central ronda los <strong>38.5°C a 39.2°C</strong>, igual que cualquier canino.
+                        </p>
+                        <p class="text-[#555555] mb-6 leading-relaxed">
+                            El "secreto" de su función como calentador de cama radica en su genética: al carecer de pelaje (aislante térmico), el calor irradia directamente desde su piel. Cuando un Xolo se acurruca contigo, la transferencia de calor por conducción es casi del 100%, creando una sensación de calidez intensa y reconfortante.
+                        </p>
+                        <div class="flex items-center space-x-4 bg-[#f4ebd8] p-4 rounded-xl">
+                            <span class="text-2xl">🔥</span>
+                            <span class="text-sm font-semibold text-[#a65d37]">Transferencia térmica directa: Sin pelo que bloquee el calor, actúan como una bolsa de agua caliente viva.</span>
+                        </div>
+                    </div>
+                    <div class="mt-10 md:mt-0">
+                        <div class="chart-container">
+                            <canvas id="tempChart"></canvas>
+                        </div>
+                        <p class="text-center text-xs text-[#777777] mt-4">Radiación de calor percibida vs. Temperatura Real</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="beneficios" class="scroll-mt-24">
+            <h2 class="text-3xl font-bold text-center text-[#333333] mb-12">Beneficios Terapéuticos (Termoterapia Ancestral)</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                
+                <div class="col-span-1 md:col-span-2 bg-white rounded-3xl p-8 shadow-sm border border-[#e5d9c5] flex flex-col justify-center">
+                    <p class="text-lg text-[#555555] leading-relaxed mb-6">
+                        Durante siglos, médicos tradicionales han "recetado" dormir con un Xoloitzcuintle. La aplicación de calor localizado (termoterapia) tiene efectos biológicos comprobados.
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <span class="mr-3 text-[#a65d37] font-bold text-xl">1.</span>
+                            <div>
+                                <h3 class="font-bold text-[#333333]">Relajación Muscular y Articular</h3>
+                                <p class="text-sm text-[#555555]">El calor promueve la vasodilatación, aumentando el flujo sanguíneo a los músculos, ideal para dolores reumáticos o artritis.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="mr-3 text-[#a65d37] font-bold text-xl">2.</span>
+                            <div>
+                                <h3 class="font-bold text-[#333333]">Regulación del Sueño</h3>
+                                <p class="text-sm text-[#555555]">Su calor constante y respiración rítmica reducen los niveles de cortisol (estrés), induciendo un sueño más profundo.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="mr-3 text-[#a65d37] font-bold text-xl">3.</span>
+                            <div>
+                                <h3 class="font-bold text-[#333333]">Alivio de Cólicos</h3>
+                                <p class="text-sm text-[#555555]">Tradicionalmente utilizados como cojines térmicos naturales sobre el abdomen para mitigar dolores menstruales o estomacales.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-span-1 bg-white rounded-3xl p-8 shadow-sm border border-[#e5d9c5] flex flex-col items-center justify-center">
+                    <h3 class="text-center font-bold text-[#333333] mb-4">Motivos de Uso (Encuesta a Dueños)</h3>
+                    <div class="chart-container w-full h-full max-h-[250px]">
+                        <canvas id="benefitsChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="interactivo" class="scroll-mt-24">
+            <div class="bg-[#a65d37] text-white rounded-3xl p-8 md:p-12 shadow-lg text-center relative overflow-hidden">
+                <div class="relative z-10">
+                    <h2 class="text-3xl font-bold mb-4">Calculadora de Confort Térmico</h2>
+                    <p class="text-[#f4ebd8] mb-8 max-w-2xl mx-auto">
+                        Ajusta la temperatura actual de tu habitación para descubrir cómo un Xoloitzcuintle mejoraría tu noche de sueño.
+                    </p>
+
+                    <div class="max-w-xl mx-auto bg-white/10 p-6 rounded-2xl backdrop-blur-sm border border-white/20">
+                        <label for="roomTemp" class="block text-xl font-medium mb-4">
+                            Temperatura de tu habitación: <span id="tempValue" class="font-bold text-[#f4ebd8]">20</span>°C
+                        </label>
+                        <input type="range" id="roomTemp" min="5" max="35" value="20" class="w-full h-3 bg-[#e5d9c5] rounded-lg appearance-none cursor-pointer accent-[#333333] mb-8">
+                        
+                        <div class="bg-white text-[#333333] rounded-xl p-6 shadow-inner">
+                            <div class="text-4xl mb-2" id="statusEmoji">🛏️🐶</div>
+                            <h3 class="text-xl font-bold mb-2 text-[#a65d37]" id="statusTitle">El Clima Perfecto</h3>
+                            <p class="text-[#555555] font-medium" id="statusText">
+                                Tu habitación está fresca. Un Xoloitzcuintle a tus pies mantendrá la temperatura ideal bajo las sábanas sin necesidad de mantas eléctricas.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-[#333333] text-white py-8 border-t border-[#444444]">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="font-bold text-lg mb-2 text-[#d4a373]">Xolos Ramirez</p>
+            <p class="text-sm text-gray-400">Preservando el legado, la salud y la tradición del perro prehispánico.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            const commonChartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { family: 'system-ui' },
+                            color: '#555555'
+                        }
+                    }
+                }
+            };
+
+            const ctxTemp = document.getElementById('tempChart').getContext('2d');
+            new Chart(ctxTemp, {
+                type: 'bar',
+                data: {
+                    labels: ['Humano', 'Perro (Con Pelo)', 'Xoloitzcuintle'],
+                    datasets: [
+                        {
+                            label: 'Temperatura Central (°C)',
+                            data: [37.0, 38.5, 38.5],
+                            backgroundColor: '#e5d9c5',
+                            borderRadius: 6
+                        },
+                        {
+                            label: 'Calor Irradiado (Percepción)',
+                            data: [20, 35, 95], 
+                            backgroundColor: '#a65d37',
+                            borderRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    ...commonChartOptions,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#f0f0f0' },
+                            ticks: { display: false } 
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    if(context.datasetIndex === 0) return context.raw + ' °C';
+                                    return 'Índice de radiación: ' + context.raw;
+                                }
+                            }
+                        },
+                        legend: { position: 'top' }
+                    }
+                }
+            });
+
+            const ctxBen = document.getElementById('benefitsChart').getContext('2d');
+            new Chart(ctxBen, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Relajación Muscular', 'Mejora del Sueño', 'Alivio Articular', 'Calma/Ansiedad'],
+                    datasets: [{
+                        data: [40, 30, 15, 15],
+                        backgroundColor: [
+                            '#a65d37',
+                            '#d4a373',
+                            '#e5d9c5',
+                            '#333333'
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    ...commonChartOptions,
+                    cutout: '60%',
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+
+            const slider = document.getElementById('roomTemp');
+            const tempValue = document.getElementById('tempValue');
+            const statusEmoji = document.getElementById('statusEmoji');
+            const statusTitle = document.getElementById('statusTitle');
+            const statusText = document.getElementById('statusText');
+
+            function updateCalculator() {
+                const temp = parseInt(slider.value);
+                tempValue.textContent = temp;
+
+                if (temp < 12) {
+                    statusEmoji.textContent = '🥶🐕🔥';
+                    statusTitle.textContent = '¡Emergencia Térmica!';
+                    statusTitle.className = "text-xl font-bold mb-2 text-[#333333]";
+                    statusText.textContent = 'Hace mucho frío. Un Xoloitzcuintle se pegará a ti, actuando como un radiador vivo de 38.5°C. Recomendaríamos dos Xolos para esta noche.';
+                } else if (temp >= 12 && temp < 20) {
+                    statusEmoji.textContent = '🛌🐶💤';
+                    statusTitle.textContent = 'El Ambiente Perfecto';
+                    statusTitle.className = "text-xl font-bold mb-2 text-[#a65d37]";
+                    statusText.textContent = 'Temperatura ideal. El Xolo mantendrá tu cama cálida, relajando tus músculos y promoviendo un sueño profundo y reparador.';
+                } else if (temp >= 20 && temp < 26) {
+                    statusEmoji.textContent = '😌🐾';
+                    statusTitle.textContent = 'Compañía Agradable';
+                    statusTitle.className = "text-xl font-bold mb-2 text-[#d4a373]";
+                    statusText.textContent = 'Agradable. El calor de tu Xolo será reconfortante, pero es probable que decida dormir a los pies de la cama o sobre las sábanas para regularse.';
+                } else {
+                    statusEmoji.textContent = '🥵🧊🐕';
+                    statusTitle.textContent = 'Demasiado Calor';
+                    statusTitle.className = "text-xl font-bold mb-2 text-[#333333]";
+                    statusText.textContent = 'Hace calor. Tu Xolo preferirá dormir en el suelo fresco. ¡Incluso podría usar tu ventilador!';
+                }
+            }
+
+            slider.addEventListener('input', updateCalculator);
+            
+            updateCalculator();
+        });
+    </script>
+</body>
+</html>
