@@ -50,3 +50,19 @@ if (navMenu) {
     }
   });
 }
+
+document.addEventListener('click', (event) => {
+  const target = event.target;
+  if (!(target instanceof Element)) return;
+
+  const naturalsLink = target.closest('a[data-gtm^="naturals"]');
+  if (!naturalsLink) return;
+
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: 'click_naturals',
+    element: naturalsLink.dataset.gtm || '',
+    origin: naturalsLink.dataset.gtmOrigin || '',
+    href: naturalsLink.getAttribute('href') || '',
+  });
+});
