@@ -243,16 +243,35 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <article class="puppy-card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
     <div class="puppy-card__image-wrapper">
       <span class="puppy-card__status status-disponible">Disponible</span>
-      <picture>
+      
+      <div style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none;">
+        <style>
+          /* Ocultar barra de scroll para mantener la estética limpia */
+          .puppy-card__image-wrapper div::-webkit-scrollbar { display: none; }
+        </style>
+        
         <img
           src="https://i.imgur.com/SGG6yte.jpeg"
-          alt="Xoloitzcuintle Ozomatli Ramirez"
+          alt="Xoloitzcuintle Ozomatli Ramirez 1"
           class="puppy-card__image"
           loading="lazy"
-          width="600"
-          height="450"
+          style="flex: 0 0 100%; scroll-snap-align: start; object-fit: cover;"
         />
-      </picture>
+        <img
+          src="https://i.imgur.com/e4z2vS9.jpeg"
+          alt="Xoloitzcuintle Ozomatli Ramirez 2"
+          class="puppy-card__image"
+          loading="lazy"
+          style="flex: 0 0 100%; scroll-snap-align: start; object-fit: cover;"
+        />
+        <img
+          src="https://i.imgur.com/zyRGNA6.jpeg"
+          alt="Xoloitzcuintle Ozomatli Ramirez 3"
+          class="puppy-card__image"
+          loading="lazy"
+          style="flex: 0 0 100%; scroll-snap-align: start; object-fit: cover;"
+        />
+      </div>
     </div>
     <div class="puppy-card__content">
       <h3 class="puppy-card__name">Ozomatli Ramirez</h3>
