@@ -291,16 +291,42 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <article class="puppy-card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="300">
     <div class="puppy-card__image-wrapper">
       <span class="puppy-card__status status-disponible">Disponible</span>
-      <picture>
+      
+      <div style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none;">
+        <style>
+          /* Ocultar barra de scroll para mantener la estética limpia */
+          .puppy-card__image-wrapper div::-webkit-scrollbar { display: none; }
+        </style>
+        
         <img
           src="https://i.imgur.com/Pb9YiKo.jpeg"
-          alt="Xoloitzcuintle Nox Ramirez"
+          alt="Xoloitzcuintle Nox Ramirez 1"
           class="puppy-card__image"
           loading="lazy"
-          width="600"
-          height="450"
+          style="flex: 0 0 100%; scroll-snap-align: start; object-fit: cover;"
         />
-      </picture>
+        <img
+          src="https://i.imgur.com/WismZ1k.jpeg"
+          alt="Xoloitzcuintle Nox Ramirez 2"
+          class="puppy-card__image"
+          loading="lazy"
+          style="flex: 0 0 100%; scroll-snap-align: start; object-fit: cover;"
+        />
+        <img
+          src="https://i.imgur.com/RcfZ1h2.jpeg"
+          alt="Xoloitzcuintle Nox Ramirez 3"
+          class="puppy-card__image"
+          loading="lazy"
+          style="flex: 0 0 100%; scroll-snap-align: start; object-fit: cover;"
+        />
+        <img
+          src="https://i.imgur.com/wi4yptD.jpeg"
+          alt="Xoloitzcuintle Nox Ramirez 4"
+          class="puppy-card__image"
+          loading="lazy"
+          style="flex: 0 0 100%; scroll-snap-align: start; object-fit: cover;"
+        />
+      </div>
     </div>
     <div class="puppy-card__content">
       <h3 class="puppy-card__name">Nox Ramirez</h3>
