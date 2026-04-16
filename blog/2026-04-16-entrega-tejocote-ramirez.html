@@ -1,162 +1,452 @@
-import base64
-from weasyprint import HTML
-
-# Content for the blog article in English
-html_content = """
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <style>
-        @page {
-            size: A4;
-            margin: 20mm;
-            background-color: #fdfbf7;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #333;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            background-color: #fdfbf7;
-        }
-        .header {
-            text-align: center;
-            border-bottom: 2px solid #8b4513;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-        .header h1 {
-            color: #8b4513;
-            font-size: 28pt;
-            margin: 0;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        .header p {
-            font-style: italic;
-            color: #666;
-            margin-top: 5px;
-        }
-        .container {
-            max-width: 100%;
-        }
-        h2 {
-            color: #a0522d;
-            border-left: 5px solid #a0522d;
-            padding-left: 15px;
-            font-size: 18pt;
-            margin-top: 30px;
-        }
-        p {
-            font-size: 11pt;
-            text-align: justify;
-        }
-        .highlight-box {
-            background-color: #f4ece4;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 25px 0;
-            border: 1px solid #e0d5c8;
-        }
-        .video-section {
-            text-align: center;
-            margin: 40px 0;
-            padding: 30px;
-            background-color: #222;
-            color: #fff;
-            border-radius: 12px;
-        }
-        .video-placeholder {
-            background-color: #333;
-            height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px dashed #555;
-            margin-bottom: 15px;
-            text-decoration: none;
-            color: #ff0000;
-            font-weight: bold;
-            font-size: 14pt;
-        }
-        .btn-link {
-            background-color: #ff0000;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            display: inline-block;
-            font-weight: bold;
-        }
-        .footer {
-            margin-top: 50px;
-            text-align: center;
-            font-size: 9pt;
-            color: #888;
-            border-top: 1px solid #ddd;
-            padding-top: 20px;
-        }
-        .tag {
-            display: inline-block;
-            background-color: #a0522d;
-            color: white;
-            padding: 3px 10px;
-            border-radius: 15px;
-            font-size: 9pt;
-            margin-right: 5px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Entrega de Tejocote Ramírez en Cancún | Xolos Ramírez</title>
+  <meta name="description" content="Así fue la emotiva entrega de Tejocote Ramírez, cachorro xoloitzcuintle de Xolos Ramírez, en el Aeropuerto Internacional de Cancún rumbo a su nuevo hogar en Playa del Carmen." />
+  <style>
+    :root {
+      --bg: #f6f1e8;
+      --paper: #fffaf2;
+      --ink: #1f1a17;
+      --muted: #6d6258;
+      --gold: #b68b2d;
+      --gold-soft: #e8d3a0;
+      --earth: #7a4b2a;
+      --line: #ddd1c2;
+      --accent: #111111;
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+      --radius: 22px;
+      --max: 980px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Georgia", "Times New Roman", serif;
+      background:
+        radial-gradient(circle at top, rgba(182, 139, 45, 0.08), transparent 30%),
+        linear-gradient(180deg, #f8f4ec 0%, #f4ede2 100%);
+      color: var(--ink);
+      line-height: 1.75;
+    }
+
+    a {
+      color: var(--earth);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .wrap {
+      width: min(100% - 32px, var(--max));
+      margin: 0 auto;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 90px 0 56px;
+      background:
+        linear-gradient(135deg, rgba(17,17,17,0.92), rgba(70,42,20,0.88)),
+        url('https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
+      color: #fff8ef;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255, 215, 130, 0.12), transparent 24%),
+        radial-gradient(circle at 80% 30%, rgba(255,255,255,0.08), transparent 16%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 7px 14px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(4px);
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      margin: 0 0 14px;
+      font-size: clamp(2.3rem, 4vw, 4.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      max-width: 900px;
+    }
+
+    .hero p.lead {
+      margin: 0;
+      max-width: 820px;
+      font-size: 1.12rem;
+      color: rgba(255, 248, 239, 0.9);
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .meta span {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.12);
+      font-size: 0.95rem;
+    }
+
+    .main {
+      padding: 44px 0 80px;
+    }
+
+    .article-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: clamp(24px, 4vw, 46px);
+    }
+
+    .intro {
+      font-size: 1.12rem;
+      color: var(--ink);
+    }
+
+    .dropcap:first-letter {
+      float: left;
+      font-size: 4rem;
+      line-height: 0.9;
+      padding-right: 10px;
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    h2 {
+      margin-top: 42px;
+      margin-bottom: 14px;
+      font-size: clamp(1.6rem, 2.4vw, 2.3rem);
+      line-height: 1.2;
+      color: var(--accent);
+    }
+
+    h3 {
+      margin-top: 28px;
+      margin-bottom: 8px;
+      font-size: 1.2rem;
+      color: var(--earth);
+    }
+
+    p {
+      margin: 0 0 18px;
+      color: var(--ink);
+    }
+
+    .highlight-box {
+      margin: 28px 0;
+      padding: 22px 22px;
+      border-left: 5px solid var(--gold);
+      background: linear-gradient(180deg, #fff8ea, #fff3da);
+      border-radius: 16px;
+      color: #3f2f1f;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 14px;
+      margin: 28px 0 10px;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 16px;
+      padding: 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+    }
+
+    .timeline-item .time {
+      font-weight: 700;
+      color: var(--earth);
+    }
+
+    .timeline-item .desc {
+      color: var(--ink);
+    }
+
+    .quote {
+      margin: 34px 0;
+      padding: 24px 24px 24px 26px;
+      border-left: 5px solid var(--earth);
+      background: #fff;
+      border-radius: 18px;
+      font-size: 1.08rem;
+      color: #302720;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    }
+
+    .media-block {
+      margin: 40px 0;
+      padding: 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      padding-top: 177.77%;
+      overflow: hidden;
+      border-radius: 18px;
+      background: #000;
+    }
+
+    .video-wrap iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .caption {
+      margin-top: 14px;
+      font-size: 0.96rem;
+      color: var(--muted);
+    }
+
+    .closing {
+      margin-top: 36px;
+      padding: 26px;
+      border-radius: 18px;
+      background:
+        linear-gradient(135deg, rgba(182,139,45,0.12), rgba(122,75,42,0.08));
+      border: 1px solid var(--line);
+    }
+
+    .signature {
+      margin-top: 18px;
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    .footer-note {
+      margin-top: 38px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 720px) {
+      .timeline-item {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 72px 0 42px;
+      }
+
+      .article-card {
+        padding: 22px 18px 28px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="header">
-        <h1>XOLOS RAMÍREZ</h1>
-        <p>Preserving the Ancient Legacy of the Mexican Hairless Dog</p>
+  <header class="hero">
+    <div class="wrap">
+      <span class="eyebrow">Xolos Ramírez · Entregas</span>
+      <h1>Entrega de Tejocote Ramírez en Cancún: un nuevo hogar en Playa del Carmen</h1>
+      <p class="lead">
+        Así fue el viaje y la emotiva entrega de <strong>Tejocote Ramírez</strong>, cachorro xoloitzcuintle de
+        <strong>Xolos Ramírez</strong>, en el Aeropuerto Internacional de Cancún, donde fue recibido con alegría
+        por su nueva familia para comenzar una nueva vida en <strong>Playa del Carmen</strong>.
+      </p>
+      <div class="meta">
+        <span>Entrega realizada en Cancún, Quintana Roo</span>
+        <span>Xoloitzcuintle preparado para viajar</span>
+        <span>Nueva vida en Playa del Carmen</span>
+      </div>
     </div>
+  </header>
 
-    <div class="container">
-        <span class="tag">Special Delivery</span>
-        <span class="tag">Service Dog</span>
-        <span class="tag">Cancun & Playa del Carmen</span>
+  <main class="main">
+    <div class="wrap">
+      <article class="article-card">
+        <p class="intro dropcap">
+          Hay entregas que se convierten en momentos profundamente memorables. La llegada de
+          <strong>Tejocote Ramírez</strong> a Cancún fue una de ellas: un viaje preparado paso a paso,
+          con atención, documentación, cuidado y, sobre todo, con el deseo de que este pequeño
+          xoloitzcuintle llegara en perfectas condiciones al encuentro con su nueva familia.
+        </p>
 
-        <h2>A Heartwarming New Beginning: Welcoming Tejocote Ramírez</h2>
-        
-        <p>There is nothing quite like the moment a puppy finds their "forever family." Recently, our team had the pleasure of traveling to the Cancun International Airport for a very special delivery. We were meeting Lola and her husband, residents of beautiful Playa del Carmen, to hand over the newest member of their family: <strong>Tejocote Ramírez</strong>.</p>
-        
-        <p>Tejocote is not just any puppy; he is a registered Service Dog with a temperament that truly exemplifies the best of the Xoloitzcuintle breed. Throughout the journey, he proved why he is perfect for his role. He is calm, attentive, and incredibly affectionate.</p>
+        <p>
+          Desde días antes, Tejocote se encontraba en la recta final de su preparación. Su proceso incluyó
+          sus vacunas correspondientes, organización de documentos, confirmación de vuelo y todos los detalles
+          necesarios para realizar una entrega ordenada y segura. El resultado fue un traslado sereno y exitoso,
+          en el que una vez más se confirmó el temperamento noble, cercano y afectuoso de los xoloitzcuintles
+          criados en <strong>Xolos Ramírez</strong>.
+        </p>
 
         <div class="highlight-box">
-            <strong>The Journey Together:</strong> 
-            "I loved traveling with him on the plane," noted his breeder during the delivery. "He was a dream passenger—constantly cuddling, giving licks, and showing his beautiful personality. He truly loves being close to people."
+          <strong>Tejocote Ramírez</strong> viajó rumbo a Cancún para ser entregado a su nueva familia, que lo recibió
+          con enorme emoción. Su nuevo hogar estará en <strong>Playa del Carmen</strong>, donde continuará su historia
+          rodeado de cariño, compañía y una nueva vida por descubrir.
         </div>
 
-        <h2>Watch the Emotional Delivery</h2>
-        <p>The joy at the airport was palpable. Lola’s face lit up the moment she held Tejocote in her arms. It was a beautiful reminder of why we do what we do at Xolos Ramírez. You can watch the full video of this special encounter below:</p>
+        <h2>La salida: rumbo al aeropuerto</h2>
+        <p>
+          El día del viaje comenzó con esa mezcla de concentración, logística y emoción que acompaña las entregas
+          importantes. Horas antes del vuelo, todo se encontraba listo: la documentación, el seguimiento del itinerario
+          y los últimos cuidados para que Tejocote pudiera trasladarse con tranquilidad.
+        </p>
 
-        <div class="video-section">
-            <div style="margin-bottom: 20px;">
-                <svg width="60" height="60" viewBox="0 0 24 24" fill="#ff0000"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
-            </div>
-            <h3>Tejocote's Delivery in Cancun</h3>
-            <p>Click the button below to watch the video on YouTube Shorts:</p>
-            <a href="https://youtube.com/shorts/-i4d8q0SJcM" class="btn-link">WATCH VIDEO ON YOUTUBE</a>
+        <p>
+          Ya en el aeropuerto, Tejocote mostró algo que se había hecho evidente desde el primer momento:
+          <strong>le gusta ir viendo todo</strong>. En la sala de espera observaba atento cada movimiento,
+          cada persona y cada sonido a su alrededor. Su expresión curiosa, su calma y su capacidad de permanecer
+          sereno en medio del entorno aeroportuario demostraron una personalidad especialmente equilibrada.
+        </p>
+
+        <h2>Un xoloitzcuintle tranquilo, afectuoso y observador</h2>
+        <p>
+          Durante la espera previa al abordaje y a lo largo del trayecto, Tejocote confirmó tener una personalidad
+          muy especial. Se mostró cariñoso, noble y cercano. Fue un compañero de viaje extraordinario, afectuoso
+          durante el vuelo y dispuesto a mantenerse en contacto humano constante, buscando cercanía y confort.
+        </p>
+
+        <p>
+          Ese temperamento tiene un valor enorme. Más allá de la belleza física del xoloitzcuintle, hay algo
+          profundamente importante en su forma de convivir con las personas: su capacidad de vínculo, su sensibilidad,
+          su atención emocional y esa manera tan única de acompañar desde la calma.
+        </p>
+
+        <div class="quote">
+          “Fue un placer viajar con Tejocote. Se mostró afectuoso, cercano y con una personalidad bellísima,
+          confirmando una vez más el gran temperamento que puede desarrollar un xoloitzcuintle cuando ha sido
+          criado con atención, vínculo y socialización.”
         </div>
 
-        <h2>More Than a Pet: A Service Companion</h2>
-        <p>As a service dog, Tejocote is prepared to provide support and companionship. The Xoloitzcuintle breed is known for its high intelligence and sensitivity to human emotions, making them exceptional service animals for those who appreciate their unique heritage and calm energy.</p>
-        
-        <p>We are thrilled to know that Tejocote will be living a life full of sun, beach walks, and endless love in Playa del Carmen. Congratulations to Lola and her husband on their new best friend!</p>
+        <h2>La entrega en el Aeropuerto de Cancún</h2>
+        <p>
+          El momento de la entrega se vivió con gran emoción. En el aeropuerto de Cancún, <strong>Lola y su esposo</strong>
+          recibieron a Tejocote con sonrisas, ternura y evidente felicidad. La escena resumió todo lo que hace
+          especiales estas entregas: el instante en el que un cachorro deja atrás la etapa de preparación y comienza
+          oficialmente su nueva vida con la familia que lo esperaba.
+        </p>
 
-        <div class="footer">
-            <p>&copy; 2026 Xolos Ramírez - Breeding with Love and Tradition</p>
-            <p>Follow us for more updates on our Xolos around the world.</p>
+        <p>
+          Lola lo sostuvo en brazos con alegría y ternura, dándole un beso mientras lo miraba fascinada.
+          Tejocote permaneció tranquilo, cómodo y receptivo, como si entendiera que ese encuentro marcaba el inicio
+          de una nueva historia. También se confirmó frente a cámara que su nuevo hogar estará en
+          <strong>Playa del Carmen</strong>, donde seguirá desarrollando su personalidad y formando un vínculo profundo
+          con su nueva familia.
+        </p>
+
+        <h2>Una entrega que habla del temperamento del xoloitzcuintle</h2>
+        <p>
+          Más allá de la logística del viaje, esta entrega deja ver algo muy importante: el xoloitzcuintle no es solo
+          una raza de enorme presencia histórica y cultural, también es un perro profundamente vinculado a la experiencia
+          humana. En Tejocote se hizo visible esa combinación de atención, ternura, calma y cercanía que tantas personas
+          descubren al convivir con uno.
+        </p>
+
+        <p>
+          Verlo llegar sereno al aeropuerto, esperar con paciencia, observarlo todo con curiosidad y después
+          entregarse con naturalidad a los brazos de su nueva familia, fue una confirmación del trabajo diario que
+          implica criar xoloitzcuintles con contacto, presencia, seguimiento y dedicación.
+        </p>
+
+        <h2>Resumen del proceso de viaje</h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="time">Preparación previa</div>
+            <div class="desc">Vacunas, organización documental, coordinación de vuelo y preparación completa para el traslado.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="time">Aeropuerto</div>
+            <div class="desc">Tejocote esperó tranquilo en sala, observando todo con curiosidad y excelente comportamiento.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="time">Vuelo a Cancún</div>
+            <div class="desc">Trayecto sereno y positivo, con un cachorro afectuoso, cercano y muy noble durante el viaje.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="time">Entrega final</div>
+            <div class="desc">Recepción emotiva por parte de Lola y su esposo en Cancún, con destino final en Playa del Carmen.</div>
+          </div>
         </div>
+
+        <div class="media-block">
+          <h2 style="margin-top: 6px;">Video de la entrega</h2>
+          <div class="video-wrap">
+            <iframe
+              src="https://www.youtube.com/embed/-i4d8q0SJcM"
+              title="Entrega de Tejocote Ramírez en Cancún"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen>
+            </iframe>
+          </div>
+          <p class="caption">
+            Mira el momento en que <strong>Tejocote Ramírez</strong> es recibido por su nueva familia en Cancún.
+            También puedes verlo directamente en YouTube:
+            <a href="https://youtube.com/shorts/-i4d8q0SJcM?si=V2UC48iEyfOBF5LL" target="_blank" rel="noopener noreferrer">
+              ver Short
+            </a>.
+          </p>
+        </div>
+
+        <h2>Un nuevo capítulo para Tejocote Ramírez</h2>
+        <p>
+          La entrega de Tejocote en Cancún representa mucho más que un traslado exitoso. Representa la continuidad
+          de una historia que ahora cambia de escenario: de la crianza y preparación en <strong>Xolos Ramírez</strong>
+          a la construcción de un nuevo vínculo en su hogar de <strong>Playa del Carmen</strong>.
+        </p>
+
+        <p>
+          Cada entrega es distinta, pero todas comparten algo: el momento en que el xoloitzcuintle encuentra a la familia
+          con la que continuará su camino. En este caso, el recibimiento cálido, la emoción visible y la serenidad del
+          propio Tejocote hicieron de esta entrega un recuerdo especialmente bello.
+        </p>
+
+        <div class="closing">
+          <strong>Así fue la entrega de Tejocote Ramírez en Cancún.</strong>
+          Un pequeño xoloitzcuintle observador, noble y amoroso que hoy comienza una nueva vida en Playa del Carmen,
+          llevando consigo el linaje, la presencia y el espíritu vivo del xoloitzcuintle.
+          <div class="signature">Xolos Ramírez · Crianza, cultura y continuidad del xoloitzcuintle.</div>
+        </div>
+
+        <div class="footer-note">
+          Artículo para el blog de <strong>Xolos Ramírez</strong>. Puedes acompañarlo con fotografías del aeropuerto,
+          de la sala de espera, del viaje y del momento exacto de la entrega para enriquecer todavía más la narrativa visual.
+        </div>
+      </article>
     </div>
+  </main>
 </body>
 </html>
-"""
-
-# Generate PDF
-output_pdf_path = "xolos-ramirez-blog-tejocote.pdf"
-HTML(string=html_content).write_pdf(output_pdf_path)
