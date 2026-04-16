@@ -1,0 +1,162 @@
+import base64
+from weasyprint import HTML
+
+# Content for the blog article in English
+html_content = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm;
+            background-color: #fdfbf7;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #fdfbf7;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #8b4513;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #8b4513;
+            font-size: 28pt;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .header p {
+            font-style: italic;
+            color: #666;
+            margin-top: 5px;
+        }
+        .container {
+            max-width: 100%;
+        }
+        h2 {
+            color: #a0522d;
+            border-left: 5px solid #a0522d;
+            padding-left: 15px;
+            font-size: 18pt;
+            margin-top: 30px;
+        }
+        p {
+            font-size: 11pt;
+            text-align: justify;
+        }
+        .highlight-box {
+            background-color: #f4ece4;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+            border: 1px solid #e0d5c8;
+        }
+        .video-section {
+            text-align: center;
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #222;
+            color: #fff;
+            border-radius: 12px;
+        }
+        .video-placeholder {
+            background-color: #333;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #555;
+            margin-bottom: 15px;
+            text-decoration: none;
+            color: #ff0000;
+            font-weight: bold;
+            font-size: 14pt;
+        }
+        .btn-link {
+            background-color: #ff0000;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 9pt;
+            color: #888;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+        .tag {
+            display: inline-block;
+            background-color: #a0522d;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 9pt;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>XOLOS RAMÍREZ</h1>
+        <p>Preserving the Ancient Legacy of the Mexican Hairless Dog</p>
+    </div>
+
+    <div class="container">
+        <span class="tag">Special Delivery</span>
+        <span class="tag">Service Dog</span>
+        <span class="tag">Cancun & Playa del Carmen</span>
+
+        <h2>A Heartwarming New Beginning: Welcoming Tejocote Ramírez</h2>
+        
+        <p>There is nothing quite like the moment a puppy finds their "forever family." Recently, our team had the pleasure of traveling to the Cancun International Airport for a very special delivery. We were meeting Lola and her husband, residents of beautiful Playa del Carmen, to hand over the newest member of their family: <strong>Tejocote Ramírez</strong>.</p>
+        
+        <p>Tejocote is not just any puppy; he is a registered Service Dog with a temperament that truly exemplifies the best of the Xoloitzcuintle breed. Throughout the journey, he proved why he is perfect for his role. He is calm, attentive, and incredibly affectionate.</p>
+
+        <div class="highlight-box">
+            <strong>The Journey Together:</strong> 
+            "I loved traveling with him on the plane," noted his breeder during the delivery. "He was a dream passenger—constantly cuddling, giving licks, and showing his beautiful personality. He truly loves being close to people."
+        </div>
+
+        <h2>Watch the Emotional Delivery</h2>
+        <p>The joy at the airport was palpable. Lola’s face lit up the moment she held Tejocote in her arms. It was a beautiful reminder of why we do what we do at Xolos Ramírez. You can watch the full video of this special encounter below:</p>
+
+        <div class="video-section">
+            <div style="margin-bottom: 20px;">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="#ff0000"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+            </div>
+            <h3>Tejocote's Delivery in Cancun</h3>
+            <p>Click the button below to watch the video on YouTube Shorts:</p>
+            <a href="https://youtube.com/shorts/-i4d8q0SJcM" class="btn-link">WATCH VIDEO ON YOUTUBE</a>
+        </div>
+
+        <h2>More Than a Pet: A Service Companion</h2>
+        <p>As a service dog, Tejocote is prepared to provide support and companionship. The Xoloitzcuintle breed is known for its high intelligence and sensitivity to human emotions, making them exceptional service animals for those who appreciate their unique heritage and calm energy.</p>
+        
+        <p>We are thrilled to know that Tejocote will be living a life full of sun, beach walks, and endless love in Playa del Carmen. Congratulations to Lola and her husband on their new best friend!</p>
+
+        <div class="footer">
+            <p>&copy; 2026 Xolos Ramírez - Breeding with Love and Tradition</p>
+            <p>Follow us for more updates on our Xolos around the world.</p>
+        </div>
+    </div>
+</body>
+</html>
+"""
+
+# Generate PDF
+output_pdf_path = "xolos-ramirez-blog-tejocote.pdf"
+HTML(string=html_content).write_pdf(output_pdf_path)
