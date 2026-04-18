@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teyolia de Guardianía Xoloitzcuintle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Warm Neutrals & Earth Tones (Stone, Amber, Emerald accents to reflect the ancestral and natural connection of the Xoloitzcuintle). -->
+    <!-- Application Structure Plan: The SPA is structured into three main interactive sections to transform the linear text into an engaging journey. 1) 'El Camino Interactivo' uses a progressive disclosure stepper to explain the 5 steps without overwhelming the user. 2) 'Análisis de Perfil' uses a dynamic Radar Chart to visually prove the core rule: "It's not an auction," comparing an ideal candidate vs an auction-mindset candidate. 3) 'Los Pilares' uses interactive flip cards for the 3 key takeaways. This structure prioritizes understanding the *philosophy* first, the *process* second, and the *proof* third. -->
+    <!-- Visualization & Content Choices: 1. Step-by-Step Process -> Goal: Organize & Inform -> Method: Interactive HTML Stepper with dynamic content updates -> Interaction: Clickable steps reveal details -> Justification: Breaks down complex text into digestible chunks. 2. "Not an Auction" Rule -> Goal: Compare & Relationships -> Method: Chart.js Radar Chart -> Interaction: Hover tooltips -> Justification: Visually demonstrates how Community and Home Environment outweigh pure Financial capability. (No SVG/Mermaid used). -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .step-btn.active {
+            background-color: #d97706;
+            color: white;
+            border-color: #d97706;
+            transform: scale(1.05);
+        }
+        .fade-in {
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .flip-card {
+            background-color: transparent;
+            perspective: 1000px;
+            height: 200px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .flip-card-front {
+            background-color: #f5f5f4;
+            color: #292524;
+        }
+        .flip-card-back {
+            background-color: #292524;
+            color: #f5f5f4;
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="bg-stone-100 text-stone-800 font-sans antialiased selection:bg-amber-200 selection:text-amber-900">
+
+    <header class="bg-stone-900 text-stone-50 py-20 px-6 text-center border-b-8 border-amber-600">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-6xl mb-6">🐕</div>
+            <h1 class="text-4xl md:text-5xl font-serif font-bold mb-6 text-amber-500 tracking-wide">Teyolia de Guardianía</h1>
+            <h2 class="text-2xl md:text-3xl font-light mb-8">El Linaje Xoloitzcuintle</h2>
+            <p class="text-lg md:text-xl text-stone-300 max-w-2xl mx-auto leading-relaxed">
+                Piensa en este proceso no como una tienda donde "compras" una mascota, sino como un <strong class="text-amber-400">camino de adopción curada</strong>, donde la tecnología, tu comunidad y el criadero se unen para asegurar que el cachorro llegue al mejor hogar posible.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12">
+
+        <section class="mb-20">
+            <div class="text-center mb-10">
+                <h3 class="text-3xl font-serif font-bold text-stone-800 mb-4">🐾 El Camino de la Teyolia</h3>
+                <p class="text-stone-600 max-w-2xl mx-auto">
+                    Explora paso a paso cómo funciona nuestro modelo transparente de asignación de cachorros. Selecciona cada etapa a continuación para descubrir las acciones requeridas y la filosofía detrás de cada una.
+                </p>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-8 items-start">
+                <div class="w-full lg:w-1/3 flex lg:flex-col overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 gap-3 border-b lg:border-b-0 lg:border-r border-stone-300 pr-0 lg:pr-6 snap-x">
+                    <button class="step-btn active flex-shrink-0 snap-center text-left px-5 py-4 rounded-xl border-2 border-stone-300 bg-white font-medium text-stone-600 transition-all duration-300 hover:border-amber-500 shadow-sm" data-step="1">
+                        <span class="block text-xs uppercase tracking-wider mb-1 text-stone-400">Paso 1</span>
+                        El Llamado
+                    </button>
+                    <button class="step-btn flex-shrink-0 snap-center text-left px-5 py-4 rounded-xl border-2 border-stone-300 bg-white font-medium text-stone-600 transition-all duration-300 hover:border-amber-500 shadow-sm" data-step="2">
+                        <span class="block text-xs uppercase tracking-wider mb-1 text-stone-400">Paso 2</span>
+                        La Preparación
+                    </button>
+                    <button class="step-btn flex-shrink-0 snap-center text-left px-5 py-4 rounded-xl border-2 border-stone-300 bg-white font-medium text-stone-600 transition-all duration-300 hover:border-amber-500 shadow-sm" data-step="3">
+                        <span class="block text-xs uppercase tracking-wider mb-1 text-stone-400">Paso 3</span>
+                        El Compromiso
+                    </button>
+                    <button class="step-btn flex-shrink-0 snap-center text-left px-5 py-4 rounded-xl border-2 border-stone-300 bg-white font-medium text-stone-600 transition-all duration-300 hover:border-amber-500 shadow-sm" data-step="4">
+                        <span class="block text-xs uppercase tracking-wider mb-1 text-stone-400">Paso 4</span>
+                        La Tribu
+                    </button>
+                    <button class="step-btn flex-shrink-0 snap-center text-left px-5 py-4 rounded-xl border-2 border-stone-300 bg-white font-medium text-stone-600 transition-all duration-300 hover:border-amber-500 shadow-sm" data-step="5">
+                        <span class="block text-xs uppercase tracking-wider mb-1 text-stone-400">Paso 5</span>
+                        La Decisión
+                    </button>
+                </div>
+
+                <div class="w-full lg:w-2/3 bg-white p-8 md:p-10 rounded-2xl shadow-lg border border-stone-200 min-h-[400px] flex items-center">
+                    <div id="step-content-container" class="w-full fade-in">
+                        <h4 id="step-title" class="text-3xl font-serif font-bold text-amber-600 mb-6 border-b pb-4 border-stone-100">Paso 1: El Llamado (Conocer y Postularse)</h4>
+                        
+                        <div class="mb-6">
+                            <h5 class="text-sm uppercase tracking-widest text-stone-400 font-bold mb-2">¿Qué pasa aquí?</h5>
+                            <p id="step-what" class="text-lg text-stone-700 leading-relaxed">Se publica la campaña de un cachorro de linaje específico. Conoces su nombre, su historia, su personalidad y la meta de la campaña.</p>
+                        </div>
+                        
+                        <div class="mb-6 bg-stone-50 p-6 rounded-xl border-l-4 border-stone-800">
+                            <h5 class="text-sm uppercase tracking-widest text-stone-800 font-bold mb-2 flex items-center">Tu Acción</h5>
+                            <p id="step-action" class="text-stone-700">Si sientes que eres el hogar ideal, te postulas formalmente. Llenas un perfil explicando tus motivos, tu estilo de vida y por qué quieres ser el guardián de este ser vivo.</p>
+                        </div>
+                        
+                        <div class="bg-amber-50 p-6 rounded-xl border border-amber-200">
+                            <h5 class="text-sm uppercase tracking-widest text-amber-800 font-bold mb-2 flex items-center">
+                                <span class="mr-2 text-xl">💡</span> Regla de Oro / Didáctico
+                            </h5>
+                            <p id="step-rule" class="text-amber-900 font-medium">Aquí entiendes que esto NO es una subasta. No gana el que ponga más dinero sobre la mesa.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-20 bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-stone-200">
+            <div class="text-center mb-10">
+                <h3 class="text-3xl font-serif font-bold text-stone-800 mb-4">Evaluación de Perfiles: ¿Por qué no es una subasta?</h3>
+                <p class="text-stone-600 max-w-3xl mx-auto">
+                    El gráfico interactivo a continuación demuestra cómo el sistema de Teyolia valora las postulaciones. Compara un perfil enfocado únicamente en lo económico ("Subastador") con el perfil ideal ("Guardián de la Tribu"). Observa cómo el respaldo comunitario y la idoneidad del hogar superan a la capacidad financiera.
+                </p>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="profileChart"></canvas>
+            </div>
+            
+            <div class="mt-8 text-center text-sm text-stone-500 bg-stone-50 p-4 rounded-lg inline-block mx-auto max-w-2xl">
+                <strong>Análisis:</strong> El "Pledge" o depósito financiero es solo un requisito de entrada (Compromiso). La decisión final humana (Paso 5) se basa fuertemente en el <em>Proof of Community</em> (OP_RETURN) y las condiciones del entorno del aspirante.
+            </div>
+        </section>
+
+        <section class="mb-16">
+            <div class="text-center mb-10">
+                <h3 class="text-3xl font-serif font-bold text-stone-800 mb-4">📌 En Resumen</h3>
+                <p class="text-stone-600">Los tres pilares fundamentales para llevar.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front border-t-4 border-red-500">
+                            <div class="text-4xl mb-3">⚖️</div>
+                            <h4 class="text-xl font-bold">No es una subasta</h4>
+                            <p class="text-sm mt-2 text-stone-500">Pasa el cursor para ver detalles</p>
+                        </div>
+                        <div class="flip-card-back">
+                            <p class="text-base leading-relaxed">El dinero te permite participar y demostrar compromiso, pero <strong>no "compra" automáticamente</strong> al perro.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front border-t-4 border-emerald-500">
+                            <div class="text-4xl mb-3">🤝</div>
+                            <h4 class="text-xl font-bold">Es comunitario</h4>
+                            <p class="text-sm mt-2 text-stone-500">Pasa el cursor para ver detalles</p>
+                        </div>
+                        <div class="flip-card-back">
+                            <p class="text-base leading-relaxed">Tu familia y amigos te ayudan a ganar <strong>"puntos de confianza"</strong> dejando mensajes públicos de apoyo (OP_RETURN).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front border-t-4 border-amber-500">
+                            <div class="text-4xl mb-3">🏛️</div>
+                            <h4 class="text-xl font-bold">Es curado</h4>
+                            <p class="text-sm mt-2 text-stone-500">Pasa el cursor para ver detalles</p>
+                        </div>
+                        <div class="flip-card-back">
+                            <p class="text-base leading-relaxed">La palabra final siempre la tiene el criadero (<strong>Xolos Ramírez</strong>) basándose en quién es realmente idóneo para preservar el linaje.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="border-t border-stone-300 pt-10">
+            <h4 class="text-lg font-bold text-stone-800 mb-4 flex items-center justify-center">
+                <span class="mr-2">🔗</span> Referencias Técnicas y Recursos
+            </h4>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="https://xolosramirez.com/blog/teyolia-guardiania-xoloitzcuintle-tutorial.html" target="_blank" class="px-4 py-2 bg-stone-200 text-stone-700 rounded-lg text-sm hover:bg-stone-300 transition-colors">Tutorial Oficial Teyolia</a>
+                <a href="https://github.com/xolosArmy/xolosramirez.git" target="_blank" class="px-4 py-2 bg-stone-200 text-stone-700 rounded-lg text-sm hover:bg-stone-300 transition-colors">Repo: Xolos Ramírez</a>
+                <a href="https://github.com/xolosArmy/RMZWallet.git" target="_blank" class="px-4 py-2 bg-stone-200 text-stone-700 rounded-lg text-sm hover:bg-stone-300 transition-colors">Repo: RMZWallet</a>
+                <a href="https://github.com/xolosArmy/ecash-flipstarter.git" target="_blank" class="px-4 py-2 bg-stone-200 text-stone-700 rounded-lg text-sm hover:bg-stone-300 transition-colors">Repo: eCash Flipstarter</a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-900 text-stone-400 py-8 text-center text-sm">
+        <p>© Plataforma Descentralizada de Adopción Teyolia. Basado en el modelo de Xolos Ramírez.</p>
+    </footer>
+
+    <script>
+        const stepsData = {
+            "1": {
+                title: "Paso 1: El Llamado (Conocer y Postularse)",
+                what: "Se publica la campaña de un cachorro de linaje específico. Conoces su nombre, su historia, su personalidad y la meta de la campaña.",
+                action: "Si sientes que eres el hogar ideal, te postulas formalmente. Llenas un perfil explicando tus motivos, tu estilo de vida y por qué quieres ser el guardián de este ser vivo.",
+                rule: "Aquí entiendes que esto NO es una subasta. No gana el que ponga más dinero sobre la mesa."
+            },
+            "2": {
+                title: "Paso 2: La Preparación (Tonalli Wallet)",
+                what: "Como el proceso es 100% transparente y público, se usa una herramienta digital.",
+                action: "Descargas e instalas tu Tonalli Wallet (una billetera digital muy sencilla de usar) y adquieres un poco de eCash (XEC), que es el saldo que utiliza esta plataforma.",
+                rule: "Míralo simplemente como descargar una app para recargar saldo. No necesitas saber de inversiones ni de 'trading'; es solo el vehículo transparente para participar."
+            },
+            "3": {
+                title: "Paso 3: El Compromiso (El 'Pledge')",
+                what: "Demuestras que tu interés es real y serio mediante el uso de la tecnología instalada en el paso anterior.",
+                action: "Entras a la plataforma web de la Teyolia, conectas tu Tonalli Wallet y haces un Pledge (un depósito de seriedad o aportación a la campaña).",
+                rule: "Este depósito te convierte oficialmente en un Aspirante a Guardián. Si al final deciden que otro hogar es mejor, las reglas te dirán qué pasa con tu depósito (ej. devolución)."
+            },
+            "4": {
+                title: "Paso 4: La Tribu (Proof of Community)",
+                what: "Es la parte más hermosa del proceso. No estás solo; tu entorno te respalda públicamente en el registro.",
+                action: "Invitas a tus amigos, familiares o comunidad a apoyarte. Ellos hacen pequeñas aportaciones usando una función técnica llamada OP_RETURN.",
+                rule: "El OP_RETURN es una dedicatoria digital. Tus amigos mandan un donativo simbólico con un mensaje ('Apoyo a Ana...'). Demuestra que eres confiable, avalado por tu tribu."
+            },
+            "5": {
+                title: "Paso 5: La Decisión (Validación Humana)",
+                what: "La campaña llega a su meta. Hay varios aspirantes, todos con su depósito hecho y con mensajes de apoyo de sus amigos.",
+                action: "Xolos Ramírez revisa todo. Leen perfiles, ven quién tiene respaldo real de su comunidad, evalúan las condiciones de vida y toman la decisión final.",
+                rule: "El dinero sostuvo la campaña, la tecnología dio transparencia, pero la decisión la toma un humano pensando estrictamente en el bienestar del cachorro."
+            }
+        };
+
+        const buttons = document.querySelectorAll('.step-btn');
+        const contentContainer = document.getElementById('step-content-container');
+        const titleEl = document.getElementById('step-title');
+        const whatEl = document.getElementById('step-what');
+        const actionEl = document.getElementById('step-action');
+        const ruleEl = document.getElementById('step-rule');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                buttons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                contentContainer.classList.remove('fade-in');
+                void contentContainer.offsetWidth;
+                
+                const step = this.getAttribute('data-step');
+                const data = stepsData[step];
+                
+                titleEl.textContent = data.title;
+                whatEl.textContent = data.what;
+                actionEl.textContent = data.action;
+                ruleEl.textContent = data.rule;
+                
+                contentContainer.classList.add('fade-in');
+            });
+        });
+
+        const ctx = document.getElementById('profileChart').getContext('2d');
+        const profileChart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: [
+                    'Aporte Financiero (Pledge)',
+                    'Respaldo de Tribu (OP_RETURN)',
+                    'Condiciones del Hogar',
+                    'Compromiso de Crianza',
+                    'Aceptación del Criadero'
+                ],
+                datasets: [
+                    {
+                        label: 'Perfil "Subastador" (Rechazado)',
+                        data: [100, 20, 50, 40, 10],
+                        backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                        borderColor: 'rgba(239, 68, 68, 1)',
+                        pointBackgroundColor: 'rgba(239, 68, 68, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(239, 68, 68, 1)'
+                    },
+                    {
+                        label: 'Perfil "Guardián Ideal" (Seleccionado)',
+                        data: [60, 95, 100, 90, 100],
+                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                        borderColor: 'rgba(16, 185, 129, 1)',
+                        pointBackgroundColor: 'rgba(16, 185, 129, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(16, 185, 129, 1)'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        },
+                        pointLabels: {
+                            font: {
+                                size: 12,
+                                family: "'Inter', sans-serif"
+                            },
+                            color: '#444'
+                        },
+                        ticks: {
+                            display: false,
+                            min: 0,
+                            max: 100
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                family: "'Inter', sans-serif"
+                            },
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.raw + ' pts';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
