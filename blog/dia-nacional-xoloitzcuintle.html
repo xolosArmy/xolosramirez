@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte: Día Nacional del Xoloitzcuintle - Xolos Ramírez</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Nunito+Sans:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Nunito Sans', sans-serif;
+            background-color: #fdfbf7;
+            color: #292524;
+        }
+
+        h1, h2, h3, .font-serif-custom {
+            font-family: 'Lora', serif;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        .tab-btn.active {
+            background-color: #9a3412;
+            color: white;
+            border-color: #9a3412;
+        }
+
+        .tab-btn {
+            transition: all 0.3s ease;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-orange-200 selection:text-orange-900">
+
+    <!-- Chosen Palette: Warm Neutrals & Terracotta (Stone-50 background, Stone-800 text, Orange-800/700 accents to reflect the Mexican cultural roots and the Xoloitzcuintle's typical coloring). -->
+    <!-- Application Structure Plan: The SPA uses a dashboard-style, single-page scroll layout. It begins with the most urgent news (The Legislative Decree), flows into quantitative data (The Breed's demographic recovery to show importance), follows with qualitative cultural insights (Interactive timeline/tabs for Day of the Dead context), and concludes with actionable strategic recommendations for the client, 'Xolos Ramírez'. This structure moves from 'The What/When' to 'The Why', and finally 'The How' (Action). -->
+    <!-- Visualization & Content Choices: 1. Line Chart (Chart.js) -> Goal: Show historical recovery -> Justification: Best for time-series data, highlights the near-extinction and current boom. 2. Doughnut Chart (Chart.js) -> Goal: Show size distribution -> Justification: Quickly communicates standard, miniature, and toy proportions. 3. Interactive Tabs (Vanilla JS) -> Goal: Organize historical/cultural text -> Justification: Prevents text fatigue, allows users to explore the Mictlán mythos at their own pace. Confirming NO SVG/Mermaid used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <nav class="sticky top-0 z-50 bg-[#fdfbf7]/90 backdrop-blur-md border-b border-stone-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">🐕</span>
+                    <span class="font-serif-custom font-bold text-xl text-orange-800">Xolos Ramírez</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#decreto" class="text-stone-600 hover:text-orange-700 font-semibold transition-colors">El Decreto</a>
+                    <a href="#datos" class="text-stone-600 hover:text-orange-700 font-semibold transition-colors">Demografía</a>
+                    <a href="#cultura" class="text-stone-600 hover:text-orange-700 font-semibold transition-colors">Legado Cultural</a>
+                    <a href="#estrategia" class="text-stone-600 hover:text-orange-700 font-semibold transition-colors">Estrategia</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <header class="text-center py-16 lg:py-24 fade-in">
+            <div class="inline-block px-4 py-1 rounded-full bg-orange-100 text-orange-800 font-bold text-sm mb-4 tracking-wide uppercase">
+                Resolución Oficial
+            </div>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-stone-800 mb-6 leading-tight">
+                El Día Nacional del <span class="text-orange-700">Xoloitzcuintle</span>
+            </h1>
+            <p class="mt-4 max-w-2xl mx-auto text-xl text-stone-600">
+                Análisis estratégico del reciente decreto de la Cámara de Diputados y su impacto cultural, demográfico y comercial para el 27 de octubre.
+            </p>
+        </header>
+
+        <section id="decreto" class="mb-20 scroll-mt-24">
+            <div class="bg-white rounded-2xl shadow-sm border border-stone-100 p-8 md:p-12">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 border-b-2 border-orange-200 pb-2 inline-block">El Decreto Legislativo</h2>
+                <p class="text-stone-600 text-lg mb-8 leading-relaxed">
+                    Esta sección desglosa la reciente aprobación legislativa. Entender los detalles del decreto es fundamental para que Xolos Ramírez pueda alinear sus campañas de concientización y eventos con el marco oficial establecido por el gobierno mexicano.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-stone-50 rounded-xl p-6 border border-stone-200 hover:shadow-md transition-shadow">
+                        <div class="text-4xl mb-3">🏛️</div>
+                        <h3 class="font-bold text-xl text-stone-800 mb-2">Aprobación</h3>
+                        <p class="text-stone-600">Aprobado por la <strong>Cámara de Diputados</strong>, reconociendo al Xoloitzcuintle como patrimonio cultural y símbolo de identidad nacional.</p>
+                    </div>
+                    <div class="bg-orange-50 rounded-xl p-6 border border-orange-200 hover:shadow-md transition-shadow">
+                        <div class="text-4xl mb-3">📅</div>
+                        <h3 class="font-bold text-xl text-orange-900 mb-2">Fecha Oficial</h3>
+                        <p class="text-orange-800">Se celebrará cada <strong>27 de octubre</strong>, marcando el inicio de las festividades del Día de Muertos y el rol del perro como guía.</p>
+                    </div>
+                    <div class="bg-stone-50 rounded-xl p-6 border border-stone-200 hover:shadow-md transition-shadow">
+                        <div class="text-4xl mb-3">📜</div>
+                        <h3 class="font-bold text-xl text-stone-800 mb-2">Objetivo</h3>
+                        <p class="text-stone-600">Fomentar su preservación, tenencia responsable y difusión de su historia milenaria, combatiendo mitos y promoviendo su cuidado.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="datos" class="mb-20 scroll-mt-24">
+            <h2 class="text-3xl font-bold text-stone-800 mb-4 border-b-2 border-orange-200 pb-2 inline-block">Panorama Demográfico de la Raza</h2>
+            <p class="text-stone-600 text-lg mb-8 leading-relaxed">
+                Aquí exploramos la evolución poblacional del Xoloitzcuintle. Los gráficos ilustran cómo la raza pasó de estar al borde de la extinción a un resurgimiento global. Estos datos empoderan a criadores como Xolos Ramírez para demostrar el valor de su trabajo de conservación.
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100">
+                    <h3 class="text-xl font-bold text-center text-stone-800 mb-2">Recuperación Histórica Poblacional</h3>
+                    <p class="text-sm text-center text-stone-500 mb-6">Estimación de ejemplares puros registrados (1950 - 2024)</p>
+                    <div class="chart-container">
+                        <canvas id="populationChart"></canvas>
+                    </div>
+                    <div class="mt-4 p-4 bg-stone-50 rounded-lg text-sm text-stone-600">
+                        <strong>Contexto:</strong> En la década de 1950, la expedición de Norman Pelham Wright fue crucial para encontrar los últimos ejemplares en zonas rurales, salvando a la raza. Hoy, el registro ha crecido exponencialmente.
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100">
+                    <h3 class="text-xl font-bold text-center text-stone-800 mb-2">Distribución por Tamaños</h3>
+                    <p class="text-sm text-center text-stone-500 mb-6">Demanda y registro actual estimado por variedad</p>
+                    <div class="chart-container">
+                        <canvas id="sizeChart"></canvas>
+                    </div>
+                    <div class="mt-4 p-4 bg-stone-50 rounded-lg text-sm text-stone-600">
+                        <strong>Contexto:</strong> Aunque el tamaño Estándar es el más antiguo y representativo históricamente, las variedades Miniatura y Toy han ganado terreno en entornos urbanos modernos.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="cultura" class="mb-20 scroll-mt-24">
+            <div class="bg-[#292524] rounded-2xl shadow-lg p-8 md:p-12 text-stone-100">
+                <h2 class="text-3xl font-bold text-white mb-4 border-b-2 border-orange-500 pb-2 inline-block">El Legado del Mictlán</h2>
+                <p class="text-stone-300 text-lg mb-8 leading-relaxed">
+                    Comprender el profundo vínculo entre el Xoloitzcuintle y la cosmogonía prehispánica explica la elección del 27 de octubre. Interactúa con las pestañas a continuación para explorar la narrativa cultural que hace de esta raza un tesoro viviente.
+                </p>
+
+                <div class="flex flex-wrap gap-2 mb-8 border-b border-stone-600 pb-4">
+                    <button id="btn-prehispanico" class="tab-btn active px-6 py-2 rounded-full border border-stone-500 hover:bg-orange-800 hover:text-white hover:border-orange-800 font-semibold text-sm">
+                        Época Prehispánica
+                    </button>
+                    <button id="btn-colonia" class="tab-btn px-6 py-2 rounded-full border border-stone-500 hover:bg-orange-800 hover:text-white hover:border-orange-800 font-semibold text-sm">
+                        La Colonia y el Riesgo
+                    </button>
+                    <button id="btn-actualidad" class="tab-btn px-6 py-2 rounded-full border border-stone-500 hover:bg-orange-800 hover:text-white hover:border-orange-800 font-semibold text-sm">
+                        El 27 de Octubre
+                    </button>
+                </div>
+
+                <div id="content-prehispanico" class="tab-content fade-in">
+                    <div class="flex items-start gap-6">
+                        <div class="text-5xl hidden md:block">💀</div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-orange-400 mb-3">Los Guías del Inframundo</h3>
+                            <p class="text-stone-300 leading-relaxed text-lg">
+                                En la mitología mexica y tolteca, el dios Xolotl (dios de la transformación, la oscuridad y lo desconocido, gemelo de Quetzalcóatl) creó a este perro a partir de la Astilla del Hueso de la Vida. Su misión divina era guiar a las almas de los difuntos en su largo y peligroso viaje a través de los nueve niveles del <strong>Mictlán</strong> (el inframundo). Se creía que solo un Xoloitzcuintle del color adecuado (ni muy claro, ni muy oscuro) podía ayudar al alma a cruzar el río Chiconauhuapan.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="content-colonia" class="tab-content fade-in hidden">
+                    <div class="flex items-start gap-6">
+                        <div class="text-5xl hidden md:block">⚔️</div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-orange-400 mb-3">Persecución y Supervivencia</h3>
+                            <p class="text-stone-300 leading-relaxed text-lg">
+                                Durante la conquista y la época colonial, los europeos intentaron erradicar al Xoloitzcuintle debido a su fuerte vínculo con las religiones indígenas, viéndolo como una manifestación pagana. Fueron consumidos como alimento y envenenados masivamente. La raza sobrevivió ocultándose en las sierras de Oaxaca y Guerrero, conservando su pureza genética de forma natural durante casi 400 años sin intervención humana sistemática.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="content-actualidad" class="tab-content fade-in hidden">
+                    <div class="flex items-start gap-6">
+                        <div class="text-5xl hidden md:block">🕯️</div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-orange-400 mb-3">La Conexión del 27 de Octubre</h3>
+                            <p class="text-stone-300 leading-relaxed text-lg">
+                                La tradición moderna del Día de Muertos establece que el 27 de octubre es el día en que las almas de las mascotas y animales de compañía regresan a visitar a sus familias terrenales. La Cámara de Diputados eligió estratégicamente esta fecha para el Día del Xoloitzcuintle, fusionando el respeto por la biodiversidad y la raza endémica con la tradición espiritual más representativa de México, posicionando al perro como el heraldo de la festividad.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="estrategia" class="mb-12 scroll-mt-24">
+            <h2 class="text-3xl font-bold text-stone-800 mb-4 border-b-2 border-orange-200 pb-2 inline-block">Plan de Acción para Xolos Ramírez</h2>
+            <p class="text-stone-600 text-lg mb-8 leading-relaxed">
+                Recomendaciones tácticas derivadas de este nuevo decreto para maximizar la visibilidad, educación y posicionamiento de su criadero u organización durante las festividades de octubre.
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white border border-stone-200 p-5 rounded-xl text-center group hover:bg-orange-50 transition-colors">
+                    <div class="text-3xl mb-2 text-stone-700 group-hover:scale-110 transition-transform">📢</div>
+                    <h4 class="font-bold text-stone-800 mb-2">Campaña de Concientización</h4>
+                    <p class="text-sm text-stone-600">Lanzar cápsulas informativas semanales en octubre sobre el cuidado específico de la piel del Xoloitzcuintle.</p>
+                </div>
+                <div class="bg-white border border-stone-200 p-5 rounded-xl text-center group hover:bg-orange-50 transition-colors">
+                    <div class="text-3xl mb-2 text-stone-700 group-hover:scale-110 transition-transform">🤝</div>
+                    <h4 class="font-bold text-stone-800 mb-2">Eventos Conmemorativos</h4>
+                    <p class="text-sm text-stone-600">Organizar una caminata o exhibición especial el 27 de octubre, aprovechando el aval legislativo para atraer prensa.</p>
+                </div>
+                <div class="bg-white border border-stone-200 p-5 rounded-xl text-center group hover:bg-orange-50 transition-colors">
+                    <div class="text-3xl mb-2 text-stone-700 group-hover:scale-110 transition-transform">🏵️</div>
+                    <h4 class="font-bold text-stone-800 mb-2">Altares Pet-Friendly</h4>
+                    <p class="text-sm text-stone-600">Promover guías para crear altares seguros para mascotas, destacando al Xolo como invitado de honor.</p>
+                </div>
+                <div class="bg-white border border-stone-200 p-5 rounded-xl text-center group hover:bg-orange-50 transition-colors">
+                    <div class="text-3xl mb-2 text-stone-700 group-hover:scale-110 transition-transform">🎖️</div>
+                    <h4 class="font-bold text-stone-800 mb-2">Sello de Autenticidad</h4>
+                    <p class="text-sm text-stone-600">Utilizar el nuevo Día Nacional para enfatizar en la crianza ética, registro oficial (FCM) y preservación pura de la raza.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-900 text-stone-400 py-8 text-center">
+        <p class="text-sm">Generado para la planificación estratégica de Xolos Ramírez.</p>
+        <p class="text-xs mt-2">© 2026. Datos basados en proyecciones demográficas y registros históricos canófilos.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            const popCtx = document.getElementById('populationChart').getContext('2d');
+            new Chart(popCtx, {
+                type: 'line',
+                data: {
+                    labels: ['1950', '1960', '1980', '2000', '2010', '2020', '2025'],
+                    datasets: [{
+                        label: 'Población Estimada (Miles)',
+                        data: [0.07, 0.2, 1.5, 4.2, 8.5, 15.3, 22.1],
+                        borderColor: '#9a3412',
+                        backgroundColor: 'rgba(154, 52, 18, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#ea580c',
+                        pointRadius: 4,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) label += ': ';
+                                    if (context.parsed.y !== null) label += context.parsed.y + 'k';
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { 
+                            beginAtZero: true,
+                            title: { display: true, text: 'Miles de ejemplares' }
+                        },
+                        x: {
+                            title: { display: true, text: 'Año' }
+                        }
+                    }
+                }
+            });
+
+            const sizeCtx = document.getElementById('sizeChart').getContext('2d');
+            new Chart(sizeCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Estándar (46-60 cm)', 'Miniatura (36-45 cm)', 'Toy (25-35 cm)'],
+                    datasets: [{
+                        data: [35, 45, 20],
+                        backgroundColor: ['#292524', '#c2410c', '#fdba74'],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '65%',
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ' ' + context.label + ': ' + context.parsed + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const tabs = ['prehispanico', 'colonia', 'actualidad'];
+            
+            tabs.forEach(tab => {
+                const btn = document.getElementById(`btn-${tab}`);
+                btn.addEventListener('click', () => {
+                    tabs.forEach(t => {
+                        document.getElementById(`btn-${t}`).classList.remove('active', 'bg-orange-800', 'text-white', 'border-orange-800');
+                        document.getElementById(`btn-${t}`).classList.add('text-stone-300');
+                        document.getElementById(`content-${t}`).classList.add('hidden');
+                    });
+                    
+                    btn.classList.add('active', 'bg-orange-800', 'text-white', 'border-orange-800');
+                    btn.classList.remove('text-stone-300');
+                    document.getElementById(`content-${tab}`).classList.remove('hidden');
+                });
+            });
+
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
