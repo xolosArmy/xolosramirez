@@ -16,13 +16,212 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="stylesheet" href="css/styles.css" />
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="assets/xolosramirez.ico" />
+
+    <style>
+      /* Estilos aislados para la app de El Camino de la Guardianía */
+      .camino-guardiania-section {
+          --panel-bg: #1e1e1e;
+          --text-muted: #888888;
+          --border-color: #333333;
+          --app-text-main: #e0e0e0;
+          display: flex;
+          justify-content: center;
+          padding: 2rem 1rem;
+      }
+
+      .app-container {
+          max-width: 850px;
+          width: 100%;
+          background-color: var(--panel-bg);
+          border-radius: 12px;
+          box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+          border: 1px solid var(--border-color);
+          overflow: hidden;
+          font-family: 'Georgia', serif;
+          color: var(--app-text-main);
+          line-height: 1.6;
+      }
+
+      .app-container * {
+          box-sizing: border-box;
+      }
+
+      .app-container .header {
+          text-align: center;
+          padding: 40px 20px;
+          background-color: #151515;
+          border-bottom: 2px solid var(--accent-color);
+      }
+
+      .app-container .header h2 {
+          color: var(--accent-color);
+          font-weight: 300;
+          font-size: 2em;
+          letter-spacing: 2px;
+          margin-bottom: 10px;
+          margin-top: 0;
+      }
+
+      .app-container .header p {
+          color: var(--text-muted);
+          font-size: 1.1em;
+          font-family: 'Arial', sans-serif;
+          margin: 0;
+      }
+
+      .app-container .stepper {
+          display: flex;
+          justify-content: space-between;
+          padding: 20px 40px;
+          background-color: #1a1a1a;
+          border-bottom: 1px solid var(--border-color);
+          font-family: 'Arial', sans-serif;
+      }
+
+      .app-container .step-indicator {
+          flex: 1;
+          text-align: center;
+          color: var(--text-muted);
+          font-size: 0.85em;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          position: relative;
+          transition: color 0.3s;
+      }
+
+      .app-container .step-indicator::after {
+          content: '';
+          display: block;
+          width: 10px;
+          height: 10px;
+          background-color: var(--text-muted);
+          border-radius: 50%;
+          margin: 10px auto 0;
+          transition: background-color 0.3s, box-shadow 0.3s;
+      }
+
+      .app-container .step-indicator.active {
+          color: var(--accent-color);
+          font-weight: bold;
+      }
+
+      .app-container .step-indicator.active::after {
+          background-color: var(--accent-color);
+          box-shadow: 0 0 10px var(--accent-color);
+      }
+
+      .app-container .step-content {
+          display: none;
+          padding: 40px;
+          animation: appFadeIn 0.6s ease-in-out;
+      }
+
+      .app-container .step-content.active {
+          display: block;
+      }
+
+      .app-container .step-content h3 {
+          color: var(--accent-color);
+          margin-bottom: 20px;
+          margin-top: 0;
+          font-weight: normal;
+          font-size: 1.5em;
+      }
+
+      .app-container .step-content p {
+          margin-bottom: 15px;
+          font-size: 1.1em;
+      }
+
+      .app-container .highlight-box {
+          background-color: rgba(212, 175, 55, 0.1);
+          border-left: 4px solid var(--accent-color);
+          padding: 15px 20px;
+          margin: 20px 0;
+          font-family: 'Arial', sans-serif;
+          font-size: 0.95em;
+      }
+
+      .app-container .btn-container {
+          display: flex;
+          justify-content: space-between;
+          padding: 0 40px 40px;
+      }
+
+      .app-container button {
+          background-color: transparent;
+          color: var(--accent-color);
+          border: 2px solid var(--accent-color);
+          padding: 12px 25px;
+          font-size: 16px;
+          cursor: pointer;
+          border-radius: 6px;
+          font-family: 'Arial', sans-serif;
+          font-weight: bold;
+          transition: all 0.3s;
+      }
+
+      .app-container button:hover:not(:disabled) {
+          background-color: var(--accent-color);
+          color: #121212;
+      }
+
+      .app-container button:disabled {
+          border-color: var(--text-muted);
+          color: var(--text-muted);
+          cursor: not-allowed;
+          background-color: transparent;
+      }
+
+      .app-container ul {
+          margin-left: 20px;
+          margin-bottom: 15px;
+      }
+
+      .app-container li {
+          margin-bottom: 8px;
+      }
+
+      @keyframes appFadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* Responsividad para móviles */
+      @media (max-width: 768px) {
+          .app-container .stepper {
+              flex-direction: column;
+              gap: 15px;
+              padding: 20px;
+          }
+          .app-container .step-indicator::after {
+              display: none;
+          }
+          .app-container .step-indicator {
+              text-align: left;
+              border-left: 3px solid var(--text-muted);
+              padding-left: 10px;
+          }
+          .app-container .step-indicator.active {
+              border-left-color: var(--accent-color);
+          }
+          .app-container .step-content {
+              padding: 20px;
+          }
+          .app-container .btn-container {
+              padding: 0 20px 30px;
+              flex-direction: column;
+              gap: 15px;
+          }
+      }
+    </style>
   </head>
   <body>
     <noscript>
       <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MGTMWN7T" height="0" width="0" style="display: none; visibility: hidden"></iframe>
     </noscript>
     <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
-    
+
     <header class="site-header">
       <div class="container header-row">
         <a class="brand" href="index.html">
@@ -64,7 +263,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="container">
           <h2>Campañas de Guardianía (Proof-of-Community)</h2>
           <p style="max-width: 700px; margin: 0 auto 2rem;">Hemos evolucionado la forma en que nuestros ejemplares encuentran su hogar. Las Teyolias son nuestro mecanismo de validación donde la comunidad respalda a los aspirantes a guardianes de manera transparente.</p>
-          
+
           <div class="card" style="margin: 0 auto; max-width: 800px; padding: 2.5rem; border: 2px solid var(--accent-color); background: var(--card-bg); text-align: center;">
             <span style="color: var(--accent-color); font-weight: bold; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;">Piloto #001 Activo</span>
             <h3 style="margin-top: 1rem;">La Teyolia para Teyolia Ramírez</h3>
@@ -119,50 +318,89 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </div>
       </section>
 
-      <section data-aos="fade-up" data-aos-duration="1000" style="padding-top: 2rem;">
-        <h2>Archivo Histórico</h2>
-        <div class="grid grid-2">
-          <figure class="card" data-aos="zoom-in" data-aos-delay="150">
-            <picture class="card__media">
-              <img src="https://i.imgur.com/D3F0UxU.jpeg" width="1200" height="800" loading="lazy" alt="Ceremonia por Día de Muertos en Grecia con Tecuani Ramirez" />
-            </picture>
-            <figcaption style="padding: 1rem; text-align: center; font-family: var(--font-secondary);">
-              Ceremonia por Día de Muertos en Grecia con Tecuani Ramirez
-            </figcaption>
-          </figure>
-          <figure class="card" data-aos="zoom-in" data-aos-delay="250">
-            <picture class="card__media">
-              <img src="https://i.imgur.com/7O0FXNi.jpeg" width="1200" height="800" loading="lazy" alt="Xoloitzcuintles Sesasi y Ameyalli Ramirez" />
-            </picture>
-            <figcaption style="padding: 1rem; text-align: center; font-family: var(--font-secondary);">
-              Xoloitzcuintles Sesasi y Ameyalli Ramirez quienes viven en Guadalajara
-            </figcaption>
-          </figure>
-          <figure class="card" data-aos="zoom-in" data-aos-delay="350">
-            <picture class="card__media">
-              <img src="https://i.imgur.com/fqKjMzU.jpeg" width="1200" height="800" loading="lazy" alt="Entrega de Chimani Ramírez a Sarai en su nuevo hogar" />
-            </picture>
-            <figcaption style="padding: 1rem; text-align: center; font-family: var(--font-secondary);">
-              Entrega del xoloitzcuintle Chimani Ramírez a Sarai, quien es bacterióloga y pintora
-            </figcaption>
-          </figure>
-          <figure class="card" data-aos="zoom-in" data-aos-delay="450">
-            <picture class="card__media">
-              <img src="https://i.imgur.com/zeXJpKO.jpeg" width="1200" height="800" loading="lazy" alt="Xoloitzcuintle representado en el arte" />
-            </picture>
-            <figcaption style="padding: 1rem; text-align: center; font-family: var(--font-secondary);">
-              Xolo en la Cultura y el Arte
-            </figcaption>
-          </figure>
+      <section class="camino-guardiania-section" data-aos="fade-up" data-aos-duration="1000">
+        <div class="app-container">
+            <div class="header">
+                <h2>El Camino de la Guardianía</h2>
+                <p>Guía interactiva del proceso Teyolia de Xolos Ramírez</p>
+            </div>
+
+            <div class="stepper">
+                <div class="step-indicator active" id="ind-1">1. Postulación</div>
+                <div class="step-indicator" id="ind-2">2. Tonalli Wallet</div>
+                <div class="step-indicator" id="ind-3">3. El Compromiso</div>
+                <div class="step-indicator" id="ind-4">4. La Tribu</div>
+                <div class="step-indicator" id="ind-5">5. La Decisión</div>
+            </div>
+
+            <div class="step-content active" id="step-1">
+                <h3>Paso 1: La Postulación (No es una subasta)</h3>
+                <p>El camino comienza conociendo al cachorro. En la plataforma verás su historia, su linaje, su personalidad y la meta comunitaria de la campaña.</p>
+                <p>Si sientes el llamado para ser su guardián, el primer paso es <strong>postularte formalmente</strong>. Esto implica llenar un perfil humano, explicar tus motivos y demostrar que comprendes la responsabilidad de preservar esta herencia viva.</p>
+
+                <div class="highlight-box">
+                    <strong>Regla de Oro:</strong> Una Teyolia <em>NO es una subasta</em>. No se entrega el cachorro a quien pague más. El dinero no decide automáticamente; la idoneidad y el respaldo sí.
+                </div>
+            </div>
+
+            <div class="step-content" id="step-2">
+                <h3>Paso 2: La Herramienta (Tonalli Wallet y eCash)</h3>
+                <p>Para participar en la campaña de forma transparente, utilizamos una herramienta digital llamada <strong>Tonalli Wallet</strong>.</p>
+                <p>No necesitas ser un experto en finanzas ni criptomonedas. Imagínalo como una aplicación de saldo digital. Para participar, necesitas adquirir <strong>eCash (XEC)</strong>, que es el saldo que utiliza esta red.</p>
+                <ul>
+                    <li><strong>Descarga Tonalli Wallet:</strong> La instalas en tu navegador o dispositivo.</li>
+                    <li><strong>Adquiere XEC:</strong> Puedes conseguir este saldo a través de un intercambio o directamente mediante las guías de la comunidad. Es como cargarle saldo a una tarjeta de regalo.</li>
+                </ul>
+                <p>Esta tecnología se usa únicamente porque permite un registro público, inalterable y transparente para todos los involucrados.</p>
+            </div>
+
+            <div class="step-content" id="step-3">
+                <h3>Paso 3: El Compromiso (El Pledge en Teyolia)</h3>
+                <p>Una vez que te has postulado y tienes tu Tonalli Wallet lista, entras a la plataforma <strong>Teyolia</strong> para hacer tu <em>Pledge</em> o depósito de seriedad.</p>
+                <p>Conectas tu billetera a la plataforma y realizas una aportación formal a la campaña del cachorro.</p>
+                <div class="highlight-box">
+                    Este depósito demuestra tu compromiso real frente a la comunidad. Si al final del proceso no eres seleccionado por el criadero, las reglas de la campaña especificarán cómo se trata este depósito (por ejemplo, si es retornable o si queda como saldo a favor para el futuro).
+                </div>
+                <p>Al hacer el Pledge, tu perfil como aspirante queda oficialmente visible para que la comunidad te respalde.</p>
+            </div>
+
+            <div class="step-content" id="step-4">
+                <h3>Paso 4: Proof of Community (La Validación de la Tribu)</h3>
+                <p>Aquí es donde la magia de la Teyolia cobra vida. No estás solo en tu postulación.</p>
+                <p>Familiares, amigos y otros miembros de la comunidad pueden sumarse a la campaña para <strong>respaldarte</strong>. Ellos pueden hacer pequeñas aportaciones simbólicas a la campaña y, al hacerlo, dejar un mensaje público apoyando tu perfil.</p>
+
+                <div class="highlight-box">
+                    <strong>El Mensaje Corto (OP_RETURN):</strong> Es una función técnica que, explicada fácil, permite adjuntar una "nota o dedicatoria" a una transacción. La comunidad usa esto para dejar mensajes como: <em>"Apoyo a Carlos porque tiene el hogar perfecto para este Xolo."</em>
+                </div>
+
+                <p>Esto genera el <strong>Proof of Community</strong> (Prueba de Comunidad): una validación social que demuestra que no eres solo un individuo con dinero, sino una persona confiable respaldada por su entorno.</p>
+            </div>
+
+            <div class="step-content" id="step-5">
+                <h3>Paso 5: La Decisión Final (Validación Humana)</h3>
+                <p>La campaña ha alcanzado su meta. Hay varios aspirantes, cada uno con su depósito de seriedad y con los mensajes de respaldo de su comunidad.</p>
+                <p><strong>¿Quién se convierte en el guardián?</strong></p>
+                <p>Aquí es donde interviene <strong>Xolos Ramírez</strong>. Se evalúan los perfiles, se revisa la validación comunitaria (Proof of Community) y se toma una decisión basada en la compatibilidad, el entorno y el bienestar del xoloitzcuintle.</p>
+                <div class="highlight-box">
+                    <strong>Conclusión:</strong> La comunidad aporta y respalda, la tecnología traza y transparenta, pero la decisión final siempre es humana, curada y responsable.
+                </div>
+            </div>
+
+            <div class="btn-container">
+                <button id="prevBtn" onclick="changeStep(-1)" disabled>Anterior</button>
+                <button id="nextBtn" onclick="changeStep(1)">Siguiente Paso</button>
+            </div>
         </div>
       </section>
 
       <section data-aos="fade-up" data-aos-duration="1000" data-aos-offset="120">
-        <h2>Registro de Aspirantes</h2>
-        <p>
-          Inicia tu proceso para convertirte en el guardián de un Xoloitzcuintle. Regístrate como aspirante y da el primer paso para participar en nuestra próxima Teyolia de Guardianía, demostrando tu compromiso real con la preservación de nuestro linaje.
-        </p>
-        <a href="contacto.html" class="btn btn-primary">Registrarse como candidato</a>
+        <div class="container">
+            <h2>Registro de Aspirantes</h2>
+            <p>
+              Inicia tu proceso para convertirte en el guardián de un Xoloitzcuintle. Regístrate como aspirante y da el primer paso para participar en nuestra próxima Teyolia de Guardianía, demostrando tu compromiso real con la preservación de nuestro linaje.
+            </p>
+            <a href="contacto.html" class="btn btn-primary">Registrarse como candidato</a>
+        </div>
       </section>
     </main>
 
@@ -194,6 +432,31 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
       AOS.init({ once: true, duration: 700, offset: 60, easing: 'ease-out' });
+
+      // Lógica de la aplicación "El Camino de la Guardianía"
+      let currentStep = 1;
+      const totalSteps = 5;
+
+      function changeStep(direction) {
+          document.getElementById(`step-${currentStep}`).classList.remove('active');
+          document.getElementById(`ind-${currentStep}`).classList.remove('active');
+
+          currentStep += direction;
+
+          document.getElementById(`step-${currentStep}`).classList.add('active');
+          document.getElementById(`ind-${currentStep}`).classList.add('active');
+
+          document.getElementById('prevBtn').disabled = currentStep === 1;
+
+          const nextBtn = document.getElementById('nextBtn');
+          if (currentStep === totalSteps) {
+              nextBtn.disabled = true;
+              nextBtn.innerText = "Fin del Recorrido";
+          } else {
+              nextBtn.disabled = false;
+              nextBtn.innerText = "Siguiente Paso";
+          }
+      }
     </script>
   </body>
 </html>
