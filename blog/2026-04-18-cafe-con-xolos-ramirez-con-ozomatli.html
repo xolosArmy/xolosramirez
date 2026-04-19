@@ -3,7 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="En Café con Xolos Ramírez, Ozomatli Ramírez (3 meses) nos acompaña en una charla profunda sobre la memoria viva del xoloitzcuintle: Día Nacional, entrega de Tejocote en Cancún, orejas primitivas y su poder curativo." />
+  <meta name="keywords" content="xoloitzcuintle, xolos ramírez, ozomatli ramírez, café con xolos, día nacional xoloitzcuintle, perro sin pelo mexicano, entrega xolo, cancún" />
+  <meta name="author" content="Xolos Ramírez" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:title" content="Café con Xolos Ramírez | Ozomatli Ramírez y la memoria viva del xoloitzcuintle" />
+  <meta property="og:description" content="Ozomatli Ramírez, cachorro de 3 meses, fue el invitado especial de una conversación sobre cultura, entregas y la esencia ancestral del xoloitzcuintle." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://xolosramirez.com/blog/cafe-con-xolos-ozomatli" />
+  <meta property="og:image" content="https://i.ytimg.com/vi/uEoSJFGqo9c/maxresdefault.jpg" />
+  <meta property="og:site_name" content="Xolos Ramírez" />
+  <meta property="og:locale" content="es_MX" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Café con Xolos Ramírez | Ozomatli Ramírez y la memoria viva del xoloitzcuintle" />
+  <meta name="twitter:description" content="Ozomatli Ramírez, cachorro de 3 meses, fue el invitado especial de una conversación sobre cultura, entregas y la esencia ancestral del xoloitzcuintle." />
+  <meta name="twitter:image" content="https://i.ytimg.com/vi/uEoSJFGqo9c/maxresdefault.jpg" />
+
   <title>Café con Xolos Ramírez | Ozomatli Ramírez y la memoria viva del xoloitzcuintle</title>
+
   <style>
     :root {
       --bg: #0b0b0f;
@@ -16,9 +37,9 @@
       --line: rgba(212, 166, 58, 0.22);
       --accent: #8c6a1f;
       --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-      --radius: 24px;
+      --radius: 28px;
       --radius-sm: 16px;
-      --max: 1100px;
+      --max: 1180px;
     }
 
     * {
@@ -32,108 +53,127 @@
     body {
       margin: 0;
       font-family: "Georgia", "Times New Roman", serif;
-      background:
-        radial-gradient(circle at top, rgba(212, 166, 58, 0.08), transparent 28%),
+      background: 
+        radial-gradient(circle at top, rgba(212, 166, 58, 0.09), transparent 30%),
         linear-gradient(180deg, #0a0a0d 0%, #0f1014 100%);
       color: var(--text);
-      line-height: 1.75;
+      line-height: 1.78;
+      font-size: 1.06rem;
     }
 
     img {
       max-width: 100%;
       display: block;
       border-radius: var(--radius-sm);
+      height: auto;
     }
 
     a {
       color: var(--gold-soft);
       text-decoration: none;
+      transition: color 0.2s ease;
     }
 
     a:hover {
+      color: #fff8ea;
       text-decoration: underline;
     }
 
     .article-shell {
       width: min(100% - 32px, var(--max));
       margin: 0 auto;
-      padding: 48px 0 80px;
+      padding: 60px 0 100px;
     }
 
+    /* HERO mejorado con overlay y mayor impacto */
     .hero {
       position: relative;
       overflow: hidden;
-      background:
-        linear-gradient(135deg, rgba(212, 166, 58, 0.12), rgba(212, 166, 58, 0.03)),
+      background: 
+        linear-gradient(135deg, rgba(212, 166, 58, 0.14), rgba(212, 166, 58, 0.04)),
         linear-gradient(180deg, rgba(18, 18, 24, 0.96), rgba(10, 10, 14, 0.98));
       border: 1px solid var(--line);
       border-radius: 32px;
       box-shadow: var(--shadow);
-      padding: 56px 28px;
+      padding: 72px 32px 64px;
+      text-align: center;
     }
 
     .hero::before {
       content: "";
       position: absolute;
       inset: 0;
-      background:
-        radial-gradient(circle at 80% 20%, rgba(240, 212, 138, 0.12), transparent 18%),
-        radial-gradient(circle at 15% 85%, rgba(212, 166, 58, 0.08), transparent 20%);
+      background: 
+        radial-gradient(circle at 80% 15%, rgba(240, 212, 138, 0.16), transparent 22%),
+        radial-gradient(circle at 12% 88%, rgba(212, 166, 58, 0.1), transparent 24%);
       pointer-events: none;
+      z-index: 1;
     }
 
     .eyebrow {
-      display: inline-block;
-      margin-bottom: 18px;
-      padding: 8px 14px;
-      border: 1px solid rgba(240, 212, 138, 0.28);
-      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding: 8px 18px;
+      border: 1px solid rgba(240, 212, 138, 0.32);
+      border-radius: 9999px;
+      background: rgba(212, 166, 58, 0.1);
       color: var(--gold-soft);
-      background: rgba(212, 166, 58, 0.08);
-      font-size: 0.82rem;
-      letter-spacing: 0.12em;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
+      font-weight: 500;
     }
 
     .hero h1 {
-      margin: 0 0 18px;
-      font-size: clamp(2.1rem, 4vw, 4rem);
-      line-height: 1.08;
-      letter-spacing: 0.01em;
+      margin: 0 0 22px;
+      font-size: clamp(2.4rem, 5vw, 4.2rem);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
       color: #fff8ea;
+      position: relative;
+      z-index: 2;
     }
 
     .hero p.lead {
-      margin: 0;
-      max-width: 820px;
-      font-size: 1.12rem;
+      margin: 0 auto;
+      max-width: 860px;
+      font-size: 1.18rem;
       color: var(--muted);
+      position: relative;
+      z-index: 2;
     }
 
     .meta {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 26px;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 32px;
+      position: relative;
+      z-index: 2;
     }
 
     .meta span {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 10px 18px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.09);
       color: #efe3c1;
-      font-size: 0.92rem;
+      font-size: 0.95rem;
+      white-space: nowrap;
     }
 
+    /* Grid principal */
     .content-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 320px;
-      gap: 28px;
-      margin-top: 34px;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 32px;
+      margin-top: 42px;
     }
 
     .main-content,
@@ -141,48 +181,51 @@
     .timeline,
     .quote-box,
     .video-card {
-      background: linear-gradient(180deg, rgba(20, 20, 28, 0.96), rgba(15, 15, 21, 0.98));
+      background: linear-gradient(180deg, rgba(20, 20, 28, 0.97), rgba(15, 15, 21, 0.98));
       border: 1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
     }
 
     .main-content {
-      padding: 34px 28px;
+      padding: 42px 36px;
     }
 
     .sidebar {
       display: grid;
-      gap: 22px;
+      gap: 26px;
       align-self: start;
+      position: sticky;
+      top: 32px;
     }
 
     .sidebar-card {
-      padding: 22px 20px;
+      padding: 28px 24px;
     }
 
     .sidebar-card h3 {
-      margin: 0 0 14px;
+      margin: 0 0 16px;
       color: var(--gold);
-      font-size: 1.05rem;
-      letter-spacing: 0.04em;
+      font-size: 1.08rem;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
     }
 
     .sidebar-card ul {
       margin: 0;
-      padding-left: 18px;
+      padding-left: 20px;
       color: var(--muted);
+      line-height: 1.6;
     }
 
     .sidebar-card li + li {
-      margin-top: 10px;
+      margin-top: 12px;
     }
 
     .main-content h2 {
-      margin: 36px 0 14px;
+      margin: 48px 0 18px;
       color: var(--gold);
-      font-size: 1.75rem;
+      font-size: 1.85rem;
       line-height: 1.2;
     }
 
@@ -191,9 +234,8 @@
     }
 
     .main-content p {
-      margin: 0 0 18px;
+      margin-bottom: 20px;
       color: var(--text);
-      font-size: 1.06rem;
     }
 
     .main-content strong {
@@ -202,80 +244,132 @@
 
     .highlight {
       color: var(--gold-soft);
+      font-weight: 500;
     }
 
+    /* Quote */
     .quote-box {
-      margin: 28px 0;
-      padding: 24px 22px;
+      margin: 36px 0;
+      padding: 32px 28px;
       position: relative;
-      background:
-        linear-gradient(180deg, rgba(212, 166, 58, 0.10), rgba(212, 166, 58, 0.04)),
-        linear-gradient(180deg, rgba(20, 20, 28, 0.96), rgba(15, 15, 21, 0.98));
+      background: linear-gradient(180deg, rgba(212, 166, 58, 0.12), rgba(212, 166, 58, 0.05));
+      border: 1px solid rgba(212, 166, 58, 0.25);
+      border-radius: var(--radius);
     }
 
     .quote-box p {
       margin: 0;
-      font-size: 1.14rem;
+      font-size: 1.22rem;
       color: #fff4d8;
+      font-style: italic;
     }
 
+    /* Video mejorado */
     .video-card {
-      margin: 28px 0;
-      padding: 24px 22px;
-      background:
-        linear-gradient(180deg, rgba(212, 166, 58, 0.08), rgba(212, 166, 58, 0.03)),
-        linear-gradient(180deg, rgba(20, 20, 28, 0.96), rgba(15, 15, 21, 0.98));
+      margin: 36px 0;
+      padding: 32px 28px;
+      background: linear-gradient(180deg, rgba(212, 166, 58, 0.1), rgba(212, 166, 58, 0.04));
     }
 
     .video-card h3 {
-      margin: 0 0 10px;
+      margin: 0 0 12px;
       color: var(--gold);
-      font-size: 1.15rem;
-      letter-spacing: 0.04em;
+      font-size: 1.2rem;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
     }
 
     .video-card p {
-      margin: 0 0 16px;
+      margin-bottom: 20px;
       color: var(--muted);
     }
 
-    .video-link {
-      display: inline-flex;
+    /* Thumbnail + Embed responsivo */
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      margin-bottom: 20px;
+    }
+
+    .video-wrapper img {
+      width: 100%;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 72px;
+      height: 72px;
+      background: rgba(212, 166, 58, 0.95);
+      border-radius: 50%;
+      display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 13px 18px;
-      border-radius: 999px;
-      background: linear-gradient(180deg, #d4a63a, #b48524);
-      color: #18120a;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      box-shadow: 0 10px 24px rgba(212, 166, 58, 0.24);
+      justify-content: center;
+      box-shadow: 0 8px 25px rgba(212, 166, 58, 0.4);
+      transition: all 0.3s ease;
+      z-index: 2;
     }
 
-    .video-link:hover {
-      text-decoration: none;
-      filter: brightness(1.04);
+    .play-button:hover {
+      transform: translate(-50%, -50%) scale(1.08);
+      background: #fff8ea;
     }
 
+    .play-button::after {
+      content: "";
+      display: block;
+      width: 0;
+      height: 0;
+      border-top: 14px solid transparent;
+      border-bottom: 14px solid transparent;
+      border-left: 22px solid #0b0b0f;
+      margin-left: 4px;
+    }
+
+    .embed-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 20px;
+      background: #000;
+    }
+
+    .embed-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Timeline */
     .timeline {
-      padding: 24px 22px;
-      margin: 28px 0;
+      padding: 28px 26px;
+      margin: 36px 0;
     }
 
     .timeline h3 {
-      margin: 0 0 16px;
+      margin-bottom: 20px;
       color: var(--gold);
-      font-size: 1.08rem;
-      letter-spacing: 0.05em;
+      font-size: 1.1rem;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
     }
 
     .timeline-item {
       display: grid;
-      grid-template-columns: 90px 1fr;
-      gap: 14px;
-      padding: 14px 0;
+      grid-template-columns: 100px 1fr;
+      gap: 18px;
+      padding: 18px 0;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
     }
 
@@ -287,7 +381,8 @@
     .time {
       color: var(--gold-soft);
       font-weight: 700;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
     }
 
     .timeline-item p {
@@ -295,85 +390,78 @@
       color: var(--muted);
     }
 
+    /* Callout */
     .callout {
-      margin-top: 36px;
-      padding: 24px 22px;
-      border-radius: 20px;
-      border: 1px solid rgba(240, 212, 138, 0.2);
-      background: rgba(212, 166, 58, 0.06);
+      margin-top: 48px;
+      padding: 32px 28px;
+      border-radius: 24px;
+      border: 1px solid rgba(240, 212, 138, 0.25);
+      background: rgba(212, 166, 58, 0.07);
     }
 
     .callout h3 {
-      margin: 0 0 10px;
+      margin: 0 0 12px;
       color: var(--gold-soft);
-      font-size: 1.15rem;
-    }
-
-    .callout p {
-      margin: 0;
-      color: var(--text);
+      font-size: 1.2rem;
     }
 
     .site-link {
       display: inline-flex;
-      margin-top: 18px;
-      padding: 13px 18px;
-      border-radius: 999px;
+      margin-top: 22px;
+      padding: 15px 26px;
+      border-radius: 9999px;
       background: linear-gradient(180deg, #d4a63a, #b48524);
       color: #18120a;
       font-weight: 700;
-      letter-spacing: 0.02em;
-      box-shadow: 0 10px 24px rgba(212, 166, 58, 0.24);
+      letter-spacing: 0.03em;
+      box-shadow: 0 12px 28px rgba(212, 166, 58, 0.28);
+      transition: all 0.3s ease;
     }
 
     .site-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 32px rgba(212, 166, 58, 0.35);
       text-decoration: none;
-      filter: brightness(1.04);
     }
 
     .footer-note {
-      margin-top: 24px;
+      margin-top: 32px;
       color: #b9af98;
-      font-size: 0.92rem;
+      font-size: 0.95rem;
+      text-align: center;
+      font-style: italic;
     }
 
-    @media (max-width: 940px) {
+    /* Responsive */
+    @media (max-width: 960px) {
       .content-grid {
         grid-template-columns: 1fr;
       }
-
       .sidebar {
-        order: -1;
+        position: static;
       }
     }
 
     @media (max-width: 640px) {
       .article-shell {
-        width: min(100% - 20px, var(--max));
-        padding-top: 24px;
+        padding-top: 28px;
       }
-
       .hero {
-        padding: 34px 18px;
+        padding: 48px 22px 42px;
         border-radius: 24px;
       }
-
-      .main-content,
-      .sidebar-card,
-      .timeline,
-      .quote-box,
-      .video-card {
-        border-radius: 20px;
-      }
-
       .main-content {
-        padding: 24px 18px;
+        padding: 28px 22px;
       }
-
       .timeline-item {
         grid-template-columns: 1fr;
-        gap: 6px;
+        gap: 8px;
       }
+    }
+
+    /* Micro-interacciones */
+    .video-wrapper:hover img {
+      transform: scale(1.03);
     }
   </style>
 </head>
@@ -383,10 +471,10 @@
       <span class="eyebrow">Crónica informativa · Café con Xolos Ramírez</span>
       <h1>Ozomatli Ramírez y la memoria viva del xoloitzcuintle</h1>
       <p class="lead">
-        En esta edición de <strong>Café con Xolos Ramírez</strong>, el cachorro <strong>Ozomatli Ramírez</strong>,
-        de tres meses de edad, fue el invitado especial de una conversación que recorrió la actualidad,
-        la historia y la dimensión espiritual del xoloitzcuintle: desde el reconocimiento legislativo
-        de su valor cultural, hasta la experiencia de entregas recientes y la explicación de rasgos
+        En esta edición de <strong>Café con Xolos Ramírez</strong>, el cachorro <strong>Ozomatli Ramírez</strong>, 
+        de tres meses de edad, fue el invitado especial de una conversación que recorrió la actualidad, 
+        la historia y la dimensión espiritual del xoloitzcuintle: desde el reconocimiento legislativo 
+        de su valor cultural, hasta la experiencia de entregas recientes y la explicación de rasgos 
         primitivos que siguen definiendo a esta raza ancestral mexicana.
       </p>
 
@@ -401,123 +489,101 @@
       <article class="main-content">
         <h2>Una conversación guiada por la identidad del xoloitzcuintle</h2>
         <p>
-          El episodio se desarrolló como una reflexión amplia sobre el lugar que ocupa el
-          <strong>xoloitzcuintle</strong> dentro de la memoria mexicana. Con Ozomatli Ramírez como presencia
-          central del encuentro, la transmisión fue enlazando noticias recientes, experiencias de entrega
+          El episodio se desarrolló como una reflexión amplia sobre el lugar que ocupa el 
+          <strong>xoloitzcuintle</strong> dentro de la memoria mexicana. Con Ozomatli Ramírez como presencia 
+          central del encuentro, la transmisión fue enlazando noticias recientes, experiencias de entrega 
           y observaciones sobre la naturaleza física y simbólica de la raza.
         </p>
         <p>
-          Lejos de ser solo una charla sobre un cachorro, el programa trazó un puente entre el presente
-          y una herencia mucho más profunda. En la figura del xoloitzcuintle aparecieron reunidos el
-          <span class="highlight">patrimonio cultural</span>, la convivencia familiar, la lectura ancestral
+          Lejos de ser solo una charla sobre un cachorro, el programa trazó un puente entre el presente 
+          y una herencia mucho más profunda. En la figura del xoloitzcuintle aparecieron reunidos el 
+          <span class="highlight">patrimonio cultural</span>, la convivencia familiar, la lectura ancestral 
           del cuerpo animal y la capacidad terapéutica que tantas personas asocian con esta raza.
         </p>
 
         <div class="quote-box">
           <p>
-            Ozomatli Ramírez no fue únicamente el invitado del episodio: fue el punto de partida para una
+            Ozomatli Ramírez no fue únicamente el invitado del episodio: fue el punto de partida para una 
             meditación sobre el xoloitzcuintle como presencia viva de México.
           </p>
         </div>
 
+        <!-- VIDEO MEJORADO: Thumbnail + Embed responsivo -->
         <div class="video-card">
-          <h3>Ver episodio en YouTube</h3>
-          <p>
-            Mira el video completo de este <strong>Café con Xolos Ramírez</strong> con Ozomatli Ramírez como invitado especial.
-          </p>
-          <a class="video-link" href="https://youtu.be/uEoSJFGqo9c" target="_blank" rel="noopener noreferrer">
-            ▶ Ver en YouTube
-          </a>
+          <h3>Ver episodio completo en YouTube</h3>
+          <p>Disfruta la conversación completa con Ozomatli Ramírez como invitado especial.</p>
+          
+          <div class="video-wrapper" onclick="document.getElementById('yt-embed').style.display='block';this.style.display='none';">
+            <img src="https://i.ytimg.com/vi/uEoSJFGqo9c/maxresdefault.jpg" alt="Miniatura del episodio Café con Xolos Ramírez con Ozomatli Ramírez" loading="lazy">
+            <div class="play-button"></div>
+          </div>
+
+          <div id="yt-embed" class="embed-container" style="display: none;">
+            <iframe 
+              src="https://www.youtube.com/embed/uEoSJFGqo9c?autoplay=1&amp;rel=0" 
+              title="Café con Xolos Ramírez | Ozomatli Ramírez y la memoria viva del xoloitzcuintle" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              allowfullscreen>
+            </iframe>
+          </div>
         </div>
 
         <h2>El 27 de octubre y el reconocimiento nacional del xoloitzcuintle</h2>
         <p>
-          Uno de los temas más relevantes del episodio fue el avance legislativo que busca declarar el
-          <strong>27 de octubre</strong> como <strong>Día Nacional del Xoloitzcuintle</strong>. En el programa,
-          este tema se abordó como una señal del creciente reconocimiento institucional hacia una raza que
+          Uno de los temas más relevantes del episodio fue el avance legislativo que busca declarar el 
+          <strong>27 de octubre</strong> como <strong>Día Nacional del Xoloitzcuintle</strong>. En el programa, 
+          este tema se abordó como una señal del creciente reconocimiento institucional hacia una raza que 
           forma parte de la identidad cultural, histórica y espiritual del país.
         </p>
         <p>
-          La conversación vinculó esta fecha con el calendario afectivo y simbólico de México, cercano a
+          La conversación vinculó esta fecha con el calendario afectivo y simbólico de México, cercano a 
           las tradiciones que honran a los animales dentro del tiempo de <strong>Día de Muertos</strong>.
-          El planteamiento no fue tratado como una simple efeméride, sino como una posibilidad de afirmar,
-          desde la vida pública, que el xoloitzcuintle sigue ocupando un lugar singular en el imaginario
-          nacional.
         </p>
 
         <h2>Tejocote Ramírez en Cancún: una entrega con dimensión humana</h2>
         <p>
-          Otro momento importante del episodio fue el recuento de la entrega de
-          <strong>Tejocote Ramírez</strong> a su nueva familia en <strong>Cancún</strong>, integrada por
-          <strong>Lola y su esposo</strong>. Más que relatar un traslado, la crónica presentada en el programa
-          subrayó el sentido emocional y práctico de este encuentro.
-        </p>
-        <p>
-          Se destacó que Tejocote fue entregado con <strong>certificación de perro de servicio</strong>,
-          un dato que añadió una capa significativa a la historia. En la narración del episodio, esta
-          entrega fue entendida como una convergencia entre crianza, acompañamiento y la vocación
-          terapéutica que muchas personas encuentran en el xoloitzcuintle.
+          Otro momento importante del episodio fue el recuento de la entrega de 
+          <strong>Tejocote Ramírez</strong> a su nueva familia en <strong>Cancún</strong>, integrada por 
+          <strong>Lola y su esposo</strong>. Se destacó que Tejocote fue entregado con 
+          <strong>certificación de perro de servicio</strong>.
         </p>
 
         <h2>La próxima entrega de Mitla Ramírez</h2>
         <p>
-          El programa también abrió espacio para mencionar la próxima entrega de
+          El programa también abrió espacio para mencionar la próxima entrega de 
           <strong>Mitla Ramírez</strong>, anticipando un nuevo capítulo dentro del recorrido de la camada.
-          Esta referencia funcionó como un hilo de continuidad dentro de la vida cotidiana de Xolos Ramírez,
-          donde cada entrega representa no solo un cambio de hogar, sino el inicio de una nueva relación
-          entre humano y xoloitzcuintle.
         </p>
 
         <h2>Las orejas erguidas y elásticas: signo de una naturaleza primitiva</h2>
         <p>
-          Hacia la parte central del episodio, la atención se concentró en una característica física del
-          xoloitzcuintle que suele despertar curiosidad y admiración: sus
-          <strong>orejas erguidas y elásticas</strong>. En la transmisión, este rasgo fue explicado no solo
-          desde lo visual, sino como una huella de la naturaleza primitiva de la raza.
-        </p>
-        <p>
-          La lectura propuesta fue especialmente interesante porque convirtió un detalle anatómico en una
-          clave para pensar el cuerpo del xoloitzcuintle como cuerpo antiguo, atento, sensible y en profunda
-          conexión con su entorno. Las orejas, en esta visión, no solo “se ven” distintivas: también hablan
-          de una continuidad biológica y simbólica que enlaza al animal contemporáneo con su raíz ancestral.
+          La atención se concentró en las <strong>orejas erguidas y elásticas</strong>, explicadas como 
+          una huella de la naturaleza primitiva de la raza y su profunda conexión con el entorno.
         </p>
 
         <h2>El xoloitzcuintle como presencia curativa</h2>
         <p>
-          El episodio cerró con una reflexión sobre la dimensión <strong>curativa y terapéutica</strong> del
-          xoloitzcuintle. Se retomó la idea de su calor corporal como un elemento de alivio físico y de
-          acompañamiento emocional, una percepción profundamente arraigada en múltiples relatos sobre esta raza.
-        </p>
-        <p>
-          En ese tramo final, la conversación conectó al xoloitzcuintle con la energía solar, con su
-          herencia sagrada y con la figura de <strong>Xólotl</strong>, reforzando una interpretación en la que
-          el perro mexicano no es solamente compañía, sino también mediador afectivo, presencia protectora
-          y guardián de una memoria espiritual que sigue vigente en la vida contemporánea.
+          El episodio cerró con la dimensión <strong>curativa y terapéutica</strong> del xoloitzcuintle, 
+          su calor corporal y su vínculo con la energía solar y la figura de <strong>Xólotl</strong>.
         </p>
 
         <div class="timeline">
           <h3>Momentos clave del episodio</h3>
-
           <div class="timeline-item">
             <div class="time">1:06 – 4:42</div>
             <p>Reflexión sobre el Día Nacional del Xoloitzcuintle y su significado cultural.</p>
           </div>
-
           <div class="timeline-item">
             <div class="time">7:16 – 9:36</div>
             <p>Relato de la entrega de Tejocote Ramírez en Cancún y su certificación como perro de servicio.</p>
           </div>
-
           <div class="timeline-item">
             <div class="time">9:42 – 10:17</div>
             <p>Mención de la próxima entrega de Mitla Ramírez.</p>
           </div>
-
           <div class="timeline-item">
             <div class="time">10:30 – 13:30</div>
-            <p>Explicación sobre las orejas erguidas y elásticas como rasgo primitivo del xoloitzcuintle.</p>
+            <p>Explicación sobre las orejas erguidas y elásticas como rasgo primitivo.</p>
           </div>
-
           <div class="timeline-item">
             <div class="time">14:11 – 17:20</div>
             <p>Reflexión sobre la naturaleza curativa, emocional y espiritual de la raza.</p>
@@ -526,14 +592,9 @@
 
         <h2>Una raza ancestral en presente continuo</h2>
         <p>
-          Este <strong>Café con Xolos Ramírez</strong> dejó ver que el xoloitzcuintle continúa siendo una
-          presencia viva en múltiples dimensiones: como compañero de familia, como símbolo de identidad
-          mexicana, como cuerpo ancestral y como figura terapéutica profundamente valorada.
-        </p>
-        <p>
-          Con Ozomatli Ramírez como invitado especial, el episodio no solo informó: también recordó que
-          hablar del xoloitzcuintle es hablar de una continuidad entre pasado y presente, entre lo natural
-          y lo sagrado, entre la vida cotidiana y la historia profunda de México.
+          Este <strong>Café con Xolos Ramírez</strong> dejó ver que el xoloitzcuintle continúa siendo una 
+          presencia viva en múltiples dimensiones: como compañero de familia, símbolo de identidad mexicana, 
+          cuerpo ancestral y figura terapéutica.
         </p>
 
         <div class="callout">
@@ -542,14 +603,9 @@
             Conoce más sobre el trabajo, la visión cultural y los ejemplares de Xolos Ramírez en su sitio oficial.
           </p>
           <a class="site-link" href="https://xolosramirez.com" target="_blank" rel="noopener noreferrer">
-            Ir a xolosramirez.com
+            Ir a xolosramirez.com →
           </a>
         </div>
-
-        <p class="footer-note">
-          Si quieres, en el siguiente paso te lo convierto con <strong>thumbnail del video</strong> y
-          <strong>embed responsivo de YouTube</strong> para que se vea todavía más pro dentro del blog.
-        </p>
       </article>
 
       <aside class="sidebar">
@@ -568,16 +624,8 @@
         <div class="sidebar-card">
           <h3>Enlace directo</h3>
           <ul>
-            <li>
-              <a href="https://youtu.be/uEoSJFGqo9c" target="_blank" rel="noopener noreferrer">
-                Ver episodio en YouTube
-              </a>
-            </li>
-            <li>
-              <a href="https://xolosramirez.com" target="_blank" rel="noopener noreferrer">
-                Sitio oficial de Xolos Ramírez
-              </a>
-            </li>
+            <li><a href="https://youtu.be/uEoSJFGqo9c" target="_blank" rel="noopener noreferrer">▶ Ver episodio en YouTube</a></li>
+            <li><a href="https://xolosramirez.com" target="_blank" rel="noopener noreferrer">Sitio oficial de Xolos Ramírez</a></li>
           </ul>
         </div>
       </aside>
