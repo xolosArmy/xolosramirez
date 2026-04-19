@@ -139,7 +139,8 @@
     .main-content,
     .sidebar-card,
     .timeline,
-    .quote-box {
+    .quote-box,
+    .video-card {
       background: linear-gradient(180deg, rgba(20, 20, 28, 0.96), rgba(15, 15, 21, 0.98));
       border: 1px solid var(--line);
       border-radius: var(--radius);
@@ -216,6 +217,45 @@
       margin: 0;
       font-size: 1.14rem;
       color: #fff4d8;
+    }
+
+    .video-card {
+      margin: 28px 0;
+      padding: 24px 22px;
+      background:
+        linear-gradient(180deg, rgba(212, 166, 58, 0.08), rgba(212, 166, 58, 0.03)),
+        linear-gradient(180deg, rgba(20, 20, 28, 0.96), rgba(15, 15, 21, 0.98));
+    }
+
+    .video-card h3 {
+      margin: 0 0 10px;
+      color: var(--gold);
+      font-size: 1.15rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .video-card p {
+      margin: 0 0 16px;
+      color: var(--muted);
+    }
+
+    .video-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 18px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #d4a63a, #b48524);
+      color: #18120a;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      box-shadow: 0 10px 24px rgba(212, 166, 58, 0.24);
+    }
+
+    .video-link:hover {
+      text-decoration: none;
+      filter: brightness(1.04);
     }
 
     .timeline {
@@ -321,7 +361,8 @@
       .main-content,
       .sidebar-card,
       .timeline,
-      .quote-box {
+      .quote-box,
+      .video-card {
         border-radius: 20px;
       }
 
@@ -377,6 +418,16 @@
             Ozomatli Ramírez no fue únicamente el invitado del episodio: fue el punto de partida para una
             meditación sobre el xoloitzcuintle como presencia viva de México.
           </p>
+        </div>
+
+        <div class="video-card">
+          <h3>Ver episodio en YouTube</h3>
+          <p>
+            Mira el video completo de este <strong>Café con Xolos Ramírez</strong> con Ozomatli Ramírez como invitado especial.
+          </p>
+          <a class="video-link" href="https://youtu.be/uEoSJFGqo9c" target="_blank" rel="noopener noreferrer">
+            ▶ Ver en YouTube
+          </a>
         </div>
 
         <h2>El 27 de octubre y el reconocimiento nacional del xoloitzcuintle</h2>
@@ -496,9 +547,8 @@
         </div>
 
         <p class="footer-note">
-          Nota editorial: si más adelante quieres, este mismo texto se puede convertir en una versión con
-          <strong>hero image</strong>, bloque de <strong>YouTube embed</strong> y sección final de
-          <strong>CTA de reserva</strong> para integrarlo directamente al estilo visual de tu blog.
+          Si quieres, en el siguiente paso te lo convierto con <strong>thumbnail del video</strong> y
+          <strong>embed responsivo de YouTube</strong> para que se vea todavía más pro dentro del blog.
         </p>
       </article>
 
@@ -516,11 +566,18 @@
         </div>
 
         <div class="sidebar-card">
-          <h3>Tono del artículo</h3>
+          <h3>Enlace directo</h3>
           <ul>
-            <li>Crónica informativa</li>
-            <li>Enfoque cultural y editorial</li>
-            <li>Ideal para blog institucional de Xolos Ramírez</li>
+            <li>
+              <a href="https://youtu.be/uEoSJFGqo9c" target="_blank" rel="noopener noreferrer">
+                Ver episodio en YouTube
+              </a>
+            </li>
+            <li>
+              <a href="https://xolosramirez.com" target="_blank" rel="noopener noreferrer">
+                Sitio oficial de Xolos Ramírez
+              </a>
+            </li>
           </ul>
         </div>
       </aside>
