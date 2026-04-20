@@ -289,6 +289,26 @@ a:hover {
 .nav-menu a{ color:var(--text); padding:.5rem .75rem; border-radius:.5rem; }
 .nav-menu a:hover{ background:var(--card); }
 
+.lang-switch {
+  font-family: 'Cinzel', serif;
+  font-size: .8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--accent) !important;
+  border: 1px solid rgba(203, 161, 53, .3);
+  padding: 4px 10px !important;
+  border-radius: 4px;
+  transition: all .3s ease;
+  display: inline-block;
+}
+
+.lang-switch:hover {
+  background-color: var(--accent);
+  color: #000 !important;
+  border-color: var(--accent);
+  text-decoration: none !important;
+}
+
 .hamburger{ display:none; background:transparent; border:0; color:var(--text); padding:.35rem .6rem; border-radius:.5rem; font-size:2rem; }
 
 @media (max-width: 768px){
@@ -329,6 +349,11 @@ a:hover {
     position: static;
     padding: 0;
     box-shadow: none;
+  }
+
+  .lang-switch {
+    margin-bottom: 1rem;
+    width: fit-content;
   }
 }
 
