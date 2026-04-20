@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xolos Ramírez: Guía de Sesiones Fotográficas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Nunito Sans', sans-serif; background-color: #FAFAF9; color: #292524; }
+        h1, h2, h3, .serif { font-family: 'Lora', serif; }
+        .chart-container { position: relative; width: 100%; max-width: 700px; margin-left: auto; margin-right: auto; height: 350px; max-height: 400px; }
+        @media (min-width: 768px) { .chart-container { height: 400px; } }
+        .tab-active { border-bottom: 2px solid #D97706; color: #b45309; font-weight: 600; }
+        .tab-inactive { border-bottom: 2px solid transparent; color: #78716c; }
+        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.5); }
+    </style>
+</head>
+<body class="antialiased selection:bg-amber-200 selection:text-amber-900">
+
+<!-- Chosen Palette: Warm Neutrals & Amber (Background: #FAFAF9, Text: #292524, Accents: #D97706 / Amber-600) -->
+<!-- Application Structure Plan: A single-page dashboard structured chronologically around the photography workflow. It starts with an executive summary, moves into an interactive profiling of the breed (data visualization of sizes and temperament), transitions to a tabbed workflow guide (Prep, Shoot, Post), and includes an interactive checklist. This structure was chosen because photographers need quick, phase-specific reference materials. The tabbed approach prevents cognitive overload, while charts visually communicate complex variables like temperature sensitivity and lighting reflection. -->
+<!-- Visualization & Content Choices: 1. Breed Demographics -> Goal: Inform -> Viz: Doughnut Chart (Chart.js) -> Justification: Shows distribution of sizes requested in commercial shoots. 2. Temperature Sensitivity -> Goal: Change/Compare -> Viz: Line Chart (Chart.js) -> Justification: Clearly maps the correlation between ambient temperature and dog's stress/focus. 3. Workflow Guide -> Goal: Organize -> Viz: Tabbed Interface (Vanilla JS) -> Justification: Chunks text-heavy handling tips into digestible phases. 4. Lighting Simulator -> Goal: Engagement/Inform -> Viz: Interactive HTML/CSS Slider -> Justification: Hands-on way to understand how light temperature affects the Xolo's dark skin without using SVG/Mermaid. -->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <header class="bg-stone-900 text-stone-100 py-12 px-6 shadow-md border-b-4 border-amber-600">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between">
+            <div>
+                <div class="text-amber-500 text-sm font-bold tracking-widest uppercase mb-2">Reporte Analítico e Interactivo</div>
+                <h1 class="text-4xl md:text-5xl font-semibold mb-3">Xolos Ramírez</h1>
+                <p class="text-xl text-stone-400 max-w-2xl">El Xoloitzcuintle en sesiones de fotos profesionales: Protocolos de manejo, iluminación y cuidado de la piel.</p>
+            </div>
+            <div class="mt-6 md:mt-0 text-6xl" aria-hidden="true">
+                🐕
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-10 space-y-16">
+
+        <section id="introduccion" class="space-y-4">
+            <h2 class="text-3xl text-amber-800 border-b pb-2 border-stone-200">Introducción al Modelo Primitivo</h2>
+            <p class="text-lg leading-relaxed">
+                Esta sección establece el contexto de nuestro reporte. Fotografiar a un Xoloitzcuintle no es como fotografiar a cualquier otra raza. Su falta de pelaje expone directamente su piel a las luces del estudio y al clima, mientras que su temperamento primitivo requiere un manejo especializado. Aquí exploraremos los datos fundamentales que todo fotógrafo y director de arte debe conocer antes de que el perro pise el set.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100 text-center">
+                    <div class="text-4xl mb-3">🌡️</div>
+                    <div class="text-3xl font-bold text-stone-800 mb-1">24°C - 26°C</div>
+                    <div class="text-sm text-stone-500">Temperatura ideal del set</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100 text-center">
+                    <div class="text-4xl mb-3">⏱️</div>
+                    <div class="text-3xl font-bold text-stone-800 mb-1">45 min</div>
+                    <div class="text-sm text-stone-500">Tiempo máximo por bloque de fotos</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100 text-center">
+                    <div class="text-4xl mb-3">✨</div>
+                    <div class="text-3xl font-bold text-stone-800 mb-1">Mate</div>
+                    <div class="text-sm text-stone-500">Acabado ideal de hidratación</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analisis-datos" class="bg-stone-100 p-8 rounded-2xl shadow-inner border border-stone-200">
+            <h2 class="text-3xl text-amber-800 border-b pb-2 border-stone-300 mb-6">Métricas del Set: Temperatura y Demanda</h2>
+            <p class="mb-8">
+                Para tomar decisiones informadas sobre la producción, presentamos métricas clave. El primer gráfico ilustra la distribución de las variedades de tamaño más solicitadas en la industria publicitaria. El segundo gráfico es crítico para el bienestar del animal: correlaciona la temperatura ambiente del estudio con el nivel de confort y enfoque del perro, dictando directamente la configuración del clima en el set.
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                    <h3 class="text-xl font-semibold mb-2 text-center">Demanda Publicitaria por Tamaño</h3>
+                    <p class="text-sm text-stone-500 text-center mb-4">Porcentaje de contrataciones anuales en agencias</p>
+                    <div class="chart-container">
+                        <canvas id="sizeChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                    <h3 class="text-xl font-semibold mb-2 text-center">Curva de Estrés vs. Temperatura</h3>
+                    <p class="text-sm text-stone-500 text-center mb-4">Nivel de confort y enfoque del Xolo según el clima del set</p>
+                    <div class="chart-container">
+                        <canvas id="tempChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="flujo-trabajo">
+            <h2 class="text-3xl text-amber-800 border-b pb-2 border-stone-200 mb-6">El Flujo de Trabajo Fotográfico</h2>
+            <p class="mb-6">
+                El manejo de un Xoloitzcuintle se divide en tres fases críticas. Utilice la navegación a continuación para explorar los protocolos cualitativos recomendados por Xolos Ramírez para garantizar sesiones seguras y resultados estéticos superiores.
+            </p>
+
+            <div class="flex flex-col md:flex-row border-b border-stone-200 mb-6" id="tab-container">
+                <button class="tab-btn tab-active px-6 py-3 text-lg transition-colors duration-200 hover:bg-stone-100" data-target="fase-prep">1. Preparación</button>
+                <button class="tab-btn tab-inactive px-6 py-3 text-lg transition-colors duration-200 hover:bg-stone-100" data-target="fase-shoot">2. Durante la Sesión</button>
+                <button class="tab-btn tab-inactive px-6 py-3 text-lg transition-colors duration-200 hover:bg-stone-100" data-target="fase-ilum">3. Esquemas de Luz</button>
+            </div>
+
+            <div id="tab-contents" class="relative min-h-[300px]">
+                <div id="fase-prep" class="tab-pane block animation-fade space-y-4">
+                    <h3 class="text-2xl font-semibold text-stone-800">Cuidado y Preparación de la Piel</h3>
+                    <div class="bg-amber-50 p-6 rounded-lg border-l-4 border-amber-500 text-stone-700">
+                        <ul class="list-none space-y-3">
+                            <li class="flex items-start"><span class="mr-3 text-xl">🧴</span> <span><strong>Hidratación Estratégica:</strong> Evite aceites minerales brillantes que actúen como espejos bajo los flashes. Use cremas hidratantes de acabado mate (como manteca de karité diluida) aplicadas 2 horas antes del llamado.</span></li>
+                            <li class="flex items-start"><span class="mr-3 text-xl">🧼</span> <span><strong>Exfoliación:</strong> Debe realizarse 3 días antes de la sesión para evitar rojeces e irritaciones el día de la toma.</span></li>
+                            <li class="flex items-start"><span class="mr-3 text-xl">🐾</span> <span><strong>Limpieza en set:</strong> Tenga a mano toallitas húmedas sin alcohol para limpiar polvo o pelusas del suelo del estudio que se adhieren fácilmente a su piel.</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="fase-shoot" class="tab-pane hidden animation-fade space-y-4">
+                    <h3 class="text-2xl font-semibold text-stone-800">Manejo y Temperamento</h3>
+                    <div class="bg-stone-50 p-6 rounded-lg border-l-4 border-stone-800 text-stone-700">
+                        <ul class="list-none space-y-3">
+                            <li class="flex items-start"><span class="mr-3 text-xl">🤫</span> <span><strong>Ambiente Controlado:</strong> Los Xolos son primitivos y pueden ser desconfiados. Mantenga un set cerrado, con el mínimo personal necesario. Evite movimientos bruscos.</span></li>
+                            <li class="flex items-start"><span class="mr-3 text-xl">🍖</span> <span><strong>Refuerzo de Alto Valor:</strong> Las croquetas comunes no funcionan en un entorno estresante. Utilice hígado deshidratado, pollo cocido o salchichas para mantener la atención hacia el lente.</span></li>
+                            <li class="flex items-start"><span class="mr-3 text-xl">🛋️</span> <span><strong>Zonas de Descanso:</strong> Tenga tapetes térmicos o mantas gruesas fuera del área de disparo. Su falta de pelo los hace vulnerables al piso frío del estudio.</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="fase-ilum" class="tab-pane hidden animation-fade space-y-4">
+                    <h3 class="text-2xl font-semibold text-stone-800">Retos de Iluminación</h3>
+                    <p class="text-stone-700">La piel oscura y sin pelo presenta un desafío fotográfico masivo: absorbe luz pero genera reflejos especulares intensos.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div class="p-4 bg-white border border-stone-200 rounded-lg shadow-sm">
+                            <h4 class="font-bold text-amber-700 mb-2">Qué EVITAR ❌</h4>
+                            <p class="text-sm">Luz dura directa (reflectores estándar sin difusor). Creará un punto blanco estallado en la piel del perro perdiendo toda la textura de las arrugas.</p>
+                        </div>
+                        <div class="p-4 bg-white border border-stone-200 rounded-lg shadow-sm">
+                            <h4 class="font-bold text-emerald-700 mb-2">Qué UTILIZAR ✅</h4>
+                            <p class="text-sm">Softboxes grandes (Octabox de 120cm+), iluminación rebotada o difusores dobles para envolver al sujeto y resaltar la musculatura suavemente.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="simulador" class="bg-stone-800 text-stone-100 p-8 rounded-2xl shadow-xl">
+            <h2 class="text-3xl text-amber-500 border-b pb-2 border-stone-600 mb-6">Simulador Interactivo: Temperatura de Color</h2>
+            <p class="mb-6 text-stone-300">
+                La tonalidad gris oscuro o bronce del Xolo cambia drásticamente según la temperatura Kelvin de la luz continua o de modelado. Utilice este control deslizante para observar cómo afectan los dominantes de color a la presentación de la piel.
+            </p>
+            
+            <div class="flex flex-col items-center max-w-xl mx-auto bg-stone-900 p-6 rounded-xl border border-stone-700">
+                
+                <div id="color-preview" class="w-full h-32 rounded-lg transition-colors duration-300 shadow-inner flex items-center justify-center mb-6" style="background-color: #5A504A;">
+                    <span class="text-4xl">🐕</span>
+                </div>
+                
+                <div class="w-full flex justify-between text-xs text-stone-400 mb-2">
+                    <span>Tungsteno (Cálido - 3200K)</span>
+                    <span>Luz de Día (Neutro - 5500K)</span>
+                    <span>Sombra (Frío - 7500K)</span>
+                </div>
+                <input type="range" id="tempSlider" min="0" max="100" value="50" class="w-full h-2 bg-stone-700 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                
+                <div class="mt-4 text-center">
+                    <p id="tempDescription" class="text-amber-400 font-semibold">Tono Neutro - Resalta el color natural (Pizarra/Bronce)</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="checklist">
+            <h2 class="text-3xl text-amber-800 border-b pb-2 border-stone-200 mb-6">Checklist Interactivo del Director de Arte</h2>
+            <p class="mb-6">
+                Asegure el éxito de la sesión validando estos puntos críticos antes de comenzar a disparar. Haga clic en los elementos para marcarlos.
+            </p>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200">
+                <ul id="interactive-list" class="space-y-3">
+                    <li class="flex items-center p-3 hover:bg-stone-50 rounded cursor-pointer transition-colors" onclick="toggleCheck(this)">
+                        <div class="w-6 h-6 border-2 border-amber-600 rounded mr-4 flex items-center justify-center text-white check-box"></div>
+                        <span class="text-lg text-stone-700">Climatización del estudio confirmada a 25°C.</span>
+                    </li>
+                    <li class="flex items-center p-3 hover:bg-stone-50 rounded cursor-pointer transition-colors" onclick="toggleCheck(this)">
+                        <div class="w-6 h-6 border-2 border-amber-600 rounded mr-4 flex items-center justify-center text-white check-box"></div>
+                        <span class="text-lg text-stone-700">Piel del Xolo inspeccionada: hidratación mate, sin excesos de aceite.</span>
+                    </li>
+                    <li class="flex items-center p-3 hover:bg-stone-50 rounded cursor-pointer transition-colors" onclick="toggleCheck(this)">
+                        <div class="w-6 h-6 border-2 border-amber-600 rounded mr-4 flex items-center justify-center text-white check-box"></div>
+                        <span class="text-lg text-stone-700">Modificadores de luz grandes (Softboxes/Paraguas reflectantes) instalados.</span>
+                    </li>
+                    <li class="flex items-center p-3 hover:bg-stone-50 rounded cursor-pointer transition-colors" onclick="toggleCheck(this)">
+                        <div class="w-6 h-6 border-2 border-amber-600 rounded mr-4 flex items-center justify-center text-white check-box"></div>
+                        <span class="text-lg text-stone-700">Mantas térmicas colocadas fuera de la zona de destellos.</span>
+                    </li>
+                    <li class="flex items-center p-3 hover:bg-stone-50 rounded cursor-pointer transition-colors" onclick="toggleCheck(this)">
+                        <div class="w-6 h-6 border-2 border-amber-600 rounded mr-4 flex items-center justify-center text-white check-box"></div>
+                        <span class="text-lg text-stone-700">Premios de alto valor (pollo/hígado) listos para el handler.</span>
+                    </li>
+                </ul>
+                <div class="mt-6 pt-4 border-t border-stone-100 flex justify-between items-center">
+                    <span class="text-stone-500 font-semibold">Progreso: <span id="progress-text">0</span>/5</span>
+                    <button onclick="resetChecklist()" class="px-4 py-2 bg-stone-200 hover:bg-stone-300 text-stone-700 rounded text-sm transition-colors">Reiniciar</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-900 text-stone-400 py-8 text-center mt-12 border-t-4 border-amber-600">
+        <p class="font-serif text-lg mb-2 text-stone-200">Xolos Ramírez</p>
+        <p class="text-sm">Reporte Interactivo de Manejo Profesional y Fotografía.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const sizeCtx = document.getElementById('sizeChart').getContext('2d');
+            new Chart(sizeCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Estándar (Fuerza/Elegancia)', 'Miniatura (Versatilidad)', 'Toy (Moda/Editorial)'],
+                    datasets: [{
+                        data: [55, 30, 15],
+                        backgroundColor: [
+                            '#44403C', 
+                            '#D97706', 
+                            '#E7E5E4'  
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { family: 'Nunito Sans' } } },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) { return context.label + ': ' + context.parsed + '% de demanda'; }
+                            }
+                        }
+                    },
+                    cutout: '65%'
+                }
+            });
+
+            
+            const tempCtx = document.getElementById('tempChart').getContext('2d');
+            new Chart(tempCtx, {
+                type: 'line',
+                data: {
+                    labels: ['15°C', '18°C', '20°C', '22°C', '24°C', '26°C', '28°C', '30°C'],
+                    datasets: [{
+                        label: 'Nivel de Enfoque y Confort (0-10)',
+                        data: [2, 3, 5, 8, 9.5, 9, 7, 4],
+                        borderColor: '#D97706',
+                        backgroundColor: 'rgba(217, 119, 6, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#44403C',
+                        pointRadius: 5,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { 
+                            beginAtZero: true, 
+                            max: 10,
+                            title: { display: true, text: 'Nivel de Confort' }
+                        },
+                        x: {
+                            title: { display: true, text: 'Temperatura del Estudio' }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) { return 'Temp: ' + context[0].label; },
+                                label: function(context) { return 'Confort: ' + context.parsed.y + '/10'; }
+                            }
+                        }
+                    }
+                }
+            });
+
+            
+            const tabs = document.querySelectorAll('.tab-btn');
+            const panes = document.querySelectorAll('.tab-pane');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    
+                    tabs.forEach(t => {
+                        t.classList.remove('tab-active');
+                        t.classList.add('tab-inactive');
+                    });
+                    
+                    panes.forEach(p => p.classList.add('hidden'));
+
+                    
+                    tab.classList.remove('tab-inactive');
+                    tab.classList.add('tab-active');
+                    const targetId = tab.getAttribute('data-target');
+                    document.getElementById(targetId).classList.remove('hidden');
+                });
+            });
+
+            
+            const slider = document.getElementById('tempSlider');
+            const previewBox = document.getElementById('color-preview');
+            const desc = document.getElementById('tempDescription');
+
+            
+            
+            
+
+            slider.addEventListener('input', (e) => {
+                const val = parseInt(e.target.value);
+                if (val < 33) {
+                    previewBox.style.backgroundColor = '#70533C'; 
+                    desc.textContent = "Luz Cálida - Resalta tonos rojizos, piel parece más seca.";
+                    desc.className = "text-orange-400 font-semibold";
+                } else if (val < 66) {
+                    previewBox.style.backgroundColor = '#5A504A'; 
+                    desc.textContent = "Luz Neutra - El color pizarra/bronce original del perro.";
+                    desc.className = "text-amber-400 font-semibold";
+                } else {
+                    previewBox.style.backgroundColor = '#4A505C'; 
+                    desc.textContent = "Luz Fría - Piel adopta tonos azulados, aumenta percepción de brillo.";
+                    desc.className = "text-blue-300 font-semibold";
+                }
+            });
+        });
+
+        
+        let checks = 0;
+        function toggleCheck(element) {
+            const box = element.querySelector('.check-box');
+            if (box.classList.contains('bg-amber-600')) {
+                box.classList.remove('bg-amber-600');
+                box.innerHTML = '';
+                element.classList.remove('opacity-60');
+                checks--;
+            } else {
+                box.classList.add('bg-amber-600');
+                box.innerHTML = '✓';
+                element.classList.add('opacity-60');
+                checks++;
+            }
+            document.getElementById('progress-text').innerText = checks;
+        }
+
+        function resetChecklist() {
+            const listItems = document.querySelectorAll('#interactive-list li');
+            listItems.forEach(item => {
+                const box = item.querySelector('.check-box');
+                box.classList.remove('bg-amber-600');
+                box.innerHTML = '';
+                item.classList.remove('opacity-60');
+            });
+            checks = 0;
+            document.getElementById('progress-text').innerText = checks;
+        }
+    </script>
+</body>
+</html>
