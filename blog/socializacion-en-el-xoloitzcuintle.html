@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Jerarquía Social en una Manada de Xoloitzcuintles</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,700;1,300&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Custom Styles & Chart Container Enforcement */
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #FAF7F2; /* Warm, earthy off-white */
+            color: #3F3F46; /* Zinc 700 */
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Merriweather', serif;
+            color: #27272A; /* Zinc 800 */
+        }
+        .text-terracotta { color: #9A3412; }
+        .bg-terracotta { background-color: #9A3412; }
+        .border-terracotta { border-color: #9A3412; }
+        
+        .text-obsidian { color: #18181B; }
+        .bg-obsidian { background-color: #18181B; }
+
+        /* CRITICAL: Chart Container Constraints */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Prevent excessive width */
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px; /* Controlled height */
+            max-height: 400px;
+        }
+        
+        @media (max-width: 640px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+
+        /* Interactive Element Styles */
+        .role-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .role-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .role-card.active {
+            border-color: #9A3412;
+            background-color: #FFF3ED;
+        }
+        
+        /* Process Flow without SVG */
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+            border-left: 4px solid #E5E7EB;
+            padding-bottom: 1.5rem;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -0.6rem;
+            top: 0;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background-color: #9A3412;
+        }
+        .timeline-item:last-child {
+            border-left: 4px solid transparent;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+<!-- Chosen Palette: Warm Earth/Xolo Tones. Background: Warm Off-White (#FAF7F2). Accents: Terracotta/Clay (#9A3412), Obsidian/Dark Slate (#18181B), Sand (#D6D3D1). -->
+
+<!-- Application Structure Plan: 
+1.  **Header/Hero:** Sets the academic yet accessible tone, introducing the primitive nature of the Xoloitzcuintle.
+2.  **Navigation (Sticky):** Allows jumping between key analytical sections.
+3.  **Section 1: Estructura Dinámica (Dynamic Structure):** Interactive grid. Users click on roles (Leaders, Sentinels, Mediators) to see text details. Rationale: Avoids wall-of-text and encourages active discovery of pack roles.
+4.  **Section 2: Análisis de Actividad y Comunicación (Activity & Communication):** - Doughnut Chart: Shows time allocation. Rationale: Best for showing proportions of a whole (24h period).
+    - Radar Chart: Compares communication types across roles. Rationale: Excellent for multivariate comparison (visual, vocal, olfactory) across different subjects.
+5.  **Section 3: Distribución de Recursos (Resource Allocation):** Bar Chart. Rationale: Clear comparison of how rank dictates access to food, space, and human attention.
+6.  **Section 4: Resolución de Conflictos (Conflict Resolution):** HTML/CSS Timeline. Rationale: Shows process flow (escalation/de-escalation) without needing SVG/Mermaid.
+-->
+
+<!-- Visualization & Content Choices:
+- Roles Data -> Goal: Organize/Inform -> Viz: Interactive HTML Cards updating a text panel -> Interaction: Click -> Justification: Cleans up UI, makes learning active.
+- Daily Activity -> Goal: Inform/Proportions -> Viz: Doughnut Chart (Chart.js) -> Interaction: Hover tooltips -> Justification: Shows how pack spends its time as parts of a whole.
+- Communication Methods -> Goal: Compare -> Viz: Radar Chart (Chart.js) -> Interaction: Hover tooltips, toggle datasets -> Justification: Compares 3 variables across 3 different roles efficiently.
+- Resource Access -> Goal: Compare -> Viz: Grouped Bar Chart (Chart.js) -> Interaction: Hover tooltips -> Justification: Direct magnitude comparison between ranks.
+- Conflict Escalation -> Goal: Process/Timeline -> Viz: CSS Timeline (HTML/Tailwind) -> Interaction: Read-through -> Justification: Structural flow mapping, completely SVG-free.
+-->
+
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. Canvas used for charts, HTML/CSS for structure and icons (Unicode). -->
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-200">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="font-serif font-bold text-xl text-obsidian tracking-wide">Xolo<span class="text-terracotta">Jerarquía</span> 🐾</div>
+            <div class="hidden md:flex space-x-6 text-sm font-semibold text-gray-600">
+                <a href="#roles" class="hover:text-terracotta transition-colors">Estructura</a>
+                <a href="#actividad" class="hover:text-terracotta transition-colors">Dinámica</a>
+                <a href="#recursos" class="hover:text-terracotta transition-colors">Recursos</a>
+                <a href="#conflictos" class="hover:text-terracotta transition-colors">Conflictos</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header / Hero -->
+    <header class="max-w-6xl mx-auto px-4 pt-16 pb-12 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">La Jerarquía Social en una Manada de Xoloitzcuintles</h1>
+        <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+            Un análisis interactivo del comportamiento colectivo, roles y comunicación de una de las razas caninas más primitivas del mundo. A diferencia de los modelos tradicionales de "macho alfa", las manadas de Xolos exhiben una estructura familiar fluida y altamente cooperativa.
+        </p>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 space-y-24 pb-20">
+
+        <!-- Section 1: Estructura de la Manada (Interactive Roles) -->
+        <section id="roles" class="scroll-mt-20">
+            <div class="mb-8 border-l-4 border-terracotta pl-4">
+                <h2 class="text-3xl font-bold mb-2">Estructura Dinámica de la Manada</h2>
+                <p class="text-gray-600">
+                    Las manadas de Xoloitzcuintles no se rigen por una tiranía rígida, sino por un sistema de roles funcionales. <strong>Haz clic en los roles a continuación</strong> para explorar las responsabilidades y características de cada individuo dentro del grupo.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                <!-- Selectors -->
+                <div class="md:col-span-5 grid grid-cols-2 gap-4">
+                    <div class="role-card active border-2 border-transparent bg-white p-4 rounded-xl shadow-sm text-center" onclick="updateRole('lideres', this)">
+                        <div class="text-3xl mb-2">👑</div>
+                        <h3 class="font-bold text-obsidian">Pareja Principal</h3>
+                        <span class="text-xs text-gray-500 uppercase tracking-wide">Guías</span>
+                    </div>
+                    <div class="role-card border-2 border-transparent bg-white p-4 rounded-xl shadow-sm text-center" onclick="updateRole('centinelas', this)">
+                        <div class="text-3xl mb-2">🛡️</div>
+                        <h3 class="font-bold text-obsidian">Centinelas</h3>
+                        <span class="text-xs text-gray-500 uppercase tracking-wide">Guardianes</span>
+                    </div>
+                    <div class="role-card border-2 border-transparent bg-white p-4 rounded-xl shadow-sm text-center" onclick="updateRole('mediadores', this)">
+                        <div class="text-3xl mb-2">🕊️</div>
+                        <h3 class="font-bold text-obsidian">Mediadores</h3>
+                        <span class="text-xs text-gray-500 uppercase tracking-wide">Pacificadores</span>
+                    </div>
+                    <div class="role-card border-2 border-transparent bg-white p-4 rounded-xl shadow-sm text-center" onclick="updateRole('cachorros', this)">
+                        <div class="text-3xl mb-2">🌱</div>
+                        <h3 class="font-bold text-obsidian">Juveniles</h3>
+                        <span class="text-xs text-gray-500 uppercase tracking-wide">Aprendices</span>
+                    </div>
+                </div>
+
+                <!-- Detail Panel -->
+                <div class="md:col-span-7 bg-white p-8 rounded-2xl shadow-md border border-gray-100 flex flex-col justify-center min-h-[300px]">
+                    <h3 id="role-title" class="text-2xl font-bold text-terracotta mb-4 flex items-center gap-2">
+                        👑 Pareja Principal (Líderes)
+                    </h3>
+                    <p id="role-desc" class="text-gray-700 leading-relaxed mb-4">
+                        Generalmente conformada por el macho y la hembra reproductores o los individuos de mayor edad y experiencia. Su liderazgo no se basa en la agresión constante, sino en el control de recursos y la toma de decisiones (cuándo moverse, cuándo descansar). Exhiben una confianza tranquila y a menudo ignoran las provocaciones menores de los rangos inferiores.
+                    </p>
+                    <ul id="role-traits" class="space-y-2 text-sm text-gray-600 bg-gray-50 p-4 rounded-lg">
+                        <li><strong>Postura:</strong> Erguida, cola alta pero relajada, orejas alerta.</li>
+                        <li><strong>Privilegios:</strong> Primer acceso a comida de alto valor y mejores lugares de descanso.</li>
+                        <li><strong>Interacción:</strong> Inician y terminan las sesiones de juego social.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Dinámica y Comunicación (Charts) -->
+        <section id="actividad" class="scroll-mt-20">
+            <div class="mb-8 border-l-4 border-terracotta pl-4">
+                <h2 class="text-3xl font-bold mb-2">Actividad y Canales de Comunicación</h2>
+                <p class="text-gray-600">
+                    Como perros primitivos, los Xolos conservan instintos de conservación de energía y una rica variedad de señales sutiles. Las visualizaciones revelan cómo distribuyen su tiempo y cómo difieren los métodos comunicativos según el rol social.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <!-- Chart 1: Activity -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <h3 class="text-center font-bold text-lg mb-2">Distribución del Tiempo Diario (24h)</h3>
+                    <p class="text-center text-xs text-gray-500 mb-4">Los Xolos son conservadores de energía, pasando la mitad del día en reposo táctil grupal.</p>
+                    <div class="chart-container">
+                        <canvas id="activityChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Chart 2: Communication Radar -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <h3 class="text-center font-bold text-lg mb-2">Uso de Señales por Rol</h3>
+                    <p class="text-center text-xs text-gray-500 mb-4">Frecuencia de uso: Visual (Postura), Vocal (Gruñidos/Ladridos), Olfativa (Marcaje).</p>
+                    <div class="chart-container">
+                        <canvas id="communicationChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section 3: Distribución de Recursos -->
+        <section id="recursos" class="scroll-mt-20 bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+            <div class="mb-8 text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4">Control y Acceso a Recursos</h2>
+                <p class="text-gray-600">
+                    La jerarquía se hace más evidente al observar la distribución de recursos valiosos. La agresión real es rara; en su lugar, se utilizan "miradas fijas", bloqueos corporales y derechos de prioridad para establecer el orden.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                <div class="md:col-span-4 space-y-6">
+                    <div class="bg-gray-50 p-4 rounded-xl">
+                        <h4 class="font-bold text-obsidian flex items-center gap-2">🍖 Comida de Alto Valor</h4>
+                        <p class="text-sm text-gray-600 mt-1">Huesos o premios especiales. Los líderes tienen prioridad absoluta; los mediadores esperan su turno sin confrontar.</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-xl">
+                        <h4 class="font-bold text-obsidian flex items-center gap-2">🛋️ Lugares de Descanso</h4>
+                        <p class="text-sm text-gray-600 mt-1">Camas soleadas o cercanas al dueño humano. Los individuos de alto rango desplazan a los inferiores con un simple acercamiento.</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-xl">
+                        <h4 class="font-bold text-obsidian flex items-center gap-2">👤 Atención Humana</h4>
+                        <p class="text-sm text-gray-600 mt-1">Los Xolos forman lazos fuertes. El líder suele interponerse físicamente entre el humano y perros de menor rango para acaparar atención.</p>
+                    </div>
+                </div>
+                
+                <div class="md:col-span-8">
+                    <div class="chart-container">
+                        <canvas id="resourceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Resolución de Conflictos -->
+        <section id="conflictos" class="scroll-mt-20">
+            <div class="mb-10 border-l-4 border-terracotta pl-4">
+                <h2 class="text-3xl font-bold mb-2">Rituales de Resolución de Conflictos</h2>
+                <p class="text-gray-600">
+                    Una manada saludable de Xolos raramente llega al combate físico. Poseen una escalera de escalada estructurada que permite resolver disputas de jerarquía o recursos mediante comunicación ritualizada.
+                </p>
+            </div>
+
+            <div class="max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                <div class="timeline-item">
+                    <h3 class="font-bold text-lg text-obsidian">1. Tensión Silenciosa (Prevención)</h3>
+                    <p class="text-gray-600 mt-1">Postura rígida, orejas erectas orientadas hacia adelante, cierre de mandíbula y mirada fija (<i>hard stare</i>). Es una advertencia clara para que el otro perro ceda el recurso o el espacio.</p>
+                </div>
+                <div class="timeline-item">
+                    <h3 class="font-bold text-lg text-obsidian">2. Advertencia Vocal y Facial</h3>
+                    <p class="text-gray-600 mt-1">Si la mirada no funciona, se muestra la dentadura (arrugando el hocico) acompañado de un gruñido sordo. No hay movimiento hacia adelante aún.</p>
+                </div>
+                <div class="timeline-item border-l-4 border-amber-500">
+                    <h3 class="font-bold text-lg text-obsidian">3. Escalada Física Ritualizada (Corte/Aviso)</h3>
+                    <p class="text-gray-600 mt-1">Ladridos secos, fintas (movimientos bruscos hacia adelante sin contacto) o el "chasquido" de dientes cerca del cuello del oponente. El objetivo es intimidar, no herir.</p>
+                </div>
+                <div class="timeline-item border-l-4 border-transparent pb-0">
+                    <h3 class="font-bold text-lg text-terracotta">4. Sumisión y Pacificación (Resolución)</h3>
+                    <p class="text-gray-600 mt-1">El individuo de menor rango rompe contacto visual, baja la cabeza, lame los belfos (labios) del perro dominante, o se recuesta mostrando el vientre. El perro dominante acepta la disculpa sacudiéndose o alejándose, restaurando el orden.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-obsidian text-white py-8">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-gray-400 font-serif mb-2">XoloJerarquía: Análisis de Comportamiento Canino Primitivo</p>
+            <p class="text-sm text-gray-500">Este panel interactivo sintetiza estudios observacionales sobre la dinámica social de la raza Xoloitzcuintle. Los datos son representaciones conceptuales basadas en comportamiento etológico general de la raza.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- DATA OBJECTS FOR INTERACTIVITY ---
+        const roleData = {
+            lideres: {
+                title: "👑 Pareja Principal (Líderes)",
+                desc: "Generalmente conformada por el macho y la hembra reproductores o los individuos de mayor edad y experiencia. Su liderazgo no se basa en la agresión constante, sino en el control de recursos y la toma de decisiones (cuándo moverse, cuándo descansar). Exhiben una confianza tranquila y a menudo ignoran las provocaciones menores de los rangos inferiores.",
+                traits: [
+                    "<strong>Postura:</strong> Erguida, cola alta pero relajada, orejas alerta.",
+                    "<strong>Privilegios:</strong> Primer acceso a comida de alto valor y mejores lugares de descanso.",
+                    "<strong>Interacción:</strong> Inician y terminan las sesiones de juego social."
+                ]
+            },
+            centinelas: {
+                title: "🛡️ Centinelas (Guardianes)",
+                desc: "Individuos altamente reactivos a estímulos externos. Suelen patrullar el perímetro del hogar o del grupo. Al detectar una anomalía, alertan vocalmente a la manada. No toman las decisiones finales, pero son vitales para la seguridad del grupo.",
+                traits: [
+                    "<strong>Postura:</strong> Tensos, moviéndose constantemente a los bordes del grupo.",
+                    "<strong>Vocalización:</strong> Ladridos agudos y rápidos ante ruidos inusuales.",
+                    "<strong>Relación con Líderes:</strong> Se retiran y ceden el frente cuando los líderes se acercan a investigar el peligro."
+                ]
+            },
+            mediadores: {
+                title: "🕊️ Mediadores (Pacificadores)",
+                desc: "Suelen ser individuos adultos o juveniles mayores con un temperamento muy estable. Su función es reducir la tensión en la manada. Cuando dos perros discuten, el mediador puede interponerse físicamente entre ellos de forma calmada o iniciar un comportamiento de juego para distraerlos.",
+                traits: [
+                    "<strong>Lenguaje Corporal:</strong> Posturas curvas, orejas hacia atrás (amigables), bostezos frecuentes (señal de calma).",
+                    "<strong>Intervención:</strong> Se interponen entre dos individuos tensos dividiendo el espacio visual.",
+                    "<strong>Juego:</strong> Frecuentemente realizan la 'reverencia de juego' para relajar el ambiente."
+                ]
+            },
+            cachorros: {
+                title: "🌱 Juveniles (Aprendices)",
+                desc: "Los cachorros y juveniles tienen un 'pase libre' en la manada hasta cierta edad. Se les permite romper reglas (morder colas, robar juguetes) mientras los adultos les enseñan inhibición de mordida y respeto mediante correcciones suaves (gruñidos bajos o inmovilización).",
+                traits: [
+                    "<strong>Comportamiento:</strong> Exploratorio, hiperactivo, constante solicitud de atención.",
+                    "<strong>Corrección:</strong> Reciben 'toques' rápidos con el hocico por parte de adultos si cruzan los límites.",
+                    "<strong>Sumisión:</strong> Rápida exhibición de vientre cuando son regañados."
+                ]
+            }
+        };
+
+        // --- INTERACTION LOGIC ---
+        function updateRole(roleKey, element) {
+            // Update UI active state
+            document.querySelectorAll('.role-card').forEach(card => card.classList.remove('active'));
+            element.classList.add('active');
+
+            // Update Content
+            const data = roleData[roleKey];
+            document.getElementById('role-title').innerHTML = data.title;
+            
+            // Simple fade effect
+            const descEl = document.getElementById('role-desc');
+            const traitsEl = document.getElementById('role-traits');
+            
+            descEl.style.opacity = 0;
+            traitsEl.style.opacity = 0;
+            
+            setTimeout(() => {
+                descEl.innerHTML = data.desc;
+                traitsEl.innerHTML = data.traits.map(t => `<li>${t}</li>`).join('');
+                descEl.style.opacity = 1;
+                traitsEl.style.opacity = 1;
+                descEl.style.transition = "opacity 0.3s ease";
+                traitsEl.style.transition = "opacity 0.3s ease";
+            }, 150);
+        }
+
+        // --- CHART.JS VISUALIZATIONS ---
+        
+        // Common Chart Defaults
+        Chart.defaults.font.family = "'Outfit', sans-serif";
+        Chart.defaults.color = '#71717A'; // Gray 500
+
+        document.addEventListener("DOMContentLoaded", function() {
+            
+            // 1. Doughnut Chart: Activity
+            const ctxActivity = document.getElementById('activityChart').getContext('2d');
+            new Chart(ctxActivity, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Descanso/Sueño', 'Patrullaje/Alerta', 'Juego Social', 'Alimentación/Exploración'],
+                    datasets: [{
+                        data: [55, 20, 15, 10],
+                        backgroundColor: [
+                            '#D6D3D1', // Sand (Rest)
+                            '#18181B', // Obsidian (Patrol)
+                            '#9A3412', // Terracotta (Play)
+                            '#713F12'  // Brown (Food)
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ' ' + context.label + ': ' + context.raw + '% del día';
+                                }
+                            }
+                        }
+                    },
+                    cutout: '65%'
+                }
+            });
+
+            // 2. Radar Chart: Communication Methods
+            const ctxComm = document.getElementById('communicationChart').getContext('2d');
+            new Chart(ctxComm, {
+                type: 'radar',
+                data: {
+                    labels: ['Postura (Visual)', 'Ladridos/Gruñidos', 'Marcaje Olfativo', 'Contacto Físico', 'Mirada Fija'],
+                    datasets: [
+                        {
+                            label: 'Líder',
+                            data: [90, 30, 85, 70, 95],
+                            backgroundColor: 'rgba(154, 52, 18, 0.2)',
+                            borderColor: '#9A3412',
+                            pointBackgroundColor: '#9A3412',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Centinela',
+                            data: [80, 95, 60, 40, 50],
+                            backgroundColor: 'rgba(24, 24, 27, 0.2)',
+                            borderColor: '#18181B',
+                            pointBackgroundColor: '#18181B',
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(0,0,0,0.1)' },
+                            grid: { color: 'rgba(0,0,0,0.1)' },
+                            pointLabels: { font: { size: 11 } },
+                            ticks: { display: false, max: 100, min: 0 }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+
+            // 3. Bar Chart: Resource Access
+            const ctxResource = document.getElementById('resourceChart').getContext('2d');
+            new Chart(ctxResource, {
+                type: 'bar',
+                data: {
+                    labels: ['Prioridad en Comida', 'Lugares de Descanso', 'Atención Humana'],
+                    datasets: [
+                        {
+                            label: 'Alto Rango (Líderes)',
+                            data: [100, 95, 90],
+                            backgroundColor: '#9A3412', // Terracotta
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Rango Medio (Sentinelas/Mediadores)',
+                            data: [50, 60, 70],
+                            backgroundColor: '#713F12', // Brown
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Rango Bajo (Subordinados)',
+                            data: [20, 30, 40],
+                            backgroundColor: '#D6D3D1', // Sand
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: { display: true, text: 'Nivel de Acceso (%)' },
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.raw + '% acceso';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
