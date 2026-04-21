@@ -205,7 +205,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </div>
       </section>
 
-      <section data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">
+      <section id="perfiles-destacados" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">
         <h2>Perfiles destacados</h2>
         <div class="puppy-grid">
 
@@ -651,6 +651,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
       AOS.init({ once: true, duration: 700, offset: 60, easing: 'ease-out' });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        setTimeout(function() {
+          const seccionDestacados = document.getElementById("perfiles-destacados");
+          if (seccionDestacados) {
+            seccionDestacados.scrollIntoView({
+              behavior: "smooth",
+              block: "start"
+            });
+          }
+        }, 800);
+      });
     </script>
   </body>
 </html>
