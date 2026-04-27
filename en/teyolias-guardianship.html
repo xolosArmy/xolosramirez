@@ -1,1 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teyolía Guardianship | Xolos Ramírez</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+            height: 350px;
+        }
+        .step-btn.active {
+            background-color: #d97706;
+            color: white;
+            border-color: #d97706;
+            transform: scale(1.05);
+        }
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .flip-card { perspective: 1000px; height: 180px; }
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%;
+            transition: transform 0.6s; transform-style: preserve-3d;
+        }
+        .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back {
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden; border-radius: 0.75rem;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 1rem;
+        }
+        .flip-card-front { background-color: #f5f5f4; color: #292524; }
+        .flip-card-back { background-color: #292524; color: #f5f5f4; transform: rotateY(180deg); }
+    </style>
+</head>
+<body class="bg-stone-100 text-stone-800 font-sans selection:bg-amber-200">
 
+    <header class="bg-stone-900 text-stone-50 py-16 px-6 text-center border-b-8 border-amber-600">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-serif font-bold mb-4 text-amber-500">Teyolía Guardianship ✨</h1>
+            <p class="text-lg text-stone-300 leading-relaxed mb-8">
+                A curated adoption path where culture, the tribe, and the breeder unite to ensure the well-being of the Xoloitzcuintle.
+            </p>
+
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="https://teyolia.xolosramirez.com" target="_blank" rel="noopener noreferrer" class="bg-amber-500 text-stone-900 px-6 py-3 rounded-full font-bold hover:bg-amber-400 transition-all shadow-lg">
+                    🔥 View Open Campaigns
+                </a>
+                <a href="../blog/tutorial-tonalli-wallet.html" class="bg-transparent border border-amber-500 text-amber-500 px-6 py-3 rounded-full font-bold hover:bg-amber-500 hover:text-stone-900 transition-all">
+                    👛 Get Tonalli Wallet
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12">
+
+        <section class="mb-20 max-w-4xl mx-auto">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-serif font-bold text-stone-800">📽️ Video Tutorial</h2>
+                <p class="text-stone-600">Learn step-by-step how to participate in the Teyolías program.</p>
+            </div>
+            <div class="video-container">
+                <iframe
+                    src="https://www.youtube.com/embed/jvLuUDhNzTo"
+                    title="Teyolía Tutorial"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </section>
+
+        <section class="mb-20">
+            <div class="text-center mb-10">
+                <h3 class="text-3xl font-serif font-bold text-stone-800 mb-2">🐾 The Step-by-Step Path</h3>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-8 items-start">
+                <div class="w-full lg:w-1/3 flex lg:flex-col overflow-x-auto gap-3 border-stone-300">
+                    <button class="step-btn active px-5 py-4 rounded-xl border-2 bg-white font-medium shadow-sm transition-all" data-step="1">1. The Call</button>
+                    <button class="step-btn px-5 py-4 rounded-xl border-2 bg-white font-medium shadow-sm transition-all" data-step="2">2. Preparation</button>
+                    <button class="step-btn px-5 py-4 rounded-xl border-2 bg-white font-medium shadow-sm transition-all" data-step="3">3. Commitment</button>
+                    <button class="step-btn px-5 py-4 rounded-xl border-2 bg-white font-medium shadow-sm transition-all" data-step="4">4. The Tribe</button>
+                    <button class="step-btn px-5 py-4 rounded-xl border-2 bg-white font-medium shadow-sm transition-all" data-step="5">5. The Decision</button>
+                </div>
+
+                <div class="w-full lg:w-2/3 bg-white p-8 rounded-2xl shadow-lg border border-stone-200 min-h-[350px] flex items-center">
+                    <div id="step-content-container" class="w-full fade-in">
+                        <h4 id="step-title" class="text-2xl font-serif font-bold text-amber-600 mb-4 border-b pb-2">Step 1: The Call</h4>
+                        <p id="step-what" class="text-lg text-stone-700 leading-relaxed mb-4">The campaign for a puppy is published. You get to know their name, story, and goal.</p>
+                        <div class="bg-amber-50 p-6 rounded-xl border border-amber-200">
+                            <p id="step-rule" class="text-amber-900 font-medium">💡 Here you understand that this is NOT an auction. The highest bidder does not automatically win.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-20 bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-stone-200 text-center">
+            <h3 class="text-2xl font-serif font-bold mb-6">Guardian Profile Evaluation</h3>
+            <div class="chart-container">
+                <canvas id="profileChart"></canvas>
+            </div>
+            <p class="mt-6 text-sm text-stone-500 italic">Community support (OP_RETURN) and home suitability are the decisive factors.</p>
+        </section>
+
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front border-t-4 border-red-500">
+                        <h4 class="font-bold">Not an Auction ⚖️</h4>
+                    </div>
+                    <div class="flip-card-back"><p class="text-sm">Money shows commitment, but does not guarantee assignment.</p></div>
+                </div>
+            </div>
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front border-t-4 border-emerald-500">
+                        <h4 class="font-bold">Community-based 🤝</h4>
+                    </div>
+                    <div class="flip-card-back"><p class="text-sm">Your network of trust validates your ability to be a guardian.</p></div>
+                </div>
+            </div>
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front border-t-4 border-amber-500">
+                        <h4 class="font-bold">Curated 🏛️</h4>
+                    </div>
+                    <div class="flip-card-back"><p class="text-sm">Xolos Ramírez decides based strictly on animal welfare.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-20 bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-stone-200">
+            <div class="text-center mb-10">
+                <p class="text-sm uppercase tracking-widest text-amber-700 font-bold mb-3">Open Campaigns</p>
+                <h3 class="text-3xl font-serif font-bold text-stone-800 mb-4">Active Teyolías</h3>
+                <p class="text-stone-600 max-w-2xl mx-auto">These are the Teyolías currently available for application. Each has its own duration, profile, and guardianship process.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <article class="rounded-2xl border border-amber-200 bg-amber-50 overflow-hidden shadow-sm">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-0">
+                        <div class="md:col-span-1 bg-stone-200">
+                            <img src="https://i.imgur.com/uRMqjE2.png" alt="Tonatiuh Ramírez, Active Teyolía" class="w-full h-full object-cover"/>
+                        </div>
+                        <div class="md:col-span-2 p-6 text-left">
+                            <p class="text-xs uppercase tracking-widest text-amber-700 font-bold mb-2">Active · 2 months</p>
+                            <h4 class="text-2xl font-serif font-bold text-stone-900 mb-3">Tonatiuh Ramírez</h4>
+                            <ul class="text-sm text-stone-700 space-y-1 mb-5">
+                                <li><strong>Age:</strong> 6 months</li>
+                                <li><strong>Gender:</strong> Male</li>
+                                <li><strong>Size:</strong> Miniature</li>
+                                <li><strong>Color:</strong> Black</li>
+                            </ul>
+                            <p class="text-stone-700 text-sm leading-relaxed mb-5">
+                                Tonatiuh has been selected as a candidate due to his stage of maturity. During this campaign, interested families can apply as guardians.
+                            </p>
+                            <a href="#" class="inline-block bg-stone-900 text-amber-500 px-5 py-3 rounded-full font-bold hover:bg-amber-600 hover:text-stone-900 transition-all">
+                                View Tonatiuh's Teyolía ✨
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="mb-20 bg-stone-900 text-stone-50 p-8 md:p-12 rounded-3xl shadow-lg border border-amber-600">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <p class="text-sm uppercase tracking-widest text-amber-400 font-bold mb-3">Required Tool</p>
+                    <h3 class="text-3xl font-serif font-bold text-amber-500 mb-4">Download Tonalli Wallet</h3>
+                    <p class="text-stone-300 leading-relaxed mb-6">
+                        To participate in a Teyolía you need Tonalli Wallet, the xolosArmy Network wallet designed to use eCash, send pledges, and register community messages via OP_RETURN.
+                    </p>
+                    <ul class="text-stone-300 text-sm space-y-2 mb-6">
+                        <li>✓ Safely store your eCash.</li>
+                        <li>✓ Participate in Teyolía campaigns.</li>
+                        <li>✓ Send community support messages.</li>
+                        <li>✓ Connect with the xolosArmy ecosystem.</li>
+                    </ul>
+                    <a href="https://cartera.xolosarmy.xyz" target="_blank" rel="noopener" class="inline-block bg-amber-600 text-white px-8 py-4 rounded-full font-bold hover:bg-amber-500 transition-all">
+                        Download Tonalli Wallet ⚡
+                    </a>
+                </div>
+                <div class="bg-stone-800 rounded-3xl p-8 border border-stone-700 text-center">
+                    <div class="text-6xl mb-4">⚡</div>
+                    <h4 class="text-2xl font-serif font-bold text-amber-500 mb-3">Guardianship + eCash</h4>
+                    <p class="text-stone-300 text-sm leading-relaxed">
+                        Tonalli Wallet ensures that participation is transparent, verifiable, and aligned with the community vision of Xolos Ramírez.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="text-center border-t border-stone-300 pt-16">
+            <h3 class="text-2xl font-serif font-bold mb-6 text-stone-800">Ready to take the next step?</h3>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mb-10">
+                <a href="https://teyolia.xolosramirez.com" target="_blank" rel="noopener noreferrer" class="bg-amber-500 text-stone-900 px-8 py-4 rounded-full font-bold hover:bg-amber-400 transition-all shadow-lg text-lg">
+                    🔥 Go to Teyolía Platform
+                </a>
+                <a href="../blog/tutorial-tonalli-wallet.html" class="bg-stone-800 text-stone-100 px-8 py-4 rounded-full font-bold hover:bg-stone-700 transition-all shadow-lg border border-stone-600 text-lg">
+                    👛 Download Tonalli Wallet
+                </a>
+            </div>
+            <a href="available-xolos.html" class="inline-block text-stone-500 font-semibold hover:text-amber-600 transition-colors">
+                ⬅ Back to Available Xolos
+            </a>
+            <div class="flex justify-center gap-6 mt-12 opacity-60 text-xs">
+                <a href="https://github.com/xolosArmy" class="hover:underline">GitHub xolosArmy</a>
+                <a href="../blog/teyolia-guardiania-xoloitzcuintle-tutorial.html" class="hover:underline">Full Tutorial</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-stone-900 text-stone-500 py-6 text-center text-xs mt-10">
+        © Xolos Ramírez - Teyolía Guardianship Model.
+    </footer>
+
+    <script>
+        const stepsData = {
+            "1": { title: "Step 1: The Call", what: "The campaign for a puppy is published. You get to know their name, story, and goal.", rule: "💡 Here you understand that this is NOT an auction. The highest bidder doesn't win automatically." },
+            "2": { title: "Step 2: Preparation", what: "We use transparent technology. You install your <a href='../blog/tutorial-tonalli-wallet.html' target='_blank' class='text-amber-600 font-bold hover:underline'>Tonalli Wallet</a> and acquire eCash (XEC).", rule: "💡 It's simply the transparent vehicle to participate." },
+            "3": { title: "Step 3: Commitment", what: "You make a 'Pledge' (earnest deposit) from the platform to apply.", rule: "💡 This officially makes you a Guardian Applicant." },
+            "4": { title: "Step 4: The Tribe", what: "Your friends and community support you by leaving public messages (OP_RETURN) on your campaign.", rule: "💡 Endorsements prove you are a reliable home." },
+            "5": { title: "Step 5: The Decision", what: "Xolos Ramírez validates who is the most suitable based on community support and environment.", rule: "💡 The final decision is always human and centered on the dog's well-being." }
+        };
+
+        const buttons = document.querySelectorAll('.step-btn');
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                buttons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+
+                const data = stepsData[this.getAttribute('data-step')];
+                document.getElementById('step-title').textContent = data.title;
+                document.getElementById('step-what').innerHTML = data.what;
+                document.getElementById('step-rule').textContent = data.rule;
+            });
+        });
+
+        const ctx = document.getElementById('profileChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Financial', 'Tribe (Community)', 'Home Environment', 'Commitment', 'Validation'],
+                datasets: [
+                    { label: 'Highest Bidder', data: [100, 20, 50, 40, 10], borderColor: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.2)' },
+                    { label: 'Ideal Guardian', data: [60, 95, 100, 90, 100], borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.2)' }
+                ]
+            },
+            options: { maintainAspectRatio: false, scales: { r: { ticks: { display: false } } } }
+        });
+    </script>
+</body>
+</html>
