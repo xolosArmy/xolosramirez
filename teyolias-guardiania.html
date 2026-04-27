@@ -1,462 +1,198 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-MGTMWN7T');</script>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Teyolias de Guardianía y Galería | Xolos Ramirez</title>
-    <meta
-      name="description"
-      content="El hogar de las campañas de guardianía Proof-of-Community de Xolos Ramírez y la galería histórica de nuestro linaje."
-    />
-    <link rel="stylesheet" href="css/styles.css" />
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-    <link rel="icon" type="image/x-icon" href="assets/xolosramirez.ico" />
-
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teyolia de Guardianía | Xolos Ramírez</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-      /* Estilos aislados para la app de El Camino de la Guardianía */
-      .camino-guardiania-section {
-          --panel-bg: #1e1e1e;
-          --text-muted: #888888;
-          --border-color: #333333;
-          --app-text-main: #e0e0e0;
-          display: flex;
-          justify-content: center;
-          padding: 2rem 1rem;
-      }
-
-      .app-container {
-          max-width: 850px;
-          width: 100%;
-          background-color: var(--panel-bg);
-          border-radius: 12px;
-          box-shadow: 0 15px 40px rgba(0,0,0,0.7);
-          border: 1px solid var(--border-color);
-          overflow: hidden;
-          font-family: 'Georgia', serif;
-          color: var(--app-text-main);
-          line-height: 1.6;
-      }
-
-      .app-container * {
-          box-sizing: border-box;
-      }
-
-      .app-container .header {
-          text-align: center;
-          padding: 40px 20px;
-          background-color: #151515;
-          border-bottom: 2px solid var(--accent-color);
-      }
-
-      .app-container .header h2 {
-          color: var(--accent-color);
-          font-weight: 300;
-          font-size: 2em;
-          letter-spacing: 2px;
-          margin-bottom: 10px;
-          margin-top: 0;
-      }
-
-      .app-container .header p {
-          color: var(--text-muted);
-          font-size: 1.1em;
-          font-family: 'Arial', sans-serif;
-          margin: 0;
-      }
-
-      .app-container .stepper {
-          display: flex;
-          justify-content: space-between;
-          padding: 20px 40px;
-          background-color: #1a1a1a;
-          border-bottom: 1px solid var(--border-color);
-          font-family: 'Arial', sans-serif;
-      }
-
-      .app-container .step-indicator {
-          flex: 1;
-          text-align: center;
-          color: var(--text-muted);
-          font-size: 0.85em;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-          position: relative;
-          transition: color 0.3s;
-      }
-
-      .app-container .step-indicator::after {
-          content: '';
-          display: block;
-          width: 10px;
-          height: 10px;
-          background-color: var(--text-muted);
-          border-radius: 50%;
-          margin: 10px auto 0;
-          transition: background-color 0.3s, box-shadow 0.3s;
-      }
-
-      .app-container .step-indicator.active {
-          color: var(--accent-color);
-          font-weight: bold;
-      }
-
-      .app-container .step-indicator.active::after {
-          background-color: var(--accent-color);
-          box-shadow: 0 0 10px var(--accent-color);
-      }
-
-      .app-container .step-content {
-          display: none;
-          padding: 40px;
-          animation: appFadeIn 0.6s ease-in-out;
-      }
-
-      .app-container .step-content.active {
-          display: block;
-      }
-
-      .app-container .step-content h3 {
-          color: var(--accent-color);
-          margin-bottom: 20px;
-          margin-top: 0;
-          font-weight: normal;
-          font-size: 1.5em;
-      }
-
-      .app-container .step-content p {
-          margin-bottom: 15px;
-          font-size: 1.1em;
-      }
-
-      .app-container .highlight-box {
-          background-color: rgba(212, 175, 55, 0.1);
-          border-left: 4px solid var(--accent-color);
-          padding: 15px 20px;
-          margin: 20px 0;
-          font-family: 'Arial', sans-serif;
-          font-size: 0.95em;
-      }
-
-      .app-container .btn-container {
-          display: flex;
-          justify-content: space-between;
-          padding: 0 40px 40px;
-      }
-
-      .app-container button {
-          background-color: transparent;
-          color: var(--accent-color);
-          border: 2px solid var(--accent-color);
-          padding: 12px 25px;
-          font-size: 16px;
-          cursor: pointer;
-          border-radius: 6px;
-          font-family: 'Arial', sans-serif;
-          font-weight: bold;
-          transition: all 0.3s;
-      }
-
-      .app-container button:hover:not(:disabled) {
-          background-color: var(--accent-color);
-          color: #121212;
-      }
-
-      .app-container button:disabled {
-          border-color: var(--text-muted);
-          color: var(--text-muted);
-          cursor: not-allowed;
-          background-color: transparent;
-      }
-
-      .app-container ul {
-          margin-left: 20px;
-          margin-bottom: 15px;
-      }
-
-      .app-container li {
-          margin-bottom: 8px;
-      }
-
-      @keyframes appFadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-      }
-
-      /* Responsividad para móviles */
-      @media (max-width: 768px) {
-          .app-container .stepper {
-              flex-direction: column;
-              gap: 15px;
-              padding: 20px;
-          }
-          .app-container .step-indicator::after {
-              display: none;
-          }
-          .app-container .step-indicator {
-              text-align: left;
-              border-left: 3px solid var(--text-muted);
-              padding-left: 10px;
-          }
-          .app-container .step-indicator.active {
-              border-left-color: var(--accent-color);
-          }
-          .app-container .step-content {
-              padding: 20px;
-          }
-          .app-container .btn-container {
-              padding: 0 20px 30px;
-              flex-direction: column;
-              gap: 15px;
-          }
-      }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+            height: 350px;
+        }
+        .step-btn.active {
+            background-color: #d97706;
+            color: white;
+            border-color: #d97706;
+            transform: scale(1.05);
+        }
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .flip-card { perspective: 1000px; height: 180px; }
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%;
+            transition: transform 0.6s; transform-style: preserve-3d;
+        }
+        .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back {
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden; border-radius: 0.75rem;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 1rem;
+        }
+        .flip-card-front { background-color: #f5f5f4; color: #292524; }
+        .flip-card-back { background-color: #292524; color: #f5f5f4; transform: rotateY(180deg); }
     </style>
-  </head>
-  <body>
-    <noscript>
-      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MGTMWN7T" height="0" width="0" style="display: none; visibility: hidden"></iframe>
-    </noscript>
-    <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
+</head>
+<body class="bg-stone-100 text-stone-800 font-sans selection:bg-amber-200">
 
-    <header class="site-header">
-      <div class="container header-row">
-        <a class="brand" href="index.html">
-          <img src="img/brand/XolosRamirez.jpg" alt="Xolos Ramírez" width="44" height="44" loading="eager" />
-          <span>Xolos Ramírez</span>
-        </a>
-        <button class="hamburger" aria-expanded="false" aria-controls="menu">☰</button>
-        <nav id="menu" class="nav-menu" data-visible="false">
-          <ul>
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="xolos-disponibles.html">Xolos disponibles</a></li>
-            <li><a href="teyolias-guardiania.html" class="active">Teyolias</a></li>
-            <li><a href="testimonios.html">Testimonios</a></li>
-            <li><a href="blog/index.html">Blog</a></li>
-            <li><a href="contacto.html">Contacto</a></li>
-          </ul>
-        </nav>
-      </div>
+    <header class="bg-stone-900 text-stone-50 py-16 px-6 text-center border-b-8 border-amber-600">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-serif font-bold mb-4 text-amber-500">Teyolía de Guardianía ✨</h1>
+            <p class="text-lg text-stone-300 leading-relaxed">
+                Un camino de adopción curada donde la cultura, la tribu y el criadero se unen para asegurar el bienestar del Xoloitzcuintle.
+            </p>
+        </div>
     </header>
 
-    <main id="contenido-principal">
-      <section class="hero" data-aos="fade-in" data-aos-duration="1200">
-        <picture class="hero__media">
-          <img
-            src="https://i.imgur.com/A3CezpD.jpeg"
-            width="1600"
-            height="900"
-            loading="eager"
-            alt="Xoloitzcuintle socializando en el Criadero Xolos Ramirez"
-          />
-        </picture>
-        <div class="container">
-          <h1>Teyolias de Guardianía</h1>
-          <p>Mecanismos de validación comunitaria on-chain y archivo fotográfico del linaje.</p>
-        </div>
-      </section>
+    <main class="max-w-6xl mx-auto px-6 py-12">
+        
+        <section class="mb-20 max-w-4xl mx-auto">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-serif font-bold text-stone-800">📽️ Video Tutorial</h2>
+                <p class="text-stone-600">Aprende paso a paso cómo participar en el programa de Teyolías.</p>
+            </div>
+            <div class="video-container">
+                <iframe 
+                    src="https://www.youtube.com/embed/jvLuUDhNzTo" 
+                    title="Tutorial Teyolía" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </section>
 
-      <section class="guardiania-hub" data-aos="fade-up" data-aos-duration="1000" style="padding: 4rem 1rem; background-color: var(--bg-color); text-align: center;">
-        <div class="container">
-          <h2>Campañas de Guardianía (Proof-of-Community)</h2>
-          <p style="max-width: 700px; margin: 0 auto 2rem;">Hemos evolucionado la forma en que nuestros ejemplares encuentran su hogar. Las Teyolias son nuestro mecanismo de validación donde la comunidad respalda a los aspirantes a guardianes de manera transparente.</p>
-
-          <div class="card" style="margin: 0 auto; max-width: 800px; padding: 2.5rem; border: 2px solid var(--accent-color); background: var(--card-bg); text-align: center;">
-            <span style="color: var(--accent-color); font-weight: bold; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;">Piloto #001 Activo</span>
-            <h3 style="margin-top: 1rem;">La Teyolia para Teyolia Ramírez</h3>
-            <p>Conoce a Teyolia, postúlate como guardián oficial con tu depósito de compromiso o respalda on-chain a tu candidato favorito utilizando eCash (XEC).</p>
-            <a href="https://www.teyolia.cash/campaigns/campaign-1776451063035" class="btn btn-primary" style="margin-top: 1.5rem; display: inline-block;">Ver Campaña Activa</a>
-          </div>
-        </div>
-      </section>
-
-      <section class="tutorial-teyolia" data-aos="fade-up" data-aos-duration="1000" style="padding: 4rem 1rem; background-color: var(--bg-color);">
-        <div class="container">
-          <h2 style="text-align: center; margin-bottom: 1rem;">¿Qué es una Teyolia de Guardianía?</h2>
-          <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem; line-height: 1.6;">
-            En Xolos Ramírez no vendemos mascotas; consagramos guardianes. Una <strong>Teyolia de Guardianía</strong> es nuestro mecanismo pionero de <em>Proof-of-Community</em> (Prueba de Comunidad). Un proceso transparente, validado en la blockchain de eCash, diseñado para asegurar que cada ejemplar llegue a las manos correctas.
-          </p>
-
-          <div class="grid grid-2" style="gap: 2rem;">
-            <article class="card" style="border-left: 4px solid var(--accent-color);">
-              <h3 style="margin-top: 0;">1. El Principio Base</h3>
-              <p>
-                <strong>No es una subasta. No es una rifa.</strong> Aquí el mayor postor no compra al cachorro. El objetivo es eliminar la adopción por impulso y requerir una demostración de compromiso real, medible y avalado por tu entorno.
-              </p>
-            </article>
-
-            <article class="card" style="border-left: 4px solid var(--accent-color);">
-              <h3 style="margin-top: 0;">2. Postulación y Garantía</h3>
-              <p>
-                Los aspirantes serios llenan un formulario detallado. Si el perfil inicial es idóneo, Xolos Ramírez lo aprueba. Para oficializar su candidatura, el aspirante realiza un depósito de garantía (e.g., <strong>50M XEC</strong>) como prueba innegable de seriedad.
-              </p>
-            </article>
-
-            <article class="card" style="border-left: 4px solid var(--accent-color);">
-              <h3 style="margin-top: 0;">3. Respaldo On-Chain</h3>
-              <p>
-                Una vez oficializado, la comunidad del aspirante (familia, amigos, seguidores) envía apoyos en XEC adjuntando un mensaje inmutable (<code>OP_RETURN</code>) en la blockchain, dejando testimonio público de por qué esa persona será un gran guardián.
-              </p>
-            </article>
-
-            <article class="card" style="border-left: 4px solid var(--accent-color);">
-              <h3 style="margin-top: 0;">4. La Consagración</h3>
-              <p>
-                El aspirante con mayor validación comunitaria obtiene prioridad de consideración, pero <strong>la asignación nunca es automática</strong>. Xolos Ramírez realiza una revisión integral final humana y, si todo es correcto, formaliza la guardianía.
-              </p>
-            </article>
-          </div>
-
-          <div style="text-align: center; margin-top: 3.5rem;">
-            <p style="font-family: var(--font-secondary); font-style: italic; color: var(--accent-color); font-size: 1.2rem;">
-              "Teyolia no busca comprador. Busca guardián."
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section class="camino-guardiania-section" data-aos="fade-up" data-aos-duration="1000">
-        <div class="app-container">
-            <div class="header">
-                <h2>El Camino de la Guardianía</h2>
-                <p>Guía interactiva del proceso Teyolia de Xolos Ramírez</p>
+        <section class="mb-20">
+            <div class="text-center mb-10">
+                <h3 class="text-3xl font-serif font-bold text-stone-800 mb-2">🐾 El Camino Paso a Paso</h3>
             </div>
 
-            <div class="stepper">
-                <div class="step-indicator active" id="ind-1">1. Postulación</div>
-                <div class="step-indicator" id="ind-2">2. Tonalli Wallet</div>
-                <div class="step-indicator" id="ind-3">3. El Compromiso</div>
-                <div class="step-indicator" id="ind-4">4. La Tribu</div>
-                <div class="step-indicator" id="ind-5">5. La Decisión</div>
-            </div>
-
-            <div class="step-content active" id="step-1">
-                <h3>Paso 1: La Postulación (No es una subasta)</h3>
-                <p>El camino comienza conociendo al cachorro. En la plataforma verás su historia, su linaje, su personalidad y la meta comunitaria de la campaña.</p>
-                <p>Si sientes el llamado para ser su guardián, el primer paso es <strong>postularte formalmente</strong>. Esto implica llenar un perfil humano, explicar tus motivos y demostrar que comprendes la responsabilidad de preservar esta herencia viva.</p>
-
-                <div class="highlight-box">
-                    <strong>Regla de Oro:</strong> Una Teyolia <em>NO es una subasta</em>. No se entrega el cachorro a quien pague más. El dinero no decide automáticamente; la idoneidad y el respaldo sí.
-                </div>
-            </div>
-
-            <div class="step-content" id="step-2">
-                <h3>Paso 2: La Herramienta (Tonalli Wallet y eCash)</h3>
-                <p>Para participar en la campaña de forma transparente, utilizamos una herramienta digital llamada <strong>Tonalli Wallet</strong>.</p>
-                <p>No necesitas ser un experto en finanzas ni criptomonedas. Imagínalo como una aplicación de saldo digital. Para participar, necesitas adquirir <strong>eCash (XEC)</strong>, que es el saldo que utiliza esta red.</p>
-                <ul>
-                    <li><strong>Descarga Tonalli Wallet:</strong> La instalas en tu navegador o dispositivo.</li>
-                    <li><strong>Adquiere XEC:</strong> Puedes conseguir este saldo a través de un intercambio o directamente mediante las guías de la comunidad. Es como cargarle saldo a una tarjeta de regalo.</li>
-                </ul>
-                <p>Esta tecnología se usa únicamente porque permite un registro público, inalterable y transparente para todos los involucrados.</p>
-            </div>
-
-            <div class="step-content" id="step-3">
-                <h3>Paso 3: El Compromiso (El Pledge en Teyolia)</h3>
-                <p>Una vez que te has postulado y tienes tu Tonalli Wallet lista, entras a la plataforma <strong>Teyolia</strong> para hacer tu <em>Pledge</em> o depósito de seriedad.</p>
-                <p>Conectas tu billetera a la plataforma y realizas una aportación formal a la campaña del cachorro.</p>
-                <div class="highlight-box">
-                    Este depósito demuestra tu compromiso real frente a la comunidad. Si al final del proceso no eres seleccionado por el criadero, las reglas de la campaña especificarán cómo se trata este depósito (por ejemplo, si es retornable o si queda como saldo a favor para el futuro).
-                </div>
-                <p>Al hacer el Pledge, tu perfil como aspirante queda oficialmente visible para que la comunidad te respalde.</p>
-            </div>
-
-            <div class="step-content" id="step-4">
-                <h3>Paso 4: Proof of Community (La Validación de la Tribu)</h3>
-                <p>Aquí es donde la magia de la Teyolia cobra vida. No estás solo en tu postulación.</p>
-                <p>Familiares, amigos y otros miembros de la comunidad pueden sumarse a la campaña para <strong>respaldarte</strong>. Ellos pueden hacer pequeñas aportaciones simbólicas a la campaña y, al hacerlo, dejar un mensaje público apoyando tu perfil.</p>
-
-                <div class="highlight-box">
-                    <strong>El Mensaje Corto (OP_RETURN):</strong> Es una función técnica que, explicada fácil, permite adjuntar una "nota o dedicatoria" a una transacción. La comunidad usa esto para dejar mensajes como: <em>"Apoyo a Carlos porque tiene el hogar perfecto para este Xolo."</em>
+            <div class="flex flex-col lg:flex-row gap-8 items-start">
+                <div class="w-full lg:w-1/3 flex lg:flex-col overflow-x-auto gap-3 border-stone-300">
+                    <button class="step-btn active px-5 py-4 rounded-xl border-2 bg-white font-medium shadow-sm transition-all" data-step="1">1. El Llamado</button>
+                    <button class="step-btn px-5 py-4 rounded-xl border-2 bg-white font-medium shadow-sm transition-all" data-step="2">2. La Preparación</button>
+                    <button class="step-btn px-5 py-4 rounded-xl border-2 bg-white font-medium shadow-sm transition-all" data-step="3">3. El Compromiso</button>
+                    <button class="step-btn px-5 py-4 rounded-xl border-2 bg-white font-medium shadow-sm transition-all" data-step="4">4. La Tribu</button>
+                    <button class="step-btn px-5 py-4 rounded-xl border-2 bg-white font-medium shadow-sm transition-all" data-step="5">5. La Decisión</button>
                 </div>
 
-                <p>Esto genera el <strong>Proof of Community</strong> (Prueba de Comunidad): una validación social que demuestra que no eres solo un individuo con dinero, sino una persona confiable respaldada por su entorno.</p>
-            </div>
-
-            <div class="step-content" id="step-5">
-                <h3>Paso 5: La Decisión Final (Validación Humana)</h3>
-                <p>La campaña ha alcanzado su meta. Hay varios aspirantes, cada uno con su depósito de seriedad y con los mensajes de respaldo de su comunidad.</p>
-                <p><strong>¿Quién se convierte en el guardián?</strong></p>
-                <p>Aquí es donde interviene <strong>Xolos Ramírez</strong>. Se evalúan los perfiles, se revisa la validación comunitaria (Proof of Community) y se toma una decisión basada en la compatibilidad, el entorno y el bienestar del xoloitzcuintle.</p>
-                <div class="highlight-box">
-                    <strong>Conclusión:</strong> La comunidad aporta y respalda, la tecnología traza y transparenta, pero la decisión final siempre es humana, curada y responsable.
+                <div class="w-full lg:w-2/3 bg-white p-8 rounded-2xl shadow-lg border border-stone-200 min-h-[350px] flex items-center">
+                    <div id="step-content-container" class="w-full fade-in">
+                        <h4 id="step-title" class="text-2xl font-serif font-bold text-amber-600 mb-4 border-b pb-2">Paso 1: El Llamado</h4>
+                        <p id="step-what" class="text-lg text-stone-700 leading-relaxed mb-4">Se publica la campaña de un cachorro. Conoces su historia, personalidad y meta.</p>
+                        <div class="bg-amber-50 p-6 rounded-xl border border-amber-200">
+                            <p id="step-rule" class="text-amber-900 font-medium">💡 Esto NO es una subasta. No gana quien pone más dinero.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <div class="btn-container">
-                <button id="prevBtn" onclick="changeStep(-1)" disabled>Anterior</button>
-                <button id="nextBtn" onclick="changeStep(1)">Siguiente Paso</button>
+        <section class="mb-20 bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-stone-200 text-center">
+            <h3 class="text-2xl font-serif font-bold mb-6">Evaluación del Perfil de Guardián</h3>
+            <div class="chart-container">
+                <canvas id="profileChart"></canvas>
             </div>
-        </div>
-      </section>
+            <p class="mt-6 text-sm text-stone-500 italic">El respaldo comunitario (OP_RETURN) y la idoneidad del hogar son los factores decisivos.</p>
+        </section>
 
-      <section data-aos="fade-up" data-aos-duration="1000" data-aos-offset="120">
-        <div class="container">
-            <h2>Registro de Aspirantes</h2>
-            <p>
-              Inicia tu proceso para convertirte en el guardián de un Xoloitzcuintle. Regístrate como aspirante y da el primer paso para participar en nuestra próxima Teyolia de Guardianía, demostrando tu compromiso real con la preservación de nuestro linaje.
-            </p>
-            <a href="contacto.html" class="btn btn-primary">Registrarse como candidato</a>
-        </div>
-      </section>
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front border-t-4 border-red-500">
+                        <h4 class="font-bold">No es subasta ⚖️</h4>
+                    </div>
+                    <div class="flip-card-back"><p class="text-sm">El dinero demuestra compromiso, pero no garantiza la asignación.</p></div>
+                </div>
+            </div>
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front border-t-4 border-emerald-500">
+                        <h4 class="font-bold">Es comunitario 🤝</h4>
+                    </div>
+                    <div class="flip-card-back"><p class="text-sm">Tu red de confianza valida tu capacidad para ser guardián.</p></div>
+                </div>
+            </div>
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front border-t-4 border-amber-500">
+                        <h4 class="font-bold">Es curado 🏛️</h4>
+                    </div>
+                    <div class="flip-card-back"><p class="text-sm">Xolos Ramírez decide basándose estrictamente en el bienestar animal.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="text-center border-t pt-10">
+            <a href="xolos-disponibles.html" class="inline-block bg-stone-900 text-amber-500 px-8 py-4 rounded-full font-bold hover:bg-amber-600 hover:text-stone-900 transition-all">
+                ⬅ Volver a Xolos Disponibles
+            </a>
+            <div class="flex justify-center gap-6 mt-8 opacity-60 text-xs">
+                <a href="https://github.com/xolosArmy" class="hover:underline">GitHub xolosArmy</a>
+                <a href="blog/teyolia-guardiania-xoloitzcuintle-tutorial.html" class="hover:underline">Tutorial Completo</a>
+            </div>
+        </section>
     </main>
 
-    <footer>
-      <div class="footer-grid">
-        <div>
-          <h3>Xolos Ramírez</h3>
-          <p>Criadero oficial de Xoloitzcuintles — Ciudad de México</p>
-        </div>
-        <div>
-          <h4>Enlaces</h4>
-          <ul>
-            <li><a href="xolos-disponibles.html">Xolos disponibles</a></li>
-            <li><a href="teyolias-guardiania.html">Teyolias (Campaña Activa)</a></li>
-            <li><a href="blog/index.html">Blog</a></li>
-            <li><a href="contacto.html">Contacto</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4>Redes</h4>
-          <a href="https://www.youtube.com/channel/UCKtNKCavbBmxtcdHSDd9BsA">YouTube</a><br>
-          <a href="https://x.com/xolosArmy">Twitter</a><br>
-          <a href="https://t.me/xolosramirez">Telegram</a>
-        </div>
-      </div>
-      <p class="copyright">© 2025 Xolos Ramírez. Todos los derechos reservados.</p>
+    <footer class="bg-stone-900 text-stone-500 py-6 text-center text-xs">
+        © Xolos Ramírez - Modelo de Guardianía Teyolía.
     </footer>
-    <script src="js/main.js" defer></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
     <script>
-      AOS.init({ once: true, duration: 700, offset: 60, easing: 'ease-out' });
+        const stepsData = {
+            "1": { title: "Paso 1: El Llamado", what: "Se publica la campaña de un cachorro. Conoces su nombre, historia y meta.", rule: "💡 Aquí entiendes que esto NO es una subasta." },
+            "2": { title: "Paso 2: La Preparación", what: "Usamos tecnología transparente. Instalas tu Tonalli Wallet y adquieres eCash (XEC).", rule: "💡 Es solo el vehículo transparente para participar." },
+            "3": { title: "Paso 3: El Compromiso", what: "Haces un 'Pledge' (depósito de seriedad) desde la plataforma para postularte.", rule: "💡 Esto te convierte en Aspirante a Guardián oficialmente." },
+            "4": { title: "Paso 4: La Tribu", what: "Tus amigos y comunidad te respaldan dejando mensajes públicos (OP_RETURN) en tu campaña.", rule: "💡 Los avales demuestran que eres un hogar confiable." },
+            "5": { title: "Paso 5: La Decisión", what: "Xolos Ramírez valida quién es el más idóneo basándose en respaldo y entorno.", rule: "💡 La decisión final siempre es humana y centrada en el perro." }
+        };
 
-      // Lógica de la aplicación "El Camino de la Guardianía"
-      let currentStep = 1;
-      const totalSteps = 5;
+        const buttons = document.querySelectorAll('.step-btn');
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                buttons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                const data = stepsData[this.getAttribute('data-step')];
+                document.getElementById('step-title').textContent = data.title;
+                document.getElementById('step-what').textContent = data.what;
+                document.getElementById('step-rule').textContent = data.rule;
+            });
+        });
 
-      function changeStep(direction) {
-          document.getElementById(`step-${currentStep}`).classList.remove('active');
-          document.getElementById(`ind-${currentStep}`).classList.remove('active');
-
-          currentStep += direction;
-
-          document.getElementById(`step-${currentStep}`).classList.add('active');
-          document.getElementById(`ind-${currentStep}`).classList.add('active');
-
-          document.getElementById('prevBtn').disabled = currentStep === 1;
-
-          const nextBtn = document.getElementById('nextBtn');
-          if (currentStep === totalSteps) {
-              nextBtn.disabled = true;
-              nextBtn.innerText = "Fin del Recorrido";
-          } else {
-              nextBtn.disabled = false;
-              nextBtn.innerText = "Siguiente Paso";
-          }
-      }
+        const ctx = document.getElementById('profileChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Financiero', 'Tribu (Comunidad)', 'Hogar', 'Compromiso', 'Validación'],
+                datasets: [
+                    { label: 'Subastador', data: [100, 20, 50, 40, 10], borderColor: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.2)' },
+                    { label: 'Guardián Ideal', data: [60, 95, 100, 90, 100], borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.2)' }
+                ]
+            },
+            options: { maintainAspectRatio: false, scales: { r: { ticks: { display: false } } } }
+        });
     </script>
-  </body>
+</body>
 </html>
