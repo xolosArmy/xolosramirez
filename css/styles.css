@@ -1516,3 +1516,30 @@ form textarea:focus {
   box-shadow: 0 12px 30px rgba(37, 211, 102, 0.3);
   text-decoration: none;
 }
+
+/* Corrección de contraste para tarjetas destacadas */
+.featured-card-fix {
+  background-color: #1a1a1a !important; /* Fondo oscuro sólido */
+  border: 1px solid #d4af37; /* Borde dorado para resaltar */
+}
+
+.featured-card-fix .light-text {
+  color: #ffffff !important; /* Texto blanco puro para máximo contraste */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.featured-card-fix .xolo-description {
+  color: #e0e0e0 !important; /* Gris muy claro para la descripción */
+  line-height: 1.6;
+}
+
+.featured-traits span {
+  color: #d4af37 !important; /* Dorado para los rasgos */
+  font-weight: bold;
+}
+
+.featured-card-fix h3 {
+  color: #d4af37 !important; /* Título en dorado */
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
