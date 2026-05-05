@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --neon-blue: #00eaff;
+            --dark-bg: #050505;
+            --card-bg: #0b0b0b;
+            --text-color: #d6ffff;
+        }
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+        }
+        .tutorial-container {
+            max-width: 800px;
+            margin: auto;
+            border: 2px solid var(--neon-blue);
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 234, 255, 0.2);
+        }
+        .step-card {
+            background: var(--card-bg);
+            border-left: 4px solid var(--neon-blue);
+            padding: 15px;
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        .step-card:hover {
+            transform: scale(1.02);
+            background: #111;
+        }
+        .btn-link {
+            color: var(--neon-blue);
+            text-decoration: none;
+            font-weight: bold;
+            border: 1px solid var(--neon-blue);
+            padding: 5px 10px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .badge {
+            background: var(--neon-blue);
+            color: black;
+            padding: 2px 8px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="tutorial-container">
+        <h1>🐾 Xolos Explorer Tutorial</h1>
+        <p>Explora la genealogía y el arte de tus NFTs en <strong>explorer.xolosarmy.xyz</strong></p>
+
+        <div class="step-card">
+            <span class="badge">Paso 1</span>
+            <h3>Obtén tu dirección o Token ID</h3>
+            <p>Abre tu <strong>RMZWallet</strong> y copia tu dirección eCash (ej: ecash:qp...) o el Token ID específico de tu NFT en la sección "Mis NFTs".</p>
+        </div>
+
+        <div class="step-card">
+            <span class="badge">Paso 2</span>
+            <h3>Búsqueda Global</h3>
+            <p>Pega tu dirección o Token ID en la barra de búsqueda del explorador. El sistema detectará automáticamente si es un bloque, transacción o dirección.</p>
+            <a href="https://explorer.xolosarmy.xyz" class="btn-link" target="_blank">Ir al buscador →</a>
+        </div>
+
+        <div class="step-card">
+            <span class="badge">Paso 3</span>
+            <h3>Explora el Expediente Táctico</h3>
+            <p>En la vista de Token, verás el <strong>XoloCard</strong>: una ficha técnica con rango, generación y narrativa curada del linaje de tu xoloitzcuintle.</p>
+        </div>
+
+        <div class="step-card">
+            <span class="badge">Paso 4</span>
+            <h3>Verificación de Integridad</h3>
+            <p>El explorador calcula el hash SHA-256 de los metadatos en IPFS y lo compara con el anclaje on-chain de la génesis para garantizar que tu NFT no ha sido alterado.</p>
+        </div>
+    </div>
+</body>
+</html>
