@@ -172,7 +172,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </div>
       </section>
 
-      <section class="live-show section" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="90">
+      <section class="live-show section section-live-show" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="90">
         <div class="container live-show__container">
           <div class="live-show__content">
             <span class="live-show__eyebrow">En vivo</span>
@@ -718,16 +718,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       AOS.init({ once: true, duration: 700, offset: 60, easing: 'ease-out' });
     </script>
     <script>
+      // Scroll automático hacia la sección del Show en Vivo
       document.addEventListener("DOMContentLoaded", function() {
         setTimeout(function() {
-          const seccionDestacados = document.getElementById("perfiles-destacados");
-          if (seccionDestacados) {
-            seccionDestacados.scrollIntoView({
-              behavior: "smooth",
-              block: "start"
-            });
+          // Buscamos directamente la clase de la sección del show
+          const showSection = document.querySelector('.section-live-show');
+          if (showSection) {
+            // Hacemos el scroll suave hacia esa sección
+            showSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
-        }, 800);
+        }, 3500); // Se activa a los 3.5 segundos (puedes ajustar este número)
       });
     </script>
   </body>
