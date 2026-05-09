@@ -1543,3 +1543,47 @@ form textarea:focus {
   font-size: 1.5rem;
   margin-bottom: 10px;
 }
+/* =========================================
+   INDICADOR DE SWIPE PARA GALERÍAS
+   ========================================= */
+.swipe-indicator {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background: rgba(17, 17, 17, 0.75);
+  color: #d4af37; /* Dorado Xolo */
+  padding: 6px 12px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 10;
+  pointer-events: none; /* Evita que bloquee el deslizamiento con el dedo */
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  backdrop-filter: blur(4px);
+  animation: swipe-bounce 2s infinite;
+}
+
+.swipe-indicator svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Animación sutil de rebote hacia la derecha */
+@keyframes swipe-bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateX(0); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(3px); }
+}
+
+/* Ocultar en pantallas muy grandes si prefieres que solo se vea en móviles
+(Opcional: borra esto si quieres que se vea también en PC) */
+@media (min-width: 1024px) {
+  .swipe-indicator {
+    display: none;
+  }
+}
