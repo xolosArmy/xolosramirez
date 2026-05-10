@@ -1379,6 +1379,10 @@ form textarea:focus {
   box-shadow: var(--sombra-suave);
 }
 
+.live-show--about .live-show__container{
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+}
+
 .live-show__content h2{
   margin: 0.4rem 0 1rem;
 }
@@ -1386,6 +1390,32 @@ form textarea:focus {
 .live-show__content p{
   margin: 0;
   max-width: 54ch;
+  color: var(--color-texto-suave);
+}
+
+.live-show__details{
+  display:grid;
+  gap:1rem;
+  margin-top:1.5rem;
+}
+
+.live-show__callout{
+  padding:1rem;
+  background: rgba(212, 175, 55, 0.05);
+  border-left: 3px solid var(--color-dorado);
+}
+
+.live-show__callout h4{
+  margin:0 0 0.5rem;
+  font-size:0.9rem;
+}
+
+.live-show__callout p,
+.live-show__mission{
+  font-size:0.85rem;
+}
+
+.live-show__mission{
   color: var(--color-texto-suave);
 }
 
@@ -1468,10 +1498,28 @@ form textarea:focus {
 @media (max-width: 900px){
   .live-show__container{
     grid-template-columns: 1fr;
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .live-show--about .live-show__container{
+    grid-template-columns: 1fr;
   }
 
   .live-show__content p{
     max-width: none;
+  }
+
+  .live-show__eyebrow{
+    justify-content: center;
+  }
+
+  .live-show__eyebrow::before{
+    display:none;
+  }
+
+  .live-show__callout{
+    text-align: left;
   }
 }
 
