@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xoloitzcuintle Estándar: Desarrollo Muscular</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'xolo-bg': '#F9F6F0',
+                        'xolo-text': '#332D2A',
+                        'xolo-accent': '#C17767',
+                        'xolo-secondary': '#D4C4B7',
+                        'xolo-green': '#8A9A86',
+                        'xolo-dark': '#4A403A'
+                    },
+                    fontFamily: {
+                        'sans': ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                        'serif': ['Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #F9F6F0;
+            color: #332D2A;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 380px;
+            min-height: 250px;
+        }
+        
+        .tab-active {
+            background-color: #C17767;
+            color: #F9F6F0;
+            border-color: #C17767;
+        }
+        
+        .tab-inactive {
+            background-color: transparent;
+            color: #4A403A;
+            border-color: #D4C4B7;
+        }
+
+        .tab-inactive:hover {
+            background-color: #D4C4B7;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F9F6F0;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4C4B7;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C17767;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased bg-xolo-bg text-xolo-text">
+
+    <!-- Chosen Palette: Warm Neutrals & Terracotta (xolo-bg, xolo-text, xolo-accent, xolo-secondary) -->
+    <!-- Application Structure Plan: A single-page scrolling dashboard structured by thematic learning phases. 1. Introduction (Context). 2. Growth Curves (Quantitative Timeline). 3. Muscular Anatomy (Interactive Spatial Layout). 4. Pillars of Development (Toggle between Nutrition/Exercise stats). This structure guides the user from general understanding to specific actionable data, avoiding overwhelming them, and using interactions (tabs/buttons) to reveal detail logically. -->
+    <!-- Visualization & Content Choices: 1. Growth Phase -> Goal: Show non-linear growth -> Viz: Line Chart (Chart.js) -> Interaction: Hover tooltips -> Justification: Best for showing continuous data over time. 2. Anatomy -> Goal: Organize spatial info -> Viz: CSS Grid/Flexbox interactive cards -> Interaction: Click to reveal details -> Justification: No SVG allowed, so structured HTML acts as the anatomical map. 3. Nutrition/Exercise -> Goal: Compare components -> Viz: Doughnut & Stacked Bar Charts (Chart.js) -> Interaction: Tabs to switch context -> Justification: Allows deep dive into specific pillars without cluttering the main view. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <nav class="sticky top-0 z-50 bg-xolo-bg/90 backdrop-blur-md border-b border-xolo-secondary shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">🐕</span>
+                    <span class="font-serif font-bold text-xl tracking-wide text-xolo-dark">XoloMuscle Estándar</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#crecimiento" class="text-sm font-medium text-xolo-dark hover:text-xolo-accent transition-colors">Crecimiento</a>
+                    <a href="#anatomia" class="text-sm font-medium text-xolo-dark hover:text-xolo-accent transition-colors">Anatomía</a>
+                    <a href="#pilares" class="text-sm font-medium text-xolo-dark hover:text-xolo-accent transition-colors">Pilares</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        
+        <header class="text-center py-16 md:py-24 fade-in">
+            <h1 class="text-4xl md:text-5xl font-serif font-bold text-xolo-dark mb-6 leading-tight">
+                Desarrollo Muscular en el <br> <span class="text-xolo-accent">Xoloitzcuintle Estándar</span>
+            </h1>
+            <p class="mt-4 max-w-2xl text-lg text-xolo-text mx-auto leading-relaxed">
+                El Xoloitzcuintle variedad Estándar (46-60 cm) es un atleta natural de proporciones armoniosas. Su falta de pelaje expone una musculatura magra y bien definida que requiere una comprensión profunda de su genética, nutrición y fases de crecimiento para alcanzar su máximo potencial.
+            </p>
+        </header>
+
+        <section id="crecimiento" class="py-16 border-t border-xolo-secondary/50 scroll-mt-20 fade-in">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-serif font-bold text-xolo-dark mb-4">Curva de Crecimiento y Masa Magra</h2>
+                <p class="max-w-3xl mx-auto text-xolo-text">
+                    El desarrollo de la musculatura no es lineal. En la variedad estándar, el crecimiento óseo domina los primeros 8 meses, seguido por un periodo de ensanchamiento y desarrollo muscular profundo que se extiende hasta los 2.5 años de edad. Interactúa con la gráfica para observar la evolución del peso promedio.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-xolo-secondary/30">
+                <div class="chart-container">
+                    <canvas id="growthChart"></canvas>
+                </div>
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-xolo-bg p-5 rounded-xl border-l-4 border-xolo-accent">
+                        <h3 class="font-bold text-lg mb-2">0 - 8 Meses: Fase Vertical</h3>
+                        <p class="text-sm">Rápido crecimiento esquelético. La musculatura es alargada y delgada. Es crucial evitar el sobrepeso y ejercicios de alto impacto para proteger las articulaciones en desarrollo.</p>
+                    </div>
+                    <div class="bg-xolo-bg p-5 rounded-xl border-l-4 border-xolo-green">
+                        <h3 class="font-bold text-lg mb-2">8 - 18 Meses: Ensanchamiento</h3>
+                        <p class="text-sm">El crecimiento vertical se ralentiza. Comienza la hipertrofia natural; el pecho se ensancha y los cuartos traseros ganan volumen. Fase ideal para introducir ejercicio de resistencia moderada.</p>
+                    </div>
+                    <div class="bg-xolo-bg p-5 rounded-xl border-l-4 border-xolo-dark">
+                        <h3 class="font-bold text-lg mb-2">18 - 30 Meses: Madurez Muscular</h3>
+                        <p class="text-sm">Consolidación de la masa magra. El Xolo alcanza su apariencia atlética definitiva, caracterizada por músculos planos, largos y firmes al tacto.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="anatomia" class="py-16 border-t border-xolo-secondary/50 scroll-mt-20 fade-in">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-serif font-bold text-xolo-dark mb-4">Anatomía Funcional</h2>
+                <p class="max-w-3xl mx-auto text-xolo-text">
+                    Selecciona una región anatómica para comprender la función y el tipo de desarrollo esperado en un ejemplar Estándar saludable. La piel desnuda permite observar la contracción muscular en tiempo real durante el movimiento.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-4 flex flex-col gap-3">
+                    <button onclick="updateAnatomy('posterior')" id="btn-posterior" class="w-full text-left px-6 py-4 rounded-xl border transition-all duration-300 font-bold tab-active">
+                        <div class="flex items-center justify-between">
+                            <span>Cuartos Traseros (Propulsión)</span>
+                            <span class="text-xl">⚡</span>
+                        </div>
+                    </button>
+                    <button onclick="updateAnatomy('anterior')" id="btn-anterior" class="w-full text-left px-6 py-4 rounded-xl border transition-all duration-300 font-bold tab-inactive">
+                        <div class="flex items-center justify-between">
+                            <span>Tren Anterior (Dirección)</span>
+                            <span class="text-xl">🛡️</span>
+                        </div>
+                    </button>
+                    <button onclick="updateAnatomy('core')" id="btn-core" class="w-full text-left px-6 py-4 rounded-xl border transition-all duration-300 font-bold tab-inactive">
+                        <div class="flex items-center justify-between">
+                            <span>Lomo y Core (Estabilidad)</span>
+                            <span class="text-xl">⚖️</span>
+                        </div>
+                    </button>
+                </div>
+                
+                <div class="lg:col-span-8 bg-white rounded-2xl p-8 shadow-sm border border-xolo-secondary/30 min-h-[300px] flex items-center">
+                    <div id="anatomy-content" class="fade-in w-full">
+                        <div class="flex items-start gap-4 mb-4">
+                            <div class="w-12 h-12 rounded-full bg-xolo-accent/20 flex items-center justify-center text-2xl">⚡</div>
+                            <div>
+                                <h3 class="text-2xl font-serif font-bold text-xolo-dark">Cuartos Traseros</h3>
+                                <p class="text-sm font-semibold text-xolo-accent uppercase tracking-wider mt-1">El motor del Xoloitzcuintle</p>
+                            </div>
+                        </div>
+                        <p class="text-lg leading-relaxed mb-4">
+                            Los muslos deben ser fuertes y musculosos. El Xolo estándar posee una angulación moderada que le permite un empuje poderoso y elástico. La musculatura aquí es densa, diseñada para ráfagas de velocidad y saltos ágiles.
+                        </p>
+                        <ul class="space-y-2 mt-6">
+                            <li class="flex items-center gap-2"><span class="text-xolo-accent">▪</span> <strong>Glúteos y Bíceps femoral:</strong> Visibles bajo la piel, especialmente en tensión.</li>
+                            <li class="flex items-center gap-2"><span class="text-xolo-accent">▪</span> <strong>Signo de desarrollo óptimo:</strong> Tensión firme al estar de pie, sin temblores ni debilidad.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pilares" class="py-16 border-t border-xolo-secondary/50 scroll-mt-20 fade-in">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-serif font-bold text-xolo-dark mb-4">Pilares de Construcción Muscular</h2>
+                <p class="max-w-3xl mx-auto text-xolo-text">
+                    La genética provee el marco, pero el entorno esculpe el resultado. Alterna entre las métricas de Nutrición y Ejercicio para entender los requerimientos específicos para el mantenimiento de la masa magra en la variedad Estándar.
+                </p>
+            </div>
+
+            <div class="flex justify-center gap-4 mb-8">
+                <button onclick="togglePillar('nutrition')" id="btn-nutrition" class="px-8 py-3 rounded-full font-bold transition-all border tab-active">
+                    🥩 Nutrición Deportiva
+                </button>
+                <button onclick="togglePillar('exercise')" id="btn-exercise" class="px-8 py-3 rounded-full font-bold transition-all border tab-inactive">
+                    🏃 Rutina de Ejercicio
+                </button>
+            </div>
+
+            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-xolo-secondary/30 relative overflow-hidden">
+                <div id="nutrition-panel" class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center fade-in block">
+                    <div>
+                        <h3 class="text-2xl font-serif font-bold text-xolo-dark mb-4">Balance de Macronutrientes (Adulto Activo)</h3>
+                        <p class="mb-4">
+                            El Xoloitzcuintle, al carecer de pelo, utiliza más energía basal para mantener su temperatura corporal. Esto, sumado a un estilo de vida activo, exige una dieta alta en proteínas de origen animal (para la síntesis muscular) y grasas saludables (como fuente de energía sostenida).
+                        </p>
+                        <div class="space-y-4">
+                            <div class="bg-xolo-bg p-4 rounded-lg flex items-center justify-between">
+                                <span class="font-bold text-xolo-dark">Proteína (28-32%)</span>
+                                <span class="text-sm">Reparación tisular</span>
+                            </div>
+                            <div class="bg-xolo-bg p-4 rounded-lg flex items-center justify-between">
+                                <span class="font-bold text-xolo-dark">Grasas (15-20%)</span>
+                                <span class="text-sm">Energía y termorregulación</span>
+                            </div>
+                            <div class="bg-xolo-bg p-4 rounded-lg flex items-center justify-between">
+                                <span class="font-bold text-xolo-dark">Carbohidratos Complejos</span>
+                                <span class="text-sm">Reservas de glucógeno</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="nutritionChart"></canvas>
+                    </div>
+                </div>
+
+                <div id="exercise-panel" class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center fade-in hidden">
+                    <div class="order-2 md:order-1 chart-container">
+                        <canvas id="exerciseChart"></canvas>
+                    </div>
+                    <div class="order-1 md:order-2">
+                        <h3 class="text-2xl font-serif font-bold text-xolo-dark mb-4">Distribución del Entrenamiento Semanal</h3>
+                        <p class="mb-4">
+                            Un perro Estándar necesita más que simples caminatas. Para desarrollar músculos densos y prevenir atrofia, se requiere una rutina variada. Evita el sobreentrenamiento en días muy calurosos o fríos debido a su exposición cutánea.
+                        </p>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-3">
+                                <span class="text-xolo-accent font-bold mt-1">1.</span>
+                                <div>
+                                    <strong class="block text-xolo-dark">Cardio / Trote Ligero</strong>
+                                    <span class="text-sm text-gray-600">Desarrolla resistencia cardiovascular y tonifica extremidades. (45% del tiempo total)</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-xolo-green font-bold mt-1">2.</span>
+                                <div>
+                                    <strong class="block text-xolo-dark">Juegos de Fuerza (Tirar/Cobrar)</strong>
+                                    <span class="text-sm text-gray-600">Estimula las fibras de contracción rápida en cuello, pecho y mandíbula. (30% del tiempo total)</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-xolo-dark font-bold mt-1">3.</span>
+                                <div>
+                                    <strong class="block text-xolo-dark">Agilidad / Cambios de Dirección</strong>
+                                    <span class="text-sm text-gray-600">Fortalece el core y los músculos estabilizadores laterales. (25% del tiempo total)</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-xolo-dark text-xolo-bg py-8 mt-12">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="font-serif italic opacity-80">"La belleza del Xoloitzcuintle no reside en su pelaje, sino en la perfecta armonía de su anatomía expuesta."</p>
+            <p class="mt-4 text-sm opacity-60">Datos presentados con fines informativos e ilustrativos sobre la raza Estándar.</p>
+        </div>
+    </footer>
+
+    <script>
+        const chartColors = {
+            accent: '#C17767',
+            secondary: '#D4C4B7',
+            green: '#8A9A86',
+            dark: '#4A403A',
+            bg: '#F9F6F0'
+        };
+
+        const growthCtx = document.getElementById('growthChart').getContext('2d');
+        new Chart(growthCtx, {
+            type: 'line',
+            data: {
+                labels: ['2 Meses', '6 Meses', '10 Meses', '14 Meses', '18 Meses', '24 Meses', '30 Meses'],
+                datasets: [
+                    {
+                        label: 'Macho Estándar Promedio (Kg)',
+                        data: [5, 12, 17, 19.5, 21, 22.5, 23],
+                        borderColor: chartColors.dark,
+                        backgroundColor: chartColors.dark,
+                        borderWidth: 3,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    },
+                    {
+                        label: 'Hembra Estándar Promedio (Kg)',
+                        data: [4.5, 10.5, 15, 17, 18.5, 19, 19.5],
+                        borderColor: chartColors.accent,
+                        backgroundColor: chartColors.accent,
+                        borderWidth: 3,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { font: { family: 'system-ui', size: 13 }, color: chartColors.dark }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(74, 64, 58, 0.9)',
+                        titleFont: { size: 14, family: 'system-ui' },
+                        bodyFont: { size: 13, family: 'system-ui' },
+                        padding: 12,
+                        cornerRadius: 8
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Peso (Kg)', color: chartColors.dark, font: { weight: 'bold'} },
+                        grid: { color: chartColors.secondary + '40' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        const nutritionCtx = document.getElementById('nutritionChart').getContext('2d');
+        const nutritionChart = new Chart(nutritionCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Proteínas (Carnes/Pescado)', 'Grasas Saludables', 'Carbohidratos/Fibras'],
+                datasets: [{
+                    data: [30, 18, 52],
+                    backgroundColor: [chartColors.accent, chartColors.green, chartColors.secondary],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '65%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { font: { family: 'system-ui' }, color: chartColors.dark }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.raw + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        const exerciseCtx = document.getElementById('exerciseChart').getContext('2d');
+        const exerciseChart = new Chart(exerciseCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Cachorro (3-8m)', 'Joven (8-18m)', 'Adulto (+18m)'],
+                datasets: [
+                    {
+                        label: 'Cardio Ligero (%)',
+                        data: [70, 50, 45],
+                        backgroundColor: chartColors.secondary,
+                    },
+                    {
+                        label: 'Fuerza/Resistencia (%)',
+                        data: [10, 25, 30],
+                        backgroundColor: chartColors.accent,
+                    },
+                    {
+                        label: 'Agilidad/Explosión (%)',
+                        data: [20, 25, 25],
+                        backgroundColor: chartColors.dark,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { stacked: true, grid: { display: false } },
+                    y: { 
+                        stacked: true, 
+                        max: 100,
+                        title: { display: true, text: '% del Entrenamiento Total' },
+                        grid: { color: chartColors.secondary + '40' }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                }
+            }
+        });
+
+        const anatomyData = {
+            posterior: {
+                icon: '⚡',
+                title: 'Cuartos Traseros',
+                subtitle: 'El motor del Xoloitzcuintle',
+                desc: 'Los muslos deben ser fuertes y musculosos. El Xolo estándar posee una angulación moderada que le permite un empuje poderoso y elástico. La musculatura aquí es densa, diseñada para ráfagas de velocidad y saltos ágiles.',
+                points: [
+                    '<strong>Glúteos y Bíceps femoral:</strong> Visibles bajo la piel, especialmente en tensión.',
+                    '<strong>Signo de desarrollo óptimo:</strong> Tensión firme al estar de pie, sin temblores ni debilidad.'
+                ]
+            },
+            anterior: {
+                icon: '🛡️',
+                title: 'Tren Anterior',
+                subtitle: 'Dirección y Amortiguación',
+                desc: 'Los hombros del Xolo son planos y musculosos. El pecho es profundo, llegando hasta los codos, albergando una gran capacidad pulmonar esencial para la resistencia. La musculatura frontal absorbe el impacto de la carrera.',
+                points: [
+                    '<strong>Músculos pectorales:</strong> Anchos pero no pesados, marcando un perfil elegante.',
+                    '<strong>Hombros:</strong> Escápulas largas e inclinadas, permitiendo un alcance de paso largo y fluido.'
+                ]
+            },
+            core: {
+                icon: '⚖️',
+                title: 'Lomo y Core',
+                subtitle: 'El puente de estabilidad',
+                desc: 'La espalda es recta y firme. El lomo (zona lumbar) es fuertemente musculado, transmitiendo la potencia de las patas traseras hacia adelante. Un core débil resulta en un trote ineficiente y balanceo indeseado.',
+                points: [
+                    '<strong>Abdomen:</strong> Musculoso y moderadamente retraído (tuck-up elegante).',
+                    '<strong>Músculos erectores de la espina:</strong> Visibles a los lados de la columna, ofreciendo rigidez estructural durante el trote.'
+                ]
+            }
+        };
+
+        function updateAnatomy(section) {
+            ['posterior', 'anterior', 'core'].forEach(id => {
+                const btn = document.getElementById(`btn-${id}`);
+                btn.classList.remove('tab-active');
+                btn.classList.add('tab-inactive');
+            });
+            const activeBtn = document.getElementById(`btn-${section}`);
+            activeBtn.classList.remove('tab-inactive');
+            activeBtn.classList.add('tab-active');
+
+            const contentDiv = document.getElementById('anatomy-content');
+            const data = anatomyData[section];
+            
+            contentDiv.style.animation = 'none';
+            contentDiv.offsetHeight; 
+            contentDiv.style.animation = 'fadeIn 0.3s ease-in-out';
+
+            let pointsHtml = data.points.map(p => `<li class="flex items-start gap-2"><span class="text-xolo-accent mt-1">▪</span> <span>${p}</span></li>`).join('');
+
+            contentDiv.innerHTML = `
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-full bg-xolo-accent/20 flex items-center justify-center text-2xl">${data.icon}</div>
+                    <div>
+                        <h3 class="text-2xl font-serif font-bold text-xolo-dark">${data.title}</h3>
+                        <p class="text-sm font-semibold text-xolo-accent uppercase tracking-wider mt-1">${data.subtitle}</p>
+                    </div>
+                </div>
+                <p class="text-lg leading-relaxed mb-4">${data.desc}</p>
+                <ul class="space-y-3 mt-6">
+                    ${pointsHtml}
+                </ul>
+            `;
+        }
+
+        function togglePillar(pillar) {
+            const btnNut = document.getElementById('btn-nutrition');
+            const btnEx = document.getElementById('btn-exercise');
+            const panelNut = document.getElementById('nutrition-panel');
+            const panelEx = document.getElementById('exercise-panel');
+
+            if (pillar === 'nutrition') {
+                btnNut.classList.replace('tab-inactive', 'tab-active');
+                btnEx.classList.replace('tab-active', 'tab-inactive');
+                panelNut.classList.remove('hidden');
+                panelEx.classList.add('hidden');
+            } else {
+                btnEx.classList.replace('tab-inactive', 'tab-active');
+                btnNut.classList.replace('tab-active', 'tab-inactive');
+                panelEx.classList.remove('hidden');
+                panelNut.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
