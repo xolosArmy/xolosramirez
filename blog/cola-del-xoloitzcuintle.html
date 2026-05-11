@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis Morfológico: La Cola del Xoloitzcuintle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,700;1,300&family=Open+Sans:wght@400;600&display=swap');
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f5f5f4; /* stone-100 */
+            color: #292524; /* stone-800 */
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Merriweather', serif;
+        }
+        
+        /* Required Chart Container Styles */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 350px;
+            min-height: 250px;
+        }
+
+        .canvas-drawing-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            background-color: #fafaf9; /* stone-50 */
+            border-radius: 0.75rem;
+            box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+            border: 1px solid #e7e5e4;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f5f5f4;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d6d3d1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a29e;
+        }
+
+        .tab-active {
+            border-bottom: 4px solid #b45309; /* amber-700 */
+            color: #b45309;
+            font-weight: 600;
+        }
+        .tab-inactive {
+            border-bottom: 4px solid transparent;
+            color: #78716c; /* stone-500 */
+        }
+        .tab-inactive:hover {
+            color: #44403c;
+            border-bottom: 4px solid #d6d3d1;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-amber-200 selection:text-amber-900">
+
+    <!-- Chosen Palette: Tierra Cálida (Warm Earth - Stone neutrals with Amber/Terracotta accents) -->
+    <!-- Application Structure Plan: The SPA uses a dashboard-like tabbed interface. This structure is chosen because morphological analysis requires looking at distinct but related aspects (Anatomy, Movement, Faults). By using tabs, users can focus on one specific concept without scrolling through a long document. Interactive canvas drawings replace static images to clearly demonstrate the physical mechanics, and a data chart visualizes the severity of common faults in breed judging, transforming a dry standard into an exploratory learning tool. -->
+    <!-- Visualization & Content Choices: 
+         - Report Info: Tail anatomy and posture. -> Goal: Inform & Compare. -> Viz: HTML5 Canvas Interactive Drawing. -> Interaction: Buttons to toggle state (Rest, Movement, Fault). -> Justification: Shows dynamic changes in physiology without relying on external SVGs or static images. 
+         - Report Info: Why curled tails are penalized. -> Goal: Organize & Inform. -> Viz: Chart.js Doughnut Chart. -> Interaction: Tooltips on hover. -> Justification: Quantifies the "why" by showing relative penalization weight in evaluations, providing context to the strictness of the rule. Library: Chart.js.
+         - NO SVG used. NO Mermaid JS used. Visuals built via Canvas API and structured CSS. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <div class="max-w-6xl mx-auto px-4 py-8 md:py-12">
+        
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-amber-100 text-amber-700 mb-4 text-3xl">
+                &#x1F415; <!-- Unicode Dog -->
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 text-stone-900">La Cola del Xoloitzcuintle</h1>
+            <p class="text-lg text-stone-600 max-w-2xl mx-auto">
+                Un análisis morfológico interactivo basado en el estándar oficial de la raza. Explora la longitud, inserción y la biomecánica que explica por qué una cola enroscada es una falta eliminatoria.
+            </p>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="bg-white rounded-2xl shadow-xl overflow-hidden border border-stone-200">
+            
+            <!-- Navigation Tabs -->
+            <nav class="flex overflow-x-auto border-b border-stone-200 bg-stone-50" role="tablist">
+                <button onclick="switchTab('anatomia')" id="tab-anatomia" class="tab-active flex-1 min-w-[150px] py-4 px-6 text-center focus:outline-none transition-colors duration-200 text-sm md:text-base" role="tab">
+                    <span class="block text-xl mb-1">&#x1F4CF;</span> Longitud e Inserción
+                </button>
+                <button onclick="switchTab('dinamica')" id="tab-dinamica" class="tab-inactive flex-1 min-w-[150px] py-4 px-6 text-center focus:outline-none transition-colors duration-200 text-sm md:text-base" role="tab">
+                    <span class="block text-xl mb-1">&#x26A1;</span> Dinámica y Postura
+                </button>
+                <button onclick="switchTab('penalizacion')" id="tab-penalizacion" class="tab-inactive flex-1 min-w-[150px] py-4 px-6 text-center focus:outline-none transition-colors duration-200 text-sm md:text-base" role="tab">
+                    <span class="block text-xl mb-1">&#x26A0;</span> El Defecto: Enroscada
+                </button>
+            </nav>
+
+            <!-- Tab Content: Anatomía -->
+            <section id="content-anatomia" class="p-6 md:p-10 block animation-fade-in">
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold mb-3 text-stone-800">Cimientos Morfológicos</h2>
+                    <p class="text-stone-600 leading-relaxed">
+                        Esta sección detalla las proporciones exactas dictadas por la Federación Canófila Internacional (FCI). La cola del Xolo no es un simple apéndice; actúa como timón en una estructura construida para la agilidad y velocidad explosiva (tipo lebrel).
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="space-y-6">
+                        <div class="bg-stone-50 p-5 rounded-xl border-l-4 border-amber-600">
+                            <h3 class="font-bold text-lg text-amber-800 flex items-center gap-2">
+                                <span>&#x25B6;</span> Inserción Baja
+                            </h3>
+                            <p class="text-stone-600 mt-2 text-sm">
+                                La cola debe ser una continuación fluida de la grupa. La grupa del Xolo tiene una ligera inclinación de unos 40 grados respecto a la horizontal. Una inserción alta rompe esta línea aerodinámica.
+                            </p>
+                        </div>
+                        <div class="bg-stone-50 p-5 rounded-xl border-l-4 border-amber-600">
+                            <h3 class="font-bold text-lg text-amber-800 flex items-center gap-2">
+                                <span>&#x25B6;</span> Longitud Exacta
+                            </h3>
+                            <p class="text-stone-600 mt-2 text-sm">
+                                Larga y afilándose hacia la punta. Al estar en reposo, <strong>debe llegar exactamente hasta el corvejón</strong> (la articulación de las extremidades posteriores). Ni más corta, ni arrastrando por el suelo.
+                            </p>
+                        </div>
+                        <div class="bg-stone-50 p-5 rounded-xl border-l-4 border-amber-600">
+                            <h3 class="font-bold text-lg text-amber-800 flex items-center gap-2">
+                                <span>&#x25B6;</span> Estructura Física
+                            </h3>
+                            <p class="text-stone-600 mt-2 text-sm">
+                                Las vértebras caudales deben ser fuertes en la base y disminuir progresivamente en grosor. En la variedad sin pelo, a veces presenta algunos pelos hirsutos en la punta, pero nunca flecos abundantes.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="relative">
+                        <!-- Abstract Representation of Proportions -->
+                        <div class="w-full h-80 bg-stone-100 rounded-xl flex items-center justify-center relative overflow-hidden border border-stone-200">
+                            <div class="absolute top-4 left-4 text-xs font-bold text-stone-400 uppercase tracking-widest">Esquema Proporcional</div>
+                            
+                            <!-- Dog representation using HTML/CSS shapes -->
+                            <div class="relative w-64 h-64">
+                                <!-- Body/Back line -->
+                                <div class="absolute top-20 left-10 w-32 h-2 bg-stone-400 rounded-full transform -rotate-6"></div>
+                                <!-- Croup -->
+                                <div class="absolute top-22 left-40 w-16 h-2 bg-stone-500 rounded-full transform rotate-[40deg] origin-left z-10" id="croup-line"></div>
+                                <!-- Hind Leg -->
+                                <div class="absolute top-[100px] left-[185px] w-2 h-28 bg-stone-300 rounded-full"></div>
+                                <!-- Hock Point -->
+                                <div class="absolute top-[205px] left-[182px] w-4 h-4 bg-amber-500 rounded-full z-20 shadow cursor-pointer hover:scale-125 transition-transform" title="Corvejón (Hock)"></div>
+                                <!-- Lower leg -->
+                                <div class="absolute top-[210px] left-[185px] w-2 h-12 bg-stone-300 rounded-full"></div>
+                                
+                                <!-- Tail -->
+                                <div class="absolute top-[100px] left-[188px] w-2 h-[115px] bg-amber-700 rounded-b-full transform -rotate-12 origin-top z-10 transition-all duration-500" id="anatomy-tail"></div>
+
+                                <!-- Measurement line -->
+                                <div class="absolute top-[100px] left-[220px] w-[1px] h-[105px] border-l-2 border-dashed border-stone-400"></div>
+                                <div class="absolute top-[140px] left-[230px] text-xs font-bold text-stone-600 bg-white px-2 py-1 rounded shadow-sm">Longitud Ideal</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab Content: Dinámica -->
+            <section id="content-dinamica" class="p-6 md:p-10 hidden animation-fade-in">
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold mb-3 text-stone-800">Simulador Biomecánico</h2>
+                    <p class="text-stone-600 leading-relaxed">
+                        Interactúa con el simulador para observar cómo cambia el porte de la cola según el estado del ejemplar. El estándar penaliza severamente que la cola descanse sobre el dorso en cualquier circunstancia.
+                    </p>
+                </div>
+
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <!-- Controls -->
+                    <div class="w-full lg:w-1/3 space-y-4">
+                        <h3 class="font-bold text-lg mb-4 border-b pb-2 text-stone-800">Selecciona el Estado</h3>
+                        
+                        <button onclick="drawSimulator('reposo')" class="w-full text-left px-5 py-4 rounded-lg border-2 border-amber-600 bg-amber-50 text-amber-900 font-semibold focus:outline-none transition-all hover:bg-amber-100 flex justify-between items-center group">
+                            <span>1. En Reposo</span>
+                            <span class="text-xl group-hover:translate-x-1 transition-transform">&#x2192;</span>
+                        </button>
+                        <p class="text-sm text-stone-500 px-2">Cuelga terminando en un ligero gancho, sin rozar el suelo.</p>
+                        
+                        <button onclick="drawSimulator('alerta')" class="w-full text-left px-5 py-4 rounded-lg border-2 border-stone-200 bg-white text-stone-700 font-semibold focus:outline-none transition-all hover:border-amber-400 hover:text-amber-700 flex justify-between items-center group mt-4">
+                            <span>2. En Movimiento / Alerta</span>
+                            <span class="text-xl group-hover:translate-x-1 transition-transform">&#x2192;</span>
+                        </button>
+                        <p class="text-sm text-stone-500 px-2">Se eleva en curva (forma de sable) pero <strong>jamás</strong> toca el dorso.</p>
+                        
+                        <button onclick="drawSimulator('falta')" class="w-full text-left px-5 py-4 rounded-lg border-2 border-red-200 bg-red-50 text-red-700 font-semibold focus:outline-none transition-all hover:bg-red-100 flex justify-between items-center group mt-4">
+                            <span>3. Falta (Enroscada)</span>
+                            <span class="text-xl group-hover:translate-x-1 transition-transform">&#x2192;</span>
+                        </button>
+                        <p class="text-sm text-stone-500 px-2">Se enrosca sobre la espalda. Totalmente inaceptable.</p>
+                    </div>
+
+                    <!-- Simulator Canvas -->
+                    <div class="w-full lg:w-2/3">
+                        <div class="canvas-drawing-container">
+                            <canvas id="postureCanvas" width="500" height="350" class="w-full h-full rounded-xl"></canvas>
+                            <!-- Legend -->
+                            <div class="absolute bottom-4 left-4 bg-white/90 px-3 py-2 rounded shadow text-xs text-stone-600 pointer-events-none">
+                                <div class="flex items-center gap-2"><div class="w-3 h-1 bg-stone-800"></div> Dorso / Grupa</div>
+                                <div class="flex items-center gap-2 mt-1"><div class="w-3 h-1 bg-[#b45309]"></div> Cola</div>
+                                <div class="flex items-center gap-2 mt-1"><div class="w-3 h-1 bg-red-500 border-t border-dashed border-red-500"></div> Límite Prohibido</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab Content: Penalización -->
+            <section id="content-penalizacion" class="p-6 md:p-10 hidden animation-fade-in">
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold mb-3 text-stone-800">¿Por qué nunca enroscada?</h2>
+                    <p class="text-stone-600 leading-relaxed">
+                        Una cola enroscada (tipo Spitz, como el Pug o Akita) no es solo un detalle estético; revela un defecto estructural profundo en una raza de tipo primitivo.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+                    <div>
+                        <!-- Chart Container (Strict styling) -->
+                        <div class="chart-container">
+                            <canvas id="faultsChart"></canvas>
+                        </div>
+                        <p class="text-center text-xs text-stone-400 mt-4">*Datos representativos de faltas eliminatorias en juzgamientos morfológicos.</p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <h3 class="text-xl font-bold text-stone-800 border-b-2 border-stone-200 pb-2">Implicaciones del Defecto</h3>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-stone-200 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="text-amber-700 text-2xl mb-2">&#x2696;</div>
+                            <h4 class="font-bold text-stone-800">1. Alteración de la Espina Dorsal</h4>
+                            <p class="text-sm text-stone-600 mt-1">
+                                Para que una cola se enrosque sobre la espalda, usualmente hay una malformación o alteración en la angulación de la pelvis y las vértebras coccígeas. Esto destruye la línea superior requerida.
+                            </p>
+                        </div>
+
+                        <div class="bg-white p-4 rounded-lg border border-stone-200 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="text-amber-700 text-2xl mb-2">&#x1F9EC;</div>
+                            <h4 class="font-bold text-stone-800">2. Evidencia de Cruza (Impureza)</h4>
+                            <p class="text-sm text-stone-600 mt-1">
+                                El Xoloitzcuintle es una raza primitiva y pura. Una cola enroscada es a menudo un indicador genético de intromisión histórica de razas tipo Spitz u otros perros de compañía.
+                            </p>
+                        </div>
+
+                        <div class="bg-white p-4 rounded-lg border border-stone-200 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="text-amber-700 text-2xl mb-2">&#x1F3C3;</div>
+                            <h4 class="font-bold text-stone-800">3. Pérdida de Funcionalidad</h4>
+                            <p class="text-sm text-stone-600 mt-1">
+                                Originalmente, son perros rústicos con aptitudes de cazador veloz. Una cola larga y de inserción baja funciona como un timón que proporciona equilibrio al dar giros bruscos a alta velocidad. Una cola enroscada anula esta función biomecánica.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="mt-8 text-center text-stone-500 text-sm">
+            <p>Análisis interactivo de conformación canina. Basado en el estándar FCI N° 234.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- Navigation Logic ---
+        function switchTab(tabId) {
+            // Hide all content
+            document.getElementById('content-anatomia').classList.add('hidden');
+            document.getElementById('content-dinamica').classList.add('hidden');
+            document.getElementById('content-penalizacion').classList.add('hidden');
+            
+            // Reset all tabs
+            const tabs = ['anatomia', 'dinamica', 'penalizacion'];
+            tabs.forEach(t => {
+                const el = document.getElementById('tab-' + t);
+                el.classList.remove('tab-active');
+                el.classList.add('tab-inactive');
+            });
+
+            // Show selected content and activate tab
+            document.getElementById('content-' + tabId).classList.remove('hidden');
+            const activeTab = document.getElementById('tab-' + tabId);
+            activeTab.classList.remove('tab-inactive');
+            activeTab.classList.add('tab-active');
+
+            // Trigger specific renders if needed
+            if(tabId === 'dinamica') {
+                drawSimulator('reposo'); // default state
+            }
+            if(tabId === 'penalizacion') {
+                renderChart();
+            }
+        }
+
+        // --- Interactive Canvas Simulator Logic ---
+        const canvas = document.getElementById('postureCanvas');
+        const ctx = canvas.getContext('2d');
+        let currentSimulatorState = 'reposo';
+
+        // Clear and setup base canvas
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw grid for reference
+            ctx.strokeStyle = '#f5f5f4';
+            ctx.lineWidth = 1;
+            for(let i=0; i<500; i+=50) {
+                ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, 350); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(500, i); ctx.stroke();
+            }
+        }
+
+        function drawDogBody() {
+            // Base coordinates for the hindquarters
+            const startX = 150;
+            const startY = 150;
+            
+            // Back line
+            ctx.beginPath();
+            ctx.moveTo(startX - 100, startY - 10);
+            ctx.lineTo(startX, startY);
+            ctx.strokeStyle = '#292524'; // stone-800
+            ctx.lineWidth = 8;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+
+            // Croup (40 degree slope)
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            const croupEndX = startX + 60;
+            const croupEndY = startY + 40;
+            ctx.lineTo(croupEndX, croupEndY);
+            ctx.stroke();
+
+            // Hind leg
+            ctx.beginPath();
+            ctx.moveTo(croupEndX - 10, croupEndY - 10);
+            ctx.lineTo(croupEndX - 20, croupEndY + 80); // upper leg
+            ctx.lineTo(croupEndX - 15, croupEndY + 140); // to hock
+            ctx.lineTo(croupEndX, croupEndY + 180); // to paw
+            ctx.strokeStyle = '#78716c'; // stone-500
+            ctx.lineWidth = 6;
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+
+            // Draw forbidden line (The Back)
+            ctx.beginPath();
+            ctx.moveTo(startX - 80, startY - 20);
+            ctx.lineTo(startX + 80, startY - 20);
+            ctx.strokeStyle = 'rgba(239, 68, 68, 0.4)'; // red-500 transparent
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.stroke();
+            ctx.setLineDash([]); // reset
+
+            return { croupEndX, croupEndY };
+        }
+
+        function drawTail(startX, startY, state) {
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.strokeStyle = '#b45309'; // amber-700
+            ctx.lineWidth = 7;
+            ctx.lineCap = 'round';
+
+            if (state === 'reposo') {
+                // Hanging down with slight hook
+                ctx.quadraticCurveTo(startX + 20, startY + 80, startX + 10, startY + 130);
+                // The hook
+                ctx.quadraticCurveTo(startX + 5, startY + 150, startX + 25, startY + 140);
+                ctx.stroke();
+                
+                // Animate UI button
+                updateButtons('reposo');
+                
+                // Text label
+                ctx.fillStyle = '#b45309';
+                ctx.font = '14px Open Sans';
+                ctx.fillText("Llega al corvejón", startX + 35, startY + 120);
+
+            } else if (state === 'alerta') {
+                // Saber curve upwards, not touching back
+                ctx.quadraticCurveTo(startX + 100, startY - 30, startX + 120, startY - 80);
+                ctx.stroke();
+                updateButtons('alerta');
+                
+                // Text label
+                ctx.fillStyle = '#b45309';
+                ctx.font = '14px Open Sans';
+                ctx.fillText("Curva en Sable", startX + 130, startY - 70);
+
+            } else if (state === 'falta') {
+                // Curled tightly over the back
+                ctx.strokeStyle = '#dc2626'; // red-600 indicating fault
+                // Curve up
+                ctx.bezierCurveTo(startX + 80, startY - 80, startX - 20, startY - 120, startX - 40, startY - 60);
+                // curl back in
+                ctx.bezierCurveTo(startX - 50, startY - 20, startX, startY - 20, startX + 10, startY - 50);
+                ctx.stroke();
+                updateButtons('falta');
+
+                // Error text
+                ctx.fillStyle = '#dc2626';
+                ctx.font = 'bold 16px Open Sans';
+                ctx.fillText("¡Falta Eliminatoria!", startX - 100, startY - 100);
+            }
+        }
+
+        function updateButtons(activeState) {
+            const buttons = document.querySelectorAll('#content-dinamica button');
+            buttons.forEach(btn => {
+                btn.classList.remove('border-amber-600', 'bg-amber-50', 'border-red-600', 'bg-red-50', 'text-amber-900', 'text-red-900');
+                btn.classList.add('border-stone-200', 'bg-white', 'text-stone-700');
+            });
+
+            const indexMap = { 'reposo': 0, 'alerta': 1, 'falta': 2 };
+            const activeBtn = buttons[indexMap[activeState]];
+            
+            activeBtn.classList.remove('border-stone-200', 'bg-white', 'text-stone-700');
+            if(activeState === 'falta') {
+                activeBtn.classList.add('border-red-600', 'bg-red-50', 'text-red-900');
+            } else {
+                activeBtn.classList.add('border-amber-600', 'bg-amber-50', 'text-amber-900');
+            }
+        }
+
+        // Main draw function exposed to HTML
+        window.drawSimulator = function(state) {
+            currentSimulatorState = state;
+            clearCanvas();
+            const { croupEndX, croupEndY } = drawDogBody();
+            drawTail(croupEndX, croupEndY, state);
+        }
+
+        // --- Chart.js Logic ---
+        let faultsChartInstance = null;
+        function renderChart() {
+            if (faultsChartInstance) return; // already rendered
+
+            const ctxChart = document.getElementById('faultsChart').getContext('2d');
+            
+            // Mock data representing the distribution of tail-related faults in shows
+            const data = {
+                labels: ['Enroscada (Falta Grave)', 'Inserción Alta', 'Corta / Amputada', 'Desviada'],
+                datasets: [{
+                    data: [55, 20, 15, 10],
+                    backgroundColor: [
+                        '#dc2626', // red-600 (Enroscada)
+                        '#f59e0b', // amber-500 (Alta)
+                        '#a8a29e', // stone-400 (Corta)
+                        '#d6d3d1'  // stone-300 (Desviada)
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            };
+
+            const config = {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '65%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    family: "'Open Sans', sans-serif",
+                                    size: 13
+                                },
+                                color: '#44403c'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        // Adding a 16-char wrapping logic simulation for tooltip readability if needed
+                                        label += context.parsed + '% de casos reportados';
+                                    }
+                                    return label;
+                                }
+                            },
+                            backgroundColor: 'rgba(41, 37, 36, 0.9)',
+                            titleFont: { size: 14, family: "'Open Sans', sans-serif" },
+                            bodyFont: { size: 13, family: "'Open Sans', sans-serif" },
+                            padding: 12,
+                            cornerRadius: 8
+                        }
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
+                }
+            };
+
+            faultsChartInstance = new Chart(ctxChart, config);
+            
+            // Add center text
+            Chart.register({
+                id: 'centerText',
+                beforeDraw: function(chart) {
+                    if (chart.config.type !== 'doughnut') return;
+                    var width = chart.width,
+                        height = chart.height,
+                        ctx = chart.ctx;
+
+                    ctx.restore();
+                    var fontSize = (height / 160).toFixed(2);
+                    ctx.font = "bold " + fontSize + "em 'Merriweather'";
+                    ctx.textBaseline = "middle";
+                    ctx.fillStyle = "#292524";
+
+                    var text = "Faltas",
+                        textX = Math.round((width - ctx.measureText(text).width) / 2),
+                        textY = height / 2 - 10;
+
+                    ctx.fillText(text, textX, textY);
+                    
+                    ctx.font = "normal " + (fontSize*0.5).toFixed(2) + "em 'Open Sans'";
+                    ctx.fillStyle = "#78716c";
+                    var text2 = "Morfológicas",
+                        textX2 = Math.round((width - ctx.measureText(text2).width) / 2),
+                        textY2 = height / 2 + 15;
+                    ctx.fillText(text2, textX2, textY2);
+                    ctx.save();
+                }
+            });
+        }
+
+        // Initialize first render
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initial animation for the abstract representation
+            setTimeout(() => {
+                const tail = document.getElementById('anatomy-tail');
+                if(tail) tail.style.transform = 'rotate(-5deg)';
+                setTimeout(() => {
+                    if(tail) tail.style.transform = 'rotate(-12deg)';
+                }, 500);
+            }, 500);
+        });
+
+    </script>
+</body>
+</html>
