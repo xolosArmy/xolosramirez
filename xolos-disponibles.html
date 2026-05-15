@@ -517,6 +517,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
            <article class="puppy-card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="800">
     <div class="puppy-card__image-wrapper">
       <span class="puppy-card__status status-disponible">Disponible</span>
+      <div class="swipe-indicator" aria-hidden="true">
+        <span>Desliza</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
      
       <picture>
         <img
@@ -526,14 +530,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           loading="lazy"
           width="600"
           height="450"
-          style="object-fit: cover;"
+          style="flex: 0 0 100%; scroll-snap-align: start; object-fit: cover;"
+        />
+        <img
+          src="https://i.imgur.com/tKlx8OO.jpeg"
+          alt="Xoloitzcuintle Mixa Ramirez"
+          class="puppy-card__image"
+          loading="lazy"
+          width="600"
+          height="450"
+          style="flex: 0 0 100%; scroll-snap-align: start; object-fit: cover;"
         />
       </picture>
     </div>
     <div class="puppy-card__content">
       <h3 class="puppy-card__name">Mixa Ramirez</h3>
       <ul class="puppy-card__details">
-        <li><strong>Edad</strong> 1 mes de edad </li>
+        <li><strong>Edad</strong> 1 mes</li>
         <li><strong>Color</strong> Mariposa</li>
       </ul>
        <div class="puppy-video-container" style="margin: 1rem 0; border-radius: 8px; overflow: hidden; aspect-ratio: 16/9;">
