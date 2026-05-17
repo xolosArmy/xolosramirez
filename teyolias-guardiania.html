@@ -56,6 +56,94 @@
         }
         .flip-card-front { background-color: #f5f5f4; color: #292524; }
         .flip-card-back { background-color: #292524; color: #f5f5f4; transform: rotateY(180deg); }
+
+        .carousel-scrollbar-hidden::-webkit-scrollbar { display: none; }
+        .carousel-scrollbar-hidden { -ms-overflow-style: none; scrollbar-width: none; }
+        .teyolia-carousel-track {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            overscroll-behavior-x: contain;
+            -webkit-overflow-scrolling: touch;
+        }
+        .teyolia-carousel-slide {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            flex: 0 0 100%;
+            scroll-snap-align: center;
+        }
+        .teyolia-carousel-image-slide {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0c0a09;
+        }
+        .teyolia-carousel-image-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+        }
+        .teyolia-carousel-video-slide {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0c0a09;
+        }
+        .teyolia-carousel-video-slide iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        .teyolia-carousel-button {
+            position: absolute;
+            top: 50%;
+            z-index: 10;
+            display: inline-flex;
+            width: 2.5rem;
+            height: 2.5rem;
+            transform: translateY(-50%);
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            border: 1px solid rgba(245, 158, 11, 0.55);
+            background: rgba(12, 10, 9, 0.68);
+            color: #fef3c7;
+            box-shadow: 0 10px 25px -12px rgba(0, 0, 0, 0.6);
+            transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
+        }
+        .teyolia-carousel-button:hover,
+        .teyolia-carousel-button:focus-visible {
+            background: rgba(217, 119, 6, 0.92);
+            color: #1c1917;
+            transform: translateY(-50%) scale(1.05);
+            outline: none;
+        }
+        .teyolia-carousel-button--prev { left: 0.75rem; }
+        .teyolia-carousel-button--next { right: 0.75rem; }
+        .teyolia-carousel-dots {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .teyolia-carousel-dot {
+            width: 0.65rem;
+            height: 0.65rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(245, 158, 11, 0.75);
+            background: rgba(28, 25, 23, 0.45);
+            transition: width 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+        }
+        .teyolia-carousel-dot.is-active {
+            width: 1.6rem;
+            background: #f59e0b;
+            border-color: #fbbf24;
+        }
     </style>
 </head>
 <body class="bg-stone-100 text-stone-800 font-sans selection:bg-amber-200">
@@ -171,55 +259,48 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <article class="rounded-2xl border border-amber-200 bg-amber-50 overflow-hidden shadow-sm">
-            <style>
-                /* Clases para ocultar la barra de scroll y mantener el estilo limpio */
-                .hide-scroll::-webkit-scrollbar { display: none; }
-                .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
-            </style>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-0">
-                <div class="md:col-span-1 bg-stone-900 relative h-80 md:h-full min-h-[350px]">
-
-                    <div class="flex overflow-x-auto snap-x snap-mandatory h-full hide-scroll w-full absolute inset-0">
-
-                        <div class="snap-center shrink-0 w-full h-full relative">
+        <article class="rounded-2xl border border-amber-200 bg-amber-50 overflow-hidden shadow-sm md:col-span-2">
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-0">
+                <div class="md:col-span-2 bg-stone-950 relative h-[28rem] md:h-full min-h-[430px]" data-carousel>
+                    <div class="teyolia-carousel-track carousel-scrollbar-hidden" data-carousel-track aria-label="Fotos y video de Tonatiuh Ramírez">
+                        <div class="teyolia-carousel-slide teyolia-carousel-image-slide" data-carousel-slide>
                             <img
                                 src="https://i.imgur.com/qYusFcs.png"
                                 alt="Tonatiuh Ramírez, Teyolía activa"
-                                class="w-full h-full object-cover"
+                                loading="lazy"
                             />
                         </div>
 
-                        <div class="snap-center shrink-0 w-full h-full relative">
-                            <img
-                                src="https://i.imgur.com/qYusFcs.png"
-                                alt="Tonatiuh Ramírez - Foto 2"
-                                class="w-full h-full object-cover"
-                            />
-                        </div>
+                        <!-- Agregar más fotos de Tonatiuh aquí -->
 
-                        <div class="snap-center shrink-0 w-full h-full relative bg-stone-950 flex items-center justify-center">
+                        <div class="teyolia-carousel-slide teyolia-carousel-video-slide" data-carousel-slide>
                             <iframe
-                                src="https://www.youtube.com/embed/RfcNi1zoJJA"
+                                src="https://www.youtube.com/embed/RfcNi1zoJJA?playsinline=1"
                                 title="Personalidad Xolo"
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                loading="lazy"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin"
                                 allowfullscreen
-                                class="w-full h-full"
                             ></iframe>
                         </div>
+                    </div>
 
-                        </div>
+                    <button class="teyolia-carousel-button teyolia-carousel-button--prev" type="button" data-carousel-prev aria-label="Ver slide anterior de Tonatiuh">
+                        ‹
+                    </button>
+                    <button class="teyolia-carousel-button teyolia-carousel-button--next" type="button" data-carousel-next aria-label="Ver slide siguiente de Tonatiuh">
+                        ›
+                    </button>
 
-                    <div class="absolute bottom-4 left-0 right-0 flex justify-center pointer-events-none">
-                        <div class="bg-black/60 text-white text-xs font-bold px-4 py-2 rounded-full backdrop-blur-md flex items-center gap-2 shadow-lg">
-                            <span>⬅️</span> Desliza <span>➡️</span>
+                    <div class="absolute bottom-4 left-0 right-0 flex flex-col items-center gap-3 pointer-events-none">
+                        <div class="teyolia-carousel-dots pointer-events-auto" data-carousel-dots aria-label="Paginación del carrusel de Tonatiuh"></div>
+                        <div class="bg-black/60 text-amber-100 text-xs font-bold px-4 py-2 rounded-full backdrop-blur-md flex items-center gap-2 shadow-lg border border-amber-500/30">
+                            <span aria-hidden="true">↔</span> Desliza
                         </div>
                     </div>
                 </div>
 
-                <div class="md:col-span-2 p-6 text-left flex flex-col justify-center">
+                <div class="md:col-span-3 p-6 text-left flex flex-col justify-center">
                     <p class="text-xs uppercase tracking-widest text-amber-700 font-bold mb-2">
                         Activa · 2 meses
                     </p>
@@ -344,6 +425,49 @@
                 document.getElementById('step-what').textContent = data.what;
                 document.getElementById('step-rule').textContent = data.rule;
             });
+        });
+
+        const carousels = document.querySelectorAll('[data-carousel]');
+        carousels.forEach(carousel => {
+            const track = carousel.querySelector('[data-carousel-track]');
+            const slides = Array.from(carousel.querySelectorAll('[data-carousel-slide]'));
+            const prevButton = carousel.querySelector('[data-carousel-prev]');
+            const nextButton = carousel.querySelector('[data-carousel-next]');
+            const dotsContainer = carousel.querySelector('[data-carousel-dots]');
+
+            if (!track || slides.length === 0 || !dotsContainer) return;
+
+            const dots = slides.map((_, index) => {
+                const dot = document.createElement('button');
+                dot.type = 'button';
+                dot.className = 'teyolia-carousel-dot';
+                dot.setAttribute('data-carousel-dot', String(index));
+                dot.setAttribute('aria-label', `Ir al slide ${index + 1} de Tonatiuh`);
+                dot.addEventListener('click', () => {
+                    track.scrollTo({ left: track.clientWidth * index, behavior: 'smooth' });
+                });
+                dotsContainer.appendChild(dot);
+                return dot;
+            });
+
+            const setActiveDot = () => {
+                const activeIndex = Math.round(track.scrollLeft / Math.max(track.clientWidth, 1));
+                dots.forEach((dot, index) => {
+                    const isActive = index === activeIndex;
+                    dot.classList.toggle('is-active', isActive);
+                    dot.setAttribute('aria-current', isActive ? 'true' : 'false');
+                });
+            };
+
+            prevButton?.addEventListener('click', () => {
+                track.scrollBy({ left: -track.clientWidth, behavior: 'smooth' });
+            });
+            nextButton?.addEventListener('click', () => {
+                track.scrollBy({ left: track.clientWidth, behavior: 'smooth' });
+            });
+            track.addEventListener('scroll', () => window.requestAnimationFrame(setActiveDot), { passive: true });
+            window.addEventListener('resize', setActiveDot);
+            setActiveDot();
         });
 
         const ctx = document.getElementById('profileChart').getContext('2d');
