@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte Interactivo: Calidad de Piel - Xoloitzcuintle vs. Perro Común</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        warmbg: '#FAF7F2',
+                        darkcharcoal: '#2D2A26',
+                        leather: '#8C5A35',
+                        softtan: '#D4B895',
+                        accentred: '#A43820'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FAF7F2;
+            color: #2D2A26;
+            -webkit-font-smoothing: antialiased;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .tab-active {
+            border-bottom: 2px solid #8C5A35;
+            color: #8C5A35;
+            font-weight: 600;
+        }
+        .layer-xolo { background-color: #8C5A35; transition: height 0.3s ease; }
+        .layer-common { background-color: #D4B895; transition: height 0.3s ease; }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Chosen Palette: Warm Neutrals & Leather (Warmbg #FAF7F2, DarkCharcoal #2D2A26, Leather #8C5A35, SoftTan #D4B895) -->
+    <!-- Application Structure Plan: The SPA is structured as an interactive executive summary for breeders/veterinarians (Xolos Ramirez). It uses a sticky top navigation for quick jumps. The core interaction is a "State Toggle" (Xolo vs. Perro Común) that dynamically updates the data, text, visual skin representations (CSS-based blocks), and the Radar Chart. This comparative dashboard approach allows users to instantly perceive the structural and physiological differences without reading dense scientific text linearly. -->
+    <!-- Visualization & Content Choices: 1. Dynamic Metric Cards -> Goal: Highlight key physiological stats (thickness, glands). Interaction: Updates on state toggle. Justification: Immediate numerical comparison. 2. CSS-Block Anatomy -> Goal: Visualize skin thickness. Interaction: Height changes via JS. Justification: Clear visual metaphor without SVG. 3. Radar Chart (Chart.js) -> Goal: Multivariate profiling of skin attributes (Toughness, UV resistance, etc.). Interaction: Updates datasets on toggle. Justification: Best for comparing multiple capabilities of a biological profile simultaneously. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <nav class="sticky top-0 z-50 bg-warmbg/95 backdrop-blur shadow-sm border-b border-gray-200">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center gap-2">
+                    <span class="text-2xl font-bold text-leather">XR</span>
+                    <span class="font-semibold text-darkcharcoal hidden sm:block">Xolos Ramirez - Reporte Clínico</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <button onclick="scrollToSection('intro')" class="text-sm font-medium text-gray-600 hover:text-leather transition-colors">Introducción</button>
+                    <button onclick="scrollToSection('comparativa')" class="text-sm font-medium text-gray-600 hover:text-leather transition-colors">Análisis Comparativo</button>
+                    <button onclick="scrollToSection('cuidados')" class="text-sm font-medium text-gray-600 hover:text-leather transition-colors">Guía de Cuidados</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow">
+        
+        <header class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 text-center fade-in">
+            <span class="uppercase tracking-widest text-xs font-bold text-accentred mb-4 block">Estudio Dermatológico Comparativo</span>
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 text-darkcharcoal leading-tight">La Biología de la "Piel de Cuero"</h1>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto mb-10">
+                Un análisis técnico sobre las diferencias estructurales, genéticas y fisiológicas entre la piel del Xoloitzcuintle (mutación FOXI3) y la piel fina dependiente de pelaje del perro común.
+            </p>
+            
+            <div class="inline-flex bg-white rounded-lg p-1 shadow-sm border border-gray-200" role="group">
+                <button id="btn-xolo" onclick="setSubject('xolo')" class="px-6 py-2.5 text-sm font-medium rounded-md bg-leather text-white shadow transition-all">
+                    🐕 Xoloitzcuintle
+                </button>
+                <button id="btn-comun" onclick="setSubject('comun')" class="px-6 py-2.5 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 transition-all">
+                    🐩 Perro Común
+                </button>
+            </div>
+        </header>
+
+        <section id="intro" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-12">
+                <h2 class="text-2xl font-bold mb-4 border-b border-gray-100 pb-4">Contexto Biológico</h2>
+                <p class="text-gray-700 leading-relaxed mb-6" id="context-text">
+                    El Xoloitzcuintle posee una mutación en el gen FOXI3. Esta mutación no solo inhibe el desarrollo del folículo piloso, sino que altera la embriogénesis del ectodermo. Como resultado, la piel debe asumir roles de protección mecánica y térmica que normalmente realiza el pelaje. Esto genera una epidermis significativamente más gruesa, densa y resistente, coloquialmente conocida como "piel de cuero".
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                    <div class="bg-warmbg p-6 rounded-xl border border-gray-200">
+                        <div class="text-3xl mb-2">🛡️</div>
+                        <h3 class="font-bold text-gray-900 mb-1">Función Principal</h3>
+                        <p class="text-sm text-gray-600" id="stat-funcion">Protección ambiental directa (Mecánica y UV).</p>
+                    </div>
+                    <div class="bg-warmbg p-6 rounded-xl border border-gray-200">
+                        <div class="text-3xl mb-2">💧</div>
+                        <h3 class="font-bold text-gray-900 mb-1">Glándulas Sebáceas</h3>
+                        <p class="text-sm text-gray-600" id="stat-glandulas">Alta densidad y actividad. Requiere exfoliación para evitar comedones.</p>
+                    </div>
+                    <div class="bg-warmbg p-6 rounded-xl border border-gray-200">
+                        <div class="text-3xl mb-2">☀️</div>
+                        <h3 class="font-bold text-gray-900 mb-1">Respuesta Solar</h3>
+                        <p class="text-sm text-gray-600" id="stat-sol">Alta producción de melanina. La piel se "broncea" y oscurece como defensa.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="comparativa" class="bg-white py-16 border-t border-gray-100">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mb-12">
+                    <h2 class="text-3xl font-bold text-center text-darkcharcoal mb-4">Análisis Estructural y Funcional</h2>
+                    <p class="text-center text-gray-600 max-w-2xl mx-auto">
+                        Comparativa interactiva de los atributos dermatológicos. Observe cómo la ausencia de pelo obliga a la piel a compensar incrementando su grosor y secreción.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    
+                    <div class="bg-warmbg rounded-2xl p-8 border border-gray-200 flex flex-col items-center justify-center min-h-[400px]">
+                        <h3 class="text-lg font-bold mb-6 text-gray-700 uppercase tracking-wide">Representación de Estratos (Grosor)</h3>
+                        <div class="w-full max-w-xs space-y-2 relative">
+                            <div class="absolute -left-20 top-1/2 transform -translate-y-1/2 text-xs text-gray-500 font-medium rotate-[-90deg] tracking-widest">EXTERIOR</div>
+                            
+                            <div id="layer-epidermis" class="w-full rounded-t-lg layer-xolo h-16 flex items-center justify-center text-white text-xs font-bold shadow-inner">
+                                Epidermis (Estrato Córneo)
+                            </div>
+                            
+                            <div id="layer-dermis" class="w-full bg-[#E8DCC8] h-24 flex items-center justify-center text-gray-800 text-xs font-bold border-l-4 border-r-4 border-leather transition-colors">
+                                Dermis (Colágeno y Glándulas)
+                            </div>
+                            
+                            <div class="w-full bg-[#D6C4AD] h-12 rounded-b-lg flex items-center justify-center text-gray-700 text-xs font-bold opacity-80">
+                                Hipodermis
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-8 text-center" id="layer-desc">
+                            En el Xoloitzcuintle, el estrato córneo es significativamente más grueso para resistir abrasiones, simulando la textura del cuero curtido.
+                        </p>
+                    </div>
+
+                    <div class="w-full">
+                        <div class="chart-container">
+                            <canvas id="radarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="cuidados" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <h2 class="text-3xl font-bold mb-8 text-darkcharcoal">Implicaciones para el Manejo (Criadores)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <div class="bg-white border border-leather/30 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="text-2xl">🚿</span>
+                        <h3 class="text-xl font-bold text-leather">Higiene y Exfoliación</h3>
+                    </div>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                        Debido a la alta secreción sebácea no absorbida por el pelo, los poros tienden a obstruirse (puntos negros/comedones).
+                    </p>
+                    <ul class="text-sm text-gray-700 space-y-2 list-none" id="care-higiene">
+                        <li>• Baño cada 15-20 días con jabón neutro (glicerina).</li>
+                        <li>• Exfoliación suave mensual (esponja vegetal).</li>
+                        <li>• Evitar champús para perros con pelo (alteran el pH).</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white border border-leather/30 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="text-2xl">🧴</span>
+                        <h3 class="text-xl font-bold text-leather">Hidratación y Clima</h3>
+                    </div>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                        La piel expuesta pierde humedad rápidamente y es susceptible a cambios extremos de temperatura.
+                    </p>
+                    <ul class="text-sm text-gray-700 space-y-2 list-none" id="care-clima">
+                        <li>• Aplicar cremas humectantes sin perfumes post-baño.</li>
+                        <li>• Uso de aceites naturales (coco/almendra) en zonas resecas.</li>
+                        <li>• Ropa protectora solo en climas de frío extremo.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-darkcharcoal text-white py-8 mt-auto">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-sm text-gray-400">© 2026 Xolos Ramirez. Reporte de Investigación Dermatológica Canina.</p>
+            <p class="text-xs text-gray-500 mt-2">Plataforma interactiva para el análisis de fenotipos sin pelo.</p>
+        </div>
+    </footer>
+
+    <script>
+        const dataConfig = {
+            xolo: {
+                contexto: 'El Xoloitzcuintle posee una mutación en el gen FOXI3. Esta mutación no solo inhibe el desarrollo del folículo piloso, sino que altera la embriogénesis del ectodermo. Como resultado, la piel debe asumir roles de protección mecánica y térmica que normalmente realiza el pelaje. Esto genera una epidermis significativamente más gruesa, densa y resistente, coloquialmente conocida como "piel de cuero".',
+                f_principal: 'Protección ambiental directa (Mecánica y térmica). Actúa como escudo primario.',
+                f_glandulas: 'Alta densidad y actividad. El sebo protege la piel pero requiere remoción manual para evitar comedones.',
+                f_sol: 'Alta producción de melanina. La piel se "broncea" y oscurece como mecanismo de defensa evolutivo.',
+                layerHeight: 'h-16',
+                layerDesc: 'En el Xoloitzcuintle, el estrato córneo es significativamente más grueso (representado aquí) para resistir abrasiones, simulando la textura del cuero curtido.',
+                layerColor: '#8C5A35',
+                borderDermis: 'border-leather',
+                chartData: [9, 8, 9, 6, 2, 8],
+                careHigiene: [
+                    '• Baño cada 15-20 días con jabón neutro o de glicerina.',
+                    '• Exfoliación suave mensual para remover piel muerta y sebo.',
+                    '• NUNCA usar cardas o cepillos duros.'
+                ],
+                careClima: [
+                    '• Aplicar loción o crema humectante (sin alcohol) tras el baño.',
+                    '• Protector solar canino si habrá exposición prolongada al mediodía.',
+                    '• Ropa de abrigo estrictamente necesaria en climas por debajo de 10°C.'
+                ]
+            },
+            comun: {
+                contexto: 'El perro común posee un pelaje denso (con capa interna y externa) que actúa como barrera primaria. Por lo tanto, su piel evolutivamente es más fina, menos queratinizada y menos pigmentada debajo del manto. Depende totalmente del folículo piloso y la capa de aire atrapada para la termorregulación y protección contra rayos UV.',
+                f_principal: 'Soporte folicular. La protección real la provee el manto de pelo.',
+                f_glandulas: 'Actividad moderada. El sebo lubrica el pelo a través del folículo; rara vez se acumula en la superficie de la piel.',
+                f_sol: 'Alta sensibilidad. Si se rasura, la piel se quema rápidamente y presenta eritemas al no tener defensas.',
+                layerHeight: 'h-4',
+                layerDesc: 'En un perro con pelo, la epidermis es delgada. La protección proviene de los folículos pilosos (no mostrados) incrustados en la dermis.',
+                layerColor: '#D4B895',
+                borderDermis: 'border-[#D4B895]',
+                chartData: [3, 4, 3, 9, 10, 3],
+                careHigiene: [
+                    '• Cepillado diario/semanal según el tipo de manto.',
+                    '• Baño cada 4-8 semanas (exceso de baño daña la barrera folicular).',
+                    '• Uso de champús específicos para el pH y tipo de pelo canino.'
+                ],
+                careClima: [
+                    '• Evitar rasurar mantos de doble capa (Husky, Pastor) ya que daña la termorregulación.',
+                    '• Secado exhaustivo con secadora para evitar hongos en la dermis oculta.',
+                    '• Inspección táctil profunda para encontrar garrapatas ocultas.'
+                ]
+            }
+        };
+
+        let radarChartInstance = null;
+
+        function initChart() {
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            Chart.defaults.color = '#666';
+
+            radarChartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        'Grosor Epidérmico', 
+                        'Actividad Sebácea', 
+                        'Resistencia Mecánica', 
+                        'Sensibilidad UV (Sin Pelo)', 
+                        'Dependencia de Pelaje',
+                        'Capacidad de Bronceado'
+                    ],
+                    datasets: [{
+                        label: 'Perfil Dermatológico',
+                        data: dataConfig.xolo.chartData,
+                        backgroundColor: 'rgba(140, 90, 53, 0.4)',
+                        borderColor: '#8C5A35',
+                        pointBackgroundColor: '#8C5A35',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#8C5A35',
+                        borderWidth: 2,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(0,0,0,0.1)' },
+                            grid: { color: 'rgba(0,0,0,0.1)' },
+                            pointLabels: {
+                                font: { size: 11, weight: '600' },
+                                color: '#2D2A26'
+                            },
+                            ticks: {
+                                min: 0,
+                                max: 10,
+                                stepSize: 2,
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#2D2A26',
+                            titleFont: { size: 13 },
+                            bodyFont: { size: 12 },
+                            padding: 10,
+                            displayColors: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return `Nivel: ${context.raw} / 10`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function setSubject(type) {
+            const btnXolo = document.getElementById('btn-xolo');
+            const btnComun = document.getElementById('btn-comun');
+            
+            if (type === 'xolo') {
+                btnXolo.classList.replace('text-gray-600', 'text-white');
+                btnXolo.classList.replace('hover:bg-gray-50', 'bg-leather');
+                btnXolo.classList.add('shadow');
+                
+                btnComun.classList.replace('text-white', 'text-gray-600');
+                btnComun.classList.replace('bg-leather', 'hover:bg-gray-50');
+                btnComun.classList.remove('shadow');
+            } else {
+                btnComun.classList.replace('text-gray-600', 'text-white');
+                btnComun.classList.replace('hover:bg-gray-50', 'bg-leather');
+                btnComun.classList.add('shadow');
+                
+                btnXolo.classList.replace('text-white', 'text-gray-600');
+                btnXolo.classList.replace('bg-leather', 'hover:bg-gray-50');
+                btnXolo.classList.remove('shadow');
+            }
+
+            const data = dataConfig[type];
+
+            document.getElementById('context-text').textContent = data.contexto;
+            document.getElementById('stat-funcion').textContent = data.f_principal;
+            document.getElementById('stat-glandulas').textContent = data.f_glandulas;
+            document.getElementById('stat-sol').textContent = data.f_sol;
+
+            const epidermis = document.getElementById('layer-epidermis');
+            const dermis = document.getElementById('layer-dermis');
+            
+            epidermis.className = `w-full rounded-t-lg transition-all duration-500 ease-in-out flex items-center justify-center text-white text-xs font-bold shadow-inner ${data.layerHeight}`;
+            epidermis.style.backgroundColor = data.layerColor;
+            
+            dermis.className = `w-full bg-[#E8DCC8] h-24 flex items-center justify-center text-gray-800 text-xs font-bold border-l-4 border-r-4 transition-colors duration-500 ${data.borderDermis}`;
+            
+            document.getElementById('layer-desc').textContent = data.layerDesc;
+
+            const listHigiene = document.getElementById('care-higiene');
+            listHigiene.innerHTML = data.careHigiene.map(item => `<li>${item}</li>`).join('');
+            
+            const listClima = document.getElementById('care-clima');
+            listClima.innerHTML = data.careClima.map(item => `<li>${item}</li>`).join('');
+
+            if (radarChartInstance) {
+                radarChartInstance.data.datasets[0].data = data.chartData;
+                radarChartInstance.data.datasets[0].backgroundColor = type === 'xolo' ? 'rgba(140, 90, 53, 0.4)' : 'rgba(212, 184, 149, 0.4)';
+                radarChartInstance.data.datasets[0].borderColor = type === 'xolo' ? '#8C5A35' : '#D4B895';
+                radarChartInstance.data.datasets[0].pointBackgroundColor = type === 'xolo' ? '#8C5A35' : '#D4B895';
+                radarChartInstance.data.datasets[0].pointHoverBorderColor = type === 'xolo' ? '#8C5A35' : '#D4B895';
+                radarChartInstance.update();
+            }
+        }
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        window.onload = function() {
+            initChart();
+        };
+    </script>
+</body>
+</html>
