@@ -172,16 +172,54 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <article class="rounded-2xl border border-amber-200 bg-amber-50 overflow-hidden shadow-sm">
+            <style>
+                /* Clases para ocultar la barra de scroll y mantener el estilo limpio */
+                .hide-scroll::-webkit-scrollbar { display: none; }
+                .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+            </style>
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-0">
-                <div class="md:col-span-1 bg-stone-200">
-                    <img 
-                        src="https://i.imgur.com/qYusFcs.png" 
-                        alt="Tonatiuh Ramírez, Teyolía activa"
-                        class="w-full h-full object-cover"
-                    />
+                <div class="md:col-span-1 bg-stone-900 relative h-80 md:h-full min-h-[350px]">
+
+                    <div class="flex overflow-x-auto snap-x snap-mandatory h-full hide-scroll w-full absolute inset-0">
+
+                        <div class="snap-center shrink-0 w-full h-full relative">
+                            <img
+                                src="https://i.imgur.com/qYusFcs.png"
+                                alt="Tonatiuh Ramírez, Teyolía activa"
+                                class="w-full h-full object-cover"
+                            />
+                        </div>
+
+                        <div class="snap-center shrink-0 w-full h-full relative">
+                            <img
+                                src="https://i.imgur.com/qYusFcs.png"
+                                alt="Tonatiuh Ramírez - Foto 2"
+                                class="w-full h-full object-cover"
+                            />
+                        </div>
+
+                        <div class="snap-center shrink-0 w-full h-full relative bg-stone-950 flex items-center justify-center">
+                            <iframe
+                                src="https://www.youtube.com/embed/RfcNi1zoJJA"
+                                title="Personalidad Xolo"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen
+                                class="w-full h-full"
+                            ></iframe>
+                        </div>
+
+                        </div>
+
+                    <div class="absolute bottom-4 left-0 right-0 flex justify-center pointer-events-none">
+                        <div class="bg-black/60 text-white text-xs font-bold px-4 py-2 rounded-full backdrop-blur-md flex items-center gap-2 shadow-lg">
+                            <span>⬅️</span> Desliza <span>➡️</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="md:col-span-2 p-6 text-left">
+                <div class="md:col-span-2 p-6 text-left flex flex-col justify-center">
                     <p class="text-xs uppercase tracking-widest text-amber-700 font-bold mb-2">
                         Activa · 2 meses
                     </p>
@@ -198,18 +236,20 @@
                     </ul>
 
                     <p class="text-stone-700 text-sm leading-relaxed mb-5">
-                        Tonatiuh ha sido seleccionado como candidato a Teyolía por su etapa de madurez. 
+                        Tonatiuh ha sido seleccionado como candidato a Teyolía por su etapa de madurez.
                         Durante esta campaña, las familias interesadas podrán postularse como guardianes.
                     </p>
 
-                    <a 
-                        href="https://www.teyolia.cash/campaigns/campaign-1777329953138"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="inline-block bg-stone-900 text-amber-500 px-5 py-3 rounded-full font-bold hover:bg-amber-600 hover:text-stone-900 transition-all"
-                    >
-                        Ver Teyolía de Tonatiuh ✨
-                    </a>
+                    <div>
+                        <a
+                            href="https://www.teyolia.cash/campaigns/campaign-1777329953138"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="inline-block bg-stone-900 text-amber-500 px-5 py-3 rounded-full font-bold hover:bg-amber-600 hover:text-stone-900 transition-all"
+                        >
+                            Ver Teyolía de Tonatiuh ✨
+                        </a>
+                    </div>
                 </div>
             </div>
         </article>
