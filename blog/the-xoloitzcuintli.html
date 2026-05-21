@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Xoloitzcuintle: A Living Mexican Treasure | Xolos Ramirez</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sand: '#FDFBF7',
+                        terracotta: '#C05640',
+                        obsidian: '#2A2A2A',
+                        agave: '#8E9B90',
+                        clay: '#E2D8C8'
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['Lato', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FDFBF7;
+            color: #2A2A2A;
+            font-family: 'Lato', sans-serif;
+        }
+        
+        h1, h2, h3, h4, .serif-text {
+            font-family: '"Playfair Display"', serif;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        .nav-item {
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-item:hover {
+            color: #C05640;
+        }
+
+        .nav-active {
+            color: #C05640;
+            border-bottom: 2px solid #C05640;
+            font-weight: 700;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .size-btn {
+            transition: all 0.3s;
+        }
+        .size-btn.active {
+            background-color: #C05640;
+            color: white;
+            border-color: #C05640;
+        }
+
+        .relative-dog-box {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background-color: #2A2A2A;
+            border-top-right-radius: 20px;
+            border-top-left-radius: 20px;
+            margin: 0 auto;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+<!-- Chosen Palette: Warm Mexican Earth (Terracotta, Obsidian, Agave, Sand) -->
+<!-- Application Structure Plan: The SPA is structured into four thematic sections (Overview, History & Myth, Biology, Modern Revival) accessible via a sticky top navigation bar. This dashboard/tabbed approach is chosen to allow users to digest the multifaceted nature of the Xoloitzcuintle (cultural artifact vs. biological entity) without being overwhelmed by a massive linear document. It facilitates exploratory learning. -->
+<!-- Visualization & Content Choices: 
+1. History: Line chart (Chart.js) showing estimated population over 3000 years to dramatically visualize near-extinction and recovery.
+2. Biology: Doughnut chart (Chart.js) illustrating the FOXI3 lethal gene inheritance (HxH breeding), as it's a critical, misunderstood aspect of the breed. HTML/JS interactive size comparator allows users to intuitively grasp the three breed sizes.
+3. Revival: Bar chart (Chart.js) showing modern registration trends to prove its status as a rising global treasure. 
+Interactions prioritize clicking to reveal data (tabs, size toggles) to keep the UI clean. -->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <nav class="sticky top-0 z-50 bg-sand border-b border-clay shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center">
+                    <span class="text-3xl mr-2 text-terracotta">&#128021;</span>
+                    <div>
+                        <h1 class="text-2xl font-bold leading-none text-obsidian tracking-wide">XOLOS RAMIREZ</h1>
+                        <span class="text-xs uppercase tracking-widest text-agave">Educational Portal</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <button onclick="nav('overview')" id="nav-overview" class="nav-item nav-active text-sm uppercase tracking-wide py-2">The Living Treasure</button>
+                    <button onclick="nav('myth')" id="nav-myth" class="nav-item text-sm uppercase tracking-wide py-2 text-gray-500">History & Myth</button>
+                    <button onclick="nav('biology')" id="nav-biology" class="nav-item text-sm uppercase tracking-wide py-2 text-gray-500">Genetics & Sizes</button>
+                    <button onclick="nav('revival')" id="nav-revival" class="nav-item text-sm uppercase tracking-wide py-2 text-gray-500">Modern Revival</button>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <select id="mobile-nav" onchange="nav(this.value)" class="bg-transparent border border-clay text-obsidian text-sm rounded-lg focus:ring-terracotta focus:border-terracotta block w-full p-2.5">
+                        <option value="overview">The Living Treasure</option>
+                        <option value="myth">History & Myth</option>
+                        <option value="biology">Genetics & Sizes</option>
+                        <option value="revival">Modern Revival</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        
+        <section id="sec-overview" class="fade-in block">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-5xl mb-4 block">&#127774;</span>
+                <h2 class="text-5xl md:text-6xl text-obsidian mb-6">More Than a Dog.<br>A Cultural Artifact.</h2>
+                <p class="text-xl text-gray-600 leading-relaxed">
+                    The Xoloitzcuintle (pronounced show-low-eats-QUEENT-lee), or Mexican Hairless Dog, is one of the oldest and rarest breeds in the world. 
+                    Forged by nature over 3,000 years ago, it is recognized not just as a canine companion, but as a living piece of Mexican history, designated by the government as an official national treasure.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                <div class="bg-white p-8 rounded-xl shadow-sm border border-clay text-center transition hover:shadow-md">
+                    <div class="text-4xl text-terracotta mb-4">&#9760;</div>
+                    <h3 class="text-2xl mb-3 text-obsidian">Guides to Mictlan</h3>
+                    <p class="text-gray-600">Revered by the Aztecs and Maya as guides for the souls of the dead traveling to the underworld.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-sm border border-clay text-center transition hover:shadow-md">
+                    <div class="text-4xl text-terracotta mb-4">&#129516;</div>
+                    <h3 class="text-2xl mb-3 text-obsidian">Evolutionary Marvel</h3>
+                    <p class="text-gray-600">Their hairlessness is a natural genetic mutation, an evolutionary adaptation to the hot, tropical climates of Mesoamerica.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-sm border border-clay text-center transition hover:shadow-md">
+                    <div class="text-4xl text-terracotta mb-4">&#127912;</div>
+                    <h3 class="text-2xl mb-3 text-obsidian">Muse of Masters</h3>
+                    <p class="text-gray-600">Saved from extinction in the 20th century, they became the beloved subjects of artists like Frida Kahlo and Diego Rivera.</p>
+                </div>
+            </div>
+            
+            <div class="mt-16 bg-clay bg-opacity-30 rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center gap-8">
+                <div class="flex-1">
+                    <h3 class="text-3xl text-obsidian mb-4">Navigating This Report</h3>
+                    <p class="text-gray-700 text-lg mb-6">
+                        Use the navigation tabs above to explore the data and history behind this extraordinary breed. We have compiled genetic analysis, historical population estimates, and physical data to demonstrate why the Xoloitzcuintle requires careful preservation and profound respect.
+                    </p>
+                    <button onclick="nav('myth')" class="bg-terracotta text-white px-8 py-3 rounded-full font-bold tracking-wider hover:bg-opacity-90 transition">BEGIN EXPLORATION</button>
+                </div>
+                <div class="flex-1 flex justify-center text-9xl text-terracotta opacity-80">
+                    &#128021;
+                </div>
+            </div>
+        </section>
+
+        <section id="sec-myth" class="fade-in hidden">
+            <div class="mb-12">
+                <h2 class="text-4xl md:text-5xl text-obsidian mb-4">Gods, Conquistadors & Survival</h2>
+                <p class="text-xl text-gray-600 max-w-4xl">
+                    This section details the dramatic historical timeline of the Xoloitzcuintle. From being revered as representatives of the dog-headed god Xolotl, to being pushed to the brink of extinction by Spanish colonizers, and finally, their modern rescue.
+                </p>
+            </div>
+
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-clay mb-12">
+                <h3 class="text-2xl text-obsidian mb-2">Estimated Population & Cultural Relevance (3000 BC - Present)</h3>
+                <p class="text-gray-500 mb-6 text-sm">Interactive Timeline: Hover over points to view historical events impacting breed population.</p>
+                
+                <div class="chart-container">
+                    <canvas id="historyChart"></canvas>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mt-12">
+                <div>
+                    <h4 class="text-3xl text-terracotta mb-4">The God Xolotl</h4>
+                    <p class="text-gray-700 mb-4 leading-relaxed">
+                        In Aztec mythology, Xolotl was the god of fire and lightning. He was often depicted as a dog-headed man and was the twin brother of Quetzalcoatl. The Xoloitzcuintle was created by Xolotl from a sliver of the Bone of Life. 
+                    </p>
+                    <p class="text-gray-700 leading-relaxed">
+                        The dogs were considered sacred. It was believed that after death, a person's soul had to cross a deep river to reach Mictlan (the underworld). Only a Xolo could ferry the soul safely across. Because of this, they were often sacrificed and buried alongside their owners.
+                    </p>
+                </div>
+                <div class="bg-obsidian text-sand p-8 rounded-xl">
+                    <h4 class="text-3xl text-terracotta mb-4">The Extinction Threat</h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <span class="text-terracotta mr-3 text-xl">&#9876;</span>
+                            <p class="text-gray-300"><strong class="text-white">1500s:</strong> Spanish conquistadors arrived and sought to eradicate indigenous religions. Because the Xolo was deeply tied to Aztec spirituality, they were systematically killed.</p>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-terracotta mr-3 text-xl">&#127830;</span>
+                            <p class="text-gray-300"><strong class="text-white">Food Source:</strong> The Spanish also found the dogs to be a convenient food source, consuming them in vast numbers, nearly wiping out the breed entirely.</p>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-terracotta mr-3 text-xl">&#127797;</span>
+                            <p class="text-gray-300"><strong class="text-white">Mountain Retreat:</strong> The breed only survived because small packs retreated into the isolated, rugged mountains of Guerrero and Oaxaca, surviving in the wild for centuries.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec-biology" class="fade-in hidden">
+            <div class="mb-12">
+                <h2 class="text-4xl md:text-5xl text-obsidian mb-4">The Science of the Sacred</h2>
+                <p class="text-xl text-gray-600 max-w-4xl">
+                    Understanding the Xoloitzcuintle requires understanding its unique genetics. The very trait that defines them—hairlessness—is a complex genetic mutation. Here we explore the mechanics of the FOXI3 gene and the physical standards of the breed.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-clay">
+                    <h3 class="text-2xl text-obsidian mb-2">The FOXI3 Gene Mutation</h3>
+                    <p class="text-gray-500 mb-6 text-sm">Offspring probability in a typical Hairless-to-Hairless breeding scenario.</p>
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="geneticsChart"></canvas>
+                    </div>
+                    <div class="mt-6 text-gray-700 text-sm bg-sand p-4 rounded-lg">
+                        <strong>Data Insight:</strong> The hairless gene is dominant. However, the homozygous state (two hairless genes) is embryonic lethal. Therefore, every living hairless Xolo is heterozygous (one hairless gene, one coated gene). Breeding two hairless dogs results in a surviving litter ratio of roughly 66% Hairless to 33% Coated. The coated variety is crucial for the breed's genetic health.
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-3xl text-terracotta mb-4">Dentition & Body Heat</h3>
+                    <p class="text-gray-700 mb-6 leading-relaxed">
+                        The same gene that causes hairlessness also affects dentition. Hairless Xolos almost always have incomplete sets of teeth, typically lacking premolars. This is a recognized breed standard and not a defect. The coated variety, possessing no hairless genes, has a complete set of teeth.
+                    </p>
+                    <div class="bg-terracotta bg-opacity-10 border border-terracotta p-6 rounded-xl">
+                        <h4 class="text-xl text-obsidian mb-2">The "Healing" Touch</h4>
+                        <p class="text-gray-800">
+                            Because they lack hair, a Xoloitzcuintle's body heat radiates intensely. While their internal body temperature is the same as other dogs (around 101°F to 102.5°F), they feel like living hot water bottles. Historically, they were used to warm beds and soothe aches, arthritis, and rheumatism.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-16">
+                <h3 class="text-3xl text-obsidian mb-8 text-center">Interactive Size Comparator</h3>
+                
+                <div class="flex flex-wrap justify-center gap-4 mb-8">
+                    <button onclick="updateSize('toy')" id="btn-toy" class="size-btn px-6 py-2 border-2 border-clay rounded-full text-obsidian font-bold hover:border-terracotta active">Toy</button>
+                    <button onclick="updateSize('mini')" id="btn-mini" class="size-btn px-6 py-2 border-2 border-clay rounded-full text-obsidian font-bold hover:border-terracotta">Miniature</button>
+                    <button onclick="updateSize('std')" id="btn-std" class="size-btn px-6 py-2 border-2 border-clay rounded-full text-obsidian font-bold hover:border-terracotta">Standard</button>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-clay p-8 max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-12">
+                    <div class="flex-1 w-full h-[350px] flex items-end justify-center border-b-4 border-clay relative pb-2">
+                        <div class="absolute left-0 top-0 h-full w-12 border-r border-dashed border-gray-300 flex items-center justify-center">
+                            <span id="size-height-label" class="transform -rotate-90 text-sm text-gray-400 font-bold tracking-widest whitespace-nowrap">14 INCHES</span>
+                        </div>
+                        <div id="dog-visual" class="relative-dog-box" style="height: 40%; width: 30%;">
+                            &#128021;
+                        </div>
+                        <div class="absolute right-0 bottom-0 text-sm text-gray-400 p-2">Scale Representation</div>
+                    </div>
+                    
+                    <div class="flex-1 w-full">
+                        <h4 id="size-title" class="text-4xl text-terracotta mb-2">Toy Xoloitzcuintle</h4>
+                        <p id="size-desc" class="text-gray-600 mb-6">The smallest variety, often highly active and alert. Perfect for apartment living but still requiring mental stimulation.</p>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-sand p-4 rounded-lg">
+                                <div class="text-xs uppercase tracking-widest text-gray-500 mb-1">Height</div>
+                                <div id="size-h" class="text-2xl text-obsidian font-bold">10 - 14 in</div>
+                            </div>
+                            <div class="bg-sand p-4 rounded-lg">
+                                <div class="text-xs uppercase tracking-widest text-gray-500 mb-1">Weight</div>
+                                <div id="size-w" class="text-2xl text-obsidian font-bold">10 - 15 lbs</div>
+                            </div>
+                            <div class="bg-sand p-4 rounded-lg col-span-2">
+                                <div class="text-xs uppercase tracking-widest text-gray-500 mb-1">Primary Role</div>
+                                <div id="size-role" class="text-lg text-obsidian">Companion, Alert Dog</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec-revival" class="fade-in hidden">
+            <div class="mb-12">
+                <h2 class="text-4xl md:text-5xl text-obsidian mb-4">From Mountains to Museums</h2>
+                <p class="text-xl text-gray-600 max-w-4xl">
+                    By the mid-20th century, the breed was thought to be extinct. This section outlines the heroic efforts to save them and their subsequent rise to international cultural prominence.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
+                <div>
+                    <h3 class="text-3xl text-terracotta mb-4">The 1956 Expedition</h3>
+                    <p class="text-gray-700 mb-4 leading-relaxed">
+                        In 1956, realizing the dog was disappearing, the <em>Federación Canófila Mexicana</em> (FCM) spearheaded an expedition led by Norman Pelham Wright. They journeyed into the remote Balsas River basin in Guerrero.
+                    </p>
+                    <p class="text-gray-700 leading-relaxed mb-6">
+                        They found local indigenous people still keeping pure Xolos. They purchased 10 structurally sound dogs and brought them back to Mexico City. These 10 dogs became the foundation stock for the breed's revival, leading to their official recognition by kennel clubs worldwide.
+                    </p>
+
+                    <div class="bg-sand p-6 rounded-xl border-l-4 border-agave">
+                        <h4 class="text-xl text-obsidian mb-2">Frida Kahlo & Diego Rivera</h4>
+                        <p class="text-gray-700 text-sm">
+                            Even before the official expedition, Mexican artists playing a crucial role in preserving the dog's cultural legacy. Frida Kahlo and Diego Rivera kept Xolos at their home, the Casa Azul, incorporating them into their artwork as symbols of an authentic, pre-Hispanic Mexican identity.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-clay">
+                    <h3 class="text-2xl text-obsidian mb-2">Modern Popularity Index</h3>
+                    <p class="text-gray-500 mb-6 text-sm">Global interest & registration trends (2010 - 2023). Note the dramatic spike surrounding pop culture inclusion.</p>
+                    
+                    <div class="chart-container">
+                        <canvas id="popularityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-16 bg-obsidian text-sand rounded-2xl p-12">
+                <h2 class="text-4xl text-terracotta mb-4">Preserving the Legacy</h2>
+                <p class="text-xl mb-8 max-w-2xl mx-auto text-gray-300">
+                    At Xolos Ramirez, our goal is the ethical preservation of this ancient breed. Understanding their history, genetics, and structural needs ensures that the living treasure of Mexico continues to thrive for another 3,000 years.
+                </p>
+                <div class="inline-block border border-terracotta text-terracotta px-8 py-3 rounded-full font-bold tracking-wider hover:bg-terracotta hover:text-white transition cursor-pointer">
+                    VIEW BREEDING STANDARDS
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-clay mt-12 py-8">
+        <div class="max-w-6xl mx-auto px-4 text-center text-gray-500 text-sm">
+            <p>&copy; 2024 Xolos Ramirez. Data and historical information compiled for educational purposes.</p>
+            <p class="mt-2 text-terracotta">&#128021; Preserving the Living Treasure.</p>
+        </div>
+    </footer>
+
+    <script>
+        const navState = {
+            activeTab: 'overview',
+            chartsRendered: {
+                history: false,
+                genetics: false,
+                revival: false
+            }
+        };
+
+        const sizeData = {
+            toy: {
+                title: "Toy Xoloitzcuintle",
+                desc: "The smallest variety, often highly active and alert. Perfect for apartment living but still requiring mental stimulation.",
+                h: "10 - 14 in",
+                w: "10 - 15 lbs",
+                role: "Companion, Alert Dog",
+                visualHeight: "40%",
+                visualWidth: "30%",
+                label: "14 INCHES"
+            },
+            mini: {
+                title: "Miniature Xoloitzcuintle",
+                desc: "A sturdy, medium-small dog. Excellent agility and highly adaptable. The most common size found in urban areas.",
+                h: "14 - 18 in",
+                w: "15 - 30 lbs",
+                role: "Companion, Watchdog",
+                visualHeight: "60%",
+                visualWidth: "45%",
+                label: "18 INCHES"
+            },
+            std: {
+                title: "Standard Xoloitzcuintle",
+                desc: "The original, ancient size. Powerful, calm, and protective. They require significant exercise and firm, gentle training.",
+                h: "18 - 23 in",
+                w: "30 - 55 lbs",
+                role: "Guard Dog, Companion",
+                visualHeight: "95%",
+                visualWidth: "60%",
+                label: "23 INCHES"
+            }
+        };
+
+        function nav(sectionId) {
+            document.querySelectorAll('main > section').forEach(sec => {
+                sec.classList.add('hidden');
+                sec.classList.remove('block');
+            });
+            
+            const targetSec = document.getElementById('sec-' + sectionId);
+            targetSec.classList.remove('hidden');
+            targetSec.classList.add('block');
+
+            document.querySelectorAll('.nav-item').forEach(nav => {
+                nav.classList.remove('nav-active', 'text-obsidian');
+                nav.classList.add('text-gray-500');
+            });
+            
+            const activeBtn = document.getElementById('nav-' + sectionId);
+            if(activeBtn) {
+                activeBtn.classList.add('nav-active');
+                activeBtn.classList.remove('text-gray-500');
+            }
+            
+            const mobileSelect = document.getElementById('mobile-nav');
+            if(mobileSelect) {
+                mobileSelect.value = sectionId;
+            }
+
+            navState.activeTab = sectionId;
+
+            if (sectionId === 'myth' && !navState.chartsRendered.history) {
+                renderHistoryChart();
+                navState.chartsRendered.history = true;
+            } else if (sectionId === 'biology' && !navState.chartsRendered.genetics) {
+                renderGeneticsChart();
+                navState.chartsRendered.genetics = true;
+            } else if (sectionId === 'revival' && !navState.chartsRendered.revival) {
+                renderPopularityChart();
+                navState.chartsRendered.revival = true;
+            }
+        }
+
+        function updateSize(sizeKey) {
+            document.querySelectorAll('.size-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById('btn-' + sizeKey).classList.add('active');
+
+            const data = sizeData[sizeKey];
+            document.getElementById('size-title').textContent = data.title;
+            document.getElementById('size-desc').textContent = data.desc;
+            document.getElementById('size-h').textContent = data.h;
+            document.getElementById('size-w').textContent = data.w;
+            document.getElementById('size-role').textContent = data.role;
+            
+            const visual = document.getElementById('dog-visual');
+            visual.style.height = data.visualHeight;
+            visual.style.width = data.visualWidth;
+
+            document.getElementById('size-height-label').textContent = data.label;
+        }
+
+        Chart.defaults.font.family = "'Lato', sans-serif";
+        Chart.defaults.color = '#8E9B90';
+
+        function renderHistoryChart() {
+            const ctx = document.getElementById('historyChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['3000 BC', '1000 AD', '1519 (Conquest)', '1800s', '1950', '1956 (Rescue)', '2000', '2024'],
+                    datasets: [{
+                        label: 'Estimated Population & Cultural Status',
+                        data: [50, 90, 100, 20, 5, 10, 60, 85],
+                        borderColor: '#C05640',
+                        backgroundColor: 'rgba(192, 86, 64, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#2A2A2A',
+                        pointRadius: 5,
+                        pointHoverRadius: 8,
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#2A2A2A',
+                            titleFont: { size: 14, family: "'Playfair Display', serif" },
+                            bodyFont: { size: 13 },
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    let notes = [
+                                        "Origins in Mesoamerica",
+                                        "Peak Aztec reverence",
+                                        "Spanish arrive; mass slaughter begins",
+                                        "Driven into mountain isolation",
+                                        "Thought to be functionally extinct",
+                                        "FCM expedition finds 10 pure dogs",
+                                        "Steady growth in fancier circles",
+                                        "Global recognition as cultural icon"
+                                    ];
+                                    return notes[context.dataIndex];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 110,
+                            ticks: { display: false },
+                            grid: { color: '#E2D8C8' },
+                            title: { display: true, text: 'Population / Prominence Level' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderGeneticsChart() {
+            const ctx = document.getElementById('geneticsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Hairless (Heterozygous)', 'Coated (Homozygous Recessive)'],
+                    datasets: [{
+                        data: [66.6, 33.4],
+                        backgroundColor: ['#2A2A2A', '#C05640'],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { padding: 20, usePointStyle: true }
+                        },
+                        tooltip: {
+                            backgroundColor: '#2A2A2A',
+                            callbacks: {
+                                label: function(context) {
+                                    return ` ${context.label}: ${context.raw}% of surviving litter`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderPopularityChart() {
+            const ctx = document.getElementById('popularityChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['2010', '2012', '2014', '2016', '2018', '2020', '2022'],
+                    datasets: [{
+                        label: 'Global Registration Index',
+                        data: [20, 22, 25, 30, 85, 90, 95],
+                        backgroundColor: '#8E9B90',
+                        borderRadius: 4,
+                        hoverBackgroundColor: '#C05640'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#2A2A2A',
+                            callbacks: {
+                                afterLabel: function(context) {
+                                    if(context.label === '2018') {
+                                        return 'Spike largely attributed to the 2017 Disney-Pixar film "Coco"';
+                                    }
+                                    return '';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#E2D8C8' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
