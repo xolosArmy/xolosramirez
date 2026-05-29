@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>De Tejocote a Yanga: Un Xolo Rockstar en el Caribe | The Xolos Ramirez Show</title>
+  <meta name="description" content="Crónica de la entrevista con Lola y Lee en The Xolos Ramirez Show. Descubre cómo Tejocote se convirtió en Yanga, su vida en Playa del Carmen y su profunda herencia cultural." />
+  <style>
+    :root {
+      --bg: #f6f1e8;
+      --paper: #fffaf2;
+      --ink: #1f1a17;
+      --muted: #6d6258;
+      --gold: #b68b2d;
+      --gold-soft: #e8d3a0;
+      --earth: #7a4b2a;
+      --line: #ddd1c2;
+      --accent: #111111;
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+      --radius: 22px;
+      --max: 980px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Georgia", "Times New Roman", serif;
+      background:
+        radial-gradient(circle at top, rgba(182, 139, 45, 0.08), transparent 30%),
+        linear-gradient(180deg, #f8f4ec 0%, #f4ede2 100%);
+      color: var(--ink);
+      line-height: 1.75;
+    }
+
+    a { color: var(--earth); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { width: min(100% - 32px, var(--max)); margin: 0 auto; }
+
+    .hero {
+      position: relative;
+      min-height: 72vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(rgba(8,8,10,.45), rgba(8,8,10,.78)),
+        url("https://i.imgur.com/HdR92na.jpeg") center center / cover no-repeat;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(0,0,0,.58) 0%, rgba(0,0,0,.36) 45%, rgba(0,0,0,.22) 100%);
+      z-index: 1;
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 2;
+      width: min(92%, var(--max));
+      margin: 0 auto;
+      padding: 100px 0 80px;
+      text-shadow: 0 4px 24px rgba(0,0,0,.5);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 18px;
+      padding: 8px 14px;
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      color: #f3e7c8;
+      font-size: .9rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      backdrop-filter: blur(6px);
+    }
+
+    .hero h1 {
+      max-width: 860px;
+      font-size: clamp(2.5rem, 5vw, 4.8rem);
+      line-height: 1.05;
+      margin-bottom: 22px;
+      font-weight: 700;
+      letter-spacing: .01em;
+      color: #fffaf0;
+    }
+
+    .hero p {
+      max-width: 760px;
+      font-size: 1.18rem;
+      color: #f1e7d4;
+    }
+
+    .main { padding: 44px 0 80px; }
+
+    .article-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: clamp(24px, 4vw, 46px);
+    }
+
+    .intro { font-size: 1.12rem; color: var(--ink); }
+    
+    .dropcap:first-letter {
+      float: left;
+      font-size: 4rem;
+      line-height: 0.9;
+      padding-right: 10px;
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    h2 {
+      margin-top: 42px;
+      margin-bottom: 14px;
+      font-size: clamp(1.6rem, 2.4vw, 2.3rem);
+      line-height: 1.2;
+      color: var(--accent);
+    }
+
+    p { margin: 0 0 18px; color: var(--ink); }
+
+    .quote {
+      margin: 34px 0;
+      padding: 24px 24px 24px 26px;
+      border-left: 5px solid var(--earth);
+      background: #fff;
+      border-radius: 18px;
+      font-size: 1.08rem;
+      color: #302720;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      font-style: italic;
+    }
+
+    .quote cite {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-style: normal;
+    }
+
+    .media-block {
+      margin: 40px 0;
+      padding: 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      overflow: hidden;
+      border-radius: 18px;
+      background: #000;
+    }
+
+    .video-wrap iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .closing {
+      margin-top: 36px;
+      padding: 26px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(182,139,45,0.12), rgba(122,75,42,0.08));
+      border: 1px solid var(--line);
+    }
+
+    @media (max-width: 720px) {
+      .hero { padding: 72px 0 42px; }
+      .article-card { padding: 22px 18px 28px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero__content">
+      <span class="eyebrow">The Xolos Ramirez Show</span>
+      <h1>De Tejocote a Yanga: Un Xoloitzcuintle Rockstar en el Caribe</h1>
+      <p class="lead">
+        A mes y medio de su emotiva entrega en Cancún, platicamos con Lola y Lee sobre la asombrosa adaptación de su cachorro a Playa del Carmen, su inteligencia superior y la poderosa herencia "Blaxican" que inspiró su nuevo nombre.
+      </p>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="wrap">
+      <article class="article-card">
+        
+        <p class="intro dropcap">
+          Hace mes y medio, en la quietud de la madrugada del Aeropuerto Internacional de Cancún, entregamos a un pequeño cachorro llamado <strong>Tejocote</strong> a los brazos de su nueva familia. Hoy, ese mismo cachorro pasea por la Quinta Avenida, nada en las playas del Caribe y responde al poderoso nombre de <strong>Yanga</strong>.
+        </p>
+
+        <p>
+          En la más reciente emisión de <em>The Xolos Ramirez Show</em>, tuvimos el enorme placer de sentarnos a conversar con <strong>Lola y Lee</strong>. Nos compartieron, de primera mano, cómo ha sido la experiencia de integrar a este xoloitzcuintle a su vida en departamento y cómo el linaje Ramírez ha superado todas sus expectativas.
+        </p>
+
+        <div class="quote">
+          "Estamos extremadamente felices con el proceso y la comunicación brindada por Xolos Ramírez. Este es nuestro segundo Xolo y, a pesar de la responsabilidad que implica, estamos sumamente satisfechos."
+          <cite>— Lola y Lee</cite>
+        </div>
+
+        <h2>Un "Rockstar" en Playa del Carmen</h2>
+        <p>
+          Si hay algo que caracteriza a Yanga es su imponente presencia. Su belleza y rareza llaman tanto la atención que los paseos por la vibrante Quinta Avenida de Playa del Carmen se convirtieron en un verdadero reto social. 
+        </p>
+        <p>
+          Lee nos contó entre risas que Yanga atrae tantas miradas y manos curiosas que tuvieron que implementar un letrero de <strong>"No tocar"</strong> para poder gestionar la atención de los turistas y locales mientras él se acostumbra al bullicio de bicicletas y otros perros.
+        </p>
+
+        <h2>Inteligencia y entrenamiento en tiempo récord</h2>
+        <p>
+          Una de las revelaciones más sorprendentes de la entrevista fue la increíble rapidez mental de Yanga. La genética y la crianza temprana rinden frutos evidentes en su capacidad de aprendizaje.
+        </p>
+
+        <div class="quote">
+          "Aprendió el 'crate training' (uso de la transportadora) en solo dos días y logró aprender a pedir salir al baño en aproximadamente una semana. Usamos premios para enseñarle comandos como izquierda, derecha y 'safe' (donde se coloca entre mis piernas)."
+          <cite>— Lee</cite>
+        </div>
+
+        <h2>El Mar Caribe y la personalidad equilibrada</h2>
+        <p>
+          Contrario al mito de que algunos perros temen al agua, Yanga es un verdadero perro de playa. Disfruta enormemente jugar en la piscina y en la famosa <strong>Playa 72</strong>, un espacio *pet-friendly* donde lo pasean con una correa de 30 pies desde muy temprano para evitar el sol intenso.
+        </p>
+        <p>
+          En el interior de su departamento, su comportamiento es ejemplar: <em>"Es un perro relajado y juguetón capaz de adaptarse a la energía tranquila de nuestro hogar. Alterna entre momentos de juego activo y siestas profundas,"</em> comentaron sus dueños.
+        </p>
+
+        <h2>Una herencia poderosa: El significado de "Yanga"</h2>
+        <p>
+          Quizás el momento más emotivo y profundo de la plática fue descubrir la historia detrás de su nombre. Tejocote fue rebautizado como <strong>Yanga</strong>, un nombre cargado de historia, resistencia y orgullo cultural.
+        </p>
+
+        <div class="quote">
+          "Lo nombramos Yanga en honor a Gaspar Yanga. Me describo a mí mismo como 'blaxican' porque mi madre es mexicana y mi padre es afroamericano, resaltando así la diversidad cultural de México."
+          <cite>— Lee</cite>
+        </div>
+
+        <p>
+          Al igual que el Xoloitzcuintle es un símbolo de resistencia y puente entre el pasado y el presente, el nombre de Gaspar Yanga (líder revolucionario en el Veracruz del siglo XVII) enmarca perfectamente la unión de estas dos ricas culturas que convergen en la familia de Lee y Lola.
+        </p>
+
+        <div class="media-block">
+          <h2 style="margin-top: 6px;">Mira la entrevista completa</h2>
+          <div class="video-wrap">
+            <iframe 
+              src="https://www.youtube.com/embed/T10ABuOihso" 
+              title="The Xolos Ramirez Show con Lola, Lee y Yanga" 
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              allowfullscreen>
+            </iframe>
+          </div>
+        </div>
+
+        <div class="closing">
+          <strong>La historia de Yanga es el ejemplo perfecto de nuestra misión.</strong>
+          Ver a un xoloitzcuintle de Xolos Ramírez prosperar, aprender con brillantez y llenar de alegría (y orgullo cultural) a su nueva familia es la mayor recompensa. ¡Larga y feliz vida en el Caribe, querido Yanga!
+        </div>
+
+      </article>
+    </div>
+  </main>
+</body>
+</html>
