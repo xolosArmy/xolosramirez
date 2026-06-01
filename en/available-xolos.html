@@ -164,16 +164,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="puppy-card__status status-disponible">Available</span>
             <span class="puppy-card__status" style="top: 40px; background-color: #d4af37; color: #000; font-weight: bold;">✨ Teyolía Candidate</span>
 
-            <picture>
+            <div class="swipe-indicator" aria-hidden="true">
+              <span>Swipe</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+
+            <div style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none;">
+              <style>
+                .puppy-card__image-wrapper div::-webkit-scrollbar { display: none; }
+              </style>
               <img
                 src="https://i.imgur.com/uRMgiE2.png"
                 alt="Xoloitzcuintle Tonatiuh Ramirez"
                 class="puppy-card__image"
                 loading="lazy"
-                width="600"
-                height="450"
+                style="flex: 0 0 100%; scroll-snap-align: start; object-fit: cover;"
               />
-            </picture>
+            </div>
           </div>
           <div class="puppy-card__content">
             <h3 class="puppy-card__name">Tonatiuh Ramirez</h3>
@@ -184,13 +191,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               <li><strong>Color</strong> Black</li>
               <li><strong>Teyolía</strong> Candidate by age</li>
             </ul>
+            <div class="puppy-video-container" style="margin: 1rem 0; border-radius: 8px; overflow: hidden; aspect-ratio: 16/9;">
+              <iframe width="100%" height="100%" src="https://www.youtube.com/embed/mwlofFThWwA" title="Tonatiuh Ramirez" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+            </div>
             <div class="puppy-card__actions">
-              <a href="https://www.youtube.com/watch?v=mwlofFThWwA" class="btn-small btn-outline-small" target="_blank" rel="noopener">Watch video 🎥</a>
               <a href="teyolias-guardianship.html" class="btn-small btn-primary-small" style="background-color: #d4af37; border-color: #d4af37; color: #000;">Participate in Teyolías ✨</a>
             </div>
           </div>
         </article>
-        
 
         <article class="puppy-card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
           <div class="puppy-card__image-wrapper">
