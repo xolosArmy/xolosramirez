@@ -1,0 +1,2627 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Xolo Skin Care | Xolos Ramírez</title>
+  <meta name="description" content="Compra bálsamos, jabones y repelentes naturales para el cuidado dermatológico del Xoloitzcuintle con Xolos Ramírez.">
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Lora:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
+    integrity="sha512-1evP8mSOA1NEfUB8gq1nH2wPFNdpWfyC1FcArWSJKnxTS1V+3HQlA0RduCMsZ/HXXdK5vCq9zHEcWZP4LYXY3Q=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+    <style>
+    :root {
+      color-scheme: dark;
+      --color-background: #050606;
+      --color-surface: #101414;
+      --color-card: #161d1d;
+      --color-border: #0f5f58;
+      --color-primary: #0d7f72;
+      --color-primary-strong: #0b5d53;
+      --color-highlight: #f0c753;
+      --color-highlight-strong: #f9dd6c;
+      --color-danger: #9e1d1d;
+      --color-text: #f7f2e9;
+      --color-text-muted: #e4d6bd;
+      --color-text-strong: #fffdfa;
+      --shadow-elevated: 0 16px 32px rgba(0, 0, 0, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Lora', serif;
+      background: var(--color-background);
+      color: var(--color-text);
+      line-height: 1.6;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: 'Cinzel Decorative', cursive;
+      color: var(--color-highlight-strong);
+      letter-spacing: 0.04em;
+    }
+
+    p {
+      color: var(--color-text-muted);
+      font-size: 1.1rem;
+    }
+
+    a {
+      color: var(--color-highlight-strong);
+    }
+
+    a,
+    button {
+      font-family: inherit;
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    .copy-offer-btn:focus-visible,
+    .tonalli-guide:focus-visible,
+    .txid-form button:focus-visible {
+      outline: 3px solid var(--color-highlight);
+      outline-offset: 3px;
+    }
+
+    header {
+      text-align: center;
+      padding: 64px 20px;
+      background: linear-gradient(135deg, rgba(26, 8, 8, 0.95), rgba(74, 12, 12, 0.92));
+      color: var(--color-text-strong);
+      border-bottom: 2px solid var(--color-highlight);
+    }
+
+    header h1 {
+      font-size: clamp(2.4rem, 5vw, 3.2rem);
+      margin-bottom: 12px;
+      color: var(--color-text-strong);
+      text-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(48px, 10vw, 96px);
+    }
+
+    section {
+      padding-inline: clamp(16px, 5vw, 60px);
+    }
+
+    .products-section {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(32px, 6vw, 48px);
+    }
+
+    .section-heading {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .section-heading p {
+      margin-top: 12px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: clamp(24px, 5vw, 40px);
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .newsletter-banner {
+      max-width: 960px;
+      margin: 0 auto 32px;
+      padding: 18px 22px;
+      border-radius: 18px;
+      background: radial-gradient(circle at 10% 0%, rgba(240, 199, 83, 0.16), transparent 55%),
+                  radial-gradient(circle at 90% 100%, rgba(13, 127, 114, 0.18), transparent 55%),
+                  rgba(16, 21, 21, 0.94);
+      border: 1px solid rgba(240, 199, 83, 0.35);
+      box-shadow: var(--shadow-elevated);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .newsletter-banner__icon {
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+
+    .newsletter-banner__content {
+      flex: 1;
+    }
+
+    .newsletter-banner__title {
+      margin: 0 0 4px;
+      font-size: 1.2rem;
+      color: var(--color-highlight-strong);
+    }
+
+    .newsletter-banner__text {
+      margin: 0;
+      font-size: 0.98rem;
+      color: var(--color-text-muted);
+    }
+
+    .newsletter-banner__cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: var(--color-primary);
+      color: var(--color-text-strong);
+      text-decoration: none;
+      font-weight: 700;
+      border: 1px solid rgba(13, 127, 114, 0.5);
+      white-space: nowrap;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .newsletter-banner__cta:hover,
+    .newsletter-banner__cta:focus-visible {
+      background: var(--color-primary-strong);
+      box-shadow: 0 10px 24px rgba(13, 127, 114, 0.4);
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 768px) {
+      .newsletter-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 18px 16px;
+      }
+
+      .newsletter-banner__cta {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    /* Marco uniforme para las imágenes de producto */
+    .card .product-media{
+      width: 100%;
+      aspect-ratio: 4 / 3;        /* usa 1/1 si prefieres miniatura cuadrada */
+      border-radius: 18px;
+      overflow: hidden;
+      display: block;
+      margin: 0 auto 16px;
+      background: rgba(0,0,0,.25);
+    }
+
+    /* Imagen rellena el marco sin deformarse */
+    .card .product-media img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Tarjetas con alturas consistentes */
+    .card{
+      display: flex;
+      flex-direction: column;
+    }
+    .card h2{ margin-top: 0; }
+    .card .card-body{ flex: 1; }   /* el texto ocupa el espacio elástico */
+    .card .card-actions{ margin-top: 12px; }
+
+    /* El grid alinea todas las tarjetas desde arriba */
+    .grid{
+      align-items: start;
+    }
+
+    .card {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: 20px;
+      padding: clamp(20px, 4vw, 28px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease, opacity 0.3s ease;
+      opacity: 1;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      border-color: var(--color-highlight);
+    }
+
+    .card h2 {
+      font-size: 1.4rem;
+      color: var(--color-highlight-strong);
+      margin: 0;
+    }
+
+    .card p {
+      font-size: 1rem;
+      color: var(--color-text-muted);
+    }
+
+    .card strong {
+      color: var(--color-text-strong);
+    }
+
+    .card-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-align: left;
+    }
+
+    .price-rmz {
+      color: var(--color-highlight-strong);
+      font-weight: 700;
+    }
+
+    .price-tag-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+    }
+
+    .price-mxn {
+      font-size: 1.4rem;
+      color: var(--color-text-strong);
+      font-weight: 700;
+    }
+
+    .price-rmz-tag {
+      font-size: 0.9rem;
+      color: var(--color-highlight);
+      background: rgba(240, 199, 83, 0.1);
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(240, 199, 83, 0.3);
+      white-space: nowrap;
+    }
+
+    .category-filter {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: 1px solid var(--color-border);
+      color: var(--color-text-muted);
+      padding: 8px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Cinzel Decorative', cursive;
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+      background: var(--color-primary);
+      color: white;
+      border-color: var(--color-primary);
+    }
+
+    .txid-success-msg {
+      display: none;
+      color: #7df9c1;
+      font-size: 0.9rem;
+      margin-top: 10px;
+      padding: 8px;
+      background: rgba(125, 249, 193, 0.1);
+      border-radius: 8px;
+      border: 1px solid rgba(125, 249, 193, 0.3);
+      text-align: left;
+    }
+
+    .offer-id-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      background: rgba(15, 21, 21, 0.6);
+      border: 1px solid rgba(240, 199, 83, 0.25);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .offer-id {
+      font-family: 'Courier New', monospace;
+      color: var(--color-highlight-strong);
+      word-break: break-all;
+      flex: 1;
+      min-width: 240px;
+    }
+
+    .copy-offer-btn {
+      background: var(--color-primary);
+      color: var(--color-text-strong);
+      border: 1px solid rgba(13, 127, 114, 0.6);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      min-width: 148px;
+    }
+
+    .copy-offer-btn:hover,
+    .copy-offer-btn:focus-visible {
+      transform: translateY(-1px);
+      background: var(--color-primary-strong);
+      box-shadow: 0 10px 22px rgba(13, 127, 114, 0.35);
+    }
+
+    .tonalli-guide {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(240, 199, 83, 0.3);
+      background: rgba(240, 199, 83, 0.12);
+      color: var(--color-text-strong);
+      cursor: pointer;
+      text-decoration: none;
+      width: fit-content;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .tonalli-guide:hover,
+    .tonalli-guide:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(240, 199, 83, 0.25);
+      background: rgba(240, 199, 83, 0.18);
+    }
+
+    .btn-primary,
+    .btn-highlight {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      width: fit-content;
+    }
+
+    .btn-primary {
+      background: var(--color-primary);
+      color: var(--color-text-strong);
+      border-color: rgba(13, 127, 114, 0.5);
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus-visible {
+      transform: translateY(-1px);
+      background: var(--color-primary-strong);
+      box-shadow: 0 10px 22px rgba(13, 127, 114, 0.35);
+    }
+
+    .btn-highlight {
+      background: rgba(240, 199, 83, 0.15);
+      color: var(--color-text-strong);
+      border-color: rgba(240, 199, 83, 0.35);
+    }
+
+    .btn-highlight:hover,
+    .btn-highlight:focus-visible {
+      transform: translateY(-1px);
+      background: rgba(240, 199, 83, 0.22);
+      box-shadow: 0 10px 22px rgba(240, 199, 83, 0.25);
+    }
+
+    .txid-toggle {
+      background: transparent;
+      color: var(--color-highlight-strong);
+      border: 1px solid rgba(240, 199, 83, 0.35);
+      border-radius: 12px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      width: fit-content;
+    }
+
+    .txid-toggle:hover,
+    .txid-toggle:focus-visible {
+      transform: translateY(-1px);
+      background: rgba(240, 199, 83, 0.1);
+      box-shadow: 0 10px 22px rgba(240, 199, 83, 0.18);
+    }
+
+    .txid-form {
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      background: rgba(15, 21, 21, 0.6);
+      border: 1px solid rgba(13, 127, 114, 0.35);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .txid-form input {
+      background: #0b0f0f;
+      color: var(--color-text-strong);
+      border: 1px solid rgba(13, 127, 114, 0.4);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+
+    .txid-form button {
+      align-self: flex-start;
+      background: var(--color-primary);
+      color: var(--color-text-strong);
+      border: 1px solid rgba(13, 127, 114, 0.6);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .txid-form button:hover,
+    .txid-form button:focus-visible {
+      transform: translateY(-1px);
+      background: var(--color-primary-strong);
+      box-shadow: 0 10px 22px rgba(13, 127, 114, 0.35);
+    }
+
+    @media (max-width: 640px) {
+      .offer-id-box {
+        flex-direction: column;
+      }
+
+      .copy-offer-btn,
+      .txid-form button {
+        width: 100%;
+      }
+    }
+
+    .whatsapp-buy {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--color-primary);
+      color: var(--color-text-strong);
+      padding: 12px 20px;
+      border-radius: 999px;
+      font-weight: 700;
+      text-decoration: none;
+      border: 2px solid transparent;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .whatsapp-buy:hover,
+    .whatsapp-buy:focus-visible {
+      transform: translateY(-2px);
+      background: var(--color-primary-strong);
+      box-shadow: 0 10px 22px rgba(13, 127, 114, 0.35);
+    }
+
+    .hero {
+      position: relative;
+      width: 100%;
+      min-height: clamp(420px, 70vh, 720px);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: radial-gradient(circle at 20% 20%, rgba(240, 199, 83, 0.25), transparent 60%);
+      perspective: 1000px;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.8) 75%);
+      z-index: 1;
+    }
+
+    .hero-video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      transform: translate(-50%, -50%);
+      filter: saturate(1.2) contrast(1.05);
+      z-index: 0;
+    }
+
+    .hero-video img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      background: rgba(9, 17, 17, 0.72);
+      padding: clamp(24px, 6vw, 36px) clamp(24px, 8vw, 48px);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-elevated);
+      max-width: 560px;
+      opacity: 0;
+      transform: translateY(28px);
+    }
+
+    .hero-content h1 {
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      margin-bottom: 12px;
+      color: var(--color-text-strong);
+    }
+
+    .hero-content p {
+      font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+      margin-bottom: 24px;
+    }
+
+    .hero-content .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: var(--color-highlight-strong);
+      color: #201c09;
+      padding: 14px 26px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      border: 2px solid transparent;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .hero-content .btn:hover,
+    .hero-content .btn:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(249, 221, 108, 0.3);
+    }
+.parallax-section{
+  height: clamp(260px, 45vh, 340px);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 700'><defs><linearGradient id='g' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%23140a0a'/><stop offset='1' stop-color='%230b1010'/></linearGradient><linearGradient id='gold' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23f0c753'/><stop offset='1' stop-color='%23f9dd6c'/></linearGradient><linearGradient id='teal' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%230d7f72'/><stop offset='1' stop-color='%230b5d53'/></linearGradient></defs><rect width='1600' height='700' fill='url(%23g)'/><g opacity='0.08' fill='%23f9dd6c'><circle cx='200' cy='140' r='6'/><circle cx='420' cy='90' r='4'/><circle cx='1180' cy='110' r='5'/><circle cx='1480' cy='160' r='3'/><circle cx='300' cy='520' r='5'/><circle cx='980' cy='560' r='4'/></g><!-- hojas --> <g fill='none' stroke='%23f9dd6c' stroke-width='3' opacity='0.35'><path d='M220 380 q40 -60 120 -20 q-60 50 -120 20 z'/><path d='M420 420 q30 -40 90 -10 q-50 40 -90 10 z'/><path d='M1230 420 q35 -55 110 -15 q-55 45 -110 15 z'/></g><!-- mortero (izquierda) --> <g transform='translate(130,430)'><path d='M0 0 q140 60 280 0 v20 q-140 70 -280 0 z' fill='url(%23teal)' opacity='0.85'/><ellipse cx='140' cy='0' rx='140' ry='28' fill='%23161d1d' stroke='%23f0c753' stroke-width='2' opacity='0.6'/><rect x='210' y='-80' width='26' height='80' rx='8' fill='%23f0c753' opacity='0.7' transform='rotate(-18 223 -40)'/></g><!-- frascos (centro) --> <g transform='translate(720,360)'><rect x='-60' y='-80' width='50' height='160' rx='10' fill='url(%23teal)'/><rect x='-52' y='-100' width='34' height='22' rx='6' fill='%23f9dd6c'/><rect x='20' y='-60' width='70' height='140' rx='16' fill='%23d0a85a'/><rect x='34' y='-80' width='42' height='24' rx='6' fill='%23f9dd6c'/><rect x='-50' y='-10' width='30' height='40' rx='6' fill='%23f9dd6c' opacity='0.35'/><rect x='40' y='10' width='40' height='36' rx='6' fill='%23fffdfa' opacity='0.2'/></g><!-- flechas del proceso --> <g stroke='%23f0c753' stroke-width='3' fill='none' opacity='0.55'><path d='M420 420 C520 380 600 380 690 380'/><path d='M820 380 C940 380 1020 390 1110 430'/><polygon points='685,372 700,380 685,388' fill='%23f0c753'/><polygon points='1100,420 1116,430 1098,438' fill='%23f0c753'/></g><!-- xolo (derecha, silueta estilizada) --> <g transform='translate(1160,220)' fill='%23161d1d' stroke='%23f0c753' stroke-width='3' opacity='0.9'><path d='M60 280 L140 260 L188 180 L230 160 L260 168 L242 210 L260 250 L310 260 L330 300 L300 310 L280 290 L250 288 L190 320 L180 350 L150 360 L138 330 L120 320 L90 320 L70 340 L40 338 L52 310 L44 292 L50 276 Z'/><circle cx='238' cy='168' r='6' fill='%23f9dd6c'/></g><!-- título centrado --> <text x='800' y='360' text-anchor='middle' font-family='Cinzel Decorative, serif' font-size='48' fill='url(%23gold)'>Fórmula artesanal · del huerto al bálsamo</text></svg>");
+  background-size: cover;
+  background-position: center 40%;
+  background-attachment: fixed;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-strong);
+  font-size: clamp(1.1rem, 3.5vw, 1.6rem);
+  letter-spacing: 2px;
+  text-shadow: 0 6px 18px rgba(0,0,0,.75);
+  overflow: hidden;
+}
+.parallax-section::after{ content: ""; position: absolute; inset: 0; background: rgba(0,0,0,.45); }
+.parallax-section span{ position: relative; z-index: 1; }
+
+
+    .audio-section {
+      padding-block: clamp(40px, 8vw, 64px);
+      text-align: center;
+      background: var(--color-surface);
+      border-block: 1px solid rgba(240, 199, 83, 0.2);
+    }
+
+    .audio-section h2 {
+      color: var(--color-highlight-strong);
+      margin-bottom: 12px;
+    }
+
+    .audio-section p {
+      max-width: 640px;
+      margin: 0 auto 24px auto;
+    }
+
+    .audio-section audio {
+      width: min(100%, 420px);
+      border-radius: 16px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .video-section {
+      text-align: center;
+      padding-block: clamp(40px, 8vw, 72px);
+    }
+
+    .video-section__frame {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 18px;
+      box-shadow: var(--shadow-elevated);
+    }
+
+    .video-section__frame iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      border-radius: 18px;
+    }
+
+    .immersive-gallery,
+    .ritual-video {
+      padding-block: clamp(40px, 8vw, 72px);
+      background: var(--color-surface);
+      border-block: 1px solid rgba(13, 127, 114, 0.2);
+    }
+
+    .immersive-gallery .section-heading,
+    .ritual-video .section-heading {
+      margin-bottom: clamp(24px, 6vw, 40px);
+    }
+
+    .immersive-gallery__frame {
+      position: relative;
+      width: min(100%, 960px);
+      margin: 0 auto;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow-elevated);
+    }
+
+    .ritual-video__frame {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 1rem;
+      margin: 2rem auto;
+      max-width: 800px;
+      width: 100%;
+      box-shadow: var(--shadow-elevated);
+    }
+
+    .immersive-gallery__frame::before,
+    .ritual-video__frame::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(240, 199, 83, 0.32);
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .immersive-gallery__frame iframe {
+      width: 100%;
+      height: clamp(320px, 56vw, 540px);
+      border: 0;
+      display: block;
+    }
+
+    .ritual-video__frame iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .ritual-video__caption {
+      text-align: center;
+      font-size: 0.9rem;
+      opacity: 0.85;
+      margin-top: 0.75rem;
+    }
+
+    @media (max-width: 768px) {
+      .ritual-video .section-heading p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+    }
+
+    .product-3d {
+      position: relative;
+      width: 100%;
+      height: 260px;
+      border-radius: 18px;
+      background: radial-gradient(circle at 30% 20%, rgba(240, 199, 83, 0.18), transparent 65%),
+                  radial-gradient(circle at 70% 80%, rgba(13, 127, 114, 0.18), transparent 55%);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .product-3d canvas {
+      width: 100% !important;
+      height: 100% !important;
+      filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.55));
+    }
+
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .animate-on-scroll.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .payment-helper {
+      display: flex;
+      justify-content: center;
+      padding: 0 20px;
+    }
+
+    .payment-helper-button {
+      background: transparent;
+      color: var(--color-highlight-strong);
+      border: 2px solid var(--color-highlight-strong);
+      padding: 12px 28px;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background-color: rgba(15, 95, 88, 0.25);
+    }
+
+    .payment-helper-button:hover,
+    .payment-helper-button:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(240, 199, 83, 0.25);
+      background-color: rgba(15, 95, 88, 0.45);
+    }
+
+    .xec-payment-info {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 16px;
+      padding: 16px;
+      background: rgba(16, 21, 21, 0.75);
+      border: 1px solid rgba(240, 199, 83, 0.28);
+      border-radius: 14px;
+    }
+
+    .xec-payment-info code {
+      display: block;
+      font-size: 0.95rem;
+      word-break: break-all;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(15, 95, 88, 0.2);
+      color: var(--color-highlight-strong);
+      border: 1px solid rgba(240, 199, 83, 0.4);
+    }
+
+    .xec-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .copy-xec,
+    .open-wallet {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      min-height: 44px;
+    }
+
+    .copy-xec {
+      background: var(--color-primary);
+      color: var(--color-text-strong);
+      border: 1px solid rgba(13, 127, 114, 0.4);
+    }
+
+    .copy-xec:hover,
+    .copy-xec:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(13, 127, 114, 0.35);
+    }
+
+    .open-wallet {
+      background-color: #FFD970;
+      color: #201c09;
+      box-shadow: 0 6px 16px rgba(249, 221, 108, 0.25);
+      border: 1px solid rgba(249, 221, 108, 0.4);
+    }
+
+    .open-wallet:hover,
+    .open-wallet:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(249, 221, 108, 0.35);
+    }
+
+    .reviews-section {
+      background: var(--color-surface);
+      padding-block: clamp(40px, 7vw, 64px);
+      text-align: center;
+      border-top: 1px solid rgba(15, 95, 88, 0.4);
+    }
+
+    .reviews-section h2 {
+      color: var(--color-highlight-strong);
+      margin-bottom: 20px;
+    }
+
+    .reviews-section form {
+      max-width: 520px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .reviews-section .form-field {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .reviews-section label {
+      font-weight: 600;
+      color: var(--color-highlight-strong);
+    }
+
+    .reviews-section input,
+    .reviews-section textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid rgba(240, 199, 83, 0.35);
+      border-radius: 12px;
+      background: rgba(22, 29, 29, 0.9);
+      color: var(--color-text);
+      font-size: 1rem;
+    }
+
+    .reviews-section input::placeholder,
+    .reviews-section textarea::placeholder {
+      color: rgba(228, 214, 189, 0.75);
+    }
+
+    .reviews-section textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    .reviews-section button {
+      background: var(--color-highlight-strong);
+      color: #201c09;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .reviews-section button:hover,
+    .reviews-section button:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 22px rgba(249, 221, 108, 0.25);
+    }
+
+    .sticky-buy {
+      position: fixed;
+      inset-inline: clamp(16px, 6vw, 48px);
+      bottom: 24px;
+      background: rgba(16, 21, 21, 0.92);
+      border: 1px solid rgba(240, 199, 83, 0.35);
+      border-radius: 18px;
+      box-shadow: var(--shadow-elevated);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 1000;
+      transform: translateY(150%);
+      opacity: 0;
+      transition: transform 0.35s ease, opacity 0.35s ease;
+    }
+
+    .sticky-buy.is-visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .sticky-buy__title {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--color-highlight-strong);
+    }
+
+    .sticky-buy__actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+    }
+
+    .sticky-buy__action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 12px;
+      padding: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .sticky-buy__action--xec {
+      background: var(--color-highlight-strong);
+      color: #201c09;
+    }
+
+    .sticky-buy__action--whatsapp {
+      background: var(--color-primary);
+      color: var(--color-text-strong);
+    }
+
+    .sticky-buy__action:hover,
+    .sticky-buy__action:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+    }
+
+    .site-footer {
+      background: linear-gradient(135deg, rgba(26, 8, 8, 0.95), rgba(74, 12, 12, 0.92));
+      color: var(--color-text-strong);
+      text-align: center;
+      padding: clamp(32px, 6vw, 48px) 20px;
+      border-top: 2px solid var(--color-highlight);
+    }
+
+    .site-footer__link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--color-highlight-strong);
+      color: #201c09;
+      padding: 12px 24px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .site-footer__copy {
+      margin-bottom: 20px;
+    }
+
+    .site-footer__link:hover,
+    .site-footer__link:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px rgba(249, 221, 108, 0.3);
+    }
+
+    /* Pastillas compactas en el sticky */
+    .sticky-buy__action {
+      min-height: 48px;
+      border-radius: 14px;
+      font-weight: 700;
+    }
+
+    @media (max-width: 1024px) {
+      .hero {
+        background-attachment: scroll;
+      }
+
+      .sticky-buy {
+        inset-inline: clamp(16px, 4vw, 32px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding-block: 48px;
+      }
+
+      .hero-content {
+        padding: 28px;
+      }
+
+      .hero-content h1 {
+        font-size: clamp(1.8rem, 6vw, 2.4rem);
+      }
+
+      .hero-content p {
+        font-size: 1.1rem;
+      }
+
+      .card {
+        padding: 24px;
+      }
+
+      .sticky-buy {
+        max-width: 520px;
+        margin-inline: auto;
+      }
+    }
+
+    @media (max-width: 600px) {
+      section {
+        padding-inline: clamp(16px, 6vw, 28px);
+      }
+
+      .hero {
+        min-height: 60vh;
+      }
+
+      .hero-content {
+        padding: 24px 20px;
+      }
+
+      .product-3d {
+        height: 220px;
+      }
+
+      .reviews-section form {
+        gap: 10px;
+      }
+
+      .sticky-buy {
+        bottom: 16px;
+        padding: 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: clamp(1.8rem, 8vw, 2.1rem);
+      }
+
+      .hero-content .btn {
+        width: 100%;
+      }
+
+      .sticky-buy__actions {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* === Proceso: imágenes responsivas (Opción 1: contain, sin recortes) === */
+    .process-figure{
+      margin: 0 auto;
+      padding: 0 16px;
+      max-width: 1100px; /* puedes ajustar */
+      width: 100%;
+    }
+
+    .process-img{
+      width: 100%;
+      display: block;
+      border-radius: 18px;
+    }
+
+    /* Alto fluido, “que quepa toda” */
+    .process-img--contain{
+      height: clamp(280px, 55vw, 640px);
+      object-fit: contain;
+      background: #0a0a0a; /* color de fondo detrás de la imagen */
+    }
+
+    /* Respiro para que la barra fija no tape el contenido inferior */
+    .process-figure,
+    .products-section{
+      margin-bottom: 120px; /* ajusta según la altura de tu sticky-buy */
+    }
+
+    /* ======== OPTIMIZACIONES MÓVIL ======== */
+
+    /* Tipografía y legibilidad */
+    html {
+      -webkit-text-size-adjust: 100%;
+    }
+    body {
+      font-size: 16px;
+    }
+
+    /* Titulares con clamp (ya existían varios; reforzamos móvil) */
+    h1 { font-size: clamp(1.8rem, 7vw, 2.6rem); }
+    h2 { font-size: clamp(1.2rem, 5.5vw, 1.6rem); }
+    p, li { font-size: clamp(0.98rem, 3.8vw, 1.08rem); }
+
+    /* Contenedores laterales en móvil */
+    section { padding-inline: clamp(14px, 4.5vw, 22px); }
+
+    /* Grid de productos: 1 por fila en móvil */
+    @media (max-width: 640px) {
+      .grid {
+        grid-template-columns: 1fr !important;
+        gap: 18px;
+      }
+      .card {
+        padding: 18px 16px;
+        border-radius: 16px;
+      }
+    }
+
+    /* Botones: tamaño táctil mínimo y espaciado */
+    a.btn,
+    button,
+    .copy-offer-btn,
+    .tonalli-guide,
+    .txid-toggle,
+    .txid-form button,
+    .whatsapp-buy,
+    .sticky-buy__action {
+      min-height: 48px;
+      line-height: 1.15;
+    }
+
+    /* Hero: asegura cobertura y centra el foco */
+    .hero { min-height: 58vh; }
+    .hero .hero-media,
+    .hero-video,
+    .hero-video img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero .hero-media {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero .hero-media__img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero .hero-media__img.process-img--contain {
+      height: 100%;
+      background: transparent;
+      object-fit: cover;
+    }
+
+    /* Parallax: desactivar en móvil para fluidez */
+    @media (max-width: 768px) {
+      .parallax-section { background-attachment: scroll !important; }
+    }
+
+    /* Iframes 100% responsivos (YouTube/Sketchfab) */
+    .video-section__frame,
+    .immersive-gallery__frame {
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    /* Imágenes del proceso responsivas */
+    .process-figure { margin: 0 auto 18px; padding: 0; max-width: 1100px; width: 100%; }
+    .process-img { width: 100%; height: auto; display: block; border-radius: 14px; }
+    .process-img--contain {
+      height: clamp(240px, 56vw, 560px);
+      object-fit: contain;
+      background: #0a0a0a;
+    }
+
+    /* Sticky-buy: respeta zonas seguras (notch) y no tape contenido */
+    .sticky-buy {
+      inset-inline: clamp(12px, 4vw, 24px);
+      bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+      padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    }
+
+    main {
+      /* deja espacio para la barra fija en móvil */
+      padding-bottom: 110px;
+    }
+
+    /* Evitar desplazamientos horizontales no deseados */
+    html, body {
+      overflow-x: hidden;
+    }
+
+    /* Motion-safe: reduce animaciones si el usuario lo pide */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* Ajustes finos de cabecera en phones pequeños */
+    @media (max-width: 480px) {
+      header {
+        padding: 40px 16px;
+      }
+      .site-footer__link { padding: 10px 16px; }
+    }
+
+    .sticky-buy__actions {
+      grid-template-columns: 1.2fr 0.8fr;     /* XEC un poco más ancho que WhatsApp */
+      align-items: stretch;
+    }
+
+    @media (max-width: 640px) {
+      .sticky-buy__actions { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding-bottom: 140px;
+      }
+
+      .sticky-buy {
+        padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+      }
+
+      .sticky-buy__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .sticky-buy__action {
+        flex: 1 1 200px;
+        min-height: 44px;
+      }
+
+      .xec-modal__dialog {
+        max-width: 95vw;
+        width: 95vw;
+        max-height: 88vh;
+        overflow-y: auto;
+      }
+
+      .xec-modal {
+        padding: 16px;
+      }
+
+      .xec-modal__title,
+      .xec-modal__list {
+        font-size: 1rem;
+        line-height: 1.55;
+      }
+
+      .card-actions {
+        align-items: stretch;
+        gap: 14px;
+      }
+
+      .offer-id-box,
+      .offer-id,
+      .txid-form input {
+        width: 100%;
+        overflow-wrap: anywhere;
+        word-break: break-all;
+      }
+
+      .card-actions a,
+      .card-actions button,
+      .txid-form button,
+      .copy-offer-btn,
+      .tonalli-guide,
+      .txid-toggle {
+        width: 100%;
+        min-height: 44px;
+      }
+    }
+  </style>
+
+  </head>
+<body>
+  <header role="banner">
+    <h1 id="siteTitle">Xolo Skin Care</h1>
+  </header>
+  <main id="mainContent" role="main">
+   <section class="hero" aria-labelledby="heroTitle heroTagline">
+     
+<!-- HERO IMAGE -->
+<picture class="hero-media">
+  <img
+    class="hero-media__img process-img process-img--contain"
+    src="https://i.imgur.com/dVIYMQU.jpeg?width=1024&auto=compress"
+    srcset="https://i.imgur.com/dVIYMQU.jpeg?width=640&auto=compress 640w,
+            https://i.imgur.com/dVIYMQU.jpeg?width=1024&auto=compress 1024w,
+            https://i.imgur.com/dVIYMQU.jpeg?width=1536&auto=compress 1536w"
+    sizes="(max-width: 768px) 100vw, 1920px"
+    loading="lazy" decoding="async" fetchpriority="low"
+    alt="Xoloitzcuintle guardián frente a Tenochtitlán al atardecer, lago de Texcoco y templo azteca."
+  />
+</picture>
+
+  <div class="hero-content">
+    <h1 id="heroTitle">Xolo Skin Care</h1>
+    <p id="heroTagline">Cuidado Ancestral para piel de Guerrero</p>
+    <a href="#productos" class="btn" aria-describedby="heroTagline">
+      <span class="visually-hidden">Ir a la sección de productos.</span>
+      Descubre nuestros naturales
+    </a>
+  </div>
+</section>
+
+<section class="parallax-section" aria-hidden="true" data-aos="zoom-in" data-aos-duration="1200">
+  <span>Guardianes del Mictlán</span>
+</section>
+
+<section class="audio-section" aria-labelledby="audioTitle" data-aos="fade-up">
+  <h2 id="audioTitle">Activa la atmósfera ritual</h2>
+  <p id="audioDescription">Reproduce el ambiente sonoro de selva, tambores y cantos para acompañar tu recorrido por los remedios sagrados.</p>
+  <audio controls loop muted autoplay aria-label="Ambiente sonoro prehispánico" aria-describedby="audioDescription">
+    <source src="https://raw.githubusercontent.com/xolosArmy/Business_network/main/assets/Bendici%C3%B3n%20al%20Amanecer%20ext%20v1.1.mp3" type="audio/mpeg">
+    Tu navegador no soporta el elemento de audio.
+  </audio>
+</section>
+
+
+<section class="craft-process" aria-labelledby="craftTitle" data-aos="fade-up">
+  <div class="section-heading">
+    <h2 id="craftTitle">Del huerto al bálsamo</h2>
+    <p>Así creamos cada fórmula para piel Xoloitzcuintle: limpia, efectiva y ceremonial.</p>
+  </div>
+
+  <div class="process-grid">
+    <div class="step">
+      <div class="doodle" aria-hidden="true">
+        <picture>
+          <img
+            class="process-img process-img--contain"
+            src="https://i.imgur.com/KfI2gM7.jpeg?width=1024&auto=compress"
+            srcset="https://i.imgur.com/KfI2gM7.jpeg?width=640&auto=compress 640w,
+                    https://i.imgur.com/KfI2gM7.jpeg?width=1024&auto=compress 1024w,
+                    https://i.imgur.com/KfI2gM7.jpeg?width=1536&auto=compress 1536w"
+            sizes="(max-width: 768px) 92vw, 1100px"
+            loading="lazy" decoding="async" fetchpriority="low"
+            alt="Ilustración del paso I: recolección de botánicos con xoloitzcuintle"
+          />
+        </picture>
+      </div>
+      <h3>1. Recolección</h3>
+      <p>Botánicos frescos (árbol de té, caléndula, lavanda, limón).</p>
+    </div>
+
+    <div class="step">
+      <div class="doodle" aria-hidden="true">
+        <picture>
+          <img
+            class="process-img process-img--contain"
+            src="https://i.imgur.com/twXFkrI.jpeg?width=1024&auto=compress"
+            srcset="https://i.imgur.com/twXFkrI.jpeg?width=640&auto=compress 640w,
+                    https://i.imgur.com/twXFkrI.jpeg?width=1024&auto=compress 1024w,
+                    https://i.imgur.com/twXFkrI.jpeg?width=1536&auto=compress 1536w"
+            sizes="(max-width: 768px) 92vw, 1100px"
+            loading="lazy" decoding="async" fetchpriority="low"
+            alt="Extraemos activos con tiempo, temperatura y oscuridad controlada."
+          />
+        </picture>
+      </div>
+      <h3>2. Macerado</h3>
+      <p>Extraemos activos con tiempo, temperatura y oscuridad controlada.</p>
+    </div>
+
+    <div class="step">
+      <div class="doodle" aria-hidden="true">
+        <picture>
+          <img
+            class="process-img process-img--contain"
+            src="https://i.imgur.com/SpeWtOy.jpeg?width=1024&auto=compress"
+            srcset="https://i.imgur.com/SpeWtOy.jpeg?width=640&auto=compress 640w,
+                    https://i.imgur.com/SpeWtOy.jpeg?width=1024&auto=compress 1024w,
+                    https://i.imgur.com/SpeWtOy.jpeg?width=1536&auto=compress 1536w"
+            sizes="(max-width: 768px) 92vw, 1100px"
+            loading="lazy" decoding="async" fetchpriority="low"
+            alt="Combinamos aceites, ceras y vitamina E hasta lograr la textura justa."
+          />
+        </picture>
+      </div>
+      <h3>3. Mezcla</h3>
+      <p>Combinamos aceites, ceras y vitamina E hasta lograr la textura justa.</p>
+    </div>
+
+    <div class="step">
+      <div class="doodle" aria-hidden="true">
+        <picture>
+          <img
+            class="process-img process-img--contain"
+            src="https://i.imgur.com/lIoKy0s.jpeg?width=1024&auto=compress"
+            srcset="https://i.imgur.com/lIoKy0s.jpeg?width=640&auto=compress 640w,
+                    https://i.imgur.com/lIoKy0s.jpeg?width=1024&auto=compress 1024w,
+                    https://i.imgur.com/lIoKy0s.jpeg?width=1536&auto=compress 1536w"
+            sizes="(max-width: 768px) 92vw, 1100px"
+            loading="lazy" decoding="async" fetchpriority="low"
+            alt="Llenado a mano y curado. Probado en lomitos, no en laboratorios crueles."
+          />
+        </picture>
+      </div>
+      <h3>4. Envasado</h3>
+      <p>Llenado a mano y curado. Probado en lomitos, no en laboratorios crueles.</p>
+    </div>
+  </div>
+
+  <div class="process-note">
+    <span aria-hidden="true">🐕‍🦺</span> Xoloitzcuintles felices = piel protegida. Sin parabenos, sin fragancias agresivas.
+  </div>
+</section>
+
+
+<section class="ritual-video" aria-labelledby="ritualVideoTitle" data-aos="fade-up">
+  <div class="section-heading">
+    <h2 id="ritualVideoTitle">Ritual de aplicación guiada</h2>
+    <p>Observa paso a paso cómo aplicar los bálsamos y esencias para potenciar su protección sin irritar la piel.</p>
+  </div>
+  <div class="ritual-video__frame">
+    <iframe
+      id="ritualVideo"
+      width="560"
+      height="315"
+      src="https://youtube.com/embed/GF1cuAVZ1Zw"
+      title="Ritual de aplicación guiada - Xolo Skin Care"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen
+      loading="lazy"
+    ></iframe>
+  </div>
+  <p class="ritual-video__caption">
+    Video oficial de aplicación del Bálsamo Natural Xolo Skin Care.
+  </p>
+</section>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
+    integrity="sha512-TrVn8xZI92s/6wDfVgsGtsasJGCynfm5F7DG25oxu48JoimPn2tIkv2pwBTvo1V1OEwq8ClDXsA+5qnvOy4PWA=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"
+    integrity="sha512-A7AYk1QcnD3G1X45L2qkV6NKc+3YFzmc5Q42Q1p1tnJx1j6h5swSNa93w35b4nJ0HNnPGx1d+WQL6im1C6H0Pg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+
+
+
+
+  <section class="payment-helper" role="region" aria-labelledby="paymentHelperTitle" data-aos="fade-up">
+    <h2 id="paymentHelperTitle" class="visually-hidden">Guía de pago con eCash</h2>
+    <button id="openXecModal" class="payment-helper-button" type="button" data-open-xec-modal aria-controls="xecModal" aria-haspopup="dialog" aria-expanded="false">
+      <i class="fa-solid fa-wallet" aria-hidden="true"></i>
+      ¿Cómo pagar con eCash (XEC)?
+    </button>
+    <div class="payment-helper__text">
+      <h3>Cómo usar XEC</h3>
+      <p>Consulta los pasos completos en el modal “¿Cómo pagar con eCash (XEC)?” y usa el botón <strong>Copiar dirección</strong> antes de enviar.</p>
+
+      <h3>Cómo usar Tonalli DEX (RMZ)</h3>
+      <p>Abre la guía desde los botones “Guía Tonalli (paso a paso)” (o la barra de compra rápida), copia el Offer ID del producto y sigue el flujo dentro del modal.</p>
+    </div>
+  </section>
+
+  <section id="productos" class="products-section" aria-labelledby="productosTitle" data-aos="fade-up">
+    <div class="section-heading">
+      <h2 id="productosTitle">Remedios botánicos para Xoloitzcuintles guardianes</h2>
+      <p>Cada fórmula artesanal está pensada para proteger la piel sensible del Xoloitzcuintle con ingredientes naturales de alto rendimiento.</p>
+    </div>
+
+    <div class="newsletter-banner" role="complementary" aria-label="Suscripción a boletín Xolo Skin Care">
+      <span class="newsletter-banner__icon" aria-hidden="true">📩</span>
+      <div class="newsletter-banner__content">
+        <h3 class="newsletter-banner__title">Suscríbete al boletín de Xolo Skin Care</h3>
+        <p class="newsletter-banner__text">
+          Recibe en tu correo lanzamientos de nuevos bálsamos, tips de cuidado ancestral y noticias sobre el Xoloitzcuintle.
+        </p>
+      </div>
+      <a
+        class="newsletter-banner__cta"
+        href="mailto:fernando@xolosramirez.com?subject=Suscripci%C3%B3n%20bolet%C3%ADn%20Xolo%20Skin%20Care&body=Hola%2C%20quiero%20suscribirme%20al%20bolet%C3%ADn%20de%20productos%20Xoloitzcuintle."
+      >
+        Quiero suscribirme
+      </a>
+    </div>
+
+    <div class="category-filter" role="toolbar" aria-label="Filtrar productos por categoría">
+      <button class="filter-btn active" type="button" data-filter="all">Todos</button>
+      <button class="filter-btn" type="button" data-filter="balsamo">Bálsamos</button>
+      <button class="filter-btn" type="button" data-filter="jabon">Jabones</button>
+      <button class="filter-btn" type="button" data-filter="kit">Kits</button>
+    </div>
+
+    <div class="grid">
+
+    <!-- Producto 1 -->
+    <div class="card animate-on-scroll" data-sku="xolo-unguento" data-category="balsamo">
+      <div class="product-media">
+        <img
+          src="https://i.imgur.com/9leXEhh.png"
+          loading="lazy"
+          decoding="async"
+          alt="Ungüento Solar del Guardián Xólotl – bálsamo de árbol de té."
+        />
+      </div>
+      <div class="card-body">
+        <h2>Bálsamos de Aceite Esencial de Árbol de Té</h2>
+        <div class="price-tag-container"><span class="price-mxn">$522 MXN</span><span class="price-rmz-tag"><i class="fa-solid fa-coins" aria-hidden="true"></i> 5752.32 RMZ</span></div>
+        <p>Formulado para apoyar el cuidado de pieles sensibles con tendencia a irritación, pequeñas molestias cutáneas o zonas que requieren limpieza botánica. El árbol de té es valorado tradicionalmente por sus propiedades purificantes, antibacterianas y protectoras. Ideal para el cuidado puntual de la piel del Xoloitzcuintle.</p>
+      </div>
+      <div class="card-actions">
+        <p><strong>Flujo rápido:</strong> 1) Copia Offer ID · 2) Abre wallet · 3) Pega y paga en Tonalli.</p>
+        <p><strong>RMZ = comprobante digital de compra</strong></p>
+        <p>Precio: <span class="price-rmz">5752.32</span> RMZ</p>
+        <div class="offer-id-box">
+          <span class="offer-id">44d97441db8e02e045181bf2f213d1f782af81b9e1c4eabab28e641c8e8b1f01:1</span>
+          <button class="copy-offer-btn" type="button">Copiar Offer ID</button>
+        </div>
+        <a href="https://cartera.xolosarmy.xyz" target="_blank" rel="noopener noreferrer">
+          Abrir wallet Tonalli (paso 2)
+        </a>
+        <button class="tonalli-guide" type="button" data-open-tonalli-modal>Guía Tonalli (paso a paso)</button>
+        <a href="https://wa.me/message/435RTKGJLTX2J1?text=Hola%2C+quiero+comprar+el+Bálsamo+Arbol+de+té"
+           class="whatsapp-buy" target="_blank" rel="noopener noreferrer"
+           data-ga-event="whatsapp_lead"
+           data-item="Ungüento Solar del Guardián Xólotl"
+           aria-label="Abrir WhatsApp para comprar el Ungüento Solar del Guardián Xólotl mediante transferencia bancaria">
+          <span aria-hidden="true">🟢</span>
+          <span>Comprar por WhatsApp (Transferencia bancaria)</span>
+        </a>
+        <button class="txid-toggle" type="button">Ya compré, pegar TXID</button>
+        <form class="txid-form" onsubmit="return false;">
+          <input type="text" name="txid" placeholder="Pega tu TXID aquí" required>
+          <button type="submit">Confirmar TXID</button>
+        </form>
+        <p class="txid-success-msg" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <!-- Producto 2 -->
+    <div class="card animate-on-scroll" data-sku="xolo-nectar" data-category="balsamo">
+      <div class="product-media">
+        <img
+          src="https://i.imgur.com/tvIa6wv.png"
+          loading="lazy"
+          decoding="async"
+          alt="Néctar Onírico de Tlazōlteōtl – bálsamo de lavanda."
+        />
+      </div>
+      <div class="card-body">
+        <h2>Bálsamos de Aceite Esencial de Lavanda</h2>
+        <div class="price-tag-container"><span class="price-mxn">$522 MXN</span><span class="price-rmz-tag"><i class="fa-solid fa-coins" aria-hidden="true"></i> 5752.32 RMZ</span></div>
+        <p>Una fórmula pensada para acompañar momentos de calma, descanso y relajación. La lavanda es utilizada tradicionalmente para favorecer tranquilidad, aliviar tensión nerviosa, apoyar el sueño y cuidar la piel en zonas con pequeñas marcas, cicatrices o resequedad. Ideal para rituales suaves de masaje y bienestar.</p>
+      </div>
+      <div class="card-actions">
+        <p><strong>Flujo rápido:</strong> 1) Copia Offer ID · 2) Abre wallet · 3) Pega y paga en Tonalli.</p>
+        <p><strong>RMZ = comprobante digital de compra</strong></p>
+        <p>Precio: <span class="price-rmz">5752.32</span> RMZ</p>
+        <div class="offer-id-box">
+          <span class="offer-id">REPLACE_WITH_TXID:1</span>
+          <button class="copy-offer-btn" type="button">Copiar Offer ID</button>
+        </div>
+        <a href="https://cartera.xolosarmy.xyz" target="_blank" rel="noopener noreferrer">
+          Abrir wallet Tonalli (paso 2)
+        </a>
+        <button class="tonalli-guide" type="button" data-open-tonalli-modal>Guía Tonalli (paso a paso)</button>
+        <a href="https://wa.me/message/435RTKGJLTX2J1?text=Hola%2C+quiero+comprar+el+Bálsamo+Lavanda"
+           class="whatsapp-buy" target="_blank" rel="noopener noreferrer" data-ga-event="whatsapp_lead"
+           data-item="Néctar Onírico de Tlazōlteōtl"
+           aria-label="Abrir WhatsApp para comprar el Néctar Onírico de Tlazōlteōtl mediante transferencia bancaria">
+          <span aria-hidden="true">🟢</span>
+          <span>Comprar por WhatsApp (Transferencia bancaria)</span>
+        </a>
+        <button class="txid-toggle" type="button">Ya compré, pegar TXID</button>
+        <form class="txid-form" onsubmit="return false;">
+          <input type="text" name="txid" placeholder="Pega tu TXID aquí" required>
+          <button type="submit">Confirmar TXID</button>
+        </form>
+        <p class="txid-success-msg" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <!-- Producto 3.5 -->
+    <div class="card animate-on-scroll" data-sku="xolo-solar-ancestral" data-category="balsamo">
+      <div class="product-media">
+        <img src="https://i.imgur.com/sEQqS7Z.png" loading="lazy" decoding="async" alt="Bálsamo Protector Solar Ancestral">
+      </div>
+      <div class="card-body">
+        <h2>Bálsamo Protector Solar</h2>
+        <div class="price-tag-container"><span class="price-mxn">$522 MXN</span><span class="price-rmz-tag"><i class="fa-solid fa-coins" aria-hidden="true"></i> 5752.32 RMZ</span></div>
+        <p>Bálsamo natural creado para proteger la piel del Xoloitzcuintle frente a la exposición solar cotidiana. Ayuda a formar una barrera humectante sobre la piel, especialmente útil en perros sin pelo o con zonas sensibles. Aplicar antes de la exposición al sol y reaplicar cuando sea necesario.</p>
+      </div>
+      <div class="card-actions">
+        <p><strong>RMZ = comprobante digital de compra</strong></p>
+        <div class="offer-id-box">
+          <span class="offer-id">e9447b3f72fd79a9a6795328d47f3216e92276d7bb2176f6bef06afb6a4b6ddef:1</span>
+          <button class="copy-offer-btn" type="button">Copiar Offer ID</button>
+        </div>
+        <a href="https://cartera.xolosarmy.xyz" target="_blank" rel="noopener noreferrer">Abrir wallet Tonalli (paso 2)</a>
+        <a href="https://wa.me/message/435RTKGJLTX2J1?text=Hola%2C+quiero+comprar+el+Bálsamo+Solar+Ancestral"
+           class="whatsapp-buy" target="_blank" rel="noopener noreferrer"
+           aria-label="Comprar por WhatsApp">
+          <span aria-hidden="true">🟢</span>
+          <span>Comprar por WhatsApp</span>
+        </a>
+        <button class="txid-toggle" type="button">Ya compré, pegar TXID</button>
+      </div>
+    </div>
+
+    <!-- Producto 3 -->
+    <div class="card animate-on-scroll" data-sku="xolo-amanecer" data-category="balsamo">
+      <div class="product-media">
+        <img
+          src="https://i.imgur.com/s3XazHr.png"
+          loading="lazy"
+          decoding="async"
+          alt="Esencia Citlalinahuatl del Amanecer – bálsamo de limón."
+        />
+      </div>
+      <div class="card-body">
+        <h2>Bálsamos de Aceite Esencial de Limón</h2>
+        <div class="price-tag-container"><span class="price-mxn">$522 MXN</span><span class="price-rmz-tag"><i class="fa-solid fa-coins" aria-hidden="true"></i> 5752.32 RMZ</span></div>
+        <p>Fórmula botánica de aroma fresco pensada para pieles con tendencia grasa o con necesidad de limpieza profunda. El limón es valorado tradicionalmente por su efecto purificante, revitalizante y refrescante. Puede apoyar el cuidado de piel con acné, exceso de grasa y también ayudar a repeler insectos de forma aromática. Precaución: evitar la exposición directa al sol inmediatamente después de su aplicación.</p>
+      </div>
+      <div class="card-actions">
+        <p><strong>Flujo rápido:</strong> 1) Copia Offer ID · 2) Abre wallet · 3) Pega y paga en Tonalli.</p>
+        <p><strong>RMZ = comprobante digital de compra</strong></p>
+        <p>Precio: <span class="price-rmz">5752.32</span> RMZ</p>
+        <div class="offer-id-box">
+          <span class="offer-id">d007f09d6167d1c7a8517cfff7446d59d69b5afe90202d739e463436fa3aa092:1</span>
+          <button class="copy-offer-btn" type="button">Copiar Offer ID</button>
+        </div>
+        <a href="https://cartera.xolosarmy.xyz" target="_blank" rel="noopener noreferrer">
+          Abrir wallet Tonalli (paso 2)
+        </a>
+        <button class="tonalli-guide" type="button" data-open-tonalli-modal>Guía Tonalli (paso a paso)</button>
+        <a href="https://wa.me/message/435RTKGJLTX2J1?text=Hola%2C+quiero+comprar+el+Bálsamo+Limón"
+           class="whatsapp-buy" target="_blank" rel="noopener noreferrer" data-ga-event="whatsapp_lead"
+           data-item="Esencia Citlalinahuatl del Amanecer"
+           aria-label="Abrir WhatsApp para comprar la Esencia Citlalinahuatl del Amanecer mediante transferencia bancaria">
+          <span aria-hidden="true">🟢</span>
+          <span>Comprar por WhatsApp (Transferencia bancaria)</span>
+        </a>
+        <button class="txid-toggle" type="button">Ya compré, pegar TXID</button>
+        <form class="txid-form" onsubmit="return false;">
+          <input type="text" name="txid" placeholder="Pega tu TXID aquí" required>
+          <button type="submit">Confirmar TXID</button>
+        </form>
+        <p class="txid-success-msg" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <!-- Producto 4 -->
+    <div class="card animate-on-scroll" data-sku="xolo-escudo" data-category="balsamo">
+      <div class="product-media">
+        <img
+          src="https://i.imgur.com/epnPlaq.png"
+          loading="lazy"
+          decoding="async"
+          alt="Escudo de Bruma de Quetzalcóatl — spray repelente."
+        />
+      </div>
+      <div class="card-body">
+        <h2>Repelente Natural de Insectos</h2>
+        <div class="price-tag-container"><span class="price-mxn">$522 MXN</span><span class="price-rmz-tag"><i class="fa-solid fa-coins" aria-hidden="true"></i> 5752.32 RMZ</span></div>
+        <p>Mezcla botánica diseñada para ayudar a repeler insectos durante paseos, visitas al jardín o actividades al aire libre. Su aroma natural funciona como una barrera suave para acompañar el cuidado diario del Xoloitzcuintle sin recurrir a fragancias agresivas.</p>
+      </div>
+      <div class="card-actions">
+        <p><strong>Flujo rápido:</strong> 1) Copia Offer ID · 2) Abre wallet · 3) Pega y paga en Tonalli.</p>
+        <p><strong>RMZ = comprobante digital de compra</strong></p>
+        <p>Precio: <span class="price-rmz">5752.32</span> RMZ</p>
+        <div class="offer-id-box">
+          <span class="offer-id">24c72fd8fe3956c19e76a66d767f594228025d1a8330c45b8b59d5ed7efbff12:1</span>
+          <button class="copy-offer-btn" type="button">Copiar Offer ID</button>
+        </div>
+        <a href="https://cartera.xolosarmy.xyz" target="_blank" rel="noopener noreferrer">
+          Abrir wallet Tonalli (paso 2)
+        </a>
+        <button class="tonalli-guide" type="button" data-open-tonalli-modal>Guía Tonalli (paso a paso)</button>
+        <a href="https://wa.me/message/435RTKGJLTX2J1?text=Hola%2C+quiero+comprar+el+Repelente+Limón"
+           class="whatsapp-buy" target="_blank" rel="noopener noreferrer" data-ga-event="whatsapp_lead"
+           data-item="Escudo de Bruma de Quetzalcóatl"
+           aria-label="Abrir WhatsApp para comprar el Escudo de Bruma de Quetzalcóatl mediante transferencia bancaria">
+          <span aria-hidden="true">🟢</span>
+          <span>Comprar por WhatsApp (Transferencia bancaria)</span>
+        </a>
+        <button class="txid-toggle" type="button">Ya compré, pegar TXID</button>
+        <form class="txid-form" onsubmit="return false;">
+          <input type="text" name="txid" placeholder="Pega tu TXID aquí" required>
+          <button type="submit">Confirmar TXID</button>
+        </form>
+        <p class="txid-success-msg" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <!-- Producto 5 -->
+    <div class="card animate-on-scroll" data-sku="xolo-duo" data-category="jabon">
+      <div class="product-media">
+        <img
+          src="https://i.imgur.com/fz3cMhC.png"
+          loading="lazy"
+          decoding="async"
+          alt="Jabón artesanal Xolo Skin Care — dúo ritual de espuma."
+        />
+      </div>
+      <div class="card-body">
+        <h2>Set de Jabones Artesanales</h2>
+        <div class="price-tag-container"><span class="price-mxn">$522 MXN</span><span class="price-rmz-tag"><i class="fa-solid fa-coins" aria-hidden="true"></i> 5752.32 RMZ</span></div>
+        <p>Dos jabones artesanales para la limpieza y el cuidado natural de la piel del Xoloitzcuintle. Ideales para baños suaves, limpieza frecuente y mantenimiento de una piel limpia, fresca y equilibrada. Pensados para acompañar una rutina de bienestar sin perder el carácter ritual de Xolo Skin Care.</p>
+        <ul>
+          <li>Glicerina vegetal</li>
+          <li>Aceite de caléndula</li>
+          <li>Avena coloidal</li>
+        </ul>
+      </div>
+      <div class="card-actions">
+        <p><strong>Flujo rápido:</strong> 1) Copia Offer ID · 2) Abre wallet · 3) Pega y paga en Tonalli.</p>
+        <p><strong>RMZ = comprobante digital de compra</strong></p>
+        <p>Precio: <span class="price-rmz">5752.32</span> RMZ</p>
+        <div class="offer-id-box">
+          <span class="offer-id">6d7bb2176f6bef06afb6a4b6ddef7447b3f72fd79a9a6795328d47f3216e9227:1</span>
+          <button class="copy-offer-btn" type="button">Copiar Offer ID</button>
+        </div>
+        <a href="https://cartera.xolosarmy.xyz" target="_blank" rel="noopener noreferrer">
+          Abrir wallet Tonalli (paso 2)
+        </a>
+        <button class="tonalli-guide" type="button" data-open-tonalli-modal>Guía Tonalli (paso a paso)</button>
+        <a href="https://wa.me/message/435RTKGJLTX2J1?text=Hola%2C+quiero+comprar+jabon+exfoliante"
+           class="whatsapp-buy" target="_blank" rel="noopener noreferrer" data-ga-event="whatsapp_lead"
+           data-item="Dúo Ritual de Espuma del Mictlán"
+           aria-label="Abrir WhatsApp para comprar el Dúo Ritual de Espuma del Mictlán mediante transferencia bancaria">
+          <span aria-hidden="true">🟢</span>
+          <span>Comprar por WhatsApp (Transferencia bancaria)</span>
+        </a>
+        <button class="txid-toggle" type="button">Ya compré, pegar TXID</button>
+        <form class="txid-form" onsubmit="return false;">
+          <input type="text" name="txid" placeholder="Pega tu TXID aquí" required>
+          <button type="submit">Confirmar TXID</button>
+        </form>
+        <p class="txid-success-msg" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+
+    
+    <!-- Producto 6 -->
+    <div class="card animate-on-scroll" data-sku="xolo-bienestar" data-category="kit">
+      <div class="product-media">
+        <img
+          src="https://i.imgur.com/gFMTtXu.png"
+          loading="lazy"
+          decoding="async"
+          alt="Paquete Bienestar Integral Xoloitzcuintle — kit completo."
+        />
+      </div>
+      <div class="card-body">
+        <h2>Kit Bienestar Xoloitzcuintle</h2>
+        <div class="price-tag-container"><span class="price-mxn">$1950 MXN</span><span class="price-rmz-tag"><i class="fa-solid fa-coins" aria-hidden="true"></i> 20707.84 RMZ</span></div>
+        <ul class="package-details">
+          <li>Jabón Artesanal (Limpieza Profunda)</li>
+          <li>Loción Hidratante (Nutrición)</li>
+          <li>
+            <strong>Bálsamo Personalizable:</strong>
+            <span>Elige entre <em>Bálsamo de Limón</em> (Relajante) o <strong>Bálsamo Protector Solar</strong> (Protección UV Técnica).</span>
+          </li>
+        </ul>
+        <p class="promo-text">Solución completa para el cuidado natural del Xoloitzcuintle. Incluye tres bálsamos o aceites botánicos, dos jabones artesanales y un repelente natural de insectos. Diseñado para proteger, limpiar, relajar y acompañar el bienestar diario de perros sin pelo o con piel sensible.</p>
+      </div>
+      <div class="card-actions">
+        <p><strong>Flujo rápido:</strong> 1) Copia Offer ID · 2) Abre wallet · 3) Pega y paga en Tonalli.</p>
+        <p><strong>RMZ = comprobante digital de compra</strong></p>
+        <p>Precio: <span class="price-rmz">20707.84</span> RMZ</p>
+        <div class="offer-id-box">
+          <span class="offer-id">a16e9319ef221abf486a47dd43e1ab2035b2a1e0cabc688ac3462c31261c75e6:1</span>
+          <button class="copy-offer-btn" type="button">Copiar Offer ID</button>
+        </div>
+        <a href="https://cartera.xolosarmy.xyz" target="_blank" rel="noopener noreferrer">
+          Abrir wallet Tonalli (paso 2)
+        </a>
+        <a href="https://wa.me/message/435RTKGJLTX2J1?text=Hola%2C+quiero+el+Paquete+Bienestar+y+quiero+elegir+el+Bálsamo+Protector+Solar." class="btn-highlight" target="_blank" rel="noopener noreferrer">Personalizar mi Paquete</a>
+        <a href="https://wa.me/message/435RTKGJLTX2J1?text=Hola%2C+quiero+comprar+el+Paquete+Bienestar+Integral+Xoloitzcuintle"
+           class="whatsapp-buy" target="_blank" rel="noopener noreferrer" data-ga-event="whatsapp_lead"
+           data-item="Paquete Bienestar Integral Xoloitzcuintle"
+           aria-label="Abrir WhatsApp para comprar el Paquete Bienestar Integral Xoloitzcuintle mediante transferencia bancaria">
+          <span aria-hidden="true">🟢</span>
+          <span>Comprar por WhatsApp (Transferencia bancaria)</span>
+        </a>
+        <button class="txid-toggle" type="button">Ya compré, pegar TXID</button>
+        <form class="txid-form" onsubmit="return false;">
+          <input type="text" name="txid" placeholder="Pega tu TXID aquí" required>
+          <button type="submit">Confirmar TXID</button>
+        </form>
+        <p class="txid-success-msg" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+
+    </div>
+
+  </section>
+
+  <!-- Sección de reseñas de clientes -->
+  <section id="reseñas" class="reviews-section" role="region" aria-labelledby="reviewsTitle" data-aos="fade-up">
+    <h2 id="reviewsTitle">Comparte tu reseña</h2>
+    <p id="reviewsDescription">¿Ya probaste nuestros productos? ¡Cuéntanos tu experiencia y ayuda a otras familias Xoloitzcuintle!</p>
+    <form action="https://formspree.io/f/your-form-id" method="POST" aria-describedby="reviewsDescription">
+      <div class="form-field">
+        <label for="reviewName">Nombre</label>
+        <input id="reviewName" type="text" name="nombre" placeholder="Tu nombre" required aria-required="true" />
+      </div>
+      <div class="form-field">
+        <label for="reviewMessage">Reseña</label>
+        <textarea id="reviewMessage" name="mensaje" placeholder="Tu reseña" required aria-required="true"></textarea>
+      </div>
+      <button type="submit">Enviar reseña</button>
+    </form>
+  </section>
+
+  <aside id="stickyBuy" class="sticky-buy" aria-hidden="true" role="region" aria-labelledby="stickyBuyTitle">
+    <p id="stickyBuyTitle" class="sticky-buy__title">Compra rápida</p>
+    <div class="sticky-buy__actions">
+      <button type="button"
+        class="sticky-buy__action sticky-buy__action--xec"
+        data-open-tonalli-modal
+        aria-haspopup="dialog"
+        aria-expanded="false">
+        <i class="fa-solid fa-coins" aria-hidden="true"></i>
+        Pagar con RMZ (Tonalli DEX)
+      </button>
+
+      <a
+        class="sticky-buy__action sticky-buy__action--whatsapp"
+        href="https://wa.me/message/435RTKGJLTX2J1"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-ga-event="whatsapp_lead"
+        data-item="Compra rápida WhatsApp"
+        aria-label="Abrir WhatsApp para una compra rápida por transferencia"
+      >
+        <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+        WhatsApp
+      </a>
+    </div>
+  </aside>
+
+  </main>
+  <footer class="site-footer" role="contentinfo">
+    <p class="site-footer__copy">&copy; 2025 Xolos Ramírez · Xoloitzcuintles con amor</p>
+
+    <div>
+      <a href="../index.html" class="site-footer__link">
+        ← Volver a la página principal
+      </a>
+    </div>
+
+  </footer>
+
+  <div id="xecModal" class="xec-modal" aria-hidden="true">
+    <div class="xec-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="xecModalTitle">
+      <button class="xec-modal__close" id="closeXecModal" type="button" aria-label="Cerrar guía de pago">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+      <h2 class="xec-modal__title" id="xecModalTitle">¿Cómo pagar con eCash (XEC)?</h2>
+      <ol class="xec-modal__list">
+        <li>Obtén eCash (XEC) en tu billetera o exchange.</li>
+        <li>Inicia el envío de XEC seleccionando la red eCash.</li>
+        <li>Copia la dirección de pago de Xolos Ramírez (botón disponible).</li>
+        <li>Ingresa el monto exacto y confirma la transacción.</li>
+        <li>Espera 1-3 minutos para la confirmación.</li>
+      </ol>
+      <div class="xec-payment-info">
+        <p>⚠️ Verifica siempre la dirección y la red antes de enviar.</p>
+        <code id="xecAddress">ecash:qq7qn90ev23ecastqmn8as00u8mcp4tzsspvt5dtlk</code>
+
+        <div class="xec-buttons">
+          <button class="copy-xec" onclick="copyXecAddress()">📋 Copiar dirección</button>
+          <a id="openWallet"
+             href="https://cartera.xolosarmy.xyz"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="open-wallet">
+             💳 Abrir en billetera
+          </a>
+        </div>
+      </div>
+
+      <script>
+      function copyXecAddress() {
+        const addr = document.getElementById("xecAddress").innerText;
+        navigator.clipboard.writeText(addr).then(() => {
+          alert("Dirección copiada: " + addr);
+        });
+      }
+      </script>
+    </div>
+  </div>
+
+  <div id="tonalliDexHowToModal" class="xec-modal" aria-hidden="true">
+    <div class="xec-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="tonalliModalTitle">
+      <button class="xec-modal__close" id="closeTonalliModal" type="button" aria-label="Cerrar guía Tonalli DEX">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+      <h2 class="xec-modal__title" id="tonalliModalTitle">¿Cómo pagar con Tonalli (Offer ID)?</h2>
+      <ol class="xec-modal__list">
+        <li>Abre tu cartera Tonalli y ve a la sección DEX.</li>
+        <li>Selecciona la opción para pagar con Offer ID.</li>
+        <li>Pega el Offer ID que copiaste en el campo correspondiente.</li>
+        <li>Ingresa el monto exacto de <strong>RMZ</strong> y confirma la transacción.</li>
+        <li>Espera la confirmación y copia tu TXID de la transacción.</li>
+      </ol>
+      <div class="xec-payment-info">
+        <p>⚠️ Recuerda verificar siempre la dirección y la red antes de enviar.</p>
+      </div>
+    </div>
+  </div>
+
+    <script>
+document.addEventListener('click', function(e){
+  const btn = e.target.closest('[data-ga-event]');
+  if(!btn) return;
+  const action = btn.getAttribute('data-ga-event');
+  const item = btn.getAttribute('data-item') || 'desconocido';
+  if (window.gtag) {
+    gtag('event', action, { item_name: item });
+  }
+});
+</script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+      const PRODUCT_OFFERS = {
+        'xolo-unguento': { priceXEC: 1900000, rmz: 5752.32, offerId: '44d97441db8e02e045181bf2f213d1f782af81b9e1c4eabab28e641c8e8b1f01:1' },
+        'xolo-nectar': { priceXEC: 1900000, rmz: 5752.32, offerId: '34d3107f8d4032adfe87f1d8d32d859118b9f6f2c10ab8989e557c89b83ba3ab:1' },
+        'xolo-amanecer': { priceXEC: 1900000, rmz: 5752.32, offerId: 'd007f09d6167d1c7a8517cfff7446d59d69b5afe90202d739e463436fa3aa092:1' },
+        'xolo-solar-ancestral': { priceXEC: 1900000, rmz: 5752.32, offerId: 'e9447b3f72fd79a9a6795328d47f3216e92276d7bb2176f6bef06afb6a4b6ddef:1' },
+        'xolo-escudo': { priceXEC: 1900000, rmz: 5752.32, offerId: '24c72fd8fe3956c19e76a66d767f594228025d1a8330c45b8b59d5ed7efbff12:1' },
+        'xolo-duo': { priceXEC: 1900000, rmz: 5752.32, offerId: '6d7bb2176f6bef06afb6a4b6ddef7447b3f72fd79a9a6795328d47f3216e9227:1' },
+        'xolo-bienestar': { priceXEC: 6900000, rmz: 20707.84, offerId: 'a16e9319ef221abf486a47dd43e1ab2035b2a1e0cabc688ac3462c31261c75e6:1' },
+      };
+
+      const copyTextWithFallback = async (text) => {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'absolute';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        const success = document.execCommand('copy');
+        document.body.removeChild(textarea);
+        return success;
+      };
+
+      const updateOfferBlocks = () => {
+        document.querySelectorAll('.card[data-sku]').forEach((card) => {
+          const sku = card.dataset.sku;
+          const config = PRODUCT_OFFERS[sku];
+          const priceEl = card.querySelector('.price-rmz');
+          const offerEl = card.querySelector('.offer-id');
+          const copyBtn = card.querySelector('.copy-offer-btn');
+          const txToggle = card.querySelector('.txid-toggle');
+          const txForm = card.querySelector('.txid-form');
+          const txInput = txForm?.querySelector('input[name="txid"]');
+
+          if (config) {
+            if (priceEl) priceEl.textContent = config.rmz;
+            if (offerEl) offerEl.textContent = config.offerId;
+          }
+
+          copyBtn?.addEventListener('click', async () => {
+            const toCopy = config?.offerId || offerEl?.textContent || '';
+            if (!toCopy) return;
+            await copyTextWithFallback(toCopy);
+            copyBtn.textContent = '¡Copiado!';
+            setTimeout(() => {
+              copyBtn.textContent = 'Copiar Offer ID';
+            }, 1500);
+          });
+
+          txToggle?.addEventListener('click', () => {
+            if (!txForm) return;
+            txForm.style.display = txForm.style.display === 'block' ? 'none' : 'block';
+          });
+
+          const txMsg = card.querySelector('.txid-success-msg');
+
+          txForm?.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const txid = txInput?.value.trim();
+            if (txid) {
+              if (txMsg) {
+                txMsg.textContent = `✅ TXID recibido: ${txid.slice(0, 12)}...${txid.slice(-6)}. Validaremos tu compra.`;
+                txMsg.style.display = 'block';
+              }
+              txForm.reset();
+              txForm.style.display = 'none';
+            }
+          });
+        });
+      };
+
+      if (window.AOS) {
+        AOS.init({
+          once: true,
+          offset: isMobile ? 100 : 160,
+          duration: isMobile ? 700 : 900,
+          easing: 'ease-out-quart',
+        });
+      }
+
+      if (window.gsap) {
+        const dur = isMobile ? 0.9 : 1.4;
+        gsap.set('.hero-content', { autoAlpha: 0, y: 42 });
+        gsap
+          .timeline({ defaults: { ease: 'power3.out' } })
+          .to('.hero-content', { duration: dur, autoAlpha: 1, y: 0 })
+          .from('.hero .btn', { duration: 0.6, scale: 0.94, autoAlpha: 0 }, '-=0.5');
+      }
+
+      const stickyBuy = document.getElementById('stickyBuy');
+      const showAt = isMobile ? 140 : 240;
+      const toggleStickyBuy = () => {
+        if (!stickyBuy) return;
+        const shouldShow = window.scrollY > showAt;
+        stickyBuy.classList.toggle('is-visible', shouldShow);
+        stickyBuy.setAttribute('aria-hidden', shouldShow ? 'false' : 'true');
+      };
+      toggleStickyBuy();
+      window.addEventListener('scroll', toggleStickyBuy, { passive: true });
+
+      const heroVideo = document.querySelector('.hero-video');
+      if (!isMobile && heroVideo) {
+        let scrollTarget = 0;
+        let currentOffset = 0;
+        const updateParallax = () => {
+          currentOffset += (scrollTarget - currentOffset) * 0.08;
+          heroVideo.style.transform = `translate(-50%, -50%) translateY(${currentOffset}px)`;
+          requestAnimationFrame(updateParallax);
+        };
+        window.addEventListener(
+          'scroll',
+          () => {
+            scrollTarget = window.scrollY * 0.18;
+          },
+          { passive: true }
+        );
+        updateParallax();
+      }
+
+      const ritualVideo = document.getElementById('ritualVideo');
+      if (ritualVideo && 'IntersectionObserver' in window) {
+        const ritualObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) ritualVideo.play().catch(() => {});
+              else ritualVideo.pause();
+            });
+          },
+          { threshold: 0.4 }
+        );
+        ritualObserver.observe(ritualVideo);
+      }
+
+      const modal = document.getElementById('xecModal');
+      const openButtons = document.querySelectorAll('[data-open-xec-modal]');
+      const closeBtn = document.getElementById('closeXecModal');
+      let lastFocusedElement = null;
+      let focusableNodes = [];
+
+      const focusableSelectors = 'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
+
+      const updateFocusableNodes = () => {
+        if (!modal) return;
+        focusableNodes = Array.from(modal.querySelectorAll(focusableSelectors)).filter((node) => !node.hasAttribute('disabled'));
+      };
+
+      const openModal = () => {
+        if (!modal) return;
+        lastFocusedElement = document.activeElement;
+        modal.classList.add('is-visible');
+        modal.setAttribute('aria-hidden', 'false');
+        updateFocusableNodes();
+        openButtons.forEach((btn) => btn.setAttribute('aria-expanded', 'true'));
+        (focusableNodes[0] || closeBtn)?.focus();
+      };
+
+      const closeModal = () => {
+        if (!modal) return;
+        modal.classList.remove('is-visible');
+        modal.setAttribute('aria-hidden', 'true');
+        openButtons.forEach((btn) => btn.setAttribute('aria-expanded', 'false'));
+        if (lastFocusedElement) {
+          lastFocusedElement.focus();
+        }
+      };
+
+      openButtons.forEach((button) => {
+        button.addEventListener('click', openModal);
+      });
+      closeBtn?.addEventListener('click', closeModal);
+
+      modal?.addEventListener('click', (event) => {
+        if (event.target === modal) {
+          closeModal();
+        }
+      });
+
+      modal?.addEventListener('keydown', (event) => {
+        if (event.key === 'Tab' && focusableNodes.length) {
+          const first = focusableNodes[0];
+          const last = focusableNodes[focusableNodes.length - 1];
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
+        }
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && modal.classList.contains('is-visible')) {
+          closeModal();
+        }
+      });
+
+      const tonalliModal = document.getElementById('tonalliDexHowToModal');
+      const tonalliOpenButtons = document.querySelectorAll('[data-open-tonalli-modal]');
+      const tonalliCloseBtn = document.getElementById('closeTonalliModal');
+      let tonalliLastFocusedElement = null;
+      let tonalliFocusableNodes = [];
+
+      const refreshTonalliNodes = () => {
+        if (!tonalliModal) return;
+        tonalliFocusableNodes = Array.from(
+          tonalliModal.querySelectorAll(focusableSelectors)
+        ).filter((node) => !node.hasAttribute('disabled'));
+      };
+
+      const openTonalliModal = () => {
+        if (!tonalliModal) return;
+        tonalliLastFocusedElement = document.activeElement;
+        tonalliModal.classList.add('is-visible');
+        tonalliModal.setAttribute('aria-hidden', 'false');
+        tonalliOpenButtons.forEach((btn) => btn.setAttribute('aria-expanded', 'true'));
+        refreshTonalliNodes();
+        (tonalliFocusableNodes[0] || tonalliCloseBtn || tonalliModal).focus();
+      };
+
+      const closeTonalliModal = () => {
+        if (!tonalliModal) return;
+        tonalliModal.classList.remove('is-visible');
+        tonalliModal.setAttribute('aria-hidden', 'true');
+        tonalliOpenButtons.forEach((btn) => btn.setAttribute('aria-expanded', 'false'));
+        if (tonalliLastFocusedElement) {
+          tonalliLastFocusedElement.focus();
+        }
+      };
+
+      tonalliOpenButtons.forEach((button) => {
+        button.addEventListener('click', (event) => {
+          event.preventDefault();
+          openTonalliModal();
+        });
+      });
+
+      tonalliCloseBtn?.addEventListener('click', closeTonalliModal);
+
+      tonalliModal?.addEventListener('click', (event) => {
+        if (event.target === tonalliModal) {
+          closeTonalliModal();
+        }
+      });
+
+      tonalliModal?.addEventListener('keydown', (event) => {
+        if (event.key === 'Tab' && tonalliFocusableNodes.length) {
+          const first = tonalliFocusableNodes[0];
+          const last = tonalliFocusableNodes[tonalliFocusableNodes.length - 1];
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
+        }
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && tonalliModal?.classList.contains('is-visible')) {
+          closeTonalliModal();
+        }
+      });
+
+      updateOfferBlocks();
+
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const productCards = document.querySelectorAll('.card[data-category]');
+
+      filterButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          filterButtons.forEach((b) => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const filter = btn.dataset.filter;
+
+          productCards.forEach((card) => {
+            const show = filter === 'all' || card.dataset.category === filter;
+            if (show) {
+              card.style.display = 'flex';
+              requestAnimationFrame(() => {
+                card.style.opacity = '1';
+              });
+            } else {
+              card.style.opacity = '0';
+              setTimeout(() => {
+                if (card.style.opacity === '0') {
+                  card.style.display = 'none';
+                }
+              }, 280);
+            }
+          });
+        });
+      });
+
+      // Animaciones al hacer scroll
+      const revealObserver = new IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in-view');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.25 }
+      );
+
+      document.querySelectorAll('.animate-on-scroll').forEach((element, index) => {
+        element.style.transitionDelay = `${index * 0.08}s`;
+        revealObserver.observe(element);
+      });
+
+      // Escaparates 3D interactivos
+      const initProductShowcases = () => {
+        if (!window.THREE) {
+          console.warn('Three.js no está disponible para inicializar los modelos 3D.');
+          return;
+        }
+
+        const containers = document.querySelectorAll('.product-3d');
+        containers.forEach((container) => {
+          const baseColor = new THREE.Color(container.dataset.baseColor || '#FFD700');
+          const accentColor = new THREE.Color(container.dataset.highlightColor || '#FFFFFF');
+          const variant = container.dataset.variant || 'balm';
+
+          const scene = new THREE.Scene();
+          scene.fog = new THREE.FogExp2(0x060606, 0.35);
+
+          const camera = new THREE.PerspectiveCamera(32, container.clientWidth / container.clientHeight, 0.1, 50);
+          camera.position.set(0, 1.4, 5);
+
+          const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+          renderer.setSize(container.clientWidth, container.clientHeight);
+          renderer.setClearColor(0x000000, 0);
+          renderer.shadowMap.enabled = false;
+          container.appendChild(renderer.domElement);
+
+          const group = new THREE.Group();
+          group.position.y = -0.3;
+          scene.add(group);
+
+          const hemiLight = new THREE.HemisphereLight(0xffffff, 0x202020, 0.9);
+          scene.add(hemiLight);
+
+          const dirLight = new THREE.DirectionalLight(0xffffff, 0.85);
+          dirLight.position.set(3, 6, 4);
+          scene.add(dirLight);
+
+          const rimLight = new THREE.PointLight(accentColor, 1.1, 12, 2);
+          rimLight.position.set(-4, 2, -3);
+          scene.add(rimLight);
+
+          const pedestalMaterial = new THREE.MeshStandardMaterial({
+            color: accentColor.clone().multiplyScalar(0.3),
+            metalness: 0.2,
+            roughness: 0.9,
+            transparent: true,
+            opacity: 0.75,
+          });
+
+          const pedestal = new THREE.Mesh(new THREE.CylinderGeometry(1.4, 1.6, 0.4, 48), pedestalMaterial);
+          pedestal.rotation.x = Math.PI;
+          pedestal.position.y = -1.5;
+          group.add(pedestal);
+
+          const auraMaterial = new THREE.MeshBasicMaterial({
+            color: accentColor,
+            transparent: true,
+            opacity: 0.35,
+            side: THREE.DoubleSide,
+          });
+
+          const aura = new THREE.Mesh(new THREE.TorusGeometry(1.6, 0.08, 32, 120), auraMaterial);
+          aura.rotation.x = Math.PI / 2;
+          aura.position.y = -0.9;
+          group.add(aura);
+
+          const productMaterial = new THREE.MeshStandardMaterial({
+            color: baseColor,
+            metalness: 0.35,
+            roughness: 0.45,
+          });
+
+          const accentMaterial = new THREE.MeshStandardMaterial({
+            color: accentColor,
+            metalness: 0.45,
+            roughness: 0.35,
+            emissive: accentColor.clone().multiplyScalar(0.15),
+            emissiveIntensity: 0.6,
+          });
+
+          const transparentLabelMaterial = new THREE.MeshStandardMaterial({
+            color: accentColor,
+            transparent: true,
+            opacity: 0.35,
+            side: THREE.DoubleSide,
+          });
+
+          const buildVariant = () => {
+            switch (variant) {
+              case 'elixir': {
+                const vial = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.4, 2.6, 48), productMaterial);
+                vial.position.y = 0.3;
+                group.add(vial);
+
+                const stopper = new THREE.Mesh(new THREE.SphereGeometry(0.55, 32, 32), accentMaterial);
+                stopper.scale.y = 0.55;
+                stopper.position.y = 1.8;
+                group.add(stopper);
+
+                const sash = new THREE.Mesh(new THREE.TorusGeometry(0.62, 0.06, 24, 120), accentMaterial);
+                sash.position.y = -0.3;
+                group.add(sash);
+                break;
+              }
+              case 'serum': {
+                const bottle = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.9, 2.2, 48), productMaterial);
+                bottle.position.y = 0.1;
+                group.add(bottle);
+
+                const dropper = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.35, 1.4, 32), accentMaterial);
+                dropper.position.y = 1.5;
+                group.add(dropper);
+
+                const droplet = new THREE.Mesh(new THREE.SphereGeometry(0.32, 32, 32), accentMaterial.clone());
+                droplet.position.y = 2.1;
+                group.add(droplet);
+
+                const label = new THREE.Mesh(new THREE.CylinderGeometry(0.82, 0.82, 0.9, 64, 1, true), transparentLabelMaterial);
+                label.position.y = -0.2;
+                group.add(label);
+                break;
+              }
+              case 'spray': {
+                const body = new THREE.Mesh(new THREE.BoxGeometry(1.2, 2.4, 1.2), productMaterial);
+                group.add(body);
+
+                const trigger = new THREE.Mesh(new THREE.BoxGeometry(1, 0.6, 1.4), accentMaterial);
+                trigger.position.set(0, 1.5, 0);
+                group.add(trigger);
+
+                const nozzle = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.6, 32), accentMaterial.clone());
+                nozzle.rotation.z = Math.PI / 2;
+                nozzle.position.set(0.6, 1.4, 0);
+                group.add(nozzle);
+                break;
+              }
+              case 'duo': {
+                const barMaterial = productMaterial.clone();
+                barMaterial.roughness = 0.6;
+                const soapOne = new THREE.Mesh(new THREE.BoxGeometry(1, 0.45, 2), barMaterial);
+                soapOne.position.set(-0.6, -0.4, 0);
+                soapOne.rotation.y = Math.PI / 10;
+                group.add(soapOne);
+
+                const soapTwo = new THREE.Mesh(new THREE.BoxGeometry(1, 0.45, 2), barMaterial.clone());
+                soapTwo.position.set(0.7, 0.15, -0.1);
+                soapTwo.rotation.y = -Math.PI / 8;
+                group.add(soapTwo);
+
+                const ribbon = new THREE.Mesh(new THREE.TorusGeometry(1.3, 0.05, 18, 80), accentMaterial);
+                ribbon.rotation.x = Math.PI / 2;
+                ribbon.position.y = -0.05;
+                group.add(ribbon);
+                break;
+              }
+              case 'kit': {
+                const chest = new THREE.Mesh(new THREE.BoxGeometry(2.8, 1.4, 1.6), productMaterial);
+                chest.position.y = -0.5;
+                group.add(chest);
+
+                const lid = new THREE.Mesh(new THREE.BoxGeometry(2.9, 0.3, 1.7), accentMaterial);
+                lid.position.y = 0.4;
+                group.add(lid);
+
+                const bottle = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.45, 1.2, 32), accentMaterial.clone());
+                bottle.position.set(-0.6, 0.7, 0.4);
+                group.add(bottle);
+
+                const jar = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.65, 0.8, 32), productMaterial.clone());
+                jar.position.set(0.7, 0.6, -0.2);
+                group.add(jar);
+                break;
+              }
+              default: {
+                const jar = new THREE.Mesh(new THREE.CylinderGeometry(0.85, 0.95, 2.3, 48), productMaterial);
+                group.add(jar);
+
+                const lid = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.7, 0.5, 32), accentMaterial);
+                lid.position.y = 1.4;
+                group.add(lid);
+
+                const label = new THREE.Mesh(new THREE.CylinderGeometry(0.87, 0.87, 0.8, 64, 1, true), transparentLabelMaterial);
+                label.position.y = -0.2;
+                group.add(label);
+                break;
+              }
+            }
+          };
+
+          buildVariant();
+
+          const accents = [aura];
+
+          let autoRotation = Math.random() * Math.PI * 2;
+          let dragRotation = 0;
+          let targetDragRotation = 0;
+          let pointerDown = false;
+          let lastPointerX = 0;
+
+          const animate = () => {
+            autoRotation += 0.01;
+            dragRotation += (targetDragRotation - dragRotation) * 0.08;
+            group.rotation.y = autoRotation + dragRotation;
+            accents.forEach((mesh, idx) => {
+              mesh.rotation.z += 0.01 + idx * 0.005;
+            });
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+          };
+
+          animate();
+
+          container.addEventListener('pointerdown', (event) => {
+            pointerDown = true;
+            lastPointerX = event.clientX;
+            container.style.cursor = 'grabbing';
+          });
+
+          container.addEventListener('pointermove', (event) => {
+            if (!pointerDown) return;
+            const deltaX = event.clientX - lastPointerX;
+            lastPointerX = event.clientX;
+            targetDragRotation += deltaX * 0.0035;
+          });
+
+          const stopDrag = () => {
+            if (!pointerDown) return;
+            pointerDown = false;
+            container.style.cursor = '';
+          };
+
+          container.addEventListener('pointerup', stopDrag);
+          container.addEventListener('pointerleave', stopDrag);
+          container.addEventListener('pointercancel', stopDrag);
+
+          const resizeObserver = new ResizeObserver((entries) => {
+            for (const entry of entries) {
+              const { width, height } = entry.contentRect;
+              if (height === 0) continue;
+              camera.aspect = width / height;
+              camera.updateProjectionMatrix();
+              renderer.setSize(width, height);
+            }
+          });
+
+          resizeObserver.observe(container);
+        });
+      };
+
+      initProductShowcases();
+
+      if (window.AOS) {
+        setTimeout(() => {
+          AOS.refreshHard();
+        }, 600);
+      }
+    });
+  </script>
+
+</body>
+</html>
