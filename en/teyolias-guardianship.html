@@ -143,6 +143,55 @@
             background: #f59e0b;
             border-color: #fbbf24;
         }
+
+
+        /* =========================================
+           Botón Flotante de Correo (Teyolias)
+           ========================================= */
+        .floating-email-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #8B4513;
+            color: #ffffff;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 9999;
+            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+        }
+
+        .floating-email-btn:hover,
+        .floating-email-btn:focus-visible {
+            transform: translateY(-5px) scale(1.05);
+            background-color: #A0522D;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+            color: #ffffff;
+        }
+
+        .floating-email-btn svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        @media (max-width: 768px) {
+            .floating-email-btn {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+            }
+
+            .floating-email-btn svg {
+                width: 24px;
+                height: 24px;
+            }
+        }
     </style>
 </head>
 <body class="bg-stone-100 text-stone-800 font-sans selection:bg-amber-200">
@@ -484,5 +533,12 @@
             options: { maintainAspectRatio: false, scales: { r: { ticks: { display: false } } } }
         });
     </script>
+
+    <a href="mailto:fernando@xolosramirez.com" class="floating-email-btn" aria-label="Send email to Fernando" title="Contact Fernando">
+        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="icon-mail" aria-hidden="true" focusable="false">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+        </svg>
+    </a>
 </body>
 </html>
