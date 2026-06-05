@@ -33,13 +33,33 @@
 
   .xolos-chronicle-intro p {
     font-size: 1.1em;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     color: #4a4a4a;
     text-align: justify;
   }
 
-  /* --- Estilos de la Línea de Tiempo (Timeline) --- */
+  /* --- Estilos para el Video Responsivo --- */
+  .xolos-video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* Proporción 16:9 */
+    height: 0;
+    overflow: hidden;
+    margin-bottom: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    background-color: #000;
+  }
 
+  .xolos-video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  /* --- Estilos de la Línea de Tiempo (Timeline) --- */
   .xolos-timeline {
     position: relative;
     padding-left: 30px;
@@ -139,6 +159,10 @@
   <section class="xolos-chronicle-intro">
     <p>En <strong>Xolos Ramírez</strong>, la salud de nuestros cachorros y la inmutabilidad de su historial médico son nuestra máxima prioridad. Durante esta jornada dirigida por <em>xolosArmy Network</em>, llevamos a cabo la protección inmunológica de cuatro de nuestros ejemplares de mes y medio de edad, respaldando cada procedimiento como un activo digital en la blockchain de eCash.</p>
   </section>
+
+  <div class="xolos-video-container">
+    <iframe src="https://www.youtube.com/embed/ROhjF-OOXJs" title="Jornada de Vacunación Xolos Ramírez" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
 
   <div class="xolos-timeline">
     <div class="timeline-item">
