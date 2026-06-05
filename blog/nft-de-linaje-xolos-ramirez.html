@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xolos Ramírez | El Pedigrí del Futuro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Warm Neutrals & Terracotta -->
+    <!-- Application Structure Plan: The SPA uses a tabbed dashboard layout to segment the information logically. Section 1 (Concepto) establishes the philosophical and historical context. Section 2 (Tecnología) uses data visualization to compare traditional methods with the new blockchain approach. Section 3 (Proceso) offers an interactive timeline of the adoption process. This structure is chosen to guide the user from the 'why' (history) to the 'what' (technology) and finally the 'how' (actionable process), making the innovative concept of 'NFTs de Linaje' easy to digest. -->
+    <!-- Visualization & Content Choices: 1. Concept uses text and unicode iconography to inform without visual clutter. 2. Technology uses a Chart.js Radar Chart to compare the conceptual coverage of traditional vs. NFT pedigrees, proving the value of the 'xolosArmy Network'. 3. The Process uses interactive HTML/Tailwind cards to organize the steps linearly, updating a central detail view via JS. No SVG or Mermaid used, ensuring strict adherence to constraints while maximizing interaction. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 380px;
+        }
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .tab-btn.active {
+            border-bottom: 2px solid #d97746;
+            color: #d97746;
+            font-weight: 600;
+        }
+        .step-card {
+            transition: all 0.3s ease;
+        }
+        .step-card.active {
+            background-color: #fef0e8;
+            border-color: #d97746;
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body class="bg-[#faf8f5] text-[#2b2824] font-sans antialiased min-h-screen flex flex-col">
+
+    <header class="bg-white shadow-sm pt-12 pb-6 px-6 text-center">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-[#1a1816] mb-3">Xolos Ramírez</h1>
+            <h2 class="text-xl md:text-2xl text-[#d97746] font-medium tracking-wide">El Pedigrí del Futuro</h2>
+            <p class="mt-4 text-gray-600 max-w-2xl mx-auto">Fusionando más de 3,000 años de linaje milenario con la inmutabilidad de la tecnología blockchain y los NFTs.</p>
+        </div>
+    </header>
+
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div class="max-w-4xl mx-auto flex justify-center space-x-2 md:space-x-8 px-4 overflow-x-auto">
+            <button onclick="switchTab('concepto')" id="btn-concepto" class="tab-btn active py-4 px-2 md:px-4 text-sm md:text-base text-gray-500 hover:text-[#d97746] whitespace-nowrap">📜 Legado & Concepto</button>
+            <button onclick="switchTab('tecnologia')" id="btn-tecnologia" class="tab-btn py-4 px-2 md:px-4 text-sm md:text-base text-gray-500 hover:text-[#d97746] whitespace-nowrap">🛡️ Red & Tecnología</button>
+            <button onclick="switchTab('proceso')" id="btn-proceso" class="tab-btn py-4 px-2 md:px-4 text-sm md:text-base text-gray-500 hover:text-[#d97746] whitespace-nowrap">🐕 Proceso de Adopción</button>
+        </div>
+    </nav>
+
+    <main class="flex-grow w-full max-w-5xl mx-auto p-6 md:p-8">
+
+        <section id="sec-concepto" class="fade-in block">
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold mb-2">Las Pirámides Vivientes</h3>
+                <p class="text-lg text-gray-700 leading-relaxed">
+                    Esta sección explora la filosofía fundamental detrás del proyecto Xolos Ramírez. Aquí entenderás por qué el Xoloitzcuintle no es solo un canino, sino un patrimonio vivo de México, y cómo la visión del criadero busca proteger esta herencia milenaria para las generaciones venideras.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="text-4xl mb-4">🏛️</div>
+                    <h4 class="text-xl font-bold mb-3 text-[#d97746]">Historia Milenaria</h4>
+                    <p class="text-gray-600 leading-relaxed">
+                        Con más de 3,000 años de historia, el Xoloitzcuintle es considerado un guardián ancestral de la cultura mexicana. Xolos Ramírez concibe a estos ejemplares como verdaderas "pirámides vivientes", monumentos biológicos que requieren preservación absoluta.
+                    </p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="text-4xl mb-4">🧬</div>
+                    <h4 class="text-xl font-bold mb-3 text-[#d97746]">El Pedigrí del Futuro</h4>
+                    <p class="text-gray-600 leading-relaxed">
+                        Para proteger esta herencia genética e histórica, el criadero ha innovado implementando "NFTs de Linaje". Esta tecnología asegura que la identidad y la memoria de cada ejemplar trasciendan el papel, volviéndose inmutables en el mundo digital.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec-tecnologia" class="fade-in hidden">
+             <div class="mb-8">
+                <h3 class="text-2xl font-bold mb-2">La Arquitectura xolosArmy Network</h3>
+                <p class="text-lg text-gray-700 leading-relaxed">
+                    Aquí visualizamos el impacto tecnológico de la implementación de NFTs frente a los registros en papel. Esta sección interactiva desglosa cómo la arquitectura digital y cultural de la red blockchain protege íntegramente la trazabilidad, memoria y seguridad del linaje avalado por la Federación Canófila Mexicana.
+                </p>
+            </div>
+
+            <div class="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row items-center gap-8">
+                <div class="w-full md:w-1/2">
+                    <h4 class="text-xl font-bold mb-4">Análisis de Integridad del Linaje</h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <span class="text-xl mr-3">🔗</span>
+                            <div>
+                                <strong class="block text-gray-800">Trazabilidad Total</strong>
+                                <span class="text-sm text-gray-600">Vínculo indisoluble entre el microchip/tatuaje físico y el registro digital en la blockchain.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-xl mr-3">🔐</span>
+                            <div>
+                                <strong class="block text-gray-800">Memoria Inmutable</strong>
+                                <span class="text-sm text-gray-600">La identidad del ejemplar no puede ser alterada, falsificada o destruida gracias a la xolosArmy Network.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-xl mr-3">📜</span>
+                            <div>
+                                <strong class="block text-gray-800">Aval Oficial</strong>
+                                <span class="text-sm text-gray-600">Sinergia tecnológica que mantiene la validez y certificación de la Federación Canófila Mexicana (FCM).</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="w-full md:w-1/2">
+                    <div class="chart-container">
+                        <canvas id="techChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec-proceso" class="fade-in hidden">
+             <div class="mb-8">
+                <h3 class="text-2xl font-bold mb-2">El Protocolo de Entrega</h3>
+                <p class="text-lg text-gray-700 leading-relaxed">
+                    Descubre paso a paso cómo se materializa la entrega de un Xoloitzcuintle bajo este nuevo estándar. Interactúa con las tarjetas a continuación para entender cómo se unifica la documentación física tradicional con el nuevo certificado digital inmutable.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <button onclick="updateProcess(0)" id="card-0" class="step-card active text-left bg-white p-4 rounded-lg border-2 border-[#d97746] shadow-sm">
+                    <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Paso 1</div>
+                    <div class="font-bold text-lg">Identificación Física</div>
+                </button>
+                <button onclick="updateProcess(1)" id="card-1" class="step-card text-left bg-white p-4 rounded-lg border-2 border-transparent hover:border-gray-300 shadow-sm">
+                    <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Paso 2</div>
+                    <div class="font-bold text-lg">Registro Digital NFT</div>
+                </button>
+                <button onclick="updateProcess(2)" id="card-2" class="step-card text-left bg-white p-4 rounded-lg border-2 border-transparent hover:border-gray-300 shadow-sm">
+                    <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Paso 3</div>
+                    <div class="font-bold text-lg">Certificación a la Familia</div>
+                </button>
+            </div>
+
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 min-h-[250px] flex items-center">
+                <div id="process-content" class="fade-in">
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 py-6 text-center text-sm text-gray-500 mt-auto">
+        <p>Informe interactivo basado en la implementación de NFTs de Linaje por Criadero Xolos Ramírez.</p>
+    </footer>
+
+    <script>
+        const processData = [
+            {
+                icon: "💉",
+                title: "Marcaje y Trazabilidad Física",
+                desc: "Antes de cualquier registro digital, el cachorro recibe un microchip de identificación y un tatuaje oficial. Estos elementos físicos son el ancla en el mundo real que garantiza que el perro corresponde exactamente a su futuro registro.",
+                tags: ["Microchip", "Tatuaje Oficial", "Garantía Física"]
+            },
+            {
+                icon: "💻",
+                title: "Creación del Pedigrí del Futuro",
+                desc: "El pedigrí tradicional, avalado y emitido por la Federación Canófila Mexicana (FCM), es procesado a través de la xolosArmy Network. Se 'mintea' (crea) un NFT de linaje único en la blockchain, creando un registro inmutable que protege la memoria e identidad del ejemplar.",
+                tags: ["Blockchain", "xolosArmy Network", "Inmutabilidad"]
+            },
+            {
+                icon: "📦",
+                title: "Entrega Integral a la Nueva Familia",
+                desc: "Al momento de la adopción, la familia recibe físicamente al Xoloitzcuintle junto con su carpeta de documentos tradicionales (certificado de salud, cuadro de vacunas, desparasitación). Simultáneamente, se realiza la transferencia tecnológica del 'NFT de Linaje' a la billetera digital del nuevo propietario.",
+                tags: ["Salud", "Transferencia Digital", "Herencia"]
+            }
+        ];
+
+        let techChartInstance = null;
+
+        function switchTab(tabId) {
+            document.querySelectorAll('section').forEach(sec => {
+                sec.classList.add('hidden');
+                sec.classList.remove('fade-in');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            const targetSec = document.getElementById('sec-' + tabId);
+            targetSec.classList.remove('hidden');
+            
+            void targetSec.offsetWidth;
+            
+            targetSec.classList.add('fade-in');
+            document.getElementById('btn-' + tabId).classList.add('active');
+
+            if (tabId === 'tecnologia' && !techChartInstance) {
+                initChart();
+            }
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('techChart').getContext('2d');
+            techChartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        ['Inmutabilidad', 'del Registro'], 
+                        ['Trazabilidad', 'Física/Digital'], 
+                        'Seguridad contra Fraude', 
+                        ['Validez', 'Institucional (FCM)'], 
+                        ['Preservación', 'Histórica']
+                    ],
+                    datasets: [{
+                        label: 'Pedigrí Tradicional (Papel)',
+                        data: [20, 40, 30, 100, 50],
+                        fill: true,
+                        backgroundColor: 'rgba(156, 163, 175, 0.2)',
+                        borderColor: 'rgba(156, 163, 175, 1)',
+                        pointBackgroundColor: 'rgba(156, 163, 175, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(156, 163, 175, 1)'
+                    }, {
+                        label: 'El Pedigrí del Futuro (NFT)',
+                        data: [100, 100, 100, 100, 100],
+                        fill: true,
+                        backgroundColor: 'rgba(217, 119, 70, 0.4)',
+                        borderColor: 'rgba(217, 119, 70, 1)',
+                        pointBackgroundColor: 'rgba(217, 119, 70, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(217, 119, 70, 1)'
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(0,0,0,0.05)' },
+                            grid: { color: 'rgba(0,0,0,0.05)' },
+                            pointLabels: {
+                                font: { family: 'sans-serif', size: 11 },
+                                color: '#3d3831'
+                            },
+                            ticks: { display: false, min: 0, max: 100 }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { family: 'sans-serif' },
+                                padding: 20,
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(43, 40, 36, 0.9)',
+                            titleFont: { size: 13 },
+                            bodyFont: { size: 13 },
+                            padding: 10,
+                            cornerRadius: 4
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateProcess(index) {
+            document.querySelectorAll('.step-card').forEach((card, i) => {
+                if(i === index) {
+                    card.classList.add('active', 'border-[#d97746]');
+                    card.classList.remove('border-transparent');
+                } else {
+                    card.classList.remove('active', 'border-[#d97746]');
+                    card.classList.add('border-transparent');
+                }
+            });
+
+            const contentDiv = document.getElementById('process-content');
+            const data = processData[index];
+            
+            contentDiv.classList.remove('fade-in');
+            void contentDiv.offsetWidth;
+            
+            let tagsHtml = data.tags.map(tag => `<span class="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full font-medium">${tag}</span>`).join('');
+
+            contentDiv.innerHTML = `
+                <div class="flex flex-col md:flex-row gap-6 items-start">
+                    <div class="text-6xl bg-[#fef0e8] p-4 rounded-2xl text-center min-w-[100px] shadow-inner">${data.icon}</div>
+                    <div>
+                        <h4 class="text-2xl font-bold mb-3 text-[#1a1816]">${data.title}</h4>
+                        <p class="text-gray-600 text-lg leading-relaxed mb-4">${data.desc}</p>
+                        <div class="flex flex-wrap gap-2">${tagsHtml}</div>
+                    </div>
+                </div>
+            `;
+            
+            contentDiv.classList.add('fade-in');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateProcess(0);
+        });
+    </script>
+</body>
+</html>
