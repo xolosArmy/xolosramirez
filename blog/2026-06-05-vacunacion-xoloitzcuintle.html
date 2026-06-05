@@ -1,3 +1,132 @@
+<style>
+  /* =========================================
+     Estilos para la Crónica de Xolos Ramírez
+     ========================================= */
+
+  .xolos-chronicle {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    color: #333;
+    line-height: 1.6;
+  }
+
+  .xolos-chronicle-header {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #d4af37; /* Tono dorado/ancestral */
+    padding-bottom: 15px;
+  }
+
+  .xolos-chronicle-header h2 {
+    color: #1a1a1a;
+    font-size: 2em;
+    margin-bottom: 10px;
+  }
+
+  .xolos-meta {
+    font-size: 0.95em;
+    color: #666;
+    font-weight: 500;
+  }
+
+  .xolos-chronicle-intro p {
+    font-size: 1.1em;
+    margin-bottom: 40px;
+    color: #4a4a4a;
+    text-align: justify;
+  }
+
+  /* --- Estilos de la Línea de Tiempo (Timeline) --- */
+
+  .xolos-timeline {
+    position: relative;
+    padding-left: 30px;
+  }
+
+  /* La línea vertical */
+  .xolos-timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 15px;
+    height: 100%;
+    width: 3px;
+    background-color: #d4af37; /* Tono dorado */
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 30px;
+  }
+
+  /* El punto en la línea de tiempo */
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: -21px; /* Centrado con la línea */
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #1a1a1a;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 2px #d4af37;
+    z-index: 1;
+  }
+
+  .timeline-time {
+    display: inline-block;
+    background-color: #1a1a1a;
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+
+  .timeline-content {
+    background-color: #f9f9f9;
+    border-left: 4px solid #1a1a1a;
+    padding: 15px 20px;
+    border-radius: 0 8px 8px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+
+  .timeline-content h3 {
+    margin-top: 0;
+    color: #b8860b; /* Dorado oscuro para los nombres */
+    font-size: 1.3em;
+    margin-bottom: 8px;
+  }
+
+  .timeline-content p {
+    margin: 0;
+    color: #555;
+  }
+
+  /* Responsivo para móviles */
+  @media (max-width: 600px) {
+    .xolos-timeline {
+      padding-left: 20px;
+    }
+    .xolos-timeline::before {
+      left: 10px;
+    }
+    .timeline-item::before {
+      left: -16px;
+      width: 12px;
+      height: 12px;
+    }
+    .xolos-chronicle-header h2 {
+      font-size: 1.6em;
+    }
+  }
+</style>
+
 <article class="xolos-chronicle">
   <header class="xolos-chronicle-header">
     <h2>Crónica de la Jornada: Vacunación y Registro Digital</h2>
