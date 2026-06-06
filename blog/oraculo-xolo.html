@@ -3,303 +3,302 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oráculo XOLO v1 - Censo On-Chain</title>
+    <title>Oráculo XOLO - Civilización Tonalli</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- 
-        Chosen Palette: Energetic Tech (Vibrant Orange, Cyan, Purple, Deep Blue)
-        
-        Application Structure Plan: The SPA is structured as a descending funnel of technical revelation. 
-        It starts with high-level KPI metrics to establish the scale of the Oráculo's operation. 
-        Then, it visually breaks down the 'Anatomía de la Extracción' (Process flow) using a grid layout to explain the 4 core data points.
-        Next, it provides analytical charts showing the health and distribution of the network (IPFS status, Genealogy types). 
-        Finally, it culminates in the 'Xolos Explorer', an interactive data table where users can filter and audit specific examples mentioned in the source material, simulating the real tool.
-        
-        Visualization & Content Choices:
-        1. Header/KPIs -> Goal: Inform -> Method: Big Numbers (HTML/CSS) -> Justification: Immediate impact of scale. NO SVG.
-        2. Extracción de Datos -> Goal: Organize/Process -> Method: HTML Grid Cards with Unicode Icons -> Justification: Breaks down technical concepts without external assets. NO SVG.
-        3. Estado IPFS -> Goal: Proportions -> Method: Chart.js Doughnut -> Interaction: Hover tooltips -> Justification: Best for binary/simple proportion data. NO SVG.
-        4. Distribución Genealógica -> Goal: Compare -> Method: Chart.js Bar Chart -> Interaction: Hover tooltips -> Justification: Compares categorical sizes clearly. NO SVG.
-        5. Xolos Explorer -> Goal: Organize/Explore -> Method: Interactive HTML Table with JS filtering -> Interaction: Buttons to filter rows -> Justification: Fulfills the "audit" and "all-seeing eye" requirement. NO SVG.
-        
-        CONFIRMATION: NEITHER Mermaid JS NOR SVG were used anywhere in the output.
-    -->
+    <!-- Chosen Palette: Warm Earthy Tech (Stone, Amber, Emerald for success) -->
+    <!-- Application Structure Plan: A single-page dashboard architecture. It begins with a conceptual overview to ground the user in the "Tonalli" ecosystem, followed by the specific data extraction criteria presented as distinct modules. The core of the application is an interactive "Xolos Explorer" simulation, allowing users to filter and visualize the on-chain data described in the report. This structure moves the user from understanding the 'what' and 'how' to actually interacting with the 'result'. -->
+    <!-- Visualization & Content Choices: 
+         1. Overview: Text block -> Goal: Inform -> Method: Typography & Layout -> Justification: Establish context.
+         2. Extraction Criteria: Grid Cards -> Goal: Organize -> Method: HTML/CSS flexbox with Unicode icons -> Justification: Breaks down technical requirements into digestible visual chunks. NO SVG used.
+         3. Genealogy Stats: Doughnut Chart -> Goal: Proportions -> Method: Chart.js -> Interaction: Hover tooltips -> Justification: Quickly shows the ratio of complete vs incomplete lineages based on the simulated dataset derived from the text.
+         4. Record Explorer: Interactive Table -> Goal: Explore -> Method: HTML Table + JS filtering -> Interaction: Filter buttons (All, IPFS OK, Complete Parents) -> Justification: Allows users to experience the "all-seeing eye" auditing concept mentioned in the text. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Syne:wght@400;600;800&display=swap');
-
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Mono&display=swap');
+        
         body {
-            font-family: 'Space Grotesk', sans-serif;
-            background-color: #f8fafc;
-            color: #0f172a;
+            font-family: 'Inter', sans-serif;
+            background-color: #fafaf9; /* stone-50 */
+            color: #292524; /* stone-800 */
         }
-
-        h1, h2, h3, h4, .font-heading {
-            font-family: 'Syne', sans-serif;
+        
+        .font-mono-tech {
+            font-family: 'Space Mono', monospace;
         }
 
         .chart-container {
             position: relative;
             width: 100%;
-            max-width: 600px;
+            max-width: 500px;
             margin-left: auto;
             margin-right: auto;
-            height: 350px;
-            max-height: 400px;
+            height: 300px;
+            max-height: 350px;
         }
-
+        
         @media (min-width: 768px) {
             .chart-container {
-                height: 400px;
+                height: 350px;
             }
         }
 
-        .gradient-text {
-            background: linear-gradient(to right, #f97316, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .card-shadow {
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+        .nav-active {
+            background-color: #d97706; /* amber-600 */
+            color: white;
         }
     </style>
 </head>
-<body class="antialiased selection:bg-cyan-200 selection:text-cyan-900">
+<body class="antialiased">
 
-    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center gap-2">
-                    <span class="text-2xl">👁️</span>
-                    <span class="font-heading font-bold text-xl tracking-tight text-slate-900">ORÁCULO <span class="text-orange-500">XOLO</span> <span class="text-xs align-top text-slate-400">v1</span></span>
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        
+        <header class="mb-12 border-b-2 border-amber-200 pb-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-stone-900">
+                        Oráculo <span class="text-amber-600">XOLO</span> <span class="text-xl text-stone-500 font-mono-tech">v1</span>
+                    </h1>
+                    <p class="mt-2 text-lg text-stone-600 max-w-3xl">
+                        Censo on-chain del Archivo del Linaje Vivo. Componente central del ecosistema de la Civilización Tonalli.
+                    </p>
                 </div>
-                <div class="hidden md:flex space-x-8 text-sm font-semibold text-slate-600">
-                    <a href="#metricas" class="hover:text-cyan-600 transition-colors">Métricas</a>
-                    <a href="#anatomia" class="hover:text-cyan-600 transition-colors">Anatomía</a>
-                    <a href="#analisis" class="hover:text-cyan-600 transition-colors">Análisis</a>
-                    <a href="#explorer" class="hover:text-cyan-600 transition-colors text-orange-600">Xolos Explorer</a>
+                <div class="hidden md:flex items-center justify-center w-16 h-16 bg-stone-800 text-amber-500 rounded-full text-2xl font-bold font-mono-tech shadow-lg">
+                    OX
                 </div>
             </div>
-        </div>
-    </nav>
+        </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-24">
+        <section id="mission" class="mb-16">
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-stone-200">
+                <h2 class="text-2xl font-semibold mb-4 text-stone-800 flex items-center">
+                    <span class="text-3xl mr-3">📜</span> El Archivo Inmutable
+                </h2>
+                <p class="text-stone-600 text-lg leading-relaxed">
+                    Esta sección introduce la función principal del Oráculo XOLO. El sistema actúa como un vigilante digital, rastreando registros directamente desde la blockchain de <strong>eCash</strong>. Su propósito es detectar linajes y eventos específicos, asegurando que la historia y los aportes de la Civilización Tonalli queden inscriptos de forma inmutable y pública.
+                </p>
+            </div>
+        </section>
 
-        <section class="text-center max-w-4xl mx-auto space-y-6 pt-10">
-            <h1 class="text-5xl md:text-7xl font-heading font-extrabold tracking-tight text-slate-900 leading-tight">
-                Censo On-Chain del <br/>
-                <span class="gradient-text">Archivo del Linaje Vivo</span>
-            </h1>
-            <p class="text-xl text-slate-600 font-light leading-relaxed">
-                El Oráculo XOLO es el vigilante inmutable de la Civilización Tonalli. Rastreando e identificando registros directamente desde la blockchain de eCash para preservar nuestra memoria en la red.
+        <section id="extraction" class="mb-16">
+            <h2 class="text-2xl font-semibold mb-2 text-stone-800">Criterios de Trazabilidad</h2>
+            <p class="text-stone-600 mb-8 max-w-4xl">
+                Para comprender cómo el Oráculo audita la red, aquí se detallan los cuatro pilares de información que extrae y documenta de cada registro leído en la cadena de bloques.
             </p>
-        </section>
 
-        <section id="metricas" class="scroll-mt-24">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white rounded-2xl p-8 border border-slate-100 card-shadow flex flex-col items-center text-center group hover:-translate-y-1 transition-transform">
-                    <div class="text-4xl mb-4 bg-orange-100 w-16 h-16 flex items-center justify-center rounded-full text-orange-500 group-hover:scale-110 transition-transform">⛓️</div>
-                    <h3 class="text-slate-500 text-sm font-semibold uppercase tracking-wider mb-2">Bloques Analizados</h3>
-                    <p class="text-4xl font-heading font-bold text-slate-900">805K+</p>
-                </div>
-                <div class="bg-white rounded-2xl p-8 border border-slate-100 card-shadow flex flex-col items-center text-center group hover:-translate-y-1 transition-transform">
-                    <div class="text-4xl mb-4 bg-cyan-100 w-16 h-16 flex items-center justify-center rounded-full text-cyan-600 group-hover:scale-110 transition-transform">🧬</div>
-                    <h3 class="text-slate-500 text-sm font-semibold uppercase tracking-wider mb-2">Linajes Detectados</h3>
-                    <p class="text-4xl font-heading font-bold text-slate-900">1,240</p>
-                </div>
-                <div class="bg-white rounded-2xl p-8 border border-slate-100 card-shadow flex flex-col items-center text-center group hover:-translate-y-1 transition-transform">
-                    <div class="text-4xl mb-4 bg-purple-100 w-16 h-16 flex items-center justify-center rounded-full text-purple-600 group-hover:scale-110 transition-transform">📦</div>
-                    <h3 class="text-slate-500 text-sm font-semibold uppercase tracking-wider mb-2">Nodos IPFS Activos</h3>
-                    <p class="text-4xl font-heading font-bold text-slate-900">99.8%</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="anatomia" class="scroll-mt-24">
-            <div class="mb-10 max-w-3xl">
-                <h2 class="text-3xl font-heading font-bold text-slate-900 mb-4">Anatomía de la Extracción</h2>
-                <p class="text-lg text-slate-600">
-                    Para detectar los linajes, el Oráculo lee la cadena de bloques y extrae cuatro pilares fundamentales de información, asegurando trazabilidad y accesibilidad descentralizada.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-slate-900 rounded-xl p-6 text-white relative overflow-hidden border-b-4 border-orange-500">
-                    <div class="text-5xl opacity-20 absolute -bottom-2 -right-2">⛓️</div>
-                    <h3 class="font-bold text-lg mb-2 relative z-10 text-orange-400">1. Bloque y Fecha</h3>
-                    <p class="text-slate-400 text-sm relative z-10">
-                        Registra el bloque exacto y la fecha de inscripción. Garantiza que la historia y los aportes queden inscriptos de forma inmutable en eCash.
-                    </p>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 
-                <div class="bg-slate-900 rounded-xl p-6 text-white relative overflow-hidden border-b-4 border-cyan-500">
-                    <div class="text-5xl opacity-20 absolute -bottom-2 -right-2">🌍</div>
-                    <h3 class="font-bold text-lg mb-2 relative z-10 text-cyan-400">2. Validación IPFS</h3>
-                    <p class="text-slate-400 text-sm relative z-10">
-                        Confirma que el contenido descentralizado asociado al registro esté accesible y correcto, marcándolo en el sistema como "IPFS OK".
-                    </p>
+                <div class="bg-stone-100 p-6 rounded-xl border-l-4 border-amber-500 hover:shadow-md transition-shadow">
+                    <div class="text-4xl mb-4">🔗</div>
+                    <h3 class="text-lg font-bold text-stone-800 mb-2">Bloque y Fecha</h3>
+                    <p class="text-sm text-stone-600">Registro del bloque exacto y timestamp. Garantiza que la historia quede inscripta de forma inmutable en eCash.</p>
                 </div>
 
-                <div class="bg-slate-900 rounded-xl p-6 text-white relative overflow-hidden border-b-4 border-purple-500">
-                    <div class="text-5xl opacity-20 absolute -bottom-2 -right-2">🧬</div>
-                    <h3 class="font-bold text-lg mb-2 relative z-10 text-purple-400">3. Conexión Genealógica</h3>
-                    <p class="text-slate-400 text-sm relative z-10">
-                        Verifica si el linaje cuenta con un padre y una madre registrados en la red, o los identifica cuando están "Sin padres completos".
-                    </p>
+                <div class="bg-stone-100 p-6 rounded-xl border-l-4 border-emerald-500 hover:shadow-md transition-shadow">
+                    <div class="text-4xl mb-4">🌍</div>
+                    <h3 class="text-lg font-bold text-stone-800 mb-2">Validación IPFS</h3>
+                    <p class="text-sm text-stone-600">Confirma que el contenido descentralizado asociado esté accesible y correcto (marcado en el sistema como "IPFS OK").</p>
                 </div>
 
-                <div class="bg-slate-900 rounded-xl p-6 text-white relative overflow-hidden border-b-4 border-blue-500">
-                    <div class="text-5xl opacity-20 absolute -bottom-2 -right-2">🏷️</div>
-                    <h3 class="font-bold text-lg mb-2 relative z-10 text-blue-400">4. Identificador Slug</h3>
-                    <p class="text-slate-400 text-sm relative z-10">
-                        Asignación de un identificador corto y único ("Slug") que facilita inmensamente su búsqueda, auditoría y organización en el Explorer.
-                    </p>
+                <div class="bg-stone-100 p-6 rounded-xl border-l-4 border-blue-500 hover:shadow-md transition-shadow">
+                    <div class="text-4xl mb-4">🧬</div>
+                    <h3 class="text-lg font-bold text-stone-800 mb-2">Genealogía</h3>
+                    <p class="text-sm text-stone-600">Verifica la conexión. Identifica si el linaje cuenta con padre y madre, o si está catalogado como "Sin padres completos".</p>
                 </div>
+
+                <div class="bg-stone-100 p-6 rounded-xl border-l-4 border-purple-500 hover:shadow-md transition-shadow">
+                    <div class="text-4xl mb-4">🏷️</div>
+                    <h3 class="text-lg font-bold text-stone-800 mb-2">Identificador</h3>
+                    <p class="text-sm text-stone-600">Generación de un "Slug" corto. Facilita la búsqueda, organización y referencia rápida dentro del ecosistema.</p>
+                </div>
+
             </div>
         </section>
 
-        <section id="analisis" class="scroll-mt-24">
-            <div class="mb-10 max-w-3xl">
-                <h2 class="text-3xl font-heading font-bold text-slate-900 mb-4">Análisis de la Red Tonalli</h2>
-                <p class="text-lg text-slate-600">
-                    Visualización de los datos auditados por el Oráculo. Estos gráficos demuestran la salud del almacenamiento descentralizado y la estructura conectiva de los linajes rastreados.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                <div class="bg-white rounded-2xl p-8 border border-slate-100 card-shadow">
-                    <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-                        <span>🌍</span> Disponibilidad del Archivo (IPFS)
-                    </h3>
-                    <div class="chart-container">
-                        <canvas id="ipfsChart"></canvas>
-                    </div>
-                    <div class="mt-6 p-4 bg-cyan-50 border border-cyan-100 rounded-lg">
-                        <p class="text-sm text-cyan-800">
-                            <strong>Contexto:</strong> Muestra la eficiencia del Oráculo al validar la accesibilidad descentralizada. La gran mayoría de los registros logran el estado "IPFS OK", asegurando la persistencia de la memoria.
-                        </p>
-                    </div>
+        <section id="explorer" class="mb-16">
+            <div class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
+                <div class="p-8 border-b border-stone-100 bg-stone-50">
+                    <h2 class="text-2xl font-semibold mb-2 text-stone-800 flex items-center">
+                        <span class="text-3xl mr-3">👁️</span> Xolos Explorer (Simulación)
+                    </h2>
+                    <p class="text-stone-600 max-w-3xl">
+                        Interactúe con esta vista que simula el "ojo que todo lo ve". Aquí puede auditar una muestra de los registros detectados por el Oráculo, incluyendo eventos históricos y linajes mencionados en los reportes (ej. Amixtli Ramírez, Códices Mexicas). Use los filtros para analizar la base de datos.
+                    </p>
                 </div>
 
-                <div class="bg-white rounded-2xl p-8 border border-slate-100 card-shadow">
-                    <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-                        <span>🧬</span> Estructura Genealógica
-                    </h3>
-                    <div class="chart-container">
-                        <canvas id="genealogyChart"></canvas>
-                    </div>
-                    <div class="mt-6 p-4 bg-purple-50 border border-purple-100 rounded-lg">
-                        <p class="text-sm text-purple-800">
-                            <strong>Contexto:</strong> Analiza las conexiones de los linajes detectados. Identifica claramente la proporción de entidades con "Padres Completos" frente a las líneas fundacionales o "Sin padres completos".
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="explorer" class="scroll-mt-24 pb-20">
-            <div class="bg-slate-900 rounded-3xl p-1 shadow-2xl overflow-hidden">
-                <div class="bg-white rounded-[1.4rem] h-full">
-                    <div class="p-8 md:p-10 border-b border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-                        <div class="max-w-2xl">
-                            <h2 class="text-3xl font-heading font-bold text-slate-900 mb-3 flex items-center gap-3">
-                                <span class="bg-orange-500 text-white p-2 rounded-lg text-xl leading-none">👁️</span> 
-                                Xolos Explorer
-                            </h2>
-                            <p class="text-slate-600">
-                                El "ojo que todo lo ve". Esta herramienta permite auditar los registros y linajes específicos detectados en la cadena de bloques, brindando trazabilidad pública a la red.
-                            </p>
-                        </div>
+                <div class="p-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
                         
-                        <div class="flex flex-wrap gap-2">
-                            <button id="btn-all" class="px-4 py-2 rounded-full text-sm font-semibold transition-all bg-slate-900 text-white border border-slate-900" onclick="filterTable('all')">
-                                Todos los Registros
-                            </button>
-                            <button id="btn-ipfs" class="px-4 py-2 rounded-full text-sm font-semibold transition-all bg-white text-slate-600 border border-slate-200 hover:bg-slate-50" onclick="filterTable('ipfs')">
-                                Solo IPFS OK
-                            </button>
-                            <button id="btn-parents" class="px-4 py-2 rounded-full text-sm font-semibold transition-all bg-white text-slate-600 border border-slate-200 hover:bg-slate-50" onclick="filterTable('parents')">
-                                Sin Padres Completos
-                            </button>
+                        <div class="lg:col-span-1">
+                            <h3 class="text-sm font-bold text-stone-500 uppercase tracking-wider mb-4">Estado Genealógico Global</h3>
+                            <div class="chart-container">
+                                <canvas id="genealogyChart"></canvas>
+                            </div>
+                            <div class="mt-6 p-4 bg-amber-50 rounded-lg text-sm text-amber-800 border border-amber-100">
+                                <strong>Análisis:</strong> El Oráculo clasifica estrictamente la ascendencia. Esta gráfica muestra la proporción de registros en la muestra actual según su completitud genealógica.
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
-                                    <th class="p-4 pl-8 font-semibold">Identificador (Slug) / Título</th>
-                                    <th class="p-4 font-semibold">Bloque Inmutable</th>
-                                    <th class="p-4 font-semibold">Estado IPFS</th>
-                                    <th class="p-4 pr-8 font-semibold">Conexión Genealógica</th>
-                                </tr>
-                            </thead>
-                            <tbody id="explorer-tbody" class="divide-y divide-slate-100 text-sm">
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="p-4 text-center bg-slate-50 text-xs text-slate-500 rounded-b-[1.4rem]">
-                        Mostrando <span id="row-count" class="font-bold text-slate-700">0</span> registros auditados del Archivo del Linaje Vivo.
+                        <div class="lg:col-span-2">
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                                <h3 class="text-sm font-bold text-stone-500 uppercase tracking-wider">Auditoría de Registros</h3>
+                                <div class="flex space-x-2 bg-stone-100 p-1 rounded-lg">
+                                    <button onclick="filterData('all', this)" class="filter-btn nav-active px-4 py-2 text-sm font-medium rounded-md transition-colors">Todos</button>
+                                    <button onclick="filterData('ipfs', this)" class="filter-btn text-stone-600 hover:bg-stone-200 px-4 py-2 text-sm font-medium rounded-md transition-colors">Solo IPFS OK</button>
+                                    <button onclick="filterData('parents', this)" class="filter-btn text-stone-600 hover:bg-stone-200 px-4 py-2 text-sm font-medium rounded-md transition-colors">Padres Completos</button>
+                                </div>
+                            </div>
+
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-stone-200">
+                                    <thead class="bg-stone-50">
+                                        <tr>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">Slug / Registro</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">Bloque (eCash)</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">Estado IPFS</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">Genealogía</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableBody" class="bg-white divide-y divide-stone-200">
+                                        <!-- Table rows will be populated by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="mt-4 text-right text-xs text-stone-400 font-mono-tech">
+                                Mostrando <span id="recordCount">0</span> registros extraídos.
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </section>
 
-    </main>
-
-    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm border-t-4 border-orange-500">
-        <p>Civilización Tonalli &copy; Oráculo XOLO v1</p>
-        <p class="mt-2 opacity-60">Censo on-chain del Archivo del Linaje Vivo</p>
-    </footer>
+    </div>
 
     <script>
-        const wrapText = (labelStr) => {
-            if (labelStr.length <= 16) return labelStr;
-            const words = labelStr.split(' ');
-            let lines = [];
-            let currentLine = '';
+        // Simulated Data based on Source Report concepts and explicit mentions
+        const sourceData = [
+            { 
+                slug: "amixtli-ramirez", 
+                title: "Amixtli Ramírez", 
+                block: "805001", 
+                date: "2024-01-15", 
+                ipfs: "IPFS OK", 
+                genealogy: "Padres Completos",
+                type: "Linaje"
+            },
+            { 
+                slug: "chimalma-codices", 
+                title: "Chimalma Ramírez: El Xoloitzcuintle en los Códices Mexicas", 
+                block: "805050", 
+                date: "2024-02-10", 
+                ipfs: "IPFS OK", 
+                genealogy: "Sin padres completos",
+                type: "Evento"
+            },
+            { 
+                slug: "evangelio-rmz", 
+                title: "Evangelio RMZ del Xoloitzcuintle", 
+                block: "805120", 
+                date: "2024-03-05", 
+                ipfs: "IPFS OK", 
+                genealogy: "Sin padres completos",
+                type: "Evento"
+            },
+            { 
+                slug: "xolotl-ancestro-01", 
+                title: "Linaje Fundacional Alpha", 
+                block: "800000", 
+                date: "2023-11-01", 
+                ipfs: "IPFS OK", 
+                genealogy: "Sin padres completos",
+                type: "Linaje Base"
+            },
+            { 
+                slug: "tzonte-ramirez-v2", 
+                title: "Tzonte Ramírez", 
+                block: "806000", 
+                date: "2024-04-20", 
+                ipfs: "Error Validación", 
+                genealogy: "Padres Completos",
+                type: "Linaje"
+            },
+            { 
+                slug: "itzcuintli-beta", 
+                title: "Itzcuintli Beta", 
+                block: "806150", 
+                date: "2024-05-02", 
+                ipfs: "IPFS OK", 
+                genealogy: "Padres Completos",
+                type: "Linaje"
+            }
+        ];
+
+        let currentChart = null;
+
+        function renderTable(data) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
             
-            words.forEach(word => {
-                if ((currentLine + word).length > 16) {
-                    if (currentLine.trim() !== '') {
-                        lines.push(currentLine.trim());
-                    }
-                    currentLine = word + ' ';
-                } else {
-                    currentLine += word + ' ';
+            data.forEach(item => {
+                const ipfsClass = item.ipfs === 'IPFS OK' ? 'text-emerald-600 bg-emerald-50' : 'text-red-600 bg-red-50';
+                const genClass = item.genealogy === 'Padres Completos' ? 'text-blue-600' : 'text-stone-500 italic';
+                
+                const row = `
+                    <tr class="hover:bg-stone-50 transition-colors">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-stone-900 truncate max-w-[200px]" title="${item.title}">${item.title}</div>
+                            <div class="text-xs text-stone-500 font-mono-tech mt-1">@${item.slug}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-stone-900 font-mono-tech">#${item.block}</div>
+                            <div class="text-xs text-stone-400">${item.date}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${ipfsClass}">
+                                ${item.ipfs}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm ${genClass}">
+                            ${item.genealogy}
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+
+            document.getElementById('recordCount').innerText = data.length;
+        }
+
+        function updateChart(data) {
+            const counts = {
+                'Padres Completos': 0,
+                'Sin padres completos': 0
+            };
+
+            data.forEach(item => {
+                if(counts[item.genealogy] !== undefined) {
+                    counts[item.genealogy]++;
                 }
             });
-            if (currentLine.trim() !== '') {
-                lines.push(currentLine.trim());
-            }
-            return lines;
-        };
 
-        const tooltipConfig = {
-            callbacks: {
-                title: function(tooltipItems) {
-                    const item = tooltipItems[0];
-                    let label = item.chart.data.labels[item.dataIndex];
-                    if (Array.isArray(label)) {
-                        return label.join(' ');
-                    } else {
-                        return label;
-                    }
-                }
-            }
-        };
-
-        const initCharts = () => {
-            const ctxIpfs = document.getElementById('ipfsChart').getContext('2d');
-            const ipfsLabels = [wrapText("Validado Correctamente (IPFS OK)"), wrapText("Error de Red o Nodo Inaccesible")];
+            const ctx = document.getElementById('genealogyChart').getContext('2d');
             
-            new Chart(ctxIpfs, {
+            if (currentChart) {
+                currentChart.destroy();
+            }
+
+            currentChart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: ipfsLabels,
+                    labels: ['Padres Completos', 'Sin Padres Completos'],
                     datasets: [{
-                        data: [92, 8],
-                        backgroundColor: ['#06b6d4', '#e2e8f0'],
+                        data: [counts['Padres Completos'], counts['Sin padres completos']],
+                        backgroundColor: [
+                            '#3b82f6', // blue-500
+                            '#d6d3d1'  // stone-300
+                        ],
                         borderWidth: 0,
                         hoverOffset: 4
                     }]
@@ -307,156 +306,66 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    cutout: '75%',
                     plugins: {
-                        legend: { position: 'bottom', labels: { padding: 20, font: { family: "'Space Grotesk', sans-serif" } } },
-                        tooltip: tooltipConfig
-                    }
-                }
-            });
-
-            const ctxGen = document.getElementById('genealogyChart').getContext('2d');
-            const genLabels = [
-                wrapText("Padres Completos Identificados"), 
-                wrapText("Sin Padres Completos"), 
-                wrapText("Linajes de Origen Desconocido")
-            ];
-
-            new Chart(ctxGen, {
-                type: 'bar',
-                data: {
-                    labels: genLabels,
-                    datasets: [{
-                        label: 'Cantidad de Registros',
-                        data: [650, 420, 170],
-                        backgroundColor: ['#8b5cf6', '#f97316', '#3b82f6'],
-                        borderRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: tooltipConfig
-                    },
-                    scales: {
-                        y: { 
-                            beginAtZero: true, 
-                            grid: { color: '#f1f5f9' },
-                            ticks: { font: { family: "'Space Grotesk', sans-serif" } }
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    family: "'Inter', sans-serif"
+                                },
+                                color: '#57534e'
+                            }
                         },
-                        x: { 
-                            grid: { display: false },
-                            ticks: { font: { family: "'Space Grotesk', sans-serif" } }
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed + ' registros';
+                                    }
+                                    return label;
+                                }
+                            }
                         }
-                    }
+                    },
+                    cutout: '70%'
                 }
             });
-        };
+        }
 
-        const tableData = [
-            {
-                slug: "amixtli-ramirez",
-                title: "Amixtli Ramírez",
-                block: "eCash #802145",
-                date: "2023-10-12",
-                ipfs: "IPFS OK",
-                genealogy: "Padres Completos"
-            },
-            {
-                slug: "chimalma-codices",
-                title: "Chimalma Ramírez: El Xoloitzcuintle en los Códices Mexicas",
-                block: "eCash #805099",
-                date: "2023-11-05",
-                ipfs: "IPFS OK",
-                genealogy: "Sin padres completos"
-            },
-            {
-                slug: "evangelio-rmz",
-                title: "Evangelio RMZ del Xoloitzcuintle",
-                block: "eCash #810220",
-                date: "2023-12-18",
-                ipfs: "IPFS OK",
-                genealogy: "Sin padres completos"
-            },
-            {
-                slug: "linaje-tonalli-base",
-                title: "Fundación Tonalli V1",
-                block: "eCash #795000",
-                date: "2023-08-01",
-                ipfs: "Pendiente",
-                genealogy: "Sin padres completos"
-            },
-            {
-                slug: "xolo-guardian-sur",
-                title: "Guardián del Sur (Registro Secundario)",
-                block: "eCash #812005",
-                date: "2024-01-10",
-                ipfs: "IPFS OK",
-                genealogy: "Padres Completos"
+        window.filterData = function(type, btnElement) {
+            // Update active button styles
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('nav-active');
+                btn.classList.add('text-stone-600', 'hover:bg-stone-200');
+            });
+            btnElement.classList.add('nav-active');
+            btnElement.classList.remove('text-stone-600', 'hover:bg-stone-200');
+
+            let filteredData = sourceData;
+
+            if (type === 'ipfs') {
+                filteredData = sourceData.filter(item => item.ipfs === 'IPFS OK');
+            } else if (type === 'parents') {
+                filteredData = sourceData.filter(item => item.genealogy === 'Padres Completos');
             }
-        ];
 
-        const renderTable = (filter) => {
-            const tbody = document.getElementById('explorer-tbody');
-            tbody.innerHTML = '';
-            let count = 0;
-
-            tableData.forEach(row => {
-                let show = false;
-                if (filter === 'all') show = true;
-                if (filter === 'ipfs' && row.ipfs === 'IPFS OK') show = true;
-                if (filter === 'parents' && row.genealogy === 'Sin padres completos') show = true;
-
-                if (show) {
-                    count++;
-                    const ipfsBadge = row.ipfs === 'IPFS OK' 
-                        ? `<span class="bg-cyan-100 text-cyan-800 py-1 px-3 rounded-full text-xs font-bold flex items-center inline-flex w-max gap-1"><span>✅</span> IPFS OK</span>`
-                        : `<span class="bg-slate-100 text-slate-500 py-1 px-3 rounded-full text-xs font-bold flex items-center inline-flex w-max gap-1"><span>⏳</span> ${row.ipfs}</span>`;
-                    
-                    const genBadge = row.genealogy === 'Padres Completos'
-                        ? `<span class="text-purple-600 font-medium">${row.genealogy}</span>`
-                        : `<span class="text-orange-500 font-medium">${row.genealogy}</span>`;
-
-                    const tr = document.createElement('tr');
-                    tr.className = "hover:bg-slate-50 transition-colors group";
-                    tr.innerHTML = `
-                        <td class="p-4 pl-8">
-                            <div class="font-bold text-slate-900 group-hover:text-orange-600 transition-colors">${row.title}</div>
-                            <div class="text-slate-500 text-xs font-mono mt-1">slug: ${row.slug}</div>
-                        </td>
-                        <td class="p-4">
-                            <div class="font-mono text-slate-700 bg-slate-100 px-2 py-1 rounded inline-block text-xs border border-slate-200">${row.block}</div>
-                            <div class="text-slate-400 text-xs mt-1">${row.date}</div>
-                        </td>
-                        <td class="p-4">${ipfsBadge}</td>
-                        <td class="p-4 pr-8">${genBadge}</td>
-                    `;
-                    tbody.appendChild(tr);
-                }
-            });
-
-            document.getElementById('row-count').innerText = count;
+            renderTable(filteredData);
+            // Optional: Update chart based on filtered data, or keep it global. 
+            // In this context, keeping it global or updating it gives different insights.
+            // Let's update it to reflect the current view.
+            updateChart(filteredData);
         };
 
-        window.filterTable = (filterType) => {
-            const btns = ['btn-all', 'btn-ipfs', 'btn-parents'];
-            btns.forEach(id => {
-                const btn = document.getElementById(id);
-                btn.className = "px-4 py-2 rounded-full text-sm font-semibold transition-all bg-white text-slate-600 border border-slate-200 hover:bg-slate-50";
-            });
+        // Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTable(sourceData);
+            updateChart(sourceData);
+        });
 
-            const activeBtn = document.getElementById('btn-' + filterType);
-            activeBtn.className = "px-4 py-2 rounded-full text-sm font-semibold transition-all bg-slate-900 text-white border border-slate-900 shadow-md";
-
-            renderTable(filterType);
-        };
-
-        window.onload = () => {
-            initCharts();
-            renderTable('all');
-        };
     </script>
 </body>
 </html>
