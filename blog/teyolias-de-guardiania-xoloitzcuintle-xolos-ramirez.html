@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xolos Ramirez: Tradición y Tecnología Web3</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 380px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#f8fafc] text-[#0f172a] font-sans antialiased">
+    <!-- Palette: Energetic Indigo & Orange (#4f46e5, #f97316, #10b981, #0f172a, #f8fafc) -->
+    <!-- Application Structure Plan: Introduction hero section outlining the mission. Section 1 covers the Teyolías Guardianía program with a focus on metrics and criteria using cards and a donut chart. Section 2 covers the NFT Pedigree system with an HTML flow diagram representing the physical-digital link, and a polar area chart outlining the xolosArmy Network pillars. This flow naturally guides the user from the emotional/cultural adoption aspect to the technological/security aspect. -->
+    <!-- Visualization Choices: Data Point 1 (Adoption Criteria) -> Goal: Compare -> Chosen: Donut Chart -> Justification/Method: Shows the balance of traits required for a Teyolia candidate using Chart.js Canvas. Data Point 2 (Physical to Digital Link) -> Goal: Organize/Flow -> Chosen: HTML Flow Diagram -> Justification/Method: Clearly maps the transition from microchip to NFT to family guarantees using structured HTML/Tailwind, explicitly avoiding SVG/Mermaid. Data Point 3 (xolosArmy Pillars) -> Goal: Compare/Inform -> Chosen: Polar Area Chart -> Justification/Method: Illustrates the equal weight of the three architectural pillars using Chart.js Canvas. CONFIRMING NO SVG. -->
+    <!-- CONFIRMATION: NEITHER Mermaid JS NOR SVG were used anywhere in the output. -->
+
+    <nav class="bg-[#4f46e5] text-white p-4 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="text-xl font-bold tracking-wider">🐕 Xolos Ramirez</div>
+            <div class="hidden md:flex space-x-6 font-medium">
+                <a href="#teyolias" class="hover:text-[#f97316] transition-colors">Teyolías Guardianía</a>
+                <a href="#pedigri" class="hover:text-[#f97316] transition-colors">El Pedigrí del Futuro</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="max-w-7xl mx-auto px-4 py-16 text-center">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-[#4f46e5] mb-6">Preservación Ancestral en la Era Digital</h1>
+        <p class="text-xl text-[#0f172a] max-w-3xl mx-auto leading-relaxed">
+            Una inmersión profunda en cómo Xolos Ramirez integra la adopción consciente y cultural con la vanguardia tecnológica de la trazabilidad blockchain para proteger al Xoloitzcuintle.
+        </p>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 pb-20 space-y-20">
+        
+        <section id="teyolias" class="scroll-mt-24">
+            <div class="mb-10 text-center md:text-left">
+                <h2 class="text-3xl font-bold text-[#f97316] mb-4">Programa Teyolías Guardianía</h2>
+                <p class="text-lg leading-relaxed max-w-4xl">
+                    El programa Teyolías Guardianía es un pilar fundamental diseñado para conectar familias con xoloitzcuintles que han alcanzado una etapa de madurez ideal. Funciona bajo un esquema de adopciones especiales profundamente arraigado en una visión cultural, comunitaria y de acompañamiento mutuo, alejándose de las dinámicas comerciales tradicionales.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="space-y-6">
+                    <div class="bg-white rounded-2xl shadow-lg p-8 border-l-8 border-[#4f46e5]">
+                        <div class="flex items-center space-x-4 mb-4">
+                            <span class="text-5xl">⏳</span>
+                            <div>
+                                <h3 class="text-xl font-bold text-[#0f172a]">Madurez Ideal Alcanzada</h3>
+                                <p class="text-sm text-gray-500">Requisito principal del programa</p>
+                            </div>
+                        </div>
+                        <div class="text-5xl font-extrabold text-[#4f46e5] mb-2">6+ Meses</div>
+                        <p class="text-[#0f172a]">Edad mínima requerida para los ejemplares participantes, garantizando un desarrollo físico y temperamental óptimo para la integración familiar.</p>
+                    </div>
+
+                    <div class="bg-[#4f46e5] text-white rounded-2xl shadow-lg p-8">
+                        <h3 class="text-2xl font-bold mb-4 flex items-center">
+                            <span class="mr-3">✨</span> Identificación Web
+                        </h3>
+                        <p class="mb-6">
+                            Los adoptantes pueden identificar fácilmente a estos ejemplares únicos en la plataforma web oficial mediante la etiqueta exclusiva <strong class="bg-[#f97316] px-2 py-1 rounded">Candidato a Teyolía</strong> en sus perfiles.
+                        </p>
+                        <div class="bg-white/10 p-4 rounded-xl border border-white/20">
+                            <div class="text-sm font-semibold mb-2">📬 Suscripción a Boletín</div>
+                            <p class="text-sm opacity-90">Existe la opción de registro por correo electrónico para recibir alertas prioritarias sobre nuevas adopciones especiales de la red.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-lg p-8">
+                    <h3 class="text-xl font-bold text-center mb-2">Equilibrio del Ejemplar Teyolía</h3>
+                    <p class="text-center text-sm text-gray-500 mb-6">Proporción de atributos buscados en la selección del programa</p>
+                    <div class="chart-container">
+                        <canvas id="teyoliasChart"></canvas>
+                    </div>
+                    <p class="mt-6 text-sm text-center text-gray-700 bg-gray-50 p-4 rounded-lg">
+                        El gráfico ilustra el balance perfecto que se busca en un Candidato a Teyolía, donde el acompañamiento y la visión comunitaria tienen tanto peso como la madurez física del ejemplar.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="pedigri" class="scroll-mt-24">
+            <div class="mb-10 text-center md:text-left">
+                <h2 class="text-3xl font-bold text-[#10b981] mb-4">El Pedigrí del Futuro</h2>
+                <p class="text-lg leading-relaxed max-w-4xl">
+                    Más allá de la adopción tradicional, Xolos Ramirez ha desarrollado una innovación tecnológica sin precedentes: el registro NFT de linaje. Este sistema garantiza la trazabilidad absoluta del pedigrí internacional, creando un vínculo inalterable entre la existencia física del animal y su identidad digital en la blockchain.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <div class="lg:col-span-7 bg-white rounded-2xl shadow-lg p-8">
+                    <h3 class="text-2xl font-bold text-center mb-8">Flujo de Trazabilidad: De lo Físico a lo Digital</h3>
+                    
+                    <div class="flex flex-col items-center space-y-4">
+                        <div class="w-full max-w-md bg-gray-50 border-2 border-gray-200 rounded-xl p-6 text-center shadow-sm">
+                            <div class="text-4xl mb-2">🐕</div>
+                            <h4 class="font-bold text-[#0f172a] text-lg">Identificación Física</h4>
+                            <p class="text-sm text-gray-600 mt-2">Microchip implantado y Tatuaje de registro físico en el ejemplar.</p>
+                        </div>
+
+                        <div class="text-3xl text-[#10b981] font-bold">⬇️</div>
+
+                        <div class="w-full max-w-md bg-[#10b981] text-white rounded-xl p-6 text-center shadow-md transform scale-105">
+                            <div class="text-4xl mb-2">🔗</div>
+                            <h4 class="font-bold text-xl">Registro NFT de Linaje</h4>
+                            <p class="text-sm opacity-90 mt-2">"El Pedigrí del Futuro". Token inmutable en la blockchain que asegura la trazabilidad internacional.</p>
+                        </div>
+
+                        <div class="text-3xl text-[#4f46e5] font-bold">⬇️</div>
+
+                        <div class="w-full max-w-md bg-white border-2 border-[#4f46e5] rounded-xl p-6 text-center shadow-sm">
+                            <div class="text-4xl mb-2">👨‍👩‍👧‍👦</div>
+                            <h4 class="font-bold text-[#4f46e5] text-lg">Entrega a la Familia</h4>
+                            <div class="grid grid-cols-2 gap-2 mt-4 text-xs font-semibold text-gray-700">
+                                <div class="bg-gray-100 p-2 rounded">Transferencia del NFT</div>
+                                <div class="bg-gray-100 p-2 rounded">Certificado de Salud</div>
+                                <div class="bg-gray-100 p-2 rounded">Registro de Vacunas</div>
+                                <div class="bg-gray-100 p-2 rounded">Desparasitación</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mt-8 text-sm text-center text-gray-700">
+                        El diagrama muestra el proceso de vinculación. Cuando una familia recibe a su Xoloitzcuintle, obtiene las garantías físicas y médicas convencionales, complementadas con la transferencia de la propiedad digital del NFT.
+                    </p>
+                </div>
+
+                <div class="lg:col-span-5 bg-white rounded-2xl shadow-lg p-8 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-2xl font-bold text-center mb-2">xolosArmy Network</h3>
+                        <p class="text-center text-sm text-gray-500 mb-6">Arquitectura Digital y Cultural</p>
+                        <div class="chart-container">
+                            <canvas id="networkChart"></canvas>
+                        </div>
+                    </div>
+                    <p class="mt-6 text-sm text-gray-700 bg-gray-50 p-4 rounded-lg">
+                        El ecosistema <strong class="text-[#f97316]">xolosArmy Network</strong> se sostiene sobre tres objetivos primordiales y de igual importancia: la protección del linaje genético, la seguridad de la identidad del animal, y la preservación de la memoria histórica de estos guardianes ancestrales.
+                    </p>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-[#0f172a] text-white py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="opacity-80">Visualización de Datos: Xolos Ramirez, Teyolías Guardianía y El Pedigrí del Futuro.</p>
+        </div>
+    </footer>
+
+    <script>
+        function wrapLabel(label) {
+            if (label.length <= 16) return label;
+            const words = label.split(' ');
+            let lines = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + word).length > 16) {
+                    if (currentLine) lines.push(currentLine.trim());
+                    currentLine = word + ' ';
+                } else {
+                    currentLine += word + ' ';
+                }
+            });
+            if (currentLine) lines.push(currentLine.trim());
+            return lines;
+        }
+
+        const tooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        const ctxTeyolias = document.getElementById('teyoliasChart').getContext('2d');
+        const labelsTeyolias = ['Madurez Física (6+ Meses)', 'Visión Cultural y Comunitaria', 'Capacidad de Acompañamiento'].map(wrapLabel);
+        
+        new Chart(ctxTeyolias, {
+            type: 'doughnut',
+            data: {
+                labels: labelsTeyolias,
+                datasets: [{
+                    data: [35, 35, 30],
+                    backgroundColor: [
+                        '#4f46e5',
+                        '#f97316',
+                        '#10b981'
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { family: 'sans-serif' },
+                            padding: 20
+                        }
+                    },
+                    tooltip: tooltipConfig
+                },
+                cutout: '65%'
+            }
+        });
+
+        const ctxNetwork = document.getElementById('networkChart').getContext('2d');
+        const labelsNetwork = ['Proteger el linaje ancestral', 'Proteger la identidad', 'Proteger la memoria'].map(wrapLabel);
+
+        new Chart(ctxNetwork, {
+            type: 'polarArea',
+            data: {
+                labels: labelsNetwork,
+                datasets: [{
+                    data: [100, 100, 100],
+                    backgroundColor: [
+                        'rgba(79, 70, 229, 0.7)',
+                        'rgba(249, 115, 22, 0.7)',
+                        'rgba(16, 185, 129, 0.7)'
+                    ],
+                    borderColor: [
+                        '#4f46e5',
+                        '#f97316',
+                        '#10b981'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        ticks: { display: false },
+                        grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { family: 'sans-serif' },
+                            padding: 15
+                        }
+                    },
+                    tooltip: tooltipConfig
+                }
+            }
+        });
+    </script>
+</body>
+</html>
