@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infografía: Civilización Tonalli - xolosArmy Network</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+body { font-family: 'Outfit', sans-serif; background-color: #0F172A; color: #F8FAFC; }
+.chart-container { position: relative; width: 100%; max-width: 700px; margin-left: auto; margin-right: auto; height: 350px; max-height: 400px; }
+@media (min-width: 768px) { .chart-container { height: 400px; } }
+.glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 1rem; }
+.text-gradient { background: linear-gradient(to right, #F97316, #FBBF24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.process-line { position: absolute; top: 50%; left: 50%; width: 100%; height: 4px; background: #06B6D4; transform: translateY(-50%); z-index: -1; }
+@media (max-width: 767px) { .process-line { width: 4px; height: 100%; top: 50%; left: 50%; transform: translateX(-50%); } }
+</style>
+<!-- Chosen Palette: Energetic Night - Deep Navy (#0F172A) background, Terracotta/Orange (#F97316) for physical/Xolo elements, Bright Yellow (#FBBF24) for highlights, Cyan (#06B6D4) for digital/crypto elements. -->
+<!-- Application Structure Plan: The SPA is divided into three main logical sections matching the source narrative: 1) The Core Philosophy (Problem vs Solution regarding digital identity), 2) The Physical-to-Digital Process Flow (How to acquire a Tonalli), and 3) The Oráculo XOLO Dashboard (Visualizing the blockchain records). A top-down scrollable narrative provides a seamless educational journey. -->
+<!-- Visualization & Content Choices: 
+1. Problem/Solution -> Goal: Compare -> Viz: Side-by-side Glass Cards -> Justification: High contrast comparison without SVG, using CSS and Unicode. 
+2. Connection Process -> Goal: Organize/Process -> Viz: HTML/CSS Flexbox Flowchart -> Justification: Clearly maps the 3-step physical-to-digital journey. No Mermaid used. 
+3. Blockchain Records -> Goal: Compare Composition -> Viz: Chart.js Donut Chart -> Justification: Shows the distribution of cultural memory types in the Oráculo. 
+4. Network Growth -> Goal: Change over Time -> Viz: Chart.js Bar Chart -> Justification: Conceptualizes the growth of verifiable lineages to provide quantitative context. 
+CONFIRMING NO SVG/Mermaid. -->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="antialiased min-h-screen pb-20">
+
+<header class="pt-20 pb-12 px-6 text-center max-w-5xl mx-auto">
+<div class="text-7xl mb-6">🐕 🔗 💻</div>
+<h1 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight">
+Civilización <span class="text-gradient">Tonalli</span>
+</h1>
+<p class="text-xl md:text-2xl text-slate-300 font-light mb-8 max-w-3xl mx-auto">
+El puente definitivo entre la herencia cultural física del Xoloitzcuintle y la identidad digital criptográfica en la red xolosArmy.
+</p>
+<div class="inline-block bg-slate-800 rounded-full px-6 py-2 text-sm font-semibold text-cyan-400 border border-cyan-900 shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+Linaje Verificable en la Web3
+</div>
+</header>
+
+<main class="max-w-6xl mx-auto px-6 space-y-24">
+
+<section id="inmutabilidad" class="scroll-mt-10">
+<div class="text-center mb-10">
+<h2 class="text-3xl font-bold mb-4">El Xoloitzcuintle como Guía y Símbolo</h2>
+<p class="text-slate-400 max-w-2xl mx-auto text-lg">
+En un ecosistema digital moderno donde las identidades se fragmentan, el Xoloitzcuintle emerge como un guardián de la inmutabilidad, ofreciendo un registro incorruptible del origen y aportaciones de cada ciudadano.
+</p>
+</div>
+<div class="grid md:grid-cols-2 gap-8">
+<div class="glass-card p-8 border-t-4 border-t-slate-600 hover:transform hover:-translate-y-2 transition-transform duration-300">
+<div class="text-4xl mb-4">⚠️</div>
+<h3 class="text-2xl font-bold mb-3 text-slate-200">El Problema: Fragmentación Digital</h3>
+<p class="text-slate-400">
+En los ecosistemas digitales actuales, los usuarios son reducidos a simples datos. Las identidades carecen de historia, ética o conexión con el mundo real, facilitando la pérdida de propósito y la desconexión humana.
+</p>
+</div>
+<div class="glass-card p-8 border-t-4 border-t-orange-500 shadow-[0_0_30px_rgba(249,115,22,0.15)] hover:transform hover:-translate-y-2 transition-transform duration-300">
+<div class="text-4xl mb-4">🛡️</div>
+<h3 class="text-2xl font-bold mb-3 text-orange-400">La Solución: Linaje Verificable</h3>
+<p class="text-slate-400">
+Inspirado en la herencia ancestral del Xoloitzcuintle, el Linaje Verificable otorga a cada ciudadano un registro inmutable. Detrás del código existe una historia humana real y comprobable.
+</p>
+</div>
+</div>
+</section>
+
+<section id="tonalli" class="scroll-mt-10">
+<div class="text-center mb-12">
+<h2 class="text-3xl font-bold mb-4">La Conexión Físico-Digital (Tonalli)</h2>
+<p class="text-slate-400 max-w-2xl mx-auto text-lg">
+La red Tonalli no existe únicamente en el plano digital. Para formar parte de esta historia irreversible, se requiere una interacción directa con el linaje físico, creando un puente hacia tu Capa Humana en código.
+</p>
+</div>
+<div class="relative py-10">
+<div class="process-line hidden md:block"></div>
+<div class="grid md:grid-cols-3 gap-10 relative z-10">
+<div class="glass-card p-8 text-center border-2 border-orange-500 bg-slate-900">
+<div class="w-16 h-16 mx-auto bg-orange-500 rounded-full flex items-center justify-center text-3xl mb-4 shadow-[0_0_20px_rgba(249,115,22,0.5)]">🧬</div>
+<h4 class="text-xl font-bold text-orange-400 mb-2">1. Nodo Criador Matriz</h4>
+<p class="text-sm text-slate-300">
+Todo se origina en "Xolos Ramírez", el guardián principal del linaje físico de la civilización.
+</p>
+</div>
+<div class="glass-card p-8 text-center border-2 border-yellow-400 bg-slate-900">
+<div class="w-16 h-16 mx-auto bg-yellow-400 rounded-full flex items-center justify-center text-3xl mb-4 text-slate-900 shadow-[0_0_20px_rgba(251,191,36,0.5)]">🐕</div>
+<h4 class="text-xl font-bold text-yellow-400 mb-2">2. Adopción Física</h4>
+<p class="text-sm text-slate-300">
+El ciudadano adopta un Xoloitzcuintle en el mundo real, reclamando su lugar en la historia.
+</p>
+</div>
+<div class="glass-card p-8 text-center border-2 border-cyan-400 bg-slate-900">
+<div class="w-16 h-16 mx-auto bg-cyan-400 rounded-full flex items-center justify-center text-3xl mb-4 shadow-[0_0_20px_rgba(6,182,212,0.5)]">⚡</div>
+<h4 class="text-xl font-bold text-cyan-400 mb-2">3. Activación Tonalli</h4>
+<p class="text-sm text-slate-300">
+Se activa la "Capa Humana" e identidad criptográfica en la red, anclada al linaje del perro.
+</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="blockchain" class="scroll-mt-10 mb-20">
+<div class="text-center mb-12">
+<h2 class="text-3xl font-bold mb-4">Registro de Memoria: El Oráculo XOLO</h2>
+<p class="text-slate-400 max-w-2xl mx-auto text-lg">
+Mediante la tecnología blockchain, la red mantiene un "Archivo del Linaje Vivo". Los registros ligan directamente la cultura del perro con la cadena de bloques, garantizando una memoria cultural perpetua.
+</p>
+</div>
+
+<div class="grid lg:grid-cols-2 gap-10">
+<div class="glass-card p-6 flex flex-col">
+<h3 class="text-xl font-semibold mb-2 text-center text-slate-200">Categorías de Memoria en el Archivo Vivo</h3>
+<p class="text-sm text-slate-400 text-center mb-6">Distribución conceptual de los registros temáticos anclados en el Oráculo XOLO mediante blockchain.</p>
+<div class="chart-container flex-grow">
+<canvas id="memoriaChart"></canvas>
+</div>
+</div>
+
+<div class="glass-card p-6 flex flex-col">
+<h3 class="text-xl font-semibold mb-2 text-center text-slate-200">Proyección de Adopciones Tonalli</h3>
+<p class="text-sm text-slate-400 text-center mb-6">Crecimiento estimado de ciudadanos activando su identidad digital a través del linaje físico.</p>
+<div class="chart-container flex-grow">
+<canvas id="crecimientoChart"></canvas>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+
+<footer class="border-t border-slate-800 bg-slate-900 py-8 text-center">
+<p class="text-slate-500 font-light">
+"Detrás de las máquinas y el código existe una ética, un propósito y una historia humana incorruptible."
+</p>
+<div class="mt-4 text-2xl">🐕 🏛️ 💻</div>
+</footer>
+
+<script>
+const wrapLabel = (text) => {
+    if (text.length <= 16) return text;
+    const words = text.split(' ');
+    const lines = [];
+    let currentLine = '';
+    words.forEach(word => {
+        if ((currentLine + word).length > 16) {
+            if (currentLine) lines.push(currentLine.trim());
+            currentLine = word + ' ';
+        } else {
+            currentLine += word + ' ';
+        }
+    });
+    if (currentLine) lines.push(currentLine.trim());
+    return lines;
+};
+
+const labelsMemoriaRaw = [
+    "Códices Mexicas (Contexto Histórico)",
+    "Evangelio RMZ (Filosofía Central)",
+    "Personalidad Xolo (Atributos Psicológicos)"
+];
+const labelsMemoriaWrapped = labelsMemoriaRaw.map(wrapLabel);
+
+const ctxMemoria = document.getElementById('memoriaChart').getContext('2d');
+new Chart(ctxMemoria, {
+    type: 'doughnut',
+    data: {
+        labels: labelsMemoriaWrapped,
+        datasets: [{
+            data: [35, 45, 20],
+            backgroundColor: [
+                '#F97316', 
+                '#06B6D4', 
+                '#FBBF24'  
+            ],
+            borderColor: '#0F172A',
+            borderWidth: 4,
+            hoverOffset: 10
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    color: '#cbd5e1',
+                    font: { family: 'Outfit', size: 13 },
+                    padding: 20
+                }
+            },
+            tooltip: {
+                backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                titleFont: { size: 14, family: 'Outfit' },
+                bodyFont: { size: 14, family: 'Outfit' },
+                padding: 12,
+                callbacks: {
+                    title: function(tooltipItems) {
+                        const item = tooltipItems[0];
+                        let label = item.chart.data.labels[item.dataIndex];
+                        if (Array.isArray(label)) {
+                            return label.join(' ');
+                        } else {
+                            return label;
+                        }
+                    },
+                    label: function(context) {
+                        return ' Proporción: ' + context.parsed + '%';
+                    }
+                }
+            }
+        },
+        cutout: '65%'
+    }
+});
+
+const labelsCrecimientoRaw = ["Año 1", "Año 2", "Año 3", "Año 4", "Año 5"];
+const ctxCrecimiento = document.getElementById('crecimientoChart').getContext('2d');
+new Chart(ctxCrecimiento, {
+    type: 'bar',
+    data: {
+        labels: labelsCrecimientoRaw,
+        datasets: [{
+            label: 'Tonallis Activados',
+            data: [50, 180, 420, 850, 1500],
+            backgroundColor: '#06B6D4',
+            borderRadius: 6,
+            hoverBackgroundColor: '#22d3ee'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: {
+                    color: 'rgba(148, 163, 184, 0.1)',
+                    drawBorder: false
+                },
+                ticks: {
+                    color: '#94a3b8',
+                    font: { family: 'Outfit' }
+                }
+            },
+            x: {
+                grid: {
+                    display: false
+                },
+                ticks: {
+                    color: '#94a3b8',
+                    font: { family: 'Outfit' }
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: false
+            },
+            tooltip: {
+                backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                titleFont: { size: 14, family: 'Outfit' },
+                bodyFont: { size: 14, family: 'Outfit' },
+                padding: 12,
+                callbacks: {
+                    title: function(tooltipItems) {
+                        const item = tooltipItems[0];
+                        let label = item.chart.data.labels[item.dataIndex];
+                        if (Array.isArray(label)) {
+                            return label.join(' ');
+                        } else {
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    }
+});
+</script>
+</body>
+</html>
