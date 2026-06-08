@@ -2112,7 +2112,9 @@ document.addEventListener('click', function(e){
       ecash: {
         chains: [ECASH_CHAIN],
         methods: ["ecash_getAddresses", "ecash_signMessage"],
-        events: ["accountsChanged", "chainChanged"],
+        // Tonalli Wallet actualmente declara events: []; mantenerlo vacío evita
+        // que WalletConnect rechace la sesión por exigir eventos no soportados.
+        events: [],
       },
     };
 
