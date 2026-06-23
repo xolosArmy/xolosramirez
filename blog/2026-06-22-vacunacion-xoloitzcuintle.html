@@ -100,6 +100,47 @@
             color: var(--primary-color);
         }
 
+        /* --- ESTILOS PARA LA CAJA DEL NFT --- */
+        .nft-box {
+            background-color: #f4f6f9;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .nft-box h4 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .nft-txid {
+            font-family: monospace;
+            word-break: break-all;
+            background: #e1e5ea;
+            padding: 5px 8px;
+            border-radius: 4px;
+            color: #555;
+            display: block;
+            margin-top: 5px;
+        }
+
+        .nft-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #3498db;
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nft-link:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+
+        /* --- ESTILOS PARA EL LLAMADO A LA ACCIÓN --- */
         .cta-box {
             background-color: #e8f8f5;
             border-left: 4px solid var(--secondary-color);
@@ -172,7 +213,17 @@
             </ul>
 
             <h2>Transparencia Total y Registro Blockchain</h2>
-            <p>Para nosotros, la confianza de nuestros clientes lo es todo. Durante la sesión, mostramos en tiempo real el llenado de los pasaportes de salud (carnets). Desprendimos las etiquetas oficiales de los frascos de las vacunas y las adherimos a los expedientes de Ónix, Luna, Mixza y Chimalma. Además, como parte de nuestro proceso de vanguardia, esta vacunación se registrará en la <em>blockchain</em> mediante un NFT (Token No Fungible), garantizando un historial médico inalterable, transparente y de acceso público.</p>
+            <p>Para nosotros, la confianza de nuestros clientes lo es todo. Durante la sesión, mostramos en tiempo real el llenado de los pasaportes de salud (carnets). Desprendimos las etiquetas oficiales de los frascos de las vacunas y las adherimos a los expedientes de Ónix, Luna, Mixza y Chimalma.</p>
+
+            <p>Como parte de nuestro proceso de vanguardia, <strong>esta vacunación ha sido registrada oficialmente en la <em>blockchain</em></strong> mediante el minteo de un NFT (Token No Fungible) a través de la Tonalli Wallet. Esto garantiza un historial médico inalterable, transparente y de acceso público para siempre, brindando la máxima seguridad a las nuevas familias de nuestros Xolos.</p>
+
+            <!-- Caja de Información NFT -->
+            <div class="nft-box">
+                <h4>🔗 Certificado Oficial Blockchain (NFT)</h4>
+                <p><strong>ID de Transacción (Txid):</strong></p>
+                <span class="nft-txid">0b0a16a49d2a1d045cfba864ef00f207eea5b6d31caff4be845b311df3256296</span>
+                <a href="https://explorer.xolosarmy.xyz/tx/0b0a16a49d2a1d045cfba864ef00f207eea5b6d31caff4be845b311df3256296" target="_blank" class="nft-link">Ver transacción en el explorador de XolosArmy ➔</a>
+            </div>
 
             <p>Agradecemos enormemente a todos los que nos acompañaron durante el <em>en vivo</em>. Leer sus comentarios y saludos, en especial desde lugares como Playa del Carmen con nuestra querida amiga Lola y su xolo Yanga, nos motiva a seguir haciendo las cosas con el mayor nivel de excelencia.</p>
 
