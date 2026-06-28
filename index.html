@@ -27,6 +27,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     />
     <meta property="og:image" content="https://xolosramirez.com/img/hero/site-hero.jpg" />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://xolosramirez.com/" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Xolos Ramírez – Comunidad dedicada al xoloitzcuintle" />
     <meta
@@ -34,7 +35,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       content="Descubre la comunidad Xolos Ramírez: historia, adopciones responsables, galería y testimonios sobre el xoloitzcuintle en México."
     />
     <meta name="twitter:image" content="https://xolosramirez.com/img/hero/site-hero.jpg" />
-    <link rel="alternate" hreflang="es" href="https://xolosramirez.com/" />
+    <link rel="alternate" hreflang="es-MX" href="https://xolosramirez.com/" />
     <link rel="alternate" hreflang="en" href="https://xolosramirez.com/en/index.html" />
     <link rel="alternate" hreflang="x-default" href="https://xolosramirez.com/" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -46,6 +47,31 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="icon" type="image/x-icon" href="assets/xolosramirez.ico" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": "https://xolosramirez.com/#business",
+        "name": "Xolos Ramírez",
+        "url": "https://xolosramirez.com/",
+        "image": ["https://xolosramirez.com/img/hero/site-hero.jpg"],
+        "description": "Criadero de Xoloitzcuintles en Ciudad de México con acompañamiento real, adopción responsable y entregas nacionales e internacionales.",
+        "email": "fernando@xolosramirez.com",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Calle Coquimbo",
+          "addressLocality": "Ciudad de México",
+          "addressRegion": "CDMX",
+          "addressCountry": "MX"
+        },
+        "sameAs": [
+          "https://www.youtube.com/@xolosramirez",
+          "https://x.com/xolosramirez1",
+          "https://www.tiktok.com/@xolosramirez"
+        ],
+        "areaServed": ["MX", "US", "CA"]
+      }
+    </script>
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->
@@ -233,7 +259,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <a href="teyolias-guardiania.html" style="font-weight: 600; color: var(--accent-color);">Descubre su historia y cómo participar →</a>
           <p class="callout" style="margin-top: 15px; font-size: 0.9rem;">
             <a href="mailto:contacto@xolosarmy.xyz?subject=%5BXOLOS%5D%20event%3Dwaitlist%20puppy%3Dgeneral&body=context_event%3Dwaitlist%0Acontext_puppy%3Dgeneral%0Acontext_name%3Dgeneral%0A%0AHola%2C%20me%20gustar%C3%ADa%20unirme%20a%20la%20lista%20de%20espera%20de%20Xolos%20Ram%C3%ADrez."
-               style="color: #666; text-decoration: underline;">
+               style="color: #666; text-decoration: underline;" class="cta-lead cta-email" data-cta="email" data-lead-type="generate_lead" data-profile="general" data-page-type="home" data-lang="es" aria-label="Escribir por correo a Xolos Ramírez">
                Conoce el programa y cómo participar →
               <p class="callout" style="margin-top: 15px; font-size: 0.9rem;">
       Los candidatos aparecerán identificados con la etiqueta <strong>✨ Candidato a Teyolía</strong> dentro de los perfiles disponibles.
@@ -384,8 +410,8 @@ NFTs de Linaje Xoloitzcuintle</a></li>
           <p style="color: #e0d5c1; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.6;">Descubre qué influye en el valor de esta raza milenaria, el impacto de su linaje y todo lo que incluye nuestro exclusivo programa de crianza y entregas.</p>
           <a href="blog/precio-xoloitzcuintle.html" class="btn" style="background-color: var(--color-dorado, #d4af37); color: #111; font-weight: 800; padding: 1rem 2rem; border-radius: 999px; text-decoration: none; display: inline-block;">Ver guía de Precios y Qué Incluye</a>
         </div>
-    -->
       </div>
+    -->
     </main>
 
     <footer>
@@ -442,7 +468,7 @@ NFTs de Linaje Xoloitzcuintle</a></li>
       rel="noopener noreferrer"
       data-gtm="email-floating"
       onclick="dataLayer.push({ event: 'click_email', source: 'floating_button' })"
-    >
+     data-cta="email" data-lead-type="generate_lead" data-profile="general" data-page-type="home" data-lang="es" aria-label="Escribir por correo a Xolos Ramírez">
       <span>✉️ Escríbenos por correo</span>
     </a>
   </body>

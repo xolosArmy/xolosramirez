@@ -1,0 +1,16 @@
+{
+  "name": "xolosramirez-site-audits",
+  "private": true,
+  "scripts": {
+    "lint:html": "htmlhint \"**/*.html\" --ignore \"node_modules/**\"",
+    "lint:links": "linkinator https://xolosramirez.com --recurse --silent",
+    "test:lighthouse:home": "lighthouse https://xolosramirez.com --only-categories=performance,accessibility,best-practices,seo --preset=desktop --output=html --output-path=./reports/lighthouse-home.html",
+    "test:lighthouse:available": "lighthouse https://xolosramirez.com/xolos-disponibles.html --only-categories=performance,accessibility,best-practices,seo --preset=desktop --output=html --output-path=./reports/lighthouse-available.html",
+    "test:lighthouse:contact": "lighthouse https://xolosramirez.com/contacto.html --only-categories=performance,accessibility,best-practices,seo --preset=desktop --output=html --output-path=./reports/lighthouse-contact.html"
+  },
+  "devDependencies": {
+    "htmlhint": "^1.4.6",
+    "linkinator": "^6.1.2",
+    "lighthouse": "^12.2.0"
+  }
+}

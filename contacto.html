@@ -27,6 +27,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     />
     <meta property="og:image" content="https://xolosramirez.com/img/hero/site-hero.jpg" />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://xolosramirez.com/contacto.html" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Contacto y asesoría sobre xoloitzcuintles | Xolos Ramírez" />
     <meta
@@ -34,9 +35,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       content="Solicita información de adopciones, colaboraciones y eventos del xoloitzcuintle con el equipo especializado de Xolos Ramírez."
     />
     <meta name="twitter:image" content="https://xolosramirez.com/img/hero/site-hero.jpg" />
-    <link rel="alternate" hreflang="es" href="https://xolosramirez.com/contacto.html" />
+    <link rel="alternate" hreflang="es-MX" href="https://xolosramirez.com/contacto.html" />
     <link rel="alternate" hreflang="en" href="https://xolosramirez.com/en/contact.html" />
-    <link rel="alternate" hreflang="x-default" href="https://xolosramirez.com/" />
+    <link rel="alternate" hreflang="x-default" href="https://xolosramirez.com/contacto.html" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -46,6 +47,31 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="icon" type="image/x-icon" href="assets/xolosramirez.ico" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": "https://xolosramirez.com/#business",
+        "name": "Xolos Ramírez",
+        "url": "https://xolosramirez.com/",
+        "image": ["https://xolosramirez.com/img/hero/site-hero.jpg"],
+        "description": "Criadero de Xoloitzcuintles en Ciudad de México con acompañamiento real, adopción responsable y entregas nacionales e internacionales.",
+        "email": "fernando@xolosramirez.com",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Calle Coquimbo",
+          "addressLocality": "Ciudad de México",
+          "addressRegion": "CDMX",
+          "addressCountry": "MX"
+        },
+        "sameAs": [
+          "https://www.youtube.com/@xolosramirez",
+          "https://x.com/xolosramirez1",
+          "https://www.tiktok.com/@xolosramirez"
+        ],
+        "areaServed": ["MX", "US", "CA"]
+      }
+    </script>
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->
@@ -79,7 +105,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <ul>
             <li><a href="index.html">Inicio</a></li>
             <li><a href="xolos-disponibles.html">Xolos disponibles</a></li>
-            <li><a href="galeria.html">Galería</a></li>
             <li><a href="testimonios.html">Testimonios</a></li>
             <li><a href="blog/index.html">Blog</a></li>
             <li><a href="contacto.html">Contacto</a></li>
@@ -139,7 +164,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <label for="mensaje">Mensaje</label>
             <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
           </div>
-          <button type="submit">Enviar mensaje</button>
+          <button type="submit" data-cta="contact-form" data-lead-type="generate_lead" data-profile="general" data-page-type="contact" data-lang="es" aria-label="Enviar formulario de contacto">Enviar mensaje</button>
         </form>
       </section>
 
@@ -216,7 +241,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       rel="noopener noreferrer"
       data-gtm="email-floating"
       onclick="dataLayer.push({ event: 'click_email', source: 'floating_button' })"
-    >
+     data-cta="email" data-lead-type="generate_lead" data-profile="general" data-page-type="contact" data-lang="es" aria-label="Escribir por correo a Xolos Ramírez">
       <span>✉️ Escríbenos por correo</span>
     </a>
   </body>
