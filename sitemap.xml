@@ -1,76 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-
-  <!-- Home (Español e Inglés) -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://xolosramirez.com/</loc>
-    <lastmod>2026-06-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://xolosramirez.com/en/index.html" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://xolosramirez.com/" />
   </url>
-  <url>
-    <loc>https://xolosramirez.com/en/index.html</loc>
-    <lastmod>2026-06-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- Páginas Comerciales Principales -->
   <url>
     <loc>https://xolosramirez.com/xolos-disponibles.html</loc>
-    <lastmod>2026-06-07</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://xolosramirez.com/en/available-xolos.html" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://xolosramirez.com/xolos-disponibles.html" />
-  </url>
-  <url>
-    <loc>https://xolosramirez.com/en/available-xolos.html</loc>
-    <lastmod>2026-06-07</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- Páginas de Apoyo y Conversión -->
-  <url>
-    <loc>https://xolosramirez.com/testimonios.html</loc>
-    <lastmod>2026-06-07</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://xolosramirez.com/contacto.html</loc>
-    <lastmod>2026-06-07</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
   </url>
-
-  <!-- Clúster Educativo / Intención Media -->
+  <url>
+    <loc>https://xolosramirez.com/testimonios.html</loc>
+  </url>
+  <url>
+    <loc>https://xolosramirez.com/blog/index.html</loc>
+  </url>
   <url>
     <loc>https://xolosramirez.com/blog/precio-xoloitzcuintle.html</loc>
-    <lastmod>2026-06-07</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://xolosramirez.com/blog/guia-tallas-xoloitzcuintle.html</loc>
-    <lastmod>2026-06-07</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://xolosramirez.com/blog/xoloitzcuintle-temperamento.html</loc>
-    <lastmod>2026-06-07</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://xolosramirez.com/blog/xoloitzcuintle-miniatura.html</loc>
-    <lastmod>2026-06-07</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <loc>https://xolosramirez.com/blog/xoloitzcuintle-alimentacion.html</loc>
   </url>
-
+  <url>
+    <loc>https://xolosramirez.com/en/index.html</loc>
+  </url>
+  <url>
+    <loc>https://xolosramirez.com/en/available-xolos.html</loc>
+  </url>
+  <url>
+    <loc>https://xolosramirez.com/en/contact.html</loc>
+  </url>
+  <url>
+    <loc>https://xolosramirez.com/en/blog/index.html</loc>
+  </url>
 </urlset>
