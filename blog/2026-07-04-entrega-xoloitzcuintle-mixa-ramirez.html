@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Una Nueva Historia que Une Tradición Milenaria y Tecnología: La Entrega de Mixa Ramírez</title>
+    <style>
+        :root {
+            --primary-color: #b3391b; /* Terracota mexicano tradicional */
+            --secondary-color: #2c2c2c; /* Carbón oscuro moderno */
+            --accent-color: #e07a5f; /* Arcilla clara */
+            --bg-color: #fbf9f6; /* Crema suave orgánico */
+            --card-bg: #ffffff;
+            --text-color: #3a3a3a;
+            --muted-text: #707070;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header.blog-header {
+            text-align: center;
+            padding: 50px 0 30px 0;
+            border-bottom: 2px solid var(--accent-color);
+            margin-bottom: 40px;
+        }
+
+        header.blog-header h1.blog-brand {
+            font-family: 'Georgia', serif;
+            font-size: 2.8rem;
+            color: var(--primary-color);
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: bold;
+        }
+
+        header.blog-header p.tagline {
+            font-size: 1.1rem;
+            color: var(--muted-text);
+            margin: 8px 0 0 0;
+            font-style: italic;
+            letter-spacing: 1px;
+        }
+
+        article.blog-post {
+            background-color: var(--card-bg);
+            padding: 50px 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        .meta-info {
+            font-size: 0.95rem;
+            color: var(--muted-text);
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .meta-info span strong {
+            color: var(--secondary-color);
+        }
+
+        h1.entry-title {
+            font-family: 'Georgia', serif;
+            font-size: 2.4rem;
+            color: var(--secondary-color);
+            line-height: 1.3;
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+        p.excerpt {
+            font-size: 1.25rem;
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-bottom: 35px;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        h2 {
+            font-family: 'Georgia', serif;
+            color: var(--primary-color);
+            font-size: 1.7rem;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--primary-color);
+            padding-left: 15px;
+        }
+
+        p {
+            margin-bottom: 22px;
+            text-align: justify;
+            font-size: 1.1rem;
+        }
+
+        .video-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 45px 0;
+            background-color: #f7f3ed;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #eadecc;
+        }
+
+        .video-wrapper {
+            width: 100%;
+            max-width: 340px;
+            aspect-ratio: 9 / 16;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+        }
+
+        .video-caption {
+            font-size: 0.95rem;
+            color: var(--muted-text);
+            margin-top: 15px;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .highlight-box {
+            background-color: #fdf5f2;
+            border-left: 5px solid var(--accent-color);
+            padding: 25px;
+            margin: 35px 0;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .highlight-box h3 {
+            margin-top: 0;
+            color: var(--secondary-color);
+            font-family: 'Georgia', serif;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .highlight-box p {
+            margin-bottom: 0;
+            font-size: 1.05rem;
+        }
+
+        .share-section {
+            margin-top: 50px;
+            padding-top: 25px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background-color: #f0ebea;
+            color: var(--secondary-color);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .tag:hover {
+            background-color: var(--accent-color);
+            color: #fff;
+        }
+
+        footer.blog-footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 30px 0;
+            font-size: 0.95rem;
+            color: var(--muted-text);
+            border-top: 1px solid #eadecc;
+        }
+
+        @media (max-width: 600px) {
+            header.blog-header h1.blog-brand { font-size: 2rem; }
+            article.blog-post { padding: 30px 20px; }
+            h1.entry-title { font-size: 1.8rem; }
+            p { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header class="blog-header">
+            <h1 class="blog-brand">Xolos Ramírez</h1>
+            <p class="tagline">Preservando el legado milenario con visión de futuro</p>
+        </header>
+
+        <main>
+            <article class="blog-post">
+                <div class="meta-info">
+                    <span>📅 Fecha: <strong>4 de Julio, 2026</strong></span>
+                    <span>✍️ Autor: <strong>Equipo Xolos Ramírez</strong></span>
+                    <span>📂 Categoría: <strong>Entregas Especiales</strong></span>
+                </div>
+
+                <h1 class="entry-title">Una Nueva Historia que Une Tradición Milenaria y Tecnología: La Entrega de Mixa Ramírez</h1>
+                
+                <p class="excerpt">
+                    En Xolos Ramírez celebramos cada oportunidad en la que uno de nuestros amados cachorros encuentra un hogar lleno de calidez. Hoy compartimos la emotiva entrega de la preciosa Mixa Ramírez a su nueva familia: Alejandro y Victoria.
+                </p>
+
+                <p>
+                    La crianza y entrega de un Xoloitzcuintle va mucho más allá de un proceso convencional; representa transferir la custodia de un tesoro vivo de la cultura y herencia mexicana. En una tarde amena y llena de expectativas, nos reunimos con Alejandro y Victoria para formalizar este momento tan esperado y dar la bienvenida oficial a la adorable <strong>Mixa</strong> a sus vidas.
+                </p>
+
+                <h2>Un Vínculo Instantáneo en Familia</h2>
+                <p>
+                    Desde el primer instante del encuentro, la conexión entre Mixa y sus nuevos protectores fue evidente. Sostenida firmemente y con suma ternura en los brazos de Alejandro, la pequeña cachorrita se mostró dócil, tranquila y receptiva al afecto. Victoria, con una gran sonrisa que reflejaba la felicidad del momento, no ocultó su entusiasmo por comenzar esta nueva etapa acompañados de una raza tan noble y mística.
+                </p>
+                
+                <p>
+                    Durante nuestra charla, conversamos un poco acerca de su día a día y planes a futuro. Actualmente, la pareja reside aquí en México, disfrutando de la riqueza de nuestro entorno, aunque compartieron la posibilidad de emprender una aventura internacional y mudarse a Argentina el próximo año. Sin importar el destino, estamos plenamente seguros de que Mixa será la compañera perfecta y una excelente embajadora de la cultura mexicana en cualquier parte del mundo.
+                </p>
+
+                <div class="video-container">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/HQqw-AiJrws" title="Entrega de Xoloitzcuintle Mixa Ramírez" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-caption">Momento exacto de la entrega de Mixa con Alejandro y Victoria.</div>
+                </div>
+
+                <h2>Innovando el Legado: Certificado de Linaje en Formato NFT</h2>
+                <p>
+                    En Xolos Ramírez creemos firmemente que la protección de una raza ancestral no está peleada con la adopción tecnológica contemporánea. Es por ello que, además de la entrega física y el seguimiento tradicional, ofrecimos a Alejandro y Victoria una propuesta de vanguardia: <strong>el certificado de linaje de Mixa en formato NFT (Token No Fungible)</strong>.
+                </p>
+                
+                <p>
+                    Esta innovadora iniciativa permite registrar de manera digital, inmutable y totalmente transparente el árbol genealógico y la autenticidad de la cachorrita dentro de la blockchain. Aunque Alejandro comentó entre risas que aún no contaba con una billetera digital configurada para coleccionables Web3 en su dispositivo móvil, le aseguramos que el proceso es sumamente sencillo. 
+                </p>
+
+                <div class="highlight-box">
+                    <h3>Abriendo las puertas al futuro con Tonalli Wallet</h3>
+                    <p>
+                        Para facilitar este paso tecnológico, nuestro equipo guiará a la familia en el uso de la <strong>Tonalli Wallet</strong>, una herramienta intuitiva diseñada para almacenar de forma segura las credenciales digitales y el historial de linaje de Mixa, asegurando que su registro permanezca imborrable a lo largo del tiempo.
+                    </p>
+                </div>
+
+                <p>
+                    Nos llena de orgullo saber que nuestros ejemplares no solo llevan consigo miles de años de misticismo e historia prehispánica, sino que también caminan de la mano con las herramientas del mañana. Agradecemos profundamente a Alejandro y Victoria por su confianza, su calidez y por abrirle las puertas de su hogar a Mixa Ramírez. ¡Les deseamos una vida repleta de alegrías, salud y memorias inolvidables juntos!
+                </p>
+
+                <div class="share-section">
+                    <div class="tags">
+                        <a href="#" class="tag">#XolosRamirez</a>
+                        <a href="#" class="tag">#Xoloitzcuintle</a>
+                        <a href="#" class="tag">#MascotasMexico</a>
+                        <a href="#" class="tag">#Web3Dogs</a>
+                        <a href="#" class="tag">#TonalliWallet</a>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--muted-text);">
+                        ¿Te gustó este artículo? ¡Compártelo!
+                    </div>
+                </div>
+            </article>
+        </main>
+
+        <footer class="blog-footer">
+            <p>&copy; 2026 Xolos Ramírez. Todos los derechos reservados. Preservando leyendas, construyendo el futuro.</p>
+        </footer>
+    </div>
+
+</body>
+</html>
