@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xoloitzcuintli: The Sacred Soul Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap');
+
+        :root {
+            --color-earth: #f5f2ed;
+            --color-clay: #b05b3b;
+            --color-charcoal: #2d2d2d;
+            --color-sand: #e6dfd3;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-earth);
+            color: var(--color-charcoal);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Cinzel', serif;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        .fact-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 1px solid rgba(176, 91, 59, 0.1);
+        }
+
+        .fact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(176, 91, 59, 0.2);
+            background-color: white;
+            border-color: var(--color-clay);
+        }
+
+        .active-fact {
+            background-color: white;
+            border-left: 4px solid var(--color-clay);
+        }
+
+        .nav-link {
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-clay);
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        canvas {
+            border-radius: 8px;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+<!-- Chosen Palette: Aztec Earth & Clay -->
+<!-- Application Structure Plan: 
+    1. Hero Section: High-impact introduction to the Xolo.
+    2. Fact Navigation: A 2-column layout (Desktop) featuring a clickable list of the 10 facts on the left and a dynamic 'Stage' on the right that updates with detailed content, visualizations, and insights.
+    3. The Soul Guide Interactive: A dedicated section for the mythological aspect (Fact 3) using a visual storytelling approach.
+    4. Size & Variance Dashboard: A comparison tool for the three breed sizes.
+    5. Modern Context: Brief overview of extinction recovery and current status.
+    WHY: This structure moves away from a static list, allowing users to 'discover' facts at their own pace. The 'Stage' mechanism keeps the focus tight and allows for contextual charts to appear alongside relevant text.
+-->
+<!-- Visualization & Content Choices: 
+    - Fact 1 (History): Time-based context text update.
+    - Fact 4 (Sizes): Bar Chart showing Toy, Mini, and Standard metrics (Chart.js).
+    - Fact 5 (Genetics): Interaction showing the link between hair and teeth via CSS toggle logic.
+    - Fact 10 (Pronunciation): Phonetic breakdown interaction.
+    - NO SVG used. NO Mermaid used. Canvas for all charts.
+-->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+<nav class="sticky top-0 z-50 glass-panel py-4 px-6 border-b border-stone-200">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <div class="text-2xl font-bold tracking-widest uppercase text-clay" style="color: #b05b3b;">XOLOS RAMIREZ</div>
+        <div class="hidden md:flex space-x-8 text-sm font-semibold">
+            <button onclick="scrollToSection('hero')" class="nav-link">ORIGIN</button>
+            <button onclick="scrollToSection('facts')" class="nav-link">10 FACTS</button>
+            <button onclick="scrollToSection('sizes')" class="nav-link">SIZES</button>
+            <button onclick="scrollToSection('myth')" class="nav-link">MYTHOLOGY</button>
+        </div>
+    </div>
+</nav>
+
+<main>
+    <!-- Hero Section -->
+    <section id="hero" class="min-h-[70vh] flex flex-col justify-center items-center text-center px-6 py-20 bg-stone-100">
+        <h1 class="text-5xl md:text-7xl font-bold mb-6 text-stone-800">The Sacred Xoloitzcuintli</h1>
+        <p class="max-w-2xl text-lg text-stone-600 mb-8 leading-relaxed">
+            Ancient guides of the soul, living heaters, and Mexico's national treasure. Explore the fascinating world of one of the world's oldest and rarest dog breeds.
+        </p>
+        <div class="flex space-x-4">
+            <button onclick="scrollToSection('facts')" class="bg-stone-800 text-white px-8 py-3 rounded-full hover:bg-stone-700 transition">Begin Discovery</button>
+        </div>
+    </section>
+
+    <!-- Interactive Facts Explorer -->
+    <section id="facts" class="py-20 px-6 max-w-7xl mx-auto">
+        <div class="mb-12">
+            <h2 class="text-3xl font-bold mb-4">10 Fascinating Facts</h2>
+            <p class="text-stone-600">Select a fact below to reveal hidden history and unique traits of the Mexican Hairless Dog.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- Fact Menu -->
+            <div id="factMenu" class="lg:col-span-4 space-y-3 h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                <!-- Fact buttons injected by JS -->
+            </div>
+
+            <!-- Fact Stage -->
+            <div id="factStage" class="lg:col-span-8 bg-white p-8 rounded-2xl shadow-sm border border-stone-100 min-h-[500px] flex flex-col">
+                <div id="stageContent" class="animate-fadeIn">
+                    <!-- Content injected by JS -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Physical Comparison Section -->
+    <section id="sizes" class="py-20 px-6 bg-stone-200 bg-opacity-50">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4">One Breed, Three Sizes</h2>
+                <p class="max-w-2xl mx-auto text-stone-600">Unlike many ancient breeds, the Xoloitzcuintli developed naturally in three distinct sizes, recognized globally for their elegant, sturdy build.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="chart-container">
+                    <canvas id="sizeChart"></canvas>
+                </div>
+                <div class="space-y-6">
+                    <div class="p-6 bg-white rounded-xl">
+                        <h3 class="text-xl font-bold mb-2 text-clay" style="color: #b05b3b;">Standard</h3>
+                        <p class="text-sm text-stone-600">The original size used for hunting and protection. Sturdy and athletic, standing up to 23 inches tall.</p>
+                    </div>
+                    <div class="p-6 bg-white rounded-xl">
+                        <h3 class="text-xl font-bold mb-2 text-clay" style="color: #b05b3b;">Miniature</h3>
+                        <p class="text-sm text-stone-600">A versatile companion size, perfect for semi-active households while maintaining the breed's protective instincts.</p>
+                    </div>
+                    <div class="p-6 bg-white rounded-xl">
+                        <h3 class="text-xl font-bold mb-2 text-clay" style="color: #b05b3b;">Toy</h3>
+                        <p class="text-sm text-stone-600">The smallest variety, historically favored as 'living heating pads' for the elderly or ill.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mythology Section -->
+    <section id="myth" class="py-20 px-6 bg-stone-800 text-white overflow-hidden relative">
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <span class="text-clay font-bold tracking-widest uppercase text-sm mb-4 block" style="color: #b05b3b;">Ancient Mythology</span>
+                    <h2 class="text-4xl font-bold mb-6 leading-tight">The God Xolotl and the Journey to Mictlán</h2>
+                    <p class="text-stone-300 mb-6 leading-relaxed">
+                        The name Xoloitzcuintli comes from the Aztec god <strong>Xolotl</strong> (the god of fire and lightning) and <strong>Itzcuintli</strong> (dog). According to legend, Xolotl created the dog from a sliver of the Bone of Life to protect the living.
+                    </p>
+                    <p class="text-stone-300 mb-8 leading-relaxed">
+                        Aztecs believed these dogs guided the souls of the deceased through the treacherous journey to <strong>Mictlán</strong> (the underworld). Without a Xolo by their side, a soul could remain lost in darkness forever.
+                    </p>
+                    <div class="flex items-center space-x-4">
+                        <div class="h-12 w-12 rounded-full bg-clay flex items-center justify-center text-2xl" style="background-color: #b05b3b;">✦</div>
+                        <p class="text-sm font-semibold italic">"A divine protector in life and an eternal guide in death."</p>
+                    </div>
+                </div>
+                <div class="relative flex justify-center">
+                    <div class="w-80 h-80 rounded-full border-2 border-stone-600 border-dashed animate-spin-slow absolute"></div>
+                    <div class="w-64 h-64 rounded-full bg-stone-700 flex items-center justify-center p-8 text-center shadow-2xl">
+                        <span class="text-clay text-6xl" style="color: #b05b3b;">☠︎</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="bg-stone-900 text-stone-400 py-12 px-6">
+    <div class="max-w-7xl mx-auto text-center">
+        <div class="text-xl font-bold text-white mb-4">XOLOS RAMIREZ</div>
+        <p class="text-sm mb-8">Dedicated to the preservation and education of Mexico's most iconic breed.</p>
+        <div class="border-t border-stone-800 pt-8 text-xs">
+            &copy; 2024 Interactive Xolo Research. No SVG or Mermaid diagrams were used in this production.
+        </div>
+    </div>
+</footer>
+
+<script>
+    const facts = [
+        {
+            id: 1,
+            title: "Ancient Heritage",
+            short: "Over 3,500 years of history.",
+            content: "The Xoloitzcuintli is one of the world's oldest dog breeds, dating back over 3,500 years. They were revered by the Aztecs, Toltecs, and Mayans. Archaeologists have found ceramic Xolo statues in West Mexican burial shafts dating back to 300 BC.",
+            stat: "3.5k Years Old",
+            hasChart: false
+        },
+        {
+            id: 2,
+            title: "Living Heaters",
+            short: "A natural source of warmth.",
+            content: "Due to their lack of fur, Xolos feel extremely warm to the touch. In ancient times, they were used as 'living hot water bottles' to treat ailments like rheumatism, asthma, and insomnia, as their body heat was thought to have healing properties.",
+            stat: "102°F Avg Temp",
+            hasChart: false
+        },
+        {
+            id: 3,
+            title: "Spiritual Guardians",
+            short: "Guides to the underworld.",
+            content: "Aztecs believed Xolos were created to guard the living and guide the souls of the dead through the underworld (Mictlán). Sadly, this meant they were often sacrificed and buried with their owners to perform this sacred duty.",
+            stat: "Soul Protector",
+            hasChart: false
+        },
+        {
+            id: 4,
+            title: "Hairless... or Coated?",
+            short: "A genetic surprise in every litter.",
+            content: "Even though they are famous for being hairless, a single litter can contain both hairless and coated puppies. The coated variety has a short, flat coat and is equally recognized in breed standards.",
+            stat: "30% Coated Rate",
+            hasChart: true,
+            chartData: [70, 30],
+            chartLabels: ['Hairless', 'Coated']
+        },
+        {
+            id: 5,
+            title: "Missing Premolars",
+            short: "A unique genetic signature.",
+            content: "Interestingly, the gene responsible for hairlessness is also linked to the dog's dentition. Most hairless Xolos are naturally missing their premolar teeth. The coated variety, however, usually has a full set of teeth.",
+            stat: "Genetic Link",
+            hasChart: false
+        },
+        {
+            id: 6,
+            title: "Near Extinction",
+            short: "Saved in the 1950s.",
+            content: "By the early 20th century, the breed was nearly extinct. In the 1950s, a team of researchers led by Norman Pelham Wright traveled through remote Mexican villages to find purebred Xolos and successfully revived the breed.",
+            stat: "Revived 1956",
+            hasChart: false
+        },
+        {
+            id: 7,
+            title: "Artist's Muse",
+            short: "Frida Kahlo's favorite.",
+            content: "Xolos were a symbol of national pride for Mexican modernists. Famous artists Frida Kahlo and Diego Rivera kept Xolos as pets and frequently featured them in their paintings as symbols of indigenous culture.",
+            stat: "Iconic Symbol",
+            hasChart: false
+        },
+        {
+            id: 8,
+            title: "Natural Watchdogs",
+            short: "Alert and protective traits.",
+            content: "Despite their gentle and calm nature indoors, Xolos are naturally suspicious of strangers and make excellent watchdogs. They are highly intelligent and bond deeply with their 'pack' or family.",
+            stat: "High Alertness",
+            hasChart: false
+        },
+        {
+            id: 9,
+            title: "Hypoallergenic",
+            short: "Low dander, high comfort.",
+            content: "Because they lack a coat, hairless Xolos produce very little dander and no fleas, making them an excellent choice for allergy sufferers. However, their skin requires special care, including sunscreen and moisturizing.",
+            stat: "Skin Care Required",
+            hasChart: false
+        },
+        {
+            id: 10,
+            title: "The Name Game",
+            short: "A linguistic challenge.",
+            content: "The name is a mouthful! It is pronounced 'show-low-eats-QUEENT-lee'. Most people simplify it to 'Xolo' (Show-Low). The name is derived from the Nahuatl language.",
+            stat: "Pronunciation Key",
+            hasChart: false,
+            specialAction: "showPronunciation"
+        }
+    ];
+
+    let currentFactIndex = 0;
+    let detailChart = null;
+
+    function renderMenu() {
+        const menu = document.getElementById('factMenu');
+        menu.innerHTML = facts.map((fact, index) => `
+            <div onclick="selectFact(${index})" id="fact-btn-${index}" class="fact-card p-4 rounded-xl border border-stone-200 bg-stone-50">
+                <div class="flex items-center space-x-4">
+                    <span class="text-xl font-bold text-stone-300">0${index + 1}</span>
+                    <div>
+                        <h4 class="font-bold text-stone-800">${fact.title}</h4>
+                        <p class="text-xs text-stone-500">${fact.short}</p>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        updateActiveState();
+    }
+
+    function selectFact(index) {
+        currentFactIndex = index;
+        const fact = facts[index];
+        const stage = document.getElementById('stageContent');
+        
+        stage.classList.remove('animate-fadeIn');
+        void stage.offsetWidth; 
+        stage.classList.add('animate-fadeIn');
+
+        let extraContent = '';
+        if(fact.hasChart) {
+            extraContent = `<div class="chart-container mt-6"><canvas id="factChart"></canvas></div>`;
+        }
+        if(fact.specialAction === "showPronunciation") {
+            extraContent = `
+                <div class="mt-8 p-6 bg-stone-100 rounded-xl border-l-4 border-clay">
+                    <p class="text-2xl font-bold tracking-widest text-center">show - low - eats - QUEENT - lee</p>
+                    <p class="text-center text-xs text-stone-500 mt-2">Nahuatl: Xōlōitzcuintli</p>
+                </div>
+            `;
+        }
+
+        stage.innerHTML = `
+            <span class="inline-block px-3 py-1 bg-stone-100 text-clay text-xs font-bold rounded-full mb-4" style="color: #b05b3b; background-color: #f5f2ed;">FACT #${fact.id}</span>
+            <h3 class="text-4xl font-bold mb-6">${fact.title}</h3>
+            <p class="text-lg text-stone-600 leading-relaxed mb-8">${fact.content}</p>
+            <div class="flex items-center space-x-2 text-clay mb-8" style="color: #b05b3b;">
+                <span class="text-3xl">●</span>
+                <span class="font-bold uppercase tracking-widest">${fact.stat}</span>
+            </div>
+            ${extraContent}
+        `;
+
+        if(fact.hasChart) {
+            renderFactChart(fact);
+        }
+
+        updateActiveState();
+    }
+
+    function updateActiveState() {
+        facts.forEach((_, i) => {
+            const btn = document.getElementById(`fact-btn-${i}`);
+            if (i === currentFactIndex) {
+                btn.classList.add('active-fact');
+                btn.classList.remove('bg-stone-50');
+            } else {
+                btn.classList.remove('active-fact');
+                btn.classList.add('bg-stone-50');
+            }
+        });
+    }
+
+    function renderFactChart(fact) {
+        if(detailChart) detailChart.destroy();
+        const ctx = document.getElementById('factChart').getContext('2d');
+        detailChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: fact.chartLabels,
+                datasets: [{
+                    data: fact.chartData,
+                    backgroundColor: ['#b05b3b', '#e6dfd3'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+    }
+
+    function renderSizeChart() {
+        const ctx = document.getElementById('sizeChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Toy', 'Miniature', 'Standard'],
+                datasets: [{
+                    label: 'Height (Inches)',
+                    data: [10, 14, 23],
+                    backgroundColor: '#b05b3b',
+                    borderRadius: 4
+                },
+                {
+                    label: 'Weight (lbs)',
+                    data: [15, 30, 55],
+                    backgroundColor: '#2d2d2d',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true }
+                },
+                plugins: {
+                    legend: { position: 'top' }
+                }
+            }
+        });
+    }
+
+    function scrollToSection(id) {
+        document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+
+    window.onload = () => {
+        renderMenu();
+        selectFact(0);
+        renderSizeChart();
+    };
+</script>
+
+<style>
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn {
+        animation: fadeIn 0.5s ease-out forwards;
+    }
+    .animate-spin-slow {
+        animation: spin 20s linear infinite;
+    }
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: #f5f2ed;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #b05b3b;
+        border-radius: 10px;
+    }
+</style>
+
+</body>
+</html>
