@@ -114,11 +114,35 @@
 <nav class="sticky top-0 z-50 glass-panel py-4 px-6 border-b border-stone-200">
     <div class="max-w-7xl mx-auto flex justify-between items-center">
         <div class="text-2xl font-bold tracking-widest uppercase text-clay" style="color: #b05b3b;">XOLOS RAMIREZ</div>
-        <div class="hidden md:flex space-x-8 text-sm font-semibold">
-            <button onclick="scrollToSection('hero')" class="nav-link">ORIGIN</button>
-            <button onclick="scrollToSection('facts')" class="nav-link">10 FACTS</button>
-            <button onclick="scrollToSection('sizes')" class="nav-link">SIZES</button>
-            <button onclick="scrollToSection('myth')" class="nav-link">MYTHOLOGY</button>
+        <div class="flex items-center gap-4 md:gap-8">
+
+            <div class="hidden md:flex space-x-8 text-sm font-semibold">
+                <button onclick="scrollToSection('hero')" class="nav-link">
+                    ORIGIN
+                </button>
+
+                <button onclick="scrollToSection('facts')" class="nav-link">
+                    10 FACTS
+                </button>
+
+                <button onclick="scrollToSection('sizes')" class="nav-link">
+                    SIZES
+                </button>
+
+                <button onclick="scrollToSection('myth')" class="nav-link">
+                    MYTHOLOGY
+                </button>
+            </div>
+
+            <a
+                href="https://xolosramirez.com/en/index.html"
+                class="inline-flex items-center gap-2 rounded-full bg-stone-800 px-4 py-2 text-xs md:text-sm font-semibold text-white transition hover:bg-stone-700 focus:outline-none focus:ring-2 focus:ring-[#b05b3b] focus:ring-offset-2"
+                aria-label="Return to the Xolos Ramirez home page"
+            >
+                <span aria-hidden="true">←</span>
+                <span>HOME</span>
+            </a>
+
         </div>
     </div>
 </nav>
