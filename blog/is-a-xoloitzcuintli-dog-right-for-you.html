@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xoloitzcuintli Guardianship Evaluation | Xolos Ramirez</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Tierra y Ceniza (Earth and Ash) 
+         Background: #FDFBF7 (Warm Neutral)
+         Primary: #2D2D2D (Charcoal/Skin)
+         Accent: #B38B59 (Aztec Gold/Bronze)
+         Secondary: #8C7867 (Warm Earth)
+    -->
+    <style>
+        :root {
+            --bg-warm: #FDFBF7;
+            --clay: #8C7867;
+            --obsidian: #2D2D2D;
+            --bronze: #B38B59;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-warm);
+            color: var(--obsidian);
+            scroll-behavior: smooth;
+        }
+        h1, h2, h3, .cinzel {
+            font-family: 'Cinzel', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(179, 139, 89, 0.2);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: var(--bronze);
+            border-radius: 10px;
+        }
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--bronze);
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .option-card.selected {
+            border-color: var(--bronze);
+            background-color: rgba(179, 139, 89, 0.05);
+            box-shadow: 0 0 0 2px var(--bronze);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Application Structure Plan:
+         1. Introduction/Hero: Sets the mythological and historical stage.
+         2. Genetic & Biological Insights: Visualizes the FOXI3 mutation and the three sizes to educate before the quiz.
+         3. The Primitive Mind: Uses a Radar chart to compare Xolo ethology vs. Modern breeds.
+         4. The Guardianship Quiz: An interactive 4-domain assessment based on the report's checklist.
+         5. Specialized Care: Interactive display for dermatology and nutrition.
+         6. Web3 & Custody: Explains the NFT and blockchain pedigree system.
+         This structure is designed to first 'teach' the user about the breed's complexity and then 'evaluate' their readiness, moving from history to modern technology.
+    -->
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-[#FDFBF7]/90 border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center space-x-2">
+                    <span class="cinzel text-xl font-bold tracking-widest text-bronze">XOLOS RAMIREZ</span>
+                </div>
+                <div class="hidden md:flex space-x-8 text-sm font-semibold tracking-wider">
+                    <a href="#history" class="nav-link">HISTORY</a>
+                    <a href="#biology" class="nav-link">BIOLOGY</a>
+                    <a href="#quiz" class="nav-link">EVALUATION</a>
+                    <a href="#care" class="nav-link">CARE</a>
+                    <a href="#web3" class="nav-link">BLOCKCHAIN</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative pt-32 pb-20 px-4 overflow-hidden">
+        <div class="max-w-5xl mx-auto text-center relative z-10">
+            <span class="text-bronze font-bold tracking-widest text-sm uppercase mb-4 block">A 3,500 Year Legacy</span>
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">The Guardian of <br><span class="text-bronze">Tonalli</span></h1>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-10 leading-relaxed">
+                The Xoloitzcuintli is more than a breed; it is a living artifact. Are you prepared to be the custodian of an ancient soul?
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#quiz" class="bg-obsidian text-white px-8 py-4 rounded-full font-bold hover:bg-bronze transition-all duration-300 shadow-xl">Start Assessment</a>
+                <a href="#biology" class="border border-obsidian px-8 py-4 rounded-full font-bold hover:bg-obsidian hover:text-white transition-all duration-300">Explore Biology</a>
+            </div>
+        </div>
+        <!-- Decorative pattern background (CSS only) -->
+        <div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(var(--bronze) 1px, transparent 0); background-size: 40px 40px;"></div>
+    </header>
+
+    <!-- History Section -->
+    <section id="history" class="py-20 bg-white border-y border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
+            <div>
+                <h2 class="text-3xl font-bold mb-6">From Mictlán to the Modern World</h2>
+                <p class="text-gray-600 mb-6 leading-relaxed">
+                    Derived from <i>Xolotl</i> (Deity of lightning and death) and <i>itzcuintli</i> (dog), these psychopomps were believed to guide souls through the nine levels of the underworld. After facing near extinction post-conquest, they have emerged as Mexico's national treasure.
+                </p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-4 bg-bg-warm rounded-lg border-l-4 border-bronze">
+                        <h4 class="font-bold text-obsidian">3,500+ Years</h4>
+                        <p class="text-xs text-gray-500">Mesoamerican antiquity</p>
+                    </div>
+                    <div class="p-4 bg-bg-warm rounded-lg border-l-4 border-bronze">
+                        <h4 class="font-bold text-obsidian">National Symbol</h4>
+                        <p class="text-xs text-gray-500">Official dog of Mexico</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-8 bg-bg-warm rounded-2xl shadow-inner flex items-center justify-center">
+                <div class="text-center">
+                    <span class="block text-6xl mb-4">🏺</span>
+                    <p class="italic text-gray-500">"The living pyramid: A synthesis of antiquity and modern veterinary science."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Biology & Sizes -->
+    <section id="biology" class="py-20 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Morphology & The FOXI3 Mutation</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Understanding the genetic blueprint that dictates the hairless variety and the necessity of the coated version.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 mb-20">
+                <!-- Size Selection Logic -->
+                <div class="md:col-span-1 space-y-4">
+                    <h3 class="text-xl font-bold mb-6 flex items-center">
+                        <span class="mr-2">📏</span> Choose Your Scale
+                    </h3>
+                    <button onclick="updateSizeChart(0)" class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-bronze transition-all size-btn active bg-white">
+                        <span class="font-bold block">Toy (Tamaño Toy)</span>
+                        <span class="text-sm text-gray-500">10-14 inches | Urban Living</span>
+                    </button>
+                    <button onclick="updateSizeChart(1)" class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-bronze transition-all size-btn bg-white">
+                        <span class="font-bold block">Miniature (Miniatura)</span>
+                        <span class="text-sm text-gray-500">14-18 inches | Versatile</span>
+                    </button>
+                    <button onclick="updateSizeChart(2)" class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-bronze transition-all size-btn bg-white">
+                        <span class="font-bold block">Standard (Estándar)</span>
+                        <span class="text-sm text-gray-500">18-23 inches | Guardian</span>
+                    </button>
+                </div>
+
+                <div class="md:col-span-2 bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="chart-container">
+                        <canvas id="sizeChart"></canvas>
+                    </div>
+                    <div id="sizeDetails" class="mt-6 text-sm text-gray-600 italic text-center">
+                        Select a size to view technical weight and exercise requirements.
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Radar Comparison -->
+            <div class="grid md:grid-cols-2 gap-12 items-center bg-obsidian text-white p-12 rounded-3xl">
+                <div>
+                    <h3 class="text-3xl font-bold mb-6 text-bronze">The Primitive Mind</h3>
+                    <p class="mb-4 text-gray-300">The Xoloitzcuintli operates on the <b>Premack Principle</b>. They do not offer blind obedience; they offer a negotiation based on mutual respect and value.</p>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start"><span class="text-bronze mr-2">✦</span> <b>Low Biddability:</b> Independent problem-solvers.</li>
+                        <li class="flex items-start"><span class="text-bronze mr-2">✦</span> <b>Velcro Nature:</b> Intensely affectionate with family.</li>
+                        <li class="flex items-start"><span class="text-bronze mr-2">✦</span> <b>Stranger Aloofness:</b> Natural hardwired suspicion.</li>
+                    </ul>
+                </div>
+                <div class="chart-container">
+                    <canvas id="ethologyChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Quiz (Core Interaction) -->
+    <section id="quiz" class="py-20 px-4 bg-gray-50">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold mb-4">Guardianship Readiness Test</h2>
+                <p class="text-gray-600">Objectively evaluate your compatibility with the 4 core domains of Xolo stewardship.</p>
+            </div>
+
+            <div id="quiz-container" class="bg-white p-8 md:p-12 rounded-3xl shadow-xl relative min-h-[500px] flex flex-col">
+                <!-- Progress Bar -->
+                <div class="w-full bg-gray-100 h-2 rounded-full mb-8 overflow-hidden">
+                    <div id="quiz-progress" class="bg-bronze h-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+
+                <div id="question-view">
+                    <div id="domain-label" class="text-xs font-bold text-bronze uppercase tracking-widest mb-2">Domain 1: Ethology</div>
+                    <h3 id="question-text" class="text-2xl font-semibold mb-8">How do you view dog training and obedience?</h3>
+                    <div id="options-grid" class="grid gap-4">
+                        <!-- Options injected via JS -->
+                    </div>
+                </div>
+
+                <div id="results-view" class="hidden text-center">
+                    <div class="mb-6">
+                        <span id="score-emoji" class="text-6xl">🏺</span>
+                    </div>
+                    <h3 class="text-3xl font-bold mb-2" id="score-title">Calculating...</h3>
+                    <p class="text-gray-600 mb-8" id="score-description"></p>
+                    <div class="bg-bg-warm p-6 rounded-xl mb-8">
+                        <div class="text-sm font-bold uppercase mb-2">Compatibility Score</div>
+                        <div class="text-5xl font-bold text-bronze" id="score-percent">0%</div>
+                    </div>
+                    <button onclick="resetQuiz()" class="text-bronze font-bold hover:underline">Retake Assessment</button>
+                </div>
+
+                <div class="mt-auto pt-8 flex justify-between items-center border-t border-gray-100">
+                    <span id="step-indicator" class="text-sm text-gray-400">Question 1 of 12</span>
+                    <button id="next-btn" disabled onclick="nextQuestion()" class="bg-obsidian text-white px-8 py-2 rounded-lg font-bold opacity-50 cursor-not-allowed transition-all">Next</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Specialized Care Section -->
+    <section id="care" class="py-20 px-4">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-16">The Specialized Protocol</h2>
+            <div class="grid md:grid-cols-2 gap-12">
+                
+                <!-- Dermatology -->
+                <div class="glass-card p-8 rounded-3xl">
+                    <h3 class="text-2xl font-bold mb-6 flex items-center">
+                        <span class="mr-3">🌿</span> Dermatological Rituals
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="bg-white w-12 h-12 rounded-full flex-shrink-0 flex items-center justify-center shadow-sm">🛁</div>
+                            <div>
+                                <h4 class="font-bold">Soap-Free Bathing</h4>
+                                <p class="text-sm text-gray-500">Every 2-4 weeks. Over-bathing triggers sebum overproduction and acne.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="bg-white w-12 h-12 rounded-full flex-shrink-0 flex items-center justify-center shadow-sm">☀️</div>
+                            <div>
+                                <h4 class="font-bold">UV Vigilance</h4>
+                                <p class="text-sm text-gray-500">Mandatory zinc-free sunscreen or UV-protective apparel for all daytime outings.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="bg-white w-12 h-12 rounded-full flex-shrink-0 flex items-center justify-center shadow-sm">🏺</div>
+                            <div>
+                                <h4 class="font-bold">Botanical Balms</h4>
+                                <div class="flex flex-wrap gap-2 mt-2">
+                                    <span class="px-2 py-1 bg-gray-100 rounded text-[10px] font-bold">TEA TREE</span>
+                                    <span class="px-2 py-1 bg-gray-100 rounded text-[10px] font-bold">LAVENDER</span>
+                                    <span class="px-2 py-1 bg-gray-100 rounded text-[10px] font-bold">LEMON</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nutrition -->
+                <div class="glass-card p-8 rounded-3xl border-obsidian/10">
+                    <h3 class="text-2xl font-bold mb-6 flex items-center">
+                        <span class="mr-3">🥩</span> The Gut-Skin Axis
+                    </h3>
+                    <div class="chart-container mb-6" style="height: 200px;">
+                        <canvas id="nutritionChart"></canvas>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-4">The hairless variety requires high-density protein and specific lipids to maintain the epidermal barrier against energy loss.</p>
+                    <div class="grid grid-cols-2 gap-4 text-xs">
+                        <div class="p-3 bg-white rounded-lg">
+                            <span class="font-bold block">Hypodontia</span>
+                            Softened/hydrated food for missing premolars.
+                        </div>
+                        <div class="p-3 bg-white rounded-lg">
+                            <span class="font-bold block">Lipid Profile</span>
+                            High Omega-3/6 for skin elasticity.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Web3 Section -->
+    <section id="web3" class="py-20 bg-obsidian text-white overflow-hidden relative">
+        <div class="max-w-7xl mx-auto px-4 relative z-10">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="order-2 md:order-1">
+                    <div class="inline-block p-4 border border-bronze/30 rounded-2xl mb-8 bg-bronze/5">
+                        <div class="flex items-center gap-4">
+                            <div class="text-3xl">🔗</div>
+                            <div>
+                                <h4 class="font-bold text-bronze">LINEAGE NFT</h4>
+                                <p class="text-xs text-gray-400">eCash Blockchain Secured</p>
+                            </div>
+                        </div>
+                    </div>
+                    <h2 class="text-4xl font-bold mb-6 cinzel">Digital Ancestry</h2>
+                    <p class="text-gray-400 mb-8 leading-relaxed">
+                        Xolos Ramirez pioneers ethical preservation through the <b>RMZWallet</b>. Every guardian receives a Lineage NFT—an immutable, digitally verifiable certificate of medical history, genetic pedigree, and cultural custody.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 rounded-full bg-bronze"></div>
+                            <span>Tamper-proof medical ledger</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 rounded-full bg-bronze"></div>
+                            <span>Publicly verifiable "Xolos Explorer" lineage</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 rounded-full bg-bronze"></div>
+                            <span>Web3 Teyolías Guardianship Program</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-1 md:order-2">
+                    <div class="relative">
+                        <div class="w-72 h-72 md:w-96 md:h-96 mx-auto bg-gradient-to-tr from-bronze to-clay rounded-full opacity-20 blur-3xl absolute inset-0"></div>
+                        <div class="relative bg-white/5 border border-white/10 p-8 rounded-[40px] backdrop-blur-md">
+                            <div class="aspect-square flex items-center justify-center border-2 border-dashed border-bronze/50 rounded-3xl">
+                                <div class="text-center">
+                                    <span class="text-5xl block mb-4">📱</span>
+                                    <span class="text-xs tracking-widest text-bronze font-bold">MINTING PEDIGREE...</span>
+                                </div>
+                            </div>
+                            <div class="mt-6 flex justify-between items-end">
+                                <div>
+                                    <p class="text-[10px] text-gray-500 uppercase tracking-tighter">Token ID</p>
+                                    <p class="font-mono text-sm">#XRAM-0042-2024</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[10px] text-gray-500 uppercase tracking-tighter">Status</p>
+                                    <p class="text-green-400 text-sm font-bold">VERIFIED</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 bg-white border-t border-gray-100 text-center">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="cinzel text-2xl font-bold text-bronze tracking-widest mb-4">XOLOS RAMIREZ</h2>
+            <p class="text-gray-500 text-sm max-w-md mx-auto mb-8">
+                Preserving the Tonalli legacy through ancient reverence and modern technology.
+            </p>
+            <div class="flex justify-center gap-6 mb-8 text-obsidian font-bold text-xs tracking-widest">
+                <a href="#" class="hover:text-bronze">INSTAGRAM</a>
+                <a href="#" class="hover:text-bronze">BLOCKCHAIN</a>
+                <a href="#" class="hover:text-bronze">CONTACT</a>
+            </div>
+            <p class="text-[10px] text-gray-400">© 2024 Xolos Ramirez. All Rights Reserved. No SVG/Mermaid JS used.</p>
+        </div>
+    </footer>
+
+    <script>
+        /* --- Visualization & Content Choices ---
+           1. Size Chart (Bar): Shows height and weight across Toy, Miniature, and Standard.
+              Reason: Simple comparison of physical logistical requirements.
+           2. Ethology Chart (Radar): Compares "Primitive Dog" vs "Modern Dog".
+              Reason: Highlights why low biddability doesn't mean low intelligence.
+           3. Nutrition Chart (Doughnut): Displays recommended protein/fat ratios.
+              Reason: Reinforces the 'Gut-Skin Axis' concept from the report.
+           No SVG/Mermaid used. Canvas rendering via Chart.js.
+        */
+
+        // Visualization & Content Choices
+        let sizeChart, ethologyChart, nutritionChart;
+
+        function initCharts() {
+            // Size Chart
+            const ctxSize = document.getElementById('sizeChart').getContext('2d');
+            sizeChart = new Chart(ctxSize, {
+                type: 'bar',
+                data: {
+                    labels: ['Height (Inches)', 'Weight (Lbs)', 'Activity (Min/Day)'],
+                    datasets: [{
+                        label: 'Standard',
+                        data: [23, 55, 60],
+                        backgroundColor: 'rgba(45, 45, 45, 0.8)',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    scales: { y: { beginAtZero: true } },
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+
+            // Ethology Chart
+            const ctxEtho = document.getElementById('ethologyChart').getContext('2d');
+            ethologyChart = new Chart(ctxEtho, {
+                type: 'radar',
+                data: {
+                    labels: ['Biddability', 'Intelligence', 'Loyalty', 'Stranger Neutrality', 'Prey Drive', 'Independence'],
+                    datasets: [
+                        {
+                            label: 'Primitive (Xolo)',
+                            data: [3, 10, 10, 4, 9, 10],
+                            borderColor: '#B38B59',
+                            backgroundColor: 'rgba(179, 139, 89, 0.3)',
+                            pointBackgroundColor: '#B38B59'
+                        },
+                        {
+                            label: 'Modern Working Dog',
+                            data: [10, 9, 8, 9, 5, 4],
+                            borderColor: '#8C7867',
+                            backgroundColor: 'rgba(140, 120, 103, 0.2)',
+                            pointBackgroundColor: '#8C7867'
+                        }
+                    ]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: { r: { beginAtZero: true, max: 10, ticks: { display: false } } },
+                    plugins: { legend: { labels: { color: '#fff' } } }
+                }
+            });
+
+            // Nutrition Chart
+            const ctxNutri = document.getElementById('nutritionChart').getContext('2d');
+            nutritionChart = new Chart(ctxNutri, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Animal Proteins', 'Essential Fats', 'Carbohydrates', 'Botanical Prebiotics'],
+                    datasets: [{
+                        data: [45, 30, 15, 10],
+                        backgroundColor: ['#2D2D2D', '#B38B59', '#8C7867', '#D1C4B9'],
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'right' } }
+                }
+            });
+        }
+
+        const sizeData = [
+            { label: 'Toy', data: [14, 15, 30], desc: "Ideal for urban apartments. High therapeutic proximity." },
+            { label: 'Miniature', data: [18, 30, 45], desc: "Optimal balance of athleticism and manageability." },
+            { label: 'Standard', data: [23, 55, 60], desc: "Historical village guardian. Requires rigorous exercise." }
+        ];
+
+        function updateSizeChart(index) {
+            const btns = document.querySelectorAll('.size-btn');
+            btns.forEach(b => b.classList.remove('active', 'border-bronze', 'bg-bg-warm'));
+            btns[index].classList.add('active', 'border-bronze', 'bg-bg-warm');
+            
+            sizeChart.data.datasets[0].label = sizeData[index].label;
+            sizeChart.data.datasets[0].data = sizeData[index].data;
+            sizeChart.update();
+            
+            document.getElementById('sizeDetails').innerText = sizeData[index].desc;
+        }
+
+        // Quiz Logic
+        const quizData = [
+            {
+                domain: "Ethology",
+                question: "How do you define a 'good' dog training session?",
+                options: [
+                    { text: "The dog immediately obeys every command I give.", score: 0 },
+                    { text: "The dog and I negotiate rewards using the Premack Principle.", score: 10 },
+                    { text: "Using dominance or 'alpha' methods to show who is boss.", score: -5 }
+                ]
+            },
+            {
+                domain: "Environment",
+                question: "Where will the dog primarily spend its time?",
+                options: [
+                    { text: "In a secure outdoor kennel or backyard.", score: -10 },
+                    { text: "Exclusively indoors as a fully integrated family member.", score: 10 },
+                    { text: "In the garage or a covered patio.", score: -5 }
+                ]
+            },
+            {
+                domain: "Dermatology",
+                question: "How do you feel about applying lotions and sunscreens to a dog daily?",
+                options: [
+                    { text: "It seems excessive and I probably won't have time.", score: 0 },
+                    { text: "I am comfortable with a rigorous skincare routine.", score: 10 },
+                    { text: "I prefer a 'wash-and-wear' dog with a standard coat.", score: 2 }
+                ]
+            },
+            {
+                domain: "Social",
+                question: "What is your expectation when meeting strangers in public?",
+                options: [
+                    { text: "I want my dog to love everyone and greet them with enthusiasm.", score: 0 },
+                    { text: "I accept and respect the dog's natural aloofness and boundaries.", score: 10 },
+                    { text: "I want a social butterfly for the local dog park.", score: 2 }
+                ]
+            },
+            {
+                domain: "Web3",
+                question: "How do you view blockchain-based medical and pedigree tracking?",
+                options: [
+                    { text: "It's too complicated and unnecessary for a pet.", score: 2 },
+                    { text: "I value the transparency and security of an immutable lineage NFT.", score: 10 },
+                    { text: "I prefer standard paper certificates.", score: 5 }
+                ]
+            },
+            {
+                domain: "Logistics",
+                question: "Your typical workday looks like:",
+                options: [
+                    { text: "Away from home for 10 hours with no intervention.", score: -10 },
+                    { text: "Remote/WFP or utilizing midday walkers to prevent separation anxiety.", score: 10 },
+                    { text: "The dog is left in the yard while I'm away.", score: -5 }
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let totalScore = 0;
+
+        function loadQuestion() {
+            const q = quizData[currentQuestion];
+            document.getElementById('domain-label').innerText = `Domain: ${q.domain}`;
+            document.getElementById('question-text').innerText = q.question;
+            document.getElementById('step-indicator').innerText = `Question ${currentQuestion + 1} of ${quizData.length}`;
+            document.getElementById('quiz-progress').style.width = `${((currentQuestion) / quizData.length) * 100}%`;
+            
+            const grid = document.getElementById('options-grid');
+            grid.innerHTML = '';
+            
+            q.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = "option-card text-left p-5 rounded-2xl border border-gray-200 hover:border-bronze transition-all bg-white";
+                btn.innerHTML = `<span class="text-sm font-medium">${opt.text}</span>`;
+                btn.onclick = () => selectOption(btn, opt.score);
+                grid.appendChild(btn);
+            });
+            
+            document.getElementById('next-btn').disabled = true;
+            document.getElementById('next-btn').classList.add('opacity-50', 'cursor-not-allowed');
+        }
+
+        let selectedScore = 0;
+        function selectOption(el, score) {
+            document.querySelectorAll('.option-card').forEach(card => card.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedScore = score;
+            document.getElementById('next-btn').disabled = false;
+            document.getElementById('next-btn').classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+
+        function nextQuestion() {
+            totalScore += selectedScore;
+            currentQuestion++;
+            
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('question-view').classList.add('hidden');
+            document.getElementById('results-view').classList.remove('hidden');
+            document.getElementById('quiz-progress').style.width = `100%`;
+            document.getElementById('next-btn').classList.add('hidden');
+            document.getElementById('step-indicator').classList.add('hidden');
+            
+            const maxScore = quizData.length * 10;
+            const percent = Math.max(0, Math.round((totalScore / maxScore) * 100));
+            
+            document.getElementById('score-percent').innerText = `${percent}%`;
+            
+            let title, desc, emoji;
+            if (percent >= 85) {
+                title = "Ancient Guardian";
+                desc = "Your lifestyle and mindset are perfectly aligned with the Xoloitzcuintli. You respect the primitive soul and the discipline it requires.";
+                emoji = "🏛️";
+            } else if (percent >= 60) {
+                title = "Promising Apprentice";
+                desc = "You have a good foundation, but some environmental or behavioral adjustments are needed before welcoming a Xolo.";
+                emoji = "🐕";
+            } else {
+                title = "Standard Companion Seeker";
+                desc = "A primitive breed may be a mismatch for your current expectations. We recommend exploring more 'biddable' modern breeds.";
+                emoji = "⚠️";
+            }
+            
+            document.getElementById('score-title').innerText = title;
+            document.getElementById('score-description').innerText = desc;
+            document.getElementById('score-emoji').innerText = emoji;
+        }
+
+        function resetQuiz() {
+            currentQuestion = 0;
+            totalScore = 0;
+            document.getElementById('question-view').classList.remove('hidden');
+            document.getElementById('results-view').classList.add('hidden');
+            document.getElementById('next-btn').classList.remove('hidden');
+            document.getElementById('step-indicator').classList.remove('hidden');
+            loadQuestion();
+        }
+
+        window.onload = () => {
+            initCharts();
+            loadQuestion();
+        };
+    </script>
+</body>
+</html>
