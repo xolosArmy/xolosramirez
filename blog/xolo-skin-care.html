@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xoloitzcuintli Care Hub | Xolos Ramirez</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+        
+        :root {
+            --bg-warm: #fcfaf7;
+            --accent-earth: #8c7851;
+            --text-main: #2d2a26;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-warm);
+            color: var(--text-main);
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        .ritual-step.active {
+            border-left: 4px solid var(--accent-earth);
+            background: #fdf6ec;
+        }
+
+        .safe-zone { border-color: #10b981; }
+        .danger-zone { border-color: #ef4444; }
+
+        .glass-nav {
+            background: rgba(252, 250, 247, 0.8);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(140, 120, 81, 0.1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+<!-- Chosen Palette: Ancestral Earth (Warm neutrals, terracotta accents, botanical greens) -->
+
+<!-- Application Structure Plan: 
+    1. Navigation: Clean fixed header for easy section access.
+    2. Hero Section: Atmospheric introduction to the "Warrior Skin".
+    3. Biological Insights: Interactive visual comparing skin vulnerabilities (Hairless vs. Coated).
+    4. The Routine (Interactive Stepper): A sequential guide from 'Atmosphere' to 'Shielding'.
+    5. Product Catalog: Dynamic cards showcasing Xolos Ramirez formulations with pricing toggle (MXN/RMZ).
+    6. Safety Dashboard: Critical visual warnings about Zinc Oxide and UV risks.
+    7. Web3 Vision: Brief overview of the digital pedigree system.
+-->
+
+<!-- Visualization & Content Choices:
+    - Goal: Compare biological vulnerability -> Method: Radar/Bar Chart (Chart.js) -> Showing TEWL, UV Risk, and Sebum levels.
+    - Goal: Guide through the Routine -> Method: Interactive Stepper with dynamic text blocks.
+    - Goal: Pricing visualization -> Method: Toggle switch that updates a list/grid of products.
+    - Goal: Toxicity Awareness -> Method: High-contrast comparison cards (Safe vs. Toxic).
+    - Library: Chart.js for all data viz. No SVG/Mermaid.
+-->
+
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+<nav class="fixed top-0 w-full z-50 glass-nav">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="text-xl font-bold tracking-tighter text-stone-800 italic">XOLOS RAMIREZ</div>
+        <div class="hidden md:flex space-x-8 text-sm font-medium uppercase tracking-widest text-stone-600">
+            <a href="#biology" class="hover:text-amber-800 transition">Biology</a>
+            <a href="#routine" class="hover:text-amber-800 transition">Routine</a>
+            <a href="#products" class="hover:text-amber-800 transition">Products</a>
+            <a href="#safety" class="hover:text-amber-800 transition">Safety</a>
+        </div>
+    </div>
+</nav>
+
+<main class="pt-24 pb-12 px-4 max-w-7xl mx-auto">
+    <!-- Hero Section -->
+    <header class="text-center mb-20 py-12">
+        <span class="text-amber-800 font-semibold tracking-widest uppercase text-xs mb-4 block">Cuidado Ancestral</span>
+        <h1 class="text-5xl md:text-7xl font-bold mb-6 text-stone-900 leading-tight">The Guardian's Skin</h1>
+        <p class="text-lg md:text-xl text-stone-600 max-w-2xl mx-auto italic">"Ancestral care for warrior skin" — A holistic journey through the unique dermatology of the Xoloitzcuintli.</p>
+    </header>
+
+    <!-- Biological Context Section -->
+    <section id="biology" class="mb-24 scroll-mt-28">
+        <div class="grid md:grid-cols-2 gap-12 items-center bg-white p-8 rounded-2xl shadow-sm border border-stone-100">
+            <div>
+                <h2 class="text-3xl font-bold mb-6">Biological Vulnerability</h2>
+                <p class="text-stone-600 mb-6 leading-relaxed">
+                    The Xoloitzcuintli’s hairlessness is the result of the <strong>FOXI3 gene mutation</strong>. Unlike coated dogs, their skin is the front-line soldier against the environment. This section illustrates why their cutaneous barrier requires specific management compared to standard breeds.
+                </p>
+                <div class="space-y-4 text-sm">
+                    <div class="flex items-start">
+                        <span class="bg-amber-100 p-2 rounded mr-3">⚡</span>
+                        <p><strong>TEWL:</strong> Rapid moisture loss due to lack of insulating fur.</p>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="bg-amber-100 p-2 rounded mr-3">💧</span>
+                        <p><strong>Sebum Pooling:</strong> Oils accumulate in pores without hair shafts to wick them away.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col items-center">
+                <div class="chart-container">
+                    <canvas id="bioChart"></canvas>
+                </div>
+                <p class="mt-4 text-xs text-stone-400 italic italic">Scale: Higher values indicate higher physiological stress/risk.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Routine Stepper -->
+    <section id="routine" class="mb-24 scroll-mt-28">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold mb-4">The Skin Care Ritual</h2>
+            <p class="text-stone-600">Xolos Ramirez advocates for a 4-phase process that balances science with ancestral peace.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="space-y-4">
+                <button onclick="updateRoutine(1)" id="step1-btn" class="ritual-step active w-full text-left p-6 rounded-xl transition duration-300">
+                    <h3 class="font-bold text-lg">1. Sound Ritual</h3>
+                    <p class="text-sm text-stone-500">Modulating the Immune Response</p>
+                </button>
+                <button onclick="updateRoutine(2)" id="step2-btn" class="ritual-step w-full text-left p-6 rounded-xl transition duration-300">
+                    <h3 class="font-bold text-lg">2. Cleansing</h3>
+                    <p class="text-sm text-stone-500">Saponification & Exfoliation</p>
+                </button>
+                <button onclick="updateRoutine(3)" id="step3-btn" class="ritual-step w-full text-left p-6 rounded-xl transition duration-300">
+                    <h3 class="font-bold text-lg">3. Botanical Care</h3>
+                    <p class="text-sm text-stone-500">Targeted Balm Application</p>
+                </button>
+                <button onclick="updateRoutine(4)" id="step4-btn" class="ritual-step w-full text-left p-6 rounded-xl transition duration-300">
+                    <h3 class="font-bold text-lg">4. Shielding</h3>
+                    <p class="text-sm text-stone-500">UV & Barrier Protection</p>
+                </button>
+            </div>
+
+            <div id="routine-content" class="md:col-span-2 bg-stone-900 text-stone-100 p-8 md:p-12 rounded-2xl flex flex-col justify-center">
+                <div id="content-display">
+                    <h3 class="text-2xl font-serif mb-4 text-amber-200">The Atmosphere Ritual</h3>
+                    <p class="text-lg leading-relaxed mb-6">Lowering cortisol is the first step in skin care. By using ancestral chants and jungle sounds, we trigger the parasympathetic system, making the skin more receptive to healing.</p>
+                    <div class="bg-stone-800 p-4 rounded-lg border-l-4 border-amber-400">
+                        <p class="text-sm italic">"Stress manifests rapidly in hairless breeds as hives or excessive self-trauma."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Grid -->
+    <section id="products" class="mb-24 scroll-mt-28">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+            <div>
+                <h2 class="text-4xl font-bold mb-4">Ancestral Formulations</h2>
+                <p class="text-stone-600">Pure botanicals without synthetic disruptors.</p>
+            </div>
+            <div class="bg-stone-100 p-1 rounded-lg flex">
+                <button id="mxnBtn" onclick="toggleCurrency('MXN')" class="px-6 py-2 rounded-md font-medium transition bg-white shadow-sm text-stone-900">MXN</button>
+                <button id="rmzBtn" onclick="toggleCurrency('RMZ')" class="px-6 py-2 rounded-md font-medium transition text-stone-400">RMZ Token</button>
+            </div>
+        </div>
+
+        <div id="product-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Cards populated by JS -->
+        </div>
+    </section>
+
+    <!-- Safety Section -->
+    <section id="safety" class="mb-24 scroll-mt-28">
+        <div class="bg-stone-50 p-10 rounded-3xl border border-stone-200">
+            <h2 class="text-4xl font-bold mb-10 text-center">Safety Protocol</h2>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="p-8 bg-emerald-50 rounded-2xl border-t-8 safe-zone">
+                    <h3 class="text-emerald-900 font-bold text-xl mb-4 uppercase tracking-wider">The Safe Way</h3>
+                    <ul class="space-y-4 text-emerald-800">
+                        <li class="flex items-center">✔ 100% Cotton clothing only</li>
+                        <li class="flex items-center">✔ Botanical Sunscreens (No Zinc)</li>
+                        <li class="flex items-center">✔ Night-time Lemon Balm use</li>
+                        <li class="flex items-center">✔ Bi-weekly pH balanced baths</li>
+                    </ul>
+                </div>
+                <div class="p-8 bg-red-50 rounded-2xl border-t-8 danger-zone">
+                    <h3 class="text-red-900 font-bold text-xl mb-4 uppercase tracking-wider">Critical Hazards</h3>
+                    <ul class="space-y-4 text-red-800">
+                        <li class="flex items-center font-bold">✖ Zinc Oxide (LETHAL Toxicity)</li>
+                        <li class="flex items-center">✖ Heavy Synthetic Fabrics (Acne)</li>
+                        <li class="flex items-center">✖ Direct Sun after Citrus Oils</li>
+                        <li class="flex items-center">✖ Fabric Softeners (Residue)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-12 p-6 bg-white rounded-xl border border-red-100 text-center max-w-3xl mx-auto">
+                <p class="text-red-700 text-sm">
+                    <strong>Toxicity Warning:</strong> Zinc Oxide causes intravascular hemolysis in canines. If ingested, it ruptures red blood cells leading to multi-organ failure. Always use breed-specific blockers.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Web3 Integration -->
+    <section id="web3" class="mb-24 p-12 bg-gradient-to-br from-stone-800 to-stone-900 rounded-3xl text-white overflow-hidden relative">
+        <div class="relative z-10">
+            <h2 class="text-3xl font-serif mb-6 text-amber-200 italic">The Digital Lineage</h2>
+            <p class="text-stone-300 max-w-2xl mb-8 leading-relaxed">
+                Protecting the Xoloitzcuintli means protecting its genetic truth. Xolos Ramirez utilizes the <strong>xolosArmy Network</strong> and <strong>RMZ tokens</strong> to create immutable NFT pedigrees, ensuring that skin health and lineage are transparent for future generations.
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <span class="bg-stone-700 px-4 py-2 rounded-full text-xs tracking-widest uppercase">Tonalli Wallet</span>
+                <span class="bg-stone-700 px-4 py-2 rounded-full text-xs tracking-widest uppercase">Teyolia Crowdfund</span>
+                <span class="bg-stone-700 px-4 py-2 rounded-full text-xs tracking-widest uppercase">Immutable Pedigree</span>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="bg-stone-100 py-12 text-center text-stone-400 text-sm">
+    <div class="max-w-7xl mx-auto px-6">
+        <p class="mb-4 uppercase tracking-widest">&copy; 2024 Xolos Ramirez Ancestral Care</p>
+        <p class="italic">"Para el Guerrero que cuidas en casa."</p>
+    </div>
+</footer>
+
+<script>
+    // Data Storage
+    const products = [
+        { name: "Bálsamo de Árbol de Té", icon: "🌿", usage: "Antibacterial / Irritation", mxn: 522, rmz: 5752.32, color: "emerald" },
+        { name: "Bálsamo de Lavanda", icon: "💜", usage: "Relaxing / Repairing", mxn: 522, rmz: 5752.32, color: "purple" },
+        { name: "Bálsamo de Limón", icon: "🍋", usage: "Acne / Degreaser (PM Only)", mxn: 522, rmz: 5752.32, color: "amber" },
+        { name: "Protector Solar", icon: "☀", usage: "UV Shield / Non-Toxic", mxn: 522, rmz: 5752.32, color: "orange" },
+        { name: "Repelente Natural", icon: "🛡", usage: "Bug Defense", mxn: 522, rmz: 5752.32, color: "stone" },
+        { name: "Kit Bienestar", icon: "🎁", usage: "Comprehensive Suite", mxn: 1950, rmz: 20707.84, color: "amber" }
+    ];
+
+    const routineData = {
+        1: {
+            title: "Phase 1: The Atmosphere Ritual",
+            desc: "Lowering cortisol is the first step in skin care. By using ancestral chants and jungle sounds, we trigger the parasympathetic system, making the skin more receptive to healing.",
+            note: "Stress manifests rapidly in hairless breeds as hives or excessive self-trauma."
+        },
+        2: {
+            title: "Phase 2: Cleansing & Exfoliation",
+            desc: "Use pH-balanced soaps with glycerin and calendula. Avoid aggressive scrubbing; instead, use a soft cloth to remove the accumulated sebum that causes 'Blackheads'.",
+            note: "Over-bathing triggers reactive seborrhea, making the skin oilier."
+        },
+        3: {
+            title: "Phase 3: Targeted Botanical Care",
+            desc: "Apply Lemon Balm for acne-prone areas (Back/Chin) only at night. Use Tea Tree for minor abrasions and Lavender for cellular repair and dryness.",
+            note: "Never apply Lemon oil before sun exposure due to Phytophotodermatitis risk."
+        },
+        4: {
+            title: "Phase 4: Hydration & Shielding",
+            desc: "Finish with non-comedogenic Baobab oil or sunscreen. These provide an exogenous lipid barrier that prevents moisture evaporation (TEWL).",
+            note: "Baobab oil is rich in Omega 3-6-9 and absorbs without clogging pores."
+        }
+    };
+
+    let currentCurrency = 'MXN';
+
+    // UI Logic
+    function init() {
+        renderProducts();
+        renderCharts();
+    }
+
+    function toggleCurrency(curr) {
+        currentCurrency = curr;
+        document.getElementById('mxnBtn').classList.toggle('bg-white', curr === 'MXN');
+        document.getElementById('mxnBtn').classList.toggle('text-stone-900', curr === 'MXN');
+        document.getElementById('mxnBtn').classList.toggle('text-stone-400', curr !== 'MXN');
+        
+        document.getElementById('rmzBtn').classList.toggle('bg-white', curr === 'RMZ');
+        document.getElementById('rmzBtn').classList.toggle('text-stone-900', curr === 'RMZ');
+        document.getElementById('rmzBtn').classList.toggle('text-stone-400', curr !== 'RMZ');
+        
+        renderProducts();
+    }
+
+    function renderProducts() {
+        const grid = document.getElementById('product-grid');
+        grid.innerHTML = products.map(p => `
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-stone-100 hover:shadow-md transition">
+                <div class="text-4xl mb-4">${p.icon}</div>
+                <h3 class="font-bold text-lg mb-1">${p.name}</h3>
+                <p class="text-xs text-stone-400 uppercase tracking-widest mb-4">${p.usage}</p>
+                <p class="text-2xl font-serif text-stone-800">
+                    ${currentCurrency === 'MXN' ? '$' + p.mxn : p.rmz + ' RMZ'}
+                </p>
+                <div class="mt-6 pt-6 border-t border-stone-50 flex items-center text-xs font-semibold uppercase text-amber-800 cursor-pointer hover:translate-x-2 transition">
+                    View Benefits &nbsp; →
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function updateRoutine(id) {
+        document.querySelectorAll('.ritual-step').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`step${id}-btn`).classList.add('active');
+
+        const content = routineData[id];
+        const display = document.getElementById('content-display');
+        display.style.opacity = 0;
+        
+        setTimeout(() => {
+            display.innerHTML = `
+                <h3 class="text-2xl font-serif mb-4 text-amber-200">${content.title}</h3>
+                <p class="text-lg leading-relaxed mb-6">${content.desc}</p>
+                <div class="bg-stone-800 p-4 rounded-lg border-l-4 border-amber-400">
+                    <p class="text-sm italic">${content.note}</p>
+                </div>
+            `;
+            display.style.opacity = 1;
+        }, 200);
+    }
+
+    function renderCharts() {
+        const ctx = document.getElementById('bioChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Water Loss (TEWL)', 'UV Sensitivity', 'Sebum Pooling', 'Impact Damage', 'Thermoregulation Stress'],
+                datasets: [
+                    {
+                        label: 'Xolo (Hairless)',
+                        data: [90, 95, 85, 70, 80],
+                        backgroundColor: 'rgba(140, 120, 81, 0.2)',
+                        borderColor: '#8c7851',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#8c7851'
+                    },
+                    {
+                        label: 'Standard Coated Dog',
+                        data: [30, 15, 20, 15, 25],
+                        backgroundColor: 'rgba(168, 162, 158, 0.2)',
+                        borderColor: '#a8a29e',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#a8a29e'
+                    }
+                ]
+            },
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: { display: false },
+                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom', labels: { font: { family: 'Inter' } } }
+                }
+            }
+        });
+    }
+
+    init();
+</script>
+
+</body>
+</html>
