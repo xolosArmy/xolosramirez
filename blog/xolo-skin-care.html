@@ -78,12 +78,13 @@
 
 <nav class="fixed top-0 w-full z-50 glass-nav">
     <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        <div class="text-xl font-bold tracking-tighter text-stone-800 italic">XOLOS RAMIREZ</div>
+        <a href="https://xolosramirez.com/xolo-skin-care/" aria-label="Visit Xolos Ramirez Xolo Skin Care" class="text-xl font-bold tracking-tighter text-stone-800 italic hover:text-amber-800 focus:outline-none focus:ring-2 focus:ring-amber-700 focus:ring-offset-2 focus:ring-offset-[#fcfaf7] rounded-sm transition">XOLOS RAMIREZ</a>
         <div class="hidden md:flex space-x-8 text-sm font-medium uppercase tracking-widest text-stone-600">
             <a href="#biology" class="hover:text-amber-800 transition">Biology</a>
             <a href="#routine" class="hover:text-amber-800 transition">Routine</a>
             <a href="#products" class="hover:text-amber-800 transition">Products</a>
             <a href="#safety" class="hover:text-amber-800 transition">Safety</a>
+            <a href="https://xolosramirez.com/xolo-skin-care/" class="text-amber-800 hover:text-stone-900 focus:outline-none focus:ring-2 focus:ring-amber-700 focus:ring-offset-4 focus:ring-offset-[#fcfaf7] transition">Xolo Skin Care</a>
         </div>
     </div>
 </nav>
@@ -94,6 +95,7 @@
         <span class="text-amber-800 font-semibold tracking-widest uppercase text-xs mb-4 block">Cuidado Ancestral</span>
         <h1 class="text-5xl md:text-7xl font-bold mb-6 text-stone-900 leading-tight">The Guardian's Skin</h1>
         <p class="text-lg md:text-xl text-stone-600 max-w-2xl mx-auto italic">"Ancestral care for warrior skin" — A holistic journey through the unique dermatology of the Xoloitzcuintli.</p>
+        <a href="https://xolosramirez.com/xolo-skin-care/" class="inline-flex items-center justify-center mt-8 px-7 py-3 rounded-full bg-stone-900 text-amber-100 text-xs font-semibold uppercase tracking-widest shadow-sm hover:bg-amber-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-amber-700 focus:ring-offset-4 focus:ring-offset-[#fcfaf7] transition">Explore Xolo Skin Care</a>
     </header>
 
     <!-- Biological Context Section -->
@@ -179,6 +181,10 @@
         <div id="product-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- Cards populated by JS -->
         </div>
+
+        <div class="text-center mt-12">
+            <a href="https://xolosramirez.com/xolo-skin-care/" class="inline-flex items-center justify-center px-8 py-3 rounded-full bg-amber-800 text-white text-xs font-semibold uppercase tracking-widest shadow-sm hover:bg-stone-900 focus:outline-none focus:ring-2 focus:ring-amber-700 focus:ring-offset-4 focus:ring-offset-[#fcfaf7] transition">Discover the complete Xolo Skin Care collection</a>
+        </div>
     </section>
 
     <!-- Safety Section -->
@@ -232,19 +238,20 @@
 <footer class="bg-stone-100 py-12 text-center text-stone-400 text-sm">
     <div class="max-w-7xl mx-auto px-6">
         <p class="mb-4 uppercase tracking-widest">&copy; 2024 Xolos Ramirez Ancestral Care</p>
-        <p class="italic">"Para el Guerrero que cuidas en casa."</p>
+        <p class="italic"><a href="https://xolosramirez.com/xolo-skin-care/" class="hover:text-amber-800 focus:outline-none focus:ring-2 focus:ring-amber-700 focus:ring-offset-4 focus:ring-offset-stone-100 rounded-sm transition">"Para el Guerrero que cuidas en casa."</a></p>
     </div>
 </footer>
 
 <script>
     // Data Storage
+    const skinCareUrl = 'https://xolosramirez.com/xolo-skin-care/';
     const products = [
-        { name: "Bálsamo de Árbol de Té", icon: "🌿", usage: "Antibacterial / Irritation", mxn: 522, rmz: 5752.32, color: "emerald" },
-        { name: "Bálsamo de Lavanda", icon: "💜", usage: "Relaxing / Repairing", mxn: 522, rmz: 5752.32, color: "purple" },
-        { name: "Bálsamo de Limón", icon: "🍋", usage: "Acne / Degreaser (PM Only)", mxn: 522, rmz: 5752.32, color: "amber" },
-        { name: "Protector Solar", icon: "☀", usage: "UV Shield / Non-Toxic", mxn: 522, rmz: 5752.32, color: "orange" },
-        { name: "Repelente Natural", icon: "🛡", usage: "Bug Defense", mxn: 522, rmz: 5752.32, color: "stone" },
-        { name: "Kit Bienestar", icon: "🎁", usage: "Comprehensive Suite", mxn: 1950, rmz: 20707.84, color: "amber" }
+        { name: "Bálsamo de Árbol de Té", icon: "🌿", usage: "Antibacterial / Irritation", mxn: 522, rmz: 5752.32, color: "emerald", cta: "View Benefits →" },
+        { name: "Bálsamo de Lavanda", icon: "💜", usage: "Relaxing / Repairing", mxn: 522, rmz: 5752.32, color: "purple", cta: "View Benefits →" },
+        { name: "Bálsamo de Limón", icon: "🍋", usage: "Acne / Degreaser (PM Only)", mxn: 522, rmz: 5752.32, color: "amber", cta: "View Benefits →" },
+        { name: "Protector Solar", icon: "☀", usage: "UV Shield / Non-Toxic", mxn: 522, rmz: 5752.32, color: "orange", cta: "View Benefits →" },
+        { name: "Repelente Natural", icon: "🛡", usage: "Bug Defense", mxn: 522, rmz: 5752.32, color: "stone", cta: "View Benefits →" },
+        { name: "Kit Bienestar", icon: "🎁", usage: "Comprehensive Suite", mxn: 1950, rmz: 20707.84, color: "amber", cta: "View the Wellness Kit →" }
     ];
 
     const routineData = {
@@ -301,9 +308,9 @@
                 <p class="text-2xl font-serif text-stone-800">
                     ${currentCurrency === 'MXN' ? '$' + p.mxn : p.rmz + ' RMZ'}
                 </p>
-                <div class="mt-6 pt-6 border-t border-stone-50 flex items-center text-xs font-semibold uppercase text-amber-800 cursor-pointer hover:translate-x-2 transition">
-                    View Benefits &nbsp; →
-                </div>
+                <a href="${skinCareUrl}" class="mt-6 pt-6 border-t border-stone-50 flex items-center text-xs font-semibold uppercase text-amber-800 hover:translate-x-2 focus:translate-x-2 focus:outline-none focus:ring-2 focus:ring-amber-700 focus:ring-offset-4 focus:ring-offset-white rounded-sm transition">
+                    ${p.cta}
+                </a>
             </div>
         `).join('');
     }
