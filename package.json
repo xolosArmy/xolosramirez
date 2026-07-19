@@ -6,7 +6,8 @@
     "lint:links": "linkinator https://xolosramirez.com --recurse --silent",
     "test:lighthouse:home": "lighthouse https://xolosramirez.com --only-categories=performance,accessibility,best-practices,seo --preset=desktop --output=html --output-path=./reports/lighthouse-home.html",
     "test:lighthouse:available": "lighthouse https://xolosramirez.com/xolos-disponibles.html --only-categories=performance,accessibility,best-practices,seo --preset=desktop --output=html --output-path=./reports/lighthouse-available.html",
-    "test:lighthouse:contact": "lighthouse https://xolosramirez.com/contacto.html --only-categories=performance,accessibility,best-practices,seo --preset=desktop --output=html --output-path=./reports/lighthouse-contact.html"
+    "test:lighthouse:contact": "lighthouse https://xolosramirez.com/contacto.html --only-categories=performance,accessibility,best-practices,seo --preset=desktop --output=html --output-path=./reports/lighthouse-contact.html",
+    "test:generate-lead": "node scripts/test-generate-lead-tracking.mjs"
   },
   "devDependencies": {
     "htmlhint": "^1.4.6",
