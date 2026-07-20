@@ -1686,48 +1686,111 @@ form textarea:focus {
   font-size: 1.5rem;
   margin-bottom: 10px;
 }
-/* =========================================
-   INDICADOR DE SWIPE PARA GALERÍAS
-   ========================================= */
-.swipe-indicator {
-  position: absolute;
-  bottom: 15px;
-  right: 15px;
-  background: rgba(17, 17, 17, 0.75);
-  color: #d4af37; /* Dorado Xolo */
-  padding: 6px 12px;
-  border-radius: 20px;
+
+
+/* Reusable available-xolo photo carousel */
+.puppy-carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #111;
+}
+
+.puppy-carousel__track {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  z-index: 10;
-  pointer-events: none; /* Evita que bloquee el deslizamiento con el dedo */
-  border: 1px solid rgba(212, 175, 55, 0.3);
-  backdrop-filter: blur(4px);
-  animation: swipe-bounce 2s infinite;
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-.swipe-indicator svg {
-  width: 14px;
-  height: 14px;
+.puppy-carousel__track::-webkit-scrollbar { display: none; }
+
+.puppy-carousel__slide {
+  flex: 0 0 100%;
+  height: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
-/* Animación sutil de rebote hacia la derecha */
-@keyframes swipe-bounce {
-  0%, 20%, 50%, 80%, 100% { transform: translateX(0); }
-  40% { transform: translateX(6px); }
-  60% { transform: translateX(3px); }
+.puppy-carousel__slide .puppy-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
-/* Ocultar en pantallas muy grandes si prefieres que solo se vea en móviles
-(Opcional: borra esto si quieres que se vea también en PC) */
-@media (min-width: 1024px) {
-  .swipe-indicator {
-    display: none;
-  }
+.puppy-carousel__button {
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  display: grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  place-items: center;
+  padding: 0;
+  color: #d4af37;
+  font-size: 1.25rem;
+  line-height: 1;
+  background: rgba(17, 17, 17, 0.7);
+  border: 1px solid rgba(212, 175, 55, 0.55);
+  border-radius: 50%;
+  cursor: pointer;
+  transform: translateY(-50%);
 }
 
+.puppy-carousel__button--previous { left: .75rem; }
+.puppy-carousel__button--next { right: .75rem; }
+.puppy-carousel__button:hover { background: rgba(17, 17, 17, .9); }
+.puppy-carousel__button:focus-visible,
+.puppy-carousel__dots button:focus-visible,
+.puppy-carousel__track:focus-visible {
+  outline: 3px solid #d4af37;
+  outline-offset: 3px;
+}
+
+.puppy-carousel__dots {
+  position: absolute;
+  right: .75rem;
+  bottom: .65rem;
+  left: .75rem;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  gap: .45rem;
+}
+
+.puppy-carousel__dots button {
+  width: .55rem;
+  height: .55rem;
+  padding: 0;
+  background: rgba(212, 175, 55, .45);
+  border: 1px solid rgba(17, 17, 17, .8);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.puppy-carousel__dots button[aria-current="true"] {
+  background: #d4af37;
+  transform: scale(1.2);
+}
+
+.puppy-carousel__live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.puppy-carousel--single .puppy-carousel__button,
+.puppy-carousel--single .puppy-carousel__dots { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .puppy-carousel__track { scroll-behavior: auto; }
+}

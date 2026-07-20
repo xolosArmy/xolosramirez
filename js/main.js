@@ -215,3 +215,78 @@ document.addEventListener('submit', (event) => {
 
   pushGenerateLead(buildLeadPayload(form));
 });
+
+function initializePuppyCarousels() {
+  document.querySelectorAll('[data-puppy-carousel]').forEach((carousel) => {
+    if (carousel.dataset.puppyCarouselInitialized === 'true') return;
+
+    const track = carousel.querySelector('.puppy-carousel__track');
+    const slides = Array.from(carousel.querySelectorAll('.puppy-carousel__slide'));
+    if (!track || slides.length === 0) return;
+
+    carousel.dataset.puppyCarouselInitialized = 'true';
+    const previousButton = carousel.querySelector('.puppy-carousel__button--previous');
+    const nextButton = carousel.querySelector('.puppy-carousel__button--next');
+    const dots = carousel.querySelector('.puppy-carousel__dots');
+    const liveRegion = carousel.querySelector('.puppy-carousel__live');
+    const isSpanish = document.documentElement.lang.toLowerCase().startsWith('es');
+    let activeIndex = 0;
+    let scrollFrame;
+
+    const messageFor = (index) => isSpanish
+      ? `Foto ${index + 1} de ${slides.length}`
+      : `Photo ${index + 1} of ${slides.length}`;
+
+    const updateActiveSlide = (index, announce = true) => {
+      activeIndex = Math.max(0, Math.min(index, slides.length - 1));
+      if (dots) {
+        dots.querySelectorAll('button').forEach((dot, dotIndex) => {
+          dot.setAttribute('aria-current', String(dotIndex === activeIndex));
+        });
+      }
+      if (announce && liveRegion) liveRegion.textContent = messageFor(activeIndex);
+    };
+
+    const goToSlide = (index) => {
+      const nextIndex = (index + slides.length) % slides.length;
+      track.scrollTo({ left: slides[nextIndex].offsetLeft, behavior: 'smooth' });
+      updateActiveSlide(nextIndex);
+    };
+
+    if (slides.length === 1) {
+      carousel.classList.add('puppy-carousel--single');
+      updateActiveSlide(0, false);
+      return;
+    }
+
+    if (dots) {
+      slides.forEach((_, index) => {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.setAttribute('aria-label', messageFor(index));
+        dot.setAttribute('aria-current', String(index === 0));
+        dot.addEventListener('click', () => goToSlide(index));
+        dots.appendChild(dot);
+      });
+    }
+
+    previousButton?.addEventListener('click', () => goToSlide(activeIndex - 1));
+    nextButton?.addEventListener('click', () => goToSlide(activeIndex + 1));
+    track.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft') { event.preventDefault(); goToSlide(activeIndex - 1); }
+      if (event.key === 'ArrowRight') { event.preventDefault(); goToSlide(activeIndex + 1); }
+    });
+    track.addEventListener('scroll', () => {
+      window.cancelAnimationFrame(scrollFrame);
+      scrollFrame = window.requestAnimationFrame(() => {
+        const closestIndex = slides.reduce((closest, slide, index) => (
+          Math.abs(slide.offsetLeft - track.scrollLeft) < Math.abs(slides[closest].offsetLeft - track.scrollLeft)
+            ? index : closest
+        ), 0);
+        if (closestIndex !== activeIndex) updateActiveSlide(closestIndex);
+      });
+    }, { passive: true });
+  });
+}
+
+initializePuppyCarousels();
