@@ -150,6 +150,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
 </header>
 
+<nav aria-label="Migas de pan" style="max-width: 72rem; margin: 0 auto; padding: 1rem 1rem 0; background: #fff; color: #57534e; font-size: 0.875rem; line-height: 1.5;">
+    <ol style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin: 0; padding: 0; list-style: none;">
+        <li><a href="../index.html" style="color: inherit; text-decoration: underline; text-underline-offset: 0.2em;">Inicio</a></li>
+        <li aria-hidden="true">›</li>
+        <li><a href="index.html" style="color: inherit; text-decoration: underline; text-underline-offset: 0.2em;">Blog</a></li>
+        <li aria-hidden="true">›</li>
+        <li aria-current="page">Orejas del xoloitzcuintle</li>
+    </ol>
+</nav>
+
 <main class="max-w-6xl mx-auto px-4 pb-24 space-y-24">
 
     <section id="anatomia" class="scroll-mt-24">
@@ -189,9 +199,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <section id="desarrollo" class="scroll-mt-24 bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-xolo-light">
         <div class="mb-10">
-            <h2 class="text-3xl font-bold text-xolo-dark mb-4">Línea de Tiempo del Desarrollo</h2>
+            <h2 class="text-3xl font-bold text-xolo-dark mb-4">Etapas cualitativas de observación</h2>
             <p class="text-gray-700 max-w-4xl leading-relaxed">
-                La posición de las orejas puede cambiar durante el crecimiento y no todos los cachorros siguen el mismo calendario. Esta herramienta muestra un recorrido orientativo; la talla no permite predecir una fecha ni garantizar el resultado.
+                La posición de las orejas puede cambiar durante el crecimiento y cada cachorro presenta variación individual. Esta herramienta organiza puntos de observación sin asignar edades, plazos ni un resultado esperado.
             </p>
         </div>
 
@@ -335,27 +345,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         }
     });
 
-    const timelineData = {
-        estandar: [1, 1.5, 2, 2.5, 3, 3.2, 3.4, 3.5],
-        miniatura: [1, 1.5, 2, 2.5, 3, 3.2, 3.4, 3.5]
+    const observationData = {
+        estandar: [1, 1, 1, 1],
+        miniatura: [1, 1, 1, 1]
     };
     
     const ctxTimeline = document.getElementById('timelineChart').getContext('2d');
     let timelineChart = new Chart(ctxTimeline, {
-        type: 'line',
+        type: 'bar',
         data: {
-            labels: ['Mes 1', 'Mes 2', 'Mes 3', 'Mes 4', 'Mes 5', 'Mes 6', 'Mes 7', 'Mes 8'],
+            labels: ['Observación inicial', 'Cambios durante el crecimiento', 'Variación individual', 'Seguimiento'],
             datasets: [{
-                label: 'Recorrido visual de observación',
-                data: timelineData.estandar,
-                borderColor: '#C68D5B',
-                backgroundColor: 'rgba(198, 141, 91, 0.1)',
-                borderWidth: 3,
-                pointBackgroundColor: '#8B5A2B',
-                pointRadius: 5,
-                pointHoverRadius: 8,
-                fill: true,
-                tension: 0.4
+                label: 'Puntos de observación sin orden temporal',
+                data: observationData.estandar,
+                backgroundColor: ['#C68D5B', '#E5D3C8', '#8B5A2B', '#B8A89A'],
+                borderColor: '#8B5A2B',
+                borderWidth: 1,
+                borderRadius: 6
             }]
         },
         options: {
@@ -364,9 +370,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             scales: {
                 y: {
                     beginAtZero: true,
-                    max: 4,
+                    max: 1.2,
                     ticks: { display: false },
-                    title: { display: true, text: 'Cambio individual' },
+                    title: { display: true, text: 'Observación cualitativa' },
                     grid: { borderDash: [5, 5], color: '#f3f4f6' }
                 },
                 x: {
@@ -378,7 +384,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 tooltip: {
                     callbacks: {
                         label: function(context) {
-                            return 'Referencia visual; no expresa probabilidad ni plazo garantizado.';
+                            const notes = [
+                                'Registra la forma sin asumir un resultado final.',
+                                'Compara cambios sin fijar plazos.',
+                                'Reconoce diferencias entre ejemplares.',
+                                'Consulta ante molestias, lesiones o secreciones.'
+                            ];
+                            return notes[context.dataIndex];
                         }
                     }
                 }
@@ -396,9 +408,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         btnMiniatura.classList.remove('active-btn');
         btnMiniatura.classList.add('inactive-btn');
         
-        timelineChart.data.datasets[0].data = timelineData.estandar;
-        timelineChart.data.datasets[0].borderColor = '#C68D5B';
-        timelineChart.data.datasets[0].backgroundColor = 'rgba(198, 141, 91, 0.1)';
+        timelineChart.data.datasets[0].data = observationData.estandar;
+        timelineChart.data.datasets[0].borderColor = '#8B5A2B';
+        timelineChart.data.datasets[0].backgroundColor = ['#C68D5B', '#E5D3C8', '#8B5A2B', '#B8A89A'];
         timelineChart.update();
         
         insightText.textContent = 'En la talla estándar también existe variación individual. Registra cambios y consulta ante dolor, inflamación, secreción o lesiones.';
@@ -410,9 +422,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         btnEstandar.classList.remove('active-btn');
         btnEstandar.classList.add('inactive-btn');
         
-        timelineChart.data.datasets[0].data = timelineData.miniatura;
+        timelineChart.data.datasets[0].data = observationData.miniatura;
         timelineChart.data.datasets[0].borderColor = '#8B5A2B';
-        timelineChart.data.datasets[0].backgroundColor = 'rgba(139, 90, 43, 0.1)';
+        timelineChart.data.datasets[0].backgroundColor = ['#8B5A2B', '#B8A89A', '#C68D5B', '#E5D3C8'];
         timelineChart.update();
         
         insightText.textContent = 'La talla miniatura no garantiza un desarrollo más rápido. El seguimiento debe basarse en el ejemplar y no en un calendario rígido.';
