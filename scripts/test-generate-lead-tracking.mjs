@@ -77,12 +77,107 @@ for (const path of ['index.html', 'en/index.html']) {
   assert.ok(/class="[^"]*(wa-float|home-email-float)[^"]*"[\s\S]*?data-cta="email"[\s\S]*?data-lead-type="generate_lead"/.test(html), path + ' must keep floating email lead CTA');
 }
 
-for (const path of ['xolos-disponibles.html', 'en/available-xolos.html']) {
-  const html = read(path);
-  assert.ok(/class="[^"]*home-email-float[^"]*"[\s\S]*?href="mailto:contacto@xolosarmy\.xyz"[\s\S]*?data-cta="email"[\s\S]*?data-lead-type="generate_lead"/.test(html), path + ' must keep floating email lead CTA');
-  assert.equal(/class="[^"]*(?:wa-float|whatsapp-float)[^"]*"[\s\S]*?href="(?:https?:\/\/(?:wa\.me|api\.whatsapp\.com)|whatsapp:\/\/)/i.test(html), false, path + ' must not keep a floating WhatsApp link');
-  assert.ok(/data-profile="(?!general)[^"]+"/.test(html), path + ' must keep profile slugs');
-  assert.ok(/data-status="(?:available|reserved|delivered|teyolia)"/.test(html), path + ' must keep profile statuses');
+const floatingEmailExpectations = [
+  {
+    path: 'xolos-disponibles.html',
+    subject: 'Precio%20y%20disponibilidad%20de%20un%20xoloitzcuintle',
+    body: 'Hola%2C%20me%20interesa%20conocer%20el%20precio%20y%20la%20disponibilidad%20de%20un%20xoloitzcuintle.%20Tambi%C3%A9n%20quisiera%20recibir%20orientaci%C3%B3n%20sobre%20tallas%2C%20documentaci%C3%B3n%20y%20proceso%20de%20entrega.%0A%0AMi%20ciudad%20o%20pa%C3%ADs%20es%3A',
+    visibleText: 'Preguntar precio de un xoloitzcuintle',
+    accessibleText: 'Preguntar precio de un xoloitzcuintle por correo',
+  },
+  {
+    path: 'en/available-xolos.html',
+    subject: 'Xoloitzcuintle%20price%20and%20availability',
+    body: 'Hello%2C%20I%E2%80%99m%20interested%20in%20learning%20about%20the%20price%20and%20current%20availability%20of%20a%20Xoloitzcuintle.%20I%20would%20also%20like%20guidance%20about%20sizes%2C%20documentation%20and%20delivery.%0A%0AMy%20city%20or%20country%20is%3A',
+    visibleText: 'Ask about Xoloitzcuintle price',
+    accessibleText: 'Ask about Xoloitzcuintle price by email',
+  },
+];
+
+for (const expectation of floatingEmailExpectations) {
+  const html = read(expectation.path);
+
+  const match = html.match(
+    /<a(?=[^>]*class="[^"]*home-email-float[^"]*")[^>]*>[\s\S]*?<\/a>/
+  );
+
+  assert.ok(
+    match,
+    expectation.path + ' must keep one floating email CTA'
+  );
+
+  const cta = match[0];
+
+  const expectedHref =
+    'href="mailto:contacto@xolosarmy.xyz?subject=' +
+    expectation.subject +
+    '&amp;body=' +
+    expectation.body +
+    '"';
+
+  includes(
+    cta,
+    expectedHref,
+    expectation.path + ' must use the exact prefilled mailto'
+  );
+
+  includes(
+    cta,
+    'data-cta="email"',
+    expectation.path + ' must keep email tracking'
+  );
+
+  includes(
+    cta,
+    'data-lead-type="generate_lead"',
+    expectation.path + ' must keep generate_lead'
+  );
+
+  includes(
+    cta,
+    'data-lead-intent="price_inquiry"',
+    expectation.path + ' must declare price intent'
+  );
+
+  includes(
+    cta,
+    expectation.visibleText,
+    expectation.path + ' must keep the price keyword'
+  );
+
+  includes(
+    cta,
+    'aria-label="' + expectation.accessibleText + '"',
+    expectation.path + ' must keep the localized aria-label'
+  );
+
+  includes(
+    cta,
+    'title="' + expectation.accessibleText + '"',
+    expectation.path + ' must keep the localized title'
+  );
+
+  assert.equal(
+    cta.includes('%25'),
+    false,
+    expectation.path + ' must not double encode the mailto'
+  );
+
+  assert.equal(
+    /(?:wa\.me|api\.whatsapp\.com|whatsapp:\/\/)/i.test(cta),
+    false,
+    expectation.path + ' must not keep floating WhatsApp'
+  );
+
+  assert.ok(
+    /data-profile="(?!general)[^"]+"/.test(html),
+    expectation.path + ' must keep profile slugs'
+  );
+
+  assert.ok(
+    /data-status="(?:available|reserved|delivered|teyolia)"/.test(html),
+    expectation.path + ' must keep profile statuses'
+  );
 }
 
 for (const path of [
