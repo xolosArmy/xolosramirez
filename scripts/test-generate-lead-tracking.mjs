@@ -79,7 +79,8 @@ for (const path of ['index.html', 'en/index.html']) {
 
 for (const path of ['xolos-disponibles.html', 'en/available-xolos.html']) {
   const html = read(path);
-  assert.ok(/class="[^"]*wa-float[^"]*"[\s\S]*?data-cta="whatsapp"[\s\S]*?data-lead-type="generate_lead"/.test(html), path + ' must keep floating WhatsApp lead CTA');
+  assert.ok(/class="[^"]*home-email-float[^"]*"[\s\S]*?href="mailto:contacto@xolosarmy\.xyz"[\s\S]*?data-cta="email"[\s\S]*?data-lead-type="generate_lead"/.test(html), path + ' must keep floating email lead CTA');
+  assert.equal(/class="[^"]*(?:wa-float|whatsapp-float)[^"]*"[\s\S]*?href="(?:https?:\/\/(?:wa\.me|api\.whatsapp\.com)|whatsapp:\/\/)/i.test(html), false, path + ' must not keep a floating WhatsApp link');
   assert.ok(/data-profile="(?!general)[^"]+"/.test(html), path + ' must keep profile slugs');
   assert.ok(/data-status="(?:available|reserved|delivered|teyolia)"/.test(html), path + ' must keep profile statuses');
 }
