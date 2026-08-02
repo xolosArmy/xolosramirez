@@ -86,6 +86,7 @@ function getLeadChannel(element) {
 
   if (cta === 'whatsapp') return 'whatsapp';
   if (cta === 'email') return 'email';
+  if (cta === 'video_call') return 'video_call';
   if (cta === 'contact-form' || cta === 'form') return 'form';
 
   return 'unknown';
