@@ -1,21 +1,12 @@
 @import url('./styles-base.css');
 
-/* Xilonen Ramirez: fotografías seleccionadas para su perfil en español e inglés. */
-.puppy-carousel[aria-label*="Xilonen"] .puppy-carousel__slide:nth-child(1),
-.puppy-carousel[aria-label*="Xilonen"] .puppy-carousel__slide:nth-child(2) {
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+/* Xilonen Ramirez: reemplazo visual directo de las dos fotografías del carrusel. */
+.puppy-carousel__slide > img[src="https://i.imgur.com/QeNNg9H.jpeg"] {
+  content: url('../img/xolos/xilonen-ramirez-01.jpg');
+  opacity: 1;
 }
 
-.puppy-carousel[aria-label*="Xilonen"] .puppy-carousel__slide:nth-child(1) {
-  background-image: url('../img/xolos/xilonen-ramirez-01.jpg');
-}
-
-.puppy-carousel[aria-label*="Xilonen"] .puppy-carousel__slide:nth-child(2) {
-  background-image: url('../img/xolos/xilonen-ramirez-02.jpg');
-}
-
-.puppy-carousel[aria-label*="Xilonen"] .puppy-carousel__slide:nth-child(-n+2) > img {
-  opacity: 0;
+.puppy-carousel__slide > img[src="https://i.imgur.com/QN6BMnO.jpeg"] {
+  content: url('../img/xolos/xilonen-ramirez-02.jpg');
+  opacity: 1;
 }
