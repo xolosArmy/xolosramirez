@@ -10,3 +10,14 @@
   content: url('../img/xolos/xilonen-ramirez-02.jpg');
   opacity: 1;
 }
+
+/* Yohualli Ramirez: fotografías seleccionadas para su perfil bilingüe. */
+.puppy-carousel__slide > img[src="https://i.imgur.com/8Gz0PYU.jpeg"] {
+  content: url('../img/xolos/yohualli-ramirez-01.webp');
+  opacity: 1;
+}
+
+.puppy-carousel__slide > img[src="https://i.imgur.com/IpXYwO3.jpeg"] {
+  content: url('../img/xolos/yohualli-ramirez-02.webp');
+  opacity: 1;
+}
