@@ -1,0 +1,59 @@
+name: Apply Xilonen profile photos
+
+on:
+  push:
+    branches:
+      - feat/xilonen-profile-photos
+
+permissions:
+  contents: write
+
+jobs:
+  update-profile-photos:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/xilonen-profile-photos
+          fetch-depth: 0
+
+      - name: Update Xilonen carousel sources
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          replacements = {
+              Path('xolos-disponibles.html'): {
+                  'https://i.imgur.com/QeNNg9H.jpeg': 'img/xolos/xilonen-ramirez-01.jpg',
+                  'https://i.imgur.com/QN6BMnO.jpeg': 'img/xolos/xilonen-ramirez-02.jpg',
+              },
+              Path('en/available-xolos.html'): {
+                  'https://i.imgur.com/QeNNg9H.jpeg': '../img/xolos/xilonen-ramirez-01.jpg',
+                  'https://i.imgur.com/QN6BMnO.jpeg': '../img/xolos/xilonen-ramirez-02.jpg',
+              },
+          }
+
+          for path, mapping in replacements.items():
+              text = path.read_text(encoding='utf-8')
+              for old, new in mapping.items():
+                  if old not in text:
+                      raise RuntimeError(f'Missing expected Xilonen image URL in {path}: {old}')
+                  text = text.replace(old, new, 1)
+              path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Remove temporary workflow and trigger
+        shell: bash
+        run: |
+          rm -f .github/workflows/apply-xilonen-profile-photos.yml .xilonen-profile-photos-trigger
+
+      - name: Commit profile updates
+        shell: bash
+        run: |
+          git config user.name "xolosArmy automation"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -m "Actualizar fotos del perfil de Xilonen"
+          git push origin HEAD:feat/xilonen-profile-photos
