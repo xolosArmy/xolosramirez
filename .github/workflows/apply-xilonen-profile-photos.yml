@@ -1,6 +1,9 @@
 name: Apply Xilonen profile photos
 
 on:
+  push:
+    branches:
+      - feat/xilonen-profile-photos
   pull_request:
     branches:
       - main
