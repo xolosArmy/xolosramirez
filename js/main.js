@@ -1,5 +1,5 @@
-const LEGACY_CONTACT_EMAIL = 'contacto@xolosarmy.xyz';
-const CURRENT_CONTACT_EMAIL = 'fernando@xolosramirez.com';
+const LEGACY_CONTACT_EMAIL = 'fernando@xolosramirez.com';
+const CURRENT_CONTACT_EMAIL = 'contacto@xolosarmy.xyz';
 
 function updateGlobalContactEmail() {
   document.querySelectorAll('a[href^="mailto:"]').forEach((link) => {
