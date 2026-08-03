@@ -1,3 +1,14 @@
+const LEGACY_CONTACT_EMAIL = 'contacto@xolosarmy.xyz';
+const CURRENT_CONTACT_EMAIL = 'fernando@xolosramirez.com';
+
+function updateGlobalContactEmail() {
+  document.querySelectorAll('a[href^="mailto:"]').forEach((link) => {
+    const href = link.getAttribute('href');
+    if (!href || !href.includes(LEGACY_CONTACT_EMAIL)) return;
+    link.setAttribute('href', href.replaceAll(LEGACY_CONTACT_EMAIL, CURRENT_CONTACT_EMAIL));
+  });
+}
+
 const navMenu = document.getElementById('menu');
 const navToggle = document.querySelector('.hamburger');
 
@@ -319,5 +330,6 @@ function updateAvailableXolosCtas() {
   }
 }
 
+updateGlobalContactEmail();
 updateAvailableXolosCtas();
 initializePuppyCarousels();
