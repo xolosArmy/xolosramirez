@@ -3,15 +3,9 @@ const navToggle = document.querySelector('.hamburger');
 
 if (navToggle && navMenu) {
   navToggle.addEventListener('click', () => {
-    const visibility = navMenu.getAttribute('data-visible');
-
-    if (visibility === 'false') {
-      navMenu.setAttribute('data-visible', 'true');
-      navToggle.setAttribute('aria-expanded', 'true');
-    } else {
-      navMenu.setAttribute('data-visible', 'false');
-      navToggle.setAttribute('aria-expanded', 'false');
-    }
+    const isVisible = navMenu.getAttribute('data-visible') === 'true';
+    navMenu.setAttribute('data-visible', String(!isVisible));
+    navToggle.setAttribute('aria-expanded', String(!isVisible));
   });
 
   navMenu.querySelectorAll('a').forEach((link) => {
@@ -23,38 +17,27 @@ if (navToggle && navMenu) {
 }
 
 const yearElement = document.getElementById('year');
-if (yearElement) {
-  yearElement.textContent = String(new Date().getFullYear());
-}
+if (yearElement) yearElement.textContent = String(new Date().getFullYear());
 
 const currentPath = window.location.pathname.replace(/\/index\.html$/, '/');
-
 if (navMenu) {
-  const links = navMenu.querySelectorAll('a');
-  links.forEach((link) => {
+  navMenu.querySelectorAll('a').forEach((link) => {
     const href = link.getAttribute('href');
     if (!href) return;
 
-    const targetPath = new URL(
-      href,
-      window.location.origin + window.location.pathname,
-    )
+    const targetPath = new URL(href, window.location.origin + window.location.pathname)
       .pathname.replace(/\/index\.html$/, '/');
-
     const isCurrentPage =
       (targetPath !== '/' && currentPath.endsWith(targetPath)) ||
       (targetPath === '/' && currentPath === '/');
 
-    if (isCurrentPage) {
-      link.setAttribute('aria-current', 'page');
-    }
+    if (isCurrentPage) link.setAttribute('aria-current', 'page');
   });
 }
 
 document.addEventListener('click', (event) => {
   const target = event.target;
   if (!(target instanceof Element)) return;
-
   const naturalsLink = target.closest('a[data-gtm^="naturals"]');
   if (!naturalsLink) return;
 
@@ -66,15 +49,16 @@ document.addEventListener('click', (event) => {
     href: naturalsLink.getAttribute('href') || '',
   });
 });
+
 const CONTACT_FORM_SELECTOR = 'form[data-gtm="contact-form"]';
 const LEAD_DEDUPLICATION_MS = 1500;
 let lastGenerateLeadSignature = '';
 let lastGenerateLeadAt = 0;
 
 function getLeadElement(target) {
-  if (!(target instanceof Element)) return null;
-
-  return target.closest('[data-lead-type="generate_lead"]');
+  return target instanceof Element
+    ? target.closest('[data-lead-type="generate_lead"]')
+    : null;
 }
 
 function getDatasetField(element, key, fallback = 'unknown') {
@@ -83,12 +67,10 @@ function getDatasetField(element, key, fallback = 'unknown') {
 
 function getLeadChannel(element) {
   const cta = getDatasetField(element, 'cta', '').toLowerCase();
-
   if (cta === 'whatsapp') return 'whatsapp';
   if (cta === 'email') return 'email';
   if (cta === 'video_call') return 'video_call';
   if (cta === 'contact-form' || cta === 'form') return 'form';
-
   return 'unknown';
 }
 
@@ -99,16 +81,13 @@ function getCtaLocation(element) {
   if (element.closest('.puppy-card')) return 'profile_card';
   if (element.closest('footer')) return 'footer';
   if (element.closest(CONTACT_FORM_SELECTOR)) return 'contact_form';
-
   return 'inline';
 }
 
 function normalizeLang(rawLang) {
   const lang = (rawLang || '').toLowerCase();
-
   if (lang === 'es' || lang.startsWith('es-')) return 'es';
   if (lang === 'en' || lang.startsWith('en-')) return 'en';
-
   return 'unknown';
 }
 
@@ -121,32 +100,16 @@ function getLeadIntent(element) {
   const pageType = getDatasetField(element, 'pageType', 'unknown');
   const ctaLocation = getCtaLocation(element);
 
-  if (leadChannel === 'whatsapp' && pageType === 'available-xolos') {
-    return 'price_inquiry';
-  }
-
-  if (leadChannel === 'email' && profileStatus === 'reserved') {
-    return 'similar_xolos';
-  }
-
-  if (leadChannel === 'email' && profile !== 'general') {
-    return 'profile_inquiry';
-  }
-
-  if (leadChannel === 'email' && pageType === 'home') {
-    return 'general_inquiry';
-  }
-
-  if (ctaLocation === 'contact_form') {
-    return 'contact_form';
-  }
-
+  if (leadChannel === 'whatsapp' && pageType === 'available-xolos') return 'price_inquiry';
+  if (leadChannel === 'email' && profileStatus === 'reserved') return 'similar_xolos';
+  if (leadChannel === 'email' && profile !== 'general') return 'profile_inquiry';
+  if (leadChannel === 'email' && pageType === 'home') return 'general_inquiry';
+  if (ctaLocation === 'contact_form') return 'contact_form';
   return 'lead_inquiry';
 }
 
 function buildLeadPayload(element) {
   const lang = element.dataset.lang || document.documentElement.lang;
-
   return {
     event: 'generate_lead',
     lead_channel: getLeadChannel(element),
@@ -174,13 +137,7 @@ function getLeadSignature(payload) {
 function pushGenerateLead(payload) {
   const now = Date.now();
   const signature = getLeadSignature(payload);
-
-  if (
-    signature === lastGenerateLeadSignature &&
-    now - lastGenerateLeadAt < LEAD_DEDUPLICATION_MS
-  ) {
-    return;
-  }
+  if (signature === lastGenerateLeadSignature && now - lastGenerateLeadAt < LEAD_DEDUPLICATION_MS) return;
 
   lastGenerateLeadSignature = signature;
   lastGenerateLeadAt = now;
@@ -191,7 +148,6 @@ function pushGenerateLead(payload) {
 function shouldIgnoreLeadClick(element) {
   const tagName = element.tagName.toLowerCase();
   const type = (element.getAttribute('type') || '').toLowerCase();
-
   return (
     (tagName === 'button' && type === 'submit') ||
     (tagName === 'input' && type === 'submit') ||
@@ -202,18 +158,14 @@ function shouldIgnoreLeadClick(element) {
 
 document.addEventListener('click', (event) => {
   const leadElement = getLeadElement(event.target);
-  if (!leadElement) return;
-  if (shouldIgnoreLeadClick(leadElement)) return;
-
+  if (!leadElement || shouldIgnoreLeadClick(leadElement)) return;
   pushGenerateLead(buildLeadPayload(leadElement));
 });
 
 document.addEventListener('submit', (event) => {
   const form = event.target;
   if (!(form instanceof HTMLFormElement)) return;
-  if (!form.matches(CONTACT_FORM_SELECTOR)) return;
-  if (!form.checkValidity()) return;
-
+  if (!form.matches(CONTACT_FORM_SELECTOR) || !form.checkValidity()) return;
   pushGenerateLead(buildLeadPayload(form));
 });
 
@@ -274,15 +226,22 @@ function initializePuppyCarousels() {
     previousButton?.addEventListener('click', () => goToSlide(activeIndex - 1));
     nextButton?.addEventListener('click', () => goToSlide(activeIndex + 1));
     track.addEventListener('keydown', (event) => {
-      if (event.key === 'ArrowLeft') { event.preventDefault(); goToSlide(activeIndex - 1); }
-      if (event.key === 'ArrowRight') { event.preventDefault(); goToSlide(activeIndex + 1); }
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        goToSlide(activeIndex - 1);
+      }
+      if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        goToSlide(activeIndex + 1);
+      }
     });
     track.addEventListener('scroll', () => {
       window.cancelAnimationFrame(scrollFrame);
       scrollFrame = window.requestAnimationFrame(() => {
         const closestIndex = slides.reduce((closest, slide, index) => (
           Math.abs(slide.offsetLeft - track.scrollLeft) < Math.abs(slides[closest].offsetLeft - track.scrollLeft)
-            ? index : closest
+            ? index
+            : closest
         ), 0);
         if (closestIndex !== activeIndex) updateActiveSlide(closestIndex);
       });
@@ -290,4 +249,75 @@ function initializePuppyCarousels() {
   });
 }
 
+function updateAvailableXolosCtas() {
+  const pagePath = window.location.pathname;
+  const isSpanishPage = pagePath.endsWith('/xolos-disponibles.html');
+  const isEnglishPage = pagePath.endsWith('/en/available-xolos.html');
+  if (!isSpanishPage && !isEnglishPage) return;
+
+  const language = isSpanishPage ? 'es' : 'en';
+  const labels = isSpanishPage
+    ? {
+        video: 'Agendar videollamada',
+        videoAria: 'Agendar videollamada con Xolos Ramírez',
+        whatsapp: 'Consultar por WhatsApp',
+        whatsappAria: 'Consultar por WhatsApp con Xolos Ramírez',
+      }
+    : {
+        video: 'Book a video call',
+        videoAria: 'Book a video call with Xolos Ramírez',
+        whatsapp: 'Contact by WhatsApp',
+        whatsappAria: 'Contact Xolos Ramírez by WhatsApp',
+      };
+
+  const commercialSection = document.getElementById(
+    isSpanishPage ? 'commercial-info-es' : 'commercial-info-en',
+  )?.closest('section');
+  const actions = commercialSection?.querySelector('.puppy-card__actions');
+  const firstAction = actions?.querySelector('a');
+
+  if (firstAction) {
+    firstAction.href = 'https://calendar.app.google/1PXNvJM42iZ3JMHC8';
+    firstAction.target = '_blank';
+    firstAction.rel = 'noopener noreferrer';
+    firstAction.textContent = labels.video;
+    firstAction.setAttribute('aria-label', labels.videoAria);
+    firstAction.dataset.cta = 'video_call';
+    firstAction.dataset.leadType = 'generate_lead';
+    firstAction.dataset.leadIntent = 'video_call_request';
+    firstAction.dataset.profile = 'general';
+    firstAction.dataset.pageType = 'available-xolos';
+    firstAction.dataset.lang = language;
+    firstAction.classList.remove('cta-email');
+    firstAction.classList.add('video-call-cta');
+  }
+
+  const floatingCta = document.querySelector(
+    'a.home-email-float.video-call-float, a.home-email-float[data-cta="video_call"]',
+  );
+  if (floatingCta) {
+    floatingCta.href = 'https://wa.me/525518555993';
+    floatingCta.target = '_blank';
+    floatingCta.rel = 'noopener noreferrer';
+    floatingCta.setAttribute('aria-label', labels.whatsappAria);
+    floatingCta.setAttribute('title', labels.whatsappAria);
+    floatingCta.dataset.cta = 'whatsapp';
+    floatingCta.dataset.leadType = 'generate_lead';
+    floatingCta.dataset.leadIntent = 'price_inquiry';
+    floatingCta.dataset.ctaLocation = 'floating';
+    floatingCta.dataset.profile = 'general';
+    floatingCta.dataset.status = 'not_applicable';
+    floatingCta.dataset.pageType = 'available-xolos';
+    floatingCta.dataset.lang = language;
+    floatingCta.classList.remove('video-call-float');
+    floatingCta.classList.add('wa-float');
+
+    const icon = floatingCta.querySelector('.home-email-float__icon');
+    const text = floatingCta.querySelector('.home-email-float__text');
+    if (icon) icon.textContent = '💬';
+    if (text) text.textContent = labels.whatsapp;
+  }
+}
+
+updateAvailableXolosCtas();
 initializePuppyCarousels();
