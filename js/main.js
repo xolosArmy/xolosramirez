@@ -330,6 +330,15 @@ function updateAvailableXolosCtas() {
   }
 }
 
+function updateXilonenProfileVideo() {
+  const oldVideoUrl = 'https://www.youtube.com/embed/-tOjo7jR67g';
+  const newVideoUrl = 'https://www.youtube.com/embed/L0GKn7rXqZk';
+  document.querySelectorAll(`iframe[src="${oldVideoUrl}"]`).forEach((iframe) => {
+    iframe.setAttribute('src', newVideoUrl);
+  });
+}
+
 updateGlobalContactEmail();
 updateAvailableXolosCtas();
+updateXilonenProfileVideo();
 initializePuppyCarousels();
