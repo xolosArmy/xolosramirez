@@ -1,9 +1,13 @@
 name: Update Xilonen profile video
 
 on:
-  push:
+  pull_request:
     branches:
-      - agent/update-xilonen-profile-video
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
 
 permissions:
   contents: write
@@ -13,10 +17,11 @@ jobs:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
-      - name: Check out branch
+      - name: Check out PR branch
         uses: actions/checkout@v4
         with:
           ref: agent/update-xilonen-profile-video
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update Xilonen video in Spanish and English profiles
         shell: bash
