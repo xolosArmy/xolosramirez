@@ -1,9 +1,9 @@
 name: Update Yohualli profile video
 
 on:
-  push:
+  pull_request:
     branches:
-      - agent/update-yohualli-profile-video
+      - main
 
 permissions:
   contents: write
