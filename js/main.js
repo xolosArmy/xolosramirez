@@ -338,7 +338,16 @@ function updateXilonenProfileVideo() {
   });
 }
 
+function updateYohualliProfileVideo() {
+  const oldVideoUrl = 'https://www.youtube.com/embed/Rv1AIlVnE6s';
+  const newVideoUrl = 'https://www.youtube.com/embed/rBWNyLjg31Q';
+  document.querySelectorAll(`iframe[src="${oldVideoUrl}"]`).forEach((iframe) => {
+    iframe.setAttribute('src', newVideoUrl);
+  });
+}
+
 updateGlobalContactEmail();
 updateAvailableXolosCtas();
 updateXilonenProfileVideo();
+updateYohualliProfileVideo();
 initializePuppyCarousels();
