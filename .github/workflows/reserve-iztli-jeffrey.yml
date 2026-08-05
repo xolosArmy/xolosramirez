@@ -1,0 +1,110 @@
+name: Reserve Iztli for Jeffrey
+
+on:
+  push:
+    branches:
+      - agent/reserve-iztli-jeffrey
+
+permissions:
+  contents: write
+
+jobs:
+  update-iztli:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/reserve-iztli-jeffrey
+
+      - name: Mark Iztli as reserved
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          updates = [
+              (
+                  Path('xolos-disponibles.html'),
+                  '<span class="puppy-card__status status-disponible">Disponible</span>',
+                  '<span class="puppy-card__status status-disponible">Reservado</span>\n    <span class="puppy-card__status" style="top: 40px; background-color: #ff4d4d; color: #fff;">Reservado por Jeffrey</span>',
+                  'iztli-es-available',
+                  'iztli-es-reserved',
+              ),
+              (
+                  Path('en/available-xolos.html'),
+                  '<span class="puppy-card__status status-disponible">Available</span>',
+                  '<span class="puppy-card__status status-disponible">Reserved</span>\n    <span class="puppy-card__status" style="top: 40px; background-color: #ff4d4d; color: #fff;">Reserved by Jeffrey</span>',
+                  'iztli-en-available',
+                  'iztli-en-reserved',
+              ),
+          ]
+
+          for path, old_status, new_status, old_ref, new_ref in updates:
+              text = path.read_text(encoding='utf-8')
+              marker = '<h3 class="puppy-card__name">Iztli Ramirez</h3>'
+              if text.count(marker) != 1:
+                  raise SystemExit(f'{path}: expected exactly one Iztli profile, found {text.count(marker)}')
+
+              name_pos = text.index(marker)
+              start = text.rfind('<article class="puppy-card"', 0, name_pos)
+              end = text.find('</article>', name_pos)
+              if start == -1 or end == -1:
+                  raise SystemExit(f'{path}: unable to isolate Iztli profile')
+              end += len('</article>')
+              block = text[start:end]
+
+              if 'Reservado por Jeffrey' in block or 'Reserved by Jeffrey' in block:
+                  continue
+              if block.count(old_status) != 1:
+                  raise SystemExit(f'{path}: expected one available status in Iztli profile, found {block.count(old_status)}')
+              if block.count('data-status="available"') != 1:
+                  raise SystemExit(f'{path}: expected one available data-status in Iztli profile')
+              if block.count(old_ref) != 1:
+                  raise SystemExit(f'{path}: expected one available reference in Iztli profile')
+
+              updated_block = block.replace(old_status, new_status, 1)
+              updated_block = updated_block.replace(old_ref, new_ref, 1)
+              updated_block = updated_block.replace('data-status="available"', 'data-status="reserved"', 1)
+
+              text = text[:start] + updated_block + text[end:]
+              path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Verify only Iztli changed
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          checks = [
+              ('xolos-disponibles.html', 'Reservado', 'Reservado por Jeffrey', 'iztli-es-reserved'),
+              ('en/available-xolos.html', 'Reserved', 'Reserved by Jeffrey', 'iztli-en-reserved'),
+          ]
+          for filename, status, owner, ref in checks:
+              text = Path(filename).read_text(encoding='utf-8')
+              marker = '<h3 class="puppy-card__name">Iztli Ramirez</h3>'
+              name_pos = text.index(marker)
+              start = text.rfind('<article class="puppy-card"', 0, name_pos)
+              end = text.find('</article>', name_pos) + len('</article>')
+              block = text[start:end]
+              assert status in block
+              assert owner in block
+              assert ref in block
+              assert 'data-status="reserved"' in block
+              assert 'data-status="available"' not in block
+          PY
+          changed="$(git diff --name-only)"
+          test "$changed" = $'en/available-xolos.html\nxolos-disponibles.html'
+
+      - name: Commit direct HTML changes
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add xolos-disponibles.html en/available-xolos.html
+          git commit -m "Mark Iztli Ramirez reserved by Jeffrey"
+          git push origin HEAD:agent/reserve-iztli-jeffrey
