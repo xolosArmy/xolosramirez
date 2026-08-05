@@ -108,3 +108,5 @@ jobs:
           git add xolos-disponibles.html en/available-xolos.html
           git commit -m "Mark Iztli Ramirez reserved by Jeffrey"
           git push origin HEAD:agent/reserve-iztli-jeffrey
+
+# Second commit activates the workflow after it exists on the branch.
