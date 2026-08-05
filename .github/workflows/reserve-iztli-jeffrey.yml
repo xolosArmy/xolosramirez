@@ -1,9 +1,13 @@
 name: Reserve Iztli for Jeffrey
 
 on:
-  push:
+  pull_request:
     branches:
-      - agent/reserve-iztli-jeffrey
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
 
 permissions:
   contents: write
@@ -108,5 +112,3 @@ jobs:
           git add xolos-disponibles.html en/available-xolos.html
           git commit -m "Mark Iztli Ramirez reserved by Jeffrey"
           git push origin HEAD:agent/reserve-iztli-jeffrey
-
-# Second commit activates the workflow after it exists on the branch.
