@@ -1,14 +1,16 @@
 name: Correct Yohualli reservation PR
 
 on:
-  deployment_status:
+  issues:
+    types:
+      - opened
 
 permissions:
   contents: write
 
 jobs:
   correct-yohualli:
-    if: github.event.deployment_status.state == 'success'
+    if: github.event.issue.title == '[automation] Correct Yohualli reservation'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
