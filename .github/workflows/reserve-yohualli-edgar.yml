@@ -95,3 +95,5 @@ jobs:
           git add xolos-disponibles.html en/available-xolos.html
           git commit -m "Mark Yohualli Ramirez reserved by Edgar"
           git push origin HEAD:agent/reserve-yohualli-edgar
+
+# Trigger workflow after creation.
