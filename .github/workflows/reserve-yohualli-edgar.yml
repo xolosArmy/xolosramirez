@@ -1,0 +1,84 @@
+name: Reserve Yohualli for Edgar
+
+on:
+  push:
+    branches:
+      - agent/reserve-yohualli-edgar
+
+permissions:
+  contents: write
+
+jobs:
+  update-yohualli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/reserve-yohualli-edgar
+
+      - name: Update Yohualli profile in both languages
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          changes = {
+              'xolos-disponibles.html': {
+                  'available_status': '<span class="puppy-card__status status-disponible">Disponible</span>',
+                  'reserved_status': '<span class="puppy-card__status status-reservado">Reservada</span>\n    <span class="puppy-card__status" style="top: 40px; background-color: #ff4d4d; color: #fff;">Reservada por Edgar</span>',
+                  'available_ref': 'yohualli-es-available',
+                  'reserved_ref': 'yohualli-es-reserved',
+                  'wrong_status': '<span class="puppy-card__status status-disponible">Reservada</span>',
+                  'right_status': '<span class="puppy-card__status status-reservado">Reservada</span>',
+              },
+              'en/available-xolos.html': {
+                  'available_status': '<span class="puppy-card__status status-disponible">Available</span>',
+                  'reserved_status': '<span class="puppy-card__status status-reservado">Reserved</span>\n    <span class="puppy-card__status" style="top: 40px; background-color: #ff4d4d; color: #fff;">Reserved by Edgar</span>',
+                  'available_ref': 'yohualli-en-available',
+                  'reserved_ref': 'yohualli-en-reserved',
+                  'wrong_status': '<span class="puppy-card__status status-disponible">Reserved</span>',
+                  'right_status': '<span class="puppy-card__status status-reservado">Reserved</span>',
+              },
+          }
+
+          marker = '<h3 class="puppy-card__name">Yohualli Ramirez</h3>'
+          for filename, cfg in changes.items():
+              path = Path(filename)
+              text = path.read_text(encoding='utf-8')
+              if text.count(marker) != 1:
+                  raise SystemExit(f'{filename}: expected exactly one Yohualli profile')
+
+              pos = text.index(marker)
+              start = text.rfind('<article class="puppy-card"', 0, pos)
+              end_marker = text.find('</article>', pos)
+              if start < 0 or end_marker < 0:
+                  raise SystemExit(f'{filename}: Yohualli card boundaries not found')
+              end = end_marker + len('</article>')
+              block = text[start:end]
+
+              if 'Edgar' not in block:
+                  for required in (cfg['available_status'], cfg['available_ref'], 'data-status="available"'):
+                      if required not in block:
+                          raise SystemExit(f'{filename}: expected available markers not found')
+                  block = block.replace(cfg['available_status'], cfg['reserved_status'], 1)
+              else:
+                  block = block.replace(cfg['wrong_status'], cfg['right_status'], 1)
+
+              block = block.replace(cfg['available_ref'], cfg['reserved_ref'], 1)
+              block = block.replace('data-status="available"', 'data-status="reserved"', 1)
+              text = text[:start] + block + text[end:]
+              path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Remove temporary automation and commit final HTML changes
+        shell: bash
+        run: |
+          rm -f .github/workflows/reserve-yohualli-edgar.yml .yohualli-workflow-trigger
+          if git diff --quiet; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A -- xolos-disponibles.html en/available-xolos.html .github/workflows/reserve-yohualli-edgar.yml .yohualli-workflow-trigger
+          git commit -m "Correct Yohualli reservation changes"
+          git push origin HEAD:agent/reserve-yohualli-edgar
