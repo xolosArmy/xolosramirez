@@ -1,4 +1,4 @@
-name: Reserve Yohualli for Edgar
+name: Correct Yohualli reservation PR
 
 on:
   pull_request_target:
@@ -13,8 +13,10 @@ permissions:
   contents: write
 
 jobs:
-  update-yohualli:
-    if: github.event.pull_request.head.ref == 'agent/reserve-yohualli-edgar'
+  correct-pr:
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'agent/reserve-yohualli-edgar'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,56 +25,76 @@ jobs:
           ref: agent/reserve-yohualli-edgar
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Update Yohualli profile in both languages
+      - name: Correct Yohualli profile in both languages
         shell: bash
         run: |
           python3 - <<'PY'
           from pathlib import Path
 
           changes = {
-              'xolos-disponibles.html': (
-                  '<span class="puppy-card__status status-disponible">Disponible</span>',
-                  '<span class="puppy-card__status status-disponible">Reservada</span>\n    <span class="puppy-card__status" style="top: 40px; background-color: #ff4d4d; color: #fff;">Reservada por Edgar</span>',
-                  'yohualli-es-available',
-                  'yohualli-es-reserved',
-              ),
-              'en/available-xolos.html': (
-                  '<span class="puppy-card__status status-disponible">Available</span>',
-                  '<span class="puppy-card__status status-disponible">Reserved</span>\n    <span class="puppy-card__status" style="top: 40px; background-color: #ff4d4d; color: #fff;">Reserved by Edgar</span>',
-                  'yohualli-en-available',
-                  'yohualli-en-reserved',
-              ),
+              'xolos-disponibles.html': {
+                  'available_status': '<span class="puppy-card__status status-disponible">Disponible</span>',
+                  'reserved_status': '<span class="puppy-card__status status-reservado">Reservada</span>\n    <span class="puppy-card__status" style="top: 40px; background-color: #ff4d4d; color: #fff;">Reservada por Edgar</span>',
+                  'available_ref': 'yohualli-es-available',
+                  'reserved_ref': 'yohualli-es-reserved',
+                  'wrong_reserved_status': '<span class="puppy-card__status status-disponible">Reservada</span>',
+                  'right_reserved_status': '<span class="puppy-card__status status-reservado">Reservada</span>',
+              },
+              'en/available-xolos.html': {
+                  'available_status': '<span class="puppy-card__status status-disponible">Available</span>',
+                  'reserved_status': '<span class="puppy-card__status status-reservado">Reserved</span>\n    <span class="puppy-card__status" style="top: 40px; background-color: #ff4d4d; color: #fff;">Reserved by Edgar</span>',
+                  'available_ref': 'yohualli-en-available',
+                  'reserved_ref': 'yohualli-en-reserved',
+                  'wrong_reserved_status': '<span class="puppy-card__status status-disponible">Reserved</span>',
+                  'right_reserved_status': '<span class="puppy-card__status status-reservado">Reserved</span>',
+              },
           }
 
           marker = '<h3 class="puppy-card__name">Yohualli Ramirez</h3>'
-          for filename, (old_status, new_status, old_ref, new_ref) in changes.items():
+          for filename, cfg in changes.items():
               path = Path(filename)
               text = path.read_text(encoding='utf-8')
               if text.count(marker) != 1:
                   raise SystemExit(f'{filename}: expected exactly one Yohualli profile')
+
               pos = text.index(marker)
               start = text.rfind('<article class="puppy-card"', 0, pos)
-              end = text.find('</article>', pos) + len('</article>')
+              end_marker = text.find('</article>', pos)
+              if start < 0 or end_marker < 0:
+                  raise SystemExit(f'{filename}: Yohualli card boundaries not found')
+              end = end_marker + len('</article>')
               block = text[start:end]
-              if 'Edgar' in block:
-                  continue
-              if old_status not in block or old_ref not in block or 'data-status="available"' not in block:
-                  raise SystemExit(f'{filename}: expected available markers not found')
-              block = block.replace(old_status, new_status, 1)
-              block = block.replace(old_ref, new_ref, 1)
-              block = block.replace('data-status="available"', 'data-status="reserved"', 1)
+
+              if 'Edgar' not in block:
+                  required = (
+                      cfg['available_status'],
+                      cfg['available_ref'],
+                      'data-status="available"',
+                  )
+                  if any(value not in block for value in required):
+                      raise SystemExit(f'{filename}: expected available markers not found')
+                  block = block.replace(cfg['available_status'], cfg['reserved_status'], 1)
+                  block = block.replace(cfg['available_ref'], cfg['reserved_ref'], 1)
+                  block = block.replace('data-status="available"', 'data-status="reserved"', 1)
+              else:
+                  block = block.replace(cfg['wrong_reserved_status'], cfg['right_reserved_status'], 1)
+                  block = block.replace(cfg['available_ref'], cfg['reserved_ref'], 1)
+                  block = block.replace('data-status="available"', 'data-status="reserved"', 1)
+
               text = text[:start] + block + text[end:]
               path.write_text(text, encoding='utf-8')
           PY
 
-      - name: Commit HTML changes
+          rm -f .github/workflows/reserve-yohualli-edgar.yml .yohualli-workflow-trigger
+
+      - name: Commit corrected PR files
         shell: bash
         run: |
-          if git diff --quiet -- xolos-disponibles.html en/available-xolos.html; then
+          if git diff --quiet; then
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add xolos-disponibles.html en/available-xolos.html
-          git commit -m "Mark Yohualli Ramirez reserved by Edgar"
+          git add -A -- xolos-disponibles.html en/available-xolos.html .github/workflows/reserve-yohualli-edgar.yml .yohualli-workflow-trigger
+          git commit -m "Correct Yohualli reservation changes"
           git push origin HEAD:agent/reserve-yohualli-edgar
