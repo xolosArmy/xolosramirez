@@ -1,20 +1,27 @@
 name: Reserve Yohualli for Edgar
 
 on:
-  push:
+  pull_request_target:
     branches:
-      - agent/reserve-yohualli-edgar
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
 
 permissions:
   contents: write
 
 jobs:
   update-yohualli:
+    if: github.event.pull_request.head.ref == 'agent/reserve-yohualli-edgar'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
+          repository: xolosArmy/xolosramirez
           ref: agent/reserve-yohualli-edgar
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update Yohualli profile in both languages
         shell: bash
@@ -25,7 +32,7 @@ jobs:
           changes = {
               'xolos-disponibles.html': (
                   '<span class="puppy-card__status status-disponible">Disponible</span>',
-                  '<span class="puppy-card__status status-disponible">Reservado</span>\n    <span class="puppy-card__status" style="top: 40px; background-color: #ff4d4d; color: #fff;">Reservado por Edgar</span>',
+                  '<span class="puppy-card__status status-disponible">Reservada</span>\n    <span class="puppy-card__status" style="top: 40px; background-color: #ff4d4d; color: #fff;">Reservada por Edgar</span>',
                   'yohualli-es-available',
                   'yohualli-es-reserved',
               ),
@@ -41,16 +48,21 @@ jobs:
           for filename, (old_status, new_status, old_ref, new_ref) in changes.items():
               path = Path(filename)
               text = path.read_text(encoding='utf-8')
+              if text.count(marker) != 1:
+                  raise SystemExit(f'{filename}: expected exactly one Yohualli profile')
               pos = text.index(marker)
               start = text.rfind('<article class="puppy-card"', 0, pos)
               end = text.find('</article>', pos) + len('</article>')
               block = text[start:end]
-              if 'Edgar' not in block:
-                  block = block.replace(old_status, new_status, 1)
-                  block = block.replace(old_ref, new_ref, 1)
-                  block = block.replace('data-status="available"', 'data-status="reserved"', 1)
-                  text = text[:start] + block + text[end:]
-                  path.write_text(text, encoding='utf-8')
+              if 'Edgar' in block:
+                  continue
+              if old_status not in block or old_ref not in block or 'data-status="available"' not in block:
+                  raise SystemExit(f'{filename}: expected available markers not found')
+              block = block.replace(old_status, new_status, 1)
+              block = block.replace(old_ref, new_ref, 1)
+              block = block.replace('data-status="available"', 'data-status="reserved"', 1)
+              text = text[:start] + block + text[end:]
+              path.write_text(text, encoding='utf-8')
           PY
 
       - name: Commit HTML changes
