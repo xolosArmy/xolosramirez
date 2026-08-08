@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrega de Chimalma Ramírez en Tijuana: linaje, documentación y memoria en blockchain | Xolos Ramírez</title>
+    <meta name="description" content="Crónica de la entrega de Chimalma Ramírez a su familia en Tijuana: viaje desde CDMX, documentación FCM/FCI, microchip y NFT documental en Tonalli Wallet.">
+    <link rel="canonical" href="https://xolosramirez.com/blog/2026-08-08-entrega-chimalma-ramirez.html">
+    <style>
+        :root {
+            --primary-color: #5c3a21;
+            --secondary-color: #b5651d;
+            --bg-color: #faf8f5;
+            --text-color: #2c2c2c;
+            --accent-bg: #f3e9dc;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Georgia", serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            padding: 3rem 1rem;
+            text-align: center;
+            border-bottom: 5px solid var(--secondary-color);
+        }
+
+        .brand-link {
+            display: inline-block;
+            color: #ffffff;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            margin-bottom: 1rem;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        header h1 {
+            max-width: 900px;
+            margin: 0 auto;
+            font-size: clamp(2rem, 6vw, 2.8rem);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.2;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            margin: 0.9rem auto 0;
+            max-width: 760px;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            background-color: #ffffff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .article-body {
+            padding: 2rem 0;
+        }
+
+        .post-meta {
+            color: #777777;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eeeeee;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .content h2 {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--primary-color);
+            margin-top: 2.5rem;
+            font-size: 1.8rem;
+            line-height: 1.3;
+        }
+
+        .content p,
+        .content li {
+            font-size: 1.12rem;
+            color: #444444;
+        }
+
+        .content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .content ul {
+            padding-left: 1.4rem;
+        }
+
+        .identity-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.85rem 1.5rem;
+            background-color: #fcfaf7;
+            border: 1px solid #eadfD2;
+            border-radius: 12px;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .identity-grid p {
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .identity-grid .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .media-wrapper {
+            margin: 2rem 0 3rem;
+        }
+
+        .video-container {
+            position: relative;
+            width: min(100%, 420px);
+            aspect-ratio: 9 / 16;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            background-color: #000000;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .highlight-box {
+            background-color: var(--accent-bg);
+            border-left: 6px solid var(--secondary-color);
+            padding: 2rem;
+            margin: 3rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .highlight-box h3 {
+            margin-top: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--primary-color);
+        }
+
+        .highlight-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .txid {
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.9rem;
+        }
+
+        .button-link {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            padding: 0.8rem 1.1rem;
+            border-radius: 8px;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 700;
+            line-height: 1.4;
+            text-decoration: none;
+        }
+
+        .button-link:hover,
+        .button-link:focus-visible {
+            background-color: var(--secondary-color);
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary-color);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .tags {
+            margin-top: 3rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eeeeee;
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: #eeeeee;
+            color: #555555;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: var(--primary-color);
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 4rem;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #ffffff;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 2.25rem 1rem;
+            }
+
+            header p {
+                font-size: 1.05rem;
+            }
+
+            .container {
+                width: calc(100% - 1.5rem);
+                margin: 1.5rem auto;
+                padding: 0 1rem;
+            }
+
+            .article-body {
+                padding: 1.25rem 0;
+            }
+
+            .content h2 {
+                font-size: 1.55rem;
+            }
+
+            .content p,
+            .content li {
+                font-size: 1.04rem;
+            }
+
+            .identity-grid {
+                grid-template-columns: 1fr;
+                padding: 1.15rem;
+            }
+
+            .identity-grid .full-width {
+                grid-column: auto;
+            }
+
+            .highlight-box {
+                padding: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a class="brand-link" href="../index.html">Xolos Ramírez</a>
+        <h1>Entrega de Chimalma Ramírez en Tijuana: linaje, documentación y memoria en blockchain</h1>
+        <p>Un viaje desde Ciudad de México para acompañar el comienzo de una nueva historia familiar.</p>
+    </header>
+
+    <main class="container">
+        <article class="article-body">
+            <a class="back-link" href="index.html">&larr; Volver al blog</a>
+
+            <div class="post-meta">
+                <span><strong>Publicado:</strong> 8 de agosto de 2026</span>
+                <span><strong>Categoría:</strong> Entregas / Linaje digital</span>
+            </div>
+
+            <div class="content">
+                <p>El 8 de agosto de 2026, <strong>Chimalma Ramírez</strong> llegó a los brazos de su familia en Tijuana, Baja California. La entrega fue el cierre de una etapa de crianza y preparación, pero también el inicio de una vida compartida: nuevos espacios, nuevas rutinas y una familia lista para acompañarla.</p>
+
+                <p>Fernando Ramírez realizó el viaje de <strong>Ciudad de México a Tijuana</strong> para entregar personalmente a Chimalma. Este acompañamiento permitió cuidar cada detalle del traslado, presentar su expediente y conversar con la familia sobre su identidad, su linaje y la memoria digital que empieza a construirse alrededor de ella.</p>
+
+                <h2>Chimalma Ramírez</h2>
+
+                <div class="identity-grid" aria-label="Datos de identidad de Chimalma Ramírez">
+                    <p><strong>Raza:</strong> Xoloitzcuintle</p>
+                    <p><strong>Sexo:</strong> Hembra</p>
+                    <p><strong>Talla:</strong> Intermedia</p>
+                    <p><strong>Variedad:</strong> Sin pelo</p>
+                    <p><strong>Color:</strong> Bermejo mariposa</p>
+                    <p><strong>Nacimiento:</strong> 20 de abril de 2026</p>
+                    <p><strong>Lugar de nacimiento:</strong> Ciudad de México</p>
+                    <p><strong>Microchip:</strong> 939000002759116</p>
+                    <p><strong>Registro FCM:</strong> FCMZZ4464-A</p>
+                    <p class="full-width"><strong>Padre:</strong> HUAPANGO (RAMÍREZ/RAMÍREZ) MEX.FCI</p>
+                    <p class="full-width"><strong>Madre:</strong> CITLALI (RAMÍREZ/RAMÍREZ) MEX.</p>
+                </div>
+
+                <h2>Una entrega preparada documento por documento</h2>
+
+                <p>Antes del viaje se reunió la documentación que acompaña la identidad y el estado de salud de Chimalma: su <strong>pedigree FCM/FCI</strong>, identificación mediante <strong>microchip</strong>, certificado de salud, comprobante de vacuna contra la rabia, certificado de perro de servicio y certificado de gusano barrenador.</p>
+
+                <p>La revisión previa permitió que la familia recibiera a Chimalma junto con un expediente claro y organizado. Cada documento cumple una función distinta y, en conjunto, deja constancia de la preparación realizada antes de su entrega.</p>
+
+                <h2>NFT documental en Tonalli Wallet</h2>
+
+                <p>Como parte de esta preparación, el NFT documental de Chimalma fue minteado en <strong>Tonalli Wallet</strong>. Funciona como una evidencia digital complementaria de su linaje, identidad, número de microchip y preparación documental previa a la entrega. No sustituye el pedigree FCM/FCI, el microchip ni los certificados físicos; los reúne dentro de una capa adicional de trazabilidad.</p>
+
+                <div class="highlight-box">
+                    <h3>Registro verificable de Chimalma</h3>
+                    <p>La transacción quedó registrada en la blockchain de eCash. Sus metadatos se relacionan con contenido almacenado en IPFS, de modo que la familia puede consultar la referencia digital y verificar el registro sin depender únicamente de una copia privada.</p>
+                    <p class="txid"><strong>TXID:</strong> 907515980dfce29c54377b8096bd911e3a565940fa51f09fac5d1a4545f75c34</p>
+                    <p><a class="button-link" href="https://explorer.xolosarmy.xyz/tx/907515980dfce29c54377b8096bd911e3a565940fa51f09fac5d1a4545f75c34" target="_blank" rel="noopener noreferrer">Consultar el NFT documental en Xolos Explorer</a></p>
+                </div>
+
+                <p>Durante la entrega se explicó este proceso de manera sencilla: la blockchain conserva el registro de la transacción en eCash, mientras que IPFS permite referenciar los metadatos asociados. Así, la tecnología acompaña a la documentación tradicional y ayuda a mantener una historia verificable de Chimalma a lo largo del tiempo.</p>
+
+                <h2>Video de la entrega de Chimalma Ramírez</h2>
+
+                <p>Este video conserva un fragmento del momento en que Chimalma fue recibida por su familia en Tijuana.</p>
+
+                <div class="media-wrapper">
+                    <div class="video-container">
+                        <iframe
+                            src="https://www.youtube.com/embed/I0GRiJ_fNtw"
+                            title="Video de la entrega de Chimalma Ramírez en Tijuana"
+                            loading="lazy"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allowfullscreen
+                        ></iframe>
+                    </div>
+                </div>
+
+                <h2>De la documentación a la memoria compartida</h2>
+
+                <p>La visión de <strong>Tonalli Memo</strong> mira hacia el siguiente capítulo: un espacio comunitario en el que las familias de Xolos Ramírez puedan publicar fotografías, eventos y momentos memorables de sus xoloitzcuintles. La intención es que cada familia pueda conservar y compartir la vida que se desarrolla después de la entrega.</p>
+
+                <p>En el futuro, los <strong>mint passes</strong> podrán abrir la posibilidad de mintear momentos especiales como NFTs: una fotografía significativa, un aniversario, un encuentro familiar o cualquier recuerdo que merezca permanecer unido a la historia digital del xolo. Esta función forma parte de la visión futura del proyecto y todavía no reemplaza los canales actuales de documentación.</p>
+
+                <p>La entrega de Chimalma reunió cuidado presencial, documentos oficiales y una herramienta digital pensada para la trazabilidad. Lo más importante, sin embargo, ocurrió al final del viaje: Chimalma llegó con su familia y comenzó una nueva etapa en Tijuana.</p>
+
+                <p>Gracias a su familia por recibirla y por permitirnos acompañar este momento. Que esta historia apenas comienza.</p>
+            </div>
+
+            <div class="tags" aria-label="Etiquetas del artículo">
+                <span class="tag">#ChimalmaRamírez</span>
+                <span class="tag">#Xoloitzcuintle</span>
+                <span class="tag">#XolosRamírez</span>
+                <span class="tag">#Tijuana</span>
+                <span class="tag">#TonalliWallet</span>
+                <span class="tag">#LinajeDigital</span>
+            </div>
+        </article>
+    </main>
+
+    <footer>
+        &copy; 2026 Xolos Ramírez. Todos los derechos reservados.<br>
+        <a href="../index.html">Inicio</a> · <a href="index.html">Blog</a>
+    </footer>
+
+</body>
+</html>
