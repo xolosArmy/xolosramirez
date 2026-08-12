@@ -1,0 +1,42 @@
+name: Rename Iztli to Oce
+
+on:
+  push:
+    branches:
+      - agent/rename-iztli-to-oce
+
+permissions:
+  contents: write
+
+jobs:
+  rename-profile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/rename-iztli-to-oce
+          fetch-depth: 0
+
+      - name: Rename Iztli to Oce in Spanish and English profiles
+        shell: python
+        run: |
+          from pathlib import Path
+
+          files = [Path('xolos-disponibles.html'), Path('en/available-xolos.html')]
+          for path in files:
+              text = path.read_text(encoding='utf-8')
+              if 'Iztli' not in text and 'iztli' not in text:
+                  raise SystemExit(f'Expected Iztli references not found in {path}')
+              text = text.replace('Iztli', 'Oce').replace('iztli', 'oce')
+              path.write_text(text, encoding='utf-8')
+
+      - name: Commit profile rename and remove temporary workflow
+        shell: bash
+        run: |
+          rm .github/workflows/rename-iztli-oce.yml
+          git config user.name "xolosArmy automation"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add xolos-disponibles.html en/available-xolos.html .github/workflows/rename-iztli-oce.yml
+          git commit -m "Rename Iztli Ramirez to Oce Ramirez"
+          git push origin HEAD:agent/rename-iztli-to-oce
