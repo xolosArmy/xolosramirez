@@ -260,8 +260,12 @@ function initializePuppyCarousels() {
   });
 }
 
+function getAvailableXolosGrid() {
+  return document.querySelector('main .puppy-grid');
+}
+
 function isAvailableXolosPage() {
-  return Boolean(document.querySelector('#perfiles-destacados .puppy-grid'));
+  return Boolean(getAvailableXolosGrid());
 }
 
 function isEnglishAvailableXolosPage() {
@@ -353,7 +357,7 @@ function updateYohualliProfileVideo() {
 }
 
 function insertTlilxochitlProfile() {
-  const grid = document.querySelector('#perfiles-destacados .puppy-grid');
+  const grid = getAvailableXolosGrid();
   if (!grid || grid.querySelector('[data-profile-card="tlilxochitl"]')) return;
 
   const isEnglish = document.documentElement.lang.toLowerCase().startsWith('en');
@@ -381,6 +385,7 @@ function insertTlilxochitlProfile() {
         cta: 'Contact via Email',
         aria: 'Contact by email about Tlilxóchitl',
         lang: 'en',
+        buttonStyle: '',
       }
     : {
         status: 'Disponible',
@@ -404,6 +409,7 @@ function insertTlilxochitlProfile() {
         cta: 'Correo directo ✉️',
         aria: 'Escribir por correo sobre Tlilxóchitl',
         lang: 'es',
+        buttonStyle: 'background-color: #25D366; border-color: #25D366; width: 100%; justify-content: center;',
       };
 
   const article = document.createElement('article');
@@ -442,11 +448,44 @@ function insertTlilxochitlProfile() {
         <iframe width="100%" height="100%" src="https://www.youtube.com/embed/KkT77ePIiIg" title="Tlilxóchitl Ramirez" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
       </div>
       <div class="puppy-card__actions">
-        <a href="mailto:${CURRENT_CONTACT_EMAIL}?subject=${encodeURIComponent(labels.subject)}&body=${encodeURIComponent(labels.body)}" class="btn-small btn-primary-small cta-lead cta-email" data-cta="email" data-lead-type="generate_lead" data-profile="tlilxochitl" data-page-type="available-xolos" data-lang="${labels.lang}" aria-label="${labels.aria}" data-status="available">${labels.cta}</a>
+        <a href="mailto:${CURRENT_CONTACT_EMAIL}?subject=${encodeURIComponent(labels.subject)}&body=${encodeURIComponent(labels.body)}" class="btn-small btn-primary-small cta-lead cta-email" style="${labels.buttonStyle}" data-cta="email" data-lead-type="generate_lead" data-profile="tlilxochitl" data-page-type="available-xolos" data-lang="${labels.lang}" aria-label="${labels.aria}" data-status="available">${labels.cta}</a>
       </div>
     </div>`;
 
   grid.prepend(article);
+}
+
+function updateXilonenAge() {
+  const grid = getAvailableXolosGrid();
+  if (!grid) return;
+
+  const isEnglish = document.documentElement.lang.toLowerCase().startsWith('en');
+  const ageLabel = isEnglish ? 'Age' : 'Edad';
+  const ageValue = isEnglish ? '1 month' : '1 mes';
+
+  Array.from(grid.querySelectorAll('.puppy-card')).forEach((card) => {
+    const name = card.querySelector('.puppy-card__name')?.textContent.trim();
+    if (name !== 'Xilonen Ramirez') return;
+
+    const ageItem = Array.from(card.querySelectorAll('.puppy-card__details li')).find((item) => (
+      item.querySelector('strong')?.textContent.trim() === ageLabel
+    ));
+    if (ageItem) ageItem.innerHTML = `<strong>${ageLabel}</strong>${ageValue}`;
+  });
+}
+
+function prioritizeAvailableProfiles() {
+  const grid = getAvailableXolosGrid();
+  if (!grid) return;
+
+  const cards = Array.from(grid.children).filter((child) => child.matches('article.puppy-card'));
+  const isAvailable = (card) => {
+    const badgeText = card.querySelector('.puppy-card__status')?.textContent.trim().toLowerCase() || '';
+    return badgeText === 'disponible' || badgeText === 'available';
+  };
+
+  cards.sort((left, right) => Number(isAvailable(right)) - Number(isAvailable(left)));
+  cards.forEach((card) => grid.appendChild(card));
 }
 
 updateGlobalContactEmail();
@@ -454,4 +493,6 @@ updateAvailableXolosCtas();
 updateXilonenProfileVideo();
 updateYohualliProfileVideo();
 insertTlilxochitlProfile();
+updateXilonenAge();
+prioritizeAvailableProfiles();
 initializePuppyCarousels();
