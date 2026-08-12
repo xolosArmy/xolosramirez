@@ -346,8 +346,111 @@ function updateYohualliProfileVideo() {
   });
 }
 
+function insertTlilxochitlProfile() {
+  const pagePath = window.location.pathname;
+  const isSpanishPage = pagePath.endsWith('/xolos-disponibles.html');
+  const isEnglishPage = pagePath.endsWith('/en/available-xolos.html');
+  if (!isSpanishPage && !isEnglishPage) return;
+
+  const grid = document.querySelector('#perfiles-destacados .puppy-grid, .puppy-grid');
+  if (!grid || grid.querySelector('[data-profile-card="tlilxochitl"]')) return;
+
+  const isSpanish = isSpanishPage;
+  const imagePrefix = isSpanish ? 'img/xolos/' : '../img/xolos/';
+  const labels = isSpanish
+    ? {
+        status: 'Disponible',
+        carousel: 'Carrusel de fotos de Tlilxóchitl Ramirez',
+        role: 'carrusel',
+        previous: 'Foto anterior',
+        next: 'Foto siguiente',
+        select: 'Seleccionar foto',
+        ageLabel: 'Edad',
+        age: 'Recién nacida · 3 de agosto de 2026',
+        genderLabel: 'Género',
+        gender: 'Hembra',
+        sizeLabel: 'Talla',
+        size: 'Intermedia',
+        colorLabel: 'Color',
+        color: 'Negro',
+        alt1: 'Tlilxóchitl Ramírez, cachorra xoloitzcuintle hembra intermedia negra recién nacida',
+        alt2: 'Tlilxóchitl Ramírez, cachorra xoloitzcuintle hembra intermedia negra sostenida entre las manos',
+        subject: 'Consulta sobre Tlilxóchitl Ramirez [Ref: tlilxochitl-es-available]',
+        body: 'Hola, vi el perfil de Tlilxóchitl Ramirez en Xolos Ramírez y me interesa conocer más sobre su disponibilidad, precio y proceso de reserva.',
+        cta: 'Correo directo ✉️',
+        aria: 'Escribir por correo sobre Tlilxóchitl',
+        lang: 'es',
+      }
+    : {
+        status: 'Available',
+        carousel: 'Tlilxóchitl Ramirez photo carousel',
+        role: 'carousel',
+        previous: 'Previous photo',
+        next: 'Next photo',
+        select: 'Select photo',
+        ageLabel: 'Age',
+        age: 'Newborn · August 3, 2026',
+        genderLabel: 'Gender',
+        gender: 'Female',
+        sizeLabel: 'Size',
+        size: 'Intermediate / Medium',
+        colorLabel: 'Color',
+        color: 'Black',
+        alt1: 'Tlilxóchitl Ramirez, newborn black female intermediate Xoloitzcuintli puppy',
+        alt2: 'Tlilxóchitl Ramirez, black female intermediate Xoloitzcuintli puppy held gently in hands',
+        subject: 'Inquiry about Tlilxóchitl Ramirez [Ref: tlilxochitl-en-available]',
+        body: 'Hello, I saw Tlilxóchitl Ramirez on the Xolos Ramírez website and would like to learn more about her availability, price, and reservation process.',
+        cta: 'Contact via Email',
+        aria: 'Contact by email about Tlilxóchitl',
+        lang: 'en',
+      };
+
+  const article = document.createElement('article');
+  article.className = 'puppy-card';
+  article.dataset.profileCard = 'tlilxochitl';
+  article.dataset.aos = 'fade-up';
+  article.dataset.aosDuration = '800';
+  article.dataset.aosDelay = '200';
+  article.innerHTML = `
+    <div class="puppy-card__image-wrapper">
+      <span class="puppy-card__status status-disponible">${labels.status}</span>
+      <div class="puppy-carousel" data-puppy-carousel role="region" aria-roledescription="${labels.role}" aria-label="${labels.carousel}">
+        <div class="puppy-carousel__track" tabindex="0">
+          <div class="puppy-carousel__slide">
+            <img src="${imagePrefix}tlilxochitl-ramirez-agosto-2026-01.webp" alt="${labels.alt1}" class="puppy-card__image" loading="lazy" decoding="async" draggable="false" />
+          </div>
+          <div class="puppy-carousel__slide">
+            <img src="${imagePrefix}tlilxochitl-ramirez-agosto-2026-02.webp" alt="${labels.alt2}" class="puppy-card__image" loading="lazy" decoding="async" draggable="false" />
+          </div>
+        </div>
+        <button class="puppy-carousel__button puppy-carousel__button--previous" type="button" aria-label="${labels.previous}">&#8592;</button>
+        <button class="puppy-carousel__button puppy-carousel__button--next" type="button" aria-label="${labels.next}">&#8594;</button>
+        <div class="puppy-carousel__dots" aria-label="${labels.select}"></div>
+        <p class="puppy-carousel__live" aria-live="polite" aria-atomic="true"></p>
+      </div>
+    </div>
+    <div class="puppy-card__content">
+      <h3 class="puppy-card__name">Tlilxóchitl Ramirez</h3>
+      <ul class="puppy-card__details">
+        <li><strong>${labels.ageLabel}</strong>${labels.age}</li>
+        <li><strong>${labels.genderLabel}</strong>${labels.gender}</li>
+        <li><strong>${labels.sizeLabel}</strong>${labels.size}</li>
+        <li><strong>${labels.colorLabel}</strong>${labels.color}</li>
+      </ul>
+      <div class="puppy-video-container" style="margin: 1rem 0; border-radius: 8px; overflow: hidden; aspect-ratio: 16/9;">
+        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/KkT77ePIiIg" title="Tlilxóchitl Ramirez" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+      </div>
+      <div class="puppy-card__actions">
+        <a href="mailto:${CURRENT_CONTACT_EMAIL}?subject=${encodeURIComponent(labels.subject)}&body=${encodeURIComponent(labels.body)}" class="btn-small btn-primary-small cta-lead cta-email" data-cta="email" data-lead-type="generate_lead" data-profile="tlilxochitl" data-page-type="available-xolos" data-lang="${labels.lang}" aria-label="${labels.aria}" data-status="available">${labels.cta}</a>
+      </div>
+    </div>`;
+
+  grid.prepend(article);
+}
+
 updateGlobalContactEmail();
 updateAvailableXolosCtas();
 updateXilonenProfileVideo();
 updateYohualliProfileVideo();
+insertTlilxochitlProfile();
 initializePuppyCarousels();
