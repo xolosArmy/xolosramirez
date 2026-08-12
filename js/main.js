@@ -260,29 +260,35 @@ function initializePuppyCarousels() {
   });
 }
 
-function updateAvailableXolosCtas() {
-  const pagePath = window.location.pathname;
-  const isSpanishPage = pagePath.endsWith('/xolos-disponibles.html');
-  const isEnglishPage = pagePath.endsWith('/en/available-xolos.html');
-  if (!isSpanishPage && !isEnglishPage) return;
+function isAvailableXolosPage() {
+  return Boolean(document.querySelector('#perfiles-destacados .puppy-grid'));
+}
 
-  const language = isSpanishPage ? 'es' : 'en';
-  const labels = isSpanishPage
+function isEnglishAvailableXolosPage() {
+  return isAvailableXolosPage() && document.documentElement.lang.toLowerCase().startsWith('en');
+}
+
+function updateAvailableXolosCtas() {
+  if (!isAvailableXolosPage()) return;
+
+  const isEnglishPage = isEnglishAvailableXolosPage();
+  const language = isEnglishPage ? 'en' : 'es';
+  const labels = isEnglishPage
     ? {
-        video: 'Agendar videollamada',
-        videoAria: 'Agendar videollamada con Xolos Ramírez',
-        whatsapp: 'Consultar por WhatsApp',
-        whatsappAria: 'Consultar por WhatsApp con Xolos Ramírez',
-      }
-    : {
         video: 'Book a video call',
         videoAria: 'Book a video call with Xolos Ramírez',
         whatsapp: 'Contact by WhatsApp',
         whatsappAria: 'Contact Xolos Ramírez by WhatsApp',
+      }
+    : {
+        video: 'Agendar videollamada',
+        videoAria: 'Agendar videollamada con Xolos Ramírez',
+        whatsapp: 'Consultar por WhatsApp',
+        whatsappAria: 'Consultar por WhatsApp con Xolos Ramírez',
       };
 
   const commercialSection = document.getElementById(
-    isSpanishPage ? 'commercial-info-es' : 'commercial-info-en',
+    isEnglishPage ? 'commercial-info-en' : 'commercial-info-es',
   )?.closest('section');
   const actions = commercialSection?.querySelector('.puppy-card__actions');
   const firstAction = actions?.querySelector('a');
@@ -347,41 +353,13 @@ function updateYohualliProfileVideo() {
 }
 
 function insertTlilxochitlProfile() {
-  const pagePath = window.location.pathname;
-  const isSpanishPage = pagePath.endsWith('/xolos-disponibles.html');
-  const isEnglishPage = pagePath.endsWith('/en/available-xolos.html');
-  if (!isSpanishPage && !isEnglishPage) return;
-
-  const grid = document.querySelector('#perfiles-destacados .puppy-grid, .puppy-grid');
+  const grid = document.querySelector('#perfiles-destacados .puppy-grid');
   if (!grid || grid.querySelector('[data-profile-card="tlilxochitl"]')) return;
 
-  const isSpanish = isSpanishPage;
-  const imagePrefix = isSpanish ? 'img/xolos/' : '../img/xolos/';
-  const labels = isSpanish
+  const isEnglish = document.documentElement.lang.toLowerCase().startsWith('en');
+  const imagePrefix = isEnglish ? '../img/xolos/' : 'img/xolos/';
+  const labels = isEnglish
     ? {
-        status: 'Disponible',
-        carousel: 'Carrusel de fotos de Tlilxóchitl Ramirez',
-        role: 'carrusel',
-        previous: 'Foto anterior',
-        next: 'Foto siguiente',
-        select: 'Seleccionar foto',
-        ageLabel: 'Edad',
-        age: 'Recién nacida · 3 de agosto de 2026',
-        genderLabel: 'Género',
-        gender: 'Hembra',
-        sizeLabel: 'Talla',
-        size: 'Intermedia',
-        colorLabel: 'Color',
-        color: 'Negro',
-        alt1: 'Tlilxóchitl Ramírez, cachorra xoloitzcuintle hembra intermedia negra recién nacida',
-        alt2: 'Tlilxóchitl Ramírez, cachorra xoloitzcuintle hembra intermedia negra sostenida entre las manos',
-        subject: 'Consulta sobre Tlilxóchitl Ramirez [Ref: tlilxochitl-es-available]',
-        body: 'Hola, vi el perfil de Tlilxóchitl Ramirez en Xolos Ramírez y me interesa conocer más sobre su disponibilidad, precio y proceso de reserva.',
-        cta: 'Correo directo ✉️',
-        aria: 'Escribir por correo sobre Tlilxóchitl',
-        lang: 'es',
-      }
-    : {
         status: 'Available',
         carousel: 'Tlilxóchitl Ramirez photo carousel',
         role: 'carousel',
@@ -403,6 +381,29 @@ function insertTlilxochitlProfile() {
         cta: 'Contact via Email',
         aria: 'Contact by email about Tlilxóchitl',
         lang: 'en',
+      }
+    : {
+        status: 'Disponible',
+        carousel: 'Carrusel de fotos de Tlilxóchitl Ramirez',
+        role: 'carrusel',
+        previous: 'Foto anterior',
+        next: 'Foto siguiente',
+        select: 'Seleccionar foto',
+        ageLabel: 'Edad',
+        age: 'Recién nacida · 3 de agosto de 2026',
+        genderLabel: 'Género',
+        gender: 'Hembra',
+        sizeLabel: 'Talla',
+        size: 'Intermedia',
+        colorLabel: 'Color',
+        color: 'Negro',
+        alt1: 'Tlilxóchitl Ramírez, cachorra xoloitzcuintle hembra intermedia negra recién nacida',
+        alt2: 'Tlilxóchitl Ramírez, cachorra xoloitzcuintle hembra intermedia negra sostenida entre las manos',
+        subject: 'Consulta sobre Tlilxóchitl Ramirez [Ref: tlilxochitl-es-available]',
+        body: 'Hola, vi el perfil de Tlilxóchitl Ramirez en Xolos Ramírez y me interesa conocer más sobre su disponibilidad, precio y proceso de reserva.',
+        cta: 'Correo directo ✉️',
+        aria: 'Escribir por correo sobre Tlilxóchitl',
+        lang: 'es',
       };
 
   const article = document.createElement('article');
