@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - agent/rename-iztli-to-oce
+    paths:
+      - .github/workflows/rename-iztli-oce.yml
 
 permissions:
   contents: write
@@ -24,19 +26,21 @@ jobs:
           from pathlib import Path
 
           files = [Path('xolos-disponibles.html'), Path('en/available-xolos.html')]
+          changed = False
           for path in files:
               text = path.read_text(encoding='utf-8')
-              if 'Iztli' not in text and 'iztli' not in text:
-                  raise SystemExit(f'Expected Iztli references not found in {path}')
-              text = text.replace('Iztli', 'Oce').replace('iztli', 'oce')
-              path.write_text(text, encoding='utf-8')
+              updated = text.replace('Iztli', 'Oce').replace('iztli', 'oce')
+              if updated != text:
+                  path.write_text(updated, encoding='utf-8')
+                  changed = True
+          if not changed:
+              raise SystemExit('No Iztli references found to rename')
 
-      - name: Commit profile rename and remove temporary workflow
+      - name: Commit profile rename
         shell: bash
         run: |
-          rm .github/workflows/rename-iztli-oce.yml
           git config user.name "xolosArmy automation"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add xolos-disponibles.html en/available-xolos.html .github/workflows/rename-iztli-oce.yml
+          git add xolos-disponibles.html en/available-xolos.html
           git commit -m "Rename Iztli Ramirez to Oce Ramirez"
           git push origin HEAD:agent/rename-iztli-to-oce
