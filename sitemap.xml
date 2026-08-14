@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://xolosramirez.com/</loc>
-  </url>
-  <url>
-    <loc>https://xolosramirez.com/xolos-disponibles.html</loc>
-  </url>
-  <url>
-    <loc>https://xolosramirez.com/contacto.html</loc>
-  </url>
-  <url>
-    <loc>https://xolosramirez.com/testimonios.html</loc>
-  </url>
+  <url><loc>https://xolosramirez.com/</loc></url>
+  <url><loc>https://xolosramirez.com/xolos-disponibles.html</loc></url>
+  <url><loc>https://xolosramirez.com/contacto.html</loc></url>
+  <url><loc>https://xolosramirez.com/testimonios.html</loc></url>
   <url>
     <loc>https://xolosramirez.com/blog/index.html</loc>
-    <lastmod>2026-08-13</lastmod>
+    <lastmod>2026-08-14</lastmod>
+  </url>
+  <url>
+    <loc>https://xolosramirez.com/blog/tutorial-firma-wallet-tonalli-firma-xec.html</loc>
+    <lastmod>2026-08-14</lastmod>
   </url>
   <url>
     <loc>https://xolosramirez.com/blog/2026-08-13-entrega-xoloitzcuintle-teyolia-ramirez.html</loc>
@@ -52,18 +48,16 @@
     <loc>https://xolosramirez.com/blog/sizes-in-xoloitzcuintli.html</loc>
     <lastmod>2026-07-27</lastmod>
   </url>
-  <url>
-    <loc>https://xolosramirez.com/en/index.html</loc>
-  </url>
-  <url>
-    <loc>https://xolosramirez.com/en/available-xolos.html</loc>
-  </url>
-  <url>
-    <loc>https://xolosramirez.com/en/contact.html</loc>
-  </url>
+  <url><loc>https://xolosramirez.com/en/index.html</loc></url>
+  <url><loc>https://xolosramirez.com/en/available-xolos.html</loc></url>
+  <url><loc>https://xolosramirez.com/en/contact.html</loc></url>
   <url>
     <loc>https://xolosramirez.com/en/blog/index.html</loc>
-    <lastmod>2026-08-11</lastmod>
+    <lastmod>2026-08-14</lastmod>
+  </url>
+  <url>
+    <loc>https://xolosramirez.com/en/blog/firma-wallet-tonalli-firma-xec-tutorial.html</loc>
+    <lastmod>2026-08-14</lastmod>
   </url>
   <url>
     <loc>https://xolosramirez.com/en/blog/xoloitzcuintli-living-pyramid-mexicos-memory.html</loc>
