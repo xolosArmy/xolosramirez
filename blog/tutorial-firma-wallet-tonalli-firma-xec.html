@@ -3,197 +3,71 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial: de Firma Wallet a Tonalli y de FIRMA a XEC | Xolos Ramírez</title>
-  <meta name="description" content="Guía paso a paso para respaldar una seed de Firma Wallet, recuperarla en Tonalli con eCash BIP44 1899, verificar Firma Alpha y redimir FIRMA a XEC mediante Agora.">
+  <title>Tutorial completo: MXN → Bitso → USDT Solana → Firma → Tonalli → XEC | Xolos Ramírez</title>
+  <meta name="description" content="Guía práctica, basada en una prueba mainnet real, para pasar de MXN en Bitso a USDT sobre Solana, fondear Firma, recuperar Firma Alpha en Tonalli y redimirlo por XEC mediante Agora.">
   <link rel="canonical" href="https://xolosramirez.com/blog/tutorial-firma-wallet-tonalli-firma-xec.html">
   <link rel="alternate" hreflang="es-MX" href="https://xolosramirez.com/blog/tutorial-firma-wallet-tonalli-firma-xec.html">
   <link rel="alternate" hreflang="en" href="https://xolosramirez.com/en/blog/firma-wallet-tonalli-firma-xec-tutorial.html">
   <link rel="alternate" hreflang="x-default" href="https://xolosramirez.com/blog/tutorial-firma-wallet-tonalli-firma-xec.html">
   <meta property="og:type" content="article">
-  <meta property="og:locale" content="es_MX">
-  <meta property="og:site_name" content="Xolos Ramírez">
-  <meta property="og:title" content="Firma Wallet → Tonalli → FIRMA → XEC: tutorial de principio a fin">
-  <meta property="og:description" content="Un tutorial basado en una prueba mainnet real: recuperar la misma seed en Tonalli, localizar Firma Alpha y redimirlo por XEC mediante Agora.">
+  <meta property="og:title" content="MXN → Bitso → USDT Solana → Firma → Tonalli → XEC">
+  <meta property="og:description" content="Embudo probado con fondos reales: fiat en México, stablecoin en Solana, Firma Alpha en eCash y redención on-chain a XEC desde Tonalli.">
   <meta property="og:url" content="https://xolosramirez.com/blog/tutorial-firma-wallet-tonalli-firma-xec.html">
   <meta property="og:image" content="https://xolosramirez.com/img/hero/site-hero.jpg">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Firma Wallet → Tonalli → FIRMA → XEC">
-  <meta name="twitter:description" content="Tutorial didáctico de recuperación de seed, discovery de FIRMA y redención on-chain por XEC.">
-  <meta name="twitter:image" content="https://xolosramirez.com/img/hero/site-hero.jpg">
+  <meta name="twitter:title" content="De pesos a XEC con Firma y Tonalli">
+  <meta name="twitter:description" content="Tutorial mainnet del embudo MXN → USDT Solana → Firma Alpha → Tonalli → XEC.">
   <link rel="stylesheet" href="../css/styles.css">
   <link rel="icon" type="image/x-icon" href="../assets/xolosramirez.ico">
   <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"HowTo",
-    "name":"De Firma Wallet a Tonalli y de FIRMA a XEC",
-    "description":"Tutorial para recuperar una seed de Firma Wallet en Tonalli con BIP44 1899, comprobar Firma Alpha y redimir FIRMA por XEC mediante Agora.",
-    "datePublished":"2026-08-14",
-    "dateModified":"2026-08-14",
-    "inLanguage":"es-MX",
-    "url":"https://xolosramirez.com/blog/tutorial-firma-wallet-tonalli-firma-xec.html",
-    "publisher":{"@type":"Organization","name":"Xolos Ramírez","url":"https://xolosramirez.com/"},
-    "step":[
-      {"@type":"HowToStep","name":"Respalda la seed de Firma Wallet","text":"Guarda las 12 palabras fuera de línea y nunca las compartas."},
-      {"@type":"HowToStep","name":"Verifica que el activo sea Firma Alpha","text":"Comprueba el Token ID canónico de FIRMA en eCash antes de seguir."},
-      {"@type":"HowToStep","name":"Restaura la seed en Tonalli","text":"Usa el perfil eCash/Cashtab con BIP44 coin type 1899 y realiza un re-escaneo extendido."},
-      {"@type":"HowToStep","name":"Añade XEC puro para comisiones si hace falta","text":"Los sats asociados a un UTXO token no siempre son combustible XEC libre para una transacción."},
-      {"@type":"HowToStep","name":"Previsualiza la redención","text":"Revisa bid oficial, precio efectivo, XEC esperado, comisión y capacidad del sweeper."},
-      {"@type":"HowToStep","name":"Firma localmente y transmite","text":"Tonalli crea una oferta Agora; al ser aceptada por el sweeper, el saldo XEC se actualiza."}
-    ]
-  }
+  {"@context":"https://schema.org","@type":"HowTo","name":"De MXN a XEC con Bitso, Firma y Tonalli","datePublished":"2026-08-14","dateModified":"2026-08-14","inLanguage":"es-MX","url":"https://xolosramirez.com/blog/tutorial-firma-wallet-tonalli-firma-xec.html","publisher":{"@type":"Organization","name":"Xolos Ramírez"},"step":[{"@type":"HowToStep","name":"Deposita MXN en Bitso y compra USDT","text":"Fondea Bitso con pesos mexicanos y adquiere USDT."},{"@type":"HowToStep","name":"Retira USDT por Solana","text":"Selecciona la red Solana y verifica cuidadosamente la dirección de depósito de Firma."},{"@type":"HowToStep","name":"Fondea firma.cash","text":"Envía el USDT-SPL al flujo de depósito indicado por Firma y espera la acreditación."},{"@type":"HowToStep","name":"Respalda la seed de Firma","text":"Guarda las 12 palabras offline y nunca las compartas."},{"@type":"HowToStep","name":"Restaura en Tonalli con 1899","text":"Importa la misma seed en Tonalli usando eCash/Cashtab BIP44 1899 y re-escanea."},{"@type":"HowToStep","name":"Verifica Firma Alpha","text":"Confirma el Token ID canónico antes de operar."},{"@type":"HowToStep","name":"Redime FIRMA por XEC","text":"Usa el DEX de Tonalli, revisa el preview, firma localmente y espera la aceptación del sweeper."}]}
   </script>
   <style>
-    .guide-wrap{max-width:960px;margin:0 auto;padding:2rem 1rem 4rem}.guide-wrap h1{line-height:1.12}.guide-wrap h2{margin-top:2.4rem}.lede{font-size:1.15rem;line-height:1.7}.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:.75rem;margin:1.5rem 0 2rem}.flow div,.callout,.acceptance,.warning{border:1px solid rgba(128,128,128,.35);border-radius:12px;padding:1rem}.flow div{text-align:center;font-weight:600}.arrow{opacity:.65}.callout{background:rgba(30,144,255,.08)}.warning{background:rgba(218,165,32,.10)}.acceptance{background:rgba(46,139,87,.10)}.steps{counter-reset:step}.step{counter-increment:step;margin:1.5rem 0;padding:1.25rem;border-left:4px solid #d4a83f;background:rgba(127,127,127,.06)}.step h3:before{content:counter(step) ". ";color:#b78b24}.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;overflow-wrap:anywhere;padding:.75rem;border-radius:8px;background:rgba(0,0,0,.08)}.checklist li{margin:.55rem 0}.meta{opacity:.75;font-size:.95rem}.language-link{margin:1rem 0 2rem}.language-link a{font-weight:600}.small{font-size:.92rem;opacity:.8}
+    .guide-wrap{max-width:980px;margin:0 auto;padding:2rem 1rem 4rem}.guide-wrap h1{line-height:1.12}.guide-wrap h2{margin-top:2.4rem}.lede{font-size:1.15rem;line-height:1.7}.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:.7rem;margin:1.5rem 0}.flow div,.callout,.warning,.acceptance{border:1px solid rgba(128,128,128,.35);border-radius:12px;padding:1rem}.flow div{text-align:center;font-weight:600}.warning{background:rgba(218,165,32,.1)}.callout{background:rgba(30,144,255,.08)}.acceptance{background:rgba(46,139,87,.1)}.step{margin:1.5rem 0;padding:1.25rem;border-left:4px solid #d4a83f;background:rgba(127,127,127,.06)}.code{font-family:ui-monospace,monospace;overflow-wrap:anywhere;padding:.75rem;border-radius:8px;background:rgba(0,0,0,.08)}.small{font-size:.92rem;opacity:.8}.meta{opacity:.75}
   </style>
 </head>
 <body>
   <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
-  <header class="site-header">
-    <div class="container header-row">
-      <a class="brand" href="../index.html"><img src="../img/brand/XolosRamirez.jpg" alt="Xolos Ramírez" width="44" height="44"><span>Xolos Ramírez</span></a>
-      <button class="hamburger" aria-expanded="false" aria-controls="menu">☰</button>
-      <nav id="menu" class="nav-menu" data-visible="false" aria-label="Navegación principal"><ul><li><a href="../index.html">Inicio</a></li><li><a href="../xolos-disponibles.html">Xolos disponibles</a></li><li><a href="index.html">Blog</a></li><li><a href="../contacto.html">Contacto</a></li><li><a href="../en/blog/firma-wallet-tonalli-firma-xec-tutorial.html" lang="en">English</a></li></ul></nav>
-    </div>
-  </header>
-
+  <header class="site-header"><div class="container header-row"><a class="brand" href="../index.html"><img src="../img/brand/XolosRamirez.jpg" alt="Xolos Ramírez" width="44" height="44"><span>Xolos Ramírez</span></a><button class="hamburger" aria-expanded="false" aria-controls="menu">☰</button><nav id="menu" class="nav-menu" data-visible="false"><ul><li><a href="../index.html">Inicio</a></li><li><a href="../xolos-disponibles.html">Xolos disponibles</a></li><li><a href="index.html">Blog</a></li><li><a href="../contacto.html">Contacto</a></li><li><a href="../en/blog/firma-wallet-tonalli-firma-xec-tutorial.html" lang="en">English</a></li></ul></nav></div></header>
   <main id="contenido-principal" class="guide-wrap">
-    <p class="meta"><time datetime="2026-08-14">14 de agosto de 2026</time> · Guía técnica · eCash / Firma Alpha / Tonalli Wallet</p>
-    <h1>De Firma Wallet a Tonalli y de FIRMA a XEC: tutorial de principio a fin</h1>
-    <p class="lede">Esta guía reproduce de forma didáctica un embudo que probamos con fondos reales en eCash mainnet: respaldar una seed de Firma Wallet, recuperarla en Tonalli, localizar Firma Alpha bajo el perfil eCash/Cashtab 1899 y redimir FIRMA por XEC mediante una oferta Agora firmada localmente.</p>
-    <p class="language-link"><a href="../en/blog/firma-wallet-tonalli-firma-xec-tutorial.html" hreflang="en">Read this tutorial in English →</a></p>
+    <p class="meta"><time datetime="2026-08-14">14 de agosto de 2026</time> · Tutorial basado en una prueba real sobre mainnet</p>
+    <h1>De pesos mexicanos a XEC: Bitso → USDT Solana → Firma → Tonalli</h1>
+    <p class="lede">Este tutorial documenta un embudo que probamos de principio a fin con fondos reales: depositar MXN en Bitso, comprar USDT, retirarlo por Solana hacia firma.cash, recibir Firma Alpha bajo una seed eCash, recuperar esa misma seed en Tonalli y convertir FIRMA a XEC mediante una oferta Agora on-chain.</p>
 
-    <section class="warning" aria-label="Seguridad">
-      <strong>Regla número uno: tus 12 palabras nunca salen de tus dispositivos.</strong>
-      <p>No pegues la seed en ChatGPT, Telegram, correo, GitHub, formularios, capturas de pantalla ni mensajes de soporte. Para aprender, usa cantidades pequeñas. Si una seed queda expuesta, considérala comprometida.</p>
-    </section>
+    <section class="warning"><strong>Seguridad primero.</strong><p>Nunca compartas tu seed de 12 palabras. Verifica red, dirección, Token ID y cantidades antes de cada envío. Haz la primera prueba con montos pequeños. Las interfaces, requisitos KYC, fees y redes soportadas pueden cambiar con el tiempo.</p></section>
 
-    <h2>El embudo que vamos a construir</h2>
-    <div class="flow" aria-label="Flujo Firma a Tonalli y XEC">
-      <div>Firma Wallet<br><small>seed de 12 palabras</small></div>
-      <div>→</div>
-      <div>eCash 1899<br><small>mismas llaves</small></div>
-      <div>→</div>
-      <div>Tonalli<br><small>scan + autocustodia</small></div>
-      <div>→</div>
-      <div>FIRMA<br><small>ALP on-chain</small></div>
-      <div>→</div>
-      <div>Agora<br><small>oferta de redención</small></div>
-      <div>→</div>
-      <div>XEC<br><small>saldo autocustodiado</small></div>
-    </div>
+    <h2>El embudo completo que quedó probado</h2>
+    <div class="flow"><div>MXN<br><small>Bitso</small></div><div>USDT<br><small>Solana / SPL</small></div><div>firma.cash<br><small>depósito</small></div><div>Firma Alpha<br><small>eCash ALP</small></div><div>Tonalli<br><small>seed 1899</small></div><div>Agora<br><small>redención</small></div><div>XEC<br><small>autocustodia</small></div></div>
 
-    <section class="callout">
-      <strong>Importante: el rail de fondeo y el activo on-chain son dos cosas distintas.</strong>
-      <p>Firma puede presentar métodos de fondeo con stablecoins y otros rails externos. Eso no significa que todo saldo mostrado en la app sea Firma Alpha. Firma Alpha, Firma USD, fCHF y fEUR no deben tratarse como el mismo token. Para seguir esta guía debes comprobar que el activo on-chain es <strong>Firma Alpha (FIRMA)</strong>.</p>
-    </section>
+    <section class="callout"><strong>Qué aprendimos del tramo Solana → eCash.</strong><p>En esta prueba, Solana funcionó como rail de entrada para USDT. Después de enviar USDT-SPL al flujo de firma.cash, el activo que apareció bajo la seed eCash y que Tonalli detectó fue <strong>Firma Alpha</strong>. No hace falta asumir que “FIRMA vive en Solana”: para el usuario, Solana fue el rail de depósito; el activo posteriormente recuperado y gastado por Tonalli fue el token ALP nativo de eCash.</p></section>
 
-    <h2>Antes de empezar</h2>
-    <ul class="checklist">
-      <li>Ten instalada y configurada Firma Wallet.</li>
-      <li>Ten acceso a Tonalli Wallet desde <a href="https://app.tonalli.cash/" rel="noopener">app.tonalli.cash</a> o a la instancia que utilices.</li>
-      <li>Guarda la seed de Firma Wallet en un soporte offline.</li>
-      <li>Empieza con una cantidad que estés dispuesto a usar como prueba.</li>
-      <li>Ten una pequeña cantidad de XEC puro disponible para comisiones.</li>
-    </ul>
+    <h2>Paso a paso</h2>
+    <section class="step"><h3>1. Deposita MXN en Bitso</h3><p>Fondea tu cuenta de Bitso con pesos mexicanos por el método disponible en tu cuenta. Espera a que el saldo quede acreditado.</p></section>
+    <section class="step"><h3>2. Compra USDT</h3><p>Compra USDT con el monto que quieras usar en la prueba. Antes de retirar, confirma que vas a utilizar <strong>Solana</strong> como red de salida y no otra red incompatible.</p></section>
+    <section class="step"><h3>3. Obtén en firma.cash la dirección de depósito correcta</h3><p>En Firma, entra al flujo de fondeo con stablecoins y conecta/selecciona el rail Solana que corresponda. Copia la dirección exactamente como la muestra la aplicación. No reutilices direcciones de pruebas anteriores sin verificar que sigan siendo válidas.</p></section>
+    <section class="step"><h3>4. Envía USDT por Solana desde Bitso</h3><p>En Bitso, retira USDT usando la red Solana hacia la dirección indicada por Firma. Revisa red, dirección y monto antes de confirmar. Espera las confirmaciones necesarias y la acreditación en Firma.</p></section>
+    <section class="step"><h3>5. Respalda las 12 palabras de Firma Wallet</h3><p>Guárdalas offline, en orden exacto. Restaurar esa seed en Tonalli no “mueve” los fondos entre aplicaciones: permite que Tonalli derive las mismas llaves eCash.</p></section>
+    <section class="step"><h3>6. Importa la seed en Tonalli con eCash/Cashtab 1899</h3><div class="code">Perfil: eCash / Cashtab<br>BIP44 coin type: 1899<br>Base: m/44'/1899'/0'/0/0</div><p>Después ejecuta un <strong>re-escaneo extendido</strong>. Si estás recuperando una wallet Tonalli antigua, usa Tonalli Legacy 899; no lo confundas con una seed Firma/Cashtab.</p></section>
+    <section class="step"><h3>7. Verifica que el activo sea Firma Alpha</h3><div class="code">Token ID: 0387947fd575db4fb19a3e322f635dec37fd192b5941625b66bc4b2c3008cbf0<br>Protocolo: ALP · 4 decimales</div><p>No confundas Firma Alpha con Firma USD, fCHF o fEUR.</p></section>
+    <section class="step"><h3>8. Asegura XEC puro para comisiones</h3><p>Los sats ligados a un UTXO token no equivalen siempre a XEC libre para fees. Si Tonalli muestra XEC puro insuficiente, fondea una pequeña cantidad de XEC spendable antes de intentar enviar o redimir FIRMA.</p></section>
+    <section class="step"><h3>9. En el DEX elige “Redimir Firma a XEC”</h3><p>Introduce la cantidad y pulsa <strong>Previsualizar operación</strong>. Revisa FIRMA a bloquear, XEC esperados, precio efectivo, bid oficial, fee estimado y capacidad del sweeper. Tonalli no firma en preview.</p></section>
+    <section class="step"><h3>10. Confirma, firma localmente y transmite</h3><p>Tonalli reconstruye el plan con estado fresco, vuelve a consultar el bid y sólo firma si las condiciones siguen siendo válidas. La transacción crea una oferta Agora on-chain. Cuando el sweeper la acepta, el saldo XEC se actualiza.</p></section>
 
-    <div class="steps">
-      <section class="step">
-        <h3>Crea o abre Firma Wallet y respalda la seed</h3>
-        <p>Cuando Firma Wallet te entregue sus 12 palabras, escríbelas en el orden exacto. No las fotografíes. Esa mnemonic es la raíz criptográfica de la cartera: no estás exportando un “saldo” a Tonalli; estás permitiendo que otra wallet derive las mismas llaves eCash.</p>
-      </section>
-
-      <section class="step">
-        <h3>Fondea Firma por el método compatible con tu versión de la app</h3>
-        <p>Firma puede ofrecer entrada desde fiat o stablecoins y, en determinadas versiones, mostrar una conexión con una wallet de Solana para USDC/USDT/EURC. Sigue siempre el flujo que la aplicación vigente te muestre y completa los requisitos de verificación que correspondan.</p>
-        <p><strong>No avances por nombre o ticker solamente.</strong> Después del fondeo, verifica qué activo terminó bajo tu seed eCash.</p>
-      </section>
-
-      <section class="step">
-        <h3>Comprueba que realmente tienes Firma Alpha</h3>
-        <p>El Firma Alpha usado por Tonalli tiene esta identidad canónica:</p>
-        <div class="code">Token ID: 0387947fd575db4fb19a3e322f635dec37fd192b5941625b66bc4b2c3008cbf0<br>Protocolo: ALP estándar · tipo 0<br>Decimales: 4</div>
-        <p>Si la app o un explorador muestra otro Token ID, no asumas que es el mismo activo.</p>
-      </section>
-
-      <section class="step">
-        <h3>Restaura las mismas 12 palabras en Tonalli</h3>
-        <p>En Tonalli elige restaurar/importar wallet e introduce las mismas 12 palabras <strong>directamente en tu dispositivo</strong>. Para una seed compatible con Firma/Cashtab, el perfil debe ser:</p>
-        <div class="code">eCash / Cashtab<br>BIP44 coin type: 1899<br>Identidad base: m/44'/1899'/0'/0/0</div>
-        <p>Si estás recuperando una wallet histórica creada por Tonalli antes de esta compatibilidad, usa el perfil <strong>Tonalli Legacy 899</strong>. No uses legacy 899 para una seed de Firma/Cashtab sólo porque el número “899” te resulte familiar.</p>
-      </section>
-
-      <section class="step">
-        <h3>Haz un re-escaneo extendido</h3>
-        <p>El saldo puede vivir en otra dirección hija del mismo árbol HD. Pulsa <strong>Re-escanear (extendido)</strong>. Tonalli recorre las ramas de recepción y cambio del perfil activo y suma los UTXOs que realmente controla esa seed.</p>
-        <p>Una comprobación útil es importar la misma seed en Cashtab en un entorno controlado y verificar que ambos clientes encuentran el mismo saldo FIRMA. No es necesario que ambas interfaces estén mostrando en ese momento la misma “dirección de recepción siguiente” para que pertenezcan al mismo árbol HD.</p>
-      </section>
-
-      <section class="step">
-        <h3>Añade XEC puro para dust y comisión si hace falta</h3>
-        <p>Un UTXO que contiene FIRMA también lleva sats, pero esos sats están asociados al output token. Tonalli separa el <strong>XEC puro spendable</strong> de los sats ligados a tokens. Si la wallet indica que no hay XEC puro suficiente, envía una cantidad pequeña de XEC a la dirección eCash canónica de la wallet y espera a que aparezca como spendable.</p>
-      </section>
-
-      <section class="step">
-        <h3>Opcional: prueba primero un envío pequeño de FIRMA</h3>
-        <p>En <strong>Enviar Firma Alpha</strong> puedes enviar una cantidad pequeña a una dirección eCash o alias <code>.xec</code>. Tonalli previsualiza, vuelve a consultar el estado fresco y sólo después deriva los signatories de las rutas HD que poseen los inputs.</p>
-        <p>En nuestra aceptación mainnet previa, una seed de Firma restaurada en Tonalli consiguió descubrir y gastar correctamente el FIRMA que también veía Cashtab.</p>
-      </section>
-
-      <section class="step">
-        <h3>Abre el DEX y elige “Redimir Firma a XEC”</h3>
-        <p>En el mercado XEC ↔ FIRMA, selecciona <strong>Redimir Firma a XEC</strong>, introduce la cantidad y pulsa <strong>Previsualizar operación</strong>. Tonalli no firma durante esta fase.</p>
-        <p>Revisa cinco datos: <strong>FIRMA a bloquear, XEC esperados, precio efectivo, bid oficial y comisión</strong>. Tonalli también consulta la capacidad del sweeper para no crear una redención que no pueda cubrirse.</p>
-      </section>
-
-      <section class="step">
-        <h3>Confirma, firma localmente y transmite</h3>
-        <p>Al confirmar, Tonalli reconstruye el plan con estado fresco. El bid de redención se consulta otra vez; si cambió, la wallet exige una nueva previsualización. Si todo coincide, firma localmente y transmite una <strong>oferta Agora on-chain</strong>.</p>
-        <p>La operación no es un retiro bancario ni una custodia de Tonalli: tus FIRMA quedan bloqueados por el covenant de la oferta hasta que el sweeper la acepta. Al aceptarla, recibes XEC y el saldo de la wallet se actualiza.</p>
-      </section>
-    </div>
-
-    <h2>Prueba mainnet real del 14 de agosto de 2026</h2>
+    <h2>Prueba real del embudo completo</h2>
     <section class="acceptance">
-      <p>Durante la prueba de aceptación de este flujo, Tonalli mostró:</p>
-      <ul>
-        <li><strong>15.2165 FIRMA</strong> a bloquear.</li>
-        <li><strong>2,278,169.6 XEC</strong> estimados a recibir al completarse.</li>
-        <li><strong>149,717.05 XEC/FIRMA</strong> de precio efectivo.</li>
-        <li><strong>149,728.32 XEC/FIRMA</strong> de bid oficial en ese momento.</li>
-        <li><strong>6.68 XEC</strong> de comisión estimada.</li>
-        <li><strong>235,402,964.32 XEC</strong> de capacidad del sweeper mostrada en el preview.</li>
-      </ul>
-      <p>La oferta fue transmitida con:</p>
-      <div class="code">TXID: 1d8a2bd65eed00638ae41d366164df017fecc2d7d69b09d10cd6ae3b4409472a<br>Offer ID: 1d8a2bd65eed00638ae41d366164df017fecc2d7d69b09d10cd6ae3b4409472a:1</div>
-      <p>Después de la aceptación del sweeper, el saldo XEC de la wallet se actualizó. Los precios y la capacidad anteriores son <strong>datos históricos de esa prueba</strong>; no son una cotización para una operación futura.</p>
+      <p>Después de completar MXN → Bitso → USDT Solana → firma.cash → Firma Alpha → Tonalli, realizamos una redención de gran tamaño desde Tonalli:</p>
+      <ul><li><strong>243.328 FIRMA</strong> bloqueados.</li><li><strong>36,385,587.2 XEC</strong> estimados al completarse.</li><li><strong>149,533.08 XEC/FIRMA</strong> de precio efectivo.</li><li><strong>149,578.25 XEC/FIRMA</strong> de bid oficial.</li><li><strong>5.31 XEC</strong> de comisión estimada.</li><li><strong>0.002 FIRMA</strong> de cambio.</li><li><strong>233,453,847.64 XEC</strong> de capacidad del sweeper mostrada.</li></ul>
+      <div class="code">Offer TXID: 49dd6237df7c6574e60440e3709f6293a424c8ce3abd87ee7311ee31ff52e191<br>Offer ID: 49dd6237df7c6574e60440e3709f6293a424c8ce3abd87ee7311ee31ff52e191:1</div>
+      <p>La wallet mostró después un saldo XEC actualizado y conservó <strong>0.0020 FIRMA</strong> de cambio. El saldo total visible de XEC en la wallet no debe confundirse con el payout de esta única redención: podía incluir XEC que ya existía previamente.</p>
+      <p class="small">Todos los precios, fees y capacidades anteriores son datos históricos de la prueba del 14 de agosto de 2026, no una cotización actual.</p>
     </section>
 
-    <h2>Qué está ocurriendo realmente</h2>
-    <p>La parte clave es que <strong>Firma Wallet, Cashtab y Tonalli pueden actuar sobre la misma identidad eCash cuando comparten la misma seed y el mismo esquema de derivación</strong>. Restaurar una seed no mueve los fondos. Los UTXOs permanecen en la blockchain; lo que cambia es la interfaz desde la que derivamos las llaves que los controlan.</p>
-    <p>La redención FIRMA → XEC es otra etapa: Tonalli crea una oferta Agora al bid de redención vigente. El sweeper acepta esa oferta y la liquidación ocurre on-chain.</p>
+    <h2>Qué demuestra y qué no</h2>
+    <p><strong>Sí demuestra:</strong> que un usuario en México pudo recorrer el embudo MXN → USDT-SPL → Firma → Firma Alpha/eCash → Tonalli → XEC, y que la seed de Firma pudo recuperarse en Tonalli para descubrir y gastar esos activos.</p>
+    <p><strong>No demuestra:</strong> la arquitectura interna completa de conversión de Firma, ni que todos sus saldos sean Firma Alpha, ni que Bitso/Firma mantendrán para siempre las mismas redes, fees o requisitos.</p>
 
-    <h2>Problemas frecuentes</h2>
-    <ul class="checklist">
-      <li><strong>“Importé la seed y no veo saldo”:</strong> confirma que el perfil sea eCash/Cashtab 1899 y ejecuta el re-escaneo extendido.</li>
-      <li><strong>“Veo FIRMA pero no puedo enviarlo”:</strong> revisa si tienes XEC puro spendable para dust y comisión.</li>
-      <li><strong>“El bid/oráculo no está disponible”:</strong> no fuerces la firma. Espera y vuelve a generar el preview.</li>
-      <li><strong>“El bid cambió”:</strong> es una protección normal; genera una nueva previsualización.</li>
-      <li><strong>“Mi vieja wallet Tonalli quedó vacía”:</strong> usa el perfil Tonalli Legacy 899, diseñado para reproducir la derivación histórica.</li>
-    </ul>
-
-    <h2>Lo que este tutorial no promete</h2>
-    <section class="warning">
-      <p>Este flujo termina en <strong>XEC bajo autocustodia</strong>. No es por sí mismo un retiro a pesos, dólares o una cuenta bancaria. La disponibilidad de métodos de fondeo, KYC, stablecoins, Solana u otros rails pertenece a los servicios que los ofrecen y puede cambiar.</p>
-      <p>También es esencial distinguir <strong>Firma Alpha</strong> de otros productos con marca Firma. Antes de mover valor, verifica siempre Token ID, red, cantidad, destino y preview.</p>
-    </section>
-
-    <h2>Resumen</h2>
-    <p>El embudo completo es simple de visualizar, pero cada frontera importa:</p>
-    <div class="code">Fondeo en Firma → comprobar Firma Alpha → respaldar seed → restaurar en Tonalli con 1899 → re-escanear → disponer de XEC puro para fees → previsualizar redención → revalidar → firmar localmente → oferta Agora → sweeper → XEC</div>
-    <p class="small">Guía basada en una prueba mainnet controlada realizada el 14 de agosto de 2026. Empieza con cantidades pequeñas y verifica siempre el estado actual de la aplicación y del mercado.</p>
+    <section class="warning"><strong>No publiques tu seed.</strong><p>Los TXIDs son públicos; las 12 palabras no. Guarda la evidencia on-chain y tus comprobantes, pero nunca incluyas la mnemonic en capturas, chats o tickets de soporte.</p></section>
   </main>
-
   <footer class="site-footer"><div class="container"><p>© 2026 Xolos Ramírez.</p></div></footer>
   <script src="../js/main.js" defer></script>
 </body>
