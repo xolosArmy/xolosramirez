@@ -341,10 +341,39 @@ function updateAvailableXolosCtas() {
 }
 
 function updateXilonenProfileVideo() {
-  const oldVideoUrl = 'https://www.youtube.com/embed/-tOjo7jR67g';
-  const newVideoUrl = 'https://www.youtube.com/embed/L0GKn7rXqZk';
-  document.querySelectorAll(`iframe[src="${oldVideoUrl}"]`).forEach((iframe) => {
-    iframe.setAttribute('src', newVideoUrl);
+  const videoUrl = 'https://www.youtube.com/embed/nrZ-PhE4bHA';
+  const grid = getAvailableXolosGrid();
+  if (!grid) return;
+
+  Array.from(grid.querySelectorAll('.puppy-card')).forEach((card) => {
+    const name = card.querySelector('.puppy-card__name')?.textContent.trim();
+    if (name !== 'Xilonen Ramirez') return;
+    const iframe = card.querySelector('.puppy-video-container iframe');
+    if (iframe) iframe.setAttribute('src', videoUrl);
+  });
+}
+
+function updateXilonenPersonality() {
+  const grid = getAvailableXolosGrid();
+  if (!grid) return;
+
+  const isEnglish = document.documentElement.lang.toLowerCase().startsWith('en');
+  const personality = isEnglish
+    ? 'Personality: curious, alert and exploratory. Xilonen is an observant little puppy who confidently investigates her surroundings and enjoys approaching people.'
+    : 'Personalidad: curiosa, despierta y exploradora. Xilonen es una cachorrita observadora que investiga su entorno con confianza y disfruta acercarse a las personas.';
+
+  Array.from(grid.querySelectorAll('.puppy-card')).forEach((card) => {
+    const name = card.querySelector('.puppy-card__name')?.textContent.trim();
+    if (name !== 'Xilonen Ramirez') return;
+    if (card.querySelector('[data-profile-personality="xilonen"]')) return;
+
+    const details = card.querySelector('.puppy-card__details');
+    if (!details) return;
+    const paragraph = document.createElement('p');
+    paragraph.dataset.profilePersonality = 'xilonen';
+    paragraph.className = 'puppy-card__personality';
+    paragraph.textContent = personality;
+    details.insertAdjacentElement('afterend', paragraph);
   });
 }
 
@@ -491,6 +520,7 @@ function prioritizeAvailableProfiles() {
 updateGlobalContactEmail();
 updateAvailableXolosCtas();
 updateXilonenProfileVideo();
+updateXilonenPersonality();
 updateYohualliProfileVideo();
 insertTlilxochitlProfile();
 updateXilonenAge();
