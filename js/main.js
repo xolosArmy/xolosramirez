@@ -122,7 +122,7 @@ function getLeadIntent(element) {
 function buildLeadPayload(element) {
   const lang = element.dataset.lang || document.documentElement.lang;
   return {
-    event: 'generate_lead',
+    event: 'xolos_generate_lead',
     lead_channel: getLeadChannel(element),
     cta_location: getCtaLocation(element),
     lead_intent: getLeadIntent(element),

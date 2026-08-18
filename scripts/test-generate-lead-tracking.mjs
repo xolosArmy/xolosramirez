@@ -21,7 +21,7 @@ function formTag(html) {
 
 includes(main, "document.addEventListener('click'", 'Expected delegated click listener');
 includes(main, "target.closest('[data-lead-type=\"generate_lead\"]')", 'Expected closest() based lead lookup');
-includes(main, "event: 'generate_lead'", 'Expected generate_lead event push');
+includes(main, "event: 'xolos_generate_lead'", 'Expected xolos_generate_lead event push');
 includes(main, "if (cta === 'video_call') return 'video_call';", 'Expected video_call lead channel');
 
 for (const key of [
