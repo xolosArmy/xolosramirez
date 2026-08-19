@@ -474,7 +474,7 @@ function insertTlilxochitlProfile() {
         <li><strong>${labels.colorLabel}</strong>${labels.color}</li>
       </ul>
       <div class="puppy-video-container" style="margin: 1rem 0; border-radius: 8px; overflow: hidden; aspect-ratio: 16/9;">
-        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/KkT77ePIiIg" title="Tlilxóchitl Ramirez" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/8iXxSLjaNfI" title="Tlilxóchitl Ramirez" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
       </div>
       <div class="puppy-card__actions">
         <a href="mailto:${CURRENT_CONTACT_EMAIL}?subject=${encodeURIComponent(labels.subject)}&body=${encodeURIComponent(labels.body)}" class="btn-small btn-primary-small cta-lead cta-email" style="${labels.buttonStyle}" data-cta="email" data-lead-type="generate_lead" data-profile="tlilxochitl" data-page-type="available-xolos" data-lang="${labels.lang}" aria-label="${labels.aria}" data-status="available">${labels.cta}</a>
