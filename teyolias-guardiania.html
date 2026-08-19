@@ -1,728 +1,1474 @@
-<!DOCTYPE html>
-<html lang="es">
+<!doctype html>
+<html lang="es-MX">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teyolia de Guardianía | Xolos Ramírez</title>
-    <meta name="description" content="Descubre el programa Teyolías de Guardianía de Xolos Ramírez: un camino de adopción curada donde la tribu y el criadero se unen por el bienestar del xoloitzcuintle.">
-    <link rel="alternate" hreflang="es" href="https://xolosramirez.com/teyolias-guardiania.html">
-    <link rel="alternate" hreflang="en" href="https://xolosramirez.com/en/teyolias-guardianship.html">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 */
-            height: 0;
-            overflow: hidden;
-            border-radius: 1.5rem;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 600px;
-            margin: auto;
-            height: 350px;
-        }
-        .step-btn.active {
-            background-color: #d97706;
-            color: white;
-            border-color: #d97706;
-            transform: scale(1.05);
-        }
-        .fade-in { animation: fadeIn 0.4s ease-in-out; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .flip-card { perspective: 1000px; height: 180px; }
-        .flip-card-inner {
-            position: relative; width: 100%; height: 100%;
-            transition: transform 0.6s; transform-style: preserve-3d;
-        }
-        .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
-        .flip-card-front, .flip-card-back {
-            position: absolute; width: 100%; height: 100%;
-            backface-visibility: hidden; border-radius: 0.75rem;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 1rem;
-        }
-        .flip-card-front { background-color: #f5f5f4; color: #292524; }
-        .flip-card-back { background-color: #292524; color: #f5f5f4; transform: rotateY(180deg); }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Teyolías: guardianía comunitaria de xoloitzcuintles | Xolos Ramírez</title>
+  <meta name="description" content="Conoce las campañas Teyolía abiertas, las próximas prepostulaciones y el proceso de guardianía comunitaria de Xolos Ramírez.">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" href="assets/xolosramirez.ico">
+  <link rel="canonical" href="https://xolosramirez.com/teyolias-guardiania.html">
+  <link rel="alternate" hreflang="es-MX" href="https://xolosramirez.com/teyolias-guardiania.html">
+  <link rel="alternate" hreflang="en" href="https://xolosramirez.com/en/teyolias-guardianship.html">
+  <link rel="alternate" hreflang="x-default" href="https://xolosramirez.com/teyolias-guardiania.html">
 
-        .carousel-scrollbar-hidden::-webkit-scrollbar { display: none; }
-        .carousel-scrollbar-hidden { -ms-overflow-style: none; scrollbar-width: none; }
-        .teyolia-carousel-track {
-            display: flex;
-            height: 100%;
-            width: 100%;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            scroll-behavior: smooth;
-            overscroll-behavior-x: contain;
-            -webkit-overflow-scrolling: touch;
-        }
-        .teyolia-carousel-slide {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            flex: 0 0 100%;
-            scroll-snap-align: center;
-        }
-        .teyolia-carousel-image-slide {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #0c0a09;
-        }
-        .teyolia-carousel-image-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            object-position: center;
-        }
-        .teyolia-carousel-video-slide {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #0c0a09;
-        }
-        .teyolia-carousel-video-slide iframe {
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-        .teyolia-carousel-button {
-            position: absolute;
-            top: 50%;
-            z-index: 10;
-            display: inline-flex;
-            width: 2.5rem;
-            height: 2.5rem;
-            transform: translateY(-50%);
-            align-items: center;
-            justify-content: center;
-            border-radius: 9999px;
-            border: 1px solid rgba(245, 158, 11, 0.55);
-            background: rgba(12, 10, 9, 0.68);
-            color: #fef3c7;
-            box-shadow: 0 10px 25px -12px rgba(0, 0, 0, 0.6);
-            transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
-        }
-        .teyolia-carousel-button:hover,
-        .teyolia-carousel-button:focus-visible {
-            background: rgba(217, 119, 6, 0.92);
-            color: #1c1917;
-            transform: translateY(-50%) scale(1.05);
-            outline: none;
-        }
-        .teyolia-carousel-button--prev { left: 0.75rem; }
-        .teyolia-carousel-button--next { right: 0.75rem; }
-        .teyolia-carousel-dots {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-        .teyolia-carousel-dot {
-            width: 0.65rem;
-            height: 0.65rem;
-            border-radius: 9999px;
-            border: 1px solid rgba(245, 158, 11, 0.75);
-            background: rgba(28, 25, 23, 0.45);
-            transition: width 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
-        }
-        .teyolia-carousel-dot.is-active {
-            width: 1.6rem;
-            background: #f59e0b;
-            border-color: #fbbf24;
-        }
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Xolos Ramírez">
+  <meta property="og:locale" content="es_MX">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:title" content="Teyolías: guardianía comunitaria de xoloitzcuintles">
+  <meta property="og:description" content="Campañas abiertas, prepostulación y proceso de guardianía Teyolías de Xolos Ramírez.">
+  <meta property="og:url" content="https://xolosramirez.com/teyolias-guardiania.html">
+  <meta property="og:image" content="https://i.imgur.com/qYusFcs.png">
+  <meta property="og:image:alt" content="Tonatiuh Ramírez, xoloitzcuintle participante del programa Teyolías">
 
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Teyolías: guardianía comunitaria de xoloitzcuintles">
+  <meta name="twitter:description" content="Conoce las oportunidades actuales y cómo funciona la guardianía Teyolías.">
+  <meta name="twitter:image" content="https://i.imgur.com/qYusFcs.png">
+  <meta name="twitter:image:alt" content="Tonatiuh Ramírez, xoloitzcuintle participante del programa Teyolías">
 
-        /* =========================================
-           Botón Flotante de Correo (Teyolias)
-           ========================================= */
-        .floating-email-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background-color: #8B4513;
-            color: #ffffff;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            z-index: 9999;
-            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
-            text-decoration: none;
-        }
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://xolosramirez.com/teyolias-guardiania.html#webpage",
+        "url": "https://xolosramirez.com/teyolias-guardiania.html",
+        "name": "Teyolías: guardianía comunitaria de xoloitzcuintles",
+        "description": "Centro de información, campañas y prepostulación del programa de guardianía Teyolías de Xolos Ramírez.",
+        "inLanguage": "es-MX",
+        "breadcrumb": { "@id": "https://xolosramirez.com/teyolias-guardiania.html#breadcrumb" },
+        "mainEntity": { "@id": "https://xolosramirez.com/teyolias-guardiania.html#opportunities" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://xolosramirez.com/teyolias-guardiania.html#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Inicio",
+            "item": "https://xolosramirez.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Teyolías",
+            "item": "https://xolosramirez.com/teyolias-guardiania.html"
+          }
+        ]
+      },
+      {
+        "@type": "ItemList",
+        "@id": "https://xolosramirez.com/teyolias-guardiania.html#opportunities",
+        "name": "Oportunidades de guardianía Teyolías",
+        "numberOfItems": 4,
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Tonatiuh Ramírez — campaña abierta" },
+          { "@type": "ListItem", "position": 2, "name": "Tlaloc Ramírez — campaña abierta" },
+          { "@type": "ListItem", "position": 3, "name": "Puka Ramírez — campaña abierta" },
+          { "@type": "ListItem", "position": 4, "name": "Ozomatli Ramírez — prepostulación" }
+        ]
+      }
+    ]
+  }
+  </script>
 
-        .floating-email-btn:hover,
-        .floating-email-btn:focus-visible {
-            transform: translateY(-5px) scale(1.05);
-            background-color: #A0522D;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
-            color: #ffffff;
-        }
+  <style>
+    :root {
+      --obsidian: #0e0d0c;
+      --obsidian-soft: #181512;
+      --stone-950: #211d19;
+      --stone-800: #403933;
+      --stone-600: #6e6258;
+      --stone-300: #cfc4b7;
+      --stone-100: #f1ece5;
+      --ivory: #fbf8f2;
+      --amber: #d7a23f;
+      --amber-dark: #8b5d13;
+      --amber-pale: #f4e2bc;
+      --white: #ffffff;
+      --shadow: 0 20px 55px rgba(24, 18, 12, 0.13);
+      --radius-lg: 1.5rem;
+      --radius-md: 1rem;
+      color-scheme: light;
+    }
 
-        .floating-email-btn svg {
-            width: 28px;
-            height: 28px;
-        }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
 
-        @media (max-width: 768px) {
-            .floating-email-btn {
-                bottom: 20px;
-                right: 20px;
-                width: 50px;
-                height: 50px;
-            }
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 7rem;
+    }
 
-            .floating-email-btn svg {
-                width: 24px;
-                height: 24px;
-            }
-        }
-    </style>
+    body {
+      margin: 0;
+      background: var(--ivory);
+      color: var(--stone-950);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 1rem;
+      line-height: 1.65;
+      text-rendering: optimizeLegibility;
+    }
+
+    img,
+    iframe {
+      display: block;
+      max-width: 100%;
+    }
+
+    img {
+      height: auto;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :focus-visible {
+      outline: 3px solid #f4b942;
+      outline-offset: 4px;
+      border-radius: 0.3rem;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .skip-link {
+      position: fixed;
+      top: 0.75rem;
+      left: 0.75rem;
+      z-index: 100;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      background: var(--white);
+      color: var(--obsidian);
+      font-weight: 800;
+      transform: translateY(-160%);
+      transition: transform 160ms ease;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .container {
+      width: min(72rem, calc(100% - 2rem));
+      margin-inline: auto;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid rgba(215, 162, 63, 0.28);
+      background: rgba(14, 13, 12, 0.96);
+      color: var(--stone-100);
+      backdrop-filter: blur(14px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      min-height: 5.25rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .brand img {
+      width: 3rem;
+      height: 3rem;
+      border: 1px solid rgba(215, 162, 63, 0.6);
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .brand span {
+      color: var(--white);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .site-nav {
+      min-width: 0;
+      margin-left: auto;
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+
+    .site-nav ul {
+      display: flex;
+      align-items: center;
+      gap: 0.15rem;
+      width: max-content;
+      margin: 0;
+      padding: 0.65rem 0;
+      list-style: none;
+    }
+
+    .site-nav a {
+      display: inline-flex;
+      min-height: 2.65rem;
+      align-items: center;
+      padding: 0.55rem 0.7rem;
+      border-radius: 999px;
+      color: var(--stone-300);
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .site-nav a:hover {
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--white);
+    }
+
+    .site-nav a[aria-current="page"] {
+      border: 1px solid rgba(215, 162, 63, 0.58);
+      background: rgba(215, 162, 63, 0.14);
+      color: var(--amber-pale);
+    }
+
+    .hero {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      padding: clamp(4.5rem, 10vw, 8.5rem) 0;
+      background:
+        radial-gradient(circle at 82% 18%, rgba(215, 162, 63, 0.22), transparent 26rem),
+        linear-gradient(135deg, #0b0a09, #211a12 62%, #100e0b);
+      color: var(--stone-100);
+    }
+
+    .hero::after {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+      background-size: 44px 44px;
+      content: "";
+      mask-image: linear-gradient(to bottom, black, transparent 80%);
+    }
+
+    .hero-content {
+      max-width: 55rem;
+    }
+
+    .eyebrow {
+      margin: 0 0 1rem;
+      color: var(--amber-pale);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin-top: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.13;
+    }
+
+    h1 {
+      max-width: 50rem;
+      margin-bottom: 1.25rem;
+      color: var(--white);
+      font-size: clamp(2.55rem, 7vw, 5.4rem);
+      letter-spacing: -0.045em;
+    }
+
+    .hero-lead {
+      max-width: 45rem;
+      margin: 0 0 2rem;
+      color: #ddd3c7;
+      font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    .button {
+      display: inline-flex;
+      min-height: 3rem;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem 1.15rem;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      font-weight: 800;
+      line-height: 1.25;
+      text-align: center;
+      text-decoration: none;
+      transition: transform 160ms ease, background-color 160ms ease, border-color 160ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button-primary {
+      background: var(--amber);
+      color: var(--obsidian);
+    }
+
+    .button-primary:hover {
+      background: #e4b85f;
+    }
+
+    .button-secondary {
+      border-color: rgba(244, 226, 188, 0.48);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--stone-100);
+    }
+
+    .button-dark {
+      background: var(--obsidian);
+      color: var(--amber-pale);
+    }
+
+    .button-outline {
+      border-color: var(--stone-300);
+      background: transparent;
+      color: var(--stone-950);
+    }
+
+    main section {
+      padding-block: clamp(4rem, 8vw, 6.5rem);
+    }
+
+    main section + section {
+      border-top: 1px solid #e4dbd0;
+    }
+
+    .section-dark {
+      border-top: 0;
+      background: var(--obsidian-soft);
+      color: var(--stone-100);
+    }
+
+    .section-stone {
+      background: #eee7de;
+    }
+
+    .section-heading {
+      max-width: 48rem;
+      margin-bottom: 2.2rem;
+    }
+
+    .section-heading h2 {
+      margin-bottom: 0.85rem;
+      color: var(--stone-950);
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      letter-spacing: -0.025em;
+    }
+
+    .section-dark .section-heading h2 {
+      color: var(--white);
+    }
+
+    .section-heading p:last-child {
+      margin-bottom: 0;
+      color: var(--stone-600);
+      font-size: 1.06rem;
+    }
+
+    .section-dark .section-heading p:last-child {
+      color: var(--stone-300);
+    }
+
+    .campaign-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+
+    .profile-card {
+      display: flex;
+      min-width: 0;
+      height: 100%;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid #ded2c4;
+      border-radius: var(--radius-lg);
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .profile-media {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      margin: 0;
+      background: var(--obsidian);
+    }
+
+    .profile-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      width: fit-content;
+      padding: 0.35rem 0.7rem;
+      border: 1px solid #a87418;
+      border-radius: 999px;
+      background: #fff7df;
+      color: #654208;
+      font-size: 0.75rem;
+      font-weight: 900;
+      letter-spacing: 0.055em;
+      text-transform: uppercase;
+    }
+
+    .status::before {
+      width: 0.48rem;
+      height: 0.48rem;
+      border-radius: 50%;
+      background: currentColor;
+      content: "";
+    }
+
+    .status-upcoming {
+      border-color: #776a5c;
+      background: #eee8df;
+      color: #4f463d;
+    }
+
+    .card-body {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      padding: 1.35rem;
+    }
+
+    .card-body h3 {
+      margin: 0.85rem 0 1rem;
+      font-size: 1.7rem;
+    }
+
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.55rem;
+      margin: 0 0 1rem;
+    }
+
+    .facts div {
+      min-width: 0;
+      padding: 0.7rem;
+      border-radius: 0.75rem;
+      background: #f4efe9;
+    }
+
+    .facts dt {
+      color: var(--stone-600);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.055em;
+      text-transform: uppercase;
+    }
+
+    .facts dd {
+      margin: 0.15rem 0 0;
+      color: var(--stone-950);
+      font-weight: 750;
+    }
+
+    .personality {
+      margin: 0 0 1rem;
+      padding-left: 0.85rem;
+      border-left: 3px solid var(--amber);
+      color: var(--stone-800);
+      font-size: 0.93rem;
+    }
+
+    .personality strong {
+      color: var(--stone-950);
+    }
+
+    .card-note {
+      margin: 0 0 1.15rem;
+      color: var(--stone-600);
+      font-size: 0.9rem;
+    }
+
+    .card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      margin-top: auto;
+    }
+
+    .card-actions .button {
+      min-height: 2.75rem;
+      padding: 0.65rem 0.9rem;
+      font-size: 0.88rem;
+    }
+
+    .upcoming-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(20rem, 0.95fr);
+      overflow: hidden;
+      border: 1px solid #c9bba8;
+      border-radius: var(--radius-lg);
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .upcoming-card .card-body {
+      justify-content: center;
+      padding: clamp(1.5rem, 4vw, 3rem);
+    }
+
+    .carousel {
+      position: relative;
+      min-width: 0;
+      overflow: hidden;
+      background: var(--obsidian);
+    }
+
+    .carousel-track {
+      display: flex;
+      height: 100%;
+      min-height: 28rem;
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+      scroll-snap-type: x mandatory;
+      scrollbar-color: var(--amber) var(--obsidian);
+      touch-action: pan-x pan-y;
+    }
+
+    .carousel-slide {
+      flex: 0 0 100%;
+      scroll-snap-align: start;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      min-height: 28rem;
+      object-fit: cover;
+    }
+
+    .carousel-control {
+      position: absolute;
+      top: 50%;
+      display: grid;
+      width: 2.85rem;
+      height: 2.85rem;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.48);
+      border-radius: 50%;
+      background: rgba(14, 13, 12, 0.84);
+      color: var(--white);
+      cursor: pointer;
+      font-size: 1.25rem;
+      transform: translateY(-50%);
+    }
+
+    .carousel-control:hover {
+      background: var(--amber-dark);
+    }
+
+    .carousel-previous {
+      left: 0.75rem;
+    }
+
+    .carousel-next {
+      right: 0.75rem;
+    }
+
+    .carousel-footer {
+      position: absolute;
+      right: 0;
+      bottom: 0.8rem;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.45rem;
+      pointer-events: none;
+    }
+
+    .carousel-dots {
+      display: flex;
+      gap: 0.45rem;
+      padding: 0.4rem 0.55rem;
+      border-radius: 999px;
+      background: rgba(14, 13, 12, 0.78);
+      pointer-events: auto;
+    }
+
+    .carousel-dot {
+      width: 0.85rem;
+      height: 0.85rem;
+      padding: 0;
+      border: 2px solid var(--white);
+      border-radius: 50%;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .carousel-dot[aria-current="true"] {
+      background: var(--amber);
+    }
+
+    .swipe-note {
+      margin: 0;
+      padding: 0.25rem 0.55rem;
+      border-radius: 999px;
+      background: rgba(14, 13, 12, 0.78);
+      color: var(--stone-100);
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+
+    .process-list {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 1rem;
+      margin: 0;
+      padding: 0;
+      counter-reset: process;
+      list-style: none;
+    }
+
+    .process-list li {
+      position: relative;
+      padding: 1.35rem;
+      border: 1px solid rgba(244, 226, 188, 0.2);
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.055);
+      counter-increment: process;
+    }
+
+    .process-list li::before {
+      display: grid;
+      width: 2.35rem;
+      height: 2.35rem;
+      margin-bottom: 1rem;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--amber);
+      color: var(--obsidian);
+      content: counter(process, decimal-leading-zero);
+      font-weight: 900;
+    }
+
+    .process-list h3 {
+      margin-bottom: 0.65rem;
+      color: var(--amber-pale);
+      font-size: 1.25rem;
+    }
+
+    .process-list p {
+      margin: 0;
+      color: var(--stone-300);
+      font-size: 0.92rem;
+    }
+
+    .criteria-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .criteria-list,
+    .tech-grid,
+    .faq-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .criteria-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .criterion,
+    .tech-card,
+    .faq-item {
+      padding: 1.3rem;
+      border: 1px solid #d8ccbd;
+      border-radius: var(--radius-md);
+      background: var(--white);
+    }
+
+    .criterion:last-child {
+      grid-column: 1 / -1;
+    }
+
+    .criterion h3,
+    .tech-card h3,
+    .faq-item h3 {
+      margin-bottom: 0.55rem;
+      font-size: 1.15rem;
+    }
+
+    .criterion p,
+    .tech-card p,
+    .faq-item p {
+      margin: 0;
+      color: var(--stone-600);
+      font-size: 0.93rem;
+    }
+
+    .principles {
+      padding: 1.5rem;
+      border-radius: var(--radius-lg);
+      background: var(--obsidian);
+      color: var(--stone-100);
+    }
+
+    .principles h3 {
+      color: var(--amber-pale);
+      font-size: 1.4rem;
+    }
+
+    .principles ul {
+      display: grid;
+      gap: 0.75rem;
+      margin: 0;
+      padding-left: 1.2rem;
+    }
+
+    .principles strong {
+      color: var(--white);
+    }
+
+    .tech-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .tech-card {
+      border-color: rgba(244, 226, 188, 0.2);
+      background: rgba(255, 255, 255, 0.055);
+    }
+
+    .tech-card h3 {
+      color: var(--amber-pale);
+      font-size: 1.35rem;
+    }
+
+    .tech-card p {
+      color: var(--stone-300);
+    }
+
+    .tech-card a {
+      display: inline-flex;
+      margin-top: 1rem;
+      color: var(--amber-pale);
+      font-weight: 800;
+    }
+
+    .flow-note {
+      margin: 1.25rem 0 0;
+      padding: 1rem 1.2rem;
+      border: 1px solid rgba(215, 162, 63, 0.45);
+      border-radius: var(--radius-md);
+      background: rgba(215, 162, 63, 0.08);
+      color: var(--stone-300);
+    }
+
+    .tutorial-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .video-shell {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      border: 1px solid #332a20;
+      border-radius: var(--radius-lg);
+      background: var(--obsidian);
+      box-shadow: var(--shadow);
+    }
+
+    .video-poster {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      border: 0;
+      background: var(--obsidian);
+      cursor: pointer;
+    }
+
+    .video-poster img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.75;
+    }
+
+    .play-label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      display: inline-flex;
+      min-height: 3.5rem;
+      align-items: center;
+      padding: 0.8rem 1.1rem;
+      border: 2px solid var(--white);
+      border-radius: 999px;
+      background: rgba(14, 13, 12, 0.86);
+      color: var(--white);
+      font-weight: 900;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+    }
+
+    .video-shell iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .tutorial-copy h2 {
+      margin-bottom: 0.8rem;
+      font-size: clamp(2rem, 4vw, 3rem);
+    }
+
+    .tutorial-copy p {
+      color: var(--stone-600);
+    }
+
+    .text-link {
+      color: var(--amber-dark);
+      font-weight: 800;
+      text-underline-offset: 0.2em;
+    }
+
+    .faq-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .final-cta {
+      padding-block: clamp(4.5rem, 9vw, 7rem);
+      background:
+        radial-gradient(circle at 50% 0, rgba(215, 162, 63, 0.24), transparent 25rem),
+        var(--obsidian);
+      color: var(--stone-100);
+      text-align: center;
+    }
+
+    .final-cta .container {
+      max-width: 50rem;
+    }
+
+    .final-cta h2 {
+      margin-bottom: 0.8rem;
+      color: var(--white);
+      font-size: clamp(2.1rem, 5vw, 3.4rem);
+    }
+
+    .final-cta p {
+      margin: 0 auto 1.6rem;
+      color: var(--stone-300);
+    }
+
+    .final-cta .button-row {
+      justify-content: center;
+    }
+
+    .site-footer {
+      padding: 2.2rem 0;
+      border-top: 1px solid rgba(215, 162, 63, 0.2);
+      background: #090807;
+      color: var(--stone-300);
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .footer-inner p {
+      margin: 0;
+      font-size: 0.85rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-links a {
+      color: var(--amber-pale);
+      font-size: 0.85rem;
+      font-weight: 750;
+      text-underline-offset: 0.2em;
+    }
+
+    @media (max-width: 62rem) {
+      .header-inner {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0;
+        padding-top: 0.75rem;
+      }
+
+      .site-nav {
+        width: 100%;
+        margin-left: 0;
+      }
+
+      .campaign-grid,
+      .tech-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .process-list {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .upcoming-card,
+      .criteria-layout,
+      .tutorial-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 46rem) {
+      .container {
+        width: min(100% - 1.25rem, 72rem);
+      }
+
+      .brand img {
+        width: 2.65rem;
+        height: 2.65rem;
+      }
+
+      .brand span {
+        font-size: 1rem;
+      }
+
+      .hero {
+        padding-top: 4rem;
+      }
+
+      .campaign-grid,
+      .tech-grid,
+      .criteria-list,
+      .faq-grid,
+      .process-list {
+        grid-template-columns: 1fr;
+      }
+
+      .criterion:last-child {
+        grid-column: auto;
+      }
+
+      .button-row,
+      .card-actions {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .carousel-track,
+      .carousel-slide img {
+        min-height: 23rem;
+      }
+
+      .play-label {
+        min-height: 3rem;
+        font-size: 0.88rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+
+      .button:hover {
+        transform: none;
+      }
+    }
+  </style>
 </head>
-<body class="bg-stone-100 text-stone-800 font-sans selection:bg-amber-200">
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido principal</a>
 
-    <header class="bg-stone-900 text-stone-50 py-16 px-6 text-center border-b-8 border-amber-600">
-        <div class="max-w-4xl mx-auto">
-            <h1 class="text-4xl md:text-5xl font-serif font-bold mb-4 text-amber-500">Teyolía de Guardianía ✨</h1>
-            <p class="text-lg text-stone-300 leading-relaxed mb-8">
-                Un camino de adopción curada donde la cultura, la tribu y el criadero se unen para asegurar el bienestar del Xoloitzcuintle.
-            </p>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Xolos Ramírez, inicio">
+        <img src="img/brand/XolosRamirez.jpg" alt="" width="96" height="96">
+        <span>Xolos Ramírez</span>
+      </a>
+      <nav class="site-nav" aria-label="Navegación principal">
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="xolos-disponibles.html">Xolos disponibles</a></li>
+          <li><a href="teyolias-guardiania.html" aria-current="page">Teyolías</a></li>
+          <li><a href="testimonios.html">Testimonios</a></li>
+          <li><a href="blog/index.html">Blog</a></li>
+          <li><a href="xolo-skin-care/">Xolo Skin Care</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+          <li><a href="en/teyolias-guardianship.html" lang="en">English</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
-            <div class="flex flex-wrap justify-center gap-4">
-                <a href="https://www.teyolia.cash" target="_blank" rel="noopener noreferrer" class="bg-amber-500 text-stone-900 px-6 py-3 rounded-full font-bold hover:bg-amber-400 transition-all shadow-lg">
-                    🔥 Ver campañas activas
-                </a>
-                <a href="https://cartera.xolosarmy.xyz" target="_blank" rel="noopener noreferrer" class="bg-transparent border border-amber-500 text-amber-500 px-6 py-3 rounded-full font-bold hover:bg-amber-500 hover:text-stone-900 transition-all">
-                    👛 Descargar Tonalli Wallet
-                </a>
-            </div>
+  <main id="contenido">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container hero-content">
+        <p class="eyebrow">Guardianía comunitaria · Xolos Ramírez</p>
+        <h1 id="hero-title">Teyolías: encontrar el hogar correcto es una decisión de cuidado</h1>
+        <p class="hero-lead">Teyolías reúne postulaciones, respaldo comunitario y una evaluación humana para acompañar a xoloitzcuintles que buscan una familia idónea. El bienestar del ejemplar guía todo el proceso.</p>
+        <div class="button-row">
+          <a class="button button-primary" href="#campanas-abiertas">Conocer las Teyolías disponibles</a>
+          <a class="button button-secondary" href="#proceso">Cómo funciona la guardianía</a>
         </div>
-    </header>
+      </div>
+    </section>
 
-    <main class="max-w-6xl mx-auto px-6 py-12">
-        
-        <section class="mb-20 max-w-4xl mx-auto">
-            <div class="text-center mb-8">
-                <h2 class="text-2xl font-serif font-bold text-stone-800">📽️ Video Tutorial</h2>
-                <p class="text-stone-600">Aprende paso a paso cómo participar en el programa de Teyolías.</p>
+    <section id="campanas-abiertas" aria-labelledby="campanas-title">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Oportunidades actuales</p>
+          <h2 id="campanas-title">Campañas abiertas en Teyolia.cash</h2>
+          <p>Estos ejemplares tienen una campaña publicada. Cuando no contamos con una URL individual confirmada, el enlace conduce a la lista general para localizar la campaña vigente sin prometer un destino incorrecto.</p>
+        </div>
+
+        <div class="campaign-grid">
+          <article class="profile-card" data-profile="tonatiuh" data-state="open-campaign" data-age="7-months" data-sex="male" data-size="miniature" data-color="black" data-personality="confident-pro-human">
+            <figure class="profile-media">
+              <img src="https://i.imgur.com/qYusFcs.png" alt="Tonatiuh Ramírez, xoloitzcuintle miniatura negro" loading="lazy" width="1200" height="900">
+            </figure>
+            <div class="card-body">
+              <span class="status">Campaña abierta</span>
+              <h3>Tonatiuh Ramírez</h3>
+              <dl class="facts">
+                <div><dt>Edad registrada</dt><dd>7 meses</dd></div>
+                <div><dt>Sexo</dt><dd>Macho</dd></div>
+                <div><dt>Talla</dt><dd>Miniatura</dd></div>
+                <div><dt>Color</dt><dd>Negro</dd></div>
+              </dl>
+              <p class="personality"><strong>Personalidad documentada:</strong> seguro de sí mismo, de carácter definido y muy orientado al contacto y la convivencia con las personas.</p>
+              <p class="card-note">La edad y la personalidad corresponden al perfil individual publicado de Tonatiuh.</p>
+              <div class="card-actions">
+                <a class="button button-dark" href="https://www.teyolia.cash/campaigns/campaign-1777329953138" target="_blank" rel="noopener noreferrer">Ver campaña de Tonatiuh</a>
+                <a class="button button-outline" href="https://www.youtube.com/watch?v=Ud7-0MpCDE0" target="_blank" rel="noopener noreferrer" aria-label="Ver video de Tonatiuh Ramírez en YouTube">Ver video</a>
+              </div>
             </div>
-            <div class="video-container">
-                <iframe 
-                    src="https://www.youtube.com/embed/jvLuUDhNzTo" 
-                    title="Tutorial Teyolía" 
-                    frameborder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowfullscreen>
-                </iframe>
+          </article>
+
+          <article class="profile-card" data-profile="tlaloc" data-state="open-campaign" data-age="1-year" data-sex="male" data-size="standard-intermediate" data-color="butterfly-gray">
+            <figure class="profile-media">
+              <img src="https://i.imgur.com/PchQIix.jpeg" alt="Tlaloc Ramírez, xoloitzcuintle color mariposa y gris" loading="lazy" width="1200" height="900">
+            </figure>
+            <div class="card-body">
+              <span class="status">Campaña abierta</span>
+              <h3>Tlaloc Ramírez</h3>
+              <dl class="facts">
+                <div><dt>Edad</dt><dd>1 año</dd></div>
+                <div><dt>Sexo</dt><dd>Macho</dd></div>
+                <div><dt>Talla</dt><dd>Estándar / intermedia</dd></div>
+                <div><dt>Color</dt><dd>Mariposa / gris</dd></div>
+              </dl>
+              <p class="card-note">No se añade una personalidad individual porque no se localizó un perfil que la documente.</p>
+              <div class="card-actions">
+                <a class="button button-dark" href="https://www.teyolia.cash/" target="_blank" rel="noopener noreferrer" aria-label="Ver campañas activas en Teyolia.cash para localizar la campaña de Tlaloc Ramírez">Ver campañas activas</a>
+                <a class="button button-outline" href="https://www.youtube.com/watch?v=4P7DCYJtKsY" target="_blank" rel="noopener noreferrer" aria-label="Ver video de Tlaloc Ramírez en YouTube">Ver video</a>
+              </div>
             </div>
-        </section>
+          </article>
 
-        <section class="mb-20">
-            <div class="text-center mb-10">
-                <h3 class="text-3xl font-serif font-bold text-stone-800 mb-2">🐾 El Camino Paso a Paso</h3>
+          <article class="profile-card" data-profile="puka" data-state="open-campaign" data-age="2-years" data-sex="male" data-color="black">
+            <figure class="profile-media">
+              <img src="https://i.imgur.com/wAys0hQ.jpeg" alt="Puka Ramírez, xoloitzcuintle macho negro" loading="lazy" width="1200" height="900">
+            </figure>
+            <div class="card-body">
+              <span class="status">Campaña abierta</span>
+              <h3>Puka Ramírez</h3>
+              <dl class="facts">
+                <div><dt>Edad</dt><dd>2 años</dd></div>
+                <div><dt>Sexo</dt><dd>Macho</dd></div>
+                <div><dt>Color</dt><dd>Negro</dd></div>
+              </dl>
+              <p class="card-note">El perfil individual confirma edad, sexo y color. La talla y la personalidad se omiten porque no aparecen documentadas allí.</p>
+              <div class="card-actions">
+                <a class="button button-dark" href="https://www.teyolia.cash/" target="_blank" rel="noopener noreferrer" aria-label="Ver campañas activas en Teyolia.cash para localizar la campaña de Puka Ramírez">Ver campañas activas</a>
+                <a class="button button-outline" href="https://www.youtube.com/watch?v=Gt9AKgF6GoU" target="_blank" rel="noopener noreferrer" aria-label="Ver video de Puka Ramírez en YouTube">Ver video</a>
+              </div>
             </div>
+          </article>
+        </div>
+      </div>
+    </section>
 
-            <div class="flex flex-col lg:flex-row gap-8 items-start">
-                <div class="w-full lg:w-1/3 flex lg:flex-col overflow-x-auto gap-3 border-stone-300">
-                    <button class="step-btn active px-5 py-4 rounded-xl border-2 bg-white font-medium shadow-sm transition-all" data-step="1">1. El Llamado</button>
-                    <button class="step-btn px-5 py-4 rounded-xl border-2 bg-white font-medium shadow-sm transition-all" data-step="2">2. La Preparación</button>
-                    <button class="step-btn px-5 py-4 rounded-xl border-2 bg-white font-medium shadow-sm transition-all" data-step="3">3. El Compromiso</button>
-                    <button class="step-btn px-5 py-4 rounded-xl border-2 bg-white font-medium shadow-sm transition-all" data-step="4">4. La Tribu</button>
-                    <button class="step-btn px-5 py-4 rounded-xl border-2 bg-white font-medium shadow-sm transition-all" data-step="5">5. La Decisión</button>
-                </div>
+    <section id="prepostulacion" class="section-stone" aria-labelledby="prepostulacion-title">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Próxima Teyolía</p>
+          <h2 id="prepostulacion-title">Prepostulación antes de la campaña</h2>
+          <p>Esta oportunidad todavía no tiene una campaña individual publicada en Teyolia.cash. La solicitud por correo permite manifestar interés y recibir orientación; no equivale a una asignación.</p>
+        </div>
 
-                <div class="w-full lg:w-2/3 bg-white p-8 rounded-2xl shadow-lg border border-stone-200 min-h-[350px] flex items-center">
-                    <div id="step-content-container" class="w-full fade-in">
-                        <h4 id="step-title" class="text-2xl font-serif font-bold text-amber-600 mb-4 border-b pb-2">Paso 1: El Llamado</h4>
-                        <p id="step-what" class="text-lg text-stone-700 leading-relaxed mb-4">Se publica la campaña de un cachorro. Conoces su historia, personalidad y meta.</p>
-                        <div class="bg-amber-50 p-6 rounded-xl border border-amber-200">
-                            <p id="step-rule" class="text-amber-900 font-medium">💡 Esto NO es una subasta. No gana quien pone más dinero.</p>
-                        </div>
-                    </div>
-                </div>
+        <article class="upcoming-card" data-profile="ozomatli" data-state="preapplication" data-age="6-months" data-sex="male" data-size="standard" data-color="black" data-personality="zen-energy">
+          <div class="carousel" data-carousel data-carousel-name="Ozomatli Ramírez" role="region" aria-roledescription="carrusel" aria-label="Fotografías de Ozomatli Ramírez">
+            <div class="carousel-track" data-carousel-track tabindex="0">
+              <div class="carousel-slide" data-carousel-slide>
+                <img src="https://i.imgur.com/GGRUvHI.png" alt="Ozomatli Ramírez, fotografía 1 de 3" loading="lazy" width="1200" height="900">
+              </div>
+              <div class="carousel-slide" data-carousel-slide>
+                <img src="https://i.imgur.com/artsE6a.jpeg" alt="Ozomatli Ramírez, fotografía 2 de 3" loading="lazy" width="1200" height="900">
+              </div>
+              <div class="carousel-slide" data-carousel-slide>
+                <img src="https://i.imgur.com/zyRGNA6.jpeg" alt="Ozomatli Ramírez, fotografía 3 de 3" loading="lazy" width="1200" height="900">
+              </div>
             </div>
-        </section>
-
-        <section class="mb-20 bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-stone-200 text-center">
-            <h3 class="text-2xl font-serif font-bold mb-6">Evaluación del Perfil de Guardián</h3>
-            <div class="chart-container">
-                <canvas id="profileChart"></canvas>
+            <button class="carousel-control carousel-previous" type="button" data-carousel-previous aria-label="Ver fotografía anterior de Ozomatli Ramírez">←</button>
+            <button class="carousel-control carousel-next" type="button" data-carousel-next aria-label="Ver fotografía siguiente de Ozomatli Ramírez">→</button>
+            <div class="carousel-footer">
+              <div class="carousel-dots" aria-label="Elegir fotografía de Ozomatli Ramírez">
+                <button class="carousel-dot" type="button" data-carousel-dot="0" aria-label="Ir a la fotografía 1 de Ozomatli Ramírez" aria-current="true"></button>
+                <button class="carousel-dot" type="button" data-carousel-dot="1" aria-label="Ir a la fotografía 2 de Ozomatli Ramírez" aria-current="false"></button>
+                <button class="carousel-dot" type="button" data-carousel-dot="2" aria-label="Ir a la fotografía 3 de Ozomatli Ramírez" aria-current="false"></button>
+              </div>
+              <p class="swipe-note">Desliza para ver las fotografías</p>
+              <span class="visually-hidden" data-carousel-live aria-live="polite" aria-atomic="true"></span>
             </div>
-            <p class="mt-6 text-sm text-stone-500 italic">El respaldo comunitario (OP_RETURN) y la idoneidad del hogar son los factores decisivos.</p>
-        </section>
+          </div>
 
-        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-            <div class="flip-card">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front border-t-4 border-red-500">
-                        <h4 class="font-bold">No es subasta ⚖️</h4>
-                    </div>
-                    <div class="flip-card-back"><p class="text-sm">El dinero demuestra compromiso, pero no garantiza la asignación.</p></div>
-                </div>
+          <div class="card-body">
+            <span class="status status-upcoming">Prepostulación · campaña pendiente</span>
+            <h3>Ozomatli Ramírez</h3>
+            <dl class="facts">
+              <div><dt>Edad</dt><dd>6 meses</dd></div>
+              <div><dt>Sexo</dt><dd>Macho</dd></div>
+              <div><dt>Talla</dt><dd>Estándar</dd></div>
+              <div><dt>Color</dt><dd>Negro</dd></div>
+            </dl>
+            <p class="personality"><strong>Personalidad documentada:</strong> desde cachorro se observó en Ozomatli una “energía Zen” durante sus sesiones de socialización y contacto humano.</p>
+            <p class="card-note">Puedes solicitar información antes de que se publique su campaña. La prepostulación no sustituye la evaluación posterior.</p>
+            <div class="card-actions">
+              <a class="button button-dark" href="mailto:contacto@xolosarmy.xyz?subject=Prepostulaci%C3%B3n%20para%20Ozomatli%20Ram%C3%ADrez&amp;body=Hola%2C%0A%0AMe%20interesa%20recibir%20informaci%C3%B3n%20sobre%20la%20pr%C3%B3xima%20Teyol%C3%ADa%20de%20Ozomatli%20Ram%C3%ADrez.%0A%0ACiudad%20y%20pa%C3%ADs%3A%0AN%C3%BAmero%20de%20WhatsApp%3A%0A%0AGracias.">Solicitar prepostulación</a>
+              <a class="button button-outline" href="https://www.youtube.com/watch?v=tL_jiakmL1o" target="_blank" rel="noopener noreferrer" aria-label="Ver video de Ozomatli Ramírez en YouTube">Ver video</a>
             </div>
-            <div class="flip-card">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front border-t-4 border-emerald-500">
-                        <h4 class="font-bold">Es comunitario 🤝</h4>
-                    </div>
-                    <div class="flip-card-back"><p class="text-sm">Tu red de confianza valida tu capacidad para ser guardián.</p></div>
-                </div>
-            </div>
-            <div class="flip-card">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front border-t-4 border-amber-500">
-                        <h4 class="font-bold">Es curado 🏛️</h4>
-                    </div>
-                    <div class="flip-card-back"><p class="text-sm">Xolos Ramírez decide basándose estrictamente en el bienestar animal.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <section class="mb-20 bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-stone-200">
-    <div class="text-center mb-10">
-        <p class="text-sm uppercase tracking-widest text-amber-700 font-bold mb-3">
-            Campañas abiertas
-        </p>
-        <h3 class="text-3xl font-serif font-bold text-stone-800 mb-4">
-            Teyolías Activas
-        </h3>
-        <p class="text-stone-600 max-w-2xl mx-auto">
-            Estas son las Teyolías actualmente disponibles para postulación. Cada una tiene una duración, un perfil y un proceso de guardianía propio.
-        </p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <article class="rounded-2xl border border-amber-200 bg-amber-50 overflow-hidden shadow-sm">
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-0 h-full">
-                <div class="md:col-span-2 bg-stone-950 relative h-[28rem] md:h-full min-h-[430px]" data-carousel data-carousel-name="Tonatiuh Ramírez">
-                    <div class="teyolia-carousel-track carousel-scrollbar-hidden" data-carousel-track aria-label="Fotos y video de Tonatiuh Ramírez">
-                        <div class="teyolia-carousel-slide teyolia-carousel-image-slide" data-carousel-slide>
-                            <img
-                                src="https://i.imgur.com/qYusFcs.png"
-                                alt="Tonatiuh Ramírez, Teyolía activa"
-                                loading="lazy"
-                            />
-                        </div>
-
-                        <!-- Agregar más fotos de Tonatiuh aquí -->
-
-                        <div class="teyolia-carousel-slide teyolia-carousel-video-slide" data-carousel-slide>
-                            <iframe
-                                src="https://www.youtube.com/embed/Ud7-0MpCDE0?playsinline=1"
-                                title="Personalidad Xolo"
-                                loading="lazy"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                referrerpolicy="strict-origin-when-cross-origin"
-                                allowfullscreen
-                            ></iframe>
-                        </div>
-                    </div>
-
-                    <button class="teyolia-carousel-button teyolia-carousel-button--prev" type="button" data-carousel-prev aria-label="Ver slide anterior de Tonatiuh">
-                        ‹
-                    </button>
-                    <button class="teyolia-carousel-button teyolia-carousel-button--next" type="button" data-carousel-next aria-label="Ver slide siguiente de Tonatiuh">
-                        ›
-                    </button>
-
-                    <div class="absolute bottom-4 left-0 right-0 flex flex-col items-center gap-3 pointer-events-none">
-                        <div class="teyolia-carousel-dots pointer-events-auto" data-carousel-dots aria-label="Paginación del carrusel de Tonatiuh"></div>
-                        <div class="bg-black/60 text-amber-100 text-xs font-bold px-4 py-2 rounded-full backdrop-blur-md flex items-center gap-2 shadow-lg border border-amber-500/30">
-                            <span aria-hidden="true">↔</span> Desliza
-                        </div>
-                    </div>
-                </div>
-
-                <div class="md:col-span-3 p-6 text-left flex flex-col justify-center">
-                    <p class="text-xs uppercase tracking-widest text-amber-700 font-bold mb-2">
-                        Activa · 2 meses
-                    </p>
-
-                    <h4 class="text-2xl font-serif font-bold text-stone-900 mb-3">
-                        Tonatiuh Ramírez
-                    </h4>
-
-                    <ul class="text-sm text-stone-700 space-y-1 mb-5">
-                        <li><strong>Edad:</strong> 6 meses</li>
-                        <li><strong>Género:</strong> Macho</li>
-                        <li><strong>Talla:</strong> Miniatura</li>
-                        <li><strong>Color:</strong> Negro</li>
-                    </ul>
-
-                    <p class="text-stone-700 text-sm leading-relaxed mb-5">
-                        Tonatiuh ha sido seleccionado como candidato a Teyolía por su etapa de madurez.
-                        Durante esta campaña, las familias interesadas podrán postularse como guardianes.
-                    </p>
-
-                    <div>
-                        <a
-                            href="https://www.teyolia.cash/campaigns/campaign-1777329953138"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="inline-block bg-stone-900 text-amber-500 px-5 py-3 rounded-full font-bold hover:bg-amber-600 hover:text-stone-900 transition-all"
-                        >
-                            Ver Teyolía de Tonatiuh ✨
-                        </a>
-                    </div>
-                </div>
-            </div>
+          </div>
         </article>
+      </div>
+    </section>
 
-        <article class="rounded-2xl border border-amber-200 bg-amber-50 overflow-hidden shadow-sm">
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-0 h-full">
-                <div class="md:col-span-2 bg-stone-950 relative h-[28rem] md:h-full min-h-[430px]" data-carousel data-carousel-name="Tlaloc Ramírez">
-                    <div class="teyolia-carousel-track carousel-scrollbar-hidden" data-carousel-track aria-label="Fotos y video de Tlaloc Ramírez">
-                        <div class="teyolia-carousel-slide teyolia-carousel-image-slide" data-carousel-slide>
-                            <img
-                                src="https://i.imgur.com/PchQIix.jpeg"
-                                alt="Tlaloc Ramírez, Teyolía activa"
-                                loading="lazy"
-                            />
-                        </div>
+    <section id="proceso" class="section-dark" aria-labelledby="proceso-title">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Proceso de guardianía</p>
+          <h2 id="proceso-title">Cinco pasos visibles de principio a fin</h2>
+          <p>La tecnología ayuda a registrar la participación, pero la evaluación del hogar y la decisión de bienestar permanecen en manos de Xolos Ramírez.</p>
+        </div>
 
-                        <div class="teyolia-carousel-slide teyolia-carousel-video-slide" data-carousel-slide>
-                            <iframe
-                                src="https://www.youtube.com/embed/4P7DCYJtKsY?playsinline=1"
-                                title="Video Tlaloc Ramírez"
-                                loading="lazy"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                referrerpolicy="strict-origin-when-cross-origin"
-                                allowfullscreen
-                            ></iframe>
-                        </div>
-                    </div>
+        <ol class="process-list">
+          <li>
+            <h3>El llamado</h3>
+            <p>Conoces el perfil y el estado real del ejemplar. Si hay campaña abierta, revisas sus datos; si todavía no existe, puedes solicitar prepostulación.</p>
+          </li>
+          <li>
+            <h3>La preparación</h3>
+            <p>Conoces Teyolia.cash, preparas Tonalli Wallet y, si decides participar en una campaña, dispones de eCash (XEC) para interactuar con ella.</p>
+          </li>
+          <li>
+            <h3>El compromiso</h3>
+            <p>Presentas tu postulación y realizas el pledge previsto por la campaña. Esa aportación registra compromiso, pero no compra ni garantiza al ejemplar.</p>
+          </li>
+          <li>
+            <h3>La tribu</h3>
+            <p>La comunidad puede expresar respaldo con mensajes públicos asociados a la campaña mediante OP_RETURN. Es una señal adicional, no un voto vinculante.</p>
+          </li>
+          <li>
+            <h3>La decisión</h3>
+            <p>Xolos Ramírez evalúa el bienestar del xoloitzcuintle, el hogar, el compromiso y el contexto completo antes de tomar la decisión humana final.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
 
-                    <button class="teyolia-carousel-button teyolia-carousel-button--prev" type="button" data-carousel-prev aria-label="Ver slide anterior de Tlaloc">
-                        ‹
-                    </button>
-                    <button class="teyolia-carousel-button teyolia-carousel-button--next" type="button" data-carousel-next aria-label="Ver slide siguiente de Tlaloc">
-                        ›
-                    </button>
+    <section id="criterios" aria-labelledby="criterios-title">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Evaluación responsable</p>
+          <h2 id="criterios-title">Criterios de selección, sin puntuaciones inventadas</h2>
+          <p>No existe una gráfica, porcentaje o fórmula automática que sustituya la revisión de cada caso. Estos son los criterios que orientan la evaluación.</p>
+        </div>
 
-                    <div class="absolute bottom-4 left-0 right-0 flex flex-col items-center gap-3 pointer-events-none">
-                        <div class="teyolia-carousel-dots pointer-events-auto" data-carousel-dots aria-label="Paginación del carrusel de Tlaloc"></div>
-                        <div class="bg-black/60 text-amber-100 text-xs font-bold px-4 py-2 rounded-full backdrop-blur-md flex items-center gap-2 shadow-lg border border-amber-500/30">
-                            <span aria-hidden="true">↔</span> Desliza
-                        </div>
-                    </div>
-                </div>
+        <div class="criteria-layout">
+          <div class="criteria-list">
+            <article class="criterion">
+              <h3>Bienestar del xoloitzcuintle</h3>
+              <p>La seguridad, los cuidados, la adaptación y la calidad de vida del ejemplar prevalecen sobre cualquier otro factor.</p>
+            </article>
+            <article class="criterion">
+              <h3>Idoneidad y estabilidad del hogar</h3>
+              <p>Se revisa si el entorno propuesto puede ofrecer condiciones estables y apropiadas para ese xoloitzcuintle en particular.</p>
+            </article>
+            <article class="criterion">
+              <h3>Compromiso del aspirante</h3>
+              <p>Se considera la disposición para asumir cuidados, responsabilidades y seguimiento durante la vida del ejemplar.</p>
+            </article>
+            <article class="criterion">
+              <h3>Respaldo comunitario</h3>
+              <p>Los mensajes públicos pueden aportar contexto sobre la red de apoyo del aspirante, pero no deciden por sí solos.</p>
+            </article>
+            <article class="criterion">
+              <h3>Evaluación humana final</h3>
+              <p>Xolos Ramírez integra la información del proceso y conserva la responsabilidad de decidir si existe una correspondencia adecuada.</p>
+            </article>
+          </div>
 
-                <div class="md:col-span-3 p-6 text-left flex flex-col justify-center">
-                    <p class="text-xs uppercase tracking-widest text-amber-700 font-bold mb-2">
-                        Activa · 3 mes
-                    </p>
-
-                    <h4 class="text-2xl font-serif font-bold text-stone-900 mb-3">
-                        Tlaloc Ramírez
-                    </h4>
-
-                    <ul class="text-sm text-stone-700 space-y-1 mb-5">
-                        <li><strong>Edad:</strong> 1 año</li>
-                        <li><strong>Género:</strong> Macho</li>
-                        <li><strong>Talla:</strong> Estándar / Intermedio</li>
-                        <li><strong>Color:</strong> Mariposa / Gris</li>
-                    </ul>
-
-                    <p class="text-stone-700 text-sm leading-relaxed mb-5">
-                        Tlaloc es un hermoso ejemplar joven de un año de edad. Destaca por su gran nobleza y energía.
-                        Durante esta campaña, buscamos a la familia ideal que pueda guiar su camino.
-                    </p>
-
-                    <div>
-                        <a
-                            href="https://www.teyolia.cash/campaigns/campaign-1777329953138"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="inline-block bg-stone-900 text-amber-500 px-5 py-3 rounded-full font-bold hover:bg-amber-600 hover:text-stone-900 transition-all"
-                        >
-                            Ver Teyolía de Tlaloc ✨
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </article>
-
-
-        <article class="rounded-2xl border border-amber-200 bg-amber-50 overflow-hidden shadow-sm">
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-0 h-full">
-                <div class="md:col-span-2 bg-stone-950 relative h-[28rem] md:h-full min-h-[430px]" data-carousel data-carousel-name="Tlaloc Ramírez">
-                    <div class="teyolia-carousel-track carousel-scrollbar-hidden" data-carousel-track aria-label="Fotos y video de Tlaloc Ramírez">
-                        <div class="teyolia-carousel-slide teyolia-carousel-image-slide" data-carousel-slide>
-                            <img
-                                src="https://i.imgur.com/wAys0hQ.jpeg"
-                                alt="Puka Ramírez, Teyolía activa"
-                                loading="lazy"
-                            />
-                        </div>
-
-                        <div class="teyolia-carousel-slide teyolia-carousel-video-slide" data-carousel-slide>
-                            <iframe
-                                src="https://www.youtube.com/embed/Gt9AKgF6GoU"
-                                title="Video Puka Ramírez"
-                                loading="lazy"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                referrerpolicy="strict-origin-when-cross-origin"
-                                allowfullscreen
-                            ></iframe>
-                        </div>
-                    </div>
-
-                    <button class="teyolia-carousel-button teyolia-carousel-button--prev" type="button" data-carousel-prev aria-label="Ver slide anterior de Tlaloc">
-                        ‹
-                    </button>
-                    <button class="teyolia-carousel-button teyolia-carousel-button--next" type="button" data-carousel-next aria-label="Ver slide siguiente de Tlaloc">
-                        ›
-                    </button>
-
-                    <div class="absolute bottom-4 left-0 right-0 flex flex-col items-center gap-3 pointer-events-none">
-                        <div class="teyolia-carousel-dots pointer-events-auto" data-carousel-dots aria-label="Paginación del carrusel de Tlaloc"></div>
-                        <div class="bg-black/60 text-amber-100 text-xs font-bold px-4 py-2 rounded-full backdrop-blur-md flex items-center gap-2 shadow-lg border border-amber-500/30">
-                            <span aria-hidden="true">↔</span> Desliza
-                        </div>
-                    </div>
-                </div>
-
-                <div class="md:col-span-3 p-6 text-left flex flex-col justify-center">
-                    <p class="text-xs uppercase tracking-widest text-amber-700 font-bold mb-2">
-                        Activa · 3 mes
-                    </p>
-
-                    <h4 class="text-2xl font-serif font-bold text-stone-900 mb-3">
-                        Puka Ramírez
-                    </h4>
-
-                    <ul class="text-sm text-stone-700 space-y-1 mb-5">
-                        <li><strong>Edad:</strong> 2 año</li>
-                        <li><strong>Género:</strong> Macho</li>
-                        <li><strong>Talla:</strong> Estándar / Intermedio</li>
-                        <li><strong>Color:</strong> Negro </li>
-                    </ul>
-
-                    <p class="text-stone-700 text-sm leading-relaxed mb-5">
-                        Puka es un hermoso ejemplar joven de dos años de edad. Destaca por su gran sociabilidad e inteligencia.
-                        Durante esta campaña, buscamos a la familia ideal que pueda guiar su camino.
-                    </p>
-
-                    <div>
-                        <a
-                            href="https://www.teyolia.cash/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="inline-block bg-stone-900 text-amber-500 px-5 py-3 rounded-full font-bold hover:bg-amber-600 hover:text-stone-900 transition-all"
-                        >
-                            Ver Teyolía de Puka ✨
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </article>
-
-
-        <article class="rounded-2xl border border-amber-200 bg-amber-50 overflow-hidden shadow-sm">
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-0 h-full">
-                <div class="md:col-span-2 bg-stone-950 relative h-[28rem] md:h-full min-h-[430px]" data-carousel data-carousel-name="Ozomatli Ramírez">
-                    <div class="teyolia-carousel-track carousel-scrollbar-hidden" data-carousel-track aria-label="Fotos y video de Ozomatli Ramírez">
-                        <div class="teyolia-carousel-slide teyolia-carousel-image-slide" data-carousel-slide><img src="https://i.imgur.com/GGRUvHI.png" alt="Ozomatli Ramírez, Teyolía activa — fotografía 1" loading="lazy" /></div>
-                        <div class="teyolia-carousel-slide teyolia-carousel-image-slide" data-carousel-slide><img src="https://i.imgur.com/artsE6a.jpeg" alt="Ozomatli Ramírez, Teyolía activa — fotografía 2" loading="lazy" /></div>
-                        <div class="teyolia-carousel-slide teyolia-carousel-image-slide" data-carousel-slide><img src="https://i.imgur.com/zyRGNA6.jpeg" alt="Ozomatli Ramírez, Teyolía activa — fotografía 3" loading="lazy" /></div>
-                        <div class="teyolia-carousel-slide teyolia-carousel-video-slide" data-carousel-slide><iframe src="https://www.youtube.com/embed/tL_jiakmL1o?playsinline=1" title="Video Ozomatli Ramírez" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
-                    </div>
-                    <button class="teyolia-carousel-button teyolia-carousel-button--prev" type="button" data-carousel-prev aria-label="Ver slide anterior de Ozomatli">‹</button>
-                    <button class="teyolia-carousel-button teyolia-carousel-button--next" type="button" data-carousel-next aria-label="Ver slide siguiente de Ozomatli">›</button>
-                    <div class="absolute bottom-4 left-0 right-0 flex flex-col items-center gap-3 pointer-events-none"><div class="teyolia-carousel-dots pointer-events-auto" data-carousel-dots aria-label="Paginación del carrusel de Ozomatli"></div><div class="bg-black/60 text-amber-100 text-xs font-bold px-4 py-2 rounded-full backdrop-blur-md flex items-center gap-2 shadow-lg border border-amber-500/30"><span aria-hidden="true">↔</span> Desliza</div></div>
-                </div>
-                <div class="md:col-span-3 p-6 text-left flex flex-col justify-center">
-                    <p class="text-xs uppercase tracking-widest text-amber-700 font-bold mb-2">Disponible · 6 meses</p>
-                    <h4 class="text-2xl font-serif font-bold text-stone-900 mb-3">Ozomatli Ramírez</h4>
-                    <ul class="text-sm text-stone-700 space-y-1 mb-5"><li><strong>Edad:</strong> 6 meses</li><li><strong>Género:</strong> Macho</li><li><strong>Talla:</strong> Estándar</li><li><strong>Color:</strong> Negro</li></ul>
-                    <p class="text-stone-700 text-sm leading-relaxed mb-5">Ozomatli ha alcanzado la edad necesaria para integrarse al programa de Guardianía Teyolías. Las familias interesadas pueden solicitar información para postularse como aspirantes a guardianes.</p>
-                    <div><a href="mailto:contacto@xolosarmy.xyz?subject=Quiero%20participar%20en%20la%20Teyol%C3%ADa%20de%20Ozomatli%20Ram%C3%ADrez&body=Hola%2C%0A%0AMe%20interesa%20participar%20en%20la%20Teyol%C3%ADa%20de%20Ozomatli%20Ram%C3%ADrez.%0A%0ACiudad%20o%20pa%C3%ADs%3A%0ATipo%20de%20hogar%3A%0AExperiencia%20previa%20con%20perros%3A%0AN%C3%BAmero%20de%20WhatsApp%3A" class="inline-block bg-stone-900 text-amber-500 px-5 py-3 rounded-full font-bold hover:bg-amber-600 hover:text-stone-900 transition-all" aria-label="Participar en la Teyolía de Ozomatli Ramírez por correo">Participar en la Teyolía de Ozomatli ✨</a></div>
-                </div>
-            </div>
-        </article>
-
-    </div>
-</section>
-
-<section class="mb-20 bg-stone-900 text-stone-50 p-8 md:p-12 rounded-3xl shadow-lg border border-amber-600">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-        <div>
-            <p class="text-sm uppercase tracking-widest text-amber-400 font-bold mb-3">
-                Herramienta necesaria
-            </p>
-
-            <h3 class="text-3xl font-serif font-bold text-amber-500 mb-4">
-                Descarga Tonalli Wallet
-            </h3>
-
-            <p class="text-stone-300 leading-relaxed mb-6">
-                Para participar en una Teyolía necesitas Tonalli Wallet, la cartera de xolosArmy Network 
-                diseñada para usar eCash, enviar pledges y registrar mensajes comunitarios mediante OP_RETURN.
-            </p>
-
-            <ul class="text-stone-300 text-sm space-y-2 mb-6">
-                <li>✓ Guarda tu eCash de forma simple.</li>
-                <li>✓ Participa en campañas Teyolía.</li>
-                <li>✓ Envía mensajes de respaldo comunitario.</li>
-                <li>✓ Conecta con el ecosistema xolosArmy.</li>
+          <aside class="principles" aria-labelledby="principios-title">
+            <h3 id="principios-title">Principios que no cambian</h3>
+            <ul>
+              <li><strong>No es una subasta.</strong> Un xoloitzcuintle no se asigna a quien ofrezca más.</li>
+              <li><strong>La mayor aportación no garantiza la asignación.</strong> Un pledge forma parte del proceso, no lo resuelve.</li>
+              <li><strong>El bienestar animal prevalece.</strong> Si ningún hogar resulta idóneo, no se fuerza una decisión.</li>
+              <li><strong>La decisión final corresponde a Xolos Ramírez.</strong> La tecnología aporta trazabilidad; no sustituye el criterio humano.</li>
             </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
 
-            <a 
-                href="https://cartera.xolosarmy.xyz" 
-                target="_blank" 
-                rel="noopener"
-                class="inline-block bg-amber-600 text-white px-8 py-4 rounded-full font-bold hover:bg-amber-500 transition-all"
-            >
-                Descargar Tonalli Wallet ⚡
-            </a>
+    <section id="participacion" class="section-dark" aria-labelledby="participacion-title">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Participación y trazabilidad</p>
+          <h2 id="participacion-title">Teyolia.cash, Tonalli Wallet y eCash</h2>
+          <p>Cada herramienta cumple una función específica dentro de la participación. Ninguna de ellas sustituye la entrevista, la evaluación del hogar ni la decisión final.</p>
         </div>
 
-        <div class="bg-stone-800 rounded-3xl p-8 border border-stone-700 text-center">
-            <div class="text-6xl mb-4">⚡</div>
-            <h4 class="text-2xl font-serif font-bold text-amber-500 mb-3">
-                Guardianía + eCash
-            </h4>
-            <p class="text-stone-300 text-sm leading-relaxed">
-                Tonalli Wallet permite que la participación sea transparente, verificable y alineada con la visión comunitaria de Xolos Ramírez.
-            </p>
+        <div class="tech-grid">
+          <article class="tech-card">
+            <h3>Teyolia.cash</h3>
+            <p>Publica y organiza las campañas, sus perfiles y las acciones disponibles para las personas interesadas.</p>
+            <a href="https://www.teyolia.cash/" target="_blank" rel="noopener noreferrer">Abrir Teyolia.cash</a>
+          </article>
+          <article class="tech-card">
+            <h3>Tonalli Wallet</h3>
+            <p>Permite utilizar eCash (XEC), participar con pledges y registrar mensajes comunitarios cuando la campaña lo contempla.</p>
+            <a href="https://cartera.xolosarmy.xyz" target="_blank" rel="noopener noreferrer">Abrir Tonalli Wallet</a>
+          </article>
+          <article class="tech-card">
+            <h3>eCash y OP_RETURN</h3>
+            <p>XEC es el activo utilizado en la interacción. OP_RETURN permite asociar mensajes públicos de respaldo a la cadena como parte de la trazabilidad comunitaria.</p>
+            <a href="blog/teyolia-guardiania-xoloitzcuintle-tutorial.html">Leer el tutorial completo</a>
+          </article>
         </div>
+        <p class="flow-note"><strong>Flujo resumido:</strong> campaña en Teyolia.cash → participación con Tonalli Wallet y XEC → pledge y respaldo comunitario → evaluación humana y decisión de Xolos Ramírez.</p>
+      </div>
+    </section>
+
+    <section id="tutorial" aria-labelledby="tutorial-title">
+      <div class="container tutorial-layout">
+        <div class="video-shell" data-video-shell>
+          <button class="video-poster" type="button" data-video-button data-video-id="jvLuUDhNzTo" aria-label="Reproducir video tutorial de Teyolías">
+            <img src="https://i.ytimg.com/vi/jvLuUDhNzTo/hqdefault.jpg" alt="Vista previa del video tutorial de Teyolías" loading="lazy" width="480" height="360">
+            <span class="play-label">Reproducir tutorial</span>
+          </button>
+        </div>
+        <div class="tutorial-copy">
+          <p class="eyebrow">Video tutorial</p>
+          <h2 id="tutorial-title">Conoce la participación paso a paso</h2>
+          <p>El video muestra el recorrido general para conocer una campaña y participar con las herramientas del ecosistema. La reproducción solo se carga cuando la solicitas.</p>
+          <p><a class="text-link" href="https://www.youtube.com/watch?v=jvLuUDhNzTo" target="_blank" rel="noopener noreferrer">Abrir el tutorial directamente en YouTube</a></p>
+          <p><a class="text-link" href="blog/teyolia-guardiania-xoloitzcuintle-tutorial.html">Consultar la guía escrita</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="preguntas" class="section-stone" aria-labelledby="preguntas-title">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Preguntas frecuentes</p>
+          <h2 id="preguntas-title">Lo esencial antes de postularte</h2>
+          <p>Estas respuestas explican el modelo sin agregar condiciones que no estén documentadas.</p>
+        </div>
+
+        <div class="faq-grid">
+          <article class="faq-item">
+            <h3>¿Por qué una Teyolía no es una subasta?</h3>
+            <p>Porque el xoloitzcuintle no se asigna por el monto más alto. El objetivo es encontrar el hogar más adecuado mediante una evaluación de bienestar.</p>
+          </article>
+          <article class="faq-item">
+            <h3>¿Una aportación garantiza la asignación?</h3>
+            <p>No. Un pledge muestra participación y compromiso dentro de la campaña, pero no garantiza que el aspirante sea seleccionado.</p>
+          </article>
+          <article class="faq-item">
+            <h3>¿Cómo se evalúa al aspirante?</h3>
+            <p>Se revisan el bienestar del ejemplar, la idoneidad y estabilidad del hogar, el compromiso, el contexto comunitario y la evaluación humana final.</p>
+          </article>
+          <article class="faq-item">
+            <h3>¿Qué función tiene el respaldo comunitario?</h3>
+            <p>Aporta señales públicas y contexto sobre la red de apoyo del aspirante. No sustituye la evaluación ni convierte el proceso en una votación vinculante.</p>
+          </article>
+          <article class="faq-item">
+            <h3>¿Qué ocurre si ningún hogar resulta idóneo?</h3>
+            <p>El bienestar animal prevalece y no se fuerza una asignación. Para conocer el estado concreto de una campaña, consulta el contacto oficial.</p>
+          </article>
+          <article class="faq-item">
+            <h3>¿Para qué se usan Teyolia.cash, Tonalli Wallet, XEC y OP_RETURN?</h3>
+            <p>Teyolia.cash organiza la campaña; Tonalli Wallet permite interactuar con XEC; los pledges registran participación; y OP_RETURN permite mensajes públicos de respaldo.</p>
+          </article>
+          <article class="faq-item">
+            <h3>¿Cómo solicito información antes de que exista una campaña?</h3>
+            <p>Usa el CTA de prepostulación o escribe a <a class="text-link" href="mailto:contacto@xolosarmy.xyz">contacto@xolosarmy.xyz</a>. El equipo confirmará qué información está disponible en ese momento.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="final-cta" aria-labelledby="cta-title">
+      <div class="container">
+        <p class="eyebrow">Siguiente paso</p>
+        <h2 id="cta-title">Conoce la campaña o solicita orientación</h2>
+        <p>Revisa las oportunidades actuales en Teyolia.cash. Si buscas una próxima Teyolía o necesitas aclarar el proceso, comunícate directamente con Xolos Ramírez.</p>
+        <div class="button-row">
+          <a class="button button-primary" href="https://www.teyolia.cash/" target="_blank" rel="noopener noreferrer">Ver campañas activas</a>
+          <a class="button button-secondary" href="mailto:contacto@xolosarmy.xyz?subject=Informaci%C3%B3n%20sobre%20Teyol%C3%ADas">Contactar a Xolos Ramírez</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2026 Xolos Ramírez. Guardianía responsable del xoloitzcuintle.</p>
+      <div class="footer-links">
+        <a href="xolos-disponibles.html">Xolos disponibles</a>
+        <a href="contacto.html">Contacto</a>
+        <a href="en/teyolias-guardianship.html" lang="en">English</a>
+      </div>
     </div>
-</section>
+  </footer>
 
-        <section class="text-center border-t border-stone-300 pt-16">
-            <h3 class="text-2xl font-serif font-bold mb-6 text-stone-800">¿Listo para dar el siguiente paso?</h3>
-            <div class="flex flex-col sm:flex-row justify-center gap-4 mb-10">
-                <a href="https://www.teyolia.cash" target="_blank" rel="noopener noreferrer" class="bg-amber-500 text-stone-900 px-8 py-4 rounded-full font-bold hover:bg-amber-400 transition-all shadow-lg text-lg">
-                    🔥 Ir a la Plataforma Teyolía
-                </a>
-                <a href="https://cartera.xolosarmy.xyz" target="_blank" rel="noopener noreferrer" class="bg-stone-800 text-stone-100 px-8 py-4 rounded-full font-bold hover:bg-stone-700 transition-all shadow-lg border border-stone-600 text-lg">
-                    👛 Descargar Tonalli Wallet
-                </a>
-            </div>
-            <a href="xolos-disponibles.html" class="inline-block text-stone-500 font-semibold hover:text-amber-600 transition-colors">
-                ⬅ Volver a Xolos Disponibles
-            </a>
-            <div class="flex justify-center gap-6 mt-12 opacity-60 text-xs">
-                <a href="https://github.com/xolosArmy" class="hover:underline">GitHub xolosArmy</a>
-                <a href="blog/teyolia-guardiania-xoloitzcuintle-tutorial.html" class="hover:underline">Tutorial Completo</a>
-            </div>
-        </section>
-    </main>
+  <script>
+    (() => {
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    <footer class="bg-stone-900 text-stone-500 py-6 text-center text-xs">
-        © Xolos Ramírez - Modelo de Guardianía Teyolía.
-    </footer>
+      document.querySelectorAll('[data-carousel]').forEach((carousel) => {
+        const track = carousel.querySelector('[data-carousel-track]');
+        const slides = Array.from(carousel.querySelectorAll('[data-carousel-slide]'));
+        const dots = Array.from(carousel.querySelectorAll('[data-carousel-dot]'));
+        const previous = carousel.querySelector('[data-carousel-previous]');
+        const next = carousel.querySelector('[data-carousel-next]');
+        const live = carousel.querySelector('[data-carousel-live]');
+        const name = carousel.dataset.carouselName || 'carrusel';
+        let activeIndex = 0;
+        let scrollFrame = null;
 
-    <script>
-        const stepsData = {
-            "1": { title: "Paso 1: El Llamado", what: "Se publica la campaña de un cachorro. Conoces su nombre, historia y meta.", rule: "💡 Aquí entiendes que esto NO es una subasta." },
-            "2": { title: "Paso 2: La Preparación", what: "Usamos tecnología transparente. Instalas tu Tonalli Wallet y adquieres eCash (XEC).", rule: "💡 Es solo el vehículo transparente para participar." },
-            "3": { title: "Paso 3: El Compromiso", what: "Haces un 'Pledge' (depósito de seriedad) desde la plataforma para postularte.", rule: "💡 Esto te convierte en Aspirante a Guardián oficialmente." },
-            "4": { title: "Paso 4: La Tribu", what: "Tus amigos y comunidad te respaldan dejando mensajes públicos (OP_RETURN) en tu campaña.", rule: "💡 Los avales demuestran que eres un hogar confiable." },
-            "5": { title: "Paso 5: La Decisión", what: "Xolos Ramírez valida quién es el más idóneo basándose en respaldo y entorno.", rule: "💡 La decisión final siempre es humana y centrada en el perro." }
+        const updateState = (index, announce = false) => {
+          activeIndex = Math.max(0, Math.min(index, slides.length - 1));
+          dots.forEach((dot, dotIndex) => {
+            dot.setAttribute('aria-current', String(dotIndex === activeIndex));
+          });
+          if (announce && live) {
+            live.textContent = `Fotografía ${activeIndex + 1} de ${slides.length} de ${name}`;
+          }
         };
 
-        const buttons = document.querySelectorAll('.step-btn');
-        buttons.forEach(button => {
-            button.addEventListener('click', function() {
-                buttons.forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-                const data = stepsData[this.getAttribute('data-step')];
-                document.getElementById('step-title').textContent = data.title;
-                document.getElementById('step-what').textContent = data.what;
-                document.getElementById('step-rule').textContent = data.rule;
-            });
-        });
+        const goTo = (index) => {
+          const normalized = (index + slides.length) % slides.length;
+          track.scrollTo({
+            left: slides[normalized].offsetLeft,
+            behavior: reducedMotion ? 'auto' : 'smooth'
+          });
+          updateState(normalized, true);
+        };
 
-        const carousels = document.querySelectorAll('[data-carousel]');
-        carousels.forEach(carousel => {
-            const track = carousel.querySelector('[data-carousel-track]');
-            const slides = Array.from(carousel.querySelectorAll('[data-carousel-slide]'));
-            const prevButton = carousel.querySelector('[data-carousel-prev]');
-            const nextButton = carousel.querySelector('[data-carousel-next]');
-            const dotsContainer = carousel.querySelector('[data-carousel-dots]');
+        previous.addEventListener('click', () => goTo(activeIndex - 1));
+        next.addEventListener('click', () => goTo(activeIndex + 1));
+        dots.forEach((dot, index) => dot.addEventListener('click', () => goTo(index)));
 
-            if (!track || slides.length === 0 || !dotsContainer) return;
+        track.addEventListener('scroll', () => {
+          if (scrollFrame) window.cancelAnimationFrame(scrollFrame);
+          scrollFrame = window.requestAnimationFrame(() => {
+            const closest = slides.reduce((bestIndex, slide, index) => {
+              const bestDistance = Math.abs(slides[bestIndex].offsetLeft - track.scrollLeft);
+              const distance = Math.abs(slide.offsetLeft - track.scrollLeft);
+              return distance < bestDistance ? index : bestIndex;
+            }, 0);
+            updateState(closest);
+          });
+        }, { passive: true });
+      });
 
-            const carouselName = carousel.getAttribute('data-carousel-name') || 'esta Teyolía';
-            const dots = slides.map((_, index) => {
-                const dot = document.createElement('button');
-                dot.type = 'button';
-                dot.className = 'teyolia-carousel-dot';
-                dot.setAttribute('data-carousel-dot', String(index));
-                dot.setAttribute('aria-label', `Ir al slide ${index + 1} de ${carouselName}`);
-                dot.addEventListener('click', () => {
-                    track.scrollTo({ left: track.clientWidth * index, behavior: 'smooth' });
-                });
-                dotsContainer.appendChild(dot);
-                return dot;
-            });
-
-            const setActiveDot = () => {
-                const activeIndex = Math.round(track.scrollLeft / Math.max(track.clientWidth, 1));
-                dots.forEach((dot, index) => {
-                    const isActive = index === activeIndex;
-                    dot.classList.toggle('is-active', isActive);
-                    dot.setAttribute('aria-current', isActive ? 'true' : 'false');
-                });
-            };
-
-            prevButton?.addEventListener('click', () => {
-                track.scrollBy({ left: -track.clientWidth, behavior: 'smooth' });
-            });
-            nextButton?.addEventListener('click', () => {
-                track.scrollBy({ left: track.clientWidth, behavior: 'smooth' });
-            });
-            track.addEventListener('scroll', () => window.requestAnimationFrame(setActiveDot), { passive: true });
-            window.addEventListener('resize', setActiveDot);
-            setActiveDot();
-        });
-
-        const ctx = document.getElementById('profileChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'radar',
-            data: {
-                labels: ['Financiero', 'Tribu (Comunidad)', 'Hogar', 'Compromiso', 'Validación'],
-                datasets: [
-                    { label: 'Subastador', data: [100, 20, 50, 40, 10], borderColor: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.2)' },
-                    { label: 'Guardián Ideal', data: [60, 95, 100, 90, 100], borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.2)' }
-                ]
-            },
-            options: { maintainAspectRatio: false, scales: { r: { ticks: { display: false } } } }
-        });
-    </script>
-<a
-      class="wa-float"
-      href="mailto:contacto@xolosarmy.xyz?subject=Informes%20sobre%20xoloitzcuintle&body=Hola%20Fernando%2C%20estoy%20interesado%20en%20un%20xoloitzcuintle%2C%20quiero%20m%C3%A1s%20informes."
-      target="_blank"
-      rel="noopener noreferrer"
-      data-gtm="email-floating"
-      onclick="dataLayer.push({ event: 'click_email', source: 'floating_button' })"
-    >
-      <span>✉️ Escríbenos por correo</span>
-    </a>
-
-    <a href="mailto:contacto@xolosarmy.xyz?subject=%5BXOLOS%5D%20event%3Dgeneral%20puppy%3Dgeneral&body=context_event%3Dgeneral%0Acontext_puppy%3Dgeneral%0Acontext_name%3Dgeneral%0A%0AHola%20Fernando%2C%20tengo%20una%20consulta%20general%20sobre%20Xolos%20Ram%C3%ADrez." class="floating-email-btn" aria-label="Enviar correo a Fernando" title="Contacta a Fernando">
-        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="icon-mail" aria-hidden="true" focusable="false">
-            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-            <polyline points="22,6 12,13 2,6"></polyline>
-        </svg>
-    </a>
+      document.querySelectorAll('[data-video-button]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const shell = button.closest('[data-video-shell]');
+          const iframe = document.createElement('iframe');
+          iframe.src = `https://www.youtube-nocookie.com/embed/${button.dataset.videoId}?autoplay=1&rel=0`;
+          iframe.title = 'Video tutorial de Teyolías';
+          iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+          iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+          iframe.allowFullscreen = true;
+          shell.replaceChildren(iframe);
+        }, { once: true });
+      });
+    })();
+  </script>
 </body>
 </html>
