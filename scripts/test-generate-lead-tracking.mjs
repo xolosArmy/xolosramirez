@@ -3,7 +3,10 @@ import { readFileSync } from 'node:fs';
 
 const read = (path) => readFileSync(path, 'utf8');
 const main = read('js/main.js');
-const leadCode = main.slice(main.indexOf('function getLeadElement'));
+const leadCode = main.slice(
+  main.indexOf('function getLeadElement'),
+  main.indexOf('function initializePuppyCarousels')
+);
 
 function includes(haystack, needle, message) {
   assert.ok(haystack.includes(needle), message || 'Expected to find ' + needle);
@@ -192,7 +195,7 @@ for (const expectation of floatingVideoCallExpectations) {
 
   includes(
     html,
-    'href="https://wa.me/525518555993"',
+    'href="https://wa.me/qr/R2F5PRQYZSJOA1"',
     expectation.path + ' must keep the non-floating WhatsApp CTA'
   );
 
