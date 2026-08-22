@@ -341,15 +341,33 @@ function updateAvailableXolosCtas() {
 }
 
 function updateXilonenProfileVideo() {
-  const videoUrl = 'https://www.youtube.com/embed/nrZ-PhE4bHA';
+  const existingVideoUrl = 'https://www.youtube.com/embed/nrZ-PhE4bHA';
+  const newShortUrl = 'https://www.youtube.com/embed/cDpeJ2UQNHE';
   const grid = getAvailableXolosGrid();
   if (!grid) return;
+
+  const isEnglish = document.documentElement.lang.toLowerCase().startsWith('en');
+  const newShortTitle = isEnglish
+    ? 'Xilonen Ramirez miniature Xoloitzcuintli puppy exploring the world'
+    : 'Xilonen Ramirez, bebé xoloitzcuintle miniatura explorando el mundo';
 
   Array.from(grid.querySelectorAll('.puppy-card')).forEach((card) => {
     const name = card.querySelector('.puppy-card__name')?.textContent.trim();
     if (name !== 'Xilonen Ramirez') return;
-    const iframe = card.querySelector('.puppy-video-container iframe');
-    if (iframe) iframe.setAttribute('src', videoUrl);
+
+    const existingVideo = card.querySelector('.puppy-video-container');
+    const existingIframe = existingVideo?.querySelector('iframe');
+    if (existingIframe) existingIframe.setAttribute('src', existingVideoUrl);
+    if (!existingVideo || card.querySelector('[data-xilonen-video="cDpeJ2UQNHE"]')) return;
+
+    const newVideo = existingVideo.cloneNode(true);
+    newVideo.dataset.xilonenVideo = 'cDpeJ2UQNHE';
+    const newIframe = newVideo.querySelector('iframe');
+    if (newIframe) {
+      newIframe.setAttribute('src', newShortUrl);
+      newIframe.setAttribute('title', newShortTitle);
+    }
+    existingVideo.insertAdjacentElement('afterend', newVideo);
   });
 }
 
