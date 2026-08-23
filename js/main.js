@@ -317,7 +317,7 @@ function updateAvailableXolosCtas() {
     'a.home-email-float.video-call-float, a.home-email-float[data-cta="video_call"]',
   );
   if (floatingCta) {
-    floatingCta.href = 'https://wa.me/qr/R2F5PRQYZSJOA1';
+    floatingCta.href = 'https://wa.me/525518555993';
     floatingCta.target = '_blank';
     floatingCta.rel = 'noopener noreferrer';
     floatingCta.setAttribute('aria-label', labels.whatsappAria);
