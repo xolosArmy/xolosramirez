@@ -195,7 +195,7 @@ for (const expectation of floatingVideoCallExpectations) {
 
   includes(
     html,
-    'href="https://wa.me/qr/R2F5PRQYZSJOA1"',
+    'href="https://wa.me/525518555993"',
     expectation.path + ' must keep the non-floating WhatsApp CTA'
   );
 
