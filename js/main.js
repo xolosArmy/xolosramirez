@@ -425,8 +425,8 @@ function insertTlilxochitlProfile() {
         size: 'Intermediate / Medium',
         colorLabel: 'Color',
         color: 'Black',
-        alt1: 'Tlilxóchitl Ramirez, newborn black female intermediate Xoloitzcuintli puppy',
-        alt2: 'Tlilxóchitl Ramirez, black female intermediate Xoloitzcuintli puppy held gently in hands',
+        alt1: 'Tlilxóchitl Ramirez, female Xoloitzcuintli puppy with her head tilted',
+        alt2: 'Tlilxóchitl Ramirez, female Xoloitzcuintli puppy facing the camera',
         subject: 'Inquiry about Tlilxóchitl Ramirez [Ref: tlilxochitl-en-available]',
         body: 'Hello, I saw Tlilxóchitl Ramirez on the Xolos Ramírez website and would like to learn more about her availability, price, and reservation process.',
         cta: 'Contact via Email',
@@ -449,8 +449,8 @@ function insertTlilxochitlProfile() {
         size: 'Intermedia',
         colorLabel: 'Color',
         color: 'Negro',
-        alt1: 'Tlilxóchitl Ramírez, cachorra xoloitzcuintle hembra intermedia negra recién nacida',
-        alt2: 'Tlilxóchitl Ramírez, cachorra xoloitzcuintle hembra intermedia negra sostenida entre las manos',
+        alt1: 'Tlilxóchitl Ramírez, bebé xoloitzcuintle hembra con la cabeza inclinada',
+        alt2: 'Tlilxóchitl Ramírez, bebé xoloitzcuintle hembra de frente mirando a la cámara',
         subject: 'Consulta sobre Tlilxóchitl Ramirez [Ref: tlilxochitl-es-available]',
         body: 'Hola, vi el perfil de Tlilxóchitl Ramirez en Xolos Ramírez y me interesa conocer más sobre su disponibilidad, precio y proceso de reserva.',
         cta: 'Correo directo ✉️',
@@ -471,10 +471,10 @@ function insertTlilxochitlProfile() {
       <div class="puppy-carousel" data-puppy-carousel role="region" aria-roledescription="${labels.role}" aria-label="${labels.carousel}">
         <div class="puppy-carousel__track" tabindex="0">
           <div class="puppy-carousel__slide">
-            <img src="${imagePrefix}tlilxochitl-ramirez-agosto-2026-01.webp" alt="${labels.alt1}" class="puppy-card__image" loading="lazy" decoding="async" draggable="false" />
+            <img src="${imagePrefix}tlilxochitl-ramirez-agosto-2026-cabeza-inclinada.webp" alt="${labels.alt1}" class="puppy-card__image" width="960" height="1200" loading="lazy" decoding="async" draggable="false" style="object-fit: contain;" />
           </div>
           <div class="puppy-carousel__slide">
-            <img src="${imagePrefix}tlilxochitl-ramirez-agosto-2026-02.webp" alt="${labels.alt2}" class="puppy-card__image" loading="lazy" decoding="async" draggable="false" />
+            <img src="${imagePrefix}tlilxochitl-ramirez-agosto-2026-frontal.webp" alt="${labels.alt2}" class="puppy-card__image" width="960" height="1200" loading="lazy" decoding="async" draggable="false" style="object-fit: contain;" />
           </div>
         </div>
         <button class="puppy-carousel__button puppy-carousel__button--previous" type="button" aria-label="${labels.previous}">&#8592;</button>
