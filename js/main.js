@@ -452,7 +452,7 @@ function insertTlilxochitlProfile() {
         color: 'Negro',
         alt1: 'Tlilxóchitl Ramírez, bebé xoloitzcuintle hembra con la cabeza inclinada',
         alt2: 'Tlilxóchitl Ramírez, bebé xoloitzcuintle hembra de frente mirando a la cámara',
-        videoTitle: 'Tlilxóchitl Ramirez, bebé xoloitzcuintle en un retrato cercano',
+        videoTitle: 'Tlilxóchitl Ramírez, bebé xoloitzcuintle en un retrato cercano',
         subject: 'Consulta sobre Tlilxóchitl Ramirez [Ref: tlilxochitl-es-available]',
         body: 'Hola, vi el perfil de Tlilxóchitl Ramirez en Xolos Ramírez y me interesa conocer más sobre su disponibilidad, precio y proceso de reserva.',
         cta: 'Correo directo ✉️',
