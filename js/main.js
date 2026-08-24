@@ -427,6 +427,7 @@ function insertTlilxochitlProfile() {
         color: 'Black',
         alt1: 'Tlilxóchitl Ramirez, female Xoloitzcuintli puppy with her head tilted',
         alt2: 'Tlilxóchitl Ramirez, female Xoloitzcuintli puppy facing the camera',
+        videoTitle: 'Tlilxóchitl Ramirez, baby Xoloitzcuintli in a close-up portrait',
         subject: 'Inquiry about Tlilxóchitl Ramirez [Ref: tlilxochitl-en-available]',
         body: 'Hello, I saw Tlilxóchitl Ramirez on the Xolos Ramírez website and would like to learn more about her availability, price, and reservation process.',
         cta: 'Contact via Email',
@@ -451,6 +452,7 @@ function insertTlilxochitlProfile() {
         color: 'Negro',
         alt1: 'Tlilxóchitl Ramírez, bebé xoloitzcuintle hembra con la cabeza inclinada',
         alt2: 'Tlilxóchitl Ramírez, bebé xoloitzcuintle hembra de frente mirando a la cámara',
+        videoTitle: 'Tlilxóchitl Ramirez, bebé xoloitzcuintle en un retrato cercano',
         subject: 'Consulta sobre Tlilxóchitl Ramirez [Ref: tlilxochitl-es-available]',
         body: 'Hola, vi el perfil de Tlilxóchitl Ramirez en Xolos Ramírez y me interesa conocer más sobre su disponibilidad, precio y proceso de reserva.',
         cta: 'Correo directo ✉️',
@@ -493,6 +495,9 @@ function insertTlilxochitlProfile() {
       </ul>
       <div class="puppy-video-container" style="margin: 1rem 0; border-radius: 8px; overflow: hidden; aspect-ratio: 16/9;">
         <iframe width="100%" height="100%" src="https://www.youtube.com/embed/8iXxSLjaNfI" title="Tlilxóchitl Ramirez" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+      </div>
+      <div class="puppy-video-container" data-profile-video="qdUfdKWn5aI" style="margin: 1rem 0; border-radius: 8px; overflow: hidden; aspect-ratio: 16/9;">
+        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/qdUfdKWn5aI" title="${labels.videoTitle}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
       </div>
       <div class="puppy-card__actions">
         <a href="mailto:${CURRENT_CONTACT_EMAIL}?subject=${encodeURIComponent(labels.subject)}&body=${encodeURIComponent(labels.body)}" class="btn-small btn-primary-small cta-lead cta-email" style="${labels.buttonStyle}" data-cta="email" data-lead-type="generate_lead" data-profile="tlilxochitl" data-page-type="available-xolos" data-lang="${labels.lang}" aria-label="${labels.aria}" data-status="available">${labels.cta}</a>
