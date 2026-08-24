@@ -493,9 +493,6 @@ function insertTlilxochitlProfile() {
         <li><strong>${labels.sizeLabel}</strong>${labels.size}</li>
         <li><strong>${labels.colorLabel}</strong>${labels.color}</li>
       </ul>
-      <div class="puppy-video-container" style="margin: 1rem 0; border-radius: 8px; overflow: hidden; aspect-ratio: 16/9;">
-        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/8iXxSLjaNfI" title="Tlilxóchitl Ramirez" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-      </div>
       <div class="puppy-video-container" data-profile-video="qdUfdKWn5aI" style="margin: 1rem 0; border-radius: 8px; overflow: hidden; aspect-ratio: 16/9;">
         <iframe width="100%" height="100%" src="https://www.youtube.com/embed/qdUfdKWn5aI" title="${labels.videoTitle}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
       </div>
