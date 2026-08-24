@@ -428,6 +428,7 @@ function insertTlilxochitlProfile() {
         alt1: 'Tlilxóchitl Ramirez, female Xoloitzcuintli puppy with her head tilted',
         alt2: 'Tlilxóchitl Ramirez, female Xoloitzcuintli puppy facing the camera',
         videoTitle: 'Tlilxóchitl Ramirez, baby Xoloitzcuintli in a close-up portrait',
+        personality: 'Personality: calm, affectionate, and observant. Tlilxóchitl is a curious and confident puppy who enjoys human contact and explores her surroundings with a sweet, serene energy.',
         subject: 'Inquiry about Tlilxóchitl Ramirez [Ref: tlilxochitl-en-available]',
         body: 'Hello, I saw Tlilxóchitl Ramirez on the Xolos Ramírez website and would like to learn more about her availability, price, and reservation process.',
         cta: 'Contact via Email',
@@ -453,6 +454,7 @@ function insertTlilxochitlProfile() {
         alt1: 'Tlilxóchitl Ramírez, bebé xoloitzcuintle hembra con la cabeza inclinada',
         alt2: 'Tlilxóchitl Ramírez, bebé xoloitzcuintle hembra de frente mirando a la cámara',
         videoTitle: 'Tlilxóchitl Ramírez, bebé xoloitzcuintle en un retrato cercano',
+        personality: 'Personalidad: tranquila, cariñosa y observadora. Tlilxóchitl es una bebé curiosa y confiada, disfruta el contacto humano y explora su entorno con una energía dulce y serena.',
         subject: 'Consulta sobre Tlilxóchitl Ramirez [Ref: tlilxochitl-es-available]',
         body: 'Hola, vi el perfil de Tlilxóchitl Ramirez en Xolos Ramírez y me interesa conocer más sobre su disponibilidad, precio y proceso de reserva.',
         cta: 'Correo directo ✉️',
@@ -493,6 +495,7 @@ function insertTlilxochitlProfile() {
         <li><strong>${labels.sizeLabel}</strong>${labels.size}</li>
         <li><strong>${labels.colorLabel}</strong>${labels.color}</li>
       </ul>
+      <p class="puppy-card__personality" data-profile-personality="tlilxochitl">${labels.personality}</p>
       <div class="puppy-video-container" data-profile-video="qdUfdKWn5aI" style="margin: 1rem 0; border-radius: 8px; overflow: hidden; aspect-ratio: 16/9;">
         <iframe width="100%" height="100%" src="https://www.youtube.com/embed/qdUfdKWn5aI" title="${labels.videoTitle}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
       </div>
