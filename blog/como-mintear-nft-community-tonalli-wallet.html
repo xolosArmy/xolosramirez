@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cómo mintear tu propio NFT en xolosArmy Community con Tonalli Wallet | Xolos Ramírez</title>
+  <meta name="description" content="Tutorial paso a paso para conseguir un Mint Pass Community y crear un NFT1 Child en xolosArmy Community con Tonalli Wallet, IPFS y eCash.">
+  <link rel="canonical" href="https://xolosramirez.com/blog/como-mintear-nft-community-tonalli-wallet.html">
+  <link rel="alternate" hreflang="es" href="https://xolosramirez.com/blog/como-mintear-nft-community-tonalli-wallet.html">
+  <link rel="alternate" hreflang="en" href="https://xolosramirez.com/en/blog/how-to-mint-community-nft-tonalli-wallet.html">
+  <link rel="alternate" hreflang="x-default" href="https://xolosramirez.com/blog/como-mintear-nft-community-tonalli-wallet.html">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Cómo mintear tu propio NFT en xolosArmy Community con Tonalli Wallet">
+  <meta property="og:description" content="Aprende qué Mint Pass necesitas, qué revisa Tonalli y cómo la ascendencia NFT1 on-chain demuestra la pertenencia a Community.">
+  <meta property="og:url" content="https://xolosramirez.com/blog/como-mintear-nft-community-tonalli-wallet.html">
+  <meta property="og:image" content="https://xolosramirez.com/img/hero/site-hero.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mintea un NFT de xolosArmy Community con Tonalli">
+  <meta name="twitter:description" content="Guía del flujo público para crear un NFT1 Child Community, desde el Mint Pass hasta la verificación on-chain.">
+  <meta name="twitter:image" content="https://xolosramirez.com/img/hero/site-hero.jpg">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="icon" type="image/x-icon" href="../assets/xolosramirez.ico">
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"HowTo",
+    "name":"Cómo mintear tu propio NFT en xolosArmy Community con Tonalli Wallet",
+    "description":"Tutorial para obtener un Mint Pass Community y crear un NFT1 Child ligado on-chain al Parent de xolosArmy Community.",
+    "datePublished":"2026-08-26",
+    "dateModified":"2026-08-26",
+    "inLanguage":"es",
+    "url":"https://xolosramirez.com/blog/como-mintear-nft-community-tonalli-wallet.html",
+    "image":"https://xolosramirez.com/img/hero/site-hero.jpg",
+    "author":{"@type":"Organization","name":"Xolos Ramírez"},
+    "publisher":{"@type":"Organization","name":"Xolos Ramírez","url":"https://xolosramirez.com/"},
+    "step":[
+      {"@type":"HowToStep","name":"Abre NFTs y elige Community","text":"En Tonalli Wallet entra a /nfts, abre Mintear NFT y selecciona xolosArmy Community."},
+      {"@type":"HowToStep","name":"Comprueba tu Mint Pass","text":"Confirma que la wallet tenga un Group atom del Parent Community canónico; Official y Community no son intercambiables."},
+      {"@type":"HowToStep","name":"Consigue un Mint Pass si hace falta","text":"Usa Conseguir Mint Pass de xolosArmy Community y carga un Offer ID válido en el DEX."},
+      {"@type":"HowToStep","name":"Completa la metadata","text":"Escribe nombre y descripción, agrega los datos descriptivos opcionales y selecciona una imagen."},
+      {"@type":"HowToStep","name":"Revisa y mintea","text":"Revisa colección, Parent, metadata y fees; luego usa Subir a IPFS + Mintear."},
+      {"@type":"HowToStep","name":"Verifica el resultado","text":"Conserva el TXID y verifica que la ascendencia NFT1 del Child apunte al Parent Community."}
+    ]
+  }
+  </script>
+  <style>
+    .guide-wrap{max-width:980px;margin:0 auto;padding:2rem 1rem 4rem}.guide-wrap h1{line-height:1.12}.guide-wrap h2{margin-top:2.5rem}.guide-wrap h3{margin-top:0}.lede{font-size:1.15rem;line-height:1.7}.meta{opacity:.78}.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:.7rem;margin:1.5rem 0}.flow div,.callout,.warning,.fact-box,.faq{border:1px solid rgba(128,128,128,.35);border-radius:12px;padding:1rem}.flow div{text-align:center;font-weight:600}.warning{background:rgba(218,165,32,.1)}.callout{background:rgba(30,144,255,.08)}.fact-box{background:rgba(46,139,87,.08)}.step{margin:1.5rem 0;padding:1.25rem;border-left:4px solid #d4a83f;background:rgba(127,127,127,.06)}.code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow-wrap:anywhere;padding:.75rem;border-radius:8px;background:rgba(0,0,0,.08)}.comparison{width:100%;border-collapse:collapse;margin:1.5rem 0}.comparison th,.comparison td{padding:.8rem;border:1px solid rgba(128,128,128,.35);text-align:left;vertical-align:top}.small{font-size:.92rem;opacity:.82}@media(max-width:620px){.comparison{display:block;overflow-x:auto}.guide-wrap{padding-top:1rem}}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
+  <header class="site-header"><div class="container header-row"><a class="brand" href="../index.html"><img src="../img/brand/XolosRamirez.jpg" alt="Xolos Ramírez" width="44" height="44"><span>Xolos Ramírez</span></a><button class="hamburger" aria-expanded="false" aria-controls="menu">☰</button><nav id="menu" class="nav-menu" data-visible="false" aria-label="Navegación principal"><ul><li><a href="../index.html">Inicio</a></li><li><a href="../xolos-disponibles.html">Xolos disponibles</a></li><li><a href="index.html">Blog</a></li><li><a href="../contacto.html">Contacto</a></li><li><a href="../en/blog/how-to-mint-community-nft-tonalli-wallet.html" lang="en">English</a></li></ul></nav></div></header>
+
+  <main id="contenido-principal" class="guide-wrap">
+    <p class="meta"><time datetime="2026-08-26">26 de agosto de 2026</time> · Tutorial de Tonalli Wallet y eCash</p>
+    <h1>Cómo mintear tu propio NFT en xolosArmy Community con Tonalli Wallet</h1>
+    <p class="lede">Tonalli Wallet permite elegir explícitamente <strong>xolosArmy Community</strong>, conseguir el Mint Pass de esa colección y crear un NFT1 Child ligado criptográficamente a su Parent en eCash. Esta guía sigue los nombres y pasos del flujo público actual de la wallet.</p>
+
+    <section class="callout">
+      <strong>Principio central: “La metadata describe. La blockchain demuestra.”</strong>
+      <p>El nombre, ticker, JSON, imagen, URI de IPFS o una palabra como <code>verification</code> pueden describir un NFT, pero no establecen su colección. Tonalli reconoce un Child como <code>community</code> únicamente cuando la evidencia NFT1 on-chain válida demuestra que su Genesis consumió un Group atom del Parent Community canónico.</p>
+    </section>
+
+    <h2>Official y Community son colecciones distintas</h2>
+    <table class="comparison">
+      <thead><tr><th>Colección en Tonalli</th><th>Parent NFT1 Group</th><th>Qué significa</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Official / Xolos Ramírez</strong></td><td class="code">bf8e0b5cd60fe4d6354c662b28542e0f3c3d69941eb039426d65bcdb7fe9f48c</td><td>Ascendencia oficial de Xolos Ramírez verificada on-chain.</td></tr>
+        <tr><td><strong>xolosArmy Community</strong></td><td class="code">d6ff881413733a1a6407fa5e1e86537e5fc9f48246bae89b732ca7044993e57a</td><td>Colección comunitaria independiente; no convierte al NFT en Official ni demuestra por sí sola que represente un Xoloitzcuintle Ramírez oficial.</td></tr>
+      </tbody>
+    </table>
+    <p>El registro de confianza de Tonalli es la versión <strong>2</strong>. No acepta que un texto de metadata, una variable del navegador o un Parent pegado libremente reemplacen estos anchors.</p>
+
+    <h2>Qué es un Mint Pass</h2>
+    <p>Un Mint Pass es un <strong>Group atom SLP NFT1 tipo 129</strong> del Parent correspondiente. Para crear un Child Community necesitas exactamente un atom del Parent Community; un pass Official no sirve. Al mintear, ese Group atom se consume como el primer input del Genesis y nace un <strong>NFT1 Child SLP tipo 65</strong> enlazado on-chain a ese Parent.</p>
+    <ul>
+      <li>Community y Official no son intercambiables.</li>
+      <li>Un NFT Child, un mint baton, un token fungible, un token ALP o un Group arbitrario no pueden sustituir al pass correcto.</li>
+      <li>El precio del Mint Pass depende de la oferta disponible; no existe un precio fijo publicado en esta guía.</li>
+      <li>El protocolo permite recibir el pass por una transferencia u obtenerlo mediante una oferta válida; no tiene que proceder necesariamente de una sola contraparte.</li>
+    </ul>
+
+    <h2>Requisitos</h2>
+    <ul>
+      <li>Una Tonalli Wallet inicializada y con el respaldo de recuperación confirmado.</li>
+      <li>Un Mint Pass de <strong>xolosArmy Community</strong>.</li>
+      <li>XEC puro suficiente para el fee de plataforma de <strong>5,500 XEC</strong>, el dust requerido y la comisión de red.</li>
+      <li>Nombre, descripción e imagen del NFT. También puedes añadir External URL y datos descriptivos opcionales.</li>
+    </ul>
+
+    <h2>Paso a paso</h2>
+    <section class="step"><h3>1. Abre Tonalli Wallet y entra a <code>/nfts</code></h3><p>Abre una instancia de Tonalli Wallet que reconozcas y verifica el dominio antes de introducir información sensible. En la ruta <code>/nfts</code>, entra a la pestaña <strong>Mintear NFT</strong>.</p></section>
+
+    <section class="step"><h3>2. Selecciona “xolosArmy Community”</h3><p>En <strong>Selecciona la colección</strong>, marca <strong>xolosArmy Community</strong>. No elijas <strong>Official / Xolos Ramírez</strong> si tu objetivo es crear un NFT comunitario. La pantalla muestra el Parent canónico completo de la colección elegida.</p></section>
+
+    <section class="step"><h3>3. Comprueba tu Mint Pass Community</h3><p>Tonalli revisa los UTXOs de la wallet y habilita el mint solamente si encuentra un Group atom válido del Parent Community. La tarjeta <strong>Mint Pass · xolosArmy Community</strong> recuerda que <strong>1 Mint Pass = 1 NFT</strong> y que el Parent Token se consume al mintear.</p></section>
+
+    <section class="step"><h3>4. Si falta, usa “Conseguir Mint Pass de xolosArmy Community”</h3><p>El CTA abre exactamente <code>/dex?mode=mintpass&amp;collectionId=community</code>. En el DEX, la sección <strong>Colección del Mint Pass</strong> debe seguir marcada como <strong>xolosArmy Community</strong> y mostrar el Parent Community exacto.</p><p>La compra actual requiere un <strong>Offer ID</strong> compartido por quien publicó una oferta. Pégalo en <strong>Comprar Mint Pass (Offer ID)</strong>, pulsa <strong>Cargar oferta</strong>, revisa cantidad y total en XEC y, si corresponden a Community, pulsa <strong>Comprar</strong>. El DEX vuelve a validar que la oferta sea del Parent seleccionado; no utiliza un pass Official como fallback.</p></section>
+
+    <section class="step"><h3>5. Regresa a NFTs</h3><p>Después de que la compra o transferencia quede confirmada, vuelve a <code>/nfts</code>, abre <strong>Mintear NFT</strong> y selecciona otra vez <strong>xolosArmy Community</strong>. Espera a que Tonalli refresque y detecte el Mint Pass correcto.</p></section>
+
+    <section class="step"><h3>6. Completa los campos reales</h3><p>Introduce <strong>Nombre</strong> y <strong>Descripción</strong>, agrega una <strong>External URL (opcional)</strong> si procede y selecciona una <strong>Imagen</strong>. La sección <strong>Datos descriptivos (opcional)</strong> admite etapa, sexo, color, variedad, fecha y lugar de nacimiento, criador, padre, madre, camada, microchip y registro FCM.</p><p>En Community esos datos son descriptivos: escribir “Official”, usar un ticker conocido o añadir un dato de linaje no cambia la colección ni crea autenticidad.</p></section>
+
+    <section class="step"><h3>7. Revisa “Resumen antes de firmar”</h3><p>Antes de enviar, comprueba en la pantalla:</p><ul><li><strong>Colección:</strong> xolosArmy Community.</li><li><strong>Parent NFT1 Group:</strong> <span class="code">d6ff881413733a1a6407fa5e1e86537e5fc9f48246bae89b732ca7044993e57a</span>.</li><li><strong>Mint Pass:</strong> exactamente un Group atom SLP NFT1 tipo 129.</li><li><strong>Resultado:</strong> NFT1 Child SLP tipo 65 ligado a ese Parent.</li><li><strong>Metadata:</strong> nombre, descripción y archivo de imagen.</li><li><strong>Fees:</strong> 5,500 XEC de plataforma y la comisión de red estimada.</li></ul><p class="small"><strong>Límite actual:</strong> la UI muestra este resumen antes del submit, pero no tiene un modal independiente de aprobación canónica en dos fases. El botón siguiente inicia las subidas y el mint; revisa todo antes de pulsarlo.</p></section>
+
+    <section class="step"><h3>8. Pulsa “Subir a IPFS + Mintear”</h3><p>Tonalli sube primero la imagen y después el JSON de metadata a IPFS. El Genesis del Child incorpora el URI de metadata y su hash, pero esa metadata sigue siendo descriptiva. Tras las subidas, la wallet vuelve a validar que el Mint Pass Community exacto continúa disponible antes de acceder a la firma local.</p></section>
+
+    <section class="step"><h3>9. Qué ocurre on-chain</h3><p>Tonalli construye un Genesis SLP NFT1 Child tipo 65. Su <code>input[0]</code> consume exactamente el Group atom tipo 129 del Parent Community seleccionado. La transacción incluye el output del nuevo Child, el fee de plataforma y el cambio XEC correspondiente; la política de comisión de red del builder es <strong>1,200 sat/kB</strong>.</p><p>Si el pass está dentro de un único UTXO que reúne más de un Group atom, el builder puede crear primero una transacción SLP SEND de separación para obtener un UTXO exacto de un atom. Ese caso añade otra transacción y su propia comisión de red antes del Genesis del Child.</p></section>
+
+    <section class="step"><h3>10. Conserva y verifica el resultado</h3><p>Al completarse, Tonalli muestra <strong>NFT minteado</strong>, el Token ID del Child y su <strong>Txid</strong>. Conserva el TXID y compruébalo en un explorador eCash de confianza. En Tonalli puedes seleccionar el NFT y usar <strong>Verificar linaje</strong>: la wallet consulta la evidencia Chronik del Genesis y clasifica el Child como <code>community</code> solo si el Parent on-chain coincide con el anchor Community.</p></section>
+
+    <h2>Fees: plataforma y red no son lo mismo</h2>
+    <div class="flow"><div>5,500 XEC<br><small>fee de plataforma</small></div><div>1,200 sat/kB<br><small>política de red</small></div><div>+ dust/cambio<br><small>según inputs</small></div></div>
+    <p>El fee de plataforma es una salida fija del mint. La comisión de red se estima según el tamaño de la transacción firmada y puede variar con los inputs y el cambio. Si hace falta separar un UTXO con varios Group atoms, también se paga la comisión de red de esa transacción previa. La pantalla muestra un total estimado y bloquea el envío cuando el XEC disponible no alcanza.</p>
+
+    <section class="fact-box">
+      <h2>Datos canónicos del Parent Community</h2>
+      <p><strong>Token ID:</strong></p><p class="code">d6ff881413733a1a6407fa5e1e86537e5fc9f48246bae89b732ca7044993e57a</p>
+      <p><strong>Genesis confirmado:</strong> bloque 964005 · <span class="code">00000000000000002b7be127bcd600849fd79669d0367e06bb148553aa36d1a2</span></p>
+      <p><strong>Metadata del Parent:</strong> <span class="code">ipfs://bafkreiadzvcm4sihnhkwi2zzzbfurdjisszlnrevrmef6lgja3a5g2qjuy</span></p>
+      <p><strong>SHA-256:</strong> <span class="code">03cd44ce490769d5646b39c84b488d2894b2b6c4958b085f2cc906c1d36a09a6</span></p>
+    </section>
+
+    <h2>Seguridad antes de mintear</h2>
+    <section class="warning"><ul><li>Nunca compartas tus 12 palabras ni las pegues en chats, formularios o tickets de soporte.</li><li>Nunca compartas un WIF o una private key.</li><li>Tonalli no necesita que publiques tu seed; la firma ocurre localmente en la wallet.</li><li>Verifica el dominio de Tonalli antes de usar la wallet.</li><li>Revisa que la colección sea Community, el Parent sea el canónico, el pass sea el correcto y los fees sean los esperados.</li><li>Conserva y verifica el TXID después del mint.</li></ul></section>
+
+    <h2>Preguntas frecuentes</h2>
+    <section class="faq"><h3>¿Puedo convertir un NFT Community en Official escribiéndolo en la metadata?</h3><p>No. La colección se demuestra mediante la ascendencia NFT1 on-chain.</p></section>
+    <section class="faq"><h3>¿Un Mint Pass Official sirve para Community?</h3><p>No. Cada colección exige un Group atom de su propio Parent canónico.</p></section>
+    <section class="faq"><h3>¿El Mint Pass permanece en mi wallet?</h3><p>No después de usarlo: el atom seleccionado se consume para crear el NFT1 Child. Otros passes o activos que no participen en la transacción permanecen en la wallet.</p></section>
+    <section class="faq"><h3>¿Dónde aprendo lo básico de Tonalli?</h3><p>Consulta la <a href="tutorial-tonalli-wallet.html">guía general de Tonalli Wallet</a> y vuelve después a este flujo específico de Community.</p></section>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p>© 2026 Xolos Ramírez.</p></div></footer>
+  <script src="../js/main.js" defer></script>
+</body>
+</html>
