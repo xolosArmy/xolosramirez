@@ -342,14 +342,24 @@ function updateAvailableXolosCtas() {
 
 function updateXilonenProfileVideo() {
   const existingVideoUrl = 'https://www.youtube.com/embed/nrZ-PhE4bHA';
-  const newShortUrl = 'https://www.youtube.com/embed/cDpeJ2UQNHE';
+  const shortVideos = [
+    {
+      id: 'cDpeJ2UQNHE',
+      url: 'https://www.youtube.com/embed/cDpeJ2UQNHE',
+      titleEn: 'Xilonen Ramirez miniature Xoloitzcuintli puppy exploring the world',
+      titleEs: 'Xilonen Ramirez, bebé xoloitzcuintle miniatura explorando el mundo',
+    },
+    {
+      id: 'pZ-Qfy8TDRw',
+      url: 'https://www.youtube.com/embed/pZ-Qfy8TDRw',
+      titleEn: 'Xilonen Ramirez miniature Xoloitzcuintli puppy',
+      titleEs: 'Xilonen Ramirez, bebé xoloitzcuintle miniatura',
+    },
+  ];
   const grid = getAvailableXolosGrid();
   if (!grid) return;
 
   const isEnglish = document.documentElement.lang.toLowerCase().startsWith('en');
-  const newShortTitle = isEnglish
-    ? 'Xilonen Ramirez miniature Xoloitzcuintli puppy exploring the world'
-    : 'Xilonen Ramirez, bebé xoloitzcuintle miniatura explorando el mundo';
 
   Array.from(grid.querySelectorAll('.puppy-card')).forEach((card) => {
     const name = card.querySelector('.puppy-card__name')?.textContent.trim();
@@ -358,16 +368,26 @@ function updateXilonenProfileVideo() {
     const existingVideo = card.querySelector('.puppy-video-container');
     const existingIframe = existingVideo?.querySelector('iframe');
     if (existingIframe) existingIframe.setAttribute('src', existingVideoUrl);
-    if (!existingVideo || card.querySelector('[data-xilonen-video="cDpeJ2UQNHE"]')) return;
+    if (!existingVideo) return;
 
-    const newVideo = existingVideo.cloneNode(true);
-    newVideo.dataset.xilonenVideo = 'cDpeJ2UQNHE';
-    const newIframe = newVideo.querySelector('iframe');
-    if (newIframe) {
-      newIframe.setAttribute('src', newShortUrl);
-      newIframe.setAttribute('title', newShortTitle);
-    }
-    existingVideo.insertAdjacentElement('afterend', newVideo);
+    let insertAfter = existingVideo;
+    shortVideos.forEach((video) => {
+      const currentVideo = card.querySelector(`[data-xilonen-video="${video.id}"]`);
+      if (currentVideo) {
+        insertAfter = currentVideo;
+        return;
+      }
+
+      const newVideo = existingVideo.cloneNode(true);
+      newVideo.dataset.xilonenVideo = video.id;
+      const newIframe = newVideo.querySelector('iframe');
+      if (newIframe) {
+        newIframe.setAttribute('src', video.url);
+        newIframe.setAttribute('title', isEnglish ? video.titleEn : video.titleEs);
+      }
+      insertAfter.insertAdjacentElement('afterend', newVideo);
+      insertAfter = newVideo;
+    });
   });
 }
 
