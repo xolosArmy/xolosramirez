@@ -355,6 +355,12 @@ function updateXilonenProfileVideo() {
       titleEn: 'Xilonen Ramirez miniature Xoloitzcuintli puppy',
       titleEs: 'Xilonen Ramirez, bebé xoloitzcuintle miniatura',
     },
+    {
+      id: 'rYDusjW9Gi0',
+      url: 'https://www.youtube.com/embed/rYDusjW9Gi0',
+      titleEn: 'Xilonen Ramirez miniature Xoloitzcuintli puppy playing with Oce',
+      titleEs: 'Xilonen Ramirez, cachorra xoloitzcuintle miniatura jugando con Oce',
+    },
   ];
   const grid = getAvailableXolosGrid();
   if (!grid) return;
