@@ -196,7 +196,6 @@ function initializePuppyCarousels() {
     const isSpanish = document.documentElement.lang.toLowerCase().startsWith('es');
     let activeIndex = 0;
     let scrollFrame;
-
     const messageFor = (index) => isSpanish
       ? `Foto ${index + 1} de ${slides.length}`
       : `Photo ${index + 1} of ${slides.length}`;
@@ -455,6 +454,7 @@ function insertTlilxochitlProfile() {
         alt2: 'Tlilxóchitl Ramirez, female Xoloitzcuintli puppy facing the camera',
         videoTitle: 'Tlilxóchitl Ramirez, baby Xoloitzcuintli in a close-up portrait',
         latestVideoTitle: 'Tlilxóchitl Ramirez, Xoloitzcuintli puppy resting and exploring',
+        newestVideoTitle: 'Tlilxóchitl Ramirez, Xoloitzcuintli puppy in a tender close-up',
         personality: 'Personality: calm, affectionate, and observant. Tlilxóchitl is a curious and confident puppy who enjoys human contact and explores her surroundings with a sweet, serene energy.',
         subject: 'Inquiry about Tlilxóchitl Ramirez [Ref: tlilxochitl-en-available]',
         body: 'Hello, I saw Tlilxóchitl Ramirez on the Xolos Ramírez website and would like to learn more about her availability, price, and reservation process.',
@@ -482,6 +482,7 @@ function insertTlilxochitlProfile() {
         alt2: 'Tlilxóchitl Ramírez, bebé xoloitzcuintle hembra de frente mirando a la cámara',
         videoTitle: 'Tlilxóchitl Ramírez, bebé xoloitzcuintle en un retrato cercano',
         latestVideoTitle: 'Tlilxóchitl Ramírez, cachorra xoloitzcuintle descansando y explorando',
+        newestVideoTitle: 'Tlilxóchitl Ramírez, cachorra xoloitzcuintle en un tierno primer plano',
         personality: 'Personalidad: tranquila, cariñosa y observadora. Tlilxóchitl es una bebé curiosa y confiada, disfruta el contacto humano y explora su entorno con una energía dulce y serena.',
         subject: 'Consulta sobre Tlilxóchitl Ramirez [Ref: tlilxochitl-es-available]',
         body: 'Hola, vi el perfil de Tlilxóchitl Ramirez en Xolos Ramírez y me interesa conocer más sobre su disponibilidad, precio y proceso de reserva.',
@@ -529,6 +530,9 @@ function insertTlilxochitlProfile() {
       </div>
       <div class="puppy-video-container" data-profile-video="UAvsWVJu8M0" style="margin: 1rem 0; border-radius: 8px; overflow: hidden; aspect-ratio: 9/16; max-width: 360px;">
         <iframe width="100%" height="100%" src="https://www.youtube.com/embed/UAvsWVJu8M0?autoplay=1&mute=1" title="${labels.latestVideoTitle}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+      </div>
+      <div class="puppy-video-container" data-profile-video="Drl7obSEm5E" style="margin: 1rem 0; border-radius: 8px; overflow: hidden; aspect-ratio: 9/16; max-width: 360px;">
+        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/Drl7obSEm5E?autoplay=1&mute=1&playsinline=1" title="${labels.newestVideoTitle}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
       </div>
       <div class="puppy-card__actions">
         <a href="mailto:${CURRENT_CONTACT_EMAIL}?subject=${encodeURIComponent(labels.subject)}&body=${encodeURIComponent(labels.body)}" class="btn-small btn-primary-small cta-lead cta-email" style="${labels.buttonStyle}" data-cta="email" data-lead-type="generate_lead" data-profile="tlilxochitl" data-page-type="available-xolos" data-lang="${labels.lang}" aria-label="${labels.aria}" data-status="available">${labels.cta}</a>
