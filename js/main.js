@@ -1,5 +1,7 @@
 const LEGACY_CONTACT_EMAIL = 'fernando@xolosramirez.com';
 const CURRENT_CONTACT_EMAIL = 'contacto@xolosarmy.xyz';
+const LEGACY_WHATSAPP_LINK = 'https://wa.me/qr/R2F5PRQYZSJOA1';
+const CURRENT_WHATSAPP_LINK = 'https://wa.me/message/435RTKGJLTX2J1';
 
 const FOOTER_SOCIAL_LINKS = [
   { label: 'Facebook', href: 'https://www.facebook.com/share/1DYZWxYmqp/' },
@@ -100,6 +102,12 @@ function updateGlobalContactEmail() {
     const href = link.getAttribute('href');
     if (!href || !href.includes(LEGACY_CONTACT_EMAIL)) return;
     link.setAttribute('href', href.replaceAll(LEGACY_CONTACT_EMAIL, CURRENT_CONTACT_EMAIL));
+  });
+
+  document.querySelectorAll('a[href]').forEach((link) => {
+    const href = link.getAttribute('href');
+    if (!href || !href.includes(LEGACY_WHATSAPP_LINK)) return;
+    link.setAttribute('href', href.replaceAll(LEGACY_WHATSAPP_LINK, CURRENT_WHATSAPP_LINK));
   });
 }
 
@@ -410,7 +418,7 @@ function updateAvailableXolosCtas() {
     'a.home-email-float.video-call-float, a.home-email-float[data-cta="video_call"]',
   );
   if (floatingCta) {
-    floatingCta.href = 'https://wa.me/message/435RTKGJLTX2J1';
+    floatingCta.href = CURRENT_WHATSAPP_LINK;
     floatingCta.target = '_blank';
     floatingCta.rel = 'noopener noreferrer';
     floatingCta.setAttribute('aria-label', labels.whatsappAria);
