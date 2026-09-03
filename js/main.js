@@ -445,22 +445,22 @@ function updateXilonenProfileVideo() {
   const existingVideoUrl = 'https://www.youtube.com/embed/nrZ-PhE4bHA?autoplay=1&mute=1';
   const shortVideos = [
     {
-      id: 'cDpeJ2UQNHE',
-      url: 'https://www.youtube.com/embed/cDpeJ2UQNHE?autoplay=1&mute=1',
-      titleEn: 'Xilonen Ramirez miniature Xoloitzcuintli puppy exploring the world',
-      titleEs: 'Xilonen Ramirez, bebé xoloitzcuintle miniatura explorando el mundo',
-    },
-    {
-      id: 'pZ-Qfy8TDRw',
-      url: 'https://www.youtube.com/embed/pZ-Qfy8TDRw?autoplay=1&mute=1',
-      titleEn: 'Xilonen Ramirez miniature Xoloitzcuintli puppy',
-      titleEs: 'Xilonen Ramirez, bebé xoloitzcuintle miniatura',
-    },
-    {
       id: 'rYDusjW9Gi0',
       url: 'https://www.youtube.com/embed/rYDusjW9Gi0?autoplay=1&mute=1',
       titleEn: 'Xilonen Ramirez miniature Xoloitzcuintli puppy playing with Oce',
       titleEs: 'Xilonen Ramirez, cachorra xoloitzcuintle miniatura jugando con Oce',
+    },
+    {
+      id: 'WRLhCdu21Q4',
+      url: 'https://www.youtube.com/embed/WRLhCdu21Q4?autoplay=1&mute=1',
+      titleEn: 'Xilonen Ramirez miniature Xoloitzcuintli puppy — new video',
+      titleEs: 'Xilonen Ramirez, cachorra xoloitzcuintle miniatura — nuevo video',
+    },
+    {
+      id: 'ZPJT-BzwZhU',
+      url: 'https://www.youtube.com/embed/ZPJT-BzwZhU?autoplay=1&mute=1',
+      titleEn: 'Xilonen Ramirez miniature Xoloitzcuintli puppy — latest video',
+      titleEs: 'Xilonen Ramirez, cachorra xoloitzcuintle miniatura — video más reciente',
     },
   ];
   const grid = getAvailableXolosGrid();
