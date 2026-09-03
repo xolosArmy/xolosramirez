@@ -1,6 +1,100 @@
 const LEGACY_CONTACT_EMAIL = 'fernando@xolosramirez.com';
 const CURRENT_CONTACT_EMAIL = 'contacto@xolosarmy.xyz';
 
+const FOOTER_SOCIAL_LINKS = [
+  { label: 'Facebook', href: 'https://www.facebook.com/share/1DYZWxYmqp/' },
+  { label: 'YouTube', href: 'https://www.youtube.com/@xolosramirez' },
+  { label: 'X / Twitter', href: 'https://x.com/xolosramirez1' },
+  { label: 'TikTok', href: 'https://www.tiktok.com/@xolosramirezoficial' },
+  {
+    label: 'Snapchat',
+    href: 'https://www.snapchat.com/add/xolos_ramirez?share_id=UFcVV_Fb_l8&locale=es-US',
+  },
+];
+
+const FOOTER_SOCIAL_HOSTS = new Set([
+  'facebook.com',
+  'www.facebook.com',
+  'youtube.com',
+  'www.youtube.com',
+  'youtu.be',
+  'x.com',
+  'www.x.com',
+  'twitter.com',
+  'www.twitter.com',
+  'tiktok.com',
+  'www.tiktok.com',
+  'snapchat.com',
+  'www.snapchat.com',
+  't.me',
+  'telegram.me',
+]);
+
+function removeSocialLink(link) {
+  const nextSibling = link.nextSibling;
+  link.remove();
+  if (nextSibling instanceof HTMLBRElement) nextSibling.remove();
+}
+
+function updateGlobalFooterSocialLinks() {
+  document.querySelectorAll('footer').forEach((footer) => {
+    footer.querySelectorAll('a[href]').forEach((link) => {
+      let hostname;
+      try {
+        hostname = new URL(link.href).hostname.toLowerCase();
+      } catch {
+        return;
+      }
+
+      if (hostname === 't.me' || hostname === 'telegram.me') removeSocialLink(link);
+    });
+
+    const heading = Array.from(footer.querySelectorAll('h4')).find((candidate) => {
+      const text = candidate.textContent.trim().toLowerCase();
+      return ['redes', 'redes sociales', 'social', 'social networks'].includes(text);
+    });
+    if (!heading) return;
+
+    const section = heading.parentElement;
+    if (!section) return;
+
+    const existingSocialLinks = Array.from(section.querySelectorAll('a[href]')).filter((link) => {
+      try {
+        return FOOTER_SOCIAL_HOSTS.has(new URL(link.href).hostname.toLowerCase());
+      } catch {
+        return false;
+      }
+    });
+    const linksParent = existingSocialLinks[0]?.parentElement || section;
+    existingSocialLinks.forEach(removeSocialLink);
+
+    const fragment = document.createDocumentFragment();
+    FOOTER_SOCIAL_LINKS.forEach(({ label, href }) => {
+      const link = document.createElement('a');
+      link.href = href;
+      link.textContent = label;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      fragment.append(link, document.createElement('br'));
+    });
+
+    const firstRemainingLink = linksParent.querySelector('a[href]');
+    if (firstRemainingLink) {
+      linksParent.insertBefore(fragment, firstRemainingLink);
+    } else if (linksParent === section) {
+      heading.after(fragment);
+    } else {
+      linksParent.prepend(fragment);
+    }
+  });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', updateGlobalFooterSocialLinks, { once: true });
+} else {
+  updateGlobalFooterSocialLinks();
+}
+
 function updateGlobalContactEmail() {
   document.querySelectorAll('a[href^="mailto:"]').forEach((link) => {
     const href = link.getAttribute('href');
