@@ -31,9 +31,9 @@ const FOOTER_SOCIAL_HOSTS = new Set([
 ]);
 
 function removeSocialLink(link) {
-  const nextSibling = link.nextSibling;
+  const separator = link.nextElementSibling;
   link.remove();
-  if (nextSibling instanceof HTMLBRElement) nextSibling.remove();
+  if (separator instanceof HTMLBRElement) separator.remove();
 }
 
 function updateGlobalFooterSocialLinks() {
