@@ -552,8 +552,10 @@ function insertTlilxochitlProfile() {
         size: 'Intermediate / Medium',
         colorLabel: 'Color',
         color: 'Black',
-        alt1: 'Tlilxóchitl Ramirez, female Xoloitzcuintli puppy with her head tilted',
-        alt2: 'Tlilxóchitl Ramirez, female Xoloitzcuintli puppy facing the camera',
+        alt1: 'Tlilxóchitl Ramirez, hairless Xoloitzcuintli puppy, in a close-up on a blanket beside an adult Xolo',
+        alt2: 'Tlilxóchitl Ramirez, hairless Xoloitzcuintli puppy, resting by a window and looking at the camera',
+        alt3: 'Tlilxóchitl Ramirez, hairless Xoloitzcuintli puppy, interacting with her mother by a window',
+        alt4: "Tlilxóchitl Ramirez, hairless Xoloitzcuintli puppy, cuddling and nuzzling her mother's face in two moments",
         videoTitle: 'Tlilxóchitl Ramirez, baby Xoloitzcuintli in a close-up portrait',
         latestVideoTitle: 'Tlilxóchitl Ramirez, Xoloitzcuintli puppy resting and exploring',
         newestVideoTitle: 'Tlilxóchitl Ramirez, Xoloitzcuintli puppy in a tender close-up',
@@ -580,8 +582,10 @@ function insertTlilxochitlProfile() {
         size: 'Intermedia',
         colorLabel: 'Color',
         color: 'Negro',
-        alt1: 'Tlilxóchitl Ramírez, bebé xoloitzcuintle hembra con la cabeza inclinada',
-        alt2: 'Tlilxóchitl Ramírez, bebé xoloitzcuintle hembra de frente mirando a la cámara',
+        alt1: 'Tlilxóchitl Ramírez, cachorra xoloitzcuintle sin pelo, en primer plano sobre una manta junto a una xolo adulta',
+        alt2: 'Tlilxóchitl Ramírez, cachorra xoloitzcuintle sin pelo, descansando junto a una ventana y mirando a la cámara',
+        alt3: 'Tlilxóchitl Ramírez, cachorra xoloitzcuintle sin pelo, conviviendo con su madre junto a una ventana',
+        alt4: 'Tlilxóchitl Ramírez, cachorra xoloitzcuintle sin pelo, acurrucándose y tocando el rostro de su madre en dos momentos',
         videoTitle: 'Tlilxóchitl Ramírez, bebé xoloitzcuintle en un retrato cercano',
         latestVideoTitle: 'Tlilxóchitl Ramírez, cachorra xoloitzcuintle descansando y explorando',
         newestVideoTitle: 'Tlilxóchitl Ramírez, cachorra xoloitzcuintle en un tierno primer plano',
@@ -606,10 +610,16 @@ function insertTlilxochitlProfile() {
       <div class="puppy-carousel" data-puppy-carousel role="region" aria-roledescription="${labels.role}" aria-label="${labels.carousel}">
         <div class="puppy-carousel__track" tabindex="0">
           <div class="puppy-carousel__slide">
-            <img src="${imagePrefix}tlilxochitl-ramirez-agosto-2026-cabeza-inclinada.webp" alt="${labels.alt1}" class="puppy-card__image" width="960" height="1200" loading="lazy" decoding="async" draggable="false" style="object-fit: contain;" />
+            <img src="${imagePrefix}tlilxochitl-ramirez-septiembre-2026-primer-plano.webp" alt="${labels.alt1}" class="puppy-card__image" width="900" height="1200" loading="lazy" decoding="async" draggable="false" style="object-fit: contain;" />
           </div>
           <div class="puppy-carousel__slide">
-            <img src="${imagePrefix}tlilxochitl-ramirez-agosto-2026-frontal.webp" alt="${labels.alt2}" class="puppy-card__image" width="960" height="1200" loading="lazy" decoding="async" draggable="false" style="object-fit: contain;" />
+            <img src="${imagePrefix}tlilxochitl-ramirez-septiembre-2026-descansando-ventana.webp" alt="${labels.alt2}" class="puppy-card__image" width="900" height="1200" loading="lazy" decoding="async" draggable="false" style="object-fit: contain;" />
+          </div>
+          <div class="puppy-carousel__slide">
+            <img src="${imagePrefix}tlilxochitl-ramirez-septiembre-2026-con-madre.webp" alt="${labels.alt3}" class="puppy-card__image" width="1200" height="900" loading="lazy" decoding="async" draggable="false" style="object-fit: contain;" />
+          </div>
+          <div class="puppy-carousel__slide">
+            <img src="${imagePrefix}tlilxochitl-ramirez-septiembre-2026-caricias-madre.webp" alt="${labels.alt4}" class="puppy-card__image" width="1200" height="1066" loading="lazy" decoding="async" draggable="false" style="object-fit: contain;" />
           </div>
         </div>
         <button class="puppy-carousel__button puppy-carousel__button--previous" type="button" aria-label="${labels.previous}">&#8592;</button>
