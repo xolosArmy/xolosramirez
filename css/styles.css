@@ -1,16 +1,5 @@
 @import url('./styles-base.css');
 
-/* Xilonen Ramirez: reemplazo visual directo de las dos fotografías del carrusel. */
-.puppy-carousel__slide > img[src="https://i.imgur.com/QeNNg9H.jpeg"] {
-  content: url('../img/xolos/xilonen-ramirez-01.jpg');
-  opacity: 1;
-}
-
-.puppy-carousel__slide > img[src="https://i.imgur.com/QN6BMnO.jpeg"] {
-  content: url('../img/xolos/xilonen-ramirez-02.jpg');
-  opacity: 1;
-}
-
 /* Yohualli Ramirez: fotografías seleccionadas para su perfil bilingüe. */
 .puppy-carousel__slide > img[src="https://i.imgur.com/8Gz0PYU.jpeg"] {
   content: url('../img/xolos/yohualli-ramirez-01.webp');
