@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QA móvil de Xilonen Ramirez</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 24px; background: #151515; color: #fff; font: 16px/1.4 system-ui, sans-serif; }
+    main { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; }
+    figure { margin: 0; }
+    figcaption { margin-bottom: 8px; font-weight: 700; }
+    iframe { display: block; width: 390px; height: 844px; border: 1px solid #777; background: #fff; }
+  </style>
+</head>
+<body>
+  <main>
+    <figure><figcaption>Español · 390 × 844</figcaption><iframe title="Vista móvil en español" src="../xolos-disponibles.html"></iframe></figure>
+    <figure><figcaption>English · 390 × 844</figcaption><iframe title="Mobile view in English" src="../en/available-xolos.html"></iframe></figure>
+  </main>
+  <script>
+    document.querySelectorAll("iframe").forEach((frame) => {
+      frame.addEventListener("load", () => {
+        window.setTimeout(() => {
+          const cards = Array.from(frame.contentDocument.querySelectorAll(".puppy-card"));
+          const card = cards.find((item) => item.querySelector(".puppy-card__name")?.textContent.trim() === "Xilonen Ramirez");
+          card?.scrollIntoView({ block: "start" });
+        }, 1800);
+      });
+    });
+  </script>
+</body>
+</html>
