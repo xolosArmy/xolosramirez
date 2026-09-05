@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nutrición Integral para el Xoloitzcuintle | Calculadora interactiva - Xolos Ramírez</title>
+<meta name="description" content="Calculadora interactiva de nutrición para xoloitzcuintles: RER/MER, raciones de croquetas y BARF, genética FOXI3, piel, oligodoncia y seguridad alimentaria.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://xolosramirez.com/blog/2026-09-04-nutricion-integral-xoloitzcuintle-interactiva.html">
+<link rel="icon" type="image/x-icon" href="../assets/xolosramirez.ico">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Xolos Ramírez">
+<meta property="og:title" content="Nutrición Integral para el Xoloitzcuintle | Calculadora interactiva">
+<meta property="og:description" content="Calcula RER, MER y raciones orientativas para xoloitzcuintles y explora una guía interactiva de croquetas, BARF, piel y seguridad alimentaria.">
+<meta property="og:url" content="https://xolosramirez.com/blog/2026-09-04-nutricion-integral-xoloitzcuintle-interactiva.html">
+<meta property="og:image" content="https://xolosramirez.com/img/hero/site-hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Nutrición Integral para el Xoloitzcuintle | Xolos Ramírez">
+<meta name="twitter:description" content="Calculadora biomatemática de raciones y guía interactiva de nutrición del xoloitzcuintle.">
+<meta name="twitter:image" content="https://xolosramirez.com/img/hero/site-hero.jpg">
+<script type="application/ld+json">
+{
+"@context":"https://schema.org",
+"@type":"WebApplication",
+"name":"Nutrición Integral para el Xoloitzcuintle",
+"url":"https://xolosramirez.com/blog/2026-09-04-nutricion-integral-xoloitzcuintle-interactiva.html",
+"applicationCategory":"EducationalApplication",
+"operatingSystem":"Web",
+"inLanguage":"es-MX",
+"datePublished":"2026-09-04",
+"publisher":{"@type":"Organization","name":"Xolos Ramírez","url":"https://xolosramirez.com/"}
+}
+</script>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+clay: {
+50: '#fdf8f6',
+100: '#f2e8e5',
+200: '#e5d3cd',
+500: '#c2593f',
+600: '#a8442c',
+700: '#8c331e',
+800: '#732c1c',
+900: '#5f271a',
+},
+amberwood: {
+50: '#fdfbf7',
+100: '#f7f2e8',
+200: '#ebdcc5',
+500: '#d9a05b',
+700: '#8c6d46',
+900: '#3a2d1d',
+}
+},
+fontFamily: {
+serif: ['Georgia', 'Cambria', 'serif'],
+sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+}
+}
+}
+}
+</script>
+<style>
+/* Custom responsive chart containers conforming to prompt specs */
+.chart-container {
+position: relative;
+width: 100%;
+max-width: 580px;
+margin-left: auto;
+margin-right: auto;
+height: 300px;
+max-height: 380px;
+}
+@media (min-width: 768px) {
+.chart-container {
+height: 340px;
+}
+}
+/* Custom tab & scrollbar styling */
+.hide-scrollbar::-webkit-scrollbar {
+display: none;
+}
+.hide-scrollbar {
+-ms-overflow-style: none;
+scrollbar-width: none;
+}
+</style>
+</head>
+<body class="bg-stone-50 text-stone-800 font-sans antialiased selection:bg-clay-500 selection:text-white">
+<!-- Chosen Palette: Warm Terracotta & Earth Neutrals (Background: #FDFBF7, Terracotta: #C2593F, Bronze: #8C6D46, Slate: #2C2523) -->
+<!-- Application Structure Plan:
+1. Hero Section: Executive overview, quick stats, and navigation for Criadero Xolos Ramírez.
+2. Dynamic Calculator (The Interactive Core): Biomathematical RER/MER calculation engine supporting both Croquetas and BARF ratios based on Kleiber's Law.
+3. Genetics & Physiology: Interactive cards highlighting the FOXI3 mutation, oligodontia, and thermal dynamics.
+4. Commercial Food Matrix: Life stage guides (Cachorro, Adulto, Senior) with dynamic macronutrient comparison chart.
+5. BARF Nutrition Guide: Visual Donut chart plate composer, safety rules (grinding bones), and an interactive 7-Day Rotational Menu.
+6. Dermatology & Nutraceuticals: Interactive tabs for Acne, Zinc Dermatosis, and functional supplements.
+7. Toxic Food Warning Matrix: Safety grid detailing chemical actions and clinical risks.
+This architecture moves from exact individual calculations to overarching principles, enabling dog owners to get customized data first and then explore detailed educational modules.
+-->
+<!-- Visualization & Content Choices:
+- Calculator Engine: Custom Vanilla JS updating UI numbers & Chart instances dynamically.
+- Macronutrient Comparison: Chart.js Bar Chart showing Protein/Fat/Moisture percentages across life stages.
+- BARF Proportions: Chart.js Doughnut Chart visualizing exact raw food component ratios (Muscle, Bone, Organs, Veggies).
+- Interactive Menus & Tabs: HTML/Tailwind JS toggles with zero SVG usage (using Unicode icons: 🥩, 🦴, 🐾, ⚡, 🩺, ⚖️).
+-->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+<!-- Navigation Bar -->
+<header class="sticky top-0 z-50 bg-stone-900/95 backdrop-blur text-stone-200 border-b border-stone-800 shadow-md">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-16">
+<a href="../index.html" class="flex items-center gap-3" aria-label="Ir a la página de inicio de Xolos Ramírez">
+<span class="text-2xl">🐕</span>
+<div>
+<span class="font-serif font-bold text-lg text-amber-400 tracking-wide block leading-tight">Xolos Ramírez</span>
+<span class="text-xs text-stone-400">Guía Nutricional Integral</span>
+</div>
+</a>
+<nav class="hidden md:flex space-x-6 text-sm font-medium" aria-label="Navegación de la guía">
+<a href="../index.html" class="hover:text-amber-400 transition-colors">Inicio</a>
+<a href="index.html" class="hover:text-amber-400 transition-colors">Blog</a>
+<a href="#calculadora" class="hover:text-amber-400 transition-colors">Calculadora</a>
+<a href="#fisiologia" class="hover:text-amber-400 transition-colors">Genética y Fisiología</a>
+<a href="#croquetas" class="hover:text-amber-400 transition-colors">Croquetas</a>
+<a href="#barf" class="hover:text-amber-400 transition-colors">Dieta BARF</a>
+<a href="#dermatologia" class="hover:text-amber-400 transition-colors">Salud y Suplementos</a>
+<a href="#toxicos" class="hover:text-amber-400 transition-colors">Toxicología</a>
+</nav>
+<div class="md:hidden">
+<a href="#calculadora" class="bg-clay-500 hover:bg-clay-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">Calculadora</a>
+</div>
+</div>
+</div>
+</header>
+<!-- Hero Header -->
+<section class="bg-gradient-to-b from-stone-900 via-stone-800 to-amberwood-900 text-white py-12 md:py-16 px-4">
+<div class="max-w-7xl mx-auto text-center">
+<span class="inline-block px-3 py-1 bg-clay-500/30 border border-clay-500/50 rounded-full text-xs font-semibold text-amber-300 uppercase tracking-widest mb-4">
+Protocolo Veterinario Especializado
+</span>
+<h1 class="text-3xl md:text-5xl font-serif font-bold tracking-tight text-stone-100 mb-4 leading-tight">
+Optimización Nutricional del Xoloitzcuintle
+</h1>
+<p class="max-w-3xl mx-auto text-stone-300 text-base md:text-lg mb-8 leading-relaxed">
+Plataforma interactiva de formulación dietética y salud dermatológica adaptada a las singularidades genéticas, digestivas y metabólicas del Xoloitzcuintle para <strong class="text-amber-300 font-semibold">Xolos Ramírez</strong>.
+</p>
+<!-- Quick Stat Banner -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+<div class="bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur">
+<div class="text-2xl font-bold text-amber-400 font-serif">FOXI3</div>
+<div class="text-xs text-stone-300 mt-1">Mutación ectodérmica clave</div>
+</div>
+<div class="bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur">
+<div class="text-2xl font-bold text-amber-400 font-serif">Oligodoncia</div>
+<div class="text-xs text-stone-300 mt-1">Molienda ósea obligatoria</div>
+</div>
+<div class="bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur">
+<div class="text-2xl font-bold text-amber-400 font-serif">Ley Kleiber</div>
+<div class="text-xs text-stone-300 mt-1">RER = 70 × (Kg)⁰.⁷⁵</div>
+</div>
+<div class="bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur">
+<div class="text-2xl font-bold text-amber-400 font-serif">Eje Piel-Intestino</div>
+<div class="text-xs text-stone-300 mt-1">Soporte con Omega-3 y Zinc</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Main Content Container -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+<!-- SECTION 1: CALCULADORA NUTRICIONAL INTERACTIVA -->
+<section id="calculadora" class="bg-white rounded-2xl shadow-xl border border-stone-200 overflow-hidden">
+<div class="bg-clay-600 text-white p-6 md:p-8">
+<div class="flex items-center gap-3">
+<span class="text-3xl">⚖️</span>
+<div>
+<h2 class="text-2xl md:text-3xl font-serif font-bold">Calculadora Biomatemática de Raciones</h2>
+<p class="text-clay-100 text-sm mt-1">Cálculo exacto de kilocalorías diarias (RER / MER) y gramaje personalizado para croquetas o dieta BARF.</p>
+</div>
+</div>
+</div>
+<div class="p-6 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Controls Column -->
+<div class="lg:col-span-6 space-y-6">
+<div class="bg-stone-50 p-5 rounded-xl border border-stone-200 space-y-4">
+<h3 class="font-serif font-bold text-stone-800 text-lg border-b border-stone-200 pb-2 flex items-center justify-between">
+<span>1. Parámetros del Ejemplar</span>
+<span class="text-xs font-normal text-stone-500">Datos fisiológicos</span>
+</h3>
+<div>
+<label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
+Talla Predeterminada o Peso Libre
+</label>
+<div class="grid grid-cols-3 gap-2 mb-3">
+<button type="button" onclick="setPreset(5)" class="preset-btn px-3 py-2 text-xs font-medium rounded-lg border border-stone-300 bg-white text-stone-700 hover:bg-stone-100">
+Toy (5 kg)
+</button>
+<button type="button" onclick="setPreset(10)" class="preset-btn px-3 py-2 text-xs font-medium rounded-lg border border-stone-300 bg-white text-stone-700 hover:bg-stone-100">
+Mini (10 kg)
+</button>
+<button type="button" onclick="setPreset(20)" class="preset-btn px-3 py-2 text-xs font-medium rounded-lg border border-clay-500 bg-clay-50 text-clay-700 font-bold">
+Estándar (20 kg)
+</button>
+</div>
+<div class="flex items-center gap-4">
+<input type="range" id="calcWeight" min="2" max="35" step="0.5" value="20" class="w-full accent-clay-500 h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer">
+<span class="text-lg font-bold font-serif text-clay-600 whitespace-nowrap"><span id="weightValue">20</span> kg</span>
+</div>
+</div>
+<div>
+<label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1">
+Estado Fisiológico / Nivel de Actividad (Factor MER)
+</label>
+<select id="calcFactor" class="w-full bg-white border border-stone-300 rounded-lg px-3 py-2.5 text-sm text-stone-800 focus:ring-2 focus:ring-clay-500 focus:outline-none">
+<option value="3.0">Cachorro Crecimiento Inicial (< 4 meses) - Factor 3.0</option>
+<option value="2.0">Cachorro Crecimiento Tardío (4-12 meses) - Factor 2.0</option>
+<option value="1.8">Adulto Intacto / Activo - Factor 1.8</option>
+<option value="1.6" selected>Adulto Castrado / Esterilizado - Factor 1.6</option>
+<option value="1.3">Adulto Sedentario / Trabajo Ligero - Factor 1.3</option>
+<option value="1.2">Senior (> 7 años) / Control de Peso - Factor 1.2</option>
+</select>
+</div>
+</div>
+<div class="bg-stone-50 p-5 rounded-xl border border-stone-200 space-y-4">
+<h3 class="font-serif font-bold text-stone-800 text-lg border-b border-stone-200 pb-2">
+2. Modelo Dietético Seleccionado
+</h3>
+<div class="grid grid-cols-2 gap-3">
+<label class="flex items-center gap-2 p-3 bg-white rounded-lg border border-stone-200 cursor-pointer hover:border-clay-500">
+<input type="radio" name="dietModel" value="croquetas" checked onchange="updateCalculations()" class="accent-clay-500">
+<span class="text-sm font-semibold text-stone-800">Croquetas Secas</span>
+</label>
+<label class="flex items-center gap-2 p-3 bg-white rounded-lg border border-stone-200 cursor-pointer hover:border-clay-500">
+<input type="radio" name="dietModel" value="barf" onchange="updateCalculations()" class="accent-clay-500">
+<span class="text-sm font-semibold text-stone-800">Dieta BARF (Cruda)</span>
+</label>
+</div>
+<div id="croquetaInputs" class="space-y-2">
+<label class="block text-xs font-medium text-stone-600">Densidad Calórica del Alimento (kcal / kg)</label>
+<input type="number" id="calcCaloricDensity" value="3500" step="50" class="w-full bg-white border border-stone-300 rounded-lg px-3 py-2 text-sm">
+<p class="text-xs text-stone-500">Promedio Súper Premium: 3,500 - 3,800 kcal/kg.</p>
+</div>
+<div id="barfInputs" class="space-y-2 hidden">
+<label class="block text-xs font-medium text-stone-600">Porcentaje de Peso Corporal (% BARF Diario)</label>
+<select id="calcBarfPercent" class="w-full bg-white border border-stone-300 rounded-lg px-3 py-2 text-sm">
+<option value="2.0">2.0% (Senior / Adulto Sedentario)</option>
+<option value="2.5" selected>2.5% (Adulto Mantenimiento Estándar)</option>
+<option value="3.0">3.0% (Adulto Muy Activo / Trabajo)</option>
+<option value="6.0">6.0% (Cachorro Crecimiento Tardío)</option>
+<option value="8.0">8.0% (Cachorro Crecimiento Inicial)</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Results Output Column -->
+<div class="lg:col-span-6 bg-amberwood-50 rounded-xl p-6 border border-amberwood-200 flex flex-col justify-between">
+<div>
+<h3 class="font-serif font-bold text-amberwood-900 text-xl mb-4 pb-2 border-b border-amberwood-200 flex items-center gap-2">
+<span>📊</span> Resultado del Protocolo Dietético
+</h3>
+<!-- Caloric Metrics -->
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-white p-4 rounded-xl border border-amberwood-200 shadow-sm">
+<span class="text-xs font-semibold text-stone-500 uppercase tracking-wider block">Metabolismo Base (RER)</span>
+<span id="outRER" class="text-2xl font-bold font-serif text-stone-800">662</span>
+<span class="text-xs text-stone-500 block">kcal / día</span>
+</div>
+<div class="bg-white p-4 rounded-xl border border-clay-300 shadow-sm">
+<span class="text-xs font-semibold text-clay-600 uppercase tracking-wider block">Meta Calórica (MER)</span>
+<span id="outMER" class="text-2xl font-bold font-serif text-clay-600">1,059</span>
+<span class="text-xs text-stone-500 block">kcal / día</span>
+</div>
+</div>
+<!-- Ration Breakdown -->
+<div id="rationResultBox" class="bg-white p-5 rounded-xl border border-amberwood-200 shadow-sm space-y-4">
+<!-- Dynamic Content Inserted by JS -->
+</div>
+</div>
+<div class="mt-6 pt-4 border-t border-amberwood-200 text-xs text-stone-600 flex items-start gap-2">
+<span class="text-amber-600 font-bold">💡 Nota Técnica:</span>
+<span>Dividir la ración total diaria en <strong>2 tomas fijas</strong> para adultos (o 3-4 en cachorros) para estabilizar la glucemia y optimizar el vaciado gástrico.</span>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 2: GENÉTICA Y FISIOLOGÍA DEL XOLOITZCUINTLE -->
+<section id="fisiologia" class="space-y-6">
+<div class="border-l-4 border-clay-500 pl-4">
+<h2 class="text-2xl md:text-3xl font-serif font-bold text-stone-900">Fundamentos Genéticos y Fisiológicos</h2>
+<p class="text-stone-600 text-sm mt-1">Anatomía adaptativa de la raza primitiva y sus implicaciones nutricionales directas.</p>
+</div>
+<p class="text-stone-700 leading-relaxed bg-white p-5 rounded-xl border border-stone-200 text-sm md:text-base">
+El Xoloitzcuintle presenta adaptaciones fenotípicas resultantes de una selección natural de más de 2,000 años. La variedad desnuda porta una duplicación de 7 pares de bases en el primer exón del gen <strong>FOXI3</strong> (cromosoma 17), condicionando una <em>displasia ectodérmica canina</em> que altera simultáneamente la piel, el pelaje y la estructura dental.
+</p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Card 1: Oligodoncia -->
+<div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition-shadow">
+<div class="text-3xl mb-3">🦷</div>
+<h3 class="font-serif font-bold text-lg text-stone-900 mb-2">Oligodoncia Anatómica</h3>
+<p class="text-xs text-stone-600 leading-relaxed mb-3">
+La alteración del gen FOXI3 detiene la lámina dental embriológica. Los ejemplares sin pelo carecen sistemáticamente de premolares, incisivos y presentan molares cónicos.
+</p>
+<div class="bg-amber-50 p-3 rounded-lg border border-amber-200 text-xs text-amber-900 font-medium">
+<strong>Impacto Dietético:</strong> Incapacidad para masticar huesos enteros o croquetas duras de gran tamaño. Exige molienda mecánica u humectación.
+</div>
+</div>
+<!-- Card 2: Termorregulación -->
+<div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition-shadow">
+<div class="text-3xl mb-3">🔥</div>
+<h3 class="font-serif font-bold text-lg text-stone-900 mb-2">Disipación Térmica Acelerada</h3>
+<p class="text-xs text-stone-600 leading-relaxed mb-3">
+Al carecer de aislamiento piloso, irradian calor por convección constante. Su tasa metabólica basal se incrementa en climas templados o fríos para mantener la homeostasis.
+</p>
+<div class="bg-amber-50 p-3 rounded-lg border border-amber-200 text-xs text-amber-900 font-medium">
+<strong>Impacto Dietético:</strong> Mayor requerimiento calórico por kg (Ley Kleiber) pero predisposición a adiposidad si se excede el superávit.
+</div>
+</div>
+<!-- Card 3: Barrera Cutánea -->
+<div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition-shadow">
+<div class="text-3xl mb-3">🛡️</div>
+<h3 class="font-serif font-bold text-lg text-stone-900 mb-2">Barrera Cutánea Expuesta</h3>
+<p class="text-xs text-stone-600 leading-relaxed mb-3">
+La dermis funciona como única defensa contra radiación UV y desecación ambiental. Las glándulas sebáceas hipertróficas carecen de canal folicular completo.
+</p>
+<div class="bg-amber-50 p-3 rounded-lg border border-amber-200 text-xs text-amber-900 font-medium">
+<strong>Impacto Dietético:</strong> Demanda crítica de Omega-3 (EPA/DHA), Vitamina A (retinol) y Zinc para prevenir queratinización y acné.
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 3: SELECCIÓN Y ADMINISTRACIÓN DE CROQUETAS -->
+<section id="croquetas" class="bg-white rounded-2xl p-6 md:p-8 border border-stone-200 shadow-md space-y-8">
+<div class="border-l-4 border-clay-500 pl-4">
+<h2 class="text-2xl md:text-3xl font-serif font-bold text-stone-900">Alimentos Comerciales Extrudizados (Croquetas)</h2>
+<p class="text-stone-600 text-sm mt-1">Selección por etapa ontogénica, perfil proteico y manejo de sensibilidades dermatológicas.</p>
+</div>
+<!-- Chart & Intro Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+<div class="lg:col-span-5 space-y-4">
+<p class="text-stone-700 text-sm leading-relaxed">
+Para el criadero <strong>Xolos Ramírez</strong>, la elección de la croqueta debe ignorar mitos comerciales y enfocarse en la biodisponibilidad proteica y la matriz lipídica. El Xoloitzcuintle requiere proteínas de alto valor biológico para conservar masa muscular magra sin recargar la función renal o hepática.
+</p>
+<div class="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-2 text-xs text-stone-600">
+<div class="font-bold text-stone-800 text-sm mb-1">Puntos Clave por Etapa:</div>
+<p>• <strong>Cachorros:</strong> 28-32% Proteína | 15-20% Grasa | Relación Ca:P estricta (1.2:1). ¡Prohibido suplementar calcio extra!</p>
+<p>• <strong>Adultos:</strong> 24-28% Proteína | 12-15% Grasa | Proteínas hidrolizadas (&lt;10,000 Da) si hay atopia.</p>
+<p>• <strong>Seniors:</strong> Proteína digestible mantenida/elevada para sarcopenia | Condroprotectores incorporados.</p>
+</div>
+</div>
+<!-- Chart Container -->
+<div class="lg:col-span-7 bg-stone-50 p-4 rounded-xl border border-stone-200">
+<h3 class="text-xs font-bold text-stone-700 uppercase tracking-wider mb-2 text-center">
+Comparativa de Macronutrientes Recomendados por Etapa (% Materia Seca)
+</h3>
+<div class="chart-container">
+<canvas id="macronutrientChart"></canvas>
+</div>
+</div>
+</div>
+<!-- Life Stages Tabbed Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Cachorro -->
+<div class="bg-amberwood-50/50 p-5 rounded-xl border border-amberwood-200 space-y-3">
+<div class="flex items-center justify-between">
+<span class="font-serif font-bold text-lg text-amberwood-900">1. Cachorro</span>
+<span class="text-xs font-semibold px-2.5 py-1 bg-amberwood-200 text-amberwood-900 rounded-full">0 - 12 Meses</span>
+</div>
+<ul class="text-xs text-stone-700 space-y-2">
+<li class="flex items-start gap-1.5">
+<span class="text-clay-500 font-bold">•</span>
+<span><strong>DHA Obligatorio:</strong> Ácido graso Omega-3 clave para neurodesarrollo y agudeza visual.</span>
+</li>
+<li class="flex items-start gap-1.5">
+<span class="text-clay-500 font-bold">•</span>
+<span><strong>Sin Calcio Adicional:</strong> La suplementación induce osteodistrofia y displasia en talla Estándar.</span>
+</li>
+<li class="flex items-start gap-1.5">
+<span class="text-clay-500 font-bold">•</span>
+<span><strong>Textura Adaptada:</strong> Remojar en caldo de huesos templado si hay dolor durante la dentición decidua.</span>
+</li>
+</ul>
+</div>
+<!-- Adulto -->
+<div class="bg-amberwood-50/50 p-5 rounded-xl border border-amberwood-200 space-y-3">
+<div class="flex items-center justify-between">
+<span class="font-serif font-bold text-lg text-amberwood-900">2. Adulto</span>
+<span class="text-xs font-semibold px-2.5 py-1 bg-amberwood-200 text-amberwood-900 rounded-full">1 - 7 Años</span>
+</div>
+<ul class="text-xs text-stone-700 space-y-2">
+<li class="flex items-start gap-1.5">
+<span class="text-clay-500 font-bold">•</span>
+<span><strong>Líneas Clínicas / Sensibles:</strong> Ante atopia cutánea, recurrir a Hill's z/d (Pollo hidrolizado) o Royal Canin Hypoallergenic.</span>
+</li>
+<li class="flex items-start gap-1.5">
+<span class="text-clay-500 font-bold">•</span>
+<span><strong>Bionutrición Mixta:</strong> Mezlcar alimento húmedo (latas/paté) con alimento seco para formar bolo si falta dentición.</span>
+</li>
+<li class="flex items-start gap-1.5">
+<span class="text-clay-500 font-bold">•</span>
+<span><strong>2 Tomas Diarias:</strong> Evitar la sobrecarga gástrica y la regurgitación de croqueta entera.</span>
+</li>
+</ul>
+</div>
+<!-- Senior -->
+<div class="bg-amberwood-50/50 p-5 rounded-xl border border-amberwood-200 space-y-3">
+<div class="flex items-center justify-between">
+<span class="font-serif font-bold text-lg text-amberwood-900">3. Senior</span>
+<span class="text-xs font-semibold px-2.5 py-1 bg-amberwood-200 text-amberwood-900 rounded-full">&gt; 7 Años</span>
+</div>
+<ul class="text-xs text-stone-700 space-y-2">
+<li class="flex items-start gap-1.5">
+<span class="text-clay-500 font-bold">•</span>
+<span><strong>Prevención de Sarcopenia:</strong> No reducir proteina drásticamente; mantener fuentes de alta digestibilidad.</span>
+</li>
+<li class="flex items-start gap-1.5">
+<span class="text-clay-500 font-bold">•</span>
+<span><strong>Condroprotección:</strong> Glucosamina y Sulfato de Condroitina para regeneración articular.</span>
+</li>
+<li class="flex items-start gap-1.5">
+<span class="text-clay-500 font-bold">•</span>
+<span><strong>Antioxidantes:</strong> Vitamina E, C y Selenio para mitigar estrés oxidativo celular y deterioro cognitivo.</span>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- SECTION 4: DIETA BARF OPTIMIZADA Y MENÚ ROTATIVO -->
+<section id="barf" class="space-y-8">
+<div class="border-l-4 border-clay-500 pl-4">
+<h2 class="text-2xl md:text-3xl font-serif font-bold text-stone-900">Optimización BARF (Alimentación Cruda)</h2>
+<p class="text-stone-600 text-sm mt-1">Arquitectura biomolecular, norma innegociable de molienda y menú rotativo semanal.</p>
+</div>
+<!-- WARNING BOX FOR BONE GRINDING -->
+<div class="bg-red-50 border-2 border-red-300 rounded-2xl p-6 flex flex-col md:flex-row items-start md:items-center gap-4">
+<span class="text-4xl">🚨</span>
+<div class="space-y-1">
+<h3 class="text-lg font-serif font-bold text-red-900">REGLA CRÍTICA DE SEGURIDAD: Molienda Ósea Obligatoria</h3>
+<p class="text-xs md:text-sm text-red-800 leading-relaxed">
+Debido a la oligodoncia de la variedad desnuda (falta de premolares y molares desarrollados), <strong>NUNCA se deben ofrecer huesos carnosos enteros</strong>. Deben procesarse en molino industrial hasta obtener una pasta homogénea. Alternativamente, usar <em>Prey Model sin hueso</em> suplementado con polvo de cáscara de huevo o citrato de calcio. <strong>¡Cualquier hueso cocinado está estrictamente prohibido por riesgo mortal de astillamiento!</strong>
+</p>
+</div>
+</div>
+<!-- Plate Composer & Interactive Chart -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white p-6 md:p-8 rounded-2xl border border-stone-200 shadow-md">
+<div class="lg:col-span-6 space-y-4">
+<h3 class="font-serif font-bold text-xl text-stone-900 flex items-center gap-2">
+<span>🥩</span> Arquitectura Cuantitativa del Plato BARF
+</h3>
+<p class="text-xs md:text-sm text-stone-600 leading-relaxed">
+Formulación basada en la réplica anatómica de una presa natural. El 5% exclusivo de hígado es la fuente primaria de Vitamina A (Retinol) indispensable para la barrera epitelial del Xoloitzcuintle.
+</p>
+<div class="space-y-2 text-xs">
+<div class="flex justify-between items-center p-2 bg-stone-50 rounded border border-stone-200">
+<span class="font-semibold text-stone-800">Carne Muscular (50-60%)</span>
+<span class="text-stone-600">Proteína estructural, Taurina, Arginina</span>
+</div>
+<div class="flex justify-between items-center p-2 bg-stone-50 rounded border border-stone-200">
+<span class="font-semibold text-stone-800">Hueso Carnoso Triturado (15-20%)</span>
+<span class="text-stone-600">Matriz perfecta de Calcio y Fósforo</span>
+</div>
+<div class="flex justify-between items-center p-2 border-l-4 border-amber-500 bg-amber-50/50 rounded">
+<span class="font-semibold text-amber-900">Hígado Crudo (5% EXACTO)</span>
+<span class="text-amber-800 font-bold">Retinol (Vitamina A) para la Piel</span>
+</div>
+<div class="flex justify-between items-center p-2 bg-stone-50 rounded border border-stone-200">
+<span class="font-semibold text-stone-800">Otras Vísceras Secreción (5%)</span>
+<span class="text-stone-600">Riñón, Bazo (Cobre, Hierro, Zinc)</span>
+</div>
+<div class="flex justify-between items-center p-2 bg-stone-50 rounded border border-stone-200">
+<span class="font-semibold text-stone-800">Fitonutrientes Triturados (20%)</span>
+<span class="text-stone-600">70% Verduras bajo IG + 30% Frutas</span>
+</div>
+</div>
+</div>
+<div class="lg:col-span-6 bg-stone-50 p-4 rounded-xl border border-stone-200">
+<h4 class="text-xs font-bold text-stone-700 uppercase tracking-wider mb-2 text-center">
+Distribución Proporcional del Menú BARF
+</h4>
+<div class="chart-container">
+<canvas id="barfPieChart"></canvas>
+</div>
+</div>
+</div>
+<!-- INTERACTIVE WEEKLY ROTATION SCHEDULE -->
+<div class="bg-stone-900 text-stone-100 p-6 md:p-8 rounded-2xl space-y-6">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-800 pb-4">
+<div>
+<h3 class="text-xl md:text-2xl font-serif font-bold text-amber-400 flex items-center gap-2">
+<span>📅</span> Menú Semanal Rotativo para Xolos Ramírez
+</h3>
+<p class="text-xs text-stone-400 mt-1">Haz clic en un día para explorar los ingredientes y beneficios específicos.</p>
+</div>
+<!-- Day Buttons -->
+<div class="flex gap-1 overflow-x-auto hide-scrollbar pb-2 md:pb-0" id="dayButtonsContainer">
+<!-- Buttons added dynamically by JS -->
+</div>
+</div>
+<!-- Day Detail Display Card -->
+<div id="dayDetailCard" class="bg-stone-800/80 p-6 rounded-xl border border-stone-700 space-y-4">
+<!-- Dynamic Day Info Inserted by JS -->
+</div>
+</div>
+</section>
+<!-- SECTION 5: DERMATOLOGÍA CLÍNICA Y NUTRACÉUTICOS -->
+<section id="dermatologia" class="space-y-8">
+<div class="border-l-4 border-clay-500 pl-4">
+<h2 class="text-2xl md:text-3xl font-serif font-bold text-stone-900">Salud Dermatológica y Nutracéuticos</h2>
+<p class="text-stone-600 text-sm mt-1">Tratamiento ortomolecular de patologías cutáneas y moduladores sistémicos.</p>
+</div>
+<!-- Interactive Accordion for Skin Conditions -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<!-- Card 1: Acné Juvenil / Comedón -->
+<div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4">
+<div class="flex items-center gap-3">
+<span class="text-3xl">🌋</span>
+<div>
+<h3 class="font-serif font-bold text-lg text-stone-900">Síndrome de Comedón Canino (Acné)</h3>
+<span class="text-xs text-clay-600 font-semibold">Hipertrofia sebácea sin tallo piloso</span>
+</div>
+</div>
+<p class="text-xs text-stone-600 leading-relaxed">
+Ocurre por obturación folicular al combinarse sebo denso con hiperqueratosis epitelial en el rostro y dorso (común entre 6 y 18 meses).
+</p>
+<div class="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-2 text-xs">
+<div class="font-bold text-stone-800">Estrategia Nutricional Interna:</div>
+<p>• <strong>Modulación de Sebo:</strong> Reemplazar grasas saturadas por <em>Omega-3 PUFA</em> para fluidificar la secreción sebácea.</p>
+<p>• <strong>Vitamina A (Retinol):</strong> Normalizar la descamación de queratinocitos mediante inclusión regular de hígado crudo.</p>
+<p>• <strong>Higiene:</strong> Evitar tazones de plástico (acumulan bacterias) y baños excesivos con detergentes agresivos.</p>
+</div>
+</div>
+<!-- Card 2: Dermatosis por Zinc -->
+<div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4">
+<div class="flex items-center gap-3">
+<span class="text-3xl">🔬</span>
+<div>
+<h3 class="font-serif font-bold text-lg text-stone-900">Dermatosis por Respuesta al Zinc</h3>
+<p class="text-xs text-clay-600 font-semibold">Bloqueo absortivo o requerimiento dérmico elevado</p>
+</div>
+</div>
+<p class="text-xs text-stone-600 leading-relaxed">
+Produce eritema, costras gruesas fisuradas perioculares, en bocas y almohadillas debido a interferencia de fitatos o exceso de calcio.
+</p>
+<div class="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-2 text-xs">
+<div class="font-bold text-stone-800">Tratamiento de Elección:</div>
+<p>• <strong>Metionina de Zinc (Zinc Quelatado):</strong> Elude el bloqueo del calcio al absorberse por la vía de aminoácidos.</p>
+<p>• <strong>Dosis Clínica Recomendada:</strong> <code>1.7 a 2.0 mg / kg de peso / día</code> bajo estricto control veterinario.</p>
+<p>• <strong>Cisteína y Metionina:</strong> Aporte extra de aminoácidos azufrados para la síntesis de queratina.</p>
+</div>
+</div>
+</div>
+<!-- NUTRACEUTICALS GRID -->
+<div class="bg-amberwood-50/60 p-6 md:p-8 rounded-2xl border border-amberwood-200 space-y-6">
+<h3 class="font-serif font-bold text-xl text-amberwood-900 flex items-center gap-2">
+<span>🧪</span> Suplementación Funcional y Nutracéuticos
+</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Omega 3 -->
+<div class="bg-white p-4 rounded-xl border border-amberwood-200 shadow-sm space-y-2">
+<div class="text-2xl">🐟</div>
+<h4 class="font-bold text-stone-800 text-sm">Aceites Pelágicos (Omega-3)</h4>
+<p class="text-xs text-stone-600">
+EPA y DHA de anchoas/sardinas/krill. Antiinflamatorio sistémico que previene la "piel ceniza" y descamación.
+</p>
+</div>
+<!-- Bone Broth -->
+<div class="bg-white p-4 rounded-xl border border-amberwood-200 shadow-sm space-y-2">
+<div class="text-2xl">🥣</div>
+<h4 class="font-bold text-stone-800 text-sm">Caldo de Huesos (Bone Broth)</h4>
+<p class="text-xs text-stone-600">
+Decocción de 24h rica en colágeno, glicina y glucosamina. Repara la barrera intestinal y da firmeza a la dermis.
+</p>
+</div>
+<!-- Probiotics -->
+<div class="bg-white p-4 rounded-xl border border-amberwood-200 shadow-sm space-y-2">
+<div class="text-2xl">🥛</div>
+<h4 class="font-bold text-stone-800 text-sm">Kéfir / Tripa Verde</h4>
+<p class="text-xs text-stone-600">
+Moduladores del microbioma intestinal (Lactobacillus). El eje intestino-piel optimiza la absorción de nutrientes.
+</p>
+</div>
+<!-- Kelp -->
+<div class="bg-white p-4 rounded-xl border border-amberwood-200 shadow-sm space-y-2">
+<div class="text-2xl">🌿</div>
+<h4 class="font-bold text-stone-800 text-sm">Algas Kelp (Ascophyllum)</h4>
+<p class="text-xs text-stone-600">
+Aporte natural de Yodo tiroideo. Sus enzimas sistémicas impiden que la placa bacteriana se adhiera al esmalte dental.
+</p>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 6: TOXICOLOGÍA ALIMENTARIA -->
+<section id="toxicos" class="bg-white rounded-2xl p-6 md:p-8 border border-stone-200 shadow-md space-y-6">
+<div class="border-l-4 border-red-500 pl-4">
+<h2 class="text-2xl md:text-3xl font-serif font-bold text-stone-900">Toxicología Alimentaria</h2>
+<p class="text-stone-600 text-sm mt-1">Sustancias con prohibición absoluta por alta letalidad metabólica en cánidos.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Toxic 1 -->
+<div class="bg-red-50/50 p-4 rounded-xl border border-red-200 space-y-2">
+<div class="flex items-center justify-between">
+<span class="text-2xl">🍫</span>
+<span class="text-[10px] font-bold uppercase px-2 py-0.5 bg-red-200 text-red-900 rounded">Metilxantinas</span>
+</div>
+<h3 class="font-bold text-red-950 text-sm">Chocolate / Cacao / Café</h3>
+<p class="text-xs text-red-900/80">
+La teobromina bloquea receptores de adenosina en el SNC. Causa arritmias ventriculares, convulsiones y colapso cardio-respiratorio.
+</p>
+</div>
+<!-- Toxic 2 -->
+<div class="bg-red-50/50 p-4 rounded-xl border border-red-200 space-y-2">
+<div class="flex items-center justify-between">
+<span class="text-2xl">🧅</span>
+<span class="text-[10px] font-bold uppercase px-2 py-0.5 bg-red-200 text-red-900 rounded">Organosulfurados</span>
+</div>
+<h3 class="font-bold text-red-950 text-sm">Cebolla / Ajo / Puerro</h3>
+<p class="text-xs text-red-900/80">
+Los disulfuros desnaturalizan la hemoglobina formando <em>Cuerpos de Heinz</em>. El bazo destruye los glóbulos rojos provocando anemia hemolítica.
+</p>
+</div>
+<!-- Toxic 3 -->
+<div class="bg-red-50/50 p-4 rounded-xl border border-red-200 space-y-2">
+<div class="flex items-center justify-between">
+<span class="text-2xl">🍇</span>
+<span class="text-[10px] font-bold uppercase px-2 py-0.5 bg-red-200 text-red-900 rounded">Ácido Tartárico</span>
+</div>
+<h3 class="font-bold text-red-950 text-sm">Uvas y Pasas</h3>
+<p class="text-xs text-red-900/80">
+Provoca necrosis tubular renal aguda severa. Aún en dosis mínimas, puede derivar en insuficiencia renal anúrica e irreversible.
+</p>
+</div>
+<!-- Toxic 4 -->
+<div class="bg-red-50/50 p-4 rounded-xl border border-red-200 space-y-2">
+<div class="flex items-center justify-between">
+<span class="text-2xl">🍗</span>
+<span class="text-[10px] font-bold uppercase px-2 py-0.5 bg-red-200 text-red-900 rounded">Daño Mecánico</span>
+</div>
+<h3 class="font-bold text-red-950 text-sm">Huesos Cocinados</h3>
+<p class="text-xs text-red-900/80">
+El calor destruye la matriz de colágeno tornándolos frágiles y cortantes. Generan perforación gástrica, peritonitis y laceraciones mortales.
+</p>
+</div>
+</div>
+</section>
+<!-- CONCLUSION & FOOTER SUMMARY -->
+<section class="bg-stone-900 text-stone-300 p-8 rounded-2xl text-center space-y-4">
+<h2 class="text-2xl font-serif font-bold text-amber-400">Compromiso con la Excelencia - Criadero Xolos Ramírez</h2>
+<p class="max-w-3xl mx-auto text-xs md:text-sm text-stone-400 leading-relaxed">
+La preservación y salud del Xoloitzcuintle requiere trascender los enfoques comerciales genéricos. Al combinar el cálculo calórico exacto por Ley de Kleiber, la adaptación biomecánica para oligodoncia y el soporte ortomolecular cutáneo, aseguramos ejemplares longevos, estructuralmente sólidos y verdaderos exponentes de nuestra herencia cultural.
+</p>
+<div class="pt-4 border-t border-stone-800 text-[11px] text-stone-400 space-y-2">
+<p>Esta calculadora ofrece estimaciones orientativas y no sustituye una valoración veterinaria ni una formulación nutricional individual.</p>
+<p>Conoce más sobre nuestra crianza y seguimiento en la <a href="../index.html" class="text-amber-400 hover:underline">página principal de Xolos Ramírez</a> o consulta más <a href="index.html" class="text-amber-400 hover:underline">guías del blog</a>.</p>
+</div>
+</section>
+</main>
+<!-- FOOTER -->
+<footer class="bg-stone-950 text-stone-500 py-6 border-t border-stone-900 text-center text-xs">
+<div class="max-w-7xl mx-auto px-4">
+<p>© 2026 Criadero Xolos Ramírez - Protocolos de Nutrición y Salud Canina. <a href="../index.html" class="hover:text-amber-400 underline">Inicio</a> · <a href="index.html" class="hover:text-amber-400 underline">Blog</a></p>
+</div>
+</footer>
+<!-- JAVASCRIPT LOGIC -->
+<script>
+// --- DATA STORE ---
+const rotativeMenuData = [
+{
+day: "Lunes",
+title: "Perfil de Aves (Rico en Triptófano)",
+icon: "🍗",
+muscle: "Carne de pavo magra + Mollejas",
+bone: "Pasta molida de cuello de pollo",
+organs: "Hígado de pollo (5%) + Pulmón",
+veggies: "Puré de zanahoria con manzana",
+supplements: "Chorrito de aceite de oliva virgen extra prensado en frío"
+},
+{
+day: "Martes",
+title: "Perfil de Rumiantes (Hierro y Zinc)",
+icon: "🥩",
+muscle: "Recortes de carne de res magra",
+bone: "Pasta molida de carcasa aviar",
+organs: "Hígado de res (5%) + Riñón de res",
+veggies: "Puré verde de calabacín y espinacas",
+supplements: "1 Yema de huevo cruda (Colina y Biotina)"
+},
+{
+day: "Miércoles",
+title: "Perfil Pelágico (Dosis Masiva de Omegas)",
+icon: "🐟",
+muscle: "Pescados de agua fría enteros (Sardinas/Boquerones)",
+bone: "Incorparado en las espinas blandas del pescado entero",
+organs: "Hígado de res (5%) + Bazo",
+veggies: "Puré de calabaza / auyama",
+supplements: "Aceite de Krill / Salmón salvaje"
+},
+{
+day: "Jueves",
+title: "Perfil Mixto Ligero",
+icon: "🌾",
+muscle: "Muslo de pollo deshuesado",
+bone: "Pasta molida de ala de pollo",
+organs: "Hígado de pollo (5%) + Corazón",
+veggies: "Mix de vegetales verdes al vapor",
+supplements: "1 cucharadita de Caldo de Huesos"
+},
+{
+day: "Viernes",
+title: "Perfil Porcino Seguro (Congelación Previa)",
+icon: "🐖",
+muscle: "Lomo de cerdo ibérico (Congelado 3 sem a -20°C)",
+bone: "Pasta de hueso carnoso de ave molido",
+organs: "Hígado de cerdo (5%) + Riñón",
+veggies: "Brócoli al vapor y pera triturada",
+supplements: "Semillas de chía previamente hidratadas"
+},
+{
+day: "Sábado",
+title: "Perfil Simbiótico (Tripa Verde Probiótica)",
+icon: "🌿",
+muscle: "Tripa Verde de rumiante (No lavada)",
+bone: "Pasta de hueso carnoso molido",
+organs: "Hígado de res (5%) + Vísceras mixtas",
+veggies: "Puré vegetal variado",
+supplements: "1 Cucharada de Kéfir o yogur natural sin azúcar"
+},
+{
+day: "Domingo",
+title: "Proteína Novedosa Hipoalergénica",
+icon: "🦆",
+muscle: "Carne de conejo o pato",
+bone: "Pasta de hueso de conejo/pato molido",
+organs: "Hígado (5%) + Bazo / Páncreas",
+veggies: "Zanahoria y arándanos triturados",
+supplements: "Polvo de Alga Kelp (Ascophyllum nodosum)"
+}
+];
+let currentActiveDay = 0;
+let macronutrientChartInstance = null;
+let barfPieChartInstance = null;
+// --- CALCULATOR ENGINE ---
+function setPreset(weight) {
+document.getElementById('calcWeight').value = weight;
+document.getElementById('weightValue').innerText = weight;
+updateCalculations();
+}
+document.getElementById('calcWeight').addEventListener('input', (e) => {
+document.getElementById('weightValue').innerText = e.target.value;
+updateCalculations();
+});
+document.getElementById('calcFactor').addEventListener('change', updateCalculations);
+document.getElementById('calcCaloricDensity').addEventListener('input', updateCalculations);
+document.getElementById('calcBarfPercent').addEventListener('change', updateCalculations);
+function updateCalculations() {
+const weight = parseFloat(document.getElementById('calcWeight').value);
+const factor = parseFloat(document.getElementById('calcFactor').value);
+const dietModel = document.querySelector('input[name="dietModel"]:checked').value;
+// Toggle visibility of input controls
+if (dietModel === 'croquetas') {
+document.getElementById('croquetaInputs').classList.remove('hidden');
+document.getElementById('barfInputs').classList.add('hidden');
+} else {
+document.getElementById('croquetaInputs').classList.add('hidden');
+document.getElementById('barfInputs').classList.remove('hidden');
+}
+// Kleiber's Law: RER = 70 * (weight)^0.75
+const rer = Math.round(70 * Math.pow(weight, 0.75));
+const mer = Math.round(rer * factor);
+document.getElementById('outRER').innerText = rer.toLocaleString();
+document.getElementById('outMER').innerText = mer.toLocaleString();
+const resultBox = document.getElementById('rationResultBox');
+if (dietModel === 'croquetas') {
+const density = parseFloat(document.getElementById('calcCaloricDensity').value) || 3500;
+const dailyGrams = Math.round((mer / density) * 1000);
+const perMeal = Math.round(dailyGrams / 2);
+resultBox.innerHTML = `
+<div class="flex items-center justify-between border-b border-stone-100 pb-3">
+<span class="text-xs font-bold text-stone-600 uppercase">Ración Diaria Total de Croqueta:</span>
+<span class="text-xl font-bold font-serif text-clay-600">${dailyGrams} g / día</span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-xs pt-2">
+<div class="bg-stone-50 p-2.5 rounded border border-stone-200">
+<span class="text-stone-500 block">Toma Mañana:</span>
+<strong class="text-stone-800 text-sm">${perMeal} g</strong>
+</div>
+<div class="bg-stone-50 p-2.5 rounded border border-stone-200">
+<span class="text-stone-500 block">Toma Noche:</span>
+<strong class="text-stone-800 text-sm">${perMeal} g</strong>
+</div>
+</div>
+<p class="text-[11px] text-stone-500 italic mt-2">
+*Basado en densidad de ${density} kcal/kg. Si presenta oligodoncia, remojar con agua tibia antes de servir.
+</p>
+`;
+} else {
+const barfPercent = parseFloat(document.getElementById('calcBarfPercent').value);
+const totalBarfGrams = Math.round(weight * (barfPercent / 100) * 1000);
+const muscleGrams = Math.round(totalBarfGrams * 0.55);
+const boneGrams = Math.round(totalBarfGrams * 0.15);
+const liverGrams = Math.round(totalBarfGrams * 0.05);
+const organGrams = Math.round(totalBarfGrams * 0.05);
+const vegGrams = Math.round(totalBarfGrams * 0.20);
+resultBox.innerHTML = `
+<div class="flex items-center justify-between border-b border-amberwood-200 pb-2">
+<span class="text-xs font-bold text-stone-700 uppercase">Volumen Diario BARF (${barfPercent}%):</span>
+<span class="text-xl font-bold font-serif text-amberwood-900">${totalBarfGrams} g / día</span>
+</div>
+<div class="space-y-1.5 text-xs pt-2">
+<div class="flex justify-between">
+<span class="text-stone-600">🥩 Carne Muscular Magra (55%):</span>
+<strong class="text-stone-800">${muscleGrams} g</strong>
+</div>
+<div class="flex justify-between">
+<span class="text-stone-600">🦴 Hueso Carnoso Triturado (15%):</span>
+<strong class="text-red-700 font-bold">${boneGrams} g (Molido)</strong>
+</div>
+<div class="flex justify-between bg-amber-100/50 px-1 rounded">
+<span class="text-amber-900 font-semibold">🩸 Hígado Crudo (5% EXACTO):</span>
+<strong class="text-amber-900">${liverGrams} g</strong>
+</div>
+<div class="flex justify-between">
+<span class="text-stone-600">🫀 Otras Vísceras (5%):</span>
+<strong class="text-stone-800">${organGrams} g</strong>
+</div>
+<div class="flex justify-between">
+<span class="text-stone-600">🥗 Fitonutrientes Triturados (20%):</span>
+<strong class="text-stone-800">${vegGrams} g</strong>
+</div>
+</div>
+`;
+}
+}
+// --- RENDER WEEKLY ROTATIVE MENU ---
+function renderRotativeMenu() {
+const container = document.getElementById('dayButtonsContainer');
+container.innerHTML = rotativeMenuData.map((item, idx) => `
+<button onclick="selectMenuDay(${idx})" class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-all whitespace-nowrap ${idx === currentActiveDay ? 'bg-amber-400 text-stone-950 font-bold' : 'bg-stone-800 text-stone-300 hover:bg-stone-700'}">
+${item.icon} ${item.day}
+</button>
+`).join('');
+const active = rotativeMenuData[currentActiveDay];
+document.getElementById('dayDetailCard').innerHTML = `
+<div class="flex items-center justify-between border-b border-stone-700 pb-3">
+<div class="flex items-center gap-2">
+<span class="text-2xl">${active.icon}</span>
+<div>
+<h4 class="text-lg font-serif font-bold text-amber-300">${active.day}: ${active.title}</h4>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-stone-300">
+<div>
+<span class="text-stone-400 block mb-1">🥩 Carne Muscular:</span>
+<div class="p-2 bg-stone-900/60 rounded border border-stone-700/50 text-stone-200">${active.muscle}</div>
+</div>
+<div>
+<span class="text-stone-400 block mb-1">🦴 Hueso Carnoso (¡Molido!):</span>
+<div class="p-2 bg-stone-900/60 rounded border border-stone-700/50 text-stone-200">${active.bone}</div>
+</div>
+<div>
+<span class="text-stone-400 block mb-1">🩸 Vísceras Secretoras (5% Hígado):</span>
+<div class="p-2 bg-stone-900/60 rounded border border-stone-700/50 text-stone-200">${active.organs}</div>
+</div>
+<div>
+<span class="text-stone-400 block mb-1">🥗 Fitonutrientes (Puré):</span>
+<div class="p-2 bg-stone-900/60 rounded border border-stone-700/50 text-stone-200">${active.veggies}</div>
+</div>
+</div>
+<div class="bg-amber-950/40 border border-amber-800/40 p-3 rounded-lg text-xs text-amber-200">
+<strong>✨ Suplementación Funcional del Día:</strong> ${active.supplements}
+</div>
+`;
+}
+function selectMenuDay(idx) {
+currentActiveDay = idx;
+renderRotativeMenu();
+}
+// --- CHARTS INITIALIZATION (Chart.js) ---
+function initCharts() {
+// Chart 1: Macronutrient Bar Chart
+const ctxMacro = document.getElementById('macronutrientChart').getContext('2d');
+macronutrientChartInstance = new Chart(ctxMacro, {
+type: 'bar',
+data: {
+labels: ['Cachorro (0-12m)', 'Adulto (1-7a)', 'Senior (>7a)'],
+datasets: [
+{
+label: 'Proteína Mínima (%)',
+data: [30, 26, 28],
+backgroundColor: '#C2593F',
+},
+{
+label: 'Grasa/Lípidos (%)',
+data: [18, 14, 11],
+backgroundColor: '#D9A05B',
+},
+{
+label: 'Carbohidratos/Fibra (%)',
+data: [38, 48, 49],
+backgroundColor: '#8C6D46',
+}
+]
+},
+options: {
+responsive: true,
+maintainAspectRatio: false,
+plugins: {
+legend: {
+position: 'bottom',
+labels: { boxWidth: 12, font: { size: 11 } }
+},
+tooltip: {
+callbacks: {
+label: function(context) {
+let label = context.dataset.label || '';
+if (label) label += ': ';
+if (context.parsed.y !== null) label += context.parsed.y + '%';
+return label;
+}
+}
+}
+},
+scales: {
+y: {
+beginAtZero: true,
+max: 60,
+title: { display: true, text: 'Porcentaje en Materia Seca (%)', font: { size: 10 } }
+}
+}
+}
+});
+// Chart 2: BARF Donut Chart
+const ctxBarf = document.getElementById('barfPieChart').getContext('2d');
+barfPieChartInstance = new Chart(ctxBarf, {
+type: 'doughnut',
+data: {
+labels: [
+'Carne Muscular (55%)',
+'Hueso Triturado (15%)',
+'Hígado Crudo (5%)',
+'Otras Vísceras (5%)',
+'Fitonutrientes (20%)'
+],
+datasets: [{
+data: [55, 15, 5, 5, 20],
+backgroundColor: [
+'#C2593F', // Reddish Clay
+'#D9A05B', // Bronze
+'#732C1C', // Dark Liver Red
+'#8C6D46', // Muted Brown
+'#4A7C59'  // Green Veggie
+],
+borderWidth: 2,
+borderColor: '#ffffff'
+}]
+},
+options: {
+responsive: true,
+maintainAspectRatio: false,
+plugins: {
+legend: {
+position: 'bottom',
+labels: { boxWidth: 12, font: { size: 11 } }
+}
+}
+}
+});
+}
+// Initialize on DOM Ready
+document.addEventListener('DOMContentLoaded', () => {
+updateCalculations();
+renderRotativeMenu();
+initCharts();
+});
+</script>
+</body>
+</html>
