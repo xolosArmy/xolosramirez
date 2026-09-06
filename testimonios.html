@@ -43,11 +43,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@400;600&display=swap"
       rel="stylesheet"
     />
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="icon" type="image/x-icon" href="assets/xolosramirez.ico" />
-  </head>
-  <body>
+  <link rel="stylesheet" href="/css/journey.css?v=20260906">
+<script src="/js/journey.js?v=20260906" defer></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://xolosramirez.com/"}, {"@type": "ListItem", "position": 2, "name": "Qué dicen nuestros adoptantes", "item": "https://xolosramirez.com/testimonios.html"}]}</script>
+</head>
+  <body class="journey-page journey-editorial">
     <!-- Google Tag Manager (noscript) -->
     <noscript>
       <iframe
@@ -59,44 +62,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </noscript>
     <!-- End Google Tag Manager (noscript) -->
     <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
-    <header class="site-header">
-      <div class="container header-row">
-        <a class="brand" href="index.html">
-          <img
-            src="img/brand/XolosRamirez.jpg"
-            alt="Xolos Ramírez"
-            width="44"
-            height="44"
-            loading="eager"
-            decoding="async"
-          />
-          <span>Xolos Ramírez</span>
-        </a>
-
-        <button class="hamburger" aria-expanded="false" aria-controls="menu">☰</button>
-
-        <nav id="menu" class="nav-menu" data-visible="false">
-          <ul>
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="xolos-disponibles.html">Xolos disponibles</a></li>
-            <li><a href="galeria.html">Galería</a></li>
-            <li><a href="testimonios.html">Testimonios</a></li>
-            <li><a href="blog/index.html">Blog</a></li>
-            <li><a href="contacto.html">Contacto</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
+    <header class="site-header"><div class="container header-row">
+      <a class="brand" href="/"><img src="/img/brand/XolosRamirez.jpg" alt="" width="44" height="44" decoding="async"><span>Xolos Ramírez</span></a>
+      <button class="hamburger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir navegación">☰</button>
+      <nav id="menu" class="nav-menu" data-visible="false" aria-label="Navegación principal"><ul>
+        <li><a href="/xolos-disponibles.html">Xolos disponibles</a></li><li><a href="/xolos-disponibles.html#proceso">El proceso</a></li><li><a href="/testimonios.html">Familias</a></li><li><a href="/blog/index.html">Blog y guías</a></li>
+        <li><details class="nav-universe"><summary>Nuestro universo</summary><ul><li><a href="/teyolias-guardiania.html">Teyolías</a></li><li><a href="/xolo-skin-care/" data-gtm="naturals-nav" data-gtm-origin="nav">Xolo Skin Care</a></li><li><a href="https://xolosarmy.xyz">xolosArmy Network ↗</a></li></ul></details></li>
+        <li><a class="nav-contact" href="/contacto.html">Contacto</a></li>
+        <li><a class="lang-switch" href="/en/index.html" lang="en" hreflang="en">English</a></li>
+      </ul></nav>
+    </div></header>
 
     <main id="contenido-principal">
-      <section class="hero" data-aos="fade-in" data-aos-duration="1200">
+<nav class="journey-breadcrumb" aria-label="Migas de pan"><a href="/">Inicio</a><span aria-hidden="true"> / </span><span aria-current="page">Qué dicen nuestros adoptantes</span></nav>
+      <section class="hero journey-intro">
         <div class="hero__media" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1;">
-          <iframe 
-            src="https://www.youtube.com/embed/dSgxcEPBxws?si=LZZyFqWyxYAyKDkj&autoplay=1&mute=1&controls=0&loop=1&playlist=dSgxcEPBxws" 
-            title="YouTube video player" 
+          <iframe
+            src="https://www.youtube.com/embed/dSgxcEPBxws?si=LZZyFqWyxYAyKDkj&autoplay=1&mute=1&controls=0&loop=1&playlist=dSgxcEPBxws"
+            title="YouTube video player"
             loading="eager"
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowfullscreen
             style="position: absolute; top: 50%; left: 50%; width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; transform: translate(-50%, -50%); pointer-events: none;">
           </iframe>
@@ -107,7 +93,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </div>
       </section>
 
-      <section id="historias-reales" data-aos="fade-up" data-aos-duration="1000">
+      <section id="historias-reales">
         <h2>Historias Reales</h2>
         <div class="grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; padding: 2rem 0;">
 
@@ -400,7 +386,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </div>
       </section>
 
-      <section data-aos="fade-up" data-aos-duration="1000">
+      <section>
         <h2>Comparte tu historia</h2>
         <p>
           Queremos escuchar cómo el xoloitzcuintle ha marcado tu vida. Envía tu
@@ -409,7 +395,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </p>
         <a href="contacto.html">Enviar testimonio</a>
       </section>
-    </main>
+    <section class="journey-next" aria-labelledby="next-step-title"><div><p class="eyebrow">Tu siguiente paso</p><h2 id="next-step-title">Imagina tu vida con un xolo</h2><p>Conoce a los ejemplares disponibles o cuéntanos cómo es tu familia para orientarte.</p></div><div class="journey-actions"><a class="btn" data-funnel-step="view_profiles" href="/xolos-disponibles.html">Ver xolos disponibles</a><a class="btn btn--secondary" data-funnel-step="contact" href="/contacto.html">Conversemos</a></div></section>
+</main>
 
     <footer>
       <div class="footer-grid">
@@ -436,10 +423,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       </div>
       <p class="copyright">© 2025 Xolos Ramírez. Todos los derechos reservados.</p>
     </footer>
-    <script src="js/main.js" defer></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-      AOS.init({ once: true, duration: 700, offset: 60, easing: 'ease-out' });
-    </script>
+    <script src="/js/main.js?v=20260906-journey" defer></script>
+
+
   </body>
 </html>

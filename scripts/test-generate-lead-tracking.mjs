@@ -81,45 +81,45 @@ for (const path of ['index.html', 'en/index.html']) {
   assert.ok(/class="[^"]*(wa-float|home-email-float)[^"]*"[\s\S]*?data-cta="email"[\s\S]*?data-lead-type="generate_lead"/.test(html), path + ' must keep floating email lead CTA');
 }
 
-const floatingVideoCallExpectations = [
+const floatingWhatsAppExpectations = [
   {
     path: 'xolos-disponibles.html',
     lang: 'es',
-    visibleText: 'Agendar videollamada',
-    accessibleText: 'Agendar videollamada con Xolos Ramírez',
+    visibleText: 'Consultar por WhatsApp',
+    accessibleText: 'Consultar por WhatsApp con Xolos Ramírez',
   },
   {
     path: 'en/available-xolos.html',
     lang: 'en',
-    visibleText: 'Book a video call',
-    accessibleText: 'Book a video call with Xolos Ramírez',
+    visibleText: 'Contact by WhatsApp',
+    accessibleText: 'Contact by WhatsApp with Xolos Ramírez',
   },
 ];
 
-for (const expectation of floatingVideoCallExpectations) {
+for (const expectation of floatingWhatsAppExpectations) {
   const html = read(expectation.path);
 
   const matches = html.match(
-    /<a(?=[^>]*class="[^"]*\bvideo-call-float\b[^"]*")[^>]*>[\s\S]*?<\/a>/g
+    /<a(?=[^>]*class="[^"]*\bwa-float\b[^"]*")[^>]*>[\s\S]*?<\/a>/g
   ) || [];
 
   assert.equal(
     matches.length,
     1,
-    expectation.path + ' must have exactly one floating video-call CTA'
+    expectation.path + ' must have exactly one floating WhatsApp CTA'
   );
 
   const cta = matches[0];
 
   includes(
     cta,
-    'href="https://calendar.app.google/1PXNvJM42iZ3JMHC8"',
-    expectation.path + ' must use the exact Calendar booking URL'
+    'href="https://wa.me/message/435RTKGJLTX2J1"',
+    expectation.path + ' must use the current WhatsApp URL'
   );
 
   includes(
     cta,
-    'class="home-email-float video-call-float cta-lead"',
+    'class="home-email-float wa-float cta-lead"',
     expectation.path + ' must keep the visual class and add the semantic class'
   );
 
@@ -137,8 +137,8 @@ for (const expectation of floatingVideoCallExpectations) {
 
   includes(
     cta,
-    'data-cta="video_call"',
-    expectation.path + ' must track the video-call channel'
+    'data-cta="whatsapp"',
+    expectation.path + ' must track the WhatsApp channel'
   );
 
   includes(
@@ -149,8 +149,8 @@ for (const expectation of floatingVideoCallExpectations) {
 
   includes(
     cta,
-    'data-lead-intent="video_call_request"',
-    expectation.path + ' must declare booking intent'
+    'data-lead-intent="price_inquiry"',
+    expectation.path + ' must declare inquiry intent'
   );
 
   for (const attribute of [
@@ -166,7 +166,7 @@ for (const expectation of floatingVideoCallExpectations) {
   includes(
     cta,
     'class="home-email-float__text">' + expectation.visibleText + '</span>',
-    expectation.path + ' must show the localized booking text'
+    expectation.path + ' must show the localized inquiry text'
   );
 
   includes(
@@ -183,19 +183,19 @@ for (const expectation of floatingVideoCallExpectations) {
 
   notMatches(
     cta,
-    /mailto:|data-cta="email"|data-lead-intent="price_inquiry"/i,
+    /mailto:|data-cta="email"|data-lead-intent="video_call_request"/i,
     expectation.path + ' must not retain floating email behavior'
   );
 
   assert.equal(
-    /(?:wa\.me|api\.whatsapp\.com|whatsapp:\/\/)/i.test(cta),
+    /calendar\.app\.google/i.test(cta),
     false,
-    expectation.path + ' must not keep floating WhatsApp'
+    expectation.path + ' must not label the WhatsApp action as calendar booking'
   );
 
   includes(
     html,
-    'href="https://wa.me/qr/R2F5PRQYZSJOA1"',
+    'href="https://wa.me/message/435RTKGJLTX2J1"',
     expectation.path + ' must keep the non-floating WhatsApp CTA'
   );
 

@@ -115,17 +115,27 @@ const navMenu = document.getElementById('menu');
 const navToggle = document.querySelector('.hamburger');
 
 if (navToggle && navMenu) {
-  navToggle.addEventListener('click', () => {
-    const isVisible = navMenu.getAttribute('data-visible') === 'true';
-    navMenu.setAttribute('data-visible', String(!isVisible));
-    navToggle.setAttribute('aria-expanded', String(!isVisible));
-  });
-
+  navMenu.dataset.enhanced = 'true';
+  navToggle.dataset.enhanced = 'true';
+  const isEnglish = document.documentElement.lang.toLowerCase().startsWith('en');
+  const setMenu = (visible, restoreFocus = false) => {
+    navMenu.setAttribute('data-visible', String(visible));
+    navToggle.setAttribute('aria-expanded', String(visible));
+    navToggle.setAttribute('aria-label', isEnglish
+      ? (visible ? 'Close navigation' : 'Open navigation')
+      : (visible ? 'Cerrar navegación' : 'Abrir navegación'));
+    if (restoreFocus) navToggle.focus();
+  };
+  setMenu(false);
+  navToggle.addEventListener('click', () => setMenu(navMenu.getAttribute('data-visible') !== 'true'));
   navMenu.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      navMenu.setAttribute('data-visible', 'false');
-      navToggle.setAttribute('aria-expanded', 'false');
-    });
+    link.addEventListener('click', () => setMenu(false));
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && navMenu.getAttribute('data-visible') === 'true') setMenu(false, true);
+  });
+  document.addEventListener('click', (event) => {
+    if (!navMenu.contains(event.target) && !navToggle.contains(event.target)) setMenu(false);
   });
 }
 
@@ -138,11 +148,10 @@ if (navMenu) {
     const href = link.getAttribute('href');
     if (!href) return;
 
-    const targetPath = new URL(href, window.location.origin + window.location.pathname)
-      .pathname.replace(/\/index\.html$/, '/');
-    const isCurrentPage =
-      (targetPath !== '/' && currentPath.endsWith(targetPath)) ||
-      (targetPath === '/' && currentPath === '/');
+    const targetUrl = new URL(href, window.location.origin + window.location.pathname);
+    const targetPath = targetUrl.pathname.replace(/\/index\.html$/, '/');
+    const isCurrentPage = targetUrl.origin === window.location.origin
+      && !targetUrl.hash && targetPath === currentPath;
 
     if (isCurrentPage) link.setAttribute('aria-current', 'page');
   });
@@ -314,7 +323,8 @@ function initializePuppyCarousels() {
 
     const goToSlide = (index) => {
       const nextIndex = (index + slides.length) % slides.length;
-      track.scrollTo({ left: slides[nextIndex].offsetLeft, behavior: 'smooth' });
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({ left: slides[nextIndex].offsetLeft, behavior: reducedMotion ? 'auto' : 'smooth' });
       updateActiveSlide(nextIndex);
     };
 
@@ -335,6 +345,8 @@ function initializePuppyCarousels() {
       });
     }
 
+    if (previousButton) previousButton.hidden = false;
+    if (nextButton) nextButton.hidden = false;
     previousButton?.addEventListener('click', () => goToSlide(activeIndex - 1));
     nextButton?.addEventListener('click', () => goToSlide(activeIndex + 1));
     track.addEventListener('keydown', (event) => {
@@ -361,338 +373,6 @@ function initializePuppyCarousels() {
   });
 }
 
-function getAvailableXolosGrid() {
-  return document.querySelector('main .puppy-grid');
-}
-
-function isAvailableXolosPage() {
-  return Boolean(getAvailableXolosGrid());
-}
-
-function isEnglishAvailableXolosPage() {
-  return isAvailableXolosPage() && document.documentElement.lang.toLowerCase().startsWith('en');
-}
-
-function updateAvailableXolosCtas() {
-  if (!isAvailableXolosPage()) return;
-
-  const isEnglishPage = isEnglishAvailableXolosPage();
-  const language = isEnglishPage ? 'en' : 'es';
-  const labels = isEnglishPage
-    ? {
-        video: 'Book a video call',
-        videoAria: 'Book a video call with Xolos Ramírez',
-        whatsapp: 'Contact by WhatsApp',
-        whatsappAria: 'Contact Xolos Ramírez by WhatsApp',
-      }
-    : {
-        video: 'Agendar videollamada',
-        videoAria: 'Agendar videollamada con Xolos Ramírez',
-        whatsapp: 'Consultar por WhatsApp',
-        whatsappAria: 'Consultar por WhatsApp con Xolos Ramírez',
-      };
-
-  const commercialSection = document.getElementById(
-    isEnglishPage ? 'commercial-info-en' : 'commercial-info-es',
-  )?.closest('section');
-  const actions = commercialSection?.querySelector('.puppy-card__actions');
-  const firstAction = actions?.querySelector('a');
-
-  if (firstAction) {
-    firstAction.href = 'https://calendar.app.google/1PXNvJM42iZ3JMHC8';
-    firstAction.target = '_blank';
-    firstAction.rel = 'noopener noreferrer';
-    firstAction.textContent = labels.video;
-    firstAction.setAttribute('aria-label', labels.videoAria);
-    firstAction.dataset.cta = 'video_call';
-    firstAction.dataset.leadType = 'generate_lead';
-    firstAction.dataset.leadIntent = 'video_call_request';
-    firstAction.dataset.profile = 'general';
-    firstAction.dataset.pageType = 'available-xolos';
-    firstAction.dataset.lang = language;
-    firstAction.classList.remove('cta-email');
-    firstAction.classList.add('video-call-cta');
-  }
-
-  const floatingCta = document.querySelector(
-    'a.home-email-float.video-call-float, a.home-email-float[data-cta="video_call"]',
-  );
-  if (floatingCta) {
-    floatingCta.href = CURRENT_WHATSAPP_LINK;
-    floatingCta.target = '_blank';
-    floatingCta.rel = 'noopener noreferrer';
-    floatingCta.setAttribute('aria-label', labels.whatsappAria);
-    floatingCta.setAttribute('title', labels.whatsappAria);
-    floatingCta.dataset.cta = 'whatsapp';
-    floatingCta.dataset.leadType = 'generate_lead';
-    floatingCta.dataset.leadIntent = 'price_inquiry';
-    floatingCta.dataset.ctaLocation = 'floating';
-    floatingCta.dataset.profile = 'general';
-    floatingCta.dataset.status = 'not_applicable';
-    floatingCta.dataset.pageType = 'available-xolos';
-    floatingCta.dataset.lang = language;
-    floatingCta.classList.remove('video-call-float');
-    floatingCta.classList.add('wa-float');
-
-    const icon = floatingCta.querySelector('.home-email-float__icon');
-    const text = floatingCta.querySelector('.home-email-float__text');
-    if (icon) icon.textContent = '💬';
-    if (text) text.textContent = labels.whatsapp;
-  }
-}
-
-function updateXilonenProfileVideo() {
-  const existingVideoUrl = 'https://www.youtube.com/embed/nrZ-PhE4bHA?autoplay=1&mute=1';
-  const shortVideos = [
-    {
-      id: 'rYDusjW9Gi0',
-      url: 'https://www.youtube.com/embed/rYDusjW9Gi0?autoplay=1&mute=1',
-      titleEn: 'Xilonen Ramirez miniature Xoloitzcuintli puppy playing with Oce',
-      titleEs: 'Xilonen Ramirez, cachorra xoloitzcuintle miniatura jugando con Oce',
-    },
-    {
-      id: 'WRLhCdu21Q4',
-      url: 'https://www.youtube.com/embed/WRLhCdu21Q4?autoplay=1&mute=1',
-      titleEn: 'Xilonen Ramirez miniature Xoloitzcuintli puppy — new video',
-      titleEs: 'Xilonen Ramirez, cachorra xoloitzcuintle miniatura — nuevo video',
-    },
-    {
-      id: 'ZPJT-BzwZhU',
-      url: 'https://www.youtube.com/embed/ZPJT-BzwZhU?autoplay=1&mute=1',
-      titleEn: 'Xilonen Ramirez miniature Xoloitzcuintli puppy — latest video',
-      titleEs: 'Xilonen Ramirez, cachorra xoloitzcuintle miniatura — video más reciente',
-    },
-  ];
-  const grid = getAvailableXolosGrid();
-  if (!grid) return;
-
-  const isEnglish = document.documentElement.lang.toLowerCase().startsWith('en');
-
-  Array.from(grid.querySelectorAll('.puppy-card')).forEach((card) => {
-    const name = card.querySelector('.puppy-card__name')?.textContent.trim();
-    if (name !== 'Xilonen Ramirez') return;
-
-    const existingVideo = card.querySelector('.puppy-video-container');
-    const existingIframe = existingVideo?.querySelector('iframe');
-    if (existingIframe) existingIframe.setAttribute('src', existingVideoUrl);
-    if (!existingVideo) return;
-
-    let insertAfter = existingVideo;
-    shortVideos.forEach((video) => {
-      const currentVideo = card.querySelector(`[data-xilonen-video="${video.id}"]`);
-      if (currentVideo) {
-        insertAfter = currentVideo;
-        return;
-      }
-
-      const newVideo = existingVideo.cloneNode(true);
-      newVideo.dataset.xilonenVideo = video.id;
-      const newIframe = newVideo.querySelector('iframe');
-      if (newIframe) {
-        newIframe.setAttribute('src', video.url);
-        newIframe.setAttribute('title', isEnglish ? video.titleEn : video.titleEs);
-      }
-      insertAfter.insertAdjacentElement('afterend', newVideo);
-      insertAfter = newVideo;
-    });
-  });
-}
-
-function updateXilonenPersonality() {
-  const grid = getAvailableXolosGrid();
-  if (!grid) return;
-
-  const isEnglish = document.documentElement.lang.toLowerCase().startsWith('en');
-  const personality = isEnglish
-    ? 'Personality: curious, alert and exploratory. Xilonen is an observant little puppy who confidently investigates her surroundings and enjoys approaching people.'
-    : 'Personalidad: curiosa, despierta y exploradora. Xilonen es una cachorrita observadora que investiga su entorno con confianza y disfruta acercarse a las personas.';
-
-  Array.from(grid.querySelectorAll('.puppy-card')).forEach((card) => {
-    const name = card.querySelector('.puppy-card__name')?.textContent.trim();
-    if (name !== 'Xilonen Ramirez') return;
-    if (card.querySelector('[data-profile-personality="xilonen"]')) return;
-
-    const details = card.querySelector('.puppy-card__details');
-    if (!details) return;
-    const paragraph = document.createElement('p');
-    paragraph.dataset.profilePersonality = 'xilonen';
-    paragraph.className = 'puppy-card__personality';
-    paragraph.textContent = personality;
-    details.insertAdjacentElement('afterend', paragraph);
-  });
-}
-
-function updateYohualliProfileVideo() {
-  const oldVideoUrl = 'https://www.youtube.com/embed/Rv1AIlVnE6s';
-  const newVideoUrl = 'https://www.youtube.com/embed/rBWNyLjg31Q';
-  document.querySelectorAll(`iframe[src="${oldVideoUrl}"]`).forEach((iframe) => {
-    iframe.setAttribute('src', newVideoUrl);
-  });
-}
-
-function insertTlilxochitlProfile() {
-  const grid = getAvailableXolosGrid();
-  if (!grid || grid.querySelector('[data-profile-card="tlilxochitl"]')) return;
-
-  const isEnglish = document.documentElement.lang.toLowerCase().startsWith('en');
-  const imagePrefix = isEnglish ? '../img/xolos/' : 'img/xolos/';
-  const labels = isEnglish
-    ? {
-        status: 'Available',
-        carousel: 'Tlilxóchitl Ramirez photo carousel',
-        role: 'carousel',
-        previous: 'Previous photo',
-        next: 'Next photo',
-        select: 'Select photo',
-        ageLabel: 'Age',
-        age: 'Newborn · August 3, 2026',
-        genderLabel: 'Gender',
-        gender: 'Female',
-        sizeLabel: 'Size',
-        size: 'Intermediate / Medium',
-        colorLabel: 'Color',
-        color: 'Black',
-        alt1: 'Tlilxóchitl Ramirez, hairless Xoloitzcuintli puppy, in a close-up on a blanket beside an adult Xolo',
-        alt2: 'Tlilxóchitl Ramirez, hairless Xoloitzcuintli puppy, resting by a window and looking at the camera',
-        alt3: 'Tlilxóchitl Ramirez, hairless Xoloitzcuintli puppy, interacting with her mother by a window',
-        alt4: "Tlilxóchitl Ramirez, hairless Xoloitzcuintli puppy, cuddling and nuzzling her mother's face in two moments",
-        videoTitle: 'Tlilxóchitl Ramirez, Xoloitzcuintli puppy — recent video',
-        latestVideoTitle: 'Tlilxóchitl Ramirez, Xoloitzcuintli puppy — new video',
-        newestVideoTitle: 'Tlilxóchitl Ramirez, Xoloitzcuintli puppy — latest video',
-        personality: 'Personality: calm, affectionate, and observant. Tlilxóchitl is a curious and confident puppy who enjoys human contact and explores her surroundings with a sweet, serene energy.',
-        subject: 'Inquiry about Tlilxóchitl Ramirez [Ref: tlilxochitl-en-available]',
-        body: 'Hello, I saw Tlilxóchitl Ramirez on the Xolos Ramírez website and would like to learn more about her availability, price, and reservation process.',
-        cta: 'Contact via Email',
-        aria: 'Contact by email about Tlilxóchitl',
-        lang: 'en',
-        buttonStyle: '',
-      }
-    : {
-        status: 'Disponible',
-        carousel: 'Carrusel de fotos de Tlilxóchitl Ramirez',
-        role: 'carrusel',
-        previous: 'Foto anterior',
-        next: 'Foto siguiente',
-        select: 'Seleccionar foto',
-        ageLabel: 'Edad',
-        age: 'Recién nacida · 3 de agosto de 2026',
-        genderLabel: 'Género',
-        gender: 'Hembra',
-        sizeLabel: 'Talla',
-        size: 'Intermedia',
-        colorLabel: 'Color',
-        color: 'Negro',
-        alt1: 'Tlilxóchitl Ramírez, cachorra xoloitzcuintle sin pelo, en primer plano sobre una manta junto a una xolo adulta',
-        alt2: 'Tlilxóchitl Ramírez, cachorra xoloitzcuintle sin pelo, descansando junto a una ventana y mirando a la cámara',
-        alt3: 'Tlilxóchitl Ramírez, cachorra xoloitzcuintle sin pelo, conviviendo con su madre junto a una ventana',
-        alt4: 'Tlilxóchitl Ramírez, cachorra xoloitzcuintle sin pelo, acurrucándose y tocando el rostro de su madre en dos momentos',
-        videoTitle: 'Tlilxóchitl Ramírez, cachorra xoloitzcuintle — video reciente',
-        latestVideoTitle: 'Tlilxóchitl Ramírez, cachorra xoloitzcuintle — nuevo video',
-        newestVideoTitle: 'Tlilxóchitl Ramírez, cachorra xoloitzcuintle — video más reciente',
-        personality: 'Personalidad: tranquila, cariñosa y observadora. Tlilxóchitl es una bebé curiosa y confiada, disfruta el contacto humano y explora su entorno con una energía dulce y serena.',
-        subject: 'Consulta sobre Tlilxóchitl Ramirez [Ref: tlilxochitl-es-available]',
-        body: 'Hola, vi el perfil de Tlilxóchitl Ramirez en Xolos Ramírez y me interesa conocer más sobre su disponibilidad, precio y proceso de reserva.',
-        cta: 'Correo directo ✉️',
-        aria: 'Escribir por correo sobre Tlilxóchitl',
-        lang: 'es',
-        buttonStyle: 'background-color: #25D366; border-color: #25D366; width: 100%; justify-content: center;',
-      };
-
-  const article = document.createElement('article');
-  article.className = 'puppy-card';
-  article.dataset.profileCard = 'tlilxochitl';
-  article.dataset.aos = 'fade-up';
-  article.dataset.aosDuration = '800';
-  article.dataset.aosDelay = '200';
-  article.innerHTML = `
-    <div class="puppy-card__image-wrapper">
-      <span class="puppy-card__status status-disponible">${labels.status}</span>
-      <div class="puppy-carousel" data-puppy-carousel role="region" aria-roledescription="${labels.role}" aria-label="${labels.carousel}">
-        <div class="puppy-carousel__track" tabindex="0">
-          <div class="puppy-carousel__slide">
-            <img src="${imagePrefix}tlilxochitl-ramirez-septiembre-2026-primer-plano.webp" alt="${labels.alt1}" class="puppy-card__image" width="900" height="1200" loading="lazy" decoding="async" draggable="false" style="object-fit: contain;" />
-          </div>
-          <div class="puppy-carousel__slide">
-            <img src="${imagePrefix}tlilxochitl-ramirez-septiembre-2026-descansando-ventana.webp" alt="${labels.alt2}" class="puppy-card__image" width="900" height="1200" loading="lazy" decoding="async" draggable="false" style="object-fit: contain;" />
-          </div>
-          <div class="puppy-carousel__slide">
-            <img src="${imagePrefix}tlilxochitl-ramirez-septiembre-2026-con-madre.webp" alt="${labels.alt3}" class="puppy-card__image" width="1200" height="900" loading="lazy" decoding="async" draggable="false" style="object-fit: contain;" />
-          </div>
-          <div class="puppy-carousel__slide">
-            <img src="${imagePrefix}tlilxochitl-ramirez-septiembre-2026-caricias-madre.webp" alt="${labels.alt4}" class="puppy-card__image" width="1200" height="1066" loading="lazy" decoding="async" draggable="false" style="object-fit: contain;" />
-          </div>
-        </div>
-        <button class="puppy-carousel__button puppy-carousel__button--previous" type="button" aria-label="${labels.previous}">&#8592;</button>
-        <button class="puppy-carousel__button puppy-carousel__button--next" type="button" aria-label="${labels.next}">&#8594;</button>
-        <div class="puppy-carousel__dots" aria-label="${labels.select}"></div>
-        <p class="puppy-carousel__live" aria-live="polite" aria-atomic="true"></p>
-      </div>
-    </div>
-    <div class="puppy-card__content">
-      <h3 class="puppy-card__name">Tlilxóchitl Ramirez</h3>
-      <ul class="puppy-card__details">
-        <li><strong>${labels.ageLabel}</strong>${labels.age}</li>
-        <li><strong>${labels.genderLabel}</strong>${labels.gender}</li>
-        <li><strong>${labels.sizeLabel}</strong>${labels.size}</li>
-        <li><strong>${labels.colorLabel}</strong>${labels.color}</li>
-      </ul>
-      <p class="puppy-card__personality" data-profile-personality="tlilxochitl">${labels.personality}</p>
-      <div class="puppy-video-container" data-profile-video="qejz0nUuXXU" style="margin: 1rem 0; border-radius: 8px; overflow: hidden; aspect-ratio: 9/16; max-width: 360px;">
-        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/qejz0nUuXXU?autoplay=1&mute=1&playsinline=1" title="${labels.videoTitle}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
-      </div>
-      <div class="puppy-video-container" data-profile-video="DTtYae0jenU" style="margin: 1rem 0; border-radius: 8px; overflow: hidden; aspect-ratio: 9/16; max-width: 360px;">
-        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/DTtYae0jenU?autoplay=1&mute=1&playsinline=1" title="${labels.latestVideoTitle}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
-      </div>
-      <div class="puppy-video-container" data-profile-video="0NHJunR5mNg" style="margin: 1rem 0; border-radius: 8px; overflow: hidden; aspect-ratio: 9/16; max-width: 360px;">
-        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/0NHJunR5mNg?autoplay=1&mute=1&playsinline=1" title="${labels.newestVideoTitle}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
-      </div>
-      <div class="puppy-card__actions">
-        <a href="mailto:${CURRENT_CONTACT_EMAIL}?subject=${encodeURIComponent(labels.subject)}&body=${encodeURIComponent(labels.body)}" class="btn-small btn-primary-small cta-lead cta-email" style="${labels.buttonStyle}" data-cta="email" data-lead-type="generate_lead" data-profile="tlilxochitl" data-page-type="available-xolos" data-lang="${labels.lang}" aria-label="${labels.aria}" data-status="available">${labels.cta}</a>
-      </div>
-    </div>`;
-
-  grid.prepend(article);
-}
-
-function updateXilonenAge() {
-  const grid = getAvailableXolosGrid();
-  if (!grid) return;
-
-  const isEnglish = document.documentElement.lang.toLowerCase().startsWith('en');
-  const ageLabel = isEnglish ? 'Age' : 'Edad';
-  const ageValue = isEnglish ? '1 month' : '1 mes';
-
-  Array.from(grid.querySelectorAll('.puppy-card')).forEach((card) => {
-    const name = card.querySelector('.puppy-card__name')?.textContent.trim();
-    if (name !== 'Xilonen Ramirez') return;
-
-    const ageItem = Array.from(card.querySelectorAll('.puppy-card__details li')).find((item) => (
-      item.querySelector('strong')?.textContent.trim() === ageLabel
-    ));
-    if (ageItem) ageItem.innerHTML = `<strong>${ageLabel}</strong>${ageValue}`;
-  });
-}
-
-function prioritizeAvailableProfiles() {
-  const grid = getAvailableXolosGrid();
-  if (!grid) return;
-
-  const cards = Array.from(grid.children).filter((child) => child.matches('article.puppy-card'));
-  const isAvailable = (card) => {
-    const badgeText = card.querySelector('.puppy-card__status')?.textContent.trim().toLowerCase() || '';
-    return badgeText === 'disponible' || badgeText === 'available';
-  };
-
-  cards.sort((left, right) => Number(isAvailable(right)) - Number(isAvailable(left)));
-  cards.forEach((card) => grid.appendChild(card));
-}
-
+// Current profiles and media are authored in both HTML pages for reliable crawlability.
 updateGlobalContactEmail();
-updateAvailableXolosCtas();
-updateXilonenProfileVideo();
-updateXilonenPersonality();
-updateYohualliProfileVideo();
-insertTlilxochitlProfile();
-updateXilonenAge();
-prioritizeAvailableProfiles();
 initializePuppyCarousels();
