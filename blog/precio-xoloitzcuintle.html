@@ -65,7 +65,7 @@
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@400;600&display=swap"
       rel="stylesheet"
     />
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
     <link rel="stylesheet" href="../css/styles.css" />
     <link rel="icon" type="image/x-icon" href="../assets/xolosramirez.ico" />
     <style>
@@ -133,8 +133,10 @@
         background: var(--color-dorado, #d4af37);
       }
     </style>
-  </head>
-  <body>
+  <link rel="stylesheet" href="/css/journey.css?v=20260906">
+<script src="/js/journey.js?v=20260906" defer></script>
+</head>
+  <body class="journey-page journey-editorial">
     <!-- Google Tag Manager (noscript) -->
     <noscript>
       <iframe
@@ -146,33 +148,16 @@
     </noscript>
     <!-- End Google Tag Manager (noscript) -->
     <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
-    <header class="site-header">
-      <div class="container header-row">
-        <a class="brand" href="../index.html">
-          <img
-            src="../img/brand/logo-xolos-ramirez.svg"
-            alt="Xolos Ramírez"
-            width="44"
-            height="44"
-            loading="eager"
-            decoding="async"
-          />
-          <span>Xolos Ramírez</span>
-        </a>
-
-        <button class="hamburger" aria-expanded="false" aria-controls="menu">☰</button>
-
-        <nav id="menu" class="nav-menu" data-visible="false">
-          <ul>
-            <li><a href="../index.html">Inicio</a></li>
-            <li><a href="../xolos-disponibles.html">Xolos disponibles</a></li>
-            <li><a href="../testimonios.html">Testimonios</a></li>
-            <li><a href="index.html">Blog</a></li>
-            <li><a href="../contacto.html">Contacto</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
+    <header class="site-header"><div class="container header-row">
+      <a class="brand" href="/"><img src="/img/brand/XolosRamirez.jpg" alt="" width="44" height="44" decoding="async"><span>Xolos Ramírez</span></a>
+      <button class="hamburger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir navegación">☰</button>
+      <nav id="menu" class="nav-menu" data-visible="false" aria-label="Navegación principal"><ul>
+        <li><a href="/xolos-disponibles.html">Xolos disponibles</a></li><li><a href="/xolos-disponibles.html#proceso">El proceso</a></li><li><a href="/testimonios.html">Familias</a></li><li><a href="/blog/index.html">Blog y guías</a></li>
+        <li><details class="nav-universe"><summary>Nuestro universo</summary><ul><li><a href="/teyolias-guardiania.html">Teyolías</a></li><li><a href="/xolo-skin-care/" data-gtm="naturals-nav" data-gtm-origin="nav">Xolo Skin Care</a></li><li><a href="https://xolosarmy.xyz">xolosArmy Network ↗</a></li></ul></details></li>
+        <li><a class="nav-contact" href="/contacto.html">Contacto</a></li>
+        <li><a class="lang-switch" href="/en/blog/xoloitzcuintli-price.html" lang="en" hreflang="en">English</a></li>
+      </ul></nav>
+    </div></header>
 
     <nav aria-label="Migas de pan" style="max-width: 72rem; margin: 0 auto; padding: 1rem 1rem 0; background: #fff; color: #57534e; font-size: 0.875rem; line-height: 1.5;">
       <ol style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin: 0; padding: 0; list-style: none;">
@@ -188,7 +173,7 @@
     </p>
 
     <main id="contenido-principal" class="article">
-      <section class="container" data-aos="fade-up" data-aos-duration="1000" style="padding-top: 3rem;">
+      <section class="container" style="padding-top: 3rem;">
         <article class="post-content">
           <header class="post-header" style="text-align: center; margin-bottom: 3rem;">
             <div
@@ -363,7 +348,7 @@
               <p style="margin-top: 1.25rem; margin-bottom: 0.75rem;">Solicita una orientación personalizada por:</p>
               <p style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0;">
                 <a
-                  href="https://wa.me/qr/R2F5PRQYZSJOA1"
+                  href="https://wa.me/message/435RTKGJLTX2J1"
                   data-cta="whatsapp"
                   data-lead-type="generate_lead"
                   data-lead-intent="price_inquiry"
@@ -389,7 +374,8 @@
           </div>
         </article>
       </section>
-    </main>
+    <section class="journey-next" aria-labelledby="next-step-title"><div><p class="eyebrow">Tu siguiente paso</p><h2 id="next-step-title">Imagina tu vida con un xolo</h2><p>Conoce a los ejemplares disponibles o cuéntanos cómo es tu familia para orientarte.</p></div><div class="journey-actions"><a class="btn" data-funnel-step="view_profiles" href="/xolos-disponibles.html">Ver xolos disponibles</a><a class="btn btn--secondary" data-funnel-step="contact" href="/contacto.html">Conversemos</a></div></section>
+</main>
 
     <footer>
       <div class="footer-grid">
@@ -413,10 +399,8 @@
       </div>
       <p class="copyright">© 2025 Xolos Ramírez. Todos los derechos reservados.</p>
     </footer>
-    <script src="../js/main.js" defer></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-      AOS.init({ once: true, duration: 700, offset: 60, easing: 'ease-out' });
-    </script>
+    <script src="/js/main.js?v=20260906-journey" defer></script>
+
+
   </body>
 </html>

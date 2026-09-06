@@ -44,7 +44,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@400;600&display=swap"
       rel="stylesheet"
     />
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="icon" type="image/x-icon" href="assets/xolosramirez.ico" />
     <script type="application/ld+json">
@@ -56,7 +56,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         "url": "https://xolosramirez.com/",
         "image": ["https://xolosramirez.com/img/hero/site-hero.jpg"],
         "description": "Criadero de Xoloitzcuintles en Ciudad de México con acompañamiento real, adopción responsable y entregas nacionales e internacionales.",
-        "email": "fernando@xolosramirez.com",
+        "email": "contacto@xolosarmy.xyz",
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "Calle Coquimbo",
@@ -74,8 +74,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         "areaServed": ["MX", "US", "CA"]
       }
     </script>
-  </head>
-  <body>
+  <link rel="stylesheet" href="/css/journey.css?v=20260906">
+<script src="/js/journey.js?v=20260906" defer></script>
+</head>
+  <body class="journey-page journey-home">
     <!-- Google Tag Manager (noscript) -->
     <noscript>
       <iframe
@@ -87,54 +89,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </noscript>
     <!-- End Google Tag Manager (noscript) -->
     <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
-    <header class="site-header">
-      <div class="container header-row">
-        <a class="brand" href="index.html">
-          <img
-            src="img/brand/XolosRamirez.jpg"
-            alt="Xolos Ramírez"
-            width="44"
-            height="44"
-            loading="eager"
-            decoding="async"
-          />
-          <span>Xolos Ramírez</span>
-        </a>
-
-        <button class="hamburger" aria-expanded="false" aria-controls="menu">☰</button>
-
-        <nav id="menu" class="nav-menu" data-visible="false">
-          <ul>
-            <li><a href="en/index.html" class="lang-switch">English</a></li>
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="xolos-disponibles.html">Xolos disponibles</a></li>
-            <li><a href="teyolias-guardiania.html">Teyolias</a></li>
-            <li><a href="testimonios.html">Testimonios</a></li>
-            <li><a href="blog/index.html">Blog</a></li>
-            <li>
-              <a
-                href="xolo-skin-care/"
-                data-gtm="naturals-nav"
-                data-gtm-origin="nav"
-                title="Xolo Skin Care — cuidado dermatológico para Xoloitzcuintles"
-              >
-                Xolo Skin Care
-              </a>
-            </li>
-            <li><a href="contacto.html">Contacto</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
+    <header class="site-header"><div class="container header-row">
+      <a class="brand" href="/"><img src="/img/brand/XolosRamirez.jpg" alt="" width="44" height="44" decoding="async"><span>Xolos Ramírez</span></a>
+      <button class="hamburger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir navegación">☰</button>
+      <nav id="menu" class="nav-menu" data-visible="false" aria-label="Navegación principal"><ul>
+        <li><a href="/xolos-disponibles.html">Xolos disponibles</a></li><li><a href="/xolos-disponibles.html#proceso">El proceso</a></li><li><a href="/testimonios.html">Familias</a></li><li><a href="/blog/index.html">Blog y guías</a></li>
+        <li><details class="nav-universe"><summary>Nuestro universo</summary><ul><li><a href="/teyolias-guardiania.html">Teyolías</a></li><li><a href="/xolo-skin-care/" data-gtm="naturals-nav" data-gtm-origin="nav">Xolo Skin Care</a></li><li><a href="https://xolosarmy.xyz">xolosArmy Network ↗</a></li></ul></details></li>
+        <li><a class="nav-contact" href="/contacto.html">Contacto</a></li>
+        <li><a class="lang-switch" href="/en/index.html" lang="en" hreflang="en">English</a></li>
+      </ul></nav>
+    </div></header>
 
     <main id="contenido-principal">
-      <section class="hero" data-aos="fade-in" data-aos-duration="1200">
+<section class="hero journey-home-hero">
         <picture class="hero__media">
           <img
             src="https://i.imgur.com/56uXiBf.jpeg"
             width="1600"
             height="900"
-            loading="eager"
+            loading="eager" fetchpriority="high"
             decoding="async"
             alt="Registro de Pedigrees de el Linaje Ramirez en la Federación Canofila Mexicana"
           />
@@ -143,8 +116,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <div class="hero__content">
             <h1>Criadero Xolos Ramírez</h1>
             <p>Guardianes ancestrales de la cultura mexicana.</p>
-            <a href="xolos-disponibles.html" class="btn btn--primary">Ver Xolos Ramirez disponibles</a>
-            <div class="cta-secondary-mobile">
+            <a href="xolos-disponibles.html" class="btn btn--primary" data-funnel-step="view_profiles">Ver Xolos Ramirez disponibles</a>
+            <p class="hero-guidance">Criadero de xoloitzcuintles en CDMX. Conoce a nuestros ejemplares y el acompañamiento para su llegada a tu familia.</p><div class="cta-secondary-mobile">
               <a href="/testimonios.html" aria-label="Ver historias reales de familias">
                 Ver historias reales de familias →
               </a>
@@ -153,7 +126,94 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </div>
       </section>
 
-      <section class="live-show live-show--about" data-aos="fade-up" data-aos-duration="1000">
+<section class="trust-mobile">
+        <p>✔️ Criadero documentado · ✔️ Acompañamiento real · ✔️ Entregas nacionales e internacionales</p>
+      </section>
+
+<section id="adopciones" class="journey-feature">
+        <article class="card highlight-card journey-feature-card">
+          <picture class="card__media">
+           <img src="img/xolos/xilonen-ramirez-agosto-2026-01.webp" width="900" height="500" loading="lazy" decoding="async" alt="Xilonen Ramírez, cachorra xoloitzcuintle miniatura">
+          </picture>
+          <div>
+            <h2>Conoce a los xolos disponibles</h2>
+            <p>
+              Explora nuestros perfiles detallados con información de salud, temperamento y
+              los requisitos para una adopción responsable. Encuentra a tu compañero ancestral.
+            </p>
+            <a href="xolos-disponibles.html" class="btn">
+              Ver Xolos Disponibles <span>→</span>
+            </a>
+          </div>
+        </article>
+      </section>
+
+
+<section class="journey-process" id="proceso" aria-labelledby="process-title"><p class="eyebrow">Un compañero. Una historia compartida.</p><h2 id="process-title">De la primera conversación a la vida en casa</h2><ol class="journey-steps"><li><h3>Conoce a tu xolo</h3><p>Explora talla, personalidad y los perfiles disponibles.</p></li><li><h3>Conversemos</h3><p>Cuéntanos tu ciudad y cómo es tu familia. Confirmamos disponibilidad y te explicamos las condiciones.</p></li><li><h3>Prepara su llegada</h3><p>Acordamos contigo la reserva, la documentación y la logística de entrega.</p></li><li><h3>Seguimos cerca</h3><p>Los cuidados, la adaptación y las historias en familia continúan después de la entrega.</p></li></ol><div class="journey-actions"><a class="btn btn--secondary" href="/blog/precio-xoloitzcuintle.html">Qué incluye el proceso</a><a class="text-link" href="/contacto.html">Solicitar orientación</a></div></section>
+
+<section class="trust">
+        <h2>Confianza y garantías</h2>
+        <div class="trust-grid">
+          <article class="card trust-card">
+            <span class="trust-icon" aria-hidden="true">💉🩺</span>
+            <h3>Garantía de salud</h3>
+            <p>
+              Entregamos a cada Xolo con certificado de salud, vacunas,
+              desparasitación, microchip y su registro NFT de linaje.
+            </p>
+          </article>
+          <article class="card trust-card">
+            <span class="trust-icon" aria-hidden="true">🔒💳</span>
+            <h3>Pagos Seguros y Flexibles</h3>
+            <p>
+             Aceptamos transferencia bancaria, criptomonedas, efectivo y opciones de pago digitales internacionales. Te brindamos claridad y acompañamiento profesional para que tu proceso sea seguro y confiable.
+            </p>
+          </article>
+          <article class="card trust-card">
+            <span class="trust-icon" aria-hidden="true">✈️🌎</span>
+            <h3>Envíos nacionales e internacionales</h3>
+            <p>
+              Enviamos a todo México y al extranjero cumpliendo los requisitos
+              veterinarios y de viaje.
+            </p>
+          </article>
+        </div>
+      </section>
+
+<article class="card blog-card">
+        <picture class="card_media">
+          <img src="https://i.imgur.com/lTttPh0.jpeg"
+  width="760" height="1013" loading="lazy" decoding="async"
+  alt="Luna Ramírez con la familia Téllez el día de su entrega en Monterrey">
+        </picture>
+        <h2>Luna Ramírez: de su llegada a Monterrey a The Xolos Ramirez Show</h2>
+        <p>Luna Ramírez, ahora Romina “Romi”, encontró su hogar con Eduardo y su familia en Monterrey. Su historia continúa en The Xolos Ramirez Show, donde comparten cómo ha sido vivir, crecer y crear un vínculo con una xoloitzcuintle.</p>
+        <a href="blog/2026-07-11-entrega-xoloitzcuintle-Luna-Ramirez-a-su-familia.html" aria-label="Conocer la historia de Luna Ramírez, ahora Romina, y su participación en The Xolos Ramirez Show">Conoce la historia de Luna Ramírez</a>
+      </article>
+
+<section id="testimonios">
+        <h2>Qué dicen nuestros adoptantes</h2>
+        <div class="grid">
+          <blockquote>
+            <p>“Mi Xoloitzcuintle cambió mi vida. Gracias a Xolos Ramírez.”</p>
+            <cite>— Carmen, Guadalajara</cite>
+          </blockquote>
+          <blockquote>
+            <p>“El acompañamiento fue increíble. Se nota su amor por la raza.”</p>
+            <cite>— Edgar, Veracruz</cite>
+          </blockquote>
+        </div>
+        <div class="cta-testimonios-wrapper">
+  <p class="cta-text">Cada Xoloitzcuintle tiene un propósito. Descubre el impacto en sus nuevas familias.</p>
+  <a href="testimonios.html" class="btn-aesthetic" aria-label="Ver testimonios de adoptantes">
+    <span class="btn-text">Ver Historias de Éxito</span>
+    <span class="btn-icon">→</span>
+  </a>
+</div>
+
+      </section>
+
+<section class="live-show live-show--about">
         <div class="container">
           <div class="live-show__container">
             <div class="live-show__frame">
@@ -162,7 +222,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 Historia Viva
               </div>
               <div class="live-show__video">
-                <iframe
+                <iframe loading="lazy"
                   src="https://www.youtube.com/embed/0Z6luzI6TpY"
                   title="Xolos Ramírez: Historia y Propósito"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -179,7 +239,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               </p>
               <div class="live-show__details">
                 <div class="callout live-show__callout">
-                  <h4>Linaje y Pedigrí Internacional</h4>
+                  <h3>Linaje y Pedigrí Internacional</h3>
                   <p>
                     Construimos nuestra genealogía desde cero. Hoy, el apellido <strong>Ramírez</strong> es un sello de calidad en pedigríes azules internacionales avalados por la Federación Canófila Mexicana, garantizando trazabilidad total mediante microchip y tatuaje en un NFT de Linaje.
                   </p>
@@ -193,185 +253,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </div>
       </section>
 
-      <section class="trust-mobile" data-aos="fade-up" data-aos-duration="900">
-        <p>✔️ Criadero documentado · ✔️ Acompañamiento real · ✔️ Entregas nacionales e internacionales</p>
-      </section>
-
-      <section class="trust" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="80">
-        <h2>Confianza y garantías</h2>
-        <div class="trust-grid">
-          <article class="card trust-card">
-            <span class="trust-icon" aria-hidden="true">💉🩺</span>
-            <h4>Garantía de salud</h4>
-            <p>
-              Entregamos a cada Xolo con certificado de salud, vacunas,
-              desparasitación, microchip y su registro NFT de linaje.
-            </p>
-          </article>
-          <article class="card trust-card">
-            <span class="trust-icon" aria-hidden="true">🔒💳</span>
-            <h4>Pagos Seguros y Flexibles</h4>
-            <p>
-             Aceptamos transferencia bancaria, criptomonedas, efectivo y opciones de pago digitales internacionales. Te brindamos claridad y acompañamiento profesional para que tu proceso sea seguro y confiable.
-            </p>
-          </article>
-          <article class="card trust-card">
-            <span class="trust-icon" aria-hidden="true">✈️🌎</span>
-            <h4>Envíos nacionales e internacionales</h4>
-            <p>
-              Enviamos a todo México y al extranjero cumpliendo los requisitos
-              veterinarios y de viaje.
-            </p>
-          </article>
-        </div>
-      </section>
-
-      <section id="adopciones" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100" style="max-width: 900px; margin: 40px auto; padding: 0 20px;">
-        <article class="card highlight-card" data-aos="zoom-in" data-aos-delay="150" style="border: 2px solid #d4af37; border-radius: 8px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); text-align: center; overflow: hidden; padding-bottom: 30px;">
-          <picture class="card__media" style="display: block; border-bottom: 3px solid #d4af37;">
-           <img
-             src="img/xolos/xilonen-ramirez-agosto-2026-01.webp"
-             width="900"
-             height="500"
-             loading="lazy"
-             decoding="async"
-             alt="Xilonen Ramírez, cachorra xoloitzcuintle miniatura"
-             style="width: 100%; height: auto; object-fit: cover;"
-          />
-          </picture>
-          <div style="padding: 30px 20px 10px;">
-            <h3 style="font-size: 2rem; margin-bottom: 15px; color: #2c2c2c;">Conoce a los xolos disponibles</h3>
-            <p style="font-size: 1.1rem; margin-bottom: 30px; color: #555; line-height: 1.6;">
-              Explora nuestros perfiles detallados con información de salud, temperamento y
-              los requisitos para una adopción responsable. Encuentra a tu compañero ancestral.
-            </p>
-            <a href="xolos-disponibles.html" class="btn" style="display: inline-flex; align-items: center; justify-content: center; padding: 15px 45px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; background-color: #d4af37; color: #fff; border: none; text-decoration: none; transition: all 0.3s ease;">
-              Ver Xolos Disponibles <span style="margin-left: 12px; font-size: 1.4rem;">→</span>
-            </a>
-          </div>
-        </article>
-      </section>
-
-      <section class="grid grid-2" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="150">
-        <article class="card highlight-card" data-aos="zoom-in" data-aos-delay="200" style="border-left: 4px solid #d4af37;">
-          <h3>Teyolías Guardianía</h3>
-          <p>
-            Algunos xoloitzcuintles de 6 meses o más han alcanzado la madurez ideal para participar en nuestro programa especial de <strong>Teyolías Guardianía</strong>: una forma de conectar con ejemplares seleccionados desde una visión cultural, comunitaria y de acompañamiento.
-          </p>
-          <a href="teyolias-guardiania.html" style="font-weight: 600; color: var(--accent-color);">Descubre su historia y cómo participar →</a>
-          <p class="callout" style="margin-top: 15px; font-size: 0.9rem;">
-            <a href="mailto:contacto@xolosarmy.xyz?subject=%5BXOLOS%5D%20event%3Dwaitlist%20puppy%3Dgeneral&body=context_event%3Dwaitlist%0Acontext_puppy%3Dgeneral%0Acontext_name%3Dgeneral%0A%0AHola%2C%20me%20gustar%C3%ADa%20unirme%20a%20la%20lista%20de%20espera%20de%20Xolos%20Ram%C3%ADrez."
-               style="color: #666; text-decoration: underline;" class="cta-lead cta-email" data-cta="email" data-lead-type="generate_lead" data-profile="general" data-page-type="home" data-lang="es" aria-label="Escribir por correo a Xolos Ramírez">
-               Conoce el programa y cómo participar →
-              <p class="callout" style="margin-top: 15px; font-size: 0.9rem;">
-      Los candidatos aparecerán identificados con la etiqueta <strong>✨ Candidato a Teyolía</strong> dentro de los perfiles disponibles.
-    </p>
-            </a>
-          </p>
-        </article>
-        <article class="card" data-aos="zoom-in" data-aos-delay="300">
-          <h3>Últimas publicaciones del blog</h3>
-          <ul>
-            <li><a href="blog/2026-07-04-entrega-xoloitzcuintle-mixa-ramirez.html">Una Nueva Historia que Une Tradición Milenaria y Tecnología: La Entrega de Mixa Ramírez</a></li>
-            <li><a href="blog/2026-06-22-vacunacion-xoloitzcuintle.html">Crónica: Día de Vacunación y Transparencia en Xolos Ramírez
-</a></li>
-            <li><a href="blog/xoloitzcuintle-miniatura.html">3 Razones para elegir un Xoloitzcuintle Miniatura
-</a></li>
-            <li><a href="blog/sizes-in-xoloitzcuintli.html">Xoloitzcuintle Sizes Explained: Toy, Miniature, and Standard</a></li>
-            <li><a href="blog/nft-linaje-xoloitzcuintle.html">El Pedigrí del Futuro:
-NFTs de Linaje Xoloitzcuintle</a></li>
-
-
-
-          </ul>
-        </article>
-      </section>
-
-      <article class="card blog-card" data-aos="zoom-in" data-aos-delay="250">
-        <picture class="card_media">
-          <img src="https://i.imgur.com/lTttPh0.jpeg"
-  width="760" height="1013" loading="lazy" decoding="async"
-  alt="Luna Ramírez con la familia Téllez el día de su entrega en Monterrey">
-        </picture>
-        <h2>Luna Ramírez: de su llegada a Monterrey a The Xolos Ramirez Show</h2>
-        <p>Luna Ramírez, ahora Romina “Romi”, encontró su hogar con Eduardo y su familia en Monterrey. Su historia continúa en The Xolos Ramirez Show, donde comparten cómo ha sido vivir, crecer y crear un vínculo con una xoloitzcuintle.</p>
-        <a href="blog/2026-07-11-entrega-xoloitzcuintle-Luna-Ramirez-a-su-familia.html" aria-label="Conocer la historia de Luna Ramírez, ahora Romina, y su participación en The Xolos Ramirez Show">Conoce la historia de Luna Ramírez</a>
-      </article>
-
-
-      <section id="testimonios" data-aos="fade-up" data-aos-duration="1000">
-        <h2>Qué dicen nuestros adoptantes</h2>
-        <div class="grid">
-          <blockquote data-aos="fade-right" data-aos-delay="150">
-            <p>“Mi Xoloitzcuintle cambió mi vida. Gracias a Xolos Ramírez.”</p>
-            <cite>— Carmen, Guadalajara</cite>
-          </blockquote>
-          <blockquote data-aos="fade-left" data-aos-delay="250">
-            <p>“El acompañamiento fue increíble. Se nota su amor por la raza.”</p>
-            <cite>— Edgar, Veracruz</cite>
-          </blockquote>
-        </div>
-        <div class="cta-testimonios-wrapper">
-  <p class="cta-text">Cada Xoloitzcuintle tiene un propósito. Descubre el impacto en sus nuevas familias.</p>
-  <a href="testimonios.html" class="btn-aesthetic" aria-label="Ver testimonios de adoptantes">
-    <span class="btn-text">Ver Historias de Éxito</span>
-    <span class="btn-icon">→</span>
-  </a>
-</div>
-
-      </section>
-
-      <section id="galeria" data-aos="fade-up" data-aos-duration="1000">
-        <h2>Galería</h2>
-        <div class="gallery-grid">
-          <figure class="card" data-aos="zoom-in" data-aos-delay="150">
-            <picture class="card__media">
-              <img
-                src="https://i.imgur.com/mtDxJ7Y.png"
-                width="1200"
-                height="800"
-                loading="lazy"
-                decoding="async"
-                alt="Xoloitzcuintle color negro"
-              />
-            </picture>
-          </figure>
-          <figure class="card" data-aos="zoom-in" data-aos-delay="250">
-            <picture class="card__media">
-              <img
-                src="https://i.imgur.com/asH2UJd.jpeg"
-                width="1200"
-                height="800"
-                loading="lazy"
-                decoding="async"
-                alt="Cachorro xoloitzcuintle mariposa"
-              />
-            </picture>
-          </figure>
-        </div>
-      </section>
-
-      <section class="network-bridge" data-aos="fade-up" data-aos-duration="1000">
-        <div class="container">
-          <h2>Más que un criadero. Un linaje.</h2>
-          <p>
-            Xolos Ramírez forma parte de xolosArmy Network,
-            una arquitectura cultural y digital que protege
-            el linaje, la identidad y la memoria de cada Xoloitzcuintle.
-          </p>
-          <a
-            href="https://xolosarmy.xyz"
-            class="btn btn-outline"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Visitar xolosArmy Network"
-          >
-            Conocer la Civilización Tonalli ↗
-          </a>
-        </div>
-      </section>
-
-      <section class="section" style="background-color: var(--color-fondo-alt, #1e1917); padding: 5rem 0; border-top: 1px solid rgba(212, 175, 55, 0.1);">
+<section class="section" style="background-color: var(--color-fondo-alt, #1e1917); padding: 5rem 0; border-top: 1px solid rgba(212, 175, 55, 0.1);">
         <div class="container">
           <div style="text-align: center; max-width: 800px; margin: 0 auto 3rem;">
             <span style="color: var(--color-dorado, #d4af37); font-weight: bold; letter-spacing: 2px; text-transform: uppercase; font-size: 0.85rem;">Guía Definitiva y Cuidados</span>
@@ -398,23 +280,106 @@ NFTs de Linaje Xoloitzcuintle</a></li>
         </div>
       </section>
 
-      <section class="cta-section">
+<section class="grid grid-2">
+        <article class="card highlight-card" style="border-left: 4px solid #d4af37;">
+          <h3>Teyolías Guardianía</h3>
+          <p>
+            Algunos xoloitzcuintles de 6 meses o más han alcanzado la madurez ideal para participar en nuestro programa especial de <strong>Teyolías Guardianía</strong>: una forma de conectar con ejemplares seleccionados desde una visión cultural, comunitaria y de acompañamiento.
+          </p>
+          <a href="teyolias-guardiania.html" style="font-weight: 600; color: var(--accent-color);">Descubre su historia y cómo participar →</a>
+          <p class="callout" style="margin-top: 15px; font-size: 0.9rem;">
+            <a href="mailto:contacto@xolosarmy.xyz?subject=%5BXOLOS%5D%20event%3Dwaitlist%20puppy%3Dgeneral&body=context_event%3Dwaitlist%0Acontext_puppy%3Dgeneral%0Acontext_name%3Dgeneral%0A%0AHola%2C%20me%20gustar%C3%ADa%20unirme%20a%20la%20lista%20de%20espera%20de%20Xolos%20Ram%C3%ADrez."
+               style="color: #666; text-decoration: underline;" class="cta-lead cta-email" data-cta="email" data-lead-type="generate_lead" data-profile="general" data-page-type="home" data-lang="es" aria-label="Escribir por correo a Xolos Ramírez">
+               Conoce el programa y cómo participar →
+              <p class="callout" style="margin-top: 15px; font-size: 0.9rem;">
+      Los candidatos aparecerán identificados con la etiqueta <strong>✨ Candidato a Teyolía</strong> dentro de los perfiles disponibles.
+    </p>
+            </a>
+          </p>
+        </article>
+        <article class="card">
+          <h3>Guías e historias del linaje</h3>
+          <ul>
+            <li><a href="blog/2026-07-04-entrega-xoloitzcuintle-mixa-ramirez.html">Una Nueva Historia que Une Tradición Milenaria y Tecnología: La Entrega de Mixa Ramírez</a></li>
+            <li><a href="blog/2026-06-22-vacunacion-xoloitzcuintle.html">Crónica: Día de Vacunación y Transparencia en Xolos Ramírez
+</a></li>
+            <li><a href="blog/xoloitzcuintle-miniatura.html">3 Razones para elegir un Xoloitzcuintle Miniatura
+</a></li>
+            <li><a href="blog/sizes-in-xoloitzcuintli.html">Xoloitzcuintle Sizes Explained: Toy, Miniature, and Standard</a></li>
+            <li><a href="blog/nft-linaje-xoloitzcuintle.html">El Pedigrí del Futuro:
+NFTs de Linaje Xoloitzcuintle</a></li>
+
+
+
+          </ul>
+        </article>
+      </section>
+
+<section id="galeria">
+        <h2>Galería</h2>
+        <div class="gallery-grid">
+          <figure class="card">
+            <picture class="card__media">
+              <img
+                src="https://i.imgur.com/mtDxJ7Y.png"
+                width="1200"
+                height="800"
+                loading="lazy"
+                decoding="async"
+                alt="Xoloitzcuintle color negro"
+              />
+            </picture>
+          </figure>
+          <figure class="card">
+            <picture class="card__media">
+              <img
+                src="https://i.imgur.com/asH2UJd.jpeg"
+                width="1200"
+                height="800"
+                loading="lazy"
+                decoding="async"
+                alt="Cachorro xoloitzcuintle mariposa"
+              />
+            </picture>
+          </figure>
+        </div>
+      </section>
+
+<section class="network-bridge">
+        <div class="container">
+          <h2>Más que un criadero. Un linaje.</h2>
+          <p>
+            Xolos Ramírez forma parte de xolosArmy Network,
+            una arquitectura cultural y digital que protege
+            el linaje, la identidad y la memoria de cada Xoloitzcuintle.
+          </p>
+          <a
+            href="https://xolosarmy.xyz"
+            class="btn btn-outline"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Visitar xolosArmy Network"
+          >
+            Conocer la Civilización Tonalli ↗
+          </a>
+        </div>
+      </section>
+
+<section class="cta-section">
         <div class="container">
           <h2>¿Listo para recibir a un compañero ancestral?</h2>
           <a href="https://xolosramirez.com/xolos-disponibles.html" class="btn">Ver Xolos Ramirez disponibles</a>
         </div>
       </section>
-
-     
- <div class="container" style="margin-top: 4rem; margin-bottom: 4rem;">
-        <div style="background: linear-gradient(145deg, #1a1512, #2a201c); padding: 3rem 2rem; text-align: center; border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-          <h3 style="color: var(--color-dorado, #d4af37); margin-bottom: 1rem; font-family: 'Cinzel', serif; font-size: 1.8rem;">Conoce más sobre lo que ofrecemos en Xolos Ramirez</h3>
-          <p style="color: #e0d5c1; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.6;">Descubre todo lo que incluye nuestro exclusivo programa de crianza y entregas.</p>
-          <a href="blog/precio-xoloitzcuintle.html" class="btn" style="background-color: var(--color-dorado, #d4af37); color: #111; font-weight: 800; padding: 1rem 2rem; border-radius: 999px; text-decoration: none; display: inline-block;">Ver guía de Precios y Qué Incluye</a>
+    <div class="journey-price-note">
+        <div>
+          <h2>Conoce más sobre lo que ofrecemos en Xolos Ramirez</h2>
+          <p>Descubre todo lo que incluye nuestro exclusivo programa de crianza y entregas.</p>
+          <a href="blog/precio-xoloitzcuintle.html" class="btn">Ver guía de Precios y Qué Incluye</a>
         </div>
       </div>
-    
-    </main>
+
+</main>
 
     <footer>
       <div class="footer-grid">
@@ -460,11 +425,9 @@ NFTs de Linaje Xoloitzcuintle</a></li>
       </div>
       <p class="copyright">© 2025 Xolos Ramírez. Todos los derechos reservados.</p>
     </footer>
-    <script src="js/main.js" defer></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-      AOS.init({ once: true, duration: 700, offset: 60, easing: 'ease-out' });
-    </script>
+    <script src="/js/main.js?v=20260906-journey" defer></script>
+
+
     <a
       class="home-email-float cta-lead cta-email"
       href="mailto:contacto@xolosarmy.xyz?subject=Informes%20sobre%20xoloitzcuintle&body=Hola%2C%20me%20interesa%20conocer%20m%C3%A1s%20sobre%20sus%20xoloitzcuintles%20y%20el%20proceso%20de%20acompa%C3%B1amiento%20para%20las%20familias."
