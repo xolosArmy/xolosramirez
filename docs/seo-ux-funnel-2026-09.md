@@ -45,7 +45,7 @@ La reserva, el pago y la confirmación de entrega siguen siendo pasos atendidos 
 
 ## SEO y medición
 
-Títulos y descripciones se alinean con la intención de cada página principal. Se conservan canonical y equivalencias ES/EN; se agregan migas de pan con datos estructurados en contacto, disponibilidad y testimonios, y un `ItemList` de perfiles sin inventar precios, ofertas ni valoraciones. El correo de contacto se corrige también en HTML y datos estructurados.
+Títulos y descripciones se alinean con la intención de cada página conservando intactos los metadatos comerciales y el experimento SEO activo de producción (Home ES con Precio, Venta y Adopción, Home EN y páginas de Disponibles ES/EN con sus títulos transaccionales de venta). Se conservan canonical y equivalencias ES/EN; se agregan migas de pan con datos estructurados en contacto, disponibilidad y testimonios, y un `ItemList` de perfiles sin inventar precios, ofertas ni valoraciones. El correo de contacto se corrige también en HTML y datos estructurados.
 
 El sitemap incluye solo URLs con canonical propio, HTTPS y dominio canónico que resuelven a un archivo local de la superficie pública. Excluye archivos sin canonical confirmado, alias, `noindex`, redirecciones e informes. Omite `lastmod` cuando no existe una fecha de modificación significativa verificable; no usa la fecha del checkout para rejuvenecer todo el archivo.
 
