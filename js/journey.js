@@ -15,6 +15,42 @@
     const latestEmbedUrl = `https://www.youtube.com/embed/${latestVideoId}`;
     const xilonen = document.querySelector('.puppy-card[data-profile-card="xilonen"], #xilonen');
 
+    if (xilonen) {
+      const refreshedVideos = [
+        {
+          oldId: 'nrZ-PhE4bHA',
+          newId: 'Gyoa8ICu-Ds',
+          titleEs: 'Xilonen Ramirez — video reciente',
+          titleEn: 'Xilonen Ramirez — recent video',
+        },
+        {
+          oldId: 'rYDusjW9Gi0',
+          newId: '4ZAvDAZ6T5c',
+          titleEs: 'Xilonen Ramirez — video reciente',
+          titleEn: 'Xilonen Ramirez — recent video',
+        },
+      ];
+
+      refreshedVideos.forEach(({ oldId, newId, titleEs, titleEn }) => {
+        const iframe = xilonen.querySelector(`iframe[src*="/embed/${oldId}"]`);
+        const container = iframe?.closest('.puppy-video-container');
+        if (!iframe || !container) return;
+
+        container.dataset.xilonenVideo = newId;
+        container.style.aspectRatio = '9 / 16';
+        container.style.maxWidth = '360px';
+        iframe.src = `https://www.youtube.com/embed/${newId}`;
+        iframe.title = english ? titleEn : titleEs;
+        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+        iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+
+        const fallback = container.nextElementSibling?.matches('a.video-fallback')
+          ? container.nextElementSibling
+          : null;
+        if (fallback) fallback.href = `https://youtube.com/shorts/${newId}`;
+      });
+    }
+
     if (xilonen && !xilonen.querySelector(`[data-xilonen-video="${latestVideoId}"]`)) {
       const firstVideo = xilonen.querySelector('.puppy-video-container[data-xilonen-video], .puppy-video-container');
       const firstFallback = firstVideo?.previousElementSibling?.matches('a.video-fallback')
