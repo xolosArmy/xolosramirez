@@ -1,4 +1,4 @@
-/* Progressive enhancements: every profile, video and contact route also exists in HTML. */
+/* Progressive enhancements for navigation, profiles, current video content and contact routes. */
 (() => {
   const english = document.documentElement.lang.startsWith('en');
   const push = (payload) => {
@@ -8,6 +8,78 @@
   const pageType = document.body.classList.contains('journey-home') ? 'home'
     : document.body.classList.contains('journey-available') ? 'available-xolos'
       : document.body.classList.contains('journey-contact') ? 'contact' : 'editorial';
+
+  if (pageType === 'available-xolos') {
+    const latestVideoId = '4Wf_OxgWjmU';
+    const latestVideoUrl = `https://youtu.be/${latestVideoId}`;
+    const latestEmbedUrl = `https://www.youtube.com/embed/${latestVideoId}`;
+    const xilonen = document.querySelector('.puppy-card[data-profile-card="xilonen"], #xilonen');
+
+    if (xilonen && !xilonen.querySelector(`[data-xilonen-video="${latestVideoId}"]`)) {
+      const firstVideo = xilonen.querySelector('.puppy-video-container[data-xilonen-video], .puppy-video-container');
+      const firstFallback = firstVideo?.previousElementSibling?.matches('a.video-fallback')
+        ? firstVideo.previousElementSibling
+        : null;
+      const insertionPoint = firstFallback || firstVideo || xilonen.querySelector('.puppy-card__actions');
+
+      if (insertionPoint?.parentNode) {
+        const fallback = document.createElement('a');
+        fallback.href = latestVideoUrl;
+        fallback.className = 'video-fallback';
+        fallback.target = '_blank';
+        fallback.rel = 'noopener noreferrer';
+        fallback.textContent = english ? 'Open on YouTube' : 'Abrir en YouTube';
+
+        const container = document.createElement('div');
+        container.className = 'puppy-video-container';
+        container.style.cssText = 'margin: 1rem 0; border-radius: 8px; overflow: hidden; aspect-ratio: 16/9;';
+        container.dataset.xilonenVideo = latestVideoId;
+
+        const iframe = document.createElement('iframe');
+        iframe.width = '100%';
+        iframe.height = '100%';
+        iframe.src = latestEmbedUrl;
+        iframe.title = english ? 'Xilonen Ramirez — latest video' : 'Xilonen Ramirez — video más reciente';
+        iframe.setAttribute('frameborder', '0');
+        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+        iframe.setAttribute('allowfullscreen', '');
+        iframe.loading = 'lazy';
+        container.appendChild(iframe);
+
+        insertionPoint.parentNode.insertBefore(fallback, insertionPoint);
+        insertionPoint.parentNode.insertBefore(container, insertionPoint);
+      }
+    }
+
+    const latestShow = Array.from(document.querySelectorAll('.live-show')).find((section) => {
+      const heading = section.querySelector('h2');
+      const text = heading?.textContent.trim();
+      return text === 'Último The Xolos Ramirez Show' || text === 'Latest The Xolos Ramirez Show';
+    });
+
+    if (latestShow) {
+      const iframe = latestShow.querySelector('.live-show__video iframe');
+      if (iframe) {
+        iframe.src = latestEmbedUrl;
+        iframe.title = english ? 'Latest The Xolos Ramirez Show episode' : 'Último episodio de The Xolos Ramirez Show';
+      }
+
+      latestShow.querySelectorAll('a[href*="youtu"]').forEach((link) => {
+        link.href = latestVideoUrl;
+        link.setAttribute(
+          'aria-label',
+          english ? 'Watch the latest The Xolos Ramirez Show episode on YouTube' : 'Ver el último episodio de The Xolos Ramirez Show en YouTube',
+        );
+      });
+
+      const description = latestShow.querySelector('.live-show__content p:not(.live-show__eyebrow)');
+      if (description) {
+        description.innerHTML = english
+          ? '<strong>The latest episode of The Xolos Ramirez Show.</strong> Watch the complete conversation on our YouTube channel.'
+          : '<strong>El episodio más reciente de The Xolos Ramirez Show.</strong> Mira la conversación completa en nuestro canal de YouTube.';
+      }
+    }
+  }
 
   // Capture navigation intent only; never collect form content, email addresses or query strings.
   document.addEventListener('click', (event) => {
