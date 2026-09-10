@@ -16,29 +16,6 @@
     const xilonen = document.querySelector('.puppy-card[data-profile-card="xilonen"], #xilonen');
 
     if (xilonen) {
-      const photoFilename = 'xilonen-ramirez-septiembre-2026-manana-alexandra.webp';
-      const photoTrack = xilonen.querySelector('.puppy-carousel__track');
-      if (photoTrack && !photoTrack.querySelector(`img[src*="${photoFilename}"]`)) {
-        const slide = document.createElement('div');
-        slide.className = 'puppy-carousel__slide';
-
-        const image = document.createElement('img');
-        image.src = english ? `../img/xolos/${photoFilename}` : `img/xolos/${photoFilename}`;
-        image.alt = english
-          ? 'Xilonen Ramirez, hairless miniature Xoloitzcuintli puppy, sitting attentively in a morning photo by Alexandra Ramirez'
-          : 'Xilonen Ramírez, cachorra xoloitzcuintle miniatura sin pelo, sentada y atenta en una fotografía matutina de Alexandra Ramírez';
-        image.className = 'puppy-card__image';
-        image.width = 512;
-        image.height = 683;
-        image.loading = 'lazy';
-        image.decoding = 'async';
-        image.draggable = false;
-        image.style.objectFit = 'contain';
-
-        slide.appendChild(image);
-        photoTrack.prepend(slide);
-      }
-
       const refreshedVideos = [
         {
           oldId: 'nrZ-PhE4bHA',
