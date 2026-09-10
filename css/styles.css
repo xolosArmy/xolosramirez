@@ -10,3 +10,20 @@
   content: url('../img/xolos/yohualli-ramirez-02.webp');
   opacity: 1;
 }
+
+/* Xilonen Ramirez: fallback visual robusto para la foto matutina en ES/EN.
+   La misma regla sustituye la fotografía antigua de la tarjeta destacada de inicio. */
+#xilonen .puppy-carousel__slide > .puppy-card__image,
+img[src$="xilonen-ramirez-agosto-2026-01.webp"] {
+  content: url('../img/xolos/xilonen-ramirez-septiembre-2026-manana-alexandra.webp');
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+#xilonen .puppy-carousel__slide > .puppy-card__image {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  object-position: center !important;
+}
