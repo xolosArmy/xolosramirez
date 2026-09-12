@@ -10,10 +10,14 @@
       : document.body.classList.contains('journey-contact') ? 'contact' : 'editorial';
 
   if (pageType === 'available-xolos') {
-    const latestVideoId = '4Wf_OxgWjmU';
-    const latestVideoUrl = `https://youtu.be/${latestVideoId}`;
-    const latestEmbedUrl = `https://www.youtube.com/embed/${latestVideoId}`;
+    const xilonenLatestVideoId = '4Wf_OxgWjmU';
+    const xilonenLatestVideoUrl = `https://youtu.be/${xilonenLatestVideoId}`;
+    const xilonenLatestEmbedUrl = `https://www.youtube.com/embed/${xilonenLatestVideoId}`;
+    const tlilxochitlLatestVideoId = 'J6F5bE863M4';
+    const tlilxochitlLatestVideoUrl = `https://youtu.be/${tlilxochitlLatestVideoId}`;
+    const tlilxochitlLatestEmbedUrl = `https://www.youtube.com/embed/${tlilxochitlLatestVideoId}`;
     const xilonen = document.querySelector('.puppy-card[data-profile-card="xilonen"], #xilonen');
+    const tlilxochitl = document.querySelector('.puppy-card[data-profile-card="tlilxochitl"], #tlilxochitl');
 
     if (xilonen) {
       const refreshedVideos = [
@@ -51,7 +55,7 @@
       });
     }
 
-    if (xilonen && !xilonen.querySelector(`[data-xilonen-video="${latestVideoId}"]`)) {
+    if (xilonen && !xilonen.querySelector(`[data-xilonen-video="${xilonenLatestVideoId}"]`)) {
       const firstVideo = xilonen.querySelector('.puppy-video-container[data-xilonen-video], .puppy-video-container');
       const firstFallback = firstVideo?.previousElementSibling?.matches('a.video-fallback')
         ? firstVideo.previousElementSibling
@@ -60,7 +64,7 @@
 
       if (insertionPoint?.parentNode) {
         const fallback = document.createElement('a');
-        fallback.href = latestVideoUrl;
+        fallback.href = xilonenLatestVideoUrl;
         fallback.className = 'video-fallback';
         fallback.target = '_blank';
         fallback.rel = 'noopener noreferrer';
@@ -69,12 +73,12 @@
         const container = document.createElement('div');
         container.className = 'puppy-video-container';
         container.style.cssText = 'margin: 1rem 0; border-radius: 8px; overflow: hidden; aspect-ratio: 16/9;';
-        container.dataset.xilonenVideo = latestVideoId;
+        container.dataset.xilonenVideo = xilonenLatestVideoId;
 
         const iframe = document.createElement('iframe');
         iframe.width = '100%';
         iframe.height = '100%';
-        iframe.src = latestEmbedUrl;
+        iframe.src = xilonenLatestEmbedUrl;
         iframe.title = english ? 'Xilonen Ramirez — latest video' : 'Xilonen Ramirez — video más reciente';
         iframe.setAttribute('frameborder', '0');
         iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
@@ -87,6 +91,44 @@
       }
     }
 
+    if (tlilxochitl && !tlilxochitl.querySelector(`[data-profile-video="${tlilxochitlLatestVideoId}"]`)) {
+      const videos = tlilxochitl.querySelector('details.profile-videos');
+      const summary = videos?.querySelector('summary');
+
+      if (videos && summary) {
+        const container = document.createElement('div');
+        container.className = 'puppy-video-container';
+        container.dataset.profileVideo = tlilxochitlLatestVideoId;
+        container.style.cssText = 'margin: 1rem 0; border-radius: 8px; overflow: hidden; aspect-ratio: 16/9; max-width: 640px;';
+
+        const iframe = document.createElement('iframe');
+        iframe.width = '100%';
+        iframe.height = '100%';
+        iframe.src = tlilxochitlLatestEmbedUrl;
+        iframe.title = english ? 'Tlilxóchitl Ramirez — latest video' : 'Tlilxóchitl Ramírez — video más reciente';
+        iframe.setAttribute('frameborder', '0');
+        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+        iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+        iframe.setAttribute('allowfullscreen', '');
+        iframe.loading = 'lazy';
+        container.appendChild(iframe);
+
+        const fallback = document.createElement('a');
+        fallback.href = tlilxochitlLatestVideoUrl;
+        fallback.className = 'video-fallback';
+        fallback.target = '_blank';
+        fallback.rel = 'noopener noreferrer';
+        fallback.textContent = english ? 'Open on YouTube' : 'Abrir en YouTube';
+
+        const firstContentNode = summary.nextSibling;
+        videos.insertBefore(container, firstContentNode);
+        videos.insertBefore(fallback, container.nextSibling);
+
+        const totalVideos = videos.querySelectorAll('.puppy-video-container').length;
+        summary.textContent = english ? `Watch ${totalVideos} videos` : `Ver ${totalVideos} videos`;
+      }
+    }
+
     const latestShow = Array.from(document.querySelectorAll('.live-show')).find((section) => {
       const heading = section.querySelector('h2');
       const text = heading?.textContent.trim();
@@ -96,12 +138,12 @@
     if (latestShow) {
       const iframe = latestShow.querySelector('.live-show__video iframe');
       if (iframe) {
-        iframe.src = latestEmbedUrl;
+        iframe.src = tlilxochitlLatestEmbedUrl;
         iframe.title = english ? 'Latest The Xolos Ramirez Show episode' : 'Último episodio de The Xolos Ramirez Show';
       }
 
       latestShow.querySelectorAll('a[href*="youtu"]').forEach((link) => {
-        link.href = latestVideoUrl;
+        link.href = tlilxochitlLatestVideoUrl;
         link.setAttribute(
           'aria-label',
           english ? 'Watch the latest The Xolos Ramirez Show episode on YouTube' : 'Ver el último episodio de The Xolos Ramirez Show en YouTube',
