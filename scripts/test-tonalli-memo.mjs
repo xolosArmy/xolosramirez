@@ -25,10 +25,15 @@ class Element {
 }
 function fixture({ json = feed(post()), fetch, lang = 'es', readyState = 'complete', observer = true, base } = {}) {
   const root = new Element('section'), status = new Element('p'), list = new Element('ol');
-  root.querySelector = (selector) => selector === '[data-memo-status]' ? status : list;
+  const intro = new Element('p'), explore = new Element('a'), sibling = new Element('article');
+  intro.textContent = 'INTRO PRESERVED';
+  explore.href = 'https://app.tonalli.cash/memo';
+  explore.textContent = 'Explorar Tonalli Memo';
+  sibling.textContent = 'Guías e historias del linaje';
+  root.querySelector = (selector) => selector === '[data-memo-status]' ? status : selector === '[data-memo-posts]' ? list : null;
   const document = {
     readyState, documentElement: { lang }, getElementById: () => root,
-    createElement: (tag) => new Element(tag)
+    createElement: (tag) => new Element(tag), body: { children: [root, sibling] }
   };
   let intersect, onLoad, timer, calls = 0, options, url, disconnected = false;
   const window = {
@@ -44,17 +49,56 @@ function fixture({ json = feed(post()), fetch, lang = 'es', readyState = 'comple
     observe(node) { assert.equal(node, root); }
     disconnect() { disconnected = true; }
   };
-  const context = vm.createContext({ document, window, URL, AbortController, Intl, Date });
+  const context = vm.createContext({
+    document, window, URL, AbortController, Intl, Date, TextDecoder, Uint8Array
+  });
   const code = base ? source.replace("apiBase: 'https://memo-api.xolosarmy.xyz/api/v1'", `apiBase: ${JSON.stringify(base)}`) : source;
   const run = () => vm.runInContext(code, context);
   run();
   return {
-    root, status, list, window, run,
+    root, status, list, intro, explore, sibling, window, run,
     load: () => onLoad?.(), visible: () => intersect?.([{ isIntersecting: true }]),
     hidden: () => intersect?.([{ isIntersecting: false }]), timeout: () => timer?.(),
     get calls() { return calls; }, get options() { return options; }, get url() { return url; },
     get disconnected() { return disconnected; }, get timer() { return timer; }
   };
+}
+function streamedResponse(chunks, { headers, signal, onCancel, onPull, onEnqueue, hangAfter } = {}) {
+  const encoder = new TextEncoder();
+  let pulls = 0;
+  const stream = new ReadableStream({
+    async pull(controller) {
+      pulls++;
+      onPull?.(pulls);
+      if (signal?.aborted) {
+        try { controller.error(signal.reason || new DOMException('Aborted', 'AbortError')); } catch (_) {}
+        return;
+      }
+      if (hangAfter != null && pulls > hangAfter) {
+        await new Promise((resolve) => {
+          if (!signal) return;
+          signal.addEventListener('abort', resolve, { once: true });
+        });
+        try { controller.error(signal?.reason || new DOMException('Aborted', 'AbortError')); } catch (_) {}
+        return;
+      }
+      const chunk = chunks[pulls - 1];
+      if (chunk === undefined) { controller.close(); return; }
+      controller.enqueue(typeof chunk === 'string' ? encoder.encode(chunk) : chunk);
+      onEnqueue?.(pulls);
+    },
+    cancel(reason) { onCancel?.(reason); }
+  });
+  return new Response(stream, { headers: headers || undefined });
+}
+function jsonOfBytes(target, extra = {}) {
+  const make = (pad) => JSON.stringify({ items: [post(1, extra)], limit: 6, pad });
+  const empty = make('');
+  const size = Buffer.byteLength(empty);
+  assert.ok(size <= target, 'base JSON exceeds target');
+  const body = make('x'.repeat(target - size));
+  assert.equal(Buffer.byteLength(body), target);
+  return body;
 }
 async function settle() { for (let i = 0; i < 6; i++) await new Promise(setImmediate); }
 async function render(options) { const f = fixture(options); f.visible(); await settle(); return f; }
@@ -196,5 +240,146 @@ test('API normalization avoids duplicate versions and rejects localhost or unexp
   }
   for (const base of ['http://localhost:3000', 'https://evil.example/api/v1', 'https://memo-api.xolosarmy.xyz/admin', 'https://user@memo-api.xolosarmy.xyz/api/v1']) {
     const f = await render({ base }); assert.equal(f.calls, 0); assert.equal(f.root.dataset.memoState, 'unavailable');
+  }
+});
+test('chunked responses without Content-Length are assembled and still bounded in bytes', async () => {
+  const body = JSON.stringify(feed(post()));
+  const mid = Math.ceil(body.length / 3);
+  const f = await render({
+    fetch: () => streamedResponse([body.slice(0, mid), body.slice(mid, mid * 2), body.slice(mid * 2)])
+  });
+  assert.equal(f.root.dataset.memoState, 'available');
+  assert.match(f.list.textContent, /message 1/);
+});
+test('missing or lying Content-Length does not replace the byte cap or block a valid body', async () => {
+  const valid = JSON.stringify(feed(post()));
+  const missing = await render({ fetch: () => streamedResponse([valid]) });
+  assert.equal(missing.root.dataset.memoState, 'available');
+  const lyingSmall = await render({
+    fetch: () => streamedResponse([valid], { headers: { 'Content-Length': '8' } })
+  });
+  assert.equal(lyingSmall.root.dataset.memoState, 'available');
+  let cancelled = false, restEnqueued = false;
+  const over = await render({
+    fetch: (_, { signal }) => streamedResponse(
+      [new Uint8Array(131073), new Uint8Array(2048)],
+      {
+        signal,
+        headers: { 'Content-Length': '12' },
+        hangAfter: 1,
+        onEnqueue: (n) => { if (n > 1) restEnqueued = true; },
+        onCancel: () => { cancelled = true; }
+      }
+    )
+  });
+  assert.equal(over.root.dataset.memoState, 'unavailable');
+  assert.equal(cancelled, true);
+  assert.equal(restEnqueued, false);
+});
+test('exactly 128 KiB is accepted; one extra byte is rejected even when Content-Length is absent', async () => {
+  const exact = jsonOfBytes(131072);
+  const f = await render({ fetch: () => streamedResponse([exact]) });
+  assert.equal(f.root.dataset.memoState, 'available');
+  assert.match(f.list.textContent, /message 1/);
+  const over = await render({ fetch: () => streamedResponse([jsonOfBytes(131073)]) });
+  assert.equal(over.root.dataset.memoState, 'unavailable');
+  assert.equal(over.list.children.length, 0);
+});
+test('UTF-8 multibyte text and characters split across chunks decode as original text', async () => {
+  const text = 'café 🐕 Δ — Tlilxóchitl';
+  const body = JSON.stringify(feed(post(1, { verification: { payload: text, displayPayload: text } })));
+  const bytes = new TextEncoder().encode(body);
+  const splitAt = bytes.indexOf(0xC3) + 1;
+  assert.ok(splitAt > 0 && splitAt < bytes.length);
+  const f = await render({
+    fetch: () => streamedResponse([bytes.slice(0, splitAt), bytes.slice(splitAt)])
+  });
+  assert.equal(f.root.dataset.memoState, 'available');
+  assert.ok(nodes(f.list, 'p').some((p) => p.textContent === text));
+});
+test('byte limit counts UTF-8 bytes, not UTF-16 code units', async () => {
+  const chars = 'é'.repeat(70000);
+  assert.ok(chars.length < 131072);
+  assert.ok(Buffer.byteLength(chars) > 131072);
+  const body = JSON.stringify({ items: [post(1, { verification: { payload: chars, displayPayload: chars } })], limit: 6 });
+  assert.ok(Buffer.byteLength(body) > 131072);
+  const f = await render({ fetch: () => streamedResponse([body]) });
+  assert.equal(f.root.dataset.memoState, 'unavailable');
+});
+test('timeout during body reading aborts and never renders a late remaining chunk', async () => {
+  let pulls = 0, cancelled = false, delivered = 0;
+  const body = JSON.stringify(feed(post()));
+  const f = fixture({
+    fetch: (_, { signal }) => streamedResponse(
+      [body.slice(0, 8), body.slice(8)],
+      {
+        signal,
+        hangAfter: 1,
+        onPull: (n) => { pulls = n; if (n === 1) delivered = 1; },
+        onCancel: () => { cancelled = true; }
+      }
+    )
+  });
+  f.visible();
+  await settle();
+  assert.equal(f.root.dataset.memoState, 'loading');
+  assert.equal(delivered, 1);
+  f.timeout();
+  await settle();
+  assert.equal(f.options.signal.aborted, true);
+  assert.equal(cancelled, true);
+  assert.ok(pulls >= 1);
+  assert.equal(f.root.dataset.memoState, 'unavailable');
+  assert.equal(f.list.children.length, 0);
+  assert.equal(f.timer, null);
+});
+test('exceeding the limit cancels the reader before consuming the rest of the response', async () => {
+  let cancelled = false, restEnqueued = false;
+  const f = await render({
+    fetch: (_, { signal }) => streamedResponse(
+      [new Uint8Array(131073).fill(0x78), new Uint8Array(4096).fill(0x79)],
+      {
+        signal,
+        hangAfter: 1,
+        onEnqueue: (n) => { if (n > 1) restEnqueued = true; },
+        onCancel: () => { cancelled = true; }
+      }
+    )
+  });
+  assert.equal(f.root.dataset.memoState, 'unavailable');
+  assert.equal(cancelled, true);
+  assert.equal(restEnqueued, false);
+  assert.equal(f.options.signal.aborted, true);
+});
+test('missing streams are unavailable and never fall back to unlimited text() or arrayBuffer()', async () => {
+  let unlimited = false;
+  const f = await render({
+    fetch: async () => ({
+      ok: true,
+      headers: { get: () => null },
+      body: null,
+      text: async () => { unlimited = true; return JSON.stringify(feed(post())); },
+      arrayBuffer: async () => { unlimited = true; return new TextEncoder().encode(JSON.stringify(feed(post()))); }
+    })
+  });
+  assert.equal(f.root.dataset.memoState, 'unavailable');
+  assert.equal(unlimited, false);
+});
+test('localized unavailable state does not alter sibling page content or the public explore link', async () => {
+  for (const lang of ['es', 'en']) {
+    const f = await render({
+      lang,
+      fetch: () => streamedResponse([new Uint8Array(131073)])
+    });
+    assert.equal(f.root.dataset.memoState, 'unavailable');
+    assert.equal(f.list.hidden, true);
+    assert.equal(f.list.children.length, 0);
+    assert.equal(f.status.hidden, false);
+    assert.match(f.status.textContent, lang === 'en' ? /currently unavailable/ : /no está disponible/);
+    assert.doesNotMatch(f.status.textContent, /PRIVATE|INTERNAL|131073|AbortError/);
+    assert.equal(f.intro.textContent, 'INTRO PRESERVED');
+    assert.equal(f.explore.href, 'https://app.tonalli.cash/memo');
+    assert.equal(f.explore.textContent, 'Explorar Tonalli Memo');
+    assert.equal(f.sibling.textContent, 'Guías e historias del linaje');
   }
 });

@@ -7,7 +7,7 @@
     publicUi: 'https://app.tonalli.cash/memo',
     limit: 6,
     timeoutMs: 8000,
-    maxResponseChars: 131072,
+    maxResponseBytes: 131072,
     maxMessageChars: 16384
   });
   const COPY = {
@@ -118,6 +118,56 @@
     return items; // Keep canonical API order; no project filter or client sorting.
   }
 
+  async function readLimitedBody(response, controller) {
+    const limit = CONFIG.maxResponseBytes;
+    const declared = response.headers.get('content-length');
+    if (declared != null && declared !== '') {
+      const length = Number(declared);
+      if (!Number.isFinite(length) || length < 0 || length > limit) {
+        controller.abort();
+        if (response.body && typeof response.body.cancel === 'function') {
+          try { await response.body.cancel(); } catch (_) {}
+        }
+        throw new Error('Invalid response');
+      }
+    }
+    if (!response.body || typeof response.body.getReader !== 'function') {
+      controller.abort();
+      throw new Error('Unavailable');
+    }
+    const reader = response.body.getReader();
+    const chunks = [];
+    let received = 0;
+    const cancelReader = () => { reader.cancel().catch(() => {}); };
+    controller.signal.addEventListener('abort', cancelReader, { once: true });
+    try {
+      while (!controller.signal.aborted) {
+        const { done, value } = await reader.read();
+        if (controller.signal.aborted) throw new Error('Aborted');
+        if (done) break;
+        if (!value || !value.byteLength) continue;
+        received += value.byteLength;
+        if (received > limit) {
+          controller.abort();
+          throw new Error('Invalid response');
+        }
+        chunks.push(new Uint8Array(value));
+      }
+      if (controller.signal.aborted) throw new Error('Aborted');
+    } finally {
+      controller.signal.removeEventListener('abort', cancelReader);
+      try { await reader.cancel(); } catch (_) {}
+      try { reader.releaseLock(); } catch (_) {}
+    }
+    const bytes = new Uint8Array(received);
+    let offset = 0;
+    for (const chunk of chunks) {
+      bytes.set(chunk, offset);
+      offset += chunk.byteLength;
+    }
+    return new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+  }
+
   function element(tag, className, text) {
     const node = document.createElement(tag);
     node.className = className;
@@ -183,9 +233,9 @@
         method: 'GET', mode: 'cors', credentials: 'omit', cache: 'no-store',
         referrerPolicy: 'no-referrer', signal: controller.signal
       });
-      if (!response.ok || Number(response.headers.get('content-length')) > CONFIG.maxResponseChars) throw new Error('Unavailable');
-      const body = await response.text();
-      if (controller.signal.aborted || body.length > CONFIG.maxResponseChars) throw new Error('Invalid response');
+      if (!response.ok) throw new Error('Unavailable');
+      const body = await readLimitedBody(response, controller);
+      if (controller.signal.aborted) throw new Error('Invalid response');
       const items = parseFeed(JSON.parse(body));
       const cards = items.map((item) => renderItem(item, copy));
       list.replaceChildren(...cards);
