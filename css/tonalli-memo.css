@@ -1,0 +1,42 @@
+/* Scoped to the replacement of the Teyolías promotional card. */
+#tonalli-memo {
+  min-width: 0;
+  border-left: 4px solid var(--color-dorado);
+  gap: 1rem;
+}
+#tonalli-memo h2 { margin: 0; font-size: clamp(1.3rem, 2vw, 1.65rem); }
+#tonalli-memo p { margin: 0; }
+#tonalli-memo .tonalli-memo__intro { color: var(--color-texto); }
+#tonalli-memo .tonalli-memo__scope,
+#tonalli-memo .tonalli-memo__status { color: var(--color-texto-suave); font-size: .875rem; }
+#tonalli-memo .tonalli-memo__posts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  align-items: stretch;
+  gap: 1rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+#tonalli-memo .tonalli-memo__item { min-width: 0; }
+#tonalli-memo .tonalli-memo__post {
+  display: flex;
+  flex-direction: column;
+  gap: .85rem;
+  height: 100%;
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid var(--color-borde);
+  border-radius: .55rem;
+  background: rgba(0, 0, 0, .18);
+}
+#tonalli-memo .tonalli-memo__message { white-space: pre-wrap; overflow-wrap: anywhere; font-size: .95rem; }
+#tonalli-memo .tonalli-memo__author { overflow-wrap: anywhere; color: var(--color-texto-suave); font-size: .75rem; }
+#tonalli-memo .tonalli-memo__date { color: var(--color-texto-suave); font-size: .8rem; }
+#tonalli-memo .tonalli-memo__states { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-top: auto; font-size: .75rem; }
+#tonalli-memo .tonalli-memo__badge { color: var(--color-dorado); border: 1px solid var(--color-borde); border-radius: .35rem; padding: .2rem .45rem; }
+#tonalli-memo .tonalli-memo__chain { color: var(--color-texto-suave); }
+#tonalli-memo .tonalli-memo__link { display: inline-flex; align-items: center; min-height: 44px; font-size: .875rem; text-decoration: underline; text-underline-offset: .2em; }
+#tonalli-memo .tonalli-memo__explore { align-self: flex-start; max-width: 100%; }
+#tonalli-memo a:focus-visible { outline: 3px solid var(--color-dorado); outline-offset: 4px; }
+#tonalli-memo [hidden] { display: none !important; }
