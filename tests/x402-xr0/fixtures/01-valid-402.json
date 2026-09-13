@@ -40,7 +40,23 @@
     "asset": "TBD — owned by x402-XEC",
     "recipient": "ecash:qp3wjpa3tjlj042z2wv7hahsldgwhwy0rq9sywjpy5",
     "targetResourceUrl": "https://api.xolosramirez.com/v1/xolos/xilonen/verified-dossier",
+    "boundResourceHash": "TBD — upstream proposal owned by x402-XEC",
     "timestamp": 1757786450
+  },
+  "verifierSimulation": {
+    "status": "VERIFIED",
+    "verifiedPayment": {
+      "txid": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "vout": 0,
+      "amount": "500000",
+      "asset": "TBD — owned by x402-XEC",
+      "recipient": "ecash:qp3wjpa3tjlj042z2wv7hahsldgwhwy0rq9sywjpy5",
+      "blockTimestamp": 1757786450
+    }
+  },
+  "transportSimulation": {
+    "deliveryAttempted": true,
+    "responseCompleted": true
   },
   "expectedOutcome": "SUCCESS",
   "expectedEvidence": [
