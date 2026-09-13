@@ -47,26 +47,51 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
     ledgerContext
   } = fixture;
 
-  // 1. Check wallet availability
+  // 1. Challenge Resource Validation: Validate challenge existence and non-empty resource URL before any dereference
+  if (!challenge || typeof challenge !== 'object') {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_CHALLENGE' };
+  }
+  if (
+    !challenge.resource ||
+    typeof challenge.resource !== 'object' ||
+    typeof challenge.resource.url !== 'string' ||
+    challenge.resource.url.trim() === ''
+  ) {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_CHALLENGE' };
+  }
+
+  // 2. Check wallet availability
   if (walletSimulation && walletSimulation.status === 'DISCONNECTED') {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_WALLET_UNAVAILABLE' };
   }
 
-  // 2. Check verifier / indexer availability
-  const verifier = verifierSimulation || options.verifierSimulation;
+  // 3. Settlement simulation: Use explicit verifier override precedence (options ?? fixture)
+  const verifier = options.verifierSimulation ?? fixture.verifierSimulation;
   if (verifier && verifier.status === 'UNREACHABLE') {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_VERIFIER_UNAVAILABLE' };
   }
-
-  // 3. Settlement simulation: Absence of affirmative simulated verifier result -> FAIL CLOSED.
-  // Derive payment details from verified result, not caller claim.
   if (!verifier || verifier.status !== 'VERIFIED' || !verifier.verifiedPayment) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_SETTLEMENT_UNVERIFIED' };
   }
 
   const verifiedPayment = verifier.verifiedPayment;
 
-  // 4. Check concurrent lock / active lease
+  // 4. UTXO Identifier Binding: Canonical monetary identity must come from verifiedPayment.
+  // If paymentProof declares txid or vout, they must match verifiedPayment exactly.
+  if (
+    paymentProof?.txid !== undefined &&
+    paymentProof.txid !== verifiedPayment.txid
+  ) {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_UTXO_MISMATCH' };
+  }
+  if (
+    paymentProof?.vout !== undefined &&
+    Number(paymentProof.vout) !== Number(verifiedPayment.vout)
+  ) {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_UTXO_MISMATCH' };
+  }
+
+  // 5. Check concurrent lock / active lease
   if (lockContext && lockContext.activeLeaseId) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_LEASE_SUPERSEDED' };
   }
@@ -76,21 +101,30 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_CHALLENGE' };
   }
 
-  // 5. Expiry: Never trust client-supplied presentedAt; do NOT use historical blockTimestamp.
-  // Use trusted injected evaluationTime (server/caller override first, then fixture clock, then system clock).
-  const trustedEvaluationTime = options.evaluationTime ?? fixture.evaluationTime ?? Math.floor(Date.now() / 1000);
+  // 6. Expiry: Never trust client-supplied presentedAt; do NOT use historical blockTimestamp or Date.now().
+  // The harness must exclusively use options.evaluationTime ?? fixture.evaluationTime.
+  // If neither exists when temporal validation is required: FAIL CLOSED.
   if (accepted.maxTimeoutSeconds && accepted.extra?.issuedAt) {
+    const trustedEvaluationTime = options.evaluationTime ?? fixture.evaluationTime;
+    if (
+      trustedEvaluationTime === undefined ||
+      trustedEvaluationTime === null ||
+      typeof trustedEvaluationTime !== 'number' ||
+      Number.isNaN(trustedEvaluationTime)
+    ) {
+      return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_EVALUATION_TIME_REQUIRED' };
+    }
     const elapsed = trustedEvaluationTime - accepted.extra.issuedAt;
     if (elapsed > accepted.maxTimeoutSeconds) {
       return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVOICE_EXPIRED' };
     }
   }
 
-  // 6. Check replay in ledger / Same-resource retry
+  // 7. Check replay in ledger / Same-resource retry
   const utxoId = `${verifiedPayment.txid}:${verifiedPayment.vout}`;
   if (ledgerContext?.alreadySettledTxids?.includes(utxoId)) {
     const existingEntitlement = ledgerContext.entitlements?.[utxoId];
-    const challengedResourceId = challenge.resource?.url;
+    const challengedResourceId = challenge.resource.url;
     const proofResourceId = paymentProof?.targetResourceUrl;
 
     // Idempotent retry: previous resourceId, challenged resourceId, and proof resourceId must all match
@@ -99,9 +133,25 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
       existingEntitlement.resourceId === challengedResourceId &&
       proofResourceId === challengedResourceId
     ) {
+      // Evaluate new transport attempt independently.
+      // Do NOT emit PAYMENT_SETTLED again; reuse existing entitlement.
+      const transport = options.transportSimulation ?? fixture.transportSimulation;
+      const retryEvidence = [];
+
+      if (transport?.responseCompleted && !transport?.deliveryAttempted) {
+        return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_DELIVERY_STAGE_INVALID' };
+      }
+
+      if (transport?.deliveryAttempted) {
+        retryEvidence.push('RESOURCE_DELIVERY_ATTEMPTED');
+      }
+      if (transport?.responseCompleted) {
+        retryEvidence.push('RESOURCE_RESPONSE_COMPLETED');
+      }
+
       return {
         outcome: 'SUCCESS',
-        evidence: ['PAYMENT_SETTLED', 'RESOURCE_UNLOCKED'],
+        evidence: retryEvidence,
         entitlement: existingEntitlement,
         idempotentRetry: true
       };
@@ -110,12 +160,12 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_REPLAY_DETECTED' };
   }
 
-  // 7. Check asset compatibility (derived from verified payment, not caller claim)
+  // 8. Check asset compatibility (derived from verified payment, not caller claim)
   if (verifiedPayment.asset !== accepted.asset) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_UNSUPPORTED_ASSET' };
   }
 
-  // 8. Check amount sufficiency (derived from verified payment, not caller claim)
+  // 9. Check amount sufficiency (derived from verified payment, not caller claim)
   try {
     const paid = BigInt(verifiedPayment.amount);
     const required = BigInt(accepted.amount);
@@ -126,17 +176,17 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_MALFORMED_AMOUNT' };
   }
 
-  // 9. Check recipient payTo match (derived from verified payment, not caller claim)
+  // 10. Check recipient payTo match (derived from verified payment, not caller claim)
   if (verifiedPayment.recipient !== accepted.payTo) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_RECIPIENT' };
   }
 
-  // 10. Check resource match
+  // 11. Check resource match
   if (!paymentProof || paymentProof.targetResourceUrl !== challenge.resource.url) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_RESOURCE_MISMATCH' };
   }
 
-  // 11. Resource binding: If expected resourceHash exists, missing or mismatched boundResourceHash
+  // 12. Resource binding: If expected resourceHash exists, missing or mismatched boundResourceHash
   // must be validated against the authenticated output returned by the verifier simulation,
   // rejecting any value supplied solely by the client or not derived from the affirmative verification.
   const expectedHash = challenge.extensions?.['x402-xec']?.info?.resourceHash;
@@ -155,26 +205,27 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
     }
   }
 
-  // 12. Check stale payment proof (derived from verified payment timestamp)
+  // 13. Check stale payment proof (derived from verified payment timestamp)
   if (verifiedPayment.blockTimestamp && accepted.extra?.issuedAt) {
     if (verifiedPayment.blockTimestamp < accepted.extra.issuedAt - 300) {
       return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_PAYMENT_PROOF_STALE' };
     }
   }
 
-  // 13. Delivery evidence: Payment verification produces PAYMENT_SETTLED and RESOURCE_UNLOCKED.
+  // 14. Delivery evidence: Payment verification produces PAYMENT_SETTLED and RESOURCE_UNLOCKED.
   // Delivery evidence requires explicit affirmative transport layer outcome.
   // Formally enforce staged lifecycle: RESOURCE_DELIVERY_ATTEMPTED must be recorded
   // before allowing transition to the final RESOURCE_RESPONSE_COMPLETED state.
+  // Completion without attempted delivery fails closed.
   const evidenceTrail = ['PAYMENT_SETTLED', 'RESOURCE_UNLOCKED'];
-  const transport = transportSimulation || options.transportSimulation;
+  const transport = options.transportSimulation ?? fixture.transportSimulation;
+  if (transport?.responseCompleted && !transport?.deliveryAttempted) {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_DELIVERY_STAGE_INVALID' };
+  }
   if (transport?.deliveryAttempted) {
     evidenceTrail.push('RESOURCE_DELIVERY_ATTEMPTED');
   }
   if (transport?.responseCompleted) {
-    if (!evidenceTrail.includes('RESOURCE_DELIVERY_ATTEMPTED')) {
-      evidenceTrail.push('RESOURCE_DELIVERY_ATTEMPTED');
-    }
     evidenceTrail.push('RESOURCE_RESPONSE_COMPLETED');
   }
 
@@ -666,19 +717,220 @@ test('Regression P1-5: Payment verification segregates settlement from transport
     'RESOURCE_RESPONSE_COMPLETED'
   ]);
 
-  // Case D (P2): Staged lifecycle — responseCompleted implies and formally records RESOURCE_DELIVERY_ATTEMPTED first
-  const impliedAttemptFixture = {
+  // Case D: Staged lifecycle — responseCompleted without deliveryAttempted FAILS CLOSED
+  const invalidAttemptFixture = {
     ...baseFixture,
     transportSimulation: {
       responseCompleted: true // deliveryAttempted omitted
     }
   };
-  const impliedResult = evaluateX402PaymentProof(impliedAttemptFixture);
-  assert.equal(impliedResult.outcome, 'SUCCESS');
-  assert.deepEqual(impliedResult.evidence, [
-    'PAYMENT_SETTLED',
-    'RESOURCE_UNLOCKED',
+  const invalidResult = evaluateX402PaymentProof(invalidAttemptFixture);
+  assert.equal(invalidResult.outcome, 'FAIL_CLOSED');
+  assert.equal(invalidResult.errorCode, 'ERR_DELIVERY_STAGE_INVALID');
+});
+
+// ---------------- PASS 2 HARDENING REGRESSION TESTS ---------------- //
+
+test('Regression P1: UTXO identifier binding rejects mismatched or forged client txid/vout', () => {
+  const validFixturePath = resolve(FIXTURES_DIR, '01-valid-402.json');
+  const baseFixture = JSON.parse(readFileSync(validFixturePath, 'utf8'));
+
+  // Case A: Matching txid and vout continues to SUCCESS
+  const matchingResult = evaluateX402PaymentProof(baseFixture);
+  assert.equal(matchingResult.outcome, 'SUCCESS');
+
+  // Case B: Mismatched txid rejects with ERR_UTXO_MISMATCH
+  const mismatchedTxidFixture = {
+    ...baseFixture,
+    paymentProof: {
+      ...baseFixture.paymentProof,
+      txid: '0000000000000000000000000000000000000000000000000000000000mismatch'
+    }
+  };
+  const mismatchedTxidResult = evaluateX402PaymentProof(mismatchedTxidFixture);
+  assert.equal(mismatchedTxidResult.outcome, 'FAIL_CLOSED');
+  assert.equal(mismatchedTxidResult.errorCode, 'ERR_UTXO_MISMATCH');
+
+  // Case C: Mismatched vout rejects with ERR_UTXO_MISMATCH
+  const mismatchedVoutFixture = {
+    ...baseFixture,
+    paymentProof: {
+      ...baseFixture.paymentProof,
+      vout: 1 // Base verifier confirmed vout 0
+    }
+  };
+  const mismatchedVoutResult = evaluateX402PaymentProof(mismatchedVoutFixture);
+  assert.equal(mismatchedVoutResult.outcome, 'FAIL_CLOSED');
+  assert.equal(mismatchedVoutResult.errorCode, 'ERR_UTXO_MISMATCH');
+
+  // Case D: Forged client txid/vout with affirmative verifier output rejects with ERR_UTXO_MISMATCH
+  const forgedClientFixture = {
+    ...baseFixture,
+    paymentProof: {
+      ...baseFixture.paymentProof,
+      txid: 'forged_utxo_txid_from_client_claim_99999999999999999999999999999999',
+      vout: 2
+    },
+    verifierSimulation: {
+      status: 'VERIFIED',
+      verifiedPayment: {
+        ...baseFixture.verifierSimulation.verifiedPayment,
+        txid: baseFixture.paymentProof.txid,
+        vout: 0
+      }
+    }
+  };
+  const forgedResult = evaluateX402PaymentProof(forgedClientFixture);
+  assert.equal(forgedResult.outcome, 'FAIL_CLOSED');
+  assert.equal(forgedResult.errorCode, 'ERR_UTXO_MISMATCH');
+});
+
+test('Regression P2: Verifier simulation override precedence over fixture', () => {
+  const validFixturePath = resolve(FIXTURES_DIR, '01-valid-402.json');
+  const baseFixture = JSON.parse(readFileSync(validFixturePath, 'utf8'));
+
+  // Fixture has VERIFIED status, but options override passes UNREACHABLE
+  const overrideResult = evaluateX402PaymentProof(baseFixture, {
+    verifierSimulation: { status: 'UNREACHABLE' }
+  });
+  assert.equal(overrideResult.outcome, 'FAIL_CLOSED');
+  assert.equal(overrideResult.errorCode, 'ERR_VERIFIER_UNAVAILABLE');
+
+  // Override passes non-affirmative status -> ERR_SETTLEMENT_UNVERIFIED
+  const unverifiedResult = evaluateX402PaymentProof(baseFixture, {
+    verifierSimulation: { status: 'FAILED' }
+  });
+  assert.equal(unverifiedResult.outcome, 'FAIL_CLOSED');
+  assert.equal(unverifiedResult.errorCode, 'ERR_SETTLEMENT_UNVERIFIED');
+});
+
+test('Regression P2: Challenge Resource Validation fails closed on missing or empty resource URL without TypeError', () => {
+  const validFixturePath = resolve(FIXTURES_DIR, '01-valid-402.json');
+  const baseFixture = JSON.parse(readFileSync(validFixturePath, 'utf8'));
+
+  // Case A: Missing resource object in challenge
+  const missingResourceFixture = {
+    ...baseFixture,
+    challenge: {
+      ...baseFixture.challenge,
+      resource: undefined
+    }
+  };
+  const missingResourceResult = evaluateX402PaymentProof(missingResourceFixture);
+  assert.equal(missingResourceResult.outcome, 'FAIL_CLOSED');
+  assert.equal(missingResourceResult.errorCode, 'ERR_INVALID_CHALLENGE');
+
+  // Case B: Missing resource.url in challenge
+  const missingUrlFixture = {
+    ...baseFixture,
+    challenge: {
+      ...baseFixture.challenge,
+      resource: {
+        description: 'No URL present'
+      }
+    }
+  };
+  const missingUrlResult = evaluateX402PaymentProof(missingUrlFixture);
+  assert.equal(missingUrlResult.outcome, 'FAIL_CLOSED');
+  assert.equal(missingUrlResult.errorCode, 'ERR_INVALID_CHALLENGE');
+
+  // Case C: Empty resource.url in challenge
+  const emptyUrlFixture = {
+    ...baseFixture,
+    challenge: {
+      ...baseFixture.challenge,
+      resource: {
+        url: '   '
+      }
+    }
+  };
+  const emptyUrlResult = evaluateX402PaymentProof(emptyUrlFixture);
+  assert.equal(emptyUrlResult.outcome, 'FAIL_CLOSED');
+  assert.equal(emptyUrlResult.errorCode, 'ERR_INVALID_CHALLENGE');
+
+  // Case D: Missing challenge object altogether
+  const noChallengeFixture = {
+    ...baseFixture,
+    challenge: undefined
+  };
+  const noChallengeResult = evaluateX402PaymentProof(noChallengeFixture);
+  assert.equal(noChallengeResult.outcome, 'FAIL_CLOSED');
+  assert.equal(noChallengeResult.errorCode, 'ERR_INVALID_CHALLENGE');
+});
+
+test('Regression P2: Transport evidence on idempotent retries evaluated independently', () => {
+  const validFixturePath = resolve(FIXTURES_DIR, '01-valid-402.json');
+  const baseFixture = JSON.parse(readFileSync(validFixturePath, 'utf8'));
+
+  const utxoId = `${baseFixture.paymentProof.txid}:${baseFixture.paymentProof.vout}`;
+  const existingEntitlement = {
+    entitlementId: 'ent-e3b0c442-0',
+    resourceId: baseFixture.paymentProof.targetResourceUrl,
+    paymentUtxo: utxoId,
+    status: 'ACTIVE_COMPLETED'
+  };
+
+  const baseRetryFixture = {
+    ...baseFixture,
+    transportSimulation: undefined,
+    ledgerContext: {
+      alreadySettledTxids: [utxoId],
+      entitlements: {
+        [utxoId]: existingEntitlement
+      }
+    }
+  };
+
+  // Case A: idempotent retry + no transport -> no new transport evidence
+  const noTransportRetry = evaluateX402PaymentProof(baseRetryFixture);
+  assert.equal(noTransportRetry.outcome, 'SUCCESS');
+  assert.equal(noTransportRetry.idempotentRetry, true);
+  assert.deepEqual(noTransportRetry.evidence, []);
+  assert.deepEqual(noTransportRetry.entitlement, existingEntitlement);
+
+  // Case B: idempotent retry + attempted -> DELIVERY_ATTEMPTED
+  const attemptedRetry = evaluateX402PaymentProof(baseRetryFixture, {
+    transportSimulation: { deliveryAttempted: true, responseCompleted: false }
+  });
+  assert.equal(attemptedRetry.outcome, 'SUCCESS');
+  assert.equal(attemptedRetry.idempotentRetry, true);
+  assert.deepEqual(attemptedRetry.evidence, ['RESOURCE_DELIVERY_ATTEMPTED']);
+  assert.deepEqual(attemptedRetry.entitlement, existingEntitlement);
+
+  // Case C: idempotent retry + completed -> ATTEMPTED → RESPONSE_COMPLETED
+  const completedRetry = evaluateX402PaymentProof(baseRetryFixture, {
+    transportSimulation: { deliveryAttempted: true, responseCompleted: true }
+  });
+  assert.equal(completedRetry.outcome, 'SUCCESS');
+  assert.equal(completedRetry.idempotentRetry, true);
+  assert.deepEqual(completedRetry.evidence, [
     'RESOURCE_DELIVERY_ATTEMPTED',
     'RESOURCE_RESPONSE_COMPLETED'
   ]);
+  assert.deepEqual(completedRetry.entitlement, existingEntitlement);
+
+  // Case D: retry completion without attempted -> FAIL CLOSED (ERR_DELIVERY_STAGE_INVALID)
+  const invalidRetry = evaluateX402PaymentProof(baseRetryFixture, {
+    transportSimulation: { responseCompleted: true } // deliveryAttempted omitted / false
+  });
+  assert.equal(invalidRetry.outcome, 'FAIL_CLOSED');
+  assert.equal(invalidRetry.errorCode, 'ERR_DELIVERY_STAGE_INVALID');
+  // Original entitlement remains unchanged
+  assert.equal(existingEntitlement.status, 'ACTIVE_COMPLETED');
 });
+
+test('Regression Hardening: Deterministic evaluationTime requires options or fixture clock, fails closed without fallback', () => {
+  const validFixturePath = resolve(FIXTURES_DIR, '01-valid-402.json');
+  const baseFixture = JSON.parse(readFileSync(validFixturePath, 'utf8'));
+
+  // Fixture requires expiration validation (has maxTimeoutSeconds and extra.issuedAt)
+  // Omitting both options.evaluationTime and fixture.evaluationTime MUST fail closed
+  const noClockFixture = {
+    ...baseFixture,
+    evaluationTime: undefined
+  };
+  const noClockResult = evaluateX402PaymentProof(noClockFixture, { evaluationTime: undefined });
+  assert.equal(noClockResult.outcome, 'FAIL_CLOSED');
+  assert.equal(noClockResult.errorCode, 'ERR_EVALUATION_TIME_REQUIRED');
+});
+
