@@ -47,10 +47,16 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
     ledgerContext
   } = fixture;
 
-  // 1. Challenge Resource Validation: Validate challenge existence and non-empty resource URL before any dereference
+  // 1. Validate challenge structure
   if (!challenge || typeof challenge !== 'object') {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_CHALLENGE' };
   }
+
+  // 2. Validate x402 protocol version (must be strictly integer 2)
+  if (challenge.x402Version !== 2) {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_CHALLENGE' };
+  }
+
   if (
     !challenge.resource ||
     typeof challenge.resource !== 'object' ||
@@ -60,50 +66,12 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_CHALLENGE' };
   }
 
-  // 2. Check wallet availability
-  if (walletSimulation && walletSimulation.status === 'DISCONNECTED') {
-    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_WALLET_UNAVAILABLE' };
-  }
-
-  // 3. Settlement simulation: Use explicit verifier override precedence (options ?? fixture)
-  const verifier = options.verifierSimulation ?? fixture.verifierSimulation;
-  if (verifier && verifier.status === 'UNREACHABLE') {
-    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_VERIFIER_UNAVAILABLE' };
-  }
-  if (!verifier || verifier.status !== 'VERIFIED' || !verifier.verifiedPayment) {
-    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_SETTLEMENT_UNVERIFIED' };
-  }
-
-  const verifiedPayment = verifier.verifiedPayment;
-
-  // 4. UTXO Identifier Binding: Canonical monetary identity must come from verifiedPayment.
-  // If paymentProof declares txid or vout, they must match verifiedPayment exactly.
-  if (
-    paymentProof?.txid !== undefined &&
-    paymentProof.txid !== verifiedPayment.txid
-  ) {
-    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_UTXO_MISMATCH' };
-  }
-  if (
-    paymentProof?.vout !== undefined &&
-    Number(paymentProof.vout) !== Number(verifiedPayment.vout)
-  ) {
-    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_UTXO_MISMATCH' };
-  }
-
-  // 5. Check concurrent lock / active lease
-  if (lockContext && lockContext.activeLeaseId) {
-    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_LEASE_SUPERSEDED' };
-  }
-
-  const accepted = challenge?.accepts?.[0];
-  if (!accepted) {
+  const accepted = challenge.accepts?.[0];
+  if (!accepted || typeof accepted !== 'object') {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_CHALLENGE' };
   }
 
-  // 6. Expiry: Never trust client-supplied presentedAt; do NOT use historical blockTimestamp or Date.now().
-  // The harness must exclusively use options.evaluationTime ?? fixture.evaluationTime.
-  // If neither exists when temporal validation is required: FAIL CLOSED.
+  // 3. Validate trusted evaluationTime (no Date.now() fallback; fail closed if absent)
   if (accepted.maxTimeoutSeconds && accepted.extra?.issuedAt) {
     const trustedEvaluationTime = options.evaluationTime ?? fixture.evaluationTime;
     if (
@@ -120,33 +88,151 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
     }
   }
 
-  // 7. Check replay in ledger / Same-resource retry
+  // Check wallet simulation / lease status
+  if (walletSimulation && walletSimulation.status === 'DISCONNECTED') {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_WALLET_UNAVAILABLE' };
+  }
+  if (lockContext && lockContext.activeLeaseId) {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_LEASE_SUPERSEDED' };
+  }
+
+  // 4. Require affirmative verifier result (precedence: options ?? fixture)
+  const verifier = options.verifierSimulation ?? fixture.verifierSimulation;
+  if (verifier && verifier.status === 'UNREACHABLE') {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_VERIFIER_UNAVAILABLE' };
+  }
+  if (!verifier || verifier.status !== 'VERIFIED' || !verifier.verifiedPayment || typeof verifier.verifiedPayment !== 'object') {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_SETTLEMENT_UNVERIFIED' };
+  }
+
+  // 5. Validate verifiedPayment shape defensively before any dereference
+  const verifiedPayment = verifier.verifiedPayment;
+  if (
+    typeof verifiedPayment.txid !== 'string' ||
+    verifiedPayment.txid.trim() === '' ||
+    verifiedPayment.vout === undefined ||
+    verifiedPayment.vout === null ||
+    typeof verifiedPayment.vout !== 'number' ||
+    !Number.isInteger(verifiedPayment.vout) ||
+    verifiedPayment.vout < 0 ||
+    typeof verifiedPayment.amount !== 'string' ||
+    verifiedPayment.amount.trim() === '' ||
+    typeof verifiedPayment.asset !== 'string' ||
+    verifiedPayment.asset.trim() === '' ||
+    typeof verifiedPayment.recipient !== 'string' ||
+    verifiedPayment.recipient.trim() === ''
+  ) {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_SETTLEMENT_UNVERIFIED' };
+  }
+
+  try {
+    const parsedAmount = BigInt(verifiedPayment.amount);
+    if (parsedAmount < 0n) {
+      return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_SETTLEMENT_UNVERIFIED' };
+    }
+  } catch {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_SETTLEMENT_UNVERIFIED' };
+  }
+
+  // 6. Validate submitted paymentProof identity (both txid and vout are strictly required)
+  if (
+    !paymentProof ||
+    typeof paymentProof !== 'object' ||
+    typeof paymentProof.txid !== 'string' ||
+    paymentProof.txid.trim() === ''
+  ) {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_UTXO_MISMATCH' };
+  }
+  if (
+    paymentProof.vout === undefined ||
+    paymentProof.vout === null ||
+    typeof paymentProof.vout !== 'number' ||
+    !Number.isInteger(paymentProof.vout) ||
+    paymentProof.vout < 0
+  ) {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_UTXO_MISMATCH' };
+  }
+
+  // 7. Bind verified UTXO: Submitted payment proof must match authentic verifier output
+  if (paymentProof.txid !== verifiedPayment.txid) {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_UTXO_MISMATCH' };
+  }
+  if (paymentProof.vout !== verifiedPayment.vout) {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_UTXO_MISMATCH' };
+  }
+
+  // 8. Verify amount, asset, recipient, resourceHash, and freshness
+  if (verifiedPayment.asset !== accepted.asset) {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_UNSUPPORTED_ASSET' };
+  }
+
+  const paid = BigInt(verifiedPayment.amount);
+  const required = BigInt(accepted.amount);
+  if (paid < required) {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INSUFFICIENT_AMOUNT' };
+  }
+
+  if (verifiedPayment.recipient !== accepted.payTo) {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_RECIPIENT' };
+  }
+
+  const expectedHash = challenge.extensions?.['x402-xec']?.info?.resourceHash;
+  if (expectedHash) {
+    if (
+      !verifiedPayment.boundResourceHash ||
+      typeof verifiedPayment.boundResourceHash !== 'string' ||
+      verifiedPayment.boundResourceHash !== expectedHash
+    ) {
+      return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_RESOURCE_HASH_MISMATCH' };
+    }
+    if (
+      !paymentProof?.boundResourceHash ||
+      typeof paymentProof.boundResourceHash !== 'string' ||
+      paymentProof.boundResourceHash !== expectedHash
+    ) {
+      return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_RESOURCE_HASH_MISMATCH' };
+    }
+  }
+
+  if (verifiedPayment.blockTimestamp && accepted.extra?.issuedAt) {
+    if (verifiedPayment.blockTimestamp < accepted.extra.issuedAt - 300) {
+      return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_PAYMENT_PROOF_STALE' };
+    }
+  }
+
+  // 9. Replay / Entitlement evaluation using canonical verifiedPayment identity
   const utxoId = `${verifiedPayment.txid}:${verifiedPayment.vout}`;
   if (ledgerContext?.alreadySettledTxids?.includes(utxoId)) {
     const existingEntitlement = ledgerContext.entitlements?.[utxoId];
     const challengedResourceId = challenge.resource.url;
     const proofResourceId = paymentProof?.targetResourceUrl;
 
-    // Idempotent retry: previous resourceId, challenged resourceId, and proof resourceId must all match
     if (
       existingEntitlement &&
       existingEntitlement.resourceId === challengedResourceId &&
       proofResourceId === challengedResourceId
     ) {
       // Evaluate new transport attempt independently.
-      // Do NOT emit PAYMENT_SETTLED again; reuse existing entitlement.
+      // Reuses entitlement without re-emitting PAYMENT_SETTLED.
       const transport = options.transportSimulation ?? fixture.transportSimulation;
       const retryEvidence = [];
 
-      if (transport?.responseCompleted && !transport?.deliveryAttempted) {
-        return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_DELIVERY_STAGE_INVALID' };
-      }
+      if (transport) {
+        if ((transport.responseCompleted || transport.deliveryFailed) && !transport.deliveryAttempted) {
+          return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_DELIVERY_STAGE_INVALID' };
+        }
+        if (transport.responseCompleted && transport.deliveryFailed) {
+          return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_DELIVERY_STAGE_INVALID' };
+        }
 
-      if (transport?.deliveryAttempted) {
-        retryEvidence.push('RESOURCE_DELIVERY_ATTEMPTED');
-      }
-      if (transport?.responseCompleted) {
-        retryEvidence.push('RESOURCE_RESPONSE_COMPLETED');
+        if (transport.deliveryAttempted) {
+          retryEvidence.push('RESOURCE_DELIVERY_ATTEMPTED');
+        }
+        if (transport.deliveryFailed) {
+          retryEvidence.push('RESOURCE_DELIVERY_FAILED');
+        } else if (transport.responseCompleted) {
+          retryEvidence.push('RESOURCE_RESPONSE_COMPLETED');
+        }
       }
 
       return {
@@ -156,77 +242,35 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
         idempotentRetry: true
       };
     }
-    // Replaying payment across different resources, sessions, or mismatched proof targets fails closed
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_REPLAY_DETECTED' };
   }
 
-  // 8. Check asset compatibility (derived from verified payment, not caller claim)
-  if (verifiedPayment.asset !== accepted.asset) {
-    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_UNSUPPORTED_ASSET' };
-  }
-
-  // 9. Check amount sufficiency (derived from verified payment, not caller claim)
-  try {
-    const paid = BigInt(verifiedPayment.amount);
-    const required = BigInt(accepted.amount);
-    if (paid < required) {
-      return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INSUFFICIENT_AMOUNT' };
-    }
-  } catch {
-    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_MALFORMED_AMOUNT' };
-  }
-
-  // 10. Check recipient payTo match (derived from verified payment, not caller claim)
-  if (verifiedPayment.recipient !== accepted.payTo) {
-    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_RECIPIENT' };
-  }
-
-  // 11. Check resource match
-  if (!paymentProof || paymentProof.targetResourceUrl !== challenge.resource.url) {
+  // If not previously settled, target resource URL in proof must match challenged resource URL
+  if (paymentProof.targetResourceUrl !== challenge.resource.url) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_RESOURCE_MISMATCH' };
   }
 
-  // 12. Resource binding: If expected resourceHash exists, missing or mismatched boundResourceHash
-  // must be validated against the authenticated output returned by the verifier simulation,
-  // rejecting any value supplied solely by the client or not derived from the affirmative verification.
-  const expectedHash = challenge.extensions?.['x402-xec']?.info?.resourceHash;
-  if (expectedHash) {
-    if (
-      !verifiedPayment.boundResourceHash ||
-      verifiedPayment.boundResourceHash !== expectedHash
-    ) {
-      return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_RESOURCE_HASH_MISMATCH' };
-    }
-    if (
-      !paymentProof?.boundResourceHash ||
-      paymentProof.boundResourceHash !== expectedHash
-    ) {
-      return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_RESOURCE_HASH_MISMATCH' };
-    }
-  }
-
-  // 13. Check stale payment proof (derived from verified payment timestamp)
-  if (verifiedPayment.blockTimestamp && accepted.extra?.issuedAt) {
-    if (verifiedPayment.blockTimestamp < accepted.extra.issuedAt - 300) {
-      return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_PAYMENT_PROOF_STALE' };
-    }
-  }
-
-  // 14. Delivery evidence: Payment verification produces PAYMENT_SETTLED and RESOURCE_UNLOCKED.
-  // Delivery evidence requires explicit affirmative transport layer outcome.
-  // Formally enforce staged lifecycle: RESOURCE_DELIVERY_ATTEMPTED must be recorded
-  // before allowing transition to the final RESOURCE_RESPONSE_COMPLETED state.
-  // Completion without attempted delivery fails closed.
+  // 10. Settlement evidence: Fresh settlement generates PAYMENT_SETTLED and RESOURCE_UNLOCKED
   const evidenceTrail = ['PAYMENT_SETTLED', 'RESOURCE_UNLOCKED'];
+
+  // 11. Transport evidence: Evaluated independently with delivery failure branch
   const transport = options.transportSimulation ?? fixture.transportSimulation;
-  if (transport?.responseCompleted && !transport?.deliveryAttempted) {
-    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_DELIVERY_STAGE_INVALID' };
-  }
-  if (transport?.deliveryAttempted) {
-    evidenceTrail.push('RESOURCE_DELIVERY_ATTEMPTED');
-  }
-  if (transport?.responseCompleted) {
-    evidenceTrail.push('RESOURCE_RESPONSE_COMPLETED');
+  if (transport) {
+    if ((transport.responseCompleted || transport.deliveryFailed) && !transport.deliveryAttempted) {
+      return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_DELIVERY_STAGE_INVALID' };
+    }
+    if (transport.responseCompleted && transport.deliveryFailed) {
+      return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_DELIVERY_STAGE_INVALID' };
+    }
+
+    if (transport.deliveryAttempted) {
+      evidenceTrail.push('RESOURCE_DELIVERY_ATTEMPTED');
+    }
+    if (transport.deliveryFailed) {
+      evidenceTrail.push('RESOURCE_DELIVERY_FAILED');
+    } else if (transport.responseCompleted) {
+      evidenceTrail.push('RESOURCE_RESPONSE_COMPLETED');
+    }
   }
 
   return {
@@ -729,17 +773,73 @@ test('Regression P1-5: Payment verification segregates settlement from transport
   assert.equal(invalidResult.errorCode, 'ERR_DELIVERY_STAGE_INVALID');
 });
 
-// ---------------- PASS 2 HARDENING REGRESSION TESTS ---------------- //
+// ---------------- PASS 3 HARDENING REGRESSION TESTS ---------------- //
 
-test('Regression P1: UTXO identifier binding rejects mismatched or forged client txid/vout', () => {
+test('Regression Pass 3 (P2-1): Strict UTXO identifiers in submitted paymentProof', () => {
   const validFixturePath = resolve(FIXTURES_DIR, '01-valid-402.json');
   const baseFixture = JSON.parse(readFileSync(validFixturePath, 'utf8'));
 
-  // Case A: Matching txid and vout continues to SUCCESS
+  // Condition 1: Matching txid and vout -> continue to SUCCESS
   const matchingResult = evaluateX402PaymentProof(baseFixture);
   assert.equal(matchingResult.outcome, 'SUCCESS');
+  assert.equal(matchingResult.entitlement.paymentUtxo, `${baseFixture.verifierSimulation.verifiedPayment.txid}:${baseFixture.verifierSimulation.verifiedPayment.vout}`);
 
-  // Case B: Mismatched txid rejects with ERR_UTXO_MISMATCH
+  // Condition 2: Missing txid -> ERR_UTXO_MISMATCH
+  const missingTxidFixture = {
+    ...baseFixture,
+    paymentProof: {
+      ...baseFixture.paymentProof,
+      txid: undefined
+    }
+  };
+  const missingTxidResult = evaluateX402PaymentProof(missingTxidFixture);
+  assert.equal(missingTxidResult.outcome, 'FAIL_CLOSED');
+  assert.equal(missingTxidResult.errorCode, 'ERR_UTXO_MISMATCH');
+
+  // Condition 2b: Empty txid -> ERR_UTXO_MISMATCH
+  const emptyTxidFixture = {
+    ...baseFixture,
+    paymentProof: {
+      ...baseFixture.paymentProof,
+      txid: '   '
+    }
+  };
+  const emptyTxidResult = evaluateX402PaymentProof(emptyTxidFixture);
+  assert.equal(emptyTxidResult.outcome, 'FAIL_CLOSED');
+  assert.equal(emptyTxidResult.errorCode, 'ERR_UTXO_MISMATCH');
+
+  // Condition 3: Missing vout -> ERR_UTXO_MISMATCH
+  const missingVoutFixture = {
+    ...baseFixture,
+    paymentProof: {
+      ...baseFixture.paymentProof,
+      vout: undefined
+    }
+  };
+  const missingVoutResult = evaluateX402PaymentProof(missingVoutFixture);
+  assert.equal(missingVoutResult.outcome, 'FAIL_CLOSED');
+  assert.equal(missingVoutResult.errorCode, 'ERR_UTXO_MISMATCH');
+
+  // Condition 3b: Non-integer / negative vout -> ERR_UTXO_MISMATCH
+  const negativeVoutFixture = {
+    ...baseFixture,
+    paymentProof: {
+      ...baseFixture.paymentProof,
+      vout: -1
+    }
+  };
+  assert.equal(evaluateX402PaymentProof(negativeVoutFixture).errorCode, 'ERR_UTXO_MISMATCH');
+
+  const nonIntegerVoutFixture = {
+    ...baseFixture,
+    paymentProof: {
+      ...baseFixture.paymentProof,
+      vout: 1.5
+    }
+  };
+  assert.equal(evaluateX402PaymentProof(nonIntegerVoutFixture).errorCode, 'ERR_UTXO_MISMATCH');
+
+  // Condition 4: Mismatched txid -> ERR_UTXO_MISMATCH
   const mismatchedTxidFixture = {
     ...baseFixture,
     paymentProof: {
@@ -751,7 +851,7 @@ test('Regression P1: UTXO identifier binding rejects mismatched or forged client
   assert.equal(mismatchedTxidResult.outcome, 'FAIL_CLOSED');
   assert.equal(mismatchedTxidResult.errorCode, 'ERR_UTXO_MISMATCH');
 
-  // Case C: Mismatched vout rejects with ERR_UTXO_MISMATCH
+  // Condition 5: Mismatched vout -> ERR_UTXO_MISMATCH
   const mismatchedVoutFixture = {
     ...baseFixture,
     paymentProof: {
@@ -763,7 +863,7 @@ test('Regression P1: UTXO identifier binding rejects mismatched or forged client
   assert.equal(mismatchedVoutResult.outcome, 'FAIL_CLOSED');
   assert.equal(mismatchedVoutResult.errorCode, 'ERR_UTXO_MISMATCH');
 
-  // Case D: Forged client txid/vout with affirmative verifier output rejects with ERR_UTXO_MISMATCH
+  // Condition 6: Forged client txid/vout with valid affirmative verifier output -> rejects with ERR_UTXO_MISMATCH
   const forgedClientFixture = {
     ...baseFixture,
     paymentProof: {
@@ -783,6 +883,269 @@ test('Regression P1: UTXO identifier binding rejects mismatched or forged client
   const forgedResult = evaluateX402PaymentProof(forgedClientFixture);
   assert.equal(forgedResult.outcome, 'FAIL_CLOSED');
   assert.equal(forgedResult.errorCode, 'ERR_UTXO_MISMATCH');
+});
+
+test('Regression Pass 3 (P2-2): Validate x402 protocol version strictly integer 2', () => {
+  const validFixturePath = resolve(FIXTURES_DIR, '01-valid-402.json');
+  const baseFixture = JSON.parse(readFileSync(validFixturePath, 'utf8'));
+
+  // Subtest A: Missing x402Version -> ERR_INVALID_CHALLENGE
+  const missingVersionFixture = {
+    ...baseFixture,
+    challenge: {
+      ...baseFixture.challenge,
+      x402Version: undefined
+    }
+  };
+  assert.equal(evaluateX402PaymentProof(missingVersionFixture).errorCode, 'ERR_INVALID_CHALLENGE');
+
+  // Subtest B: x402Version = 1 -> ERR_INVALID_CHALLENGE
+  const v1Fixture = {
+    ...baseFixture,
+    challenge: {
+      ...baseFixture.challenge,
+      x402Version: 1
+    }
+  };
+  assert.equal(evaluateX402PaymentProof(v1Fixture).errorCode, 'ERR_INVALID_CHALLENGE');
+
+  // Subtest C: x402Version = 3 -> ERR_INVALID_CHALLENGE
+  const v3Fixture = {
+    ...baseFixture,
+    challenge: {
+      ...baseFixture.challenge,
+      x402Version: 3
+    }
+  };
+  assert.equal(evaluateX402PaymentProof(v3Fixture).errorCode, 'ERR_INVALID_CHALLENGE');
+
+  // Subtest D: x402Version = "2" (string, no coercion) -> ERR_INVALID_CHALLENGE
+  const stringV2Fixture = {
+    ...baseFixture,
+    challenge: {
+      ...baseFixture.challenge,
+      x402Version: '2'
+    }
+  };
+  assert.equal(evaluateX402PaymentProof(stringV2Fixture).errorCode, 'ERR_INVALID_CHALLENGE');
+
+  // Subtest E: arbitrary value -> ERR_INVALID_CHALLENGE
+  const arbitraryFixture = {
+    ...baseFixture,
+    challenge: {
+      ...baseFixture.challenge,
+      x402Version: 'custom-draft'
+    }
+  };
+  assert.equal(evaluateX402PaymentProof(arbitraryFixture).errorCode, 'ERR_INVALID_CHALLENGE');
+});
+
+test('Regression Pass 3 (P2-3): Explicit failed-delivery evidence and invalid transport transitions', () => {
+  const validFixturePath = resolve(FIXTURES_DIR, '01-valid-402.json');
+  const baseFixture = JSON.parse(readFileSync(validFixturePath, 'utf8'));
+
+  // Case A: attempted + failed -> ATTEMPTED, FAILED (no RESOURCE_RESPONSE_COMPLETED)
+  const failedDeliveryFixture = {
+    ...baseFixture,
+    transportSimulation: {
+      deliveryAttempted: true,
+      deliveryFailed: true,
+      responseCompleted: false
+    }
+  };
+  const failedResult = evaluateX402PaymentProof(failedDeliveryFixture);
+  assert.equal(failedResult.outcome, 'SUCCESS');
+  assert.deepEqual(failedResult.evidence, [
+    'PAYMENT_SETTLED',
+    'RESOURCE_UNLOCKED',
+    'RESOURCE_DELIVERY_ATTEMPTED',
+    'RESOURCE_DELIVERY_FAILED'
+  ]);
+  assert.equal(failedResult.evidence.includes('RESOURCE_RESPONSE_COMPLETED'), false);
+  assert.equal(failedResult.entitlement.status, 'ACTIVE_COMPLETED');
+
+  // Case B: attempted + failed + responseCompleted -> FAIL CLOSED invalid transition
+  const conflictingTransportFixture = {
+    ...baseFixture,
+    transportSimulation: {
+      deliveryAttempted: true,
+      deliveryFailed: true,
+      responseCompleted: true
+    }
+  };
+  const conflictingResult = evaluateX402PaymentProof(conflictingTransportFixture);
+  assert.equal(conflictingResult.outcome, 'FAIL_CLOSED');
+  assert.equal(conflictingResult.errorCode, 'ERR_DELIVERY_STAGE_INVALID');
+
+  // Case C: failed without attempted -> FAIL CLOSED
+  const failedWithoutAttemptFixture = {
+    ...baseFixture,
+    transportSimulation: {
+      deliveryAttempted: false,
+      deliveryFailed: true,
+      responseCompleted: false
+    }
+  };
+  const failedWithoutAttemptResult = evaluateX402PaymentProof(failedWithoutAttemptFixture);
+  assert.equal(failedWithoutAttemptResult.outcome, 'FAIL_CLOSED');
+  assert.equal(failedWithoutAttemptResult.errorCode, 'ERR_DELIVERY_STAGE_INVALID');
+
+  // Case D: Idempotent retry with deliveryFailed -> ATTEMPTED, FAILED
+  const utxoId = `${baseFixture.paymentProof.txid}:${baseFixture.paymentProof.vout}`;
+  const existingEntitlement = {
+    entitlementId: 'ent-e3b0c442-0',
+    resourceId: baseFixture.paymentProof.targetResourceUrl,
+    paymentUtxo: utxoId,
+    status: 'ACTIVE_COMPLETED'
+  };
+  const retryFailedResult = evaluateX402PaymentProof(
+    {
+      ...baseFixture,
+      ledgerContext: {
+        alreadySettledTxids: [utxoId],
+        entitlements: { [utxoId]: existingEntitlement }
+      }
+    },
+    {
+      transportSimulation: {
+        deliveryAttempted: true,
+        deliveryFailed: true,
+        responseCompleted: false
+      }
+    }
+  );
+  assert.equal(retryFailedResult.outcome, 'SUCCESS');
+  assert.equal(retryFailedResult.idempotentRetry, true);
+  assert.deepEqual(retryFailedResult.evidence, [
+    'RESOURCE_DELIVERY_ATTEMPTED',
+    'RESOURCE_DELIVERY_FAILED'
+  ]);
+  assert.deepEqual(retryFailedResult.entitlement, existingEntitlement);
+});
+
+test('Regression Pass 3 (P2-4): Defensive verifiedPayment shape validation fails closed without TypeError', () => {
+  const validFixturePath = resolve(FIXTURES_DIR, '01-valid-402.json');
+  const baseFixture = JSON.parse(readFileSync(validFixturePath, 'utf8'));
+
+  // Case A: VERIFIED + missing txid -> FAIL CLOSED (ERR_SETTLEMENT_UNVERIFIED)
+  const noTxid = {
+    ...baseFixture,
+    verifierSimulation: {
+      status: 'VERIFIED',
+      verifiedPayment: {
+        ...baseFixture.verifierSimulation.verifiedPayment,
+        txid: undefined
+      }
+    }
+  };
+  assert.doesNotThrow(() => {
+    const res = evaluateX402PaymentProof(noTxid);
+    assert.equal(res.outcome, 'FAIL_CLOSED');
+    assert.equal(res.errorCode, 'ERR_SETTLEMENT_UNVERIFIED');
+  });
+
+  // Case B: VERIFIED + empty txid -> FAIL CLOSED
+  const emptyTxid = {
+    ...baseFixture,
+    verifierSimulation: {
+      status: 'VERIFIED',
+      verifiedPayment: {
+        ...baseFixture.verifierSimulation.verifiedPayment,
+        txid: '   '
+      }
+    }
+  };
+  assert.equal(evaluateX402PaymentProof(emptyTxid).errorCode, 'ERR_SETTLEMENT_UNVERIFIED');
+
+  // Case C: VERIFIED + missing vout -> FAIL CLOSED
+  const noVout = {
+    ...baseFixture,
+    verifierSimulation: {
+      status: 'VERIFIED',
+      verifiedPayment: {
+        ...baseFixture.verifierSimulation.verifiedPayment,
+        vout: undefined
+      }
+    }
+  };
+  assert.equal(evaluateX402PaymentProof(noVout).errorCode, 'ERR_SETTLEMENT_UNVERIFIED');
+
+  // Case D: VERIFIED + negative/non-integer vout -> FAIL CLOSED
+  const negVout = {
+    ...baseFixture,
+    verifierSimulation: {
+      status: 'VERIFIED',
+      verifiedPayment: {
+        ...baseFixture.verifierSimulation.verifiedPayment,
+        vout: -1
+      }
+    }
+  };
+  assert.equal(evaluateX402PaymentProof(negVout).errorCode, 'ERR_SETTLEMENT_UNVERIFIED');
+
+  const floatVout = {
+    ...baseFixture,
+    verifierSimulation: {
+      status: 'VERIFIED',
+      verifiedPayment: {
+        ...baseFixture.verifierSimulation.verifiedPayment,
+        vout: 0.5
+      }
+    }
+  };
+  assert.equal(evaluateX402PaymentProof(floatVout).errorCode, 'ERR_SETTLEMENT_UNVERIFIED');
+
+  // Case E: VERIFIED + missing recipient -> FAIL CLOSED
+  const noRecipient = {
+    ...baseFixture,
+    verifierSimulation: {
+      status: 'VERIFIED',
+      verifiedPayment: {
+        ...baseFixture.verifierSimulation.verifiedPayment,
+        recipient: ''
+      }
+    }
+  };
+  assert.equal(evaluateX402PaymentProof(noRecipient).errorCode, 'ERR_SETTLEMENT_UNVERIFIED');
+
+  // Case F: VERIFIED + missing asset -> FAIL CLOSED
+  const noAsset = {
+    ...baseFixture,
+    verifierSimulation: {
+      status: 'VERIFIED',
+      verifiedPayment: {
+        ...baseFixture.verifierSimulation.verifiedPayment,
+        asset: ''
+      }
+    }
+  };
+  assert.equal(evaluateX402PaymentProof(noAsset).errorCode, 'ERR_SETTLEMENT_UNVERIFIED');
+
+  // Case G: VERIFIED + missing amount -> FAIL CLOSED
+  const noAmount = {
+    ...baseFixture,
+    verifierSimulation: {
+      status: 'VERIFIED',
+      verifiedPayment: {
+        ...baseFixture.verifierSimulation.verifiedPayment,
+        amount: undefined
+      }
+    }
+  };
+  assert.equal(evaluateX402PaymentProof(noAmount).errorCode, 'ERR_SETTLEMENT_UNVERIFIED');
+
+  // Case H: VERIFIED + non-parsable amount -> FAIL CLOSED
+  const invalidAmount = {
+    ...baseFixture,
+    verifierSimulation: {
+      status: 'VERIFIED',
+      verifiedPayment: {
+        ...baseFixture.verifierSimulation.verifiedPayment,
+        amount: 'invalid-not-a-number'
+      }
+    }
+  };
+  assert.equal(evaluateX402PaymentProof(invalidAmount).errorCode, 'ERR_SETTLEMENT_UNVERIFIED');
 });
 
 test('Regression P2: Verifier simulation override precedence over fixture', () => {
