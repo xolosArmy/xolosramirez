@@ -2,13 +2,15 @@
  * @file webmcp-tools.js
  * WebMCP read-only tools registration for Xolos Ramírez.
  *
- * Implements milestone WM-XR1 as specified in XR-AC0 Revision B.
+ * Implements milestone WM-XR1 as specified in XR-AC0 Revision B and the
+ * WebMCP Draft Community Group Report (10-Sep-2026).
  * Registers 5 read-only tools via `document.modelContext.registerTool(...)`.
  *
  * INVARIANTS:
+ * - Normative API: document.modelContext.registerTool({ name, description, inputSchema, execute, annotations }).
  * - Feature detection: executes ONLY if document.modelContext.registerTool is present.
  * - Progressive enhancement: completely dormant when WebMCP is unavailable.
- * - sideEffects = "none" for all 5 tools.
+ * - Read-only guarantee: annotations: { readOnlyHint: true } for all 5 tools.
  * - Zero PII, zero private pricing disclosure.
  * - Non-blocking, zero interference with GTM/GA4/SEO/Formspree/WhatsApp.
  */
@@ -19,7 +21,9 @@ export const WEBMCP_TOOLS_DEFINITIONS = [
   {
     name: 'list_available_xolos',
     description: 'Lista los cachorros xoloitzcuintles públicos disponibles o reservados de Xolos Ramírez con filtros por estado, variedad y talla.',
-    sideEffects: 'none',
+    annotations: {
+      readOnlyHint: true
+    },
     inputSchema: {
       type: 'object',
       properties: {
@@ -74,6 +78,9 @@ export const WEBMCP_TOOLS_DEFINITIONS = [
         }
       }
     },
+    execute: async (params) => {
+      return await PublicXolosDataAdapter.listAvailableXolos(params || {});
+    },
     handler: async (params) => {
       return await PublicXolosDataAdapter.listAvailableXolos(params || {});
     }
@@ -81,14 +88,16 @@ export const WEBMCP_TOOLS_DEFINITIONS = [
   {
     name: 'get_xolo_profile',
     description: 'Obtiene el perfil público detallado, temperamento, cuidados y referencia genealógica de un xoloitzcuintle específico.',
-    sideEffects: 'none',
+    annotations: {
+      readOnlyHint: true
+    },
     inputSchema: {
       type: 'object',
       required: ['id'],
       properties: {
         id: {
           type: 'string',
-          description: 'Identificador del ejemplar (e.g. "tlilxochitl", "xilonen", "yohualli", "iztli")'
+          description: 'Identificador del ejemplar (e.g. "tlilxochitl", "xilonen", "yohualli", "oce", "tonalli", "xochitl")'
         }
       },
       additionalProperties: false
@@ -124,6 +133,9 @@ export const WEBMCP_TOOLS_DEFINITIONS = [
         }
       }
     },
+    execute: async (params) => {
+      return await PublicXolosDataAdapter.getXoloProfile(params || {});
+    },
     handler: async (params) => {
       return await PublicXolosDataAdapter.getXoloProfile(params || {});
     }
@@ -131,7 +143,9 @@ export const WEBMCP_TOOLS_DEFINITIONS = [
   {
     name: 'get_delivery_information',
     description: 'Consulta los protocolos de transporte, acompañamiento y entrega nacional e internacional garantizando bienestar animal.',
-    sideEffects: 'none',
+    annotations: {
+      readOnlyHint: true
+    },
     inputSchema: {
       type: 'object',
       properties: {
@@ -152,6 +166,9 @@ export const WEBMCP_TOOLS_DEFINITIONS = [
         zones: { type: 'object' }
       }
     },
+    execute: async (params) => {
+      return await PublicXolosDataAdapter.getDeliveryInformation(params || {});
+    },
     handler: async (params) => {
       return await PublicXolosDataAdapter.getDeliveryInformation(params || {});
     }
@@ -159,7 +176,9 @@ export const WEBMCP_TOOLS_DEFINITIONS = [
   {
     name: 'get_contact_options',
     description: 'Devuelve los canales oficiales verificados para comunicarse con el criadero Xolos Ramírez (WhatsApp, correo, redes sociales).',
-    sideEffects: 'none',
+    annotations: {
+      readOnlyHint: true
+    },
     inputSchema: {
       type: 'object',
       properties: {},
@@ -187,6 +206,9 @@ export const WEBMCP_TOOLS_DEFINITIONS = [
         }
       }
     },
+    execute: async () => {
+      return await PublicXolosDataAdapter.getContactOptions();
+    },
     handler: async () => {
       return await PublicXolosDataAdapter.getContactOptions();
     }
@@ -194,7 +216,9 @@ export const WEBMCP_TOOLS_DEFINITIONS = [
   {
     name: 'get_price_process_information',
     description: 'Explica la filosofía de crianza ética, qué incluye cada cachorro y el proceso de consulta personalizada. No publica precios numéricos abiertos.',
-    sideEffects: 'none',
+    annotations: {
+      readOnlyHint: true
+    },
     inputSchema: {
       type: 'object',
       properties: {},
@@ -217,6 +241,9 @@ export const WEBMCP_TOOLS_DEFINITIONS = [
         contactWarning: { type: 'string' }
       }
     },
+    execute: async () => {
+      return await PublicXolosDataAdapter.getPriceProcessInformation();
+    },
     handler: async () => {
       return await PublicXolosDataAdapter.getPriceProcessInformation();
     }
@@ -225,6 +252,7 @@ export const WEBMCP_TOOLS_DEFINITIONS = [
 
 /**
  * Register WebMCP tools on document.modelContext if supported.
+ * Adheres to the normative WebMCP Community Group Draft Report (10-Sep-2026).
  * Returns the registration status summary.
  */
 export function registerWebMcpTools() {
@@ -246,8 +274,8 @@ export function registerWebMcpTools() {
         description: tool.description,
         inputSchema: tool.inputSchema,
         outputSchema: tool.outputSchema,
-        sideEffects: tool.sideEffects,
-        handler: tool.handler
+        execute: tool.execute,
+        annotations: tool.annotations
       });
       registeredCount++;
     } catch (err) {

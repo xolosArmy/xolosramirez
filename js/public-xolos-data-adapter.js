@@ -19,7 +19,7 @@ const CANONICAL_PUBLIC_XOLOS = [
     name: 'Tlilxóchitl Ramirez',
     status: 'available',
     variety: 'hairless',
-    size: 'standard',
+    size: 'intermediate',
     gender: 'female',
     color: 'black',
     birthDate: '2026-08-03',
@@ -53,39 +53,75 @@ const CANONICAL_PUBLIC_XOLOS = [
     publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#xilonen'
   },
   {
+    id: 'oce',
+    name: 'Oce Ramirez',
+    status: 'reserved',
+    variety: 'hairless',
+    size: 'intermediate',
+    gender: 'male',
+    color: 'black',
+    birthDate: '2026-06-20',
+    ageDescription: 'Cachorro macho reservado en proceso de acompañamiento',
+    personalitySummary: 'Cachorro curioso, juguetón y de gran afinidad con niños y otros caninos.',
+    careConsiderations: [
+      'Cuidado preventivo de piel y exfoliación natural mensual'
+    ],
+    lineageReference: 'Linaje Tonalli Xolos Ramírez',
+    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#oce'
+  },
+  {
     id: 'yohualli',
     name: 'Yohualli Ramirez',
     status: 'reserved',
     variety: 'hairless',
-    size: 'standard',
-    gender: 'male',
-    color: 'dark slate',
+    size: 'intermediate',
+    gender: 'female',
+    color: 'black',
     birthDate: '2026-06-15',
-    ageDescription: 'Joven estándar reservado con familia confirmada',
-    personalitySummary: 'Macho estándar de porte imponente, noble y protector con su núcleo familiar.',
+    ageDescription: 'Cachorra hembra reservada con familia confirmada',
+    personalitySummary: 'Hembra intermedia de temperamento equilibrado, cariñosa y atenta a su entorno.',
     careConsiderations: [
-      'Ejercicio diario moderado a vigoroso',
+      'Ejercicio diario moderado',
       'Estimulación cognitiva y entrenamiento positivo'
     ],
     lineageReference: 'Linaje Tonalli Xolos Ramírez',
     publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#yohualli'
   },
   {
-    id: 'iztli',
-    name: 'Iztli Ramirez (Oce)',
+    id: 'tonalli',
+    name: 'Tonalli Ramírez',
+    status: 'reserved',
+    variety: 'hairless',
+    size: 'standard',
+    gender: 'female',
+    color: 'black',
+    birthDate: '2026-08-03',
+    ageDescription: 'Cachorra recién nacida reservada',
+    personalitySummary: 'Cachorra xoloitzcuintle sin pelo de temperamento dulce y equilibrado, actualmente en etapa de crianza temprana y reservada.',
+    careConsiderations: [
+      'Cuidado dérmico ancestral e hidratación periódica',
+      'Protección contra cambios de temperatura'
+    ],
+    lineageReference: 'Linaje Tonalli Xolos Ramírez',
+    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#tonalli'
+  },
+  {
+    id: 'xochitl',
+    name: 'Xochitl Ramirez',
     status: 'reserved',
     variety: 'hairless',
     size: 'intermediate',
-    gender: 'male',
-    color: 'bronze/slate',
-    birthDate: '2026-06-20',
-    ageDescription: 'Intermedio en proceso de acompañamiento',
-    personalitySummary: 'Cachorro curioso, juguetón y de gran afinidad con niños y otros caninos.',
+    gender: 'female',
+    color: 'bermejo',
+    birthDate: '2026-08-03',
+    ageDescription: 'Cachorra bermejo reservada',
+    personalitySummary: 'Cachorra xoloitzcuintle de tonalidad bermeja y carácter sereno, en etapa de crecimiento protegida.',
     careConsiderations: [
-      'Cuidado preventivo de piel y exfoliación natural mensual'
+      'Protección dérmica especializada para xoloitzcuintles bermejos',
+      'Alimentación equilibrada de alta calidad'
     ],
     lineageReference: 'Linaje Tonalli Xolos Ramírez',
-    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#iztli'
+    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#xochitl'
   }
 ];
 
@@ -252,7 +288,7 @@ export const PublicXolosDataAdapter = {
     let details;
     if (cleanZone.includes('cdmx') || cleanZone.includes('local')) {
       details = { cdmx_metropolitan: OFFICIAL_DELIVERY_INFO.zones.cdmx_metropolitan };
-    } else if (cleanZone.includes('nacional') || cleanZone.includes('mexico')) {
+    } else if (cleanZone.includes('national') || cleanZone.includes('nacional') || cleanZone.includes('mexico')) {
       details = { national_mexico: OFFICIAL_DELIVERY_INFO.zones.national_mexico };
     } else if (cleanZone.includes('inter') || cleanZone.includes('usa') || cleanZone.includes('eu')) {
       details = { international: OFFICIAL_DELIVERY_INFO.zones.international };
