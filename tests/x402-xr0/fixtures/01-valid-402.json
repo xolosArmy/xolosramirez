@@ -1,0 +1,52 @@
+{
+  "scenario": "01-valid-402",
+  "description": "Standard valid x402 challenge and compliant payment proof",
+  "challenge": {
+    "x402Version": 2,
+    "resource": {
+      "url": "https://api.xolosramirez.com/v1/xolos/xilonen/verified-dossier",
+      "description": "Verified Public Xolo Dossier for Xilonen Ramirez",
+      "mimeType": "application/json"
+    },
+    "accepts": [
+      {
+        "scheme": "exact",
+        "network": "TBD — owned by x402-XEC",
+        "amount": "500000",
+        "asset": "TBD — owned by x402-XEC",
+        "payTo": "ecash:qp3wjpa3tjlj042z2wv7hahsldgwhwy0rq9sywjpy5",
+        "maxTimeoutSeconds": 300,
+        "extra": {
+          "nonce": "TBD — upstream proposed parameter",
+          "issuedAt": 1757786400
+        }
+      }
+    ],
+    "extensions": {
+      "x402-xec": {
+        "info": {
+          "resourceHash": "TBD — upstream proposal owned by x402-XEC",
+          "invoiceHash": "TBD — upstream proposal owned by x402-XEC",
+          "bindingSchema": "TBD — upstream proposal owned by x402-XEC"
+        },
+        "schema": "https://xolosarmy.xyz/schemas/x402-xec-extension.json"
+      }
+    }
+  },
+  "paymentProof": {
+    "txid": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "vout": 0,
+    "amount": "500000",
+    "asset": "TBD — owned by x402-XEC",
+    "recipient": "ecash:qp3wjpa3tjlj042z2wv7hahsldgwhwy0rq9sywjpy5",
+    "targetResourceUrl": "https://api.xolosramirez.com/v1/xolos/xilonen/verified-dossier",
+    "timestamp": 1757786450
+  },
+  "expectedOutcome": "SUCCESS",
+  "expectedEvidence": [
+    "PAYMENT_SETTLED",
+    "RESOURCE_UNLOCKED",
+    "RESOURCE_DELIVERY_ATTEMPTED",
+    "RESOURCE_RESPONSE_COMPLETED"
+  ]
+}

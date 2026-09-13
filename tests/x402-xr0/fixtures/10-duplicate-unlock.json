@@ -1,0 +1,30 @@
+{
+  "scenario": "10-duplicate-unlock",
+  "description": "Simultaneous or conflicting unlock attempt on an active or superseded delivery lease",
+  "challenge": {
+    "x402Version": 2,
+    "resource": {
+      "url": "https://api.xolosramirez.com/v1/xolos/xilonen/verified-dossier"
+    },
+    "accepts": [
+      {
+        "amount": "500000",
+        "asset": "TBD — owned by x402-XEC",
+        "payTo": "ecash:qp3wjpa3tjlj042z2wv7hahsldgwhwy0rq9sywjpy5"
+      }
+    ]
+  },
+  "paymentProof": {
+    "txid": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "vout": 0,
+    "amount": "500000",
+    "asset": "TBD — owned by x402-XEC",
+    "recipient": "ecash:qp3wjpa3tjlj042z2wv7hahsldgwhwy0rq9sywjpy5",
+    "targetResourceUrl": "https://api.xolosramirez.com/v1/xolos/xilonen/verified-dossier"
+  },
+  "lockContext": {
+    "activeLeaseId": "lease-8899a-in-flight-streaming"
+  },
+  "expectedOutcome": "FAIL_CLOSED",
+  "expectedErrorCode": "ERR_LEASE_SUPERSEDED"
+}
