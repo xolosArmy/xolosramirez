@@ -13,7 +13,30 @@
  * - Deterministic outputs.
  */
 
-const CANONICAL_PUBLIC_XOLOS = [
+export const CANONICAL_PUBLIC_BIRTH_DATES = {
+  tlilxochitl: '2026-08-03' // Backed by public card in xolos-disponibles.html: "Recién nacida · 3 de agosto de 2026"
+};
+
+/**
+ * Validates that a profile does not synthesize an exact birthDate when only
+ * an approximate age (e.g. "1 mes", "recién nacido") is publicly published.
+ * @param {Object} profile
+ * @returns {{ valid: boolean, error?: string }}
+ */
+export function validatePublicAgeIntegrity(profile) {
+  if (profile && profile.birthDate) {
+    const canonicalDate = CANONICAL_PUBLIC_BIRTH_DATES[profile.id];
+    if (!canonicalDate || canonicalDate !== profile.birthDate) {
+      return {
+        valid: false,
+        error: `Profile "${profile.id}" specifies synthetic or unverified birthDate "${profile.birthDate}". Public approximate age must not be substituted with synthetic exact dates.`
+      };
+    }
+  }
+  return { valid: true };
+}
+
+export const CANONICAL_PUBLIC_XOLOS = [
   {
     id: 'tlilxochitl',
     name: 'Tlilxóchitl Ramirez',
@@ -23,7 +46,7 @@ const CANONICAL_PUBLIC_XOLOS = [
     gender: 'female',
     color: 'black',
     birthDate: '2026-08-03',
-    ageDescription: 'Cachorra nacida el 3 de agosto de 2026',
+    ageDescription: 'Recién nacida · 3 de agosto de 2026',
     personalitySummary: 'Cachorra xoloitzcuintle con copete característico, vivaz, atenta y de temperamento equilibrado con fuerte apego familiar.',
     careConsiderations: [
       'Protección solar e hidratación cutánea periódica',
@@ -41,7 +64,6 @@ const CANONICAL_PUBLIC_XOLOS = [
     size: 'miniature',
     gender: 'female',
     color: 'black',
-    birthDate: '2026-08-10',
     ageDescription: 'Cachorra miniatura de 1 mes',
     personalitySummary: 'Cachorra xoloitzcuintle miniatura sin pelo, dulce, observadora, excelente para vida en departamento o compañía cercana.',
     careConsiderations: [
@@ -60,8 +82,7 @@ const CANONICAL_PUBLIC_XOLOS = [
     size: 'intermediate',
     gender: 'male',
     color: 'black',
-    birthDate: '2026-06-20',
-    ageDescription: 'Cachorro macho reservado en proceso de acompañamiento',
+    ageDescription: 'Cachorro macho recién nacido (reservado)',
     personalitySummary: 'Cachorro curioso, juguetón y de gran afinidad con niños y otros caninos.',
     careConsiderations: [
       'Cuidado preventivo de piel y exfoliación natural mensual'
@@ -77,8 +98,7 @@ const CANONICAL_PUBLIC_XOLOS = [
     size: 'intermediate',
     gender: 'female',
     color: 'black',
-    birthDate: '2026-06-15',
-    ageDescription: 'Cachorra hembra reservada con familia confirmada',
+    ageDescription: 'Cachorra hembra recién nacida (reservada)',
     personalitySummary: 'Hembra intermedia de temperamento equilibrado, cariñosa y atenta a su entorno.',
     careConsiderations: [
       'Ejercicio diario moderado',
@@ -95,8 +115,7 @@ const CANONICAL_PUBLIC_XOLOS = [
     size: 'standard',
     gender: 'female',
     color: 'black',
-    birthDate: '2026-08-03',
-    ageDescription: 'Cachorra recién nacida reservada',
+    ageDescription: 'Cachorra recién nacida (reservada)',
     personalitySummary: 'Cachorra xoloitzcuintle sin pelo de temperamento dulce y equilibrado, actualmente en etapa de crianza temprana y reservada.',
     careConsiderations: [
       'Cuidado dérmico ancestral e hidratación periódica',
@@ -113,8 +132,7 @@ const CANONICAL_PUBLIC_XOLOS = [
     size: 'intermediate',
     gender: 'female',
     color: 'bermejo',
-    birthDate: '2026-08-03',
-    ageDescription: 'Cachorra bermejo reservada',
+    ageDescription: 'Cachorra recién nacida (reservada)',
     personalitySummary: 'Cachorra xoloitzcuintle de tonalidad bermeja y carácter sereno, en etapa de crecimiento protegida.',
     careConsiderations: [
       'Protección dérmica especializada para xoloitzcuintles bermejos',
@@ -255,24 +273,29 @@ export const PublicXolosDataAdapter = {
       };
     }
 
+    const xoloData = {
+      id: xolo.id,
+      name: xolo.name,
+      status: xolo.status,
+      variety: xolo.variety,
+      size: xolo.size,
+      gender: xolo.gender,
+      color: xolo.color,
+      ageDescription: xolo.ageDescription,
+      personalitySummary: xolo.personalitySummary,
+      careConsiderations: xolo.careConsiderations,
+      lineageReference: xolo.lineageReference,
+      publicUrl: xolo.publicUrl,
+      directContactNotice: 'Para consultar disponibilidad vigente o iniciar el proceso de adopción, contacta a Fernando Ramírez vía WhatsApp: https://wa.me/message/435RTKGJLTX2J1'
+    };
+
+    if (xolo.birthDate) {
+      xoloData.birthDate = xolo.birthDate;
+    }
+
     return {
       found: true,
-      xolo: {
-        id: xolo.id,
-        name: xolo.name,
-        status: xolo.status,
-        variety: xolo.variety,
-        size: xolo.size,
-        gender: xolo.gender,
-        color: xolo.color,
-        birthDate: xolo.birthDate,
-        ageDescription: xolo.ageDescription,
-        personalitySummary: xolo.personalitySummary,
-        careConsiderations: xolo.careConsiderations,
-        lineageReference: xolo.lineageReference,
-        publicUrl: xolo.publicUrl,
-        directContactNotice: 'Para consultar disponibilidad vigente o iniciar el proceso de adopción, contacta a Fernando Ramírez vía WhatsApp: https://wa.me/message/435RTKGJLTX2J1'
-      }
+      xolo: xoloData
     };
   },
 

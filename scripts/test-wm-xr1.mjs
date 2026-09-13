@@ -25,7 +25,7 @@
 
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { PublicXolosDataAdapter } from '../js/public-xolos-data-adapter.js';
+import { PublicXolosDataAdapter, validatePublicAgeIntegrity } from '../js/public-xolos-data-adapter.js';
 import { WEBMCP_TOOLS_DEFINITIONS, registerWebMcpTools } from '../js/webmcp-tools.js';
 
 test('WM-XR1: Tool discovery and definitions count', () => {
@@ -310,4 +310,38 @@ test('WM-XR1: Negative test — registerTool rejects legacy handler when execute
   } finally {
     globalThis.document = previousDocument;
   }
+});
+
+test('WM-XR1: Public approximate age vs synthetic exact birthDate invariant', async () => {
+  // Only profiles with an explicit, canonical calendar date on public website cards may have birthDate.
+  // Profiles with approximate public ages (e.g. "1 mes", "Recién nacida") must NEVER synthesize exact dates.
+  const tlil = await PublicXolosDataAdapter.getXoloProfile({ id: 'tlilxochitl' });
+  assert.equal(tlil.xolo.birthDate, '2026-08-03', 'Tlilxóchitl birthDate is explicitly published in public card');
+  assert.equal(validatePublicAgeIntegrity(tlil.xolo).valid, true);
+
+  // Remaining profiles only state approximate age on public cards; birthDate must be undefined
+  const approximateDogs = ['xilonen', 'oce', 'yohualli', 'tonalli', 'xochitl'];
+  for (const dogId of approximateDogs) {
+    const profile = await PublicXolosDataAdapter.getXoloProfile({ id: dogId });
+    assert.equal(
+      profile.xolo.birthDate,
+      undefined,
+      `Profile "${dogId}" must not synthesize an exact birthDate when only approximate age is published`
+    );
+    assert.ok(
+      profile.xolo.ageDescription,
+      `Profile "${dogId}" must expose public approximate ageDescription`
+    );
+    assert.equal(validatePublicAgeIntegrity(profile.xolo).valid, true);
+  }
+
+  // Negative test: verify that injecting a synthetic exact birthDate without a canonical public source fails
+  const syntheticDog = {
+    id: 'xilonen',
+    birthDate: '2026-08-10', // synthetic date derived from "1 mes" or vaccination timeline
+    ageDescription: 'Cachorra miniatura de 1 mes'
+  };
+  const validationResult = validatePublicAgeIntegrity(syntheticDog);
+  assert.equal(validationResult.valid, false, 'Validation must fail when synthetic birthDate is introduced');
+  assert.match(validationResult.error, /synthetic or unverified birthDate/);
 });
