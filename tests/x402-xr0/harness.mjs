@@ -76,8 +76,9 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_CHALLENGE' };
   }
 
-  // 5. Expiry: Never trust client-supplied presentedAt; use trusted evaluationTime
-  const trustedEvaluationTime = fixture.evaluationTime ?? options.evaluationTime ?? verifiedPayment.blockTimestamp ?? (accepted.extra?.issuedAt ? accepted.extra.issuedAt + 10 : Date.now() / 1000);
+  // 5. Expiry: Never trust client-supplied presentedAt; do NOT use historical blockTimestamp.
+  // Use trusted injected evaluationTime (server/caller override first, then fixture clock, then system clock).
+  const trustedEvaluationTime = options.evaluationTime ?? fixture.evaluationTime ?? Math.floor(Date.now() / 1000);
   if (accepted.maxTimeoutSeconds && accepted.extra?.issuedAt) {
     const elapsed = trustedEvaluationTime - accepted.extra.issuedAt;
     if (elapsed > accepted.maxTimeoutSeconds) {
@@ -88,9 +89,16 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
   // 6. Check replay in ledger / Same-resource retry
   const utxoId = `${verifiedPayment.txid}:${verifiedPayment.vout}`;
   if (ledgerContext?.alreadySettledTxids?.includes(utxoId)) {
-    // If it's an idempotent re-request of the same resource with an existing active entitlement, return it
     const existingEntitlement = ledgerContext.entitlements?.[utxoId];
-    if (existingEntitlement && existingEntitlement.resourceId === paymentProof?.targetResourceUrl) {
+    const challengedResourceId = challenge.resource?.url;
+    const proofResourceId = paymentProof?.targetResourceUrl;
+
+    // Idempotent retry: previous resourceId, challenged resourceId, and proof resourceId must all match
+    if (
+      existingEntitlement &&
+      existingEntitlement.resourceId === challengedResourceId &&
+      proofResourceId === challengedResourceId
+    ) {
       return {
         outcome: 'SUCCESS',
         evidence: ['PAYMENT_SETTLED', 'RESOURCE_UNLOCKED'],
@@ -98,7 +106,7 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
         idempotentRetry: true
       };
     }
-    // Replaying payment across different resources or sessions fails closed
+    // Replaying payment across different resources, sessions, or mismatched proof targets fails closed
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_REPLAY_DETECTED' };
   }
 
@@ -128,10 +136,21 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_RESOURCE_MISMATCH' };
   }
 
-  // 11. Resource binding: If expected resourceHash exists, missing or mismatched boundResourceHash -> FAIL CLOSED
+  // 11. Resource binding: If expected resourceHash exists, missing or mismatched boundResourceHash
+  // must be validated against the authenticated output returned by the verifier simulation,
+  // rejecting any value supplied solely by the client or not derived from the affirmative verification.
   const expectedHash = challenge.extensions?.['x402-xec']?.info?.resourceHash;
   if (expectedHash) {
-    if (!paymentProof?.boundResourceHash || paymentProof.boundResourceHash !== expectedHash) {
+    if (
+      !verifiedPayment.boundResourceHash ||
+      verifiedPayment.boundResourceHash !== expectedHash
+    ) {
+      return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_RESOURCE_HASH_MISMATCH' };
+    }
+    if (
+      !paymentProof?.boundResourceHash ||
+      paymentProof.boundResourceHash !== expectedHash
+    ) {
       return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_RESOURCE_HASH_MISMATCH' };
     }
   }
@@ -145,12 +164,17 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
 
   // 13. Delivery evidence: Payment verification produces PAYMENT_SETTLED and RESOURCE_UNLOCKED.
   // Delivery evidence requires explicit affirmative transport layer outcome.
+  // Formally enforce staged lifecycle: RESOURCE_DELIVERY_ATTEMPTED must be recorded
+  // before allowing transition to the final RESOURCE_RESPONSE_COMPLETED state.
   const evidenceTrail = ['PAYMENT_SETTLED', 'RESOURCE_UNLOCKED'];
   const transport = transportSimulation || options.transportSimulation;
   if (transport?.deliveryAttempted) {
     evidenceTrail.push('RESOURCE_DELIVERY_ATTEMPTED');
   }
   if (transport?.responseCompleted) {
+    if (!evidenceTrail.includes('RESOURCE_DELIVERY_ATTEMPTED')) {
+      evidenceTrail.push('RESOURCE_DELIVERY_ATTEMPTED');
+    }
     evidenceTrail.push('RESOURCE_RESPONSE_COMPLETED');
   }
 
@@ -278,7 +302,7 @@ test('X402-XR0: Frozen Upstream Ownership Invariant', () => {
 
 // ---------------- REMEDIATION REGRESSION TESTS (CODEX FINDINGS P1-1 TO P1-5) ---------------- //
 
-test('Regression P1-1: Same-resource retry returns existing active entitlement, different resource fails ERR_REPLAY_DETECTED', () => {
+test('Regression P1-1: Inter-resource isolation and same-resource retry in ledger replay', () => {
   const validFixturePath = resolve(FIXTURES_DIR, '01-valid-402.json');
   const baseFixture = JSON.parse(readFileSync(validFixturePath, 'utf8'));
 
@@ -290,7 +314,7 @@ test('Regression P1-1: Same-resource retry returns existing active entitlement, 
     status: 'ACTIVE_COMPLETED'
   };
 
-  // Case A: Same payment + same canonical resource -> return existing entitlement idempotently
+  // Case A: Same payment + same canonical resource in challenge and proof -> return existing entitlement idempotently
   const sameResourceFixture = {
     ...baseFixture,
     ledgerContext: {
@@ -305,7 +329,7 @@ test('Regression P1-1: Same-resource retry returns existing active entitlement, 
   assert.equal(sameResult.idempotentRetry, true);
   assert.deepEqual(sameResult.entitlement, existingEntitlement);
 
-  // Case B: Same payment + different resource -> ERR_REPLAY_DETECTED
+  // Case B: Same payment + different resource in both challenge and proof -> ERR_REPLAY_DETECTED
   const differentResourceFixture = {
     ...baseFixture,
     challenge: {
@@ -328,9 +352,51 @@ test('Regression P1-1: Same-resource retry returns existing active entitlement, 
   const diffResult = evaluateX402PaymentProof(differentResourceFixture);
   assert.equal(diffResult.outcome, 'FAIL_CLOSED');
   assert.equal(diffResult.errorCode, 'ERR_REPLAY_DETECTED');
+
+  // Case C: Challenged resource is tlilxochitl, but proof retains old target xilonen -> ERR_REPLAY_DETECTED
+  const retainedTargetFixture = {
+    ...baseFixture,
+    challenge: {
+      ...baseFixture.challenge,
+      resource: {
+        url: 'https://api.xolosramirez.com/v1/xolos/tlilxochitl/verified-dossier'
+      }
+    },
+    paymentProof: {
+      ...baseFixture.paymentProof,
+      targetResourceUrl: baseFixture.paymentProof.targetResourceUrl // Retains xilonen
+    },
+    ledgerContext: {
+      alreadySettledTxids: [utxoId],
+      entitlements: {
+        [utxoId]: existingEntitlement // xilonen
+      }
+    }
+  };
+  const retainedResult = evaluateX402PaymentProof(retainedTargetFixture);
+  assert.equal(retainedResult.outcome, 'FAIL_CLOSED');
+  assert.equal(retainedResult.errorCode, 'ERR_REPLAY_DETECTED');
+
+  // Case D: Challenge is xilonen, but proof points to tlilxochitl -> ERR_REPLAY_DETECTED
+  const proofMismatchFixture = {
+    ...baseFixture,
+    paymentProof: {
+      ...baseFixture.paymentProof,
+      targetResourceUrl: 'https://api.xolosramirez.com/v1/xolos/tlilxochitl/verified-dossier'
+    },
+    ledgerContext: {
+      alreadySettledTxids: [utxoId],
+      entitlements: {
+        [utxoId]: existingEntitlement
+      }
+    }
+  };
+  const proofMismatchResult = evaluateX402PaymentProof(proofMismatchFixture);
+  assert.equal(proofMismatchResult.outcome, 'FAIL_CLOSED');
+  assert.equal(proofMismatchResult.errorCode, 'ERR_REPLAY_DETECTED');
 });
 
-test('Regression P1-2: Expiration uses trusted evaluationTime and rejects client-faked presentedAt', () => {
+test('Regression P1-2: Expiration uses trusted evaluationTime and rejects client-faked presentedAt or historical blockTimestamp', () => {
   const validFixturePath = resolve(FIXTURES_DIR, '01-valid-402.json');
   const baseFixture = JSON.parse(readFileSync(validFixturePath, 'utf8'));
 
@@ -339,6 +405,7 @@ test('Regression P1-2: Expiration uses trusted evaluationTime and rejects client
   const timeout = 300;
   const expiredEvaluationTime = 1757780500; // 500s after issue -> EXPIRED
 
+  // Subtest A: Client maliciously claims presentation was within window, but trusted evaluationTime is expired
   const fixtureWithFakedClientTimestamp = {
     ...baseFixture,
     challenge: {
@@ -353,46 +420,155 @@ test('Regression P1-2: Expiration uses trusted evaluationTime and rejects client
     },
     paymentProof: {
       ...baseFixture.paymentProof,
-      // Client maliciously claims presentation was at issuedAt + 10s
       presentedAt: issuedAt + 10
     },
-    // Trusted evaluation time provided by server context is expired
     evaluationTime: expiredEvaluationTime
   };
+  const fakedResult = evaluateX402PaymentProof(fixtureWithFakedClientTimestamp);
+  assert.equal(fakedResult.outcome, 'FAIL_CLOSED');
+  assert.equal(fakedResult.errorCode, 'ERR_INVOICE_EXPIRED');
 
-  const result = evaluateX402PaymentProof(fixtureWithFakedClientTimestamp);
-  assert.equal(result.outcome, 'FAIL_CLOSED');
-  assert.equal(result.errorCode, 'ERR_INVOICE_EXPIRED');
-});
-
-test('Regression P1-3: Missing boundResourceHash fails closed with ERR_RESOURCE_HASH_MISMATCH', () => {
-  const validFixturePath = resolve(FIXTURES_DIR, '01-valid-402.json');
-  const baseFixture = JSON.parse(readFileSync(validFixturePath, 'utf8'));
-
-  // Challenge requires a bound resource hash
-  const fixtureWithMissingBoundHash = {
+  // Subtest B: Server override options.evaluationTime takes precedence over fixture.evaluationTime
+  const fixtureWithValidTime = {
     ...baseFixture,
     challenge: {
       ...baseFixture.challenge,
-      extensions: {
-        'x402-xec': {
-          info: {
-            resourceHash: 'sha256:mandatory_expected_hash_99999'
-          },
-          schema: 'https://xolosarmy.xyz/schemas/x402-xec-extension.json'
+      accepts: [
+        {
+          ...baseFixture.challenge.accepts[0],
+          maxTimeoutSeconds: timeout,
+          extra: { issuedAt }
         }
+      ]
+    },
+    evaluationTime: issuedAt + 10 // Inside window at fixture level
+  };
+  const overrideResult = evaluateX402PaymentProof(fixtureWithValidTime, { evaluationTime: expiredEvaluationTime });
+  assert.equal(overrideResult.outcome, 'FAIL_CLOSED');
+  assert.equal(overrideResult.errorCode, 'ERR_INVOICE_EXPIRED');
+
+  // Subtest C: Historical blockTimestamp inside the window does NOT pass an expired invoice
+  const expiredWithHistoricalBlock = {
+    ...baseFixture,
+    challenge: {
+      ...baseFixture.challenge,
+      accepts: [
+        {
+          ...baseFixture.challenge.accepts[0],
+          maxTimeoutSeconds: timeout,
+          extra: { issuedAt }
+        }
+      ]
+    },
+    verifierSimulation: {
+      ...baseFixture.verifierSimulation,
+      verifiedPayment: {
+        ...baseFixture.verifierSimulation.verifiedPayment,
+        blockTimestamp: issuedAt + 10 // Block was mined inside window
       }
     },
-    paymentProof: {
-      ...baseFixture.paymentProof,
-      // Caller omitted boundResourceHash completely
-      boundResourceHash: undefined
+    evaluationTime: expiredEvaluationTime // Evaluation occurs after expiration
+  };
+  const blockTimeResult = evaluateX402PaymentProof(expiredWithHistoricalBlock);
+  assert.equal(blockTimeResult.outcome, 'FAIL_CLOSED');
+  assert.equal(blockTimeResult.errorCode, 'ERR_INVOICE_EXPIRED');
+});
+
+test('Regression P1-3: Cryptographic resource binding derived from affirmative verifier output', () => {
+  const validFixturePath = resolve(FIXTURES_DIR, '01-valid-402.json');
+  const baseFixture = JSON.parse(readFileSync(validFixturePath, 'utf8'));
+
+  const expectedHash = 'sha256:mandatory_expected_hash_99999';
+  const bindingChallenge = {
+    ...baseFixture.challenge,
+    extensions: {
+      'x402-xec': {
+        info: {
+          resourceHash: expectedHash
+        },
+        schema: 'https://xolosarmy.xyz/schemas/x402-xec-extension.json'
+      }
     }
   };
 
-  const result = evaluateX402PaymentProof(fixtureWithMissingBoundHash);
-  assert.equal(result.outcome, 'FAIL_CLOSED');
-  assert.equal(result.errorCode, 'ERR_RESOURCE_HASH_MISMATCH');
+  // Subtest A: Caller supplies expectedHash in paymentProof, but verifier output lacks boundResourceHash -> FAIL CLOSED
+  const verifierLacksBinding = {
+    ...baseFixture,
+    challenge: bindingChallenge,
+    paymentProof: {
+      ...baseFixture.paymentProof,
+      boundResourceHash: expectedHash
+    },
+    verifierSimulation: {
+      status: 'VERIFIED',
+      verifiedPayment: {
+        ...baseFixture.verifierSimulation.verifiedPayment,
+        boundResourceHash: undefined // Verifier did not attest to the hash
+      }
+    }
+  };
+  const lacksResult = evaluateX402PaymentProof(verifierLacksBinding);
+  assert.equal(lacksResult.outcome, 'FAIL_CLOSED');
+  assert.equal(lacksResult.errorCode, 'ERR_RESOURCE_HASH_MISMATCH');
+
+  // Subtest B: Verifier output has different hash than expected -> FAIL CLOSED
+  const verifierMismatch = {
+    ...baseFixture,
+    challenge: bindingChallenge,
+    paymentProof: {
+      ...baseFixture.paymentProof,
+      boundResourceHash: expectedHash
+    },
+    verifierSimulation: {
+      status: 'VERIFIED',
+      verifiedPayment: {
+        ...baseFixture.verifierSimulation.verifiedPayment,
+        boundResourceHash: 'sha256:different_onchain_binding'
+      }
+    }
+  };
+  const mismatchResult = evaluateX402PaymentProof(verifierMismatch);
+  assert.equal(mismatchResult.outcome, 'FAIL_CLOSED');
+  assert.equal(mismatchResult.errorCode, 'ERR_RESOURCE_HASH_MISMATCH');
+
+  // Subtest C: Caller omits boundResourceHash completely -> FAIL CLOSED
+  const clientOmittedBinding = {
+    ...baseFixture,
+    challenge: bindingChallenge,
+    paymentProof: {
+      ...baseFixture.paymentProof,
+      boundResourceHash: undefined
+    },
+    verifierSimulation: {
+      status: 'VERIFIED',
+      verifiedPayment: {
+        ...baseFixture.verifierSimulation.verifiedPayment,
+        boundResourceHash: expectedHash
+      }
+    }
+  };
+  const omittedResult = evaluateX402PaymentProof(clientOmittedBinding);
+  assert.equal(omittedResult.outcome, 'FAIL_CLOSED');
+  assert.equal(omittedResult.errorCode, 'ERR_RESOURCE_HASH_MISMATCH');
+
+  // Subtest D: Affirmative verifier and client proof both carry matching authenticated hash -> SUCCESS
+  const validBinding = {
+    ...baseFixture,
+    challenge: bindingChallenge,
+    paymentProof: {
+      ...baseFixture.paymentProof,
+      boundResourceHash: expectedHash
+    },
+    verifierSimulation: {
+      status: 'VERIFIED',
+      verifiedPayment: {
+        ...baseFixture.verifierSimulation.verifiedPayment,
+        boundResourceHash: expectedHash
+      }
+    }
+  };
+  const validResult = evaluateX402PaymentProof(validBinding);
+  assert.equal(validResult.outcome, 'SUCCESS');
 });
 
 test('Regression P1-4: Settlement simulation fails closed without affirmative verifier, and derives payment from verifier', () => {
@@ -473,7 +649,7 @@ test('Regression P1-5: Payment verification segregates settlement from transport
     'RESOURCE_DELIVERY_ATTEMPTED'
   ]);
 
-  // Case C: Explicit transport response completed produces all 4 evidence items
+  // Case C: Explicit transport response completed produces all 4 evidence items in exact order
   const completedFixture = {
     ...baseFixture,
     transportSimulation: {
@@ -484,6 +660,22 @@ test('Regression P1-5: Payment verification segregates settlement from transport
   const completedResult = evaluateX402PaymentProof(completedFixture);
   assert.equal(completedResult.outcome, 'SUCCESS');
   assert.deepEqual(completedResult.evidence, [
+    'PAYMENT_SETTLED',
+    'RESOURCE_UNLOCKED',
+    'RESOURCE_DELIVERY_ATTEMPTED',
+    'RESOURCE_RESPONSE_COMPLETED'
+  ]);
+
+  // Case D (P2): Staged lifecycle — responseCompleted implies and formally records RESOURCE_DELIVERY_ATTEMPTED first
+  const impliedAttemptFixture = {
+    ...baseFixture,
+    transportSimulation: {
+      responseCompleted: true // deliveryAttempted omitted
+    }
+  };
+  const impliedResult = evaluateX402PaymentProof(impliedAttemptFixture);
+  assert.equal(impliedResult.outcome, 'SUCCESS');
+  assert.deepEqual(impliedResult.evidence, [
     'PAYMENT_SETTLED',
     'RESOURCE_UNLOCKED',
     'RESOURCE_DELIVERY_ATTEMPTED',
