@@ -32,7 +32,8 @@
       "vout": 0,
       "amount": "500000",
       "asset": "TBD — owned by x402-XEC",
-      "recipient": "ecash:qp3wjpa3tjlj042z2wv7hahsldgwhwy0rq9sywjpy5"
+      "recipient": "ecash:qp3wjpa3tjlj042z2wv7hahsldgwhwy0rq9sywjpy5",
+      "resourceUrl": "https://api.xolosramirez.com/v1/xolos/xilonen/verified-dossier"
     }
   },
   "expectedOutcome": "FAIL_CLOSED",

@@ -27,8 +27,70 @@ const __dirname = dirname(__filename);
 const FIXTURES_DIR = resolve(__dirname, 'fixtures');
 
 /**
+ * Helper to validate and extract transport evidence strictly adhering to real booleans and staged invariants.
+ *
+ * @param {Object} [transport]
+ * @returns {{ evidence: string[], error?: string }}
+ */
+function validateAndExtractTransportEvidence(transport) {
+  if (!transport) {
+    return { evidence: [] };
+  }
+
+  // Transport flags must be real booleans (no truthiness)
+  for (const flag of ['deliveryAttempted', 'responseCompleted', 'deliveryFailed']) {
+    if (transport[flag] !== undefined && typeof transport[flag] !== 'boolean') {
+      return { error: 'ERR_DELIVERY_STAGE_INVALID' };
+    }
+  }
+
+  // Invariants:
+  // responseCompleted === true requires deliveryAttempted === true
+  if (transport.responseCompleted === true && transport.deliveryAttempted !== true) {
+    return { error: 'ERR_DELIVERY_STAGE_INVALID' };
+  }
+
+  // deliveryFailed === true requires deliveryAttempted === true
+  if (transport.deliveryFailed === true && transport.deliveryAttempted !== true) {
+    return { error: 'ERR_DELIVERY_STAGE_INVALID' };
+  }
+
+  // responseCompleted === true and deliveryFailed === true -> invalid transition
+  if (transport.responseCompleted === true && transport.deliveryFailed === true) {
+    return { error: 'ERR_DELIVERY_STAGE_INVALID' };
+  }
+
+  const evidence = [];
+  if (transport.deliveryAttempted === true) {
+    evidence.push('RESOURCE_DELIVERY_ATTEMPTED');
+  }
+  if (transport.deliveryFailed === true) {
+    evidence.push('RESOURCE_DELIVERY_FAILED');
+  } else if (transport.responseCompleted === true) {
+    evidence.push('RESOURCE_RESPONSE_COMPLETED');
+  }
+
+  return { evidence };
+}
+
+/**
  * Offline validation engine simulating the X402-XR0 verification pipeline.
  * Purely deterministic, fail-closed, and isolated from network/chain.
+ *
+ * Evaluation order:
+ * 1. challenge shape
+ * 2. x402Version
+ * 3. resource.url
+ * 4. amount
+ * 5. timing fields
+ * 6. affirmative verifier status
+ * 7. verifiedPayment shape
+ * 8. verifier-backed resource identity
+ * 9. submitted proof txid/vout consistency
+ * 10. amount/asset/recipient binding
+ * 11. replay / entitlement
+ * 12. settlement evidence
+ * 13. transport evidence
  *
  * @param {Object} fixture
  * @param {Object} [options]
@@ -47,7 +109,7 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
     ledgerContext
   } = fixture;
 
-  // 1. Validate challenge structure
+  // 1. Validate challenge shape
   if (!challenge || typeof challenge !== 'object') {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_CHALLENGE' };
   }
@@ -57,6 +119,7 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_CHALLENGE' };
   }
 
+  // 3. Validate resource.url
   if (
     !challenge.resource ||
     typeof challenge.resource !== 'object' ||
@@ -66,24 +129,45 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_CHALLENGE' };
   }
 
+  // 4. Validate accepts[0].amount strictly before BigInt conversion
   const accepted = challenge.accepts?.[0];
   if (!accepted || typeof accepted !== 'object') {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_CHALLENGE' };
   }
+  if (typeof accepted.amount !== 'string' || !/^[1-9][0-9]*$/.test(accepted.amount)) {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_CHALLENGE' };
+  }
 
-  // 3. Validate trusted evaluationTime (no Date.now() fallback; fail closed if absent)
-  if (accepted.maxTimeoutSeconds && accepted.extra?.issuedAt) {
+  // 5. Validate timing fields strictly before calculating expiration
+  if (
+    accepted.maxTimeoutSeconds !== undefined ||
+    fixture.evaluationTime !== undefined ||
+    options.evaluationTime !== undefined
+  ) {
+    const maxTimeoutSeconds = accepted.maxTimeoutSeconds;
+    if (typeof maxTimeoutSeconds !== 'number' || !Number.isSafeInteger(maxTimeoutSeconds) || maxTimeoutSeconds <= 0) {
+      return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_CHALLENGE' };
+    }
+
+    const issuedAt = accepted.extra?.issuedAt;
+    if (typeof issuedAt !== 'number' || !Number.isSafeInteger(issuedAt) || issuedAt < 0) {
+      return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_CHALLENGE' };
+    }
+
+    if (issuedAt + maxTimeoutSeconds > Number.MAX_SAFE_INTEGER) {
+      return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_CHALLENGE' };
+    }
+
     const trustedEvaluationTime = options.evaluationTime ?? fixture.evaluationTime;
-    if (
-      trustedEvaluationTime === undefined ||
-      trustedEvaluationTime === null ||
-      typeof trustedEvaluationTime !== 'number' ||
-      Number.isNaN(trustedEvaluationTime)
-    ) {
+    if (trustedEvaluationTime === undefined) {
       return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_EVALUATION_TIME_REQUIRED' };
     }
-    const elapsed = trustedEvaluationTime - accepted.extra.issuedAt;
-    if (elapsed > accepted.maxTimeoutSeconds) {
+    if (typeof trustedEvaluationTime !== 'number' || !Number.isSafeInteger(trustedEvaluationTime) || trustedEvaluationTime < 0) {
+      return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_CHALLENGE' };
+    }
+
+    const expiresAt = issuedAt + maxTimeoutSeconds;
+    if (trustedEvaluationTime > expiresAt) {
       return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVOICE_EXPIRED' };
     }
   }
@@ -96,7 +180,7 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_LEASE_SUPERSEDED' };
   }
 
-  // 4. Require affirmative verifier result (precedence: options ?? fixture)
+  // 6. Affirmative verifier status (precedence: options ?? fixture)
   const verifier = options.verifierSimulation ?? fixture.verifierSimulation;
   if (verifier && verifier.status === 'UNREACHABLE') {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_VERIFIER_UNAVAILABLE' };
@@ -105,7 +189,7 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_SETTLEMENT_UNVERIFIED' };
   }
 
-  // 5. Validate verifiedPayment shape defensively before any dereference
+  // 7. VerifiedPayment shape defensively before any dereference
   const verifiedPayment = verifier.verifiedPayment;
   if (
     typeof verifiedPayment.txid !== 'string' ||
@@ -134,7 +218,43 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_SETTLEMENT_UNVERIFIED' };
   }
 
-  // 6. Validate submitted paymentProof identity (both txid and vout are strictly required)
+  // 8. Verifier-backed resource identity
+  if (
+    typeof verifiedPayment.resourceUrl !== 'string' ||
+    verifiedPayment.resourceUrl.trim() === ''
+  ) {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_RESOURCE_BINDING_UNVERIFIED' };
+  }
+
+  if (verifiedPayment.resourceUrl !== challenge.resource.url) {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_RESOURCE_MISMATCH' };
+  }
+
+  const expectedHash = challenge.resource?.hash ?? challenge.resourceHash ?? challenge.extensions?.['x402-xec']?.info?.resourceHash;
+  if (expectedHash) {
+    const verifierHash = verifiedPayment.boundResourceHash !== undefined
+      ? verifiedPayment.boundResourceHash
+      : verifiedPayment.resourceHash;
+    if (
+      !verifierHash ||
+      typeof verifierHash !== 'string' ||
+      verifierHash !== expectedHash
+    ) {
+      return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_RESOURCE_HASH_MISMATCH' };
+    }
+    const proofHash = paymentProof?.boundResourceHash !== undefined
+      ? paymentProof?.boundResourceHash
+      : paymentProof?.resourceHash;
+    if (
+      !proofHash ||
+      typeof proofHash !== 'string' ||
+      proofHash !== expectedHash
+    ) {
+      return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_RESOURCE_HASH_MISMATCH' };
+    }
+  }
+
+  // 9. Submitted proof txid/vout consistency
   if (
     !paymentProof ||
     typeof paymentProof !== 'object' ||
@@ -153,7 +273,6 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_UTXO_MISMATCH' };
   }
 
-  // 7. Bind verified UTXO: Submitted payment proof must match authentic verifier output
   if (paymentProof.txid !== verifiedPayment.txid) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_UTXO_MISMATCH' };
   }
@@ -161,7 +280,7 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_UTXO_MISMATCH' };
   }
 
-  // 8. Verify amount, asset, recipient, resourceHash, and freshness
+  // 10. Amount/asset/recipient binding
   if (verifiedPayment.asset !== accepted.asset) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_UNSUPPORTED_ASSET' };
   }
@@ -176,31 +295,13 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_RECIPIENT' };
   }
 
-  const expectedHash = challenge.extensions?.['x402-xec']?.info?.resourceHash;
-  if (expectedHash) {
-    if (
-      !verifiedPayment.boundResourceHash ||
-      typeof verifiedPayment.boundResourceHash !== 'string' ||
-      verifiedPayment.boundResourceHash !== expectedHash
-    ) {
-      return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_RESOURCE_HASH_MISMATCH' };
-    }
-    if (
-      !paymentProof?.boundResourceHash ||
-      typeof paymentProof.boundResourceHash !== 'string' ||
-      paymentProof.boundResourceHash !== expectedHash
-    ) {
-      return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_RESOURCE_HASH_MISMATCH' };
-    }
-  }
-
   if (verifiedPayment.blockTimestamp && accepted.extra?.issuedAt) {
     if (verifiedPayment.blockTimestamp < accepted.extra.issuedAt - 300) {
       return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_PAYMENT_PROOF_STALE' };
     }
   }
 
-  // 9. Replay / Entitlement evaluation using canonical verifiedPayment identity
+  // 11. Replay / entitlement
   const utxoId = `${verifiedPayment.txid}:${verifiedPayment.vout}`;
   if (ledgerContext?.alreadySettledTxids?.includes(utxoId)) {
     const existingEntitlement = ledgerContext.entitlements?.[utxoId];
@@ -212,32 +313,15 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
       existingEntitlement.resourceId === challengedResourceId &&
       proofResourceId === challengedResourceId
     ) {
-      // Evaluate new transport attempt independently.
-      // Reuses entitlement without re-emitting PAYMENT_SETTLED.
       const transport = options.transportSimulation ?? fixture.transportSimulation;
-      const retryEvidence = [];
-
-      if (transport) {
-        if ((transport.responseCompleted || transport.deliveryFailed) && !transport.deliveryAttempted) {
-          return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_DELIVERY_STAGE_INVALID' };
-        }
-        if (transport.responseCompleted && transport.deliveryFailed) {
-          return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_DELIVERY_STAGE_INVALID' };
-        }
-
-        if (transport.deliveryAttempted) {
-          retryEvidence.push('RESOURCE_DELIVERY_ATTEMPTED');
-        }
-        if (transport.deliveryFailed) {
-          retryEvidence.push('RESOURCE_DELIVERY_FAILED');
-        } else if (transport.responseCompleted) {
-          retryEvidence.push('RESOURCE_RESPONSE_COMPLETED');
-        }
+      const transportResult = validateAndExtractTransportEvidence(transport);
+      if (transportResult.error) {
+        return { outcome: 'FAIL_CLOSED', errorCode: transportResult.error };
       }
 
       return {
         outcome: 'SUCCESS',
-        evidence: retryEvidence,
+        evidence: transportResult.evidence,
         entitlement: existingEntitlement,
         idempotentRetry: true
       };
@@ -245,40 +329,27 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_REPLAY_DETECTED' };
   }
 
-  // If not previously settled, target resource URL in proof must match challenged resource URL
-  if (paymentProof.targetResourceUrl !== challenge.resource.url) {
+  if (paymentProof.targetResourceUrl && paymentProof.targetResourceUrl !== challenge.resource.url) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_RESOURCE_MISMATCH' };
   }
 
-  // 10. Settlement evidence: Fresh settlement generates PAYMENT_SETTLED and RESOURCE_UNLOCKED
+  // 12. Settlement evidence
   const evidenceTrail = ['PAYMENT_SETTLED', 'RESOURCE_UNLOCKED'];
 
-  // 11. Transport evidence: Evaluated independently with delivery failure branch
+  // 13. Transport evidence
   const transport = options.transportSimulation ?? fixture.transportSimulation;
-  if (transport) {
-    if ((transport.responseCompleted || transport.deliveryFailed) && !transport.deliveryAttempted) {
-      return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_DELIVERY_STAGE_INVALID' };
-    }
-    if (transport.responseCompleted && transport.deliveryFailed) {
-      return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_DELIVERY_STAGE_INVALID' };
-    }
-
-    if (transport.deliveryAttempted) {
-      evidenceTrail.push('RESOURCE_DELIVERY_ATTEMPTED');
-    }
-    if (transport.deliveryFailed) {
-      evidenceTrail.push('RESOURCE_DELIVERY_FAILED');
-    } else if (transport.responseCompleted) {
-      evidenceTrail.push('RESOURCE_RESPONSE_COMPLETED');
-    }
+  const transportResult = validateAndExtractTransportEvidence(transport);
+  if (transportResult.error) {
+    return { outcome: 'FAIL_CLOSED', errorCode: transportResult.error };
   }
+  evidenceTrail.push(...transportResult.evidence);
 
   return {
     outcome: 'SUCCESS',
     evidence: evidenceTrail,
     entitlement: {
       entitlementId: `ent-${verifiedPayment.txid.slice(0, 8)}-${verifiedPayment.vout}`,
-      resourceId: paymentProof.targetResourceUrl,
+      resourceId: challenge.resource.url,
       paymentUtxo: utxoId,
       status: 'ACTIVE_COMPLETED'
     }
@@ -437,6 +508,13 @@ test('Regression P1-1: Inter-resource isolation and same-resource retry in ledge
       ...baseFixture.paymentProof,
       targetResourceUrl: 'https://api.xolosramirez.com/v1/xolos/tlilxochitl/verified-dossier'
     },
+    verifierSimulation: {
+      status: 'VERIFIED',
+      verifiedPayment: {
+        ...baseFixture.verifierSimulation.verifiedPayment,
+        resourceUrl: 'https://api.xolosramirez.com/v1/xolos/tlilxochitl/verified-dossier'
+      }
+    },
     ledgerContext: {
       alreadySettledTxids: [utxoId],
       entitlements: {
@@ -460,6 +538,13 @@ test('Regression P1-1: Inter-resource isolation and same-resource retry in ledge
     paymentProof: {
       ...baseFixture.paymentProof,
       targetResourceUrl: baseFixture.paymentProof.targetResourceUrl // Retains xilonen
+    },
+    verifierSimulation: {
+      status: 'VERIFIED',
+      verifiedPayment: {
+        ...baseFixture.verifierSimulation.verifiedPayment,
+        resourceUrl: 'https://api.xolosramirez.com/v1/xolos/tlilxochitl/verified-dossier'
+      }
     },
     ledgerContext: {
       alreadySettledTxids: [utxoId],
@@ -702,7 +787,7 @@ test('Regression P1-4: Settlement simulation fails closed without affirmative ve
     verifierSimulation: {
       status: 'VERIFIED',
       verifiedPayment: {
-        ...baseFixture.paymentProof,
+        ...baseFixture.verifierSimulation.verifiedPayment,
         amount: '100' // Verifier confirms only 100
       }
     }
@@ -1296,4 +1381,507 @@ test('Regression Hardening: Deterministic evaluationTime requires options or fix
   assert.equal(noClockResult.outcome, 'FAIL_CLOSED');
   assert.equal(noClockResult.errorCode, 'ERR_EVALUATION_TIME_REQUIRED');
 });
+
+// ---------------- PASS 4 HARDENING REGRESSION TESTS ---------------- //
+
+test('Regression Pass 4 (Finding 1): Verifier-backed resource binding is mandatory and authoritative', () => {
+  const validFixturePath = resolve(FIXTURES_DIR, '01-valid-402.json');
+  const baseFixture = JSON.parse(readFileSync(validFixturePath, 'utf8'));
+
+  const resourceA = 'https://api.xolosramirez.com/v1/xolos/xilonen/verified-dossier';
+  const resourceB = 'https://api.xolosramirez.com/v1/xolos/tlilxochitl/verified-dossier';
+
+  // Subtest 1: Hashless challenge + matching verifier resourceUrl -> PASS
+  const hashlessFixture = {
+    ...baseFixture,
+    challenge: {
+      ...baseFixture.challenge,
+      extensions: undefined
+    },
+    paymentProof: {
+      ...baseFixture.paymentProof,
+      boundResourceHash: undefined,
+      resourceHash: undefined
+    },
+    verifierSimulation: {
+      status: 'VERIFIED',
+      verifiedPayment: {
+        ...baseFixture.verifierSimulation.verifiedPayment,
+        resourceUrl: baseFixture.challenge.resource.url,
+        resourceHash: undefined,
+        boundResourceHash: undefined
+      }
+    }
+  };
+  const hashlessResult = evaluateX402PaymentProof(hashlessFixture);
+  assert.equal(hashlessResult.outcome, 'SUCCESS');
+  assert.equal(hashlessResult.entitlement.resourceId, baseFixture.challenge.resource.url);
+
+  // Subtest 2: Hashless challenge + verifier URL for resource A + caller changes URL to resource B -> FAIL (ERR_RESOURCE_MISMATCH)
+  // Case A: Challenge requests resource B while verifier authenticated resource A
+  const challengeMismatchFixture = {
+    ...baseFixture,
+    challenge: {
+      ...baseFixture.challenge,
+      resource: { url: resourceB },
+      extensions: undefined
+    },
+    paymentProof: {
+      ...baseFixture.paymentProof,
+      targetResourceUrl: resourceB,
+      boundResourceHash: undefined
+    },
+    verifierSimulation: {
+      status: 'VERIFIED',
+      verifiedPayment: {
+        ...baseFixture.verifierSimulation.verifiedPayment,
+        resourceUrl: resourceA,
+        resourceHash: undefined,
+        boundResourceHash: undefined
+      }
+    }
+  };
+  const challengeMismatchResult = evaluateX402PaymentProof(challengeMismatchFixture);
+  assert.equal(challengeMismatchResult.outcome, 'FAIL_CLOSED');
+  assert.equal(challengeMismatchResult.errorCode, 'ERR_RESOURCE_MISMATCH');
+
+  // Case B: Challenge requests resource A, verifier authenticated resource A, caller proof claims resource B
+  const proofMismatchFixture = {
+    ...baseFixture,
+    challenge: {
+      ...baseFixture.challenge,
+      resource: { url: resourceA },
+      extensions: undefined
+    },
+    paymentProof: {
+      ...baseFixture.paymentProof,
+      targetResourceUrl: resourceB,
+      boundResourceHash: undefined
+    },
+    verifierSimulation: {
+      status: 'VERIFIED',
+      verifiedPayment: {
+        ...baseFixture.verifierSimulation.verifiedPayment,
+        resourceUrl: resourceA,
+        resourceHash: undefined,
+        boundResourceHash: undefined
+      }
+    }
+  };
+  const proofMismatchResult = evaluateX402PaymentProof(proofMismatchFixture);
+  assert.equal(proofMismatchResult.outcome, 'FAIL_CLOSED');
+  assert.equal(proofMismatchResult.errorCode, 'ERR_RESOURCE_MISMATCH');
+
+  // Subtest 3: Verifier missing resourceUrl -> FAIL CLOSED (ERR_RESOURCE_BINDING_UNVERIFIED)
+  const noUrlCases = [
+    { label: 'undefined', val: undefined },
+    { label: 'empty string', val: '' },
+    { label: 'whitespace only', val: '   ' },
+    { label: 'null', val: null },
+    { label: 'numeric type', val: 12345 }
+  ];
+  for (const { label, val } of noUrlCases) {
+    const unverifiedBindingFixture = {
+      ...baseFixture,
+      verifierSimulation: {
+        status: 'VERIFIED',
+        verifiedPayment: {
+          ...baseFixture.verifierSimulation.verifiedPayment,
+          resourceUrl: val
+        }
+      }
+    };
+    const res = evaluateX402PaymentProof(unverifiedBindingFixture);
+    assert.equal(res.outcome, 'FAIL_CLOSED', `Missing resourceUrl (${label}) must fail closed`);
+    assert.equal(res.errorCode, 'ERR_RESOURCE_BINDING_UNVERIFIED', `Missing resourceUrl (${label}) must return ERR_RESOURCE_BINDING_UNVERIFIED`);
+  }
+
+  // Subtest 4: Challenge with hash + missing or mismatched verifier hash -> FAIL CLOSED (ERR_RESOURCE_HASH_MISMATCH)
+  const expectedHash = 'sha256:mandatory_expected_hash_99999';
+  const hashedChallenge = {
+    ...baseFixture.challenge,
+    extensions: {
+      'x402-xec': {
+        info: { resourceHash: expectedHash },
+        schema: 'https://xolosarmy.xyz/schemas/x402-xec-extension.json'
+      }
+    }
+  };
+
+  const missingVerifierHash = {
+    ...baseFixture,
+    challenge: hashedChallenge,
+    paymentProof: {
+      ...baseFixture.paymentProof,
+      boundResourceHash: expectedHash,
+      resourceHash: expectedHash
+    },
+    verifierSimulation: {
+      status: 'VERIFIED',
+      verifiedPayment: {
+        ...baseFixture.verifierSimulation.verifiedPayment,
+        resourceUrl: baseFixture.challenge.resource.url,
+        resourceHash: undefined,
+        boundResourceHash: undefined
+      }
+    }
+  };
+  const resMissingHash = evaluateX402PaymentProof(missingVerifierHash);
+  assert.equal(resMissingHash.outcome, 'FAIL_CLOSED');
+  assert.equal(resMissingHash.errorCode, 'ERR_RESOURCE_HASH_MISMATCH');
+
+  const mismatchedVerifierHash = {
+    ...baseFixture,
+    challenge: hashedChallenge,
+    paymentProof: {
+      ...baseFixture.paymentProof,
+      boundResourceHash: expectedHash,
+      resourceHash: expectedHash
+    },
+    verifierSimulation: {
+      status: 'VERIFIED',
+      verifiedPayment: {
+        ...baseFixture.verifierSimulation.verifiedPayment,
+        resourceUrl: baseFixture.challenge.resource.url,
+        resourceHash: 'sha256:mismatched_verifier_hash_00000',
+        boundResourceHash: 'sha256:mismatched_verifier_hash_00000'
+      }
+    }
+  };
+  const resMismatchedHash = evaluateX402PaymentProof(mismatchedVerifierHash);
+  assert.equal(resMismatchedHash.outcome, 'FAIL_CLOSED');
+  assert.equal(resMismatchedHash.errorCode, 'ERR_RESOURCE_HASH_MISMATCH');
+});
+
+test('Regression Pass 4 (Finding 2): Validate accepts[0].amount strictly before BigInt conversion without throwing exceptions', () => {
+  const validFixturePath = resolve(FIXTURES_DIR, '01-valid-402.json');
+  const baseFixture = JSON.parse(readFileSync(validFixturePath, 'utf8'));
+
+  const invalidAmounts = [
+    { label: 'missing (undefined)', val: undefined },
+    { label: 'null', val: null },
+    { label: 'empty string', val: '' },
+    { label: 'non-decimal (alphabetic)', val: 'abc' },
+    { label: 'non-decimal (hex prefix)', val: '0x10' },
+    { label: 'non-decimal (special chars)', val: '500!' },
+    { label: 'negative string', val: '-500' },
+    { label: 'zero', val: '0' },
+    { label: 'leading zero (octal-like)', val: '0500' },
+    { label: 'fractional', val: '100.5' },
+    { label: 'leading whitespace', val: ' 500' },
+    { label: 'trailing whitespace', val: '500 ' },
+    { label: 'internal whitespace', val: '50 0' },
+    { label: 'tab whitespace', val: '\t500' },
+    { label: 'numeric type (not string)', val: 500000 },
+    { label: 'boolean true', val: true },
+    { label: 'boolean false', val: false },
+    { label: 'array type', val: ['500000'] },
+    { label: 'object type', val: {} }
+  ];
+
+  for (const { label, val } of invalidAmounts) {
+    const invalidFixture = {
+      ...baseFixture,
+      challenge: {
+        ...baseFixture.challenge,
+        accepts: [
+          {
+            ...baseFixture.challenge.accepts[0],
+            amount: val
+          }
+        ]
+      }
+    };
+
+    assert.doesNotThrow(() => {
+      const result = evaluateX402PaymentProof(invalidFixture);
+      assert.equal(
+        result.outcome,
+        'FAIL_CLOSED',
+        `Case "${label}" must fail closed`
+      );
+      assert.equal(
+        result.errorCode,
+        'ERR_INVALID_CHALLENGE',
+        `Case "${label}" must return ERR_INVALID_CHALLENGE`
+      );
+    }, `Case "${label}" threw an unhandled exception instead of failing closed deterministically`);
+  }
+});
+
+test('Regression Pass 4 (Finding 3): Validate timing fields strictly without implicit coercion', () => {
+  const validFixturePath = resolve(FIXTURES_DIR, '01-valid-402.json');
+  const baseFixture = JSON.parse(readFileSync(validFixturePath, 'utf8'));
+
+  const validIssuedAt = 1757786400;
+  const validTimeout = 300;
+  const validEvalTime = 1757786450;
+
+  // 1. Invalid maxTimeoutSeconds values
+  const invalidTimeouts = [
+    { label: 'timeout null', val: null },
+    { label: 'timeout undefined', val: undefined },
+    { label: 'timeout string', val: '300' },
+    { label: 'timeout NaN', val: NaN },
+    { label: 'timeout Infinity', val: Infinity },
+    { label: 'timeout -Infinity', val: -Infinity },
+    { label: 'timeout zero', val: 0 },
+    { label: 'timeout negative', val: -10 },
+    { label: 'timeout fractional', val: 300.5 },
+    { label: 'timeout boolean', val: true }
+  ];
+
+  for (const { label, val } of invalidTimeouts) {
+    const fixture = {
+      ...baseFixture,
+      challenge: {
+        ...baseFixture.challenge,
+        accepts: [
+          {
+            ...baseFixture.challenge.accepts[0],
+            maxTimeoutSeconds: val,
+            extra: { issuedAt: validIssuedAt }
+          }
+        ]
+      },
+      evaluationTime: validEvalTime
+    };
+    assert.doesNotThrow(() => {
+      const res = evaluateX402PaymentProof(fixture);
+      assert.equal(res.outcome, 'FAIL_CLOSED', `${label} must fail closed`);
+      assert.equal(res.errorCode, 'ERR_INVALID_CHALLENGE', `${label} must return ERR_INVALID_CHALLENGE`);
+    });
+  }
+
+  // 2. Invalid issuedAt values
+  const invalidIssuedAts = [
+    { label: 'issuedAt null', val: null },
+    { label: 'issuedAt undefined', val: undefined },
+    { label: 'issuedAt string', val: '1757786400' },
+    { label: 'issuedAt NaN', val: NaN },
+    { label: 'issuedAt Infinity', val: Infinity },
+    { label: 'issuedAt -Infinity', val: -Infinity },
+    { label: 'issuedAt negative', val: -1 },
+    { label: 'issuedAt fractional', val: 1757786400.5 },
+    { label: 'issuedAt boolean', val: true }
+  ];
+
+  for (const { label, val } of invalidIssuedAts) {
+    const fixture = {
+      ...baseFixture,
+      challenge: {
+        ...baseFixture.challenge,
+        accepts: [
+          {
+            ...baseFixture.challenge.accepts[0],
+            maxTimeoutSeconds: validTimeout,
+            extra: { issuedAt: val }
+          }
+        ]
+      },
+      evaluationTime: validEvalTime
+    };
+    assert.doesNotThrow(() => {
+      const res = evaluateX402PaymentProof(fixture);
+      assert.equal(res.outcome, 'FAIL_CLOSED', `${label} must fail closed`);
+      assert.equal(res.errorCode, 'ERR_INVALID_CHALLENGE', `${label} must return ERR_INVALID_CHALLENGE`);
+    });
+  }
+
+  // 3. Overflow (issuedAt + maxTimeoutSeconds > Number.MAX_SAFE_INTEGER)
+  const overflowFixture = {
+    ...baseFixture,
+    challenge: {
+      ...baseFixture.challenge,
+      accepts: [
+        {
+          ...baseFixture.challenge.accepts[0],
+          maxTimeoutSeconds: 100,
+          extra: { issuedAt: Number.MAX_SAFE_INTEGER }
+        }
+      ]
+    },
+    evaluationTime: validEvalTime
+  };
+  const overflowRes = evaluateX402PaymentProof(overflowFixture);
+  assert.equal(overflowRes.outcome, 'FAIL_CLOSED');
+  assert.equal(overflowRes.errorCode, 'ERR_INVALID_CHALLENGE');
+
+  // 4. Invalid evaluationTime values (strings, NaN, Infinity, negative, fractional, null)
+  const invalidEvalTimes = [
+    { label: 'evaluationTime null', val: null },
+    { label: 'evaluationTime string', val: '1757786450' },
+    { label: 'evaluationTime NaN', val: NaN },
+    { label: 'evaluationTime Infinity', val: Infinity },
+    { label: 'evaluationTime -Infinity', val: -Infinity },
+    { label: 'evaluationTime negative', val: -1 },
+    { label: 'evaluationTime fractional', val: 1757786450.5 },
+    { label: 'evaluationTime boolean', val: true }
+  ];
+
+  for (const { label, val } of invalidEvalTimes) {
+    const fixture = {
+      ...baseFixture,
+      challenge: {
+        ...baseFixture.challenge,
+        accepts: [
+          {
+            ...baseFixture.challenge.accepts[0],
+            maxTimeoutSeconds: validTimeout,
+            extra: { issuedAt: validIssuedAt }
+          }
+        ]
+      },
+      evaluationTime: val
+    };
+    assert.doesNotThrow(() => {
+      const res = evaluateX402PaymentProof(fixture);
+      assert.equal(res.outcome, 'FAIL_CLOSED', `${label} must fail closed`);
+      assert.equal(res.errorCode, 'ERR_INVALID_CHALLENGE', `${label} must return ERR_INVALID_CHALLENGE`);
+    });
+  }
+
+  // 5. Expired invoice (evaluationTime > issuedAt + maxTimeoutSeconds) -> ERR_INVOICE_EXPIRED
+  const expiredFixture = {
+    ...baseFixture,
+    challenge: {
+      ...baseFixture.challenge,
+      accepts: [
+        {
+          ...baseFixture.challenge.accepts[0],
+          maxTimeoutSeconds: validTimeout,
+          extra: { issuedAt: validIssuedAt }
+        }
+      ]
+    },
+    evaluationTime: validIssuedAt + validTimeout + 1
+  };
+  const expiredRes = evaluateX402PaymentProof(expiredFixture);
+  assert.equal(expiredRes.outcome, 'FAIL_CLOSED');
+  assert.equal(expiredRes.errorCode, 'ERR_INVOICE_EXPIRED');
+});
+
+test('Regression Pass 4 (Finding 4): Transport flags must be strict booleans in fresh settlement and idempotent retry', () => {
+  const validFixturePath = resolve(FIXTURES_DIR, '01-valid-402.json');
+  const baseFixture = JSON.parse(readFileSync(validFixturePath, 'utf8'));
+
+  const utxoId = `${baseFixture.paymentProof.txid}:${baseFixture.paymentProof.vout}`;
+  const existingEntitlement = {
+    entitlementId: 'ent-e3b0c442-0',
+    resourceId: baseFixture.paymentProof.targetResourceUrl,
+    paymentUtxo: utxoId,
+    status: 'ACTIVE_COMPLETED'
+  };
+
+  const retryFixture = {
+    ...baseFixture,
+    ledgerContext: {
+      alreadySettledTxids: [utxoId],
+      entitlements: { [utxoId]: existingEntitlement }
+    }
+  };
+
+  const nonBooleanCases = [
+    { label: 'deliveryAttempted string "false"', transport: { deliveryAttempted: 'false' } },
+    { label: 'deliveryAttempted string "true"', transport: { deliveryAttempted: 'true' } },
+    { label: 'deliveryAttempted number 1', transport: { deliveryAttempted: 1 } },
+    { label: 'deliveryAttempted number 0', transport: { deliveryAttempted: 0 } },
+    { label: 'deliveryAttempted null', transport: { deliveryAttempted: null } },
+    { label: 'responseCompleted string "true"', transport: { deliveryAttempted: true, responseCompleted: 'true' } },
+    { label: 'responseCompleted string "false"', transport: { deliveryAttempted: true, responseCompleted: 'false' } },
+    { label: 'responseCompleted number 1', transport: { deliveryAttempted: true, responseCompleted: 1 } },
+    { label: 'responseCompleted null', transport: { deliveryAttempted: true, responseCompleted: null } },
+    { label: 'deliveryFailed number 1', transport: { deliveryAttempted: true, deliveryFailed: 1 } },
+    { label: 'deliveryFailed string "true"', transport: { deliveryAttempted: true, deliveryFailed: 'true' } },
+    { label: 'deliveryFailed string "false"', transport: { deliveryAttempted: true, deliveryFailed: 'false' } },
+    { label: 'deliveryFailed null', transport: { deliveryAttempted: true, deliveryFailed: null } }
+  ];
+
+  for (const { label, transport } of nonBooleanCases) {
+    // Flow 1: Fresh settlement
+    const freshRes = evaluateX402PaymentProof(baseFixture, { transportSimulation: transport });
+    assert.equal(freshRes.outcome, 'FAIL_CLOSED', `Fresh settlement: ${label} must fail closed`);
+    assert.equal(freshRes.errorCode, 'ERR_DELIVERY_STAGE_INVALID', `Fresh settlement: ${label} must return ERR_DELIVERY_STAGE_INVALID`);
+
+    // Flow 2: Idempotent retry
+    const retryRes = evaluateX402PaymentProof(retryFixture, { transportSimulation: transport });
+    assert.equal(retryRes.outcome, 'FAIL_CLOSED', `Idempotent retry: ${label} must fail closed`);
+    assert.equal(retryRes.errorCode, 'ERR_DELIVERY_STAGE_INVALID', `Idempotent retry: ${label} must return ERR_DELIVERY_STAGE_INVALID`);
+  }
+
+  // Staged invariants: responseCompleted requires deliveryAttempted
+  const noAttemptCompleted = evaluateX402PaymentProof(baseFixture, {
+    transportSimulation: { responseCompleted: true, deliveryAttempted: false }
+  });
+  assert.equal(noAttemptCompleted.outcome, 'FAIL_CLOSED');
+  assert.equal(noAttemptCompleted.errorCode, 'ERR_DELIVERY_STAGE_INVALID');
+
+  // Staged invariants: deliveryFailed requires deliveryAttempted
+  const noAttemptFailed = evaluateX402PaymentProof(baseFixture, {
+    transportSimulation: { deliveryFailed: true, deliveryAttempted: false }
+  });
+  assert.equal(noAttemptFailed.outcome, 'FAIL_CLOSED');
+  assert.equal(noAttemptFailed.errorCode, 'ERR_DELIVERY_STAGE_INVALID');
+
+  // Invalid transition: responseCompleted AND deliveryFailed both true
+  const conflictFresh = evaluateX402PaymentProof(baseFixture, {
+    transportSimulation: { deliveryAttempted: true, responseCompleted: true, deliveryFailed: true }
+  });
+  assert.equal(conflictFresh.outcome, 'FAIL_CLOSED');
+  assert.equal(conflictFresh.errorCode, 'ERR_DELIVERY_STAGE_INVALID');
+
+  const conflictRetry = evaluateX402PaymentProof(retryFixture, {
+    transportSimulation: { deliveryAttempted: true, responseCompleted: true, deliveryFailed: true }
+  });
+  assert.equal(conflictRetry.outcome, 'FAIL_CLOSED');
+  assert.equal(conflictRetry.errorCode, 'ERR_DELIVERY_STAGE_INVALID');
+
+  // Valid evidence progressions for both flows:
+  // Fresh settlement: attempted -> completed
+  const freshCompleted = evaluateX402PaymentProof(baseFixture, {
+    transportSimulation: { deliveryAttempted: true, responseCompleted: true, deliveryFailed: false }
+  });
+  assert.equal(freshCompleted.outcome, 'SUCCESS');
+  assert.deepEqual(freshCompleted.evidence, [
+    'PAYMENT_SETTLED',
+    'RESOURCE_UNLOCKED',
+    'RESOURCE_DELIVERY_ATTEMPTED',
+    'RESOURCE_RESPONSE_COMPLETED'
+  ]);
+
+  // Fresh settlement: attempted -> failed
+  const freshFailed = evaluateX402PaymentProof(baseFixture, {
+    transportSimulation: { deliveryAttempted: true, responseCompleted: false, deliveryFailed: true }
+  });
+  assert.equal(freshFailed.outcome, 'SUCCESS');
+  assert.deepEqual(freshFailed.evidence, [
+    'PAYMENT_SETTLED',
+    'RESOURCE_UNLOCKED',
+    'RESOURCE_DELIVERY_ATTEMPTED',
+    'RESOURCE_DELIVERY_FAILED'
+  ]);
+
+  // Idempotent retry: attempted -> completed
+  const retryCompleted = evaluateX402PaymentProof(retryFixture, {
+    transportSimulation: { deliveryAttempted: true, responseCompleted: true, deliveryFailed: false }
+  });
+  assert.equal(retryCompleted.outcome, 'SUCCESS');
+  assert.equal(retryCompleted.idempotentRetry, true);
+  assert.deepEqual(retryCompleted.evidence, [
+    'RESOURCE_DELIVERY_ATTEMPTED',
+    'RESOURCE_RESPONSE_COMPLETED'
+  ]);
+
+  // Idempotent retry: attempted -> failed
+  const retryFailed = evaluateX402PaymentProof(retryFixture, {
+    transportSimulation: { deliveryAttempted: true, responseCompleted: false, deliveryFailed: true }
+  });
+  assert.equal(retryFailed.outcome, 'SUCCESS');
+  assert.equal(retryFailed.idempotentRetry, true);
+  assert.deepEqual(retryFailed.evidence, [
+    'RESOURCE_DELIVERY_ATTEMPTED',
+    'RESOURCE_DELIVERY_FAILED'
+  ]);
+});
+
 
