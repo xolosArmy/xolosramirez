@@ -3,7 +3,7 @@
 **Milestone:** `X402-XR0 — Verified Public Xolo Dossier Contract & Offline Harness`  
 **Status:** `DESIGN_FROZEN / SPEC_AND_HARNESS_ONLY`  
 **Autoridad:** Xolos Ramírez Architecture & Security  
-**Ref Arquitectura:** [xr-ac0-architecture.md](file:///home/xolosarmy/.gemini/antigravity-cli/brain/10a6329f-a3e8-434f-be7d-3c3d60c8972c/xr-ac0-architecture.md) (Revision B)
+**Ref Arquitectura:** [XR-AC0 Revision B](https://github.com/xolosArmy/Business_network/blob/ad0e7ea2afa832e31a5fbcbc5ebfdb436924e63d/docs/agentic-commerce/xr-ac0-architecture.md) (`XR-AC0-REVISION-B-FREEZE-20260913`)
 
 ---
 

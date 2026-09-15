@@ -138,7 +138,15 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_CHALLENGE' };
   }
 
-  // 5. Validate timing fields strictly before calculating expiration
+  // 5. Validate timing fields strictly before calculating expiration or freshness
+  const issuedAt = accepted.extra?.issuedAt;
+  if (
+    issuedAt !== undefined &&
+    (typeof issuedAt !== 'number' || !Number.isSafeInteger(issuedAt) || issuedAt < 0)
+  ) {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_CHALLENGE' };
+  }
+
   if (
     accepted.maxTimeoutSeconds !== undefined ||
     fixture.evaluationTime !== undefined ||
@@ -149,7 +157,6 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
       return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_CHALLENGE' };
     }
 
-    const issuedAt = accepted.extra?.issuedAt;
     if (typeof issuedAt !== 'number' || !Number.isSafeInteger(issuedAt) || issuedAt < 0) {
       return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_INVALID_CHALLENGE' };
     }
@@ -230,7 +237,26 @@ export function evaluateX402PaymentProof(fixture, options = {}) {
     return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_RESOURCE_MISMATCH' };
   }
 
-  const expectedHash = challenge.resource?.hash ?? challenge.resourceHash ?? challenge.extensions?.['x402-xec']?.info?.resourceHash;
+  const canonicalHash = challenge.extensions?.['x402-xec']?.info?.resourceHash;
+  const resourceHashBindings = [
+    canonicalHash,
+    challenge.resourceHash,
+    challenge.resource?.hash
+  ].filter((hash) => hash !== undefined);
+
+  if (
+    resourceHashBindings.some(
+      (hash) => typeof hash !== 'string' || hash.trim() === ''
+    )
+  ) {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_RESOURCE_HASH_MISMATCH' };
+  }
+
+  const expectedHash = canonicalHash ?? challenge.resourceHash ?? challenge.resource?.hash;
+  if (resourceHashBindings.some((hash) => hash !== expectedHash)) {
+    return { outcome: 'FAIL_CLOSED', errorCode: 'ERR_RESOURCE_HASH_MISMATCH' };
+  }
+
   if (expectedHash) {
     const verifierHash = verifiedPayment.boundResourceHash !== undefined
       ? verifiedPayment.boundResourceHash
@@ -1884,4 +1910,93 @@ test('Regression Pass 4 (Finding 4): Transport flags must be strict booleans in 
   ]);
 });
 
+// ---------------- FRESH CODEX REVIEW REGRESSION TESTS ---------------- //
+
+test('Fresh Codex Finding P1: Canonical resource hash cannot be shadowed by aliases', () => {
+  const validFixturePath = resolve(FIXTURES_DIR, '01-valid-402.json');
+  const baseFixture = JSON.parse(readFileSync(validFixturePath, 'utf8'));
+  const canonicalHash = baseFixture.challenge.extensions['x402-xec'].info.resourceHash;
+
+  const invalidAliases = [
+    {
+      label: 'empty resource.hash',
+      resource: { ...baseFixture.challenge.resource, hash: '' }
+    },
+    {
+      label: 'empty top-level resourceHash',
+      resourceHash: ''
+    },
+    {
+      label: 'conflicting resource.hash',
+      resource: { ...baseFixture.challenge.resource, hash: 'sha256:conflicting-alias' }
+    },
+    {
+      label: 'conflicting top-level resourceHash',
+      resourceHash: 'sha256:conflicting-alias'
+    }
+  ];
+
+  for (const { label, ...challengeOverrides } of invalidAliases) {
+    const result = evaluateX402PaymentProof({
+      ...baseFixture,
+      challenge: {
+        ...baseFixture.challenge,
+        ...challengeOverrides
+      }
+    });
+    assert.equal(result.outcome, 'FAIL_CLOSED', `${label} must fail closed`);
+    assert.equal(result.errorCode, 'ERR_RESOURCE_HASH_MISMATCH');
+  }
+
+  const consistentAliases = evaluateX402PaymentProof({
+    ...baseFixture,
+    challenge: {
+      ...baseFixture.challenge,
+      resourceHash: canonicalHash,
+      resource: { ...baseFixture.challenge.resource, hash: canonicalHash }
+    }
+  });
+  assert.equal(consistentAliases.outcome, 'SUCCESS');
+});
+
+test('Fresh Codex Finding P2: Standalone issuedAt is validated before freshness arithmetic', () => {
+  const validFixturePath = resolve(FIXTURES_DIR, '01-valid-402.json');
+  const baseFixture = JSON.parse(readFileSync(validFixturePath, 'utf8'));
+  const invalidIssuedAts = ['not-a-time', NaN, Infinity, -1, 1757786400.5, true, null];
+
+  for (const issuedAt of invalidIssuedAts) {
+    const result = evaluateX402PaymentProof({
+      ...baseFixture,
+      evaluationTime: undefined,
+      challenge: {
+        ...baseFixture.challenge,
+        accepts: [
+          {
+            ...baseFixture.challenge.accepts[0],
+            maxTimeoutSeconds: undefined,
+            extra: { issuedAt }
+          }
+        ]
+      }
+    });
+    assert.equal(result.outcome, 'FAIL_CLOSED');
+    assert.equal(result.errorCode, 'ERR_INVALID_CHALLENGE');
+  }
+
+  const validStandaloneIssuedAt = evaluateX402PaymentProof({
+    ...baseFixture,
+    evaluationTime: undefined,
+    challenge: {
+      ...baseFixture.challenge,
+      accepts: [
+        {
+          ...baseFixture.challenge.accepts[0],
+          maxTimeoutSeconds: undefined,
+          extra: { issuedAt: 1757786400 }
+        }
+      ]
+    }
+  });
+  assert.equal(validStandaloneIssuedAt.outcome, 'SUCCESS');
+});
 
