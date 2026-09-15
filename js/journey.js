@@ -81,9 +81,50 @@
         secondaryCta.textContent = english ? 'Talk about this Xolo' : 'Conversar sobre este xolo';
       }
 
-      iztli.querySelectorAll('.profile-videos iframe').forEach((iframe) => {
-        iframe.title = 'Iztli Ramirez';
-      });
+      // Replace all legacy Oce/Iztli profile videos with the two current Iztli Shorts.
+      const videos = iztli.querySelector('details.profile-videos');
+      const summary = videos?.querySelector('summary');
+      if (videos && summary) {
+        const currentVideos = [
+          { id: 'l22KoCmiLJI', titleEs: 'Iztli Ramirez — video reciente', titleEn: 'Iztli Ramirez — recent video' },
+          { id: 'XyVgvyj6n5A', titleEs: 'Iztli Ramirez — video reciente', titleEn: 'Iztli Ramirez — recent video' },
+        ];
+
+        Array.from(videos.children).forEach((child) => {
+          if (child !== summary) child.remove();
+        });
+
+        currentVideos.forEach(({ id, titleEs, titleEn }) => {
+          const container = document.createElement('div');
+          container.className = 'puppy-video-container';
+          container.dataset.iztliVideo = id;
+          container.style.cssText = 'margin: 1rem 0; border-radius: 8px; overflow: hidden; aspect-ratio: 9/16; max-width: 360px;';
+
+          const iframe = document.createElement('iframe');
+          iframe.width = '100%';
+          iframe.height = '100%';
+          iframe.src = `https://www.youtube.com/embed/${id}`;
+          iframe.title = english ? titleEn : titleEs;
+          iframe.setAttribute('frameborder', '0');
+          iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+          iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+          iframe.setAttribute('allowfullscreen', '');
+          iframe.loading = 'lazy';
+          container.appendChild(iframe);
+
+          const fallback = document.createElement('a');
+          fallback.href = `https://www.youtube.com/shorts/${id}`;
+          fallback.className = 'video-fallback';
+          fallback.target = '_blank';
+          fallback.rel = 'noopener noreferrer';
+          fallback.textContent = english ? 'Open on YouTube' : 'Abrir en YouTube';
+
+          videos.appendChild(container);
+          videos.appendChild(fallback);
+        });
+
+        summary.textContent = english ? 'Watch 2 videos' : 'Ver 2 videos';
+      }
 
       // Keep rendered structured data aligned while retaining the established #oce permalink.
       document.querySelectorAll('script[type="application/ld+json"]').forEach((script) => {
