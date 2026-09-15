@@ -76,13 +76,13 @@ export const CANONICAL_PUBLIC_XOLOS = [
   },
   {
     id: 'oce',
-    name: 'Oce Ramirez',
-    status: 'reserved',
+    name: 'Iztli Ramirez',
+    status: 'available',
     variety: 'hairless',
     size: 'intermediate',
     gender: 'male',
     color: 'black',
-    ageDescription: 'Cachorro macho recién nacido (reservado)',
+    ageDescription: 'Cachorro macho de talla intermedia chica',
     personalitySummary: 'Cachorro curioso, juguetón y de gran afinidad con niños y otros caninos.',
     careConsiderations: [
       'Cuidado preventivo de piel y exfoliación natural mensual'
