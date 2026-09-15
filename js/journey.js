@@ -18,6 +18,91 @@
     const tlilxochitlLatestEmbedUrl = `https://www.youtube.com/embed/${tlilxochitlLatestVideoId}`;
     const xilonen = document.querySelector('.puppy-card[data-profile-card="xilonen"], #xilonen');
     const tlilxochitl = document.querySelector('.puppy-card[data-profile-card="tlilxochitl"], #tlilxochitl');
+    // Keep the historical #oce/profile=oce identifier stable for existing links and analytics,
+    // while presenting the canonical current identity and availability as Iztli Ramirez.
+    const iztli = document.querySelector('.puppy-card[data-profile-card="oce"], #oce');
+
+    if (iztli) {
+      iztli.dataset.profileStatus = 'available';
+
+      const status = iztli.querySelector('.puppy-card__status');
+      if (status) {
+        status.classList.remove('status-reserved');
+        status.classList.add('status-disponible');
+        status.textContent = english ? 'Available' : 'Disponible';
+      }
+      iztli.querySelector('.puppy-card__reservation-note')?.remove();
+
+      const carousel = iztli.querySelector('[data-puppy-carousel]');
+      const track = carousel?.querySelector('.puppy-carousel__track');
+      if (carousel) {
+        carousel.setAttribute('aria-label', english ? 'Iztli Ramirez photo carousel' : 'Carrusel de fotos de Iztli Ramirez');
+      }
+      if (track) {
+        const slide = document.createElement('div');
+        slide.className = 'puppy-carousel__slide';
+        const image = document.createElement('img');
+        image.src = english
+          ? '../img/xolos/iztli-ramirez-septiembre-2026.webp'
+          : 'img/xolos/iztli-ramirez-septiembre-2026.webp';
+        image.alt = english
+          ? 'Iztli Ramirez, a dark hairless male Xoloitzcuintli puppy, photographed full-body in front of a blue and yellow mural at Xolos Ramírez'
+          : 'Iztli Ramirez, cachorro xoloitzcuintle macho sin pelo de color oscuro, fotografiado de cuerpo completo frente a un mural azul y amarillo en Xolos Ramírez';
+        image.className = 'puppy-card__image';
+        image.width = 800;
+        image.height = 600;
+        image.loading = 'lazy';
+        image.decoding = 'async';
+        image.draggable = false;
+        image.style.objectFit = 'contain';
+        slide.appendChild(image);
+        track.replaceChildren(slide);
+      }
+
+      const name = iztli.querySelector('.puppy-card__name');
+      if (name) name.textContent = 'Iztli Ramirez';
+
+      const primaryCta = iztli.querySelector('.puppy-card__actions .cta-email');
+      if (primaryCta) {
+        const subject = english
+          ? 'Inquiry about Iztli Ramirez [Ref: oce-en-available]'
+          : 'Consulta sobre Iztli Ramirez [Ref: oce-es-available]';
+        const body = english
+          ? 'Hello, I saw Iztli Ramirez on the Xolos Ramírez website and would like to learn more about his current availability, personality, price, process conditions, documentation, care, and delivery options for our location.'
+          : 'Hola, vi el perfil de Iztli Ramirez en el sitio de Xolos Ramírez y me interesa conocer más sobre su disponibilidad actual, personalidad, precio, condiciones del proceso, documentación, cuidados y opciones de entrega para nuestra ubicación.';
+        primaryCta.href = `mailto:contacto@xolosarmy.xyz?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        primaryCta.dataset.status = 'available';
+        primaryCta.setAttribute('aria-label', english ? 'Ask about Iztli Ramirez' : 'Consultar por Iztli Ramirez');
+        primaryCta.textContent = english ? 'Ask about Iztli Ramirez' : 'Consultar por Iztli Ramirez';
+      }
+
+      const secondaryCta = iztli.querySelector('.puppy-card__actions .text-link');
+      if (secondaryCta) {
+        secondaryCta.textContent = english ? 'Talk about this Xolo' : 'Conversar sobre este xolo';
+      }
+
+      iztli.querySelectorAll('.profile-videos iframe').forEach((iframe) => {
+        iframe.title = 'Iztli Ramirez';
+      });
+
+      // Keep rendered structured data aligned while retaining the established #oce permalink.
+      document.querySelectorAll('script[type="application/ld+json"]').forEach((script) => {
+        try {
+          const data = JSON.parse(script.textContent);
+          if (data?.['@type'] !== 'ItemList' || !Array.isArray(data.itemListElement)) return;
+          let changed = false;
+          data.itemListElement.forEach((item) => {
+            if (typeof item?.url === 'string' && item.url.endsWith('#oce')) {
+              item.name = 'Iztli Ramirez';
+              changed = true;
+            }
+          });
+          if (changed) script.textContent = JSON.stringify(data);
+        } catch {
+          // Ignore unrelated/non-JSON scripts.
+        }
+      });
+    }
 
     if (xilonen) {
       const refreshedVideos = [
