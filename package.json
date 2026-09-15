@@ -9,7 +9,8 @@
     "test:lighthouse:contact": "lighthouse https://xolosramirez.com/contacto.html --only-categories=performance,accessibility,best-practices,seo --preset=desktop --output=html --output-path=./reports/lighthouse-contact.html",
     "test:generate-lead": "node scripts/test-generate-lead-tracking.mjs",
     "test:webmcp": "node scripts/test-wm-xr1.mjs",
-    "test": "node scripts/test-generate-lead-tracking.mjs && node scripts/test-wm-xr1.mjs"
+    "test:x402-xr0": "node tests/x402-xr0/harness.mjs",
+    "test": "node scripts/test-generate-lead-tracking.mjs && node scripts/test-wm-xr1.mjs && node tests/x402-xr0/harness.mjs"
   },
   "devDependencies": {
     "htmlhint": "^1.4.6",

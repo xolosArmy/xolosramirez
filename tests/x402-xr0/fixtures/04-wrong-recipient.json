@@ -1,0 +1,38 @@
+{
+  "scenario": "04-wrong-recipient",
+  "description": "Payment proof specifies an unauthorized recipient address",
+  "challenge": {
+    "x402Version": 2,
+    "resource": {
+      "url": "https://api.xolosramirez.com/v1/xolos/xilonen/verified-dossier"
+    },
+    "accepts": [
+      {
+        "amount": "500000",
+        "asset": "TBD — owned by x402-XEC",
+        "payTo": "ecash:qp3wjpa3tjlj042z2wv7hahsldgwhwy0rq9sywjpy5"
+      }
+    ]
+  },
+  "paymentProof": {
+    "txid": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "vout": 0,
+    "amount": "500000",
+    "asset": "TBD — owned by x402-XEC",
+    "recipient": "ecash:qzattackerunauthorizedaddress9999999999",
+    "targetResourceUrl": "https://api.xolosramirez.com/v1/xolos/xilonen/verified-dossier"
+  },
+  "verifierSimulation": {
+    "status": "VERIFIED",
+    "verifiedPayment": {
+      "txid": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "vout": 0,
+      "amount": "500000",
+      "asset": "TBD — owned by x402-XEC",
+      "recipient": "ecash:qzattackerunauthorizedaddress9999999999",
+      "resourceUrl": "https://api.xolosramirez.com/v1/xolos/xilonen/verified-dossier"
+    }
+  },
+  "expectedOutcome": "FAIL_CLOSED",
+  "expectedErrorCode": "ERR_INVALID_RECIPIENT"
+}
