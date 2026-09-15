@@ -11,7 +11,7 @@
  * 3. Valid schemas: inputSchema and outputSchema conform to JSON Schema Draft 2020-12 structure.
  * 4. Deterministic outputs: all execute callbacks return valid, consistent JSON structures.
  * 5. Data accuracy:
- *    - Oce (#oce, reserved)
+ *    - Iztli (#oce, available)
  *    - Yohualli (female, intermediate, reserved)
  *    - Tlilxóchitl (intermediate, female, available)
  *    - Tonalli (standard, female, reserved)
@@ -83,14 +83,14 @@ test('WM-XR1: Deterministic output for list_available_xolos', async () => {
 
   // Filter test: available
   const availableFiltered = await PublicXolosDataAdapter.listAvailableXolos({ status: 'available' });
-  assert.ok(availableFiltered.total >= 2);
+  assert.ok(availableFiltered.total >= 3);
   for (const x of availableFiltered.xolos) {
     assert.equal(x.status, 'available');
   }
 
   // Filter test: reserved
   const reservedFiltered = await PublicXolosDataAdapter.listAvailableXolos({ status: 'reserved' });
-  assert.ok(reservedFiltered.total >= 4);
+  assert.ok(reservedFiltered.total >= 3);
   for (const x of reservedFiltered.xolos) {
     assert.equal(x.status, 'reserved');
   }
@@ -113,14 +113,14 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
   assert.equal(xilonen.xolo.gender, 'female');
   assert.equal(xilonen.xolo.status, 'available');
 
-  // 3. Oce (reserved, intermediate, male, #oce)
+  // 3. Iztli (available, intermediate, male, historical #oce identifier)
   const oce = await PublicXolosDataAdapter.getXoloProfile({ id: 'oce' });
   assert.equal(oce.found, true);
   assert.equal(oce.xolo.id, 'oce');
-  assert.equal(oce.xolo.name, 'Oce Ramirez');
+  assert.equal(oce.xolo.name, 'Iztli Ramirez');
   assert.equal(oce.xolo.size, 'intermediate');
   assert.equal(oce.xolo.gender, 'male');
-  assert.equal(oce.xolo.status, 'reserved');
+  assert.equal(oce.xolo.status, 'available');
   assert.equal(oce.xolo.publicUrl, 'https://xolosramirez.com/xolos-disponibles.html#oce');
 
   // 4. Yohualli (reserved, intermediate, female)

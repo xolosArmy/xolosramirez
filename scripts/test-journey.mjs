@@ -24,7 +24,7 @@ class Element {
 }
 function fixture({ lang = 'es', query = '', withForm = false, fetch } = {}) {
   const buttons = ['all', 'available', 'reserved'].map((filter) => new Element({ filter }));
-  const cards = [['tlilxochitl','available'],['xilonen','available'],['oce','reserved']].map(([id, profileStatus]) => Object.assign(new Element({ profileStatus }), { id }));
+  const cards = [['tlilxochitl','available'],['xilonen','available'],['yohualli','reserved']].map(([id, profileStatus]) => Object.assign(new Element({ profileStatus }), { id }));
   const count = new Element();
   const toolbar = new Element();
   toolbar.hidden = true;
