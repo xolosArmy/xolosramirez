@@ -1,0 +1,57 @@
+name: Temporary Ozomatli bilingual video update
+
+on:
+  push:
+    branches:
+      - content/ozomatli-short-mfocogvfjT0-20260917
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          ref: content/ozomatli-short-mfocogvfjT0-20260917
+
+      - name: Add recent Ozomatli Short to Spanish and English profiles
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          short_url = "https://youtube.com/shorts/mFOCogvFjT0?feature=share"
+          updates = [
+              (
+                  Path("teyolias-guardiania.html"),
+                  '              <a class="button button-outline" href="https://www.youtube.com/watch?v=tL_jiakmL1o" target="_blank" rel="noopener noreferrer" aria-label="Ver video de Ozomatli Ramírez en YouTube">Ver video</a>',
+                  '              <a class="button button-outline" href="https://youtube.com/shorts/mFOCogvFjT0?feature=share" target="_blank" rel="noopener noreferrer" aria-label="Ver video reciente de Ozomatli Ramírez en YouTube">Ver video reciente</a>',
+              ),
+              (
+                  Path("en/teyolias-guardianship.html"),
+                  '              <a class="button button-outline" href="https://www.youtube.com/watch?v=tL_jiakmL1o" target="_blank" rel="noopener noreferrer" aria-label="Watch a video of Ozomatli Ramírez on YouTube">Watch video</a>',
+                  '              <a class="button button-outline" href="https://youtube.com/shorts/mFOCogvFjT0?feature=share" target="_blank" rel="noopener noreferrer" aria-label="Watch a recent video of Ozomatli Ramírez on YouTube">Watch recent video</a>',
+              ),
+          ]
+
+          for path, existing_link, new_link in updates:
+              text = path.read_text(encoding="utf-8")
+              if short_url in text:
+                  raise SystemExit(f"{path}: new Short is already present")
+              count = text.count(existing_link)
+              if count != 1:
+                  raise SystemExit(f"{path}: expected exactly one Ozomatli video anchor, found {count}")
+              path.write_text(text.replace(existing_link, existing_link + "\n" + new_link), encoding="utf-8")
+          PY
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/tmp-ozomatli-video.yml
+          git add teyolias-guardiania.html en/teyolias-guardianship.html
+          git diff --cached --check
+          git diff --cached --exit-code --quiet && { echo "No content changes produced"; exit 1; } || true
+          git commit -m "Add recent Ozomatli video to ES and EN Teyolías profiles"
+          git push origin HEAD:content/ozomatli-short-mfocogvfjT0-20260917
