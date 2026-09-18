@@ -36,6 +36,8 @@ export function validatePublicAgeIntegrity(profile) {
   return { valid: true };
 }
 
+const LEGACY_PUBLIC_PROFILE_ALIASES = Object.freeze({ oce: 'iztli' });
+
 export const CANONICAL_PUBLIC_XOLOS = [
   {
     id: 'tlilxochitl',
@@ -75,7 +77,7 @@ export const CANONICAL_PUBLIC_XOLOS = [
     publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#xilonen'
   },
   {
-    id: 'oce',
+    id: 'iztli',
     name: 'Iztli Ramirez',
     status: 'available',
     variety: 'hairless',
@@ -88,7 +90,7 @@ export const CANONICAL_PUBLIC_XOLOS = [
       'Cuidado preventivo de piel y exfoliación natural mensual'
     ],
     lineageReference: 'Linaje Tonalli Xolos Ramírez',
-    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#oce'
+    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#iztli'
   },
   {
     id: 'yohualli',
@@ -263,7 +265,8 @@ export const PublicXolosDataAdapter = {
     }
 
     const cleanId = id.trim().toLowerCase();
-    const xolo = CANONICAL_PUBLIC_XOLOS.find((x) => x.id.toLowerCase() === cleanId);
+    const canonicalId = LEGACY_PUBLIC_PROFILE_ALIASES[cleanId] || cleanId;
+    const xolo = CANONICAL_PUBLIC_XOLOS.find((x) => x.id.toLowerCase() === canonicalId);
 
     if (!xolo) {
       return {
