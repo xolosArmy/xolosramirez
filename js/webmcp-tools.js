@@ -97,7 +97,7 @@ export const WEBMCP_TOOLS_DEFINITIONS = [
       properties: {
         id: {
           type: 'string',
-          description: 'Identificador del ejemplar (e.g. "tlilxochitl", "xilonen", "yohualli", "oce", "tonalli", "xochitl")'
+          description: 'Identificador canónico del ejemplar (e.g. "tlilxochitl", "xilonen", "yohualli", "iztli", "tonalli", "xochitl"). El alias histórico "oce" se acepta solo por compatibilidad.'
         }
       },
       additionalProperties: false
