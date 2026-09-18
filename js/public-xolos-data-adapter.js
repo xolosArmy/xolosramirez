@@ -190,7 +190,7 @@ const OFFICIAL_DELIVERY_INFO = {
 
 const ETHICAL_PRICING_PROCESS = {
   kennelPhilosophy: 'Crianza ética familiar y preservación biocultural del Xoloitzcuintle como Patrimonio Cultural y Vivo de México.',
-  privatePricingNotice: 'Xolos Ramírez NO publica listas numéricas de precios abiertos en la web. Cada cachorro representa un linaje único y su asignación se basa en compatibilidad con la familia adoptante.',
+  privatePricingNotice: 'El adaptador WebMCP no expone cotizaciones numéricas. Para el precio público vigente y sus condiciones, consulta https://xolosramirez.com/blog/cuanto-cuesta-xoloitzcuintle-xolos-ramirez.html. La asignación de cada cachorro también considera compatibilidad con la familia adoptante.',
   whatIsIncluded: [
     'Esquema de vacunación y desparasitación completo y certificado por médico veterinario zootecnista',
     'Microchip de identificación subcutáneo ISO homologado internacionalmente',

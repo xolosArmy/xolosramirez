@@ -199,7 +199,7 @@ test('WM-XR1: Ausencia de precios numéricos privados en get_price_process_infor
   // Assert critical invariants: no numerical prices, no currency amounts
   assert.ok(!serialized.match(/\$\s*\d+/), 'Must not contain numerical dollar or peso prices (e.g. $1000)');
   assert.ok(!serialized.match(/\d+[\s,]*(USD|MXN|satoshis|XEC)/i), 'Must not contain numerical currency quotes');
-  assert.ok(info.privatePricingNotice.includes('NO publica listas numéricas de precios'));
+  assert.ok(info.privatePricingNotice.includes('no expone cotizaciones numéricas'));
   assert.ok(Array.isArray(info.whatIsIncluded));
   assert.ok(Array.isArray(info.inquiryProcess));
 });
