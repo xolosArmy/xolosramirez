@@ -210,9 +210,11 @@
   if (!form) return;
   const profile = form.querySelector('[name="ejemplar"]');
   const requestedProfile = new URLSearchParams(window.location.search).get('profile');
+  const canonicalRequestedProfile = requestedProfile === 'oce' ? 'iztli' : requestedProfile;
   // Only known option values can become context; arbitrary URL text is never rendered or submitted.
-  if (profile && Array.from(profile.options).some((option) => option.value === requestedProfile)) {
-    profile.value = requestedProfile;
+  // "oce" remains accepted only as a legacy deep-link alias for the canonical Iztli profile.
+  if (profile && Array.from(profile.options).some((option) => option.value === canonicalRequestedProfile)) {
+    profile.value = canonicalRequestedProfile;
     const reason = form.querySelector('[name="motivo"]');
     if (reason) reason.value = 'adopcion';
   }
