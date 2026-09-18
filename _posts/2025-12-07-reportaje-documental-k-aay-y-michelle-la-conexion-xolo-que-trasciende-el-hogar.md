@@ -12,7 +12,7 @@ Fecha de Publicación: 7 de Diciembre de 2025
 Categoría: Historias Reales, Comunidad Xoloitzcuintle
 
 El más reciente episodio de **"The
-Xolos Ramírez Show"** nos ofreció una mirada conmovedora y profundamente informativa a la vida de uno de nuestros Xoloitzcuintles miniatura, **K'aay** (anteriormente conocida como Menta), junto a su nueva humana,
+Xolos Ramírez Show"** nos ofreció una mirada conmovedora y profundamente informativa a la vida de uno de nuestros Xoloitzcuintles miniatura, **K'aay** (anteriormente conocida como Menta), junto a su humana,
 **Michelle**. La conversación, liderada por Fernando Ramírez, no
 solo celebró la perfecta adaptación de K'aay, sino que también demostró por qué esta raza milenaria es considerada un compañero "casi humano" en la actualidad.
 
@@ -49,6 +49,33 @@ seguir los pasos de otras Xolos de nuestra comunidad, como Itza Ramírez, quien 
 
 El episodio de "The Xolos Ramírez Show" con Michelle y K'aay es un recordatorio poderoso de que adoptar un Xoloitzcuintle no es solo adquirir una mascota, sino
 integrar a un miembro inteligente, sensible y lleno de amor a la familia.
+
+
+### **Actualización 2026: K'aay conoce el mar**
+
+El **17 de septiembre de 2026**, Michelle volvió a compartir con Xolos Ramírez un nuevo capítulo de la vida de K'aay. A **un año recién cumplido**, la xoloitzcuintle conoció el mar durante unas vacaciones en la playa, acompañada por los perros que forman parte de su familia.
+
+Michelle nos contó que K'aay está feliz, que sigue siendo una perrita linda e inteligente y que se encuentra **súper integrada a la familia**. La escena también refleja la vida cotidiana que ha construido junto a Michelle, propietaria de **Chantli Hotel**, donde la convivencia con otros perros forma parte natural de su entorno.
+
+> “Una Xolo en el mar, K'aay está feliz de conocer el mar junto a sus hermanos, es tan linda e inteligente y a un año recién cumplido súper integrada a la familia. Gracias Xolos Ramírez por este regalo de vida tan hermoso.” — Michelle
+
+Este video continúa la historia que comenzó cuando todavía la conocíamos como **Menta Ramírez** y que hoy seguimos documentando bajo el nombre que recibió en su hogar: **K'aay Ramírez**.
+
+<div style="max-width: 360px; margin: 1.5rem auto;">
+  <iframe
+    title="K'aay Ramírez conoce el mar"
+    width="315"
+    height="560"
+    src="https://www.youtube-nocookie.com/embed/tvtYVuG1ZLE?rel=0"
+    frameborder="0"
+    loading="lazy"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+  </iframe>
+</div>
+
+**Video:** [K'aay Ramírez conoce el mar por primera vez](https://youtube.com/shorts/tvtYVuG1ZLE?feature=share)
 
 ---
 
