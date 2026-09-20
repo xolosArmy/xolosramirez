@@ -82,6 +82,6 @@ Este video continúa la historia que comenzó cuando todavía la conocíamos com
 ### **¿Quieres encontrar a tu propio compañero Xolo?**
 
 * **Consulta nuestros Xoloitzcuintles disponibles para
-  adopción:** <https://www.xolosramirez.com/xolos-disponibles/>
+  adopción:** <https://xolosramirez.com/xolos-disponibles.html>
 * **Protege la piel de tu Xolo con nuestros productos
   naturales:** <https://xolosarmy.xyz/productos-xoloitzcuintle/>

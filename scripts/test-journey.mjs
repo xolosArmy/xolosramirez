@@ -32,7 +32,7 @@ function fixture({ lang = 'es', query = '', withForm = false, fetch } = {}) {
   toolbar.querySelector = () => count;
   const status = new Element();
   const button = new Element(); button.textContent = 'Enviar mensaje';
-  const profile = { options: [{ value: 'general' }, { value: 'xilonen' }], value: 'general' };
+  const profile = { options: [{ value: 'general' }, { value: 'xilonen' }, { value: 'tlilxochitl' }], value: 'general' };
   const reason = { value: '' };
   const form = new Element();
   form.action = 'https://formspree.io/f/xbdzegwj';
@@ -50,7 +50,13 @@ function fixture({ lang = 'es', query = '', withForm = false, fetch } = {}) {
   window.location = { hash: '', search: query };
   window.dataLayer = [];
   window.fetch = fetch;
-  window.FormData = class { constructor(form) { this.content = form.message; } };
+  window.FormData = class {
+    constructor(form) {
+      this.content = form.message;
+      this.profile = form.querySelector('[name="ejemplar"]')?.value;
+    }
+    get(name) { return name === 'ejemplar' ? this.profile : null; }
+  };
   window.AbortController = AbortController;
   window.setTimeout = (callback) => { window.timeout = callback; return 1; };
   window.clearTimeout = () => { window.timeout = null; };
@@ -112,8 +118,40 @@ test('duplicate clicks send once; confirmed success clears the form and records 
   assert.equal(f.button.disabled, false);
   assert.equal(f.status.focused, true);
   assert.equal(f.window.dataLayer.length, 1);
-  assert.deepEqual(JSON.parse(JSON.stringify(f.window.dataLayer[0])), { event: 'xolos_contact_success', lead_channel: 'form', page_type: 'contact', lang: 'es' });
-  assert.doesNotMatch(JSON.stringify(f.window.dataLayer), /Private|example|profile|href/);
+  assert.deepEqual(JSON.parse(JSON.stringify(f.window.dataLayer[0])), {
+    event: 'contact_form_submit',
+    lead_channel: 'form',
+    lead_intent: 'contact_form',
+    cta_location: 'contact_form',
+    page_type: 'contact',
+    lang: 'es',
+  });
+  assert.doesNotMatch(JSON.stringify(f.window.dataLayer), /contact_received/);
+  assert.doesNotMatch(JSON.stringify(f.window.dataLayer), /Private family note|private@example\.test|href/);
+});
+test('confirmed form submission includes a canonical profile only when selected', async () => {
+  const f = fixture({ withForm: true, query: '?profile=xilonen', fetch: async () => ({ ok: true }) });
+  await f.form.emit('submit');
+  assert.equal(f.window.dataLayer[0].profile, 'xilonen');
+  assert.equal('profile_status' in f.window.dataLayer[0], false);
+});
+test('confirmed form submission keeps the profile captured in the request body', async () => {
+  let resolveRequest;
+  let requestBody;
+  const f = fixture({
+    withForm: true,
+    fetch: async (_, options) => {
+      requestBody = options.body;
+      return new Promise((resolve) => { resolveRequest = resolve; });
+    },
+  });
+  f.profile.value = 'xilonen';
+  const pending = f.form.emit('submit');
+  assert.equal(requestBody.profile, 'xilonen');
+  f.profile.value = 'tlilxochitl';
+  resolveRequest({ ok: true });
+  await pending;
+  assert.equal(f.window.dataLayer[0].profile, 'xilonen');
 });
 test('HTTP rejection preserves the message and permits a successful retry', async () => {
   let requests = 0;
@@ -128,11 +166,11 @@ test('HTTP rejection preserves the message and permits a successful retry', asyn
   assert.equal(f.status.dataset.state, 'success');
   assert.equal(f.window.dataLayer[0].lang, 'en');
 });
-test('network failure retains input and offers direct contact alternatives', async () => {
+test('network failure retains input and offers the primary email alternative', async () => {
   const f = fixture({ withForm: true, fetch: async () => { throw new Error('offline'); } });
   await f.form.emit('submit');
   assert.equal(f.status.dataset.state, 'error');
-  assert.match(f.status.textContent, /WhatsApp y correo/);
+  assert.match(f.status.textContent, /enlace de correo/);
   assert.match(f.form.message, /Private/);
   assert.equal(f.button.disabled, false);
 });

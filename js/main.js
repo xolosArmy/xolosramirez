@@ -1,7 +1,5 @@
 const LEGACY_CONTACT_EMAIL = 'fernando@xolosramirez.com';
 const CURRENT_CONTACT_EMAIL = 'contacto@xolosarmy.xyz';
-const LEGACY_WHATSAPP_LINK = 'https://wa.me/qr/R2F5PRQYZSJOA1';
-const CURRENT_WHATSAPP_LINK = 'https://wa.me/message/435RTKGJLTX2J1';
 
 const FOOTER_SOCIAL_LINKS = [
   { label: 'Facebook', href: 'https://www.facebook.com/share/1DYZWxYmqp/' },
@@ -103,12 +101,6 @@ function updateGlobalContactEmail() {
     if (!href || !href.includes(LEGACY_CONTACT_EMAIL)) return;
     link.setAttribute('href', href.replaceAll(LEGACY_CONTACT_EMAIL, CURRENT_CONTACT_EMAIL));
   });
-
-  document.querySelectorAll('a[href]').forEach((link) => {
-    const href = link.getAttribute('href');
-    if (!href || !href.includes(LEGACY_WHATSAPP_LINK)) return;
-    link.setAttribute('href', href.replaceAll(LEGACY_WHATSAPP_LINK, CURRENT_WHATSAPP_LINK));
-  });
 }
 
 const navMenu = document.getElementById('menu');
@@ -174,6 +166,21 @@ document.addEventListener('click', (event) => {
 
 const CONTACT_FORM_SELECTOR = 'form[data-gtm="contact-form"]';
 const LEAD_DEDUPLICATION_MS = 1500;
+const QUALIFIED_CONTACT_INTENTS = new Set([
+  'price_inquiry',
+  'profile_inquiry',
+  'video_call_request',
+  'contact_form',
+]);
+const LEAD_ANALYTICS_FIELDS = [
+  'profile',
+  'profile_status',
+  'lead_channel',
+  'lead_intent',
+  'page_type',
+  'cta_location',
+  'lang',
+];
 let lastGenerateLeadSignature = '';
 let lastGenerateLeadAt = 0;
 
@@ -183,22 +190,21 @@ function getLeadElement(target) {
     : null;
 }
 
-function getDatasetField(element, key, fallback = 'unknown') {
-  return element.dataset[key] || fallback;
+function getDatasetField(element, key) {
+  return element.dataset[key] || '';
 }
 
 function getLeadChannel(element) {
+  if (element.dataset.leadChannel) return element.dataset.leadChannel;
   const cta = getDatasetField(element, 'cta', '').toLowerCase();
-  if (cta === 'whatsapp') return 'whatsapp';
   if (cta === 'email') return 'email';
   if (cta === 'video_call') return 'video_call';
   if (cta === 'contact-form' || cta === 'form') return 'form';
-  return 'unknown';
+  return '';
 }
 
 function getCtaLocation(element) {
   if (element.dataset.ctaLocation) return element.dataset.ctaLocation;
-  if (element.classList.contains('wa-float')) return 'floating';
   if (element.classList.contains('home-email-float')) return 'floating';
   if (element.closest('.puppy-card')) return 'profile_card';
   if (element.closest('footer')) return 'footer';
@@ -210,38 +216,53 @@ function normalizeLang(rawLang) {
   const lang = (rawLang || '').toLowerCase();
   if (lang === 'es' || lang.startsWith('es-')) return 'es';
   if (lang === 'en' || lang.startsWith('en-')) return 'en';
-  return 'unknown';
+  return '';
+}
+
+function getProfileStatus(element) {
+  return element.dataset.profileStatus || element.dataset.status || '';
+}
+
+function getLeadProfile(element) {
+  if (!(element instanceof HTMLFormElement) || !element.matches(CONTACT_FORM_SELECTOR)) {
+    return getDatasetField(element, 'profile');
+  }
+
+  const control = element.querySelector('[name="ejemplar"]');
+  const selectedProfile = typeof control?.value === 'string' ? control.value : '';
+  const isValidProfile = selectedProfile !== ''
+    && selectedProfile !== 'general'
+    && Array.from(control?.options || []).some((option) => option.value === selectedProfile);
+  return isValidProfile ? selectedProfile : '';
 }
 
 function getLeadIntent(element) {
   if (element.dataset.leadIntent) return element.dataset.leadIntent;
 
   const leadChannel = getLeadChannel(element);
-  const profile = getDatasetField(element, 'profile', 'general');
-  const profileStatus = getDatasetField(element, 'status', 'not_applicable');
-  const pageType = getDatasetField(element, 'pageType', 'unknown');
+  const profile = getDatasetField(element, 'profile');
+  const profileStatus = getProfileStatus(element);
   const ctaLocation = getCtaLocation(element);
 
-  if (leadChannel === 'whatsapp' && pageType === 'available-xolos') return 'price_inquiry';
-  if (leadChannel === 'email' && profileStatus === 'reserved') return 'similar_xolos';
-  if (leadChannel === 'email' && profile !== 'general') return 'profile_inquiry';
-  if (leadChannel === 'email' && pageType === 'home') return 'general_inquiry';
+  if (leadChannel === 'email' && profile && profile !== 'general') return 'profile_inquiry';
   if (ctaLocation === 'contact_form') return 'contact_form';
-  return 'lead_inquiry';
+  if (profileStatus === 'reserved') return 'profile_inquiry';
+  return '';
 }
 
 function buildLeadPayload(element) {
   const lang = element.dataset.lang || document.documentElement.lang;
-  return {
+  const fields = {
     event: 'xolos_generate_lead',
     lead_channel: getLeadChannel(element),
     cta_location: getCtaLocation(element),
     lead_intent: getLeadIntent(element),
-    profile: getDatasetField(element, 'profile', 'general'),
-    profile_status: getDatasetField(element, 'status', 'not_applicable'),
-    page_type: getDatasetField(element, 'pageType', 'unknown'),
+    profile: getLeadProfile(element),
+    profile_status: getProfileStatus(element),
+    page_type: getDatasetField(element, 'pageType'),
     lang: normalizeLang(lang),
   };
+  return Object.fromEntries(Object.entries(fields).filter(([, parameter]) => parameter !== ''));
 }
 
 function getLeadSignature(payload) {
@@ -256,7 +277,13 @@ function getLeadSignature(payload) {
   ].join('|');
 }
 
-function pushGenerateLead(payload) {
+function pushLeadEvent(payload) {
+  const reset = Object.fromEntries(LEAD_ANALYTICS_FIELDS.map((field) => [field, undefined]));
+  window.dataLayer.push(reset);
+  window.dataLayer.push(payload);
+}
+
+function pushLeadActivation(payload) {
   const now = Date.now();
   const signature = getLeadSignature(payload);
   if (signature === lastGenerateLeadSignature && now - lastGenerateLeadAt < LEAD_DEDUPLICATION_MS) return;
@@ -264,7 +291,10 @@ function pushGenerateLead(payload) {
   lastGenerateLeadSignature = signature;
   lastGenerateLeadAt = now;
   window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push(payload);
+  pushLeadEvent(payload);
+  if (QUALIFIED_CONTACT_INTENTS.has(payload.lead_intent)) {
+    pushLeadEvent({ ...payload, event: 'qualified_contact_intent' });
+  }
 }
 
 function shouldIgnoreLeadClick(element) {
@@ -281,14 +311,14 @@ function shouldIgnoreLeadClick(element) {
 document.addEventListener('click', (event) => {
   const leadElement = getLeadElement(event.target);
   if (!leadElement || shouldIgnoreLeadClick(leadElement)) return;
-  pushGenerateLead(buildLeadPayload(leadElement));
+  pushLeadActivation(buildLeadPayload(leadElement));
 });
 
 document.addEventListener('submit', (event) => {
   const form = event.target;
   if (!(form instanceof HTMLFormElement)) return;
   if (!form.matches(CONTACT_FORM_SELECTOR) || !form.checkValidity()) return;
-  pushGenerateLead(buildLeadPayload(form));
+  pushLeadActivation(buildLeadPayload(form));
 });
 
 function initializePuppyCarousels() {

@@ -61,7 +61,7 @@ Te invitamos a ver el episodio completo de nuestro programa en YouTube:
 
 **Enlaces de interés:**
 
-* 🐾 **Cachorros Disponibles:** [Explora nuestra selección de ejemplares](https://www.xolosramirez.com/xolos-disponibles/)
+* 🐾 **Cachorros Disponibles:** [Explora nuestra selección de ejemplares](https://xolosramirez.com/xolos-disponibles.html)
 * 🌿 **Cuidado Especializado:** [Productos para la piel de tu Xolo](https://xolosArmy.xyz/productos-xoloitzcuintle/)
 
 ### Somos Xolos Ramirez, El Mejor Criadero Xoloitzcuintle en México.

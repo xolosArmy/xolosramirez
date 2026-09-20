@@ -65,7 +65,7 @@ esta ocasión, premiamos a los conocedores con el token **Xolos RMZ**, integrand
 
 Te invitamos a explorar nuestra selección de ejemplares disponibles y a unirte a la familia Xolos Ramírez.
 
-* 🐾 **Mira nuestros Xolos disponibles:** [xolosramirez.com/xolos-disponibles](https://www.xolosramirez.com/xolos-disponibles/)
+* 🐾 **Mira nuestros Xolos disponibles:** [xolosramirez.com/xolos-disponibles.html](https://xolosramirez.com/xolos-disponibles.html)
 * 💰 **Gestiona tu pasión en la RMZWallet Tonalli:** [cartera.xolosarmy.xyz](https://cartera.xolosarmy.xyz)
 
 **¿Tienes alguna duda sobre los cuidados de la piel del Xoloitzcuintle? ¡Déjanos un comentario!**

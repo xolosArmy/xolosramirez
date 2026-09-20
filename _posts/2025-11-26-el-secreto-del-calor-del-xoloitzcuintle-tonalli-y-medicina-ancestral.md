@@ -72,7 +72,7 @@ preservar esta energía milenaria.
 
 Si estás listo para recibir el Tonalli de un compañero ancestral, te invitamos a conocer a nuestros cachorros.
 
-🐾 Ver Xolos Disponibles: [https://www.xolosramirez.com/xolos-disponibles/](https://www.xolosramirez.com/xolos-disponibles/ "https://www.xolosramirez.com/xolos-disponibles/")
+🐾 Ver Xolos Disponibles: [https://xolosramirez.com/xolos-disponibles.html](https://xolosramirez.com/xolos-disponibles.html "https://xolosramirez.com/xolos-disponibles.html")
 
 ### Cuida la piel de tu Xolo
 
