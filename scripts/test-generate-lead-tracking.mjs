@@ -1,11 +1,16 @@
 import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
 import { extname, join } from 'node:path';
+import vm from 'node:vm';
 
 const read = (path) => readFileSync(path, 'utf8');
 const main = read('js/main.js');
 const leadCode = main.slice(
   main.indexOf('function getLeadElement'),
+  main.indexOf('function initializePuppyCarousels')
+);
+const leadRuntimeCode = main.slice(
+  main.indexOf('const CONTACT_FORM_SELECTOR'),
   main.indexOf('function initializePuppyCarousels')
 );
 
@@ -50,6 +55,222 @@ notMatches(leadCode, /\bcurrency\b/, 'generate_lead must not send currency');
 notMatches(leadCode, /\.value\b|new FormData|FormData\s*\(/, 'generate_lead must not read field values');
 notMatches(leadCode, /querySelector(?:All)?\(['"](?:input|textarea|select)/, 'generate_lead must not query form fields');
 notMatches(leadCode, /href|Click URL/i, 'generate_lead must not send href or Click URL');
+notMatches(leadCode, /\(not set\)/i, 'Analytics resets must use undefined rather than an artificial label');
+
+const leadAnalyticsFields = [
+  'profile',
+  'profile_status',
+  'lead_channel',
+  'lead_intent',
+  'page_type',
+  'cta_location',
+  'lang',
+];
+
+function trackingFixture() {
+  class TestElement {
+    constructor(dataset = {}, tagName = 'a') {
+      this.dataset = dataset;
+      this.tagName = tagName.toUpperCase();
+      this.classList = { contains: () => false };
+    }
+
+    closest(selector) {
+      if (selector === '[data-lead-type="generate_lead"]') {
+        return this.dataset.leadType === 'generate_lead' ? this : null;
+      }
+      if (selector === 'form[data-gtm="contact-form"]') {
+        return this instanceof TestForm ? this : null;
+      }
+      return null;
+    }
+
+    getAttribute(name) {
+      return name === 'type' ? '' : null;
+    }
+  }
+
+  class TestForm extends TestElement {
+    constructor(dataset) {
+      super(dataset, 'form');
+    }
+
+    matches(selector) {
+      return selector === 'form[data-gtm="contact-form"]';
+    }
+
+    checkValidity() {
+      return true;
+    }
+  }
+
+  const listeners = {};
+  const rawPushes = [];
+  const emittedEvents = [];
+  const dataLayerModel = {};
+  const dataLayer = [];
+  dataLayer.push = (message) => {
+    rawPushes.push(message);
+    for (const field of leadAnalyticsFields) {
+      if (!Object.prototype.hasOwnProperty.call(message, field)) continue;
+      if (message[field] === undefined) delete dataLayerModel[field];
+      else dataLayerModel[field] = message[field];
+    }
+    if (message.event) emittedEvents.push({ event: message.event, ...dataLayerModel });
+    return rawPushes.length;
+  };
+
+  const document = {
+    documentElement: { lang: 'es' },
+    addEventListener(type, listener) {
+      listeners[type] = listener;
+    },
+  };
+  const window = { dataLayer };
+  vm.runInNewContext(leadRuntimeCode, {
+    document,
+    window,
+    Element: TestElement,
+    HTMLFormElement: TestForm,
+    Set,
+    Object,
+    Date,
+    Boolean,
+  });
+
+  return {
+    rawPushes,
+    emittedEvents,
+    click(dataset) {
+      listeners.click({ target: new TestElement({ leadType: 'generate_lead', ...dataset }) });
+    },
+    submit(dataset) {
+      listeners.submit({ target: new TestForm({ leadType: 'generate_lead', ...dataset }) });
+    },
+  };
+}
+
+function assertAnalyticsContext(event, expected) {
+  for (const field of leadAnalyticsFields) {
+    if (Object.prototype.hasOwnProperty.call(expected, field)) {
+      assert.equal(event[field], expected[field], `${event.event} must set ${field}`);
+    } else {
+      assert.equal(field in event, false, `${event.event} must clear stale ${field}`);
+    }
+  }
+}
+
+function assertResetBeforeEveryEvent(rawPushes) {
+  const eventIndexes = rawPushes
+    .map((message, index) => message.event ? index : -1)
+    .filter((index) => index >= 0);
+  for (const index of eventIndexes) {
+    assert.ok(index > 0, 'Every analytics event must have a preceding reset');
+    const reset = rawPushes[index - 1];
+    assert.equal('event' in reset, false, 'Reset must not emit an analytics event');
+    for (const field of leadAnalyticsFields) {
+      assert.ok(Object.prototype.hasOwnProperty.call(reset, field), `Reset must include ${field}`);
+      assert.equal(reset[field], undefined, `Reset must clear ${field} with undefined`);
+    }
+    assert.doesNotMatch(JSON.stringify(reset), /\(not set\)/i);
+  }
+}
+
+const profileContext = {
+  lead_channel: 'email',
+  lead_intent: 'profile_inquiry',
+  page_type: 'available-xolos',
+  cta_location: 'profile_card',
+  profile: 'xilonen',
+  profile_status: 'available',
+  lang: 'es',
+};
+const priceContext = {
+  lead_channel: 'email',
+  lead_intent: 'price_inquiry',
+  page_type: 'home',
+  cta_location: 'floating',
+  lang: 'es',
+};
+const videoCallContext = {
+  lead_channel: 'video_call',
+  lead_intent: 'video_call_request',
+  page_type: 'contact',
+  cta_location: 'inline',
+  lang: 'es',
+};
+const contactFormContext = {
+  lead_channel: 'form',
+  lead_intent: 'contact_form',
+  page_type: 'contact',
+  cta_location: 'contact_form',
+  lang: 'es',
+};
+const generalContext = {
+  lead_channel: 'email',
+  lead_intent: 'general_inquiry',
+  page_type: 'contact',
+  cta_location: 'inline',
+  lang: 'es',
+};
+
+function activateProfile(fixture) {
+  fixture.click({
+    cta: 'email',
+    leadIntent: 'profile_inquiry',
+    pageType: 'available-xolos',
+    ctaLocation: 'profile_card',
+    profile: 'xilonen',
+    status: 'available',
+    lang: 'es',
+  });
+}
+
+function assertQualifiedPair(events, expected) {
+  assert.deepEqual(events.map(({ event }) => event), ['xolos_generate_lead', 'qualified_contact_intent']);
+  for (const event of events) assertAnalyticsContext(event, expected);
+}
+
+{
+  const fixture = trackingFixture();
+  activateProfile(fixture);
+  fixture.click({ cta: 'email', leadIntent: 'price_inquiry', pageType: 'home', ctaLocation: 'floating', lang: 'es' });
+  assertQualifiedPair(fixture.emittedEvents.slice(0, 2), profileContext);
+  assertQualifiedPair(fixture.emittedEvents.slice(2), priceContext);
+  assertResetBeforeEveryEvent(fixture.rawPushes);
+}
+
+{
+  const fixture = trackingFixture();
+  activateProfile(fixture);
+  fixture.click({ cta: 'video_call', leadIntent: 'video_call_request', pageType: 'contact', ctaLocation: 'inline', lang: 'es' });
+  assertQualifiedPair(fixture.emittedEvents.slice(0, 2), profileContext);
+  assertQualifiedPair(fixture.emittedEvents.slice(2), videoCallContext);
+  assertResetBeforeEveryEvent(fixture.rawPushes);
+}
+
+{
+  const fixture = trackingFixture();
+  activateProfile(fixture);
+  fixture.submit({ cta: 'form', leadIntent: 'contact_form', pageType: 'contact', ctaLocation: 'contact_form', lang: 'es' });
+  assertQualifiedPair(fixture.emittedEvents.slice(0, 2), profileContext);
+  assertQualifiedPair(fixture.emittedEvents.slice(2), contactFormContext);
+  assertResetBeforeEveryEvent(fixture.rawPushes);
+}
+
+{
+  const fixture = trackingFixture();
+  fixture.click({ cta: 'email', leadIntent: 'general_inquiry', pageType: 'contact', ctaLocation: 'inline', lang: 'es' });
+  activateProfile(fixture);
+  assert.deepEqual(fixture.emittedEvents.map(({ event }) => event), [
+    'xolos_generate_lead',
+    'xolos_generate_lead',
+    'qualified_contact_intent',
+  ]);
+  assertAnalyticsContext(fixture.emittedEvents[0], generalContext);
+  assertQualifiedPair(fixture.emittedEvents.slice(1), profileContext);
+  assertResetBeforeEveryEvent(fixture.rawPushes);
+}
 
 includes(main, 'LEAD_DEDUPLICATION_MS = 1500', 'Expected 1500 ms deduplication window');
 includes(main, 'getLeadSignature(payload)', 'Expected signature-based deduplication');

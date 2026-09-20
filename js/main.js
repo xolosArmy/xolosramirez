@@ -172,6 +172,15 @@ const QUALIFIED_CONTACT_INTENTS = new Set([
   'video_call_request',
   'contact_form',
 ]);
+const LEAD_ANALYTICS_FIELDS = [
+  'profile',
+  'profile_status',
+  'lead_channel',
+  'lead_intent',
+  'page_type',
+  'cta_location',
+  'lang',
+];
 let lastGenerateLeadSignature = '';
 let lastGenerateLeadAt = 0;
 
@@ -255,6 +264,12 @@ function getLeadSignature(payload) {
   ].join('|');
 }
 
+function pushLeadEvent(payload) {
+  const reset = Object.fromEntries(LEAD_ANALYTICS_FIELDS.map((field) => [field, undefined]));
+  window.dataLayer.push(reset);
+  window.dataLayer.push(payload);
+}
+
 function pushLeadActivation(payload) {
   const now = Date.now();
   const signature = getLeadSignature(payload);
@@ -263,9 +278,9 @@ function pushLeadActivation(payload) {
   lastGenerateLeadSignature = signature;
   lastGenerateLeadAt = now;
   window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push(payload);
+  pushLeadEvent(payload);
   if (QUALIFIED_CONTACT_INTENTS.has(payload.lead_intent)) {
-    window.dataLayer.push({ ...payload, event: 'qualified_contact_intent' });
+    pushLeadEvent({ ...payload, event: 'qualified_contact_intent' });
   }
 }
 
