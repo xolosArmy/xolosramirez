@@ -32,7 +32,7 @@ function fixture({ lang = 'es', query = '', withForm = false, fetch } = {}) {
   toolbar.querySelector = () => count;
   const status = new Element();
   const button = new Element(); button.textContent = 'Enviar mensaje';
-  const profile = { options: [{ value: 'general' }, { value: 'xilonen' }], value: 'general' };
+  const profile = { options: [{ value: 'general' }, { value: 'xilonen' }, { value: 'tlilxochitl' }], value: 'general' };
   const reason = { value: '' };
   const form = new Element();
   form.action = 'https://formspree.io/f/xbdzegwj';
@@ -50,7 +50,13 @@ function fixture({ lang = 'es', query = '', withForm = false, fetch } = {}) {
   window.location = { hash: '', search: query };
   window.dataLayer = [];
   window.fetch = fetch;
-  window.FormData = class { constructor(form) { this.content = form.message; } };
+  window.FormData = class {
+    constructor(form) {
+      this.content = form.message;
+      this.profile = form.querySelector('[name="ejemplar"]')?.value;
+    }
+    get(name) { return name === 'ejemplar' ? this.profile : null; }
+  };
   window.AbortController = AbortController;
   window.setTimeout = (callback) => { window.timeout = callback; return 1; };
   window.clearTimeout = () => { window.timeout = null; };
@@ -128,6 +134,24 @@ test('confirmed form submission includes a canonical profile only when selected'
   await f.form.emit('submit');
   assert.equal(f.window.dataLayer[0].profile, 'xilonen');
   assert.equal('profile_status' in f.window.dataLayer[0], false);
+});
+test('confirmed form submission keeps the profile captured in the request body', async () => {
+  let resolveRequest;
+  let requestBody;
+  const f = fixture({
+    withForm: true,
+    fetch: async (_, options) => {
+      requestBody = options.body;
+      return new Promise((resolve) => { resolveRequest = resolve; });
+    },
+  });
+  f.profile.value = 'xilonen';
+  const pending = f.form.emit('submit');
+  assert.equal(requestBody.profile, 'xilonen');
+  f.profile.value = 'tlilxochitl';
+  resolveRequest({ ok: true });
+  await pending;
+  assert.equal(f.window.dataLayer[0].profile, 'xilonen');
 });
 test('HTTP rejection preserves the message and permits a successful retry', async () => {
   let requests = 0;

@@ -223,6 +223,19 @@ function getProfileStatus(element) {
   return element.dataset.profileStatus || element.dataset.status || '';
 }
 
+function getLeadProfile(element) {
+  if (!(element instanceof HTMLFormElement) || !element.matches(CONTACT_FORM_SELECTOR)) {
+    return getDatasetField(element, 'profile');
+  }
+
+  const control = element.querySelector('[name="ejemplar"]');
+  const selectedProfile = typeof control?.value === 'string' ? control.value : '';
+  const isValidProfile = selectedProfile !== ''
+    && selectedProfile !== 'general'
+    && Array.from(control?.options || []).some((option) => option.value === selectedProfile);
+  return isValidProfile ? selectedProfile : '';
+}
+
 function getLeadIntent(element) {
   if (element.dataset.leadIntent) return element.dataset.leadIntent;
 
@@ -244,7 +257,7 @@ function buildLeadPayload(element) {
     lead_channel: getLeadChannel(element),
     cta_location: getCtaLocation(element),
     lead_intent: getLeadIntent(element),
-    profile: getDatasetField(element, 'profile'),
+    profile: getLeadProfile(element),
     profile_status: getProfileStatus(element),
     page_type: getDatasetField(element, 'pageType'),
     lang: normalizeLang(lang),

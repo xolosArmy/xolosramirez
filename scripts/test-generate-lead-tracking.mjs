@@ -50,10 +50,11 @@ for (const key of [
   includes(leadCode, key, 'Expected payload parameter ' + key);
 }
 
-notMatches(leadCode, /\bvalue\b/, 'generate_lead must not send value');
+notMatches(leadCode, /^\s*value\s*:/m, 'generate_lead must not send a value parameter');
 notMatches(leadCode, /\bcurrency\b/, 'generate_lead must not send currency');
-notMatches(leadCode, /\.value\b|new FormData|FormData\s*\(/, 'generate_lead must not read field values');
-notMatches(leadCode, /querySelector(?:All)?\(['"](?:input|textarea|select)/, 'generate_lead must not query form fields');
+includes(leadCode, "element.querySelector('[name=\"ejemplar\"]')", 'Form activation must read the selected public profile');
+notMatches(leadCode, /new FormData|FormData\s*\(/, 'generate_lead must not read submitted form contents');
+notMatches(leadCode, /querySelector(?:All)?\(['"](?:input|textarea|select|\[name=(?!["']ejemplar))/, 'generate_lead must not query private form fields');
 notMatches(leadCode, /href|Click URL/i, 'generate_lead must not send href or Click URL');
 notMatches(leadCode, /\(not set\)/i, 'Analytics resets must use undefined rather than an artificial label');
 
@@ -91,8 +92,16 @@ function trackingFixture() {
   }
 
   class TestForm extends TestElement {
-    constructor(dataset) {
+    constructor(dataset, selectedProfile = 'general') {
       super(dataset, 'form');
+      this.profileControl = {
+        value: selectedProfile,
+        options: [
+          { value: 'general' },
+          { value: 'xilonen' },
+          { value: 'tlilxochitl' },
+        ],
+      };
     }
 
     matches(selector) {
@@ -101,6 +110,10 @@ function trackingFixture() {
 
     checkValidity() {
       return true;
+    }
+
+    querySelector(selector) {
+      return selector === '[name="ejemplar"]' ? this.profileControl : null;
     }
   }
 
@@ -144,8 +157,8 @@ function trackingFixture() {
     click(dataset) {
       listeners.click({ target: new TestElement({ leadType: 'generate_lead', ...dataset }) });
     },
-    submit(dataset) {
-      listeners.submit({ target: new TestForm({ leadType: 'generate_lead', ...dataset }) });
+    submit(dataset, selectedProfile) {
+      listeners.submit({ target: new TestForm({ leadType: 'generate_lead', ...dataset }, selectedProfile) });
     },
   };
 }
@@ -206,6 +219,10 @@ const contactFormContext = {
   cta_location: 'contact_form',
   lang: 'es',
 };
+const xilonenContactFormContext = {
+  ...contactFormContext,
+  profile: 'xilonen',
+};
 const generalContext = {
   lead_channel: 'email',
   lead_intent: 'general_inquiry',
@@ -237,6 +254,20 @@ function assertQualifiedPair(events, expected) {
   fixture.click({ cta: 'email', leadIntent: 'price_inquiry', pageType: 'home', ctaLocation: 'floating', lang: 'es' });
   assertQualifiedPair(fixture.emittedEvents.slice(0, 2), profileContext);
   assertQualifiedPair(fixture.emittedEvents.slice(2), priceContext);
+  assertResetBeforeEveryEvent(fixture.rawPushes);
+}
+
+{
+  const fixture = trackingFixture();
+  fixture.submit({ cta: 'form', leadIntent: 'contact_form', pageType: 'contact', ctaLocation: 'contact_form', lang: 'es' }, 'xilonen');
+  assertQualifiedPair(fixture.emittedEvents, xilonenContactFormContext);
+  assertResetBeforeEveryEvent(fixture.rawPushes);
+}
+
+for (const noSelectedProfile of ['', 'general']) {
+  const fixture = trackingFixture();
+  fixture.submit({ cta: 'form', leadIntent: 'contact_form', pageType: 'contact', ctaLocation: 'contact_form', lang: 'es' }, noSelectedProfile);
+  assertQualifiedPair(fixture.emittedEvents, contactFormContext);
   assertResetBeforeEveryEvent(fixture.rawPushes);
 }
 

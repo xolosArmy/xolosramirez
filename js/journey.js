@@ -238,11 +238,17 @@
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), 20000);
     try {
+      const formData = new FormData(form);
+      const submittedProfileValue = formData.get('ejemplar');
+      const submittedProfile = typeof submittedProfileValue === 'string'
+        && submittedProfileValue !== ''
+        && submittedProfileValue !== 'general'
+        ? submittedProfileValue
+        : '';
       const response = await window.fetch(form.action, {
-        method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' }, signal: controller.signal,
+        method: 'POST', body: formData, headers: { Accept: 'application/json' }, signal: controller.signal,
       });
       if (!response.ok) throw new Error('contact_request_failed');
-      const submittedProfile = profile?.value && profile.value !== 'general' ? profile.value : '';
       status.dataset.state = 'success';
       status.textContent = english
         ? 'Thank you. Your message was sent. We will reply by email within 48 business hours. If you wish, you can also choose a video-call time above.'
