@@ -212,7 +212,7 @@
   const requestedProfile = new URLSearchParams(window.location.search).get('profile');
   const canonicalRequestedProfile = requestedProfile === 'oce' ? 'iztli' : requestedProfile;
   // Only known option values can become context; arbitrary URL text is never rendered or submitted.
-  // "oce" remains accepted only as a legacy deep-link alias for the canonical Iztli profile.
+  // Normalize deprecated deep-link profile keys before selecting the canonical profile.
   if (profile && Array.from(profile.options).some((option) => option.value === canonicalRequestedProfile)) {
     profile.value = canonicalRequestedProfile;
     const reason = form.querySelector('[name="motivo"]');
