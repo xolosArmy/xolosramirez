@@ -78,7 +78,7 @@ describe en los códices prehispánicos.
 
 * Adopciones e Información sobre Disponibilidad:
 
-  [https://www.xolosramirez.com/xolos-disponibles/](https://www.xolosramirez.com/xolos-disponibles/ "https://www.xolosramirez.com/xolos-disponibles/")
+  [https://xolosramirez.com/xolos-disponibles.html](https://xolosramirez.com/xolos-disponibles.html "https://xolosramirez.com/xolos-disponibles.html")
 * Conoce la RMZ Wallet (BETA):
 
   [https://cartera.xolosarmy.xyz](https://cartera.xolosarmy.xyz "https://cartera.xolosarmy.xyz")

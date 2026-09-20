@@ -116,12 +116,12 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
   // 3. Iztli (available, intermediate, male, historical #oce identifier)
   const oce = await PublicXolosDataAdapter.getXoloProfile({ id: 'oce' });
   assert.equal(oce.found, true);
-  assert.equal(oce.xolo.id, 'oce');
+  assert.equal(oce.xolo.id, 'iztli');
   assert.equal(oce.xolo.name, 'Iztli Ramirez');
   assert.equal(oce.xolo.size, 'intermediate');
   assert.equal(oce.xolo.gender, 'male');
   assert.equal(oce.xolo.status, 'available');
-  assert.equal(oce.xolo.publicUrl, 'https://xolosramirez.com/xolos-disponibles.html#oce');
+  assert.equal(oce.xolo.publicUrl, 'https://xolosramirez.com/xolos-disponibles.html#iztli');
 
   // 4. Yohualli (reserved, intermediate, female)
   const yohualli = await PublicXolosDataAdapter.getXoloProfile({ id: 'yohualli' });
@@ -186,10 +186,19 @@ test('WM-XR1: Deterministic output for get_delivery_information with national zo
 
 test('WM-XR1: Deterministic output for get_contact_options', async () => {
   const contact = await PublicXolosDataAdapter.getContactOptions();
+  assert.equal(contact.primaryChannel, 'email');
   assert.equal(contact.officialEmail, 'contacto@xolosarmy.xyz');
-  assert.equal(contact.whatsappDirect, 'https://wa.me/message/435RTKGJLTX2J1');
+  assert.equal(contact.videoCallBookingUrl, 'https://calendar.app.google/1PXNvJM42iZ3JMHC8');
   assert.equal(contact.officialWebsite, 'https://xolosramirez.com');
   assert.ok(Array.isArray(contact.socialChannels));
+  assert.equal('whatsappDirect' in contact, false, 'Retired contact channel must not be returned');
+  assert.doesNotMatch(JSON.stringify(contact), /whatsapp|wa\.me|whatsapp:\/\//i);
+
+  const definition = WEBMCP_TOOLS_DEFINITIONS.find((tool) => tool.name === 'get_contact_options');
+  assert.ok(definition);
+  assert.equal(definition.outputSchema.required.includes('officialEmail'), true);
+  assert.equal(definition.outputSchema.required.includes('primaryChannel'), true);
+  assert.equal('whatsappDirect' in definition.outputSchema.properties, false);
 });
 
 test('WM-XR1: Ausencia de precios numéricos privados en get_price_process_information', async () => {

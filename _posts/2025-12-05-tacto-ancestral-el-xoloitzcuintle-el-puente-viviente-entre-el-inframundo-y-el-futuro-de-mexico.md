@@ -64,7 +64,7 @@ viviente**.
 
 * Cachorros Xoloitzcuintle disponibles:
 
-  [https://www.xolosramirez.com/xolos-disponibles/](https://www.xolosramirez.com/xolos-disponibles/ "https://www.xolosramirez.com/xolos-disponibles/")
+  [https://xolosramirez.com/xolos-disponibles.html](https://xolosramirez.com/xolos-disponibles.html "https://xolosramirez.com/xolos-disponibles.html")
 * Cuida la piel de tu Xolo con nuestros productos naturales (Bálsamos y Jabones):
 
   [https://xolosArmy.xyz/productos-xoloitzcuintle/](https://xolosArmy.xyz/productos-xoloitzcuintle/ "https://xolosArmy.xyz/productos-xoloitzcuintle/")

@@ -118,7 +118,7 @@
 .journey-page [data-form-status] { padding: 1rem; border-left: 3px solid var(--color-dorado); background: #231e19; }
 .journey-page [data-form-status][data-state="error"] { border-color: #ffb9a3; }
 /* Float labels remain understandable on touch screens and cannot sit above the menu. */
-.journey-page .home-email-float, .journey-page .wa-float { z-index: 40; bottom: max(1rem,env(safe-area-inset-bottom)); right: 1rem; max-width: calc(100% - 2rem); border-color: var(--color-dorado); color: var(--color-dorado); border-radius: .65rem; }
+.journey-page .home-email-float { z-index: 40; bottom: max(1rem,env(safe-area-inset-bottom)); right: 1rem; max-width: calc(100% - 2rem); border-color: var(--color-dorado); color: var(--color-dorado); border-radius: .65rem; }
 .journey-page footer { padding-bottom: 7rem; }
 .journey-page .table-wrap { border-radius: .5rem; }
 .journey-page .table-wrap table { min-width: 520px; }
@@ -145,7 +145,7 @@
   .journey-page .puppy-grid { grid-template-columns: 1fr; }
   .journey-page .puppy-card__image-wrapper { height: 360px; }
   .journey-page .journey-feature-card .card__media { max-height: 330px; }
-  .journey-page .home-email-float, .journey-page .wa-float { width: auto; height: auto; min-height: 48px; padding: .7rem 1rem; font-size: .875rem; }
+  .journey-page .home-email-float { width: auto; height: auto; min-height: 48px; padding: .7rem 1rem; font-size: .875rem; }
   .journey-page .home-email-float__text { position: static; width: auto; height: auto; margin: 0; clip-path: none; white-space: normal; overflow: visible; }
 }
 @media (max-width: 420px) {

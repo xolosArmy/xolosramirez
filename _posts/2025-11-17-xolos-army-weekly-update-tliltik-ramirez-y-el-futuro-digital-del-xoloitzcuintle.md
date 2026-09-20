@@ -66,4 +66,4 @@ y centralización.
 Si deseas conocer más sobre Tliltik o ver otros cachorros Xoloitzcuintles disponibles, te invitamos a visitar nuestra sección de adopción.
 
 * **🐕 Cachorros Xoloitzcuintles
-  Disponibles:** <https://www.xolosramirez.com/xolos-disponibles/>
+  Disponibles:** <https://xolosramirez.com/xolos-disponibles.html>

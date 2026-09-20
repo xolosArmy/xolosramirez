@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
+import { extname, join } from 'node:path';
 
 const read = (path) => readFileSync(path, 'utf8');
 const main = read('js/main.js');
@@ -25,7 +26,12 @@ function formTag(html) {
 includes(main, "document.addEventListener('click'", 'Expected delegated click listener');
 includes(main, "target.closest('[data-lead-type=\"generate_lead\"]')", 'Expected closest() based lead lookup');
 includes(main, "event: 'xolos_generate_lead'", 'Expected xolos_generate_lead event push');
+includes(main, "event: 'qualified_contact_intent'", 'Expected qualified_contact_intent event push');
 includes(main, "if (cta === 'video_call') return 'video_call';", 'Expected video_call lead channel');
+for (const intent of ['price_inquiry', 'profile_inquiry', 'video_call_request', 'contact_form']) {
+  includes(main, `'${intent}'`, 'Expected qualified intent allowlist entry ' + intent);
+}
+notMatches(main, /contact_received/, 'Frontend must never emit contact_received');
 
 for (const key of [
   'lead_channel',
@@ -65,7 +71,7 @@ for (const entry of [[esForm, 'es'], [enForm, 'en']]) {
   const lang = entry[1];
   includes(tag, 'data-lead-type="generate_lead"');
   includes(tag, 'data-cta="form"');
-  includes(tag, 'data-profile="general"');
+  notMatches(tag, /data-profile=|data-status=/, 'Generic forms must not invent profile context');
   includes(tag, 'data-page-type="contact"');
   includes(tag, 'data-lang="' + lang + '"');
   includes(tag, 'data-cta-location="contact_form"');
@@ -78,55 +84,85 @@ for (const entry of [[esForm, 'es'], [enForm, 'en']]) {
 
 for (const path of ['index.html', 'en/index.html']) {
   const html = read(path);
-  assert.ok(/class="[^"]*(wa-float|home-email-float)[^"]*"[\s\S]*?data-cta="email"[\s\S]*?data-lead-type="generate_lead"/.test(html), path + ' must keep floating email lead CTA');
+  assert.ok(/class="[^"]*home-email-float[^"]*"[\s\S]*?data-cta="email"[\s\S]*?data-lead-type="generate_lead"/.test(html), path + ' must keep floating email lead CTA');
 }
 
-const floatingWhatsAppExpectations = [
+const floatingPriceExpectations = [
+  {
+    path: 'index.html',
+    lang: 'es',
+    pageType: 'home',
+    visibleText: 'Preguntar por precio',
+    accessibleText: 'Preguntar por precio por correo',
+  },
+  {
+    path: 'en/index.html',
+    lang: 'en',
+    pageType: 'home',
+    visibleText: 'Ask about price',
+    accessibleText: 'Ask about price by email',
+  },
   {
     path: 'xolos-disponibles.html',
     lang: 'es',
-    visibleText: 'Consultar por WhatsApp',
-    accessibleText: 'Consultar por WhatsApp con Xolos Ramírez',
+    pageType: 'available-xolos',
+    visibleText: 'Preguntar por precio',
+    accessibleText: 'Preguntar por precio por correo',
   },
   {
     path: 'en/available-xolos.html',
     lang: 'en',
-    visibleText: 'Contact by WhatsApp',
-    accessibleText: 'Contact by WhatsApp with Xolos Ramírez',
+    pageType: 'available-xolos',
+    visibleText: 'Ask about price',
+    accessibleText: 'Ask about price by email',
+  },
+  {
+    path: 'contacto.html',
+    lang: 'es',
+    pageType: 'contact',
+    visibleText: 'Preguntar por precio',
+    accessibleText: 'Preguntar por precio por correo',
+  },
+  {
+    path: 'en/contact.html',
+    lang: 'en',
+    pageType: 'contact',
+    visibleText: 'Ask about price',
+    accessibleText: 'Ask about price by email',
   },
 ];
 
-for (const expectation of floatingWhatsAppExpectations) {
+for (const expectation of floatingPriceExpectations) {
   const html = read(expectation.path);
 
   const matches = html.match(
-    /<a(?=[^>]*class="[^"]*\bwa-float\b[^"]*")[^>]*>[\s\S]*?<\/a>/g
+    /<a(?=[^>]*class="[^"]*\bhome-email-float\b[^"]*")[^>]*>[\s\S]*?<\/a>/g
   ) || [];
 
   assert.equal(
     matches.length,
     1,
-    expectation.path + ' must have exactly one floating WhatsApp CTA'
+    expectation.path + ' must have exactly one floating price CTA'
   );
 
   const cta = matches[0];
 
   includes(
     cta,
-    'href="https://wa.me/message/435RTKGJLTX2J1"',
-    expectation.path + ' must use the current WhatsApp URL'
+    'href="mailto:contacto@xolosarmy.xyz?subject=',
+    expectation.path + ' must open the primary email channel'
   );
 
   includes(
     cta,
-    'class="home-email-float wa-float cta-lead"',
-    expectation.path + ' must keep the visual class and add the semantic class'
+    'class="home-email-float cta-lead cta-email"',
+    expectation.path + ' must use the email floating CTA classes'
   );
 
   includes(
     cta,
     'target="_blank"',
-    expectation.path + ' must open the booking page in a new tab'
+    expectation.path + ' must open the email client in a new tab context'
   );
 
   includes(
@@ -137,8 +173,8 @@ for (const expectation of floatingWhatsAppExpectations) {
 
   includes(
     cta,
-    'data-cta="whatsapp"',
-    expectation.path + ' must track the WhatsApp channel'
+    'data-cta="email"',
+    expectation.path + ' must track the email channel'
   );
 
   includes(
@@ -155,13 +191,13 @@ for (const expectation of floatingWhatsAppExpectations) {
 
   for (const attribute of [
     'data-cta-location="floating"',
-    'data-profile="general"',
-    'data-status="not_applicable"',
-    'data-page-type="available-xolos"',
+    'data-page-type="' + expectation.pageType + '"',
     'data-lang="' + expectation.lang + '"',
   ]) {
     includes(cta, attribute, expectation.path + ' must keep ' + attribute);
   }
+
+  notMatches(cta, /data-profile=|data-status=/, expectation.path + ' must not invent profile context');
 
   includes(
     cta,
@@ -175,44 +211,94 @@ for (const expectation of floatingWhatsAppExpectations) {
     expectation.path + ' must use the localized aria-label'
   );
 
-  includes(
-    cta,
-    'title="' + expectation.accessibleText + '"',
-    expectation.path + ' must use the localized title'
-  );
-
   notMatches(
     cta,
-    /mailto:|data-cta="email"|data-lead-intent="video_call_request"/i,
-    expectation.path + ' must not retain floating email behavior'
+    /data-cta="video_call"|data-lead-intent="video_call_request"/i,
+    expectation.path + ' must not relabel the floating price CTA as a video call'
   );
 
-  assert.equal(
-    /calendar\.app\.google/i.test(cta),
-    false,
-    expectation.path + ' must not label the WhatsApp action as calendar booking'
-  );
+  notMatches(cta, /wa\.me|whatsapp:\/\//i, expectation.path + ' must not expose messaging links');
+}
 
-  includes(
-    html,
-    'href="https://wa.me/message/435RTKGJLTX2J1"',
-    expectation.path + ' must keep the non-floating WhatsApp CTA'
-  );
+const profileExpectations = [
+  ['tlilxochitl', 'available', 'Tlilxóchitl Ramirez'],
+  ['xilonen', 'available', 'Xilonen Ramirez'],
+  ['iztli', 'available', 'Iztli Ramirez'],
+  ['yohualli', 'reserved', 'Yohualli Ramirez'],
+  ['tonalli', 'reserved', 'Tonalli Ramírez'],
+  ['xochitl', 'reserved', 'Xochitl Ramirez'],
+];
+for (const [path, prefix] of [['xolos-disponibles.html', 'Preguntar por '], ['en/available-xolos.html', 'Ask about ']]) {
+  const html = read(path);
+  for (const [profile, status, name] of profileExpectations) {
+    const match = html.match(new RegExp(`<a(?=[^>]*data-profile="${profile}")(?=[^>]*data-cta-location="profile_card")[^>]*>[\\s\\S]*?<\\/a>`));
+    assert.ok(match, path + ' must expose the CTA for ' + profile);
+    const cta = match[0];
+    includes(cta, 'data-cta="email"');
+    includes(cta, 'data-lead-intent="profile_inquiry"');
+    includes(cta, 'data-status="' + status + '"');
+    includes(cta, 'data-page-type="available-xolos"');
+    includes(cta, '>' + prefix + name + '</a>');
+  }
+}
 
-  assert.ok(
-    /mailto:/i.test(html),
-    expectation.path + ' must keep internal email links'
-  );
+const activeContactSurfaces = [
+  'index.html', 'en/index.html', 'xolos-disponibles.html', 'en/available-xolos.html',
+  'contacto.html', 'en/contact.html', 'blog/precio-xoloitzcuintle.html',
+  'en/blog/xoloitzcuintli-price.html', 'teyolias-guardiania.html',
+  'en/teyolias-guardianship.html', 'public/xolos-disponibles.html', 'js/main.js',
+  'js/journey.js', 'js/public-xolos-data-adapter.js', 'js/webmcp-tools.js',
+  'css/styles-base.css', 'css/journey.css',
+];
+for (const path of activeContactSurfaces) {
+  notMatches(read(path), /whatsapp|wa\.me|whatsapp:\/\//i, path + ' must not expose the retired public contact channel');
+}
 
-  assert.ok(
-    /data-profile="(?!general)[^"]+"/.test(html),
-    expectation.path + ' must keep profile slugs'
-  );
+for (const [path, primaryLabel, secondaryLabel] of [
+  ['contacto.html', 'Correo · canal principal', 'Videollamada'],
+  ['en/contact.html', 'Email · primary channel', 'Video call'],
+]) {
+  const html = read(path);
+  assert.ok(html.indexOf(primaryLabel) >= 0, path + ' must identify email as primary');
+  assert.ok(html.indexOf(primaryLabel) < html.indexOf(secondaryLabel), path + ' must present email before video call');
+}
 
-  assert.ok(
-    /data-status="(?:available|reserved|delivered|teyolia)"/.test(html),
-    expectation.path + ' must keep profile statuses'
-  );
+const sitemap = read('sitemap.xml');
+assert.equal((sitemap.match(/<loc>https:\/\/xolosramirez\.com\/xolos-disponibles\.html<\/loc>/g) || []).length, 1);
+assert.equal((sitemap.match(/<loc>https:\/\/xolosramirez\.com\/en\/available-xolos\.html<\/loc>/g) || []).length, 1);
+notMatches(sitemap, /<loc>[^<]*\/(?:xolos-disponibles|en\/available-xolos)<\/loc>/, 'Sitemap must not contain extensionless availability aliases');
+
+for (const [path, alias, canonical] of [
+  ['xolos-disponibles.html', '/xolos-disponibles', '/xolos-disponibles.html'],
+  ['en/available-xolos.html', '/en/available-xolos', '/en/available-xolos.html'],
+]) {
+  const html = read(path);
+  includes(html, `window.location.pathname === '${alias}'`, path + ' must detect the extensionless alias');
+  includes(html, `window.location.replace('${canonical}' + window.location.search + window.location.hash)`, path + ' must preserve query and fragment when consolidating');
+  includes(html, `rel="canonical" href="https://xolosramirez.com${canonical}"`);
+}
+
+function walkHtml(directory) {
+  const files = [];
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    if (['.git', 'node_modules', 'reports', 'import'].includes(entry.name)) continue;
+    const path = join(directory, entry.name);
+    if (entry.isDirectory()) files.push(...walkHtml(path));
+    else if (extname(entry.name) === '.html') files.push(path);
+  }
+  return files;
+}
+for (const path of walkHtml('.')) {
+  const html = read(path);
+  for (const match of html.matchAll(/\b(?:href|content)=["']([^"']+)["']/g)) {
+    const value = match[1];
+    if (/xolos-disponibles/i.test(value) && !/^mailto:/i.test(value)) {
+      assert.match(value, /xolos-disponibles\.html(?:[?#]|$)/, path + ' has a non-canonical availability link: ' + value);
+    }
+    if (/available-xolos/i.test(value)) {
+      assert.match(value, /available-xolos\.html(?:[?#]|$)/, path + ' has a non-canonical English availability link: ' + value);
+    }
+  }
 }
 
 for (const path of [

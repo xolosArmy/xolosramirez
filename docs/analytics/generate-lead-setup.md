@@ -1,150 +1,115 @@
-# generate_lead setup
+# Funnel de contacto y configuración de `generate_lead`
 
-Este repositorio unicamente empuja el evento `generate_lead` a `window.dataLayer`. Todavia se requiere configurar Google Tag Manager, Google Analytics 4 y Google Ads para que el evento se procese como conversion o evento clave. El sitio no envia valores, moneda, precios ni datos personales a Analytics.
+Fecha de revisión: 20 de septiembre de 2026.
 
-## Configuración en GTM
+El frontend separa activación, intención cualificada y envío confirmado. No envía precios, moneda, contenido del formulario, correo, ciudad, query strings ni otros datos personales a Analytics.
 
-Crear variables de capa de datos, versión 2:
-
-DLV - lead_channel
-DLV - cta_location
-DLV - lead_intent
-DLV - profile
-DLV - profile_status
-DLV - page_type
-DLV - lang
-
-Cada variable debe usar el nombre correspondiente:
-
-lead_channel
-cta_location
-lead_intent
-profile
-profile_status
-page_type
-lang
-
-Crear un activador:
-
-Nombre:
-Custom Event - generate_lead
-
-Tipo:
-Evento personalizado
-
-Nombre del evento:
+```text
 generate_lead
+       ↓
+qualified_contact_intent
+       ↓
+contacto real
+       ↓
+seguimiento / videollamada
+       ↓
+reserva
+```
 
-Activación:
-Todos los eventos personalizados con ese nombre.
+Solo las dos primeras capas pueden medirse enteramente en frontend. El sitio no emite `contact_received`: abrir un cliente de correo no demuestra que el mensaje se redactó o se envió.
 
-Crear una etiqueta:
+## Contrato de eventos
 
-Nombre:
-GA4 Event - generate_lead
+| Evento en `dataLayer` | Significado | Cuándo se emite |
+| --- | --- | --- |
+| `xolos_generate_lead` | Activación de un CTA comercial; en enlaces `mailto:` significa únicamente “email CTA opened”. | Clic en CTA o intento válido de envío del formulario. |
+| `qualified_contact_intent` | Activación de un CTA con intención explícita. | Solo para `price_inquiry`, `profile_inquiry`, `video_call_request` o `contact_form`. |
+| `contact_form_submit` | Formulario aceptado por Formspree. | Únicamente después de una respuesta HTTP satisfactoria. No significa que el equipo ya leyó el mensaje. |
 
-Tipo:
-Google Analytics: evento de GA4
+`xolos_generate_lead` se transforma en el evento GA4 `generate_lead` desde GTM. El evento `qualified_contact_intent` conserva su nombre. Ninguno prueba por sí mismo que exista un contacto real, una cita o una reserva.
 
-Usar la Google tag o etiqueta de configuración GA4 ya existente.
+Los dos eventos de activación usan, cuando el contexto existe:
 
-Nombre del evento:
-generate_lead
+- `lead_channel`
+- `lead_intent`
+- `page_type`
+- `cta_location`
+- `profile`
+- `profile_status`
+- `lang`
 
-Parámetros:
+## Matriz esperada
 
-lead_channel = {{DLV - lead_channel}}
-cta_location = {{DLV - cta_location}}
-lead_intent = {{DLV - lead_intent}}
-profile = {{DLV - profile}}
-profile_status = {{DLV - profile_status}}
-page_type = {{DLV - page_type}}
-lang = {{DLV - lang}}
+CTA de precio:
 
-Activador:
-Custom Event - generate_lead
-
-No enviar valor ni moneda.
-
-## Matriz de prueba en Tag Assistant
-
-Home correo español:
-
+```text
 lead_channel=email
-cta_location=floating
-lead_intent=general_inquiry
-profile=general
-profile_status=not_applicable
-page_type=home
-lang=es
-
-WhatsApp disponibles español:
-
-lead_channel=whatsapp
-cta_location=floating
+cta_location=floating|inline|article_footer
 lead_intent=price_inquiry
-profile=general
-profile_status=not_applicable
-page_type=available-xolos
-lang=es
+page_type=home|available-xolos|contact|blog-price
+lang=es|en
+```
 
-Yaretzi o perfil available:
+CTA de perfil:
 
+```text
 lead_channel=email
 cta_location=profile_card
 lead_intent=profile_inquiry
-profile=slug
-profile_status=available
+profile=<canonical profile id>
+profile_status=available|reserved
 page_type=available-xolos
 lang=es|en
+```
 
-Perfil reserved:
+Videollamada:
 
-lead_channel=email
-cta_location=profile_card
-lead_intent=similar_xolos
-profile=slug
-profile_status=reserved
-page_type=available-xolos
+```text
+lead_channel=video_call
+cta_location=inline
+lead_intent=video_call_request
+page_type=available-xolos|contact
 lang=es|en
+```
 
 Formulario:
 
+```text
 lead_channel=form
 cta_location=contact_form
 lead_intent=contact_form
-profile=general
-profile_status=not_applicable
+profile=<canonical profile id, solo si el usuario seleccionó uno>
 page_type=contact
 lang=es|en
+```
 
-## Configuración en GA4
+Los CTA sin un perfil real omiten `profile` y `profile_status`; no se rellenan con valores sintéticos como `general`, `unknown` o `not_applicable`.
 
-1. Publicar el contenedor de GTM.
-2. Ejecutar al menos una prueba real.
-3. Verificar generate_lead en DebugView o Tiempo real.
-4. Marcar generate_lead como evento clave.
-5. También puede marcarse anticipadamente escribiendo exactamente:
-   generate_lead
-6. Los informes estándar pueden tardar hasta 24 horas.
+## Configuración en GTM
 
-## Configuración en Google Ads
+Crear variables de capa de datos, versión 2, para los siete parámetros anteriores.
 
-1. Confirmar que GA4 y Google Ads estén vinculados.
-2. Crear una conversión basada en el evento clave generate_lead.
-3. La categoría recomendada para este evento unificado es Contacto, porque incluye:
-   - WhatsApp
-   - correo
-   - formulario
-4. No seleccionar purchase como conversión de leads.
-5. No asignar a cada lead el precio total de un xoloitzcuintle.
-6. Inicialmente validar el conteo antes de usarlo para puja automática.
-7. Después de validar, configurarlo como acción principal para el objetivo de leads.
+Para GA4 `generate_lead`:
 
-generate_lead podría no aparecer todavía por estas razones:
+1. Crear el activador `Custom Event - xolos_generate_lead` con nombre de evento `xolos_generate_lead`.
+2. Crear una etiqueta GA4 con nombre de evento `generate_lead`.
+3. Añadir los siete parámetros de la capa de datos.
+4. No enviar `value` ni `currency`.
 
-- el sitio no lo había enviado;
-- GTM todavía no estaba configurado o publicado;
-- GA4 aún no lo había recibido;
-- no estaba marcado como evento clave;
-- Google Ads puede tardar en mostrarlo después de la recepción y vinculación.
+Para GA4 `qualified_contact_intent`:
+
+1. Crear el activador `Custom Event - qualified_contact_intent` con ese mismo nombre de evento.
+2. Crear una etiqueta GA4 con nombre de evento `qualified_contact_intent`.
+3. Reutilizar los siete parámetros.
+4. No configurarlo como prueba de contacto recibido ni de reserva.
+
+Para `contact_form_submit`, usar un activador separado. Es una confirmación técnica de aceptación del formulario por el proveedor, no una confirmación de lectura o seguimiento.
+
+## Validación en GA4 y Google Ads
+
+1. Validar `generate_lead` y `qualified_contact_intent` en DebugView o Tiempo real.
+2. Confirmar que una activación cualificada produce exactamente un evento de cada capa.
+3. Confirmar que un CTA genérico no produce `qualified_contact_intent`.
+4. Confirmar que un error o timeout de Formspree no produce `contact_form_submit`.
+5. Marcar eventos clave solo después de validar nombres y conteo.
+6. No usar `purchase`, no asignar el precio de un xolo a un clic y no deducir una reserva desde eventos frontend.

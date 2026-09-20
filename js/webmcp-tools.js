@@ -12,7 +12,7 @@
  * - Progressive enhancement: completely dormant when WebMCP is unavailable.
  * - Read-only guarantee: annotations: { readOnlyHint: true } for all 5 tools.
  * - Zero PII, zero private pricing disclosure.
- * - Non-blocking, zero interference with GTM/GA4/SEO/Formspree/WhatsApp.
+ * - Non-blocking, zero interference with GTM/GA4/SEO/Formspree.
  */
 
 import { PublicXolosDataAdapter } from './public-xolos-data-adapter.js';
@@ -175,7 +175,7 @@ export const WEBMCP_TOOLS_DEFINITIONS = [
   },
   {
     name: 'get_contact_options',
-    description: 'Devuelve los canales oficiales verificados para comunicarse con el criadero Xolos Ramírez (WhatsApp, correo, redes sociales).',
+    description: 'Devuelve los canales oficiales verificados para comunicarse con el criadero Xolos Ramírez (correo principal, videollamada y redes sociales).',
     annotations: {
       readOnlyHint: true
     },
@@ -186,13 +186,14 @@ export const WEBMCP_TOOLS_DEFINITIONS = [
     },
     outputSchema: {
       type: 'object',
-      required: ['kennelName', 'officialWebsite', 'officialEmail', 'whatsappDirect'],
+      required: ['kennelName', 'officialWebsite', 'primaryChannel', 'officialEmail', 'videoCallBookingUrl'],
       properties: {
         kennelName: { type: 'string' },
         location: { type: 'string' },
         officialWebsite: { type: 'string', format: 'uri' },
+        primaryChannel: { type: 'string', enum: ['email'] },
         officialEmail: { type: 'string' },
-        whatsappDirect: { type: 'string', format: 'uri' },
+        videoCallBookingUrl: { type: 'string', format: 'uri' },
         calendarBookingNotice: { type: 'string' },
         socialChannels: {
           type: 'array',

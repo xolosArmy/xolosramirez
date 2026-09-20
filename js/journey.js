@@ -242,17 +242,27 @@
         method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' }, signal: controller.signal,
       });
       if (!response.ok) throw new Error('contact_request_failed');
+      const submittedProfile = profile?.value && profile.value !== 'general' ? profile.value : '';
       status.dataset.state = 'success';
       status.textContent = english
         ? 'Thank you. Your message was sent. We will reply by email within 48 business hours. If you wish, you can also choose a video-call time above.'
         : 'Gracias. Tu mensaje se envió. Te responderemos por correo en menos de 48 horas hábiles. Si lo deseas, también puedes elegir un horario de videollamada arriba.';
       form.reset();
-      push({ event: 'xolos_contact_success', lead_channel: 'form', page_type: 'contact', lang: english ? 'en' : 'es' });
+      const submitPayload = {
+        event: 'contact_form_submit',
+        lead_channel: 'form',
+        lead_intent: 'contact_form',
+        cta_location: 'contact_form',
+        page_type: 'contact',
+        lang: english ? 'en' : 'es',
+      };
+      if (submittedProfile) submitPayload.profile = submittedProfile;
+      push(submitPayload);
     } catch {
       status.dataset.state = 'error';
       status.textContent = english
-        ? 'We could not confirm delivery. Your message remains in the form. Try again or use the WhatsApp and email links above.'
-        : 'No pudimos confirmar el envío. Tu mensaje sigue en el formulario. Intenta de nuevo o usa los enlaces de WhatsApp y correo de arriba.';
+        ? 'We could not confirm delivery. Your message remains in the form. Try again or use the email link above.'
+        : 'No pudimos confirmar el envío. Tu mensaje sigue en el formulario. Intenta de nuevo o usa el enlace de correo de arriba.';
     } finally {
       window.clearTimeout(timeout);
       pending = false;
