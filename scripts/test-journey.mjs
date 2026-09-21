@@ -65,6 +65,11 @@ function fixture({ lang = 'es', query = '', withForm = false, fetch } = {}) {
   return { window, document, cards, buttons, count, toolbar, status, button, form, profile, reason };
 }
 
+test('available-page JavaScript does not rewrite the canonical Latest Show HTML', () => {
+  assert.doesNotMatch(source, /Último The Xolos Ramirez Show|Latest The Xolos Ramirez Show/);
+  assert.doesNotMatch(source, /const latestShow =/);
+});
+
 test('filters show all initially, preserve order and correctly announce both subsets', async () => {
   const f = fixture();
   assert.equal(f.toolbar.hidden, false);
