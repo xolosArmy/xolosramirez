@@ -70,6 +70,10 @@ test('available-page JavaScript does not rewrite the canonical Latest Show HTML'
   assert.doesNotMatch(source, /const latestShow =/);
 });
 
+test('available-page JavaScript does not inject stale Tlilxóchitl profile videos', () => {
+  assert.doesNotMatch(source, /tlilxochitlLatestVideoId|J6F5bE863M4/);
+});
+
 test('filters show all initially, preserve order and correctly announce both subsets', async () => {
   const f = fixture();
   assert.equal(f.toolbar.hidden, false);
