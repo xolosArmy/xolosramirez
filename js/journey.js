@@ -13,11 +13,7 @@
     const xilonenLatestVideoId = '4Wf_OxgWjmU';
     const xilonenLatestVideoUrl = `https://youtu.be/${xilonenLatestVideoId}`;
     const xilonenLatestEmbedUrl = `https://www.youtube.com/embed/${xilonenLatestVideoId}`;
-    const tlilxochitlLatestVideoId = 'J6F5bE863M4';
-    const tlilxochitlLatestVideoUrl = `https://youtu.be/${tlilxochitlLatestVideoId}`;
-    const tlilxochitlLatestEmbedUrl = `https://www.youtube.com/embed/${tlilxochitlLatestVideoId}`;
     const xilonen = document.querySelector('.puppy-card[data-profile-card="xilonen"], #xilonen');
-    const tlilxochitl = document.querySelector('.puppy-card[data-profile-card="tlilxochitl"], #tlilxochitl');
     if (xilonen) {
       const refreshedVideos = [
         {
@@ -90,43 +86,7 @@
       }
     }
 
-    if (tlilxochitl && !tlilxochitl.querySelector(`[data-profile-video="${tlilxochitlLatestVideoId}"]`)) {
-      const videos = tlilxochitl.querySelector('details.profile-videos');
-      const summary = videos?.querySelector('summary');
 
-      if (videos && summary) {
-        const container = document.createElement('div');
-        container.className = 'puppy-video-container';
-        container.dataset.profileVideo = tlilxochitlLatestVideoId;
-        container.style.cssText = 'margin: 1rem 0; border-radius: 8px; overflow: hidden; aspect-ratio: 16/9; max-width: 640px;';
-
-        const iframe = document.createElement('iframe');
-        iframe.width = '100%';
-        iframe.height = '100%';
-        iframe.src = tlilxochitlLatestEmbedUrl;
-        iframe.title = english ? 'Tlilxóchitl Ramirez — latest video' : 'Tlilxóchitl Ramírez — video más reciente';
-        iframe.setAttribute('frameborder', '0');
-        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
-        iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
-        iframe.setAttribute('allowfullscreen', '');
-        iframe.loading = 'lazy';
-        container.appendChild(iframe);
-
-        const fallback = document.createElement('a');
-        fallback.href = tlilxochitlLatestVideoUrl;
-        fallback.className = 'video-fallback';
-        fallback.target = '_blank';
-        fallback.rel = 'noopener noreferrer';
-        fallback.textContent = english ? 'Open on YouTube' : 'Abrir en YouTube';
-
-        const firstContentNode = summary.nextSibling;
-        videos.insertBefore(container, firstContentNode);
-        videos.insertBefore(fallback, container.nextSibling);
-
-        const totalVideos = videos.querySelectorAll('.puppy-video-container').length;
-        summary.textContent = english ? `Watch ${totalVideos} videos` : `Ver ${totalVideos} videos`;
-      }
-    }
 
   }
 
