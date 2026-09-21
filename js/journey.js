@@ -128,34 +128,6 @@
       }
     }
 
-    const latestShow = Array.from(document.querySelectorAll('.live-show')).find((section) => {
-      const heading = section.querySelector('h2');
-      const text = heading?.textContent.trim();
-      return text === 'Último The Xolos Ramirez Show' || text === 'Latest The Xolos Ramirez Show';
-    });
-
-    if (latestShow) {
-      const iframe = latestShow.querySelector('.live-show__video iframe');
-      if (iframe) {
-        iframe.src = tlilxochitlLatestEmbedUrl;
-        iframe.title = english ? 'Latest The Xolos Ramirez Show episode' : 'Último episodio de The Xolos Ramirez Show';
-      }
-
-      latestShow.querySelectorAll('a[href*="youtu"]').forEach((link) => {
-        link.href = tlilxochitlLatestVideoUrl;
-        link.setAttribute(
-          'aria-label',
-          english ? 'Watch the latest The Xolos Ramirez Show episode on YouTube' : 'Ver el último episodio de The Xolos Ramirez Show en YouTube',
-        );
-      });
-
-      const description = latestShow.querySelector('.live-show__content p:not(.live-show__eyebrow)');
-      if (description) {
-        description.innerHTML = english
-          ? '<strong>The latest episode of The Xolos Ramirez Show.</strong> Watch the complete conversation on our YouTube channel.'
-          : '<strong>El episodio más reciente de The Xolos Ramirez Show.</strong> Mira la conversación completa en nuestro canal de YouTube.';
-      }
-    }
   }
 
   // Capture navigation intent only; never collect form content, email addresses or query strings.
