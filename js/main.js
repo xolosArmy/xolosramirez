@@ -393,5 +393,4 @@ function initializePuppyCarousels() {
 }
 
 // Current profiles and media are authored in both HTML pages for reliable crawlability.
-updateGlobalContactEmail();
 initializePuppyCarousels();
