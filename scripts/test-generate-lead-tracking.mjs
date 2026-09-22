@@ -401,7 +401,7 @@ for (const expectation of floatingPriceExpectations) {
 
   includes(
     cta,
-    'href="https://wa.me/message/KGKS3MKYMHCWEI"',
+    'href="https://wa.me/message/KGKS3MKYMHCWE1"',
     expectation.path + ' must open the official WhatsApp direct link'
   );
 
@@ -509,7 +509,7 @@ for (const path of [
   'js/public-xolos-data-adapter.js',
   'js/webmcp-tools.js',
 ]) {
-  notMatches(read(path), /wa\.me\/message\/KGKS3MKYMHCWEI/i, path + ' must not gain the floating WhatsApp route outside the requested surfaces');
+  notMatches(read(path), /wa\.me\/message\/KGKS3MKYMHCWE1/i, path + ' must not gain the floating WhatsApp route outside the requested surfaces');
 }
 
 for (const [path, primaryLabel, secondaryLabel] of [
@@ -524,7 +524,7 @@ for (const [path, primaryLabel, secondaryLabel] of [
 const skinCareHtml = read('xolo-skin-care/index.html');
 const skinCareFloating = skinCareHtml.match(/<a(?=[^>]*class="[^"]*sticky-buy__action--email[^"]*")(?=[^>]*data-cta-location="floating")[^>]*>[\s\S]*?<\/a>/);
 assert.ok(skinCareFloating, 'Xolo Skin Care must keep its floating guidance CTA');
-includes(skinCareFloating[0], 'href="https://wa.me/message/KGKS3MKYMHCWEI"');
+includes(skinCareFloating[0], 'href="https://wa.me/message/KGKS3MKYMHCWE1"');
 includes(skinCareFloating[0], 'data-cta="whatsapp"');
 includes(skinCareFloating[0], 'data-lead-channel="whatsapp"');
 includes(skinCareFloating[0], 'Pedir orientación');
