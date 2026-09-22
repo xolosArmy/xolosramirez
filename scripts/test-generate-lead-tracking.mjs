@@ -199,7 +199,7 @@ const profileContext = {
   lang: 'es',
 };
 const priceContext = {
-  lead_channel: 'email',
+  lead_channel: 'whatsapp',
   lead_intent: 'price_inquiry',
   page_type: 'home',
   cta_location: 'floating',
@@ -251,7 +251,7 @@ function assertQualifiedPair(events, expected) {
 {
   const fixture = trackingFixture();
   activateProfile(fixture);
-  fixture.click({ cta: 'email', leadIntent: 'price_inquiry', pageType: 'home', ctaLocation: 'floating', lang: 'es' });
+  fixture.click({ cta: 'whatsapp', leadChannel: 'whatsapp', leadIntent: 'price_inquiry', pageType: 'home', ctaLocation: 'floating', lang: 'es' });
   assertQualifiedPair(fixture.emittedEvents.slice(0, 2), profileContext);
   assertQualifiedPair(fixture.emittedEvents.slice(2), priceContext);
   assertResetBeforeEveryEvent(fixture.rawPushes);
@@ -336,7 +336,7 @@ for (const entry of [[esForm, 'es'], [enForm, 'en']]) {
 
 for (const path of ['index.html', 'en/index.html']) {
   const html = read(path);
-  assert.ok(/class="[^"]*home-email-float[^"]*"[\s\S]*?data-cta="email"[\s\S]*?data-lead-type="generate_lead"/.test(html), path + ' must keep floating email lead CTA');
+  assert.ok(/class="[^"]*home-email-float[^"]*"[\s\S]*?data-cta="whatsapp"[\s\S]*?data-lead-type="generate_lead"[\s\S]*?data-lead-channel="whatsapp"/.test(html), path + ' must keep floating WhatsApp lead CTA');
 }
 
 const floatingPriceExpectations = [
@@ -345,42 +345,42 @@ const floatingPriceExpectations = [
     lang: 'es',
     pageType: 'home',
     visibleText: 'Preguntar por precio',
-    accessibleText: 'Preguntar por precio por correo',
+    accessibleText: 'Preguntar por precio por WhatsApp',
   },
   {
     path: 'en/index.html',
     lang: 'en',
     pageType: 'home',
     visibleText: 'Ask about price',
-    accessibleText: 'Ask about price by email',
+    accessibleText: 'Ask about price on WhatsApp',
   },
   {
     path: 'xolos-disponibles.html',
     lang: 'es',
     pageType: 'available-xolos',
     visibleText: 'Preguntar por precio',
-    accessibleText: 'Preguntar por precio por correo',
+    accessibleText: 'Preguntar por precio por WhatsApp',
   },
   {
     path: 'en/available-xolos.html',
     lang: 'en',
     pageType: 'available-xolos',
     visibleText: 'Ask about price',
-    accessibleText: 'Ask about price by email',
+    accessibleText: 'Ask about price on WhatsApp',
   },
   {
     path: 'contacto.html',
     lang: 'es',
     pageType: 'contact',
     visibleText: 'Preguntar por precio',
-    accessibleText: 'Preguntar por precio por correo',
+    accessibleText: 'Preguntar por precio por WhatsApp',
   },
   {
     path: 'en/contact.html',
     lang: 'en',
     pageType: 'contact',
     visibleText: 'Ask about price',
-    accessibleText: 'Ask about price by email',
+    accessibleText: 'Ask about price on WhatsApp',
   },
 ];
 
@@ -401,20 +401,20 @@ for (const expectation of floatingPriceExpectations) {
 
   includes(
     cta,
-    'href="mailto:fernando@xolosramirez.com?subject=',
-    expectation.path + ' must open the primary email channel'
+    'href="https://wa.me/message/KGKS3MKYMHCWEI"',
+    expectation.path + ' must open the official WhatsApp direct link'
   );
 
   includes(
     cta,
     'class="home-email-float cta-lead cta-email"',
-    expectation.path + ' must use the email floating CTA classes'
+    expectation.path + ' must preserve the existing floating CTA classes'
   );
 
   includes(
     cta,
     'target="_blank"',
-    expectation.path + ' must open the email client in a new tab context'
+    expectation.path + ' must open WhatsApp in a new tab context'
   );
 
   includes(
@@ -425,14 +425,20 @@ for (const expectation of floatingPriceExpectations) {
 
   includes(
     cta,
-    'data-cta="email"',
-    expectation.path + ' must track the email channel'
+    'data-cta="whatsapp"',
+    expectation.path + ' must track the WhatsApp CTA'
   );
 
   includes(
     cta,
     'data-lead-type="generate_lead"',
     expectation.path + ' must keep generate_lead'
+  );
+
+  includes(
+    cta,
+    'data-lead-channel="whatsapp"',
+    expectation.path + ' must identify WhatsApp as the lead channel'
   );
 
   includes(
@@ -469,7 +475,7 @@ for (const expectation of floatingPriceExpectations) {
     expectation.path + ' must not relabel the floating price CTA as a video call'
   );
 
-  notMatches(cta, /wa\.me|whatsapp:\/\//i, expectation.path + ' must not expose messaging links');
+  notMatches(cta, /mailto:/i, expectation.path + ' floating price CTA must not use mailto');
 }
 
 const profileExpectations = [
@@ -494,16 +500,16 @@ for (const [path, prefix] of [['xolos-disponibles.html', 'Preguntar por '], ['en
   }
 }
 
-const activeContactSurfaces = [
-  'index.html', 'en/index.html', 'xolos-disponibles.html', 'en/available-xolos.html',
-  'contacto.html', 'en/contact.html', 'blog/precio-xoloitzcuintle.html',
-  'en/blog/xoloitzcuintli-price.html', 'teyolias-guardiania.html',
-  'en/teyolias-guardianship.html', 'public/xolos-disponibles.html', 'js/main.js',
-  'js/journey.js', 'js/public-xolos-data-adapter.js', 'js/webmcp-tools.js',
-  'css/styles-base.css', 'css/journey.css',
-];
-for (const path of activeContactSurfaces) {
-  notMatches(read(path), /whatsapp|wa\.me|whatsapp:\/\//i, path + ' must not expose the retired public contact channel');
+for (const path of [
+  'blog/precio-xoloitzcuintle.html',
+  'en/blog/xoloitzcuintli-price.html',
+  'teyolias-guardiania.html',
+  'en/teyolias-guardianship.html',
+  'public/xolos-disponibles.html',
+  'js/public-xolos-data-adapter.js',
+  'js/webmcp-tools.js',
+]) {
+  notMatches(read(path), /wa\.me\/message\/KGKS3MKYMHCWEI/i, path + ' must not gain the floating WhatsApp route outside the requested surfaces');
 }
 
 for (const [path, primaryLabel, secondaryLabel] of [
@@ -514,6 +520,15 @@ for (const [path, primaryLabel, secondaryLabel] of [
   assert.ok(html.indexOf(primaryLabel) >= 0, path + ' must identify email as primary');
   assert.ok(html.indexOf(primaryLabel) < html.indexOf(secondaryLabel), path + ' must present email before video call');
 }
+
+const skinCareHtml = read('xolo-skin-care/index.html');
+const skinCareFloating = skinCareHtml.match(/<a(?=[^>]*class="[^"]*sticky-buy__action--email[^"]*")(?=[^>]*data-cta-location="floating")[^>]*>[\s\S]*?<\/a>/);
+assert.ok(skinCareFloating, 'Xolo Skin Care must keep its floating guidance CTA');
+includes(skinCareFloating[0], 'href="https://wa.me/message/KGKS3MKYMHCWEI"');
+includes(skinCareFloating[0], 'data-cta="whatsapp"');
+includes(skinCareFloating[0], 'data-lead-channel="whatsapp"');
+includes(skinCareFloating[0], 'Pedir orientación');
+notMatches(skinCareFloating[0], /mailto:/i, 'Xolo Skin Care floating CTA must not use mailto');
 
 const sitemap = read('sitemap.xml');
 assert.equal((sitemap.match(/<loc>https:\/\/xolosramirez\.com\/xolos-disponibles\.html<\/loc>/g) || []).length, 1);
