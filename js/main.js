@@ -1,6 +1,3 @@
-const LEGACY_CONTACT_EMAIL = 'fernando@xolosramirez.com';
-const CURRENT_CONTACT_EMAIL = 'contacto@xolosarmy.xyz';
-
 const FOOTER_SOCIAL_LINKS = [
   { label: 'Facebook', href: 'https://www.facebook.com/share/1DYZWxYmqp/' },
   { label: 'YouTube', href: 'https://www.youtube.com/@xolosramirez' },
@@ -93,14 +90,6 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', updateGlobalFooterSocialLinks, { once: true });
 } else {
   updateGlobalFooterSocialLinks();
-}
-
-function updateGlobalContactEmail() {
-  document.querySelectorAll('a[href^="mailto:"]').forEach((link) => {
-    const href = link.getAttribute('href');
-    if (!href || !href.includes(LEGACY_CONTACT_EMAIL)) return;
-    link.setAttribute('href', href.replaceAll(LEGACY_CONTACT_EMAIL, CURRENT_CONTACT_EMAIL));
-  });
 }
 
 const navMenu = document.getElementById('menu');
@@ -404,5 +393,4 @@ function initializePuppyCarousels() {
 }
 
 // Current profiles and media are authored in both HTML pages for reliable crawlability.
-updateGlobalContactEmail();
 initializePuppyCarousels();
