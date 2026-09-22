@@ -13,7 +13,7 @@
  * 5. Data accuracy:
  *    - Iztli (#oce, available)
  *    - Yohualli (female, intermediate, reserved)
- *    - Tlilxóchitl (intermediate, female, available)
+ *    - Tlilxóchitl (standard, female, available)
  *    - Tonalli (standard, female, reserved)
  *    - Xóchitl (intermediate, female, reserved)
  *    - Delivery zone recognizes "national".
@@ -97,12 +97,12 @@ test('WM-XR1: Deterministic output for list_available_xolos', async () => {
 });
 
 test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', async () => {
-  // 1. Tlilxóchitl (available, intermediate, female)
+  // 1. Tlilxóchitl (available, standard, female)
   const tlil = await PublicXolosDataAdapter.getXoloProfile({ id: 'tlilxochitl' });
   assert.equal(tlil.found, true);
   assert.equal(tlil.xolo.id, 'tlilxochitl');
   assert.equal(tlil.xolo.name, 'Tlilxóchitl Ramirez');
-  assert.equal(tlil.xolo.size, 'intermediate');
+  assert.equal(tlil.xolo.size, 'standard');
   assert.equal(tlil.xolo.gender, 'female');
   assert.equal(tlil.xolo.status, 'available');
 
