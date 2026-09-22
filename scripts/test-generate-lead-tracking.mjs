@@ -459,6 +459,18 @@ for (const expectation of floatingPriceExpectations) {
 
   includes(
     cta,
+    'fa-brands fa-whatsapp',
+    expectation.path + ' must show the WhatsApp brand icon'
+  );
+
+  notMatches(
+    cta,
+    /✉️|fa-envelope/i,
+    expectation.path + ' floating WhatsApp CTA must not show an email icon'
+  );
+
+  includes(
+    cta,
     'class="home-email-float__text">' + expectation.visibleText + '</span>',
     expectation.path + ' must show the localized inquiry text'
   );
@@ -527,8 +539,10 @@ assert.ok(skinCareFloating, 'Xolo Skin Care must keep its floating guidance CTA'
 includes(skinCareFloating[0], 'href="https://wa.me/message/KGKS3MKYMHCWE1"');
 includes(skinCareFloating[0], 'data-cta="whatsapp"');
 includes(skinCareFloating[0], 'data-lead-channel="whatsapp"');
+includes(skinCareFloating[0], 'fa-brands fa-whatsapp');
 includes(skinCareFloating[0], 'Pedir orientación');
 notMatches(skinCareFloating[0], /mailto:/i, 'Xolo Skin Care floating CTA must not use mailto');
+notMatches(skinCareFloating[0], /fa-envelope/i, 'Xolo Skin Care floating CTA must not show an email icon');
 
 const sitemap = read('sitemap.xml');
 assert.equal((sitemap.match(/<loc>https:\/\/xolosramirez\.com\/xolos-disponibles\.html<\/loc>/g) || []).length, 1);
