@@ -44,7 +44,7 @@ export const CANONICAL_PUBLIC_XOLOS = [
     name: 'Tlilxóchitl Ramirez',
     status: 'available',
     variety: 'hairless',
-    size: 'intermediate',
+    size: 'standard',
     gender: 'female',
     color: 'black',
     birthDate: '2026-08-03',
