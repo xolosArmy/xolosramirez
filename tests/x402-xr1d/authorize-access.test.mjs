@@ -65,6 +65,7 @@ function seed(path) {
 function readRow(path) {
   const db = new DatabaseSync(path);
   try {
+    db.exec('PRAGMA busy_timeout = 1000;');
     return db.prepare(
       `SELECT entitlement_id, invoice_hash, txid, resource_id, resource_hash,
               granted_at, expires_at, status
@@ -90,10 +91,23 @@ function runWorker(workerData) {
       new URL('./authorize-worker.mjs', import.meta.url),
       { workerData },
     );
-    worker.once('message', resolve);
+    let result;
+    let received = false;
+    worker.once('message', message => {
+      result = message;
+      received = true;
+    });
     worker.once('error', reject);
     worker.once('exit', code => {
-      if (code !== 0) reject(new Error(`authorize worker exited ${code}`));
+      if (code !== 0) {
+        reject(new Error(`authorize worker exited ${code}`));
+        return;
+      }
+      if (!received) {
+        reject(new Error('authorize worker exited without result'));
+        return;
+      }
+      resolve(result);
     });
   });
 }
