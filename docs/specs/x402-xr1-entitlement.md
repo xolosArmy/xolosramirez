@@ -45,7 +45,7 @@ C3B is responsible for:
 - replay protection at settlement;
 - atomic transition to `PAID`.
 
-XR1 does not duplicate those checks.
+XR1 does not duplicate those checks. The XR1 gate MUST be mounted after canonical C3B middleware and reads settlement authority exclusively from the in-process `request.x402Settlement` property attached by C3B. Client body, headers or query parameters cannot supply or replace that authority.
 
 ## 3. XR1 authority boundary
 
@@ -96,10 +96,11 @@ Required behavior:
 1. Same invoice + same txid + same resource is idempotent.
 2. Same invoice + competing txid is rejected.
 3. Same txid + different invoice is rejected.
-4. Wrong resourceHash is rejected.
-5. The protected handler is unreachable before C3B `UNLOCKED` and invoice `PAID`.
-6. Delivery failure does not revoke payment or require repayment; the entitlement remains reusable.
-7. Production requires a durable entitlement store.
+4. The runtime request identity is recomputed with canonical x402-XEC `computeResourceHash`; the resulting hash must equal the frozen XR1 `resourceHash`. Any path/method/query/body variant fails closed.
+5. Wrong C3B `resourceHash` is rejected.
+6. The protected handler is unreachable before C3B `UNLOCKED`, invoice `PAID`, runtime resource binding and entitlement commit.
+7. Delivery failure does not revoke payment or require repayment; the entitlement remains reusable.
+8. Production requires a durable entitlement store.
 
 ## 6. Non-production restriction
 
