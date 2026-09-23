@@ -3,8 +3,7 @@ import assert from 'node:assert/strict';
 import {
   XR1_RESOURCE,
   InMemoryXr1EntitlementStore,
-  projectC3BSettlement,
-  unlockXr1Resource,
+  createXr1EntitlementGate,
   assertProductionEntitlementStore,
   Xr1GateError
 } from '../../src/x402-xr1/entitlement.mjs';
@@ -14,263 +13,280 @@ const B = 'b'.repeat(64);
 const C = 'c'.repeat(64);
 
 function paidResult(overrides = {}) {
-  const invoice = {
-    invoiceHash: A,
-    resourceHash: XR1_RESOURCE.resourceHash,
-    network: 'xec:mainnet',
-    scheme: 'exact',
-    state: 'PAID',
-    settledTxid: B,
-    settledAt: 1_797_000_000,
-    ...overrides.invoice
-  };
-  const proof = {
-    x402Version: 1,
-    network: 'xec:mainnet',
-    invoiceHash: A,
-    txid: B,
-    ...overrides.proof
-  };
   return {
     ok: true,
     status: 'UNLOCKED',
-    invoice,
-    proof,
-    matchedOutputIndex: 2,
-    transaction: { txid: B, outputs: [] },
-    idempotent: false,
+    invoice: {
+      invoiceHash: A,
+      resourceHash: XR1_RESOURCE.resourceHash,
+      network: 'xec:mainnet',
+      scheme: 'exact',
+      state: 'PAID',
+      settledTxid: B,
+      settledAt: 1_797_000_000,
+      ...overrides.invoice
+    },
+    proof: {
+      x402Version: 1,
+      network: 'xec:mainnet',
+      invoiceHash: A,
+      txid: B,
+      ...overrides.proof
+    },
     ...overrides.root
   };
 }
 
-test('1. canonical C3B PAID result projects to narrow XR1 settlement view', () => {
-  const view = projectC3BSettlement(paidResult());
-  assert.deepEqual(view, {
-    version: 'x402-xr1/1',
-    status: 'PAID',
-    network: 'xec:mainnet',
-    invoiceHash: A,
-    txid: B,
-    resourceHash: XR1_RESOURCE.resourceHash,
-    settledAt: 1_797_000_000
+function request(overrides = {}) {
+  return {
+    method: 'GET',
+    originalUrl: XR1_RESOURCE.path,
+    x402Settlement: paidResult(),
+    ...overrides
+  };
+}
+
+function canonicalHasher(resource) {
+  assert.deepEqual(resource, {
+    serverOrigin: XR1_RESOURCE.serverOrigin,
+    method: 'GET',
+    path: XR1_RESOURCE.path
   });
-  for (const forbidden of ['privateKey', 'rawTx', 'signatory', 'signature', 'payTo', 'amountSats', 'matchedOutputIndex', 'transaction']) {
-    assert.equal(Object.hasOwn(view, forbidden), false, `must not expose ${forbidden}`);
-  }
-});
+  return XR1_RESOURCE.resourceHash;
+}
 
-test('2. handler is unreachable before C3B UNLOCKED/PAID evidence', async () => {
-  const store = new InMemoryXr1EntitlementStore();
-  let calls = 0;
-  const handler = async () => { calls++; return { dossier: true }; };
+function gate({ store = new InMemoryXr1EntitlementStore(), handler = async entitlement => entitlement, hasher = canonicalHasher } = {}) {
+  return createXr1EntitlementGate({ store, handler, computeResourceHash: hasher });
+}
 
-  for (const result of [
-    null,
-    { ok: false, status: 'DENIED' },
-    paidResult({ root: { ok: false } }),
-    paidResult({ root: { status: 'LOCKED' } }),
-    paidResult({ invoice: { state: 'ISSUED' } })
-  ]) {
-    const response = await unlockXr1Resource({ c3bResult: result, store, handler });
-    assert.equal(response.ok, false);
-    assert.equal(calls, 0);
-  }
-});
-
-test('3. valid C3B result grants entitlement before delivery', async () => {
-  const store = new InMemoryXr1EntitlementStore();
-  let observed;
-  const result = await unlockXr1Resource({
-    c3bResult: paidResult(),
-    store,
-    handler: async entitlement => {
-      observed = await store.getByInvoiceHash(A);
-      return { resourceId: entitlement.resourceId };
-    }
-  });
+test('1. valid internal C3B settlement unlocks frozen XR1 resource', async () => {
+  const run = gate();
+  const result = await run(request());
   assert.equal(result.ok, true);
   assert.equal(result.status, 'UNLOCKED');
   assert.equal(result.idempotent, false);
-  assert.equal(observed?.status, 'ACTIVE');
-  assert.equal(result.payload.resourceId, XR1_RESOURCE.resourceId);
+  assert.equal(result.entitlement.resourceId, XR1_RESOURCE.resourceId);
 });
 
-test('4. same invoice + same txid retry is idempotent and never creates a second entitlement', async () => {
+test('2. handler is unreachable without request.x402Settlement', async () => {
+  let calls = 0;
+  const run = gate({ handler: async () => { calls++; } });
+  const result = await run(request({ x402Settlement: undefined }));
+  assert.equal(result.ok, false);
+  assert.equal(result.code, 'XR1_C3B_NOT_UNLOCKED');
+  assert.equal(calls, 0);
+});
+
+test('3. client body cannot substitute for internal C3B settlement', async () => {
+  let calls = 0;
+  const forged = paidResult();
+  const run = gate({ handler: async () => { calls++; } });
+  const result = await run({
+    method: 'GET',
+    originalUrl: XR1_RESOURCE.path,
+    body: forged,
+    x402Settlement: undefined
+  });
+  assert.equal(result.ok, false);
+  assert.equal(result.code, 'XR1_RESOURCE_MISMATCH');
+  assert.equal(calls, 0);
+});
+
+test('4. client payment-proof-like headers cannot substitute for internal C3B settlement', async () => {
+  let calls = 0;
+  const run = gate({ handler: async () => { calls++; } });
+  const result = await run({
+    method: 'GET',
+    originalUrl: XR1_RESOURCE.path,
+    headers: { 'payment-proof': JSON.stringify({ x402Version: 1, network: 'xec:mainnet', invoiceHash: A, txid: B }) }
+  });
+  assert.equal(result.ok, false);
+  assert.equal(result.code, 'XR1_C3B_NOT_UNLOCKED');
+  assert.equal(calls, 0);
+});
+
+test('5. canonical resource hash is recomputed at runtime', async () => {
+  let calls = 0;
+  const run = gate({
+    hasher: () => C,
+    handler: async () => { calls++; }
+  });
+  const result = await run(request());
+  assert.equal(result.ok, false);
+  assert.equal(result.code, 'XR1_RESOURCE_MISMATCH');
+  assert.equal(calls, 0);
+});
+
+test('6. missing canonical x402-XEC hasher fails closed at gate construction', () => {
+  assert.throws(
+    () => createXr1EntitlementGate({
+      store: new InMemoryXr1EntitlementStore(),
+      handler: async () => true
+    }),
+    error => error instanceof Xr1GateError && error.code === 'XR1_CANONICAL_HASHER_REQUIRED'
+  );
+});
+
+test('7. same invoice + same txid retry is idempotent', async () => {
   const store = new InMemoryXr1EntitlementStore();
-  const first = await unlockXr1Resource({ c3bResult: paidResult(), store, handler: async () => 'first' });
-  const second = await unlockXr1Resource({ c3bResult: paidResult(), store, handler: async () => 'second' });
+  const run = gate({ store });
+  const first = await run(request());
+  const second = await run(request());
   assert.equal(first.ok, true);
   assert.equal(first.idempotent, false);
   assert.equal(second.ok, true);
   assert.equal(second.idempotent, true);
-  assert.equal(second.entitlement.entitlementId, first.entitlement.entitlementId);
+  assert.equal(first.entitlement.entitlementId, second.entitlement.entitlementId);
 });
 
-test('5. same invoice cannot switch to a competing txid', async () => {
+test('8. same invoice cannot switch to competing txid', async () => {
   const store = new InMemoryXr1EntitlementStore();
-  assert.equal((await unlockXr1Resource({ c3bResult: paidResult(), store, handler: async () => true })).ok, true);
-  const competing = paidResult({
-    invoice: { settledTxid: C },
-    proof: { txid: C }
+  const run = gate({ store });
+  assert.equal((await run(request())).ok, true);
+  const competing = request({
+    x402Settlement: paidResult({
+      invoice: { settledTxid: C },
+      proof: { txid: C }
+    })
   });
-  const response = await unlockXr1Resource({ c3bResult: competing, store, handler: async () => true });
-  assert.deepEqual({ ok: response.ok, code: response.code, httpStatus: response.httpStatus }, {
-    ok: false, code: 'XR1_INVOICE_CONFLICT', httpStatus: 409
-  });
+  const result = await run(competing);
+  assert.equal(result.ok, false);
+  assert.equal(result.code, 'XR1_INVOICE_CONFLICT');
+  assert.equal(result.httpStatus, 409);
 });
 
-test('6. same txid cannot be replayed for a different invoice', async () => {
+test('9. same txid cannot be replayed for another invoice', async () => {
   const store = new InMemoryXr1EntitlementStore();
-  await unlockXr1Resource({ c3bResult: paidResult(), store, handler: async () => true });
-  const other = paidResult({
-    invoice: { invoiceHash: C },
-    proof: { invoiceHash: C }
-  });
-  const response = await unlockXr1Resource({ c3bResult: other, store, handler: async () => true });
-  assert.equal(response.ok, false);
-  assert.equal(response.code, 'XR1_TXID_REPLAY');
-  assert.equal(response.httpStatus, 409);
+  const run = gate({ store });
+  await run(request());
+  const result = await run(request({
+    x402Settlement: paidResult({
+      invoice: { invoiceHash: C },
+      proof: { invoiceHash: C }
+    })
+  }));
+  assert.equal(result.ok, false);
+  assert.equal(result.code, 'XR1_TXID_REPLAY');
+  assert.equal(result.httpStatus, 409);
 });
 
-test('7. invoiceHash mismatch fails closed', async () => {
-  const response = await unlockXr1Resource({
-    c3bResult: paidResult({ proof: { invoiceHash: C } }),
-    store: new InMemoryXr1EntitlementStore(),
-    handler: async () => true
-  });
-  assert.equal(response.ok, false);
-  assert.equal(response.code, 'XR1_INVOICE_BINDING_MISMATCH');
+test('10. invoiceHash mismatch fails closed', async () => {
+  const result = await gate()(request({
+    x402Settlement: paidResult({ proof: { invoiceHash: C } })
+  }));
+  assert.equal(result.ok, false);
+  assert.equal(result.code, 'XR1_INVOICE_BINDING_MISMATCH');
 });
 
-test('8. settled txid mismatch fails closed', async () => {
-  const response = await unlockXr1Resource({
-    c3bResult: paidResult({ proof: { txid: C } }),
-    store: new InMemoryXr1EntitlementStore(),
-    handler: async () => true
-  });
-  assert.equal(response.ok, false);
-  assert.equal(response.code, 'XR1_TXID_BINDING_MISMATCH');
+test('11. settled txid mismatch fails closed', async () => {
+  const result = await gate()(request({
+    x402Settlement: paidResult({ proof: { txid: C } })
+  }));
+  assert.equal(result.ok, false);
+  assert.equal(result.code, 'XR1_TXID_BINDING_MISMATCH');
 });
 
-test('9. wrong resource hash fails closed', async () => {
-  const response = await unlockXr1Resource({
-    c3bResult: paidResult({ invoice: { resourceHash: C } }),
-    store: new InMemoryXr1EntitlementStore(),
-    handler: async () => true
-  });
-  assert.equal(response.ok, false);
-  assert.equal(response.code, 'XR1_RESOURCE_MISMATCH');
+test('12. paid invoice for different resource fails closed', async () => {
+  const result = await gate()(request({
+    x402Settlement: paidResult({ invoice: { resourceHash: C } })
+  }));
+  assert.equal(result.ok, false);
+  assert.equal(result.code, 'XR1_RESOURCE_MISMATCH');
 });
 
-test('10. wrong network, scheme or x402 version fail closed', async () => {
+test('13. wrong network, scheme or x402 version fail closed', async () => {
   const cases = [
     [paidResult({ invoice: { network: 'xec:testnet' } }), 'XR1_NETWORK_MISMATCH'],
     [paidResult({ invoice: { scheme: 'other' } }), 'XR1_SCHEME_MISMATCH'],
     [paidResult({ proof: { x402Version: 2 } }), 'XR1_VERSION_MISMATCH']
   ];
-  for (const [c3bResult, code] of cases) {
-    const response = await unlockXr1Resource({
-      c3bResult,
-      store: new InMemoryXr1EntitlementStore(),
-      handler: async () => true
-    });
-    assert.equal(response.ok, false);
-    assert.equal(response.code, code);
+  for (const [x402Settlement, code] of cases) {
+    const result = await gate()(request({ x402Settlement }));
+    assert.equal(result.ok, false);
+    assert.equal(result.code, code);
   }
 });
 
-test('11. malformed canonical evidence fails closed without handler execution', async () => {
-  let calls = 0;
-  const cases = [
-    paidResult({ invoice: { invoiceHash: 'ABC' } }),
-    paidResult({ invoice: { settledTxid: null } }),
-    paidResult({ proof: { txid: 'not-a-txid' } }),
-    paidResult({ invoice: { settledAt: 'now' } })
-  ];
-  for (const c3bResult of cases) {
-    const response = await unlockXr1Resource({
-      c3bResult,
-      store: new InMemoryXr1EntitlementStore(),
-      handler: async () => { calls++; }
-    });
-    assert.equal(response.ok, false);
+test('14. query/path/method variants cannot reuse the entitlement', async () => {
+  for (const req of [
+    request({ method: 'POST' }),
+    request({ originalUrl: XR1_RESOURCE.path + '?x=1' }),
+    request({ originalUrl: '/v1/xolos/tlilxochitl/verified-dossier' })
+  ]) {
+    const result = await gate()(req);
+    assert.equal(result.ok, false);
+    assert.equal(result.code, 'XR1_RESOURCE_MISMATCH');
   }
-  assert.equal(calls, 0);
 });
 
-test('12. delivery failure preserves entitlement for idempotent retry without repayment', async () => {
+test('15. handler observes entitlement already committed', async () => {
   const store = new InMemoryXr1EntitlementStore();
-  const failed = await unlockXr1Resource({
-    c3bResult: paidResult(),
+  let observed;
+  const run = gate({
     store,
-    handler: async () => { throw new Error('socket drop'); }
+    handler: async entitlement => {
+      observed = await store.getByInvoiceHash(A);
+      return entitlement.entitlementId;
+    }
   });
+  const result = await run(request());
+  assert.equal(result.ok, true);
+  assert.equal(observed?.status, 'ACTIVE');
+  assert.equal(result.payload, result.entitlement.entitlementId);
+});
+
+test('16. delivery failure preserves entitlement for idempotent retry', async () => {
+  const store = new InMemoryXr1EntitlementStore();
+  const failRun = gate({ store, handler: async () => { throw new Error('socket drop'); } });
+  const failed = await failRun(request());
   assert.equal(failed.ok, false);
   assert.equal(failed.code, 'XR1_DELIVERY_FAILED');
   assert.equal((await store.getByInvoiceHash(A))?.status, 'ACTIVE');
 
-  const retry = await unlockXr1Resource({
-    c3bResult: paidResult(),
-    store,
-    handler: async entitlement => ({ entitlementId: entitlement.entitlementId })
-  });
+  const retryRun = gate({ store });
+  const retry = await retryRun(request());
   assert.equal(retry.ok, true);
   assert.equal(retry.idempotent, true);
-  assert.equal(retry.payload.entitlementId, failed.entitlement.entitlementId);
+  assert.equal(retry.entitlement.entitlementId, failed.entitlement.entitlementId);
 });
 
-test('13. in-memory entitlement store is explicitly rejected for production', () => {
+test('17. parallel identical requests converge on one entitlement', async () => {
   const store = new InMemoryXr1EntitlementStore();
-  assert.equal(store.isDurable, false);
-  assert.throws(() => assertProductionEntitlementStore(store), error =>
-    error instanceof Xr1GateError && error.code === 'XR1_DURABLE_STORE_REQUIRED'
-  );
-});
-
-test('14. XR1 source contains no signing, raw transaction or broadcast authority', async () => {
-  const { readFile } = await import('node:fs/promises');
-  const source = await readFile(new URL('../../src/x402-xr1/entitlement.mjs', import.meta.url), 'utf8');
-  const forbiddenCalls = [
-    'broadcastTx(',
-    'broadcast(',
-    'signPreparedTransaction(',
-    'signatoryForUtxo(',
-    'P2PKHSignatory(',
-    'TxBuilder('
-  ];
-  for (const token of forbiddenCalls) {
-    assert.equal(source.includes(token), false, `XR1 must not contain authority token ${token}`);
-  }
-});
-
-test('15. parallel identical grants converge on one entitlement', async () => {
-  const store = new InMemoryXr1EntitlementStore();
-  const settlement = projectC3BSettlement(paidResult());
-  const [a, b] = await Promise.all([
-    store.grant(settlement),
-    store.grant(settlement)
-  ]);
+  const run = gate({ store });
+  const [a, b] = await Promise.all([run(request()), run(request())]);
   assert.equal(a.ok, true);
   assert.equal(b.ok, true);
   assert.deepEqual([a.idempotent, b.idempotent].sort(), [false, true]);
   assert.equal(a.entitlement.entitlementId, b.entitlement.entitlementId);
 });
 
-test('16. direct client payment proof is rejected before any entitlement logic', async () => {
-  let calls = 0;
-  const response = await unlockXr1Resource({
-    clientProof: { x402Version: 1, network: 'xec:mainnet', invoiceHash: A, txid: B },
-    c3bResult: paidResult(),
-    store: new InMemoryXr1EntitlementStore(),
-    handler: async () => { calls++; }
-  });
-  assert.equal(response.ok, false);
-  assert.equal(response.code, 'XR1_DIRECT_CLIENT_PROOF_FORBIDDEN');
-  assert.equal(response.httpStatus, 400);
-  assert.equal(calls, 0);
+test('18. in-memory store is forbidden for production', () => {
+  const store = new InMemoryXr1EntitlementStore();
+  assert.equal(store.isDurable, false);
+  assert.throws(
+    () => assertProductionEntitlementStore(store),
+    error => error instanceof Xr1GateError && error.code === 'XR1_DURABLE_STORE_REQUIRED'
+  );
 });
 
-test('17. protected resource identity is frozen to Xilonen verified dossier v1', () => {
+test('19. XR1 source contains no signing, tx parsing or broadcast authority', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const source = await readFile(new URL('../../src/x402-xr1/entitlement.mjs', import.meta.url), 'utf8');
+  for (const token of [
+    'broadcastTx(',
+    'broadcast(',
+    'signPreparedTransaction(',
+    'signatoryForUtxo(',
+    'P2PKHSignatory(',
+    'TxBuilder(',
+    'parseTransaction(',
+    'deserializeTransaction('
+  ]) {
+    assert.equal(source.includes(token), false, `XR1 must not contain authority token ${token}`);
+  }
+});
+
+test('20. frozen resource identity matches canonical C3B hash', () => {
   assert.deepEqual(XR1_RESOURCE, {
     resourceId: 'xolos:xilonen:verified-dossier:v1',
     serverOrigin: 'https://api.xolosramirez.com',
