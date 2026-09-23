@@ -12,7 +12,8 @@
     "test:x402-xr0": "node tests/x402-xr0/harness.mjs",
     "test:x402-xr1": "node --test tests/x402-xr1/entitlement.test.mjs",
     "test:x402-xr1d": "node --test tests/x402-xr1d/schema.test.mjs tests/x402-xr1d/grant.test.mjs tests/x402-xr1d/authorize-access.test.mjs",
-    "test": "node scripts/test-generate-lead-tracking.mjs && node --test scripts/test-journey.mjs && node scripts/test-wm-xr1.mjs && node tests/x402-xr0/harness.mjs && node --test tests/x402-xr1/entitlement.test.mjs && npm run test:x402-xr1d"
+    "test:x402-xr1w": "node --test tests/x402-xr1w/controlled-e2e.test.mjs",
+    "test": "node scripts/test-generate-lead-tracking.mjs && node --test scripts/test-journey.mjs && node scripts/test-wm-xr1.mjs && node tests/x402-xr0/harness.mjs && node --test tests/x402-xr1/entitlement.test.mjs && npm run test:x402-xr1d && npm run test:x402-xr1w"
   },
   "devDependencies": {
     "htmlhint": "^1.4.6",
