@@ -205,7 +205,7 @@ test('10. DELETE is forbidden to preserve audit/replay evidence', () => {
   });
 });
 
-test('11. expires_at must be strictly greater than granted_at', () => {
+test('11. timestamps are ordered and bounded to Number.MAX_SAFE_INTEGER', () => {
   withDb(({ db }) => {
     assert.throws(
       () => insert(db, { expiresAt: 1_797_000_000 }),
@@ -214,6 +214,14 @@ test('11. expires_at must be strictly greater than granted_at', () => {
     assert.throws(
       () => insert(db, { expiresAt: 1_796_999_999 }),
       /CHECK constraint failed/
+    );
+    assert.throws(
+      () => insert(db, { grantedAt: Number.MAX_SAFE_INTEGER + 1, expiresAt: Number.MAX_SAFE_INTEGER + 2 }),
+      /CHECK constraint failed|BigInt|integer/i
+    );
+    assert.throws(
+      () => insert(db, { expiresAt: Number.MAX_SAFE_INTEGER + 1 }),
+      /CHECK constraint failed|BigInt|integer/i
     );
   });
 });
@@ -328,4 +336,75 @@ test('16. second distinct entitlement remains allowed when both unique bindings 
       2
     );
   });
+});
+
+test('17. failed migration rolls back schema objects and keeps user_version at 0', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'xr1d-migration-fail-'));
+  const path = join(dir, 'entitlements.sqlite');
+  const db = new DatabaseSync(path);
+  try {
+    const broken = MIGRATION.replace(
+      'CREATE TRIGGER xr1_entitlements_status_transition',
+      'CREATE TRIGGER xr1_entitlements_status_transition BROKEN'
+    );
+    assert.throws(() => db.exec(broken));
+    try { db.exec('ROLLBACK'); } catch {}
+
+    assert.equal(db.prepare('PRAGMA user_version').get().user_version, 0);
+    assert.equal(
+      db.prepare(
+        "SELECT COUNT(*) AS count FROM sqlite_master WHERE name IN ('xr1_entitlements','xr1_entitlements_insert_active_only','xr1_entitlements_immutable_binding','xr1_entitlements_status_transition','xr1_entitlements_no_delete','xr1_entitlements_active_expiry_idx')"
+      ).get().count,
+      0
+    );
+  } finally {
+    db.close();
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('18. weak pre-existing schema is rejected and never certified as v1', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'xr1d-schema-drift-'));
+  const path = join(dir, 'entitlements.sqlite');
+  const db = new DatabaseSync(path);
+  try {
+    db.exec(`CREATE TABLE xr1_entitlements (
+      entitlement_id TEXT PRIMARY KEY,
+      invoice_hash TEXT NOT NULL,
+      txid TEXT NOT NULL,
+      resource_id TEXT NOT NULL,
+      resource_hash TEXT NOT NULL,
+      granted_at INTEGER NOT NULL,
+      expires_at INTEGER NOT NULL,
+      status TEXT NOT NULL
+    ) STRICT;`);
+
+    assert.throws(
+      () => db.exec(MIGRATION),
+      /already exists/i
+    );
+    try { db.exec('ROLLBACK'); } catch {}
+
+    assert.equal(db.prepare('PRAGMA user_version').get().user_version, 0);
+
+    db.prepare(
+      `INSERT INTO xr1_entitlements (
+        entitlement_id, invoice_hash, txid, resource_id, resource_hash,
+        granted_at, expires_at, status
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+    ).run('weak-a', A, B, 'r1', RESOURCE_HASH, 1, 2, 'ACTIVE');
+
+    // Demonstrates the weak schema remains weak and, crucially, is NOT certified v1.
+    db.prepare(
+      `INSERT INTO xr1_entitlements (
+        entitlement_id, invoice_hash, txid, resource_id, resource_hash,
+        granted_at, expires_at, status
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+    ).run('weak-b', A, B, 'r2', RESOURCE_HASH, 3, 4, 'ACTIVE');
+
+    assert.equal(db.prepare('SELECT COUNT(*) AS count FROM xr1_entitlements').get().count, 2);
+  } finally {
+    db.close();
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
