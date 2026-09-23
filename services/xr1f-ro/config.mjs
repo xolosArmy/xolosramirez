@@ -44,9 +44,14 @@ function parseTimeout(value) {
 }
 
 function parseEndpoint(input) {
+  const raw = input.trim();
+  if (raw.endsWith('/')) {
+    throw new TypeError('XR1F_RO_CHRONIK_ENDPOINT must not end with "/"');
+  }
+
   let url;
   try {
-    url = new URL(input);
+    url = new URL(raw);
   } catch {
     throw new TypeError('XR1F_RO_CHRONIK_ENDPOINT must be an absolute HTTP(S) URL');
   }
@@ -58,10 +63,7 @@ function parseEndpoint(input) {
       'XR1F_RO_CHRONIK_ENDPOINT must not contain credentials, query or fragment',
     );
   }
-  if (url.href.endsWith('/')) {
-    throw new TypeError('XR1F_RO_CHRONIK_ENDPOINT must not end with "/"');
-  }
-  return url.href;
+  return raw;
 }
 
 export function loadXr1fRoConfig(env = process.env) {
