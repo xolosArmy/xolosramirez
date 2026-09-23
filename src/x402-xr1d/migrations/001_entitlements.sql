@@ -3,9 +3,10 @@
 -- No payment verification, signing, broadcast, production wiring, or real funds.
 
 PRAGMA foreign_keys = ON;
-PRAGMA user_version = 1;
 
-CREATE TABLE IF NOT EXISTS xr1_entitlements (
+BEGIN IMMEDIATE;
+
+CREATE TABLE xr1_entitlements (
   entitlement_id TEXT PRIMARY KEY
     CHECK(length(entitlement_id) >= 8 AND length(entitlement_id) <= 128),
 
@@ -34,10 +35,16 @@ CREATE TABLE IF NOT EXISTS xr1_entitlements (
     ),
 
   granted_at INTEGER NOT NULL
-    CHECK(granted_at >= 0),
+    CHECK(
+      granted_at >= 0
+      AND granted_at <= 9007199254740991
+    ),
 
   expires_at INTEGER NOT NULL
-    CHECK(expires_at > granted_at),
+    CHECK(
+      expires_at > granted_at
+      AND expires_at <= 9007199254740991
+    ),
 
   status TEXT NOT NULL
     CHECK(status IN ('ACTIVE', 'EXPIRED'))
@@ -45,7 +52,7 @@ CREATE TABLE IF NOT EXISTS xr1_entitlements (
 
 -- New grants always begin ACTIVE. Historical EXPIRED rows are reached only
 -- through the single allowed lifecycle transition below.
-CREATE TRIGGER IF NOT EXISTS xr1_entitlements_insert_active_only
+CREATE TRIGGER xr1_entitlements_insert_active_only
 BEFORE INSERT ON xr1_entitlements
 FOR EACH ROW
 WHEN NEW.status <> 'ACTIVE'
@@ -55,7 +62,7 @@ END;
 
 -- Economic binding + grant/TTL evidence is immutable after insertion.
 -- expires_at is immutable too: application code cannot extend/recycle access.
-CREATE TRIGGER IF NOT EXISTS xr1_entitlements_immutable_binding
+CREATE TRIGGER xr1_entitlements_immutable_binding
 BEFORE UPDATE OF
   entitlement_id,
   invoice_hash,
@@ -79,7 +86,7 @@ BEGIN
 END;
 
 -- Lifecycle is monotonic: ACTIVE -> EXPIRED only.
-CREATE TRIGGER IF NOT EXISTS xr1_entitlements_status_transition
+CREATE TRIGGER xr1_entitlements_status_transition
 BEFORE UPDATE OF status ON xr1_entitlements
 FOR EACH ROW
 WHEN
@@ -90,12 +97,17 @@ BEGIN
 END;
 
 -- Evidence rows are retained for audit/replay defense.
-CREATE TRIGGER IF NOT EXISTS xr1_entitlements_no_delete
+CREATE TRIGGER xr1_entitlements_no_delete
 BEFORE DELETE ON xr1_entitlements
 FOR EACH ROW
 BEGIN
   SELECT RAISE(ABORT, 'XR1D_DELETE_FORBIDDEN');
 END;
 
-CREATE INDEX IF NOT EXISTS xr1_entitlements_active_expiry_idx
+CREATE INDEX xr1_entitlements_active_expiry_idx
 ON xr1_entitlements(status, expires_at);
+
+-- Version is certified only after every schema object exists successfully.
+PRAGMA user_version = 1;
+
+COMMIT;
