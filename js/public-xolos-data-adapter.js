@@ -49,7 +49,7 @@ export const CANONICAL_PUBLIC_XOLOS = [
     gender: 'female',
     color: 'black',
     birthDate: '2026-08-03',
-    ageDescription: 'Recién nacida · 3 de agosto de 2026',
+    ageDescription: '7 semanas · nacida el 3 de agosto de 2026',
     personalitySummary: 'Cachorra xoloitzcuintle con copete característico, vivaz, atenta y de temperamento equilibrado con fuerte apego familiar.',
     careConsiderations: [
       'Protección solar e hidratación cutánea periódica',
