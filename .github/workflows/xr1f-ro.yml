@@ -1,0 +1,39 @@
+name: X402-XR1F-RO production read-only verification
+
+on:
+  pull_request:
+    paths:
+      - 'services/xr1f-ro/**'
+      - 'tests/xr1f-ro/**'
+      - 'deploy/systemd/xr1f-ro.service'
+      - 'deploy/xr1f-ro.env.example'
+      - 'docs/specs/x402-xr1f-ro-production-service.md'
+      - 'src/x402-xr1f/**'
+      - 'package.json'
+      - '.github/workflows/xr1f-ro.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  xr1f-ro:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Assert exact PR head
+        if: ${{ github.event_name == 'pull_request' }}
+        run: test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run test:xr1f-ro
+      - run: npm run test:x402-xr1f
+      - run: npm run test:x402-xr1w
+      - run: npm run test:x402-xr1d
+      - run: npm test
