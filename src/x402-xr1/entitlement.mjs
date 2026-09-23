@@ -38,6 +38,10 @@ function assertTimestamp(value, field) {
 }
 
 /**
+ * TRUST BOUNDARY: c3bResult MUST be the in-process result attached by the
+ * canonical x402-XEC settlement middleware after verification. Never pass a
+ * client-supplied body/header object into this function.
+ *
  * Narrow projection from canonical x402-XEC Gate C3B success into the only
  * settlement evidence Xolos Ramírez needs to grant an XR1 entitlement.
  *
@@ -189,10 +193,16 @@ export function assertProductionEntitlementStore(store) {
  */
 export async function unlockXr1Resource({
   c3bResult,
+  clientProof,
   store,
   handler,
   resource = XR1_RESOURCE
 }) {
+  // XR1 never accepts client payment evidence directly. The client proof must
+  // first pass through canonical C3B middleware, which supplies c3bResult.
+  if (clientProof !== undefined) {
+    return { ok: false, code: 'XR1_DIRECT_CLIENT_PROOF_FORBIDDEN', httpStatus: 400 };
+  }
   if (!store || typeof store.grant !== 'function') {
     return { ok: false, code: 'XR1_STORE_UNAVAILABLE', httpStatus: 500 };
   }
