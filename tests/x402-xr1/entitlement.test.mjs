@@ -256,7 +256,21 @@ test('15. parallel identical grants converge on one entitlement', async () => {
   assert.equal(a.entitlement.entitlementId, b.entitlement.entitlementId);
 });
 
-test('16. protected resource identity is frozen to Xilonen verified dossier v1', () => {
+test('16. direct client payment proof is rejected before any entitlement logic', async () => {
+  let calls = 0;
+  const response = await unlockXr1Resource({
+    clientProof: { x402Version: 1, network: 'xec:mainnet', invoiceHash: A, txid: B },
+    c3bResult: paidResult(),
+    store: new InMemoryXr1EntitlementStore(),
+    handler: async () => { calls++; }
+  });
+  assert.equal(response.ok, false);
+  assert.equal(response.code, 'XR1_DIRECT_CLIENT_PROOF_FORBIDDEN');
+  assert.equal(response.httpStatus, 400);
+  assert.equal(calls, 0);
+});
+
+test('17. protected resource identity is frozen to Xilonen verified dossier v1', () => {
   assert.deepEqual(XR1_RESOURCE, {
     resourceId: 'xolos:xilonen:verified-dossier:v1',
     serverOrigin: 'https://api.xolosramirez.com',
