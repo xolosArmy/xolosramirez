@@ -1,0 +1,32 @@
+name: X402-XR1D schema verification
+
+on:
+  pull_request:
+    paths:
+      - 'src/x402-xr1d/**'
+      - 'tests/x402-xr1d/**'
+      - 'package.json'
+      - '.github/workflows/x402-xr1d.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  xr1d-schema:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Assert exact PR head
+        if: ${{ github.event_name == 'pull_request' }}
+        run: test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run test:x402-xr1d
+      - run: npm test
