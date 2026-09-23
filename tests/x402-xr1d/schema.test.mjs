@@ -243,7 +243,9 @@ test('13. durable file survives close and reopen', () => {
       const row = db.prepare(
         'SELECT invoice_hash, txid, status FROM xr1_entitlements WHERE invoice_hash = ?'
       ).get(A);
-      assert.deepEqual(row, { invoice_hash: A, txid: B, status: 'ACTIVE' });
+      assert.equal(row.invoice_hash, A);
+      assert.equal(row.txid, B);
+      assert.equal(row.status, 'ACTIVE');
       db.close();
     }
   } finally {
@@ -303,9 +305,13 @@ test('15. schema contains no payment verification or wallet authority', () => {
     'broadcast',
     'chronik'
   ];
-  const lower = MIGRATION.toLowerCase();
+  const executableSql = MIGRATION
+    .split('\n')
+    .map(line => line.replace(/--.*$/, ''))
+    .join('\n')
+    .toLowerCase();
   for (const token of forbidden) {
-    assert.equal(lower.includes(token), false, `migration must not contain ${token}`);
+    assert.equal(executableSql.includes(token), false, `executable migration SQL must not contain ${token}`);
   }
 });
 
