@@ -14,7 +14,8 @@
  */
 
 export const CANONICAL_PUBLIC_BIRTH_DATES = {
-  tlilxochitl: '2026-08-03' // Backed by public card in xolos-disponibles.html: "Recién nacida · 3 de agosto de 2026"
+  tlilxochitl: '2026-08-03', // Backed by public card in xolos-disponibles.html: "Recién nacida · 3 de agosto de 2026"
+  iztli: '2026-07-14' // Backed by the canonical Xolos Ramírez master sheet and now published on the ES/EN profile cards.
 };
 
 /**
@@ -80,14 +81,15 @@ export const CANONICAL_PUBLIC_XOLOS = [
     id: 'iztli',
     name: 'Iztli Ramirez',
     status: 'available',
-    variety: 'hairless',
-    size: 'intermediate',
+    variety: 'pending_confirmation',
+    size: 'small_intermediate',
     gender: 'male',
     color: 'black',
-    ageDescription: 'Cachorro macho recién nacido',
+    birthDate: '2026-07-14',
+    ageDescription: '2 meses · nacido el 14 de julio de 2026',
     personalitySummary: 'Cachorro curioso, juguetón y de gran afinidad con niños y otros caninos.',
     careConsiderations: [
-      'Cuidado preventivo de piel y exfoliación natural mensual'
+      'Cuidados generales de cachorro y seguimiento de piel según evolución individual'
     ],
     lineageReference: 'Linaje Tonalli Xolos Ramírez',
     publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#iztli'
@@ -230,7 +232,12 @@ export const PublicXolosDataAdapter = {
       results = results.filter((x) => x.variety.toLowerCase() === variety.toLowerCase());
     }
     if (size && size !== 'all') {
-      results = results.filter((x) => x.size.toLowerCase() === size.toLowerCase());
+      const normalizedSize = size.toLowerCase();
+      results = results.filter((x) => {
+        const profileSize = x.size.toLowerCase();
+        return profileSize === normalizedSize ||
+          (normalizedSize === 'intermediate' && profileSize === 'small_intermediate');
+      });
     }
 
     return {
