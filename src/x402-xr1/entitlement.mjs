@@ -37,20 +37,9 @@ function assertTimestamp(value, field) {
   return value;
 }
 
-/**
- * TRUST BOUNDARY: c3bResult MUST be the in-process result attached by the
- * canonical x402-XEC settlement middleware after verification. Never pass a
- * client-supplied body/header object into this function.
- *
- * Narrow projection from canonical x402-XEC Gate C3B success into the only
- * settlement evidence Xolos Ramírez needs to grant an XR1 entitlement.
- *
- * This intentionally drops transaction outputs, payTo, amount, vout and every
- * signing/broadcast detail. Xolos does not independently re-verify Chronik.
- */
-export function projectC3BSettlement(c3bResult, expectedResource = XR1_RESOURCE) {
+function projectC3BSettlement(c3bResult, expectedResourceHash) {
   if (!c3bResult || typeof c3bResult !== 'object') {
-    fail('XR1_C3B_NOT_UNLOCKED', 'Missing C3B settlement result');
+    fail('XR1_C3B_NOT_UNLOCKED', 'Missing internal C3B settlement result');
   }
   if (c3bResult.ok !== true || c3bResult.status !== 'UNLOCKED') {
     fail('XR1_C3B_NOT_UNLOCKED', 'C3B has not authorized resource unlock');
@@ -88,7 +77,7 @@ export function projectC3BSettlement(c3bResult, expectedResource = XR1_RESOURCE)
   if (settledTxid !== proofTxid) {
     fail('XR1_TXID_BINDING_MISMATCH', 'C3B proof txid does not match the paid invoice');
   }
-  if (resourceHash !== expectedResource.resourceHash) {
+  if (resourceHash !== expectedResourceHash) {
     fail('XR1_RESOURCE_MISMATCH', 'C3B invoice was paid for a different resource');
   }
 
@@ -111,7 +100,6 @@ function entitlementId(resourceId, invoiceHash, txid) {
 }
 
 export class InMemoryXr1EntitlementStore {
-  readonly = undefined;
   isDurable = false;
 
   #byInvoice = new Map();
@@ -187,62 +175,122 @@ export function assertProductionEntitlementStore(store) {
   }
 }
 
+function requestResource(request) {
+  if (!request || typeof request !== 'object') {
+    fail('XR1_REQUEST_INVALID', 'XR1 requires a server request object', 500);
+  }
+
+  const method = typeof request.method === 'string' ? request.method.toUpperCase() : '';
+  const rawUrl = request.originalUrl ?? request.url ?? request.path;
+  if (typeof rawUrl !== 'string' || rawUrl.length === 0) {
+    fail('XR1_REQUEST_INVALID', 'XR1 request URL is unavailable', 500);
+  }
+
+  let url;
+  try {
+    url = new URL(rawUrl, XR1_RESOURCE.serverOrigin);
+  } catch {
+    fail('XR1_REQUEST_INVALID', 'XR1 request URL is malformed', 400);
+  }
+
+  if (method !== XR1_RESOURCE.method || url.pathname !== XR1_RESOURCE.path) {
+    fail('XR1_RESOURCE_MISMATCH', 'Request does not target the frozen XR1 resource', 403);
+  }
+  if (url.search !== '' || url.hash !== '') {
+    fail('XR1_RESOURCE_MISMATCH', 'XR1 v1 does not permit query or fragment variants', 403);
+  }
+  if (request.body !== undefined && request.body !== null) {
+    fail('XR1_RESOURCE_MISMATCH', 'XR1 v1 GET resource does not permit a request body', 403);
+  }
+
+  return Object.freeze({
+    serverOrigin: XR1_RESOURCE.serverOrigin,
+    method: XR1_RESOURCE.method,
+    path: XR1_RESOURCE.path
+  });
+}
+
 /**
- * Gate wrapper: the protected handler is invoked only after C3B projection
- * succeeds and the entitlement is committed.
+ * Creates the XR1 server-side gate that MUST be mounted after canonical
+ * x402-XEC Gate C3B middleware.
+ *
+ * SECURITY BOUNDARY:
+ * - Client headers/body are never accepted as settlement evidence.
+ * - The only settlement authority is request.x402Settlement, an in-process
+ *   server property attached by the upstream C3B middleware after PAID commit.
+ * - Resource hashing is delegated to canonical x402-XEC computeResourceHash,
+ *   injected as computeResourceHash. XR1 does not reimplement canonical hashing.
  */
-export async function unlockXr1Resource({
-  c3bResult,
-  clientProof,
+export function createXr1EntitlementGate({
   store,
   handler,
+  computeResourceHash,
   resource = XR1_RESOURCE
 }) {
-  // XR1 never accepts client payment evidence directly. The client proof must
-  // first pass through canonical C3B middleware, which supplies c3bResult.
-  if (clientProof !== undefined) {
-    return { ok: false, code: 'XR1_DIRECT_CLIENT_PROOF_FORBIDDEN', httpStatus: 400 };
-  }
   if (!store || typeof store.grant !== 'function') {
-    return { ok: false, code: 'XR1_STORE_UNAVAILABLE', httpStatus: 500 };
+    fail('XR1_STORE_UNAVAILABLE', 'XR1 entitlement store is unavailable', 500);
   }
   if (typeof handler !== 'function') {
-    return { ok: false, code: 'XR1_HANDLER_INVALID', httpStatus: 500 };
+    fail('XR1_HANDLER_INVALID', 'XR1 protected handler is invalid', 500);
+  }
+  if (typeof computeResourceHash !== 'function') {
+    fail(
+      'XR1_CANONICAL_HASHER_REQUIRED',
+      'XR1 requires canonical x402-XEC computeResourceHash at runtime',
+      500
+    );
   }
 
-  let settlement;
-  try {
-    settlement = projectC3BSettlement(c3bResult, resource);
-  } catch (error) {
-    if (error instanceof Xr1GateError) {
-      return { ok: false, code: error.code, httpStatus: error.httpStatus };
+  return async function xr1EntitlementGate(request) {
+    let runtimeResourceHash;
+    let settlement;
+    try {
+      const runtimeResource = requestResource(request);
+      runtimeResourceHash = assertHash(
+        computeResourceHash(runtimeResource),
+        'runtimeResourceHash'
+      );
+      if (runtimeResourceHash !== resource.resourceHash) {
+        fail('XR1_RESOURCE_MISMATCH', 'Runtime canonical resource hash does not match frozen XR1 resource');
+      }
+
+      // Deliberately read only the server-side property populated by C3B.
+      // request.body, payment-proof headers, query params and client-provided
+      // objects can never substitute for this value.
+      settlement = projectC3BSettlement(request.x402Settlement, runtimeResourceHash);
+    } catch (error) {
+      if (error instanceof Xr1GateError) {
+        return { ok: false, code: error.code, httpStatus: error.httpStatus };
+      }
+      return { ok: false, code: 'XR1_INTERNAL_ERROR', httpStatus: 500 };
     }
-    return { ok: false, code: 'XR1_INTERNAL_ERROR', httpStatus: 500 };
-  }
 
-  const grant = await store.grant(settlement, resource);
-  if (!grant.ok) {
-    const status = grant.code === 'XR1_INVOICE_CONFLICT' || grant.code === 'XR1_TXID_REPLAY' ? 409 : 403;
-    return { ok: false, code: grant.code, httpStatus: status };
-  }
+    const grant = await store.grant(settlement, resource);
+    if (!grant.ok) {
+      const status = grant.code === 'XR1_INVOICE_CONFLICT' || grant.code === 'XR1_TXID_REPLAY'
+        ? 409
+        : 403;
+      return { ok: false, code: grant.code, httpStatus: status };
+    }
 
-  try {
-    const payload = await handler({ ...grant.entitlement });
-    return {
-      ok: true,
-      status: 'UNLOCKED',
-      idempotent: grant.idempotent,
-      entitlement: grant.entitlement,
-      payload
-    };
-  } catch {
-    // Entitlement stays committed. A retry with the same paid invoice is
-    // idempotent and does not require repayment.
-    return {
-      ok: false,
-      code: 'XR1_DELIVERY_FAILED',
-      httpStatus: 503,
-      entitlement: grant.entitlement
-    };
-  }
+    try {
+      const payload = await handler({ ...grant.entitlement });
+      return {
+        ok: true,
+        status: 'UNLOCKED',
+        idempotent: grant.idempotent,
+        entitlement: grant.entitlement,
+        payload
+      };
+    } catch {
+      // Entitlement remains committed. Same paid invoice can retry idempotently
+      // without a second payment.
+      return {
+        ok: false,
+        code: 'XR1_DELIVERY_FAILED',
+        httpStatus: 503,
+        entitlement: grant.entitlement
+      };
+    }
+  };
 }
