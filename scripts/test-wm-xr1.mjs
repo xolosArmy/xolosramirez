@@ -11,7 +11,7 @@
  * 3. Valid schemas: inputSchema and outputSchema conform to JSON Schema Draft 2020-12 structure.
  * 4. Deterministic outputs: all execute callbacks return valid, consistent JSON structures.
  * 5. Data accuracy:
- *    - Iztli (#oce, available)
+ *    - Iztli (#oce alias, available, small intermediate, variety pending confirmation, born 2026-07-14)
  *    - Yohualli (female, intermediate, reserved)
  *    - Tlilxóchitl (standard, female, available)
  *    - Tonalli (standard, female, reserved)
@@ -113,15 +113,24 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
   assert.equal(xilonen.xolo.gender, 'female');
   assert.equal(xilonen.xolo.status, 'available');
 
-  // 3. Iztli (available, intermediate, male, historical #oce identifier)
+  // 3. Iztli (available, small intermediate, male, historical #oce identifier)
   const oce = await PublicXolosDataAdapter.getXoloProfile({ id: 'oce' });
   assert.equal(oce.found, true);
   assert.equal(oce.xolo.id, 'iztli');
   assert.equal(oce.xolo.name, 'Iztli Ramirez');
-  assert.equal(oce.xolo.size, 'intermediate');
+  assert.equal(oce.xolo.size, 'small_intermediate');
+  assert.equal(oce.xolo.variety, 'pending_confirmation');
   assert.equal(oce.xolo.gender, 'male');
   assert.equal(oce.xolo.status, 'available');
+  assert.equal(oce.xolo.birthDate, '2026-07-14');
+  assert.equal(oce.xolo.ageDescription, '2 meses · nacido el 14 de julio de 2026');
   assert.equal(oce.xolo.publicUrl, 'https://xolosramirez.com/xolos-disponibles.html#iztli');
+
+  const intermediateFiltered = await PublicXolosDataAdapter.listAvailableXolos({ size: 'intermediate' });
+  assert.ok(
+    intermediateFiltered.xolos.some((x) => x.id === 'iztli'),
+    'The intermediate filter must include canonical small_intermediate profiles'
+  );
 
   // 4. Yohualli (reserved, intermediate, female)
   const yohualli = await PublicXolosDataAdapter.getXoloProfile({ id: 'yohualli' });
@@ -328,8 +337,13 @@ test('WM-XR1: Public approximate age vs synthetic exact birthDate invariant', as
   assert.equal(tlil.xolo.birthDate, '2026-08-03', 'Tlilxóchitl birthDate is explicitly published in public card');
   assert.equal(validatePublicAgeIntegrity(tlil.xolo).valid, true);
 
+  // Iztli now has a canonical exact birth date from the master sheet and public ES/EN cards.
+  const iztli = await PublicXolosDataAdapter.getXoloProfile({ id: 'iztli' });
+  assert.equal(iztli.xolo.birthDate, '2026-07-14');
+  assert.equal(validatePublicAgeIntegrity(iztli.xolo).valid, true);
+
   // Remaining profiles only state approximate age on public cards; birthDate must be undefined
-  const approximateDogs = ['xilonen', 'oce', 'yohualli', 'tonalli', 'xochitl'];
+  const approximateDogs = ['xilonen', 'yohualli', 'tonalli', 'xochitl'];
   for (const dogId of approximateDogs) {
     const profile = await PublicXolosDataAdapter.getXoloProfile({ id: dogId });
     assert.equal(
