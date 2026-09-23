@@ -73,6 +73,7 @@ function withStore(fn) {
 function countRows(path) {
   const db = new DatabaseSync(path);
   try {
+    db.exec('PRAGMA busy_timeout = 1000;');
     return db.prepare('SELECT COUNT(*) AS count FROM xr1_entitlements').get().count;
   } finally {
     db.close();
@@ -85,10 +86,23 @@ function runWorker(workerData) {
       new URL('./grant-worker.mjs', import.meta.url),
       { workerData },
     );
-    worker.once('message', resolve);
+    let result;
+    let received = false;
+    worker.once('message', message => {
+      result = message;
+      received = true;
+    });
     worker.once('error', reject);
     worker.once('exit', code => {
-      if (code !== 0) reject(new Error(`grant worker exited ${code}`));
+      if (code !== 0) {
+        reject(new Error(`grant worker exited ${code}`));
+        return;
+      }
+      if (!received) {
+        reject(new Error('grant worker exited without result'));
+        return;
+      }
+      resolve(result);
     });
   });
 }

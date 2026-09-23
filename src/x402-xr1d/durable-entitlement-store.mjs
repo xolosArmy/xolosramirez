@@ -214,6 +214,8 @@ export class SqliteXr1dEntitlementStore {
   #db;
   #insert;
   #findCollisions;
+  #findByEntitlementId;
+  #expireIfDue;
   #closed = false;
 
   constructor({ path }) {
@@ -268,6 +270,28 @@ export class SqliteXr1dEntitlementStore {
           status
         FROM xr1_entitlements
         WHERE entitlement_id = ? OR invoice_hash = ? OR txid = ?`,
+      );
+
+      this.#findByEntitlementId = db.prepare(
+        `SELECT
+          entitlement_id,
+          invoice_hash,
+          txid,
+          resource_id,
+          resource_hash,
+          granted_at,
+          expires_at,
+          status
+        FROM xr1_entitlements
+        WHERE entitlement_id = ?`,
+      );
+
+      this.#expireIfDue = db.prepare(
+        `UPDATE xr1_entitlements
+        SET status = 'EXPIRED'
+        WHERE entitlement_id = ?
+          AND status = 'ACTIVE'
+          AND expires_at <= ?`,
       );
 
       this.#db = db;
@@ -357,6 +381,164 @@ export class SqliteXr1dEntitlementStore {
 
       if (isUniqueConstraint(error)) {
         return this.#resolveConstraintCollision(candidate);
+      }
+
+      const classified = classifySqliteError(error);
+      return {
+        ok: false,
+        outcome:
+          classified.kind === 'retryable' ? 'RETRYABLE' : 'STORAGE_FAILURE',
+        code: classified.code,
+        retryable: classified.retryable,
+      };
+    }
+  }
+
+
+  authorizeAccess(input) {
+    let entitlementId;
+    let resourceId;
+    let resourceHash;
+    let now;
+
+    try {
+      if (!input || typeof input !== 'object') {
+        throw new Xr1dStoreError(
+          'XR1D_INVALID_ACCESS_CHECK',
+          'authorizeAccess input must be an object',
+        );
+      }
+
+      entitlementId = input.entitlementId;
+      resourceId = input.resourceId;
+      resourceHash = validateHash(input.resourceHash, 'resourceHash');
+      now = validateTimestamp(input.now, 'now');
+
+      if (
+        typeof entitlementId !== 'string' ||
+        entitlementId.length < 8 ||
+        entitlementId.length > 128
+      ) {
+        throw new Xr1dStoreError(
+          'XR1D_INVALID_ACCESS_CHECK',
+          'entitlementId is invalid',
+        );
+      }
+
+      if (
+        typeof resourceId !== 'string' ||
+        resourceId.length < 1 ||
+        resourceId.length > 256
+      ) {
+        throw new Xr1dStoreError(
+          'XR1D_INVALID_ACCESS_CHECK',
+          'resourceId is invalid',
+        );
+      }
+    } catch (error) {
+      return {
+        ok: false,
+        outcome: 'INVALID',
+        code:
+          error instanceof Xr1dStoreError
+            ? error.code
+            : 'XR1D_INVALID_ACCESS_CHECK',
+        retryable: false,
+      };
+    }
+
+    let transactionStarted = false;
+
+    try {
+      this.#db.exec('BEGIN IMMEDIATE');
+      transactionStarted = true;
+
+      let existing = rowToEntitlement(
+        this.#findByEntitlementId.get(entitlementId),
+      );
+
+      if (
+        !existing ||
+        existing.resourceId !== resourceId ||
+        existing.resourceHash !== resourceHash
+      ) {
+        this.#db.exec('COMMIT');
+        transactionStarted = false;
+        return {
+          ok: false,
+          outcome: 'DENIED',
+          code: 'XR1D_ACCESS_NOT_FOUND_OR_MISMATCH',
+          retryable: false,
+        };
+      }
+
+      if (existing.status === 'EXPIRED') {
+        this.#db.exec('COMMIT');
+        transactionStarted = false;
+        return {
+          ok: false,
+          outcome: 'DENIED',
+          code: 'XR1D_ACCESS_EXPIRED',
+          retryable: false,
+          entitlement: existing,
+        };
+      }
+
+      if (existing.status !== 'ACTIVE') {
+        this.#db.exec('ROLLBACK');
+        transactionStarted = false;
+        return {
+          ok: false,
+          outcome: 'STORAGE_FAILURE',
+          code: 'XR1D_STORAGE_FAILURE',
+          retryable: false,
+        };
+      }
+
+      if (existing.expiresAt > now) {
+        this.#db.exec('COMMIT');
+        transactionStarted = false;
+        return {
+          ok: true,
+          outcome: 'ALLOWED',
+          retryable: false,
+          entitlement: existing,
+        };
+      }
+
+      this.#expireIfDue.run(entitlementId, now);
+
+      existing = rowToEntitlement(
+        this.#findByEntitlementId.get(entitlementId),
+      );
+
+      if (!existing || existing.status !== 'EXPIRED') {
+        this.#db.exec('ROLLBACK');
+        transactionStarted = false;
+        return {
+          ok: false,
+          outcome: 'STORAGE_FAILURE',
+          code: 'XR1D_STORAGE_FAILURE',
+          retryable: false,
+        };
+      }
+
+      this.#db.exec('COMMIT');
+      transactionStarted = false;
+
+      return {
+        ok: false,
+        outcome: 'DENIED',
+        code: 'XR1D_ACCESS_EXPIRED',
+        retryable: false,
+        transitioned: true,
+        entitlement: existing,
+      };
+    } catch (error) {
+      if (transactionStarted) {
+        try {
+          this.#db.exec('ROLLBACK');
+        } catch {}
       }
 
       const classified = classifySqliteError(error);

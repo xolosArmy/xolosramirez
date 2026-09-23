@@ -7,7 +7,7 @@ import {
 let store;
 try {
   store = new SqliteXr1dEntitlementStore({ path: workerData.path });
-  parentPort.postMessage(store.grant(workerData.input));
+  parentPort.postMessage(store.authorizeAccess(workerData.input));
 } catch (error) {
   if (error instanceof Xr1dStoreError) {
     parentPort.postMessage({
