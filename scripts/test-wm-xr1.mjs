@@ -13,7 +13,7 @@
  * 5. Data accuracy:
  *    - Iztli (#oce alias, available, small intermediate, variety pending confirmation, born 2026-07-14)
  *    - Yohualli (female, intermediate, reserved)
- *    - Tlilxóchitl (standard, female, available)
+ *    - Tlilxóchitl (standard, female, available, born 2026-08-03, 7 weeks)
  *    - Tonalli (standard, female, reserved)
  *    - Xóchitl (intermediate, female, reserved)
  *    - Delivery zone recognizes "national".
@@ -105,6 +105,8 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
   assert.equal(tlil.xolo.size, 'standard');
   assert.equal(tlil.xolo.gender, 'female');
   assert.equal(tlil.xolo.status, 'available');
+  assert.equal(tlil.xolo.birthDate, '2026-08-03');
+  assert.equal(tlil.xolo.ageDescription, '7 semanas · nacida el 3 de agosto de 2026');
 
   // 2. Xilonen (available, miniature, female)
   const xilonen = await PublicXolosDataAdapter.getXoloProfile({ id: 'xilonen' });
@@ -335,6 +337,7 @@ test('WM-XR1: Public approximate age vs synthetic exact birthDate invariant', as
   // Profiles with approximate public ages (e.g. "1 mes", "Recién nacida") must NEVER synthesize exact dates.
   const tlil = await PublicXolosDataAdapter.getXoloProfile({ id: 'tlilxochitl' });
   assert.equal(tlil.xolo.birthDate, '2026-08-03', 'Tlilxóchitl birthDate is explicitly published in public card');
+  assert.equal(tlil.xolo.ageDescription, '7 semanas · nacida el 3 de agosto de 2026');
   assert.equal(validatePublicAgeIntegrity(tlil.xolo).valid, true);
 
   // Iztli now has a canonical exact birth date from the master sheet and public ES/EN cards.
