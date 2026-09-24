@@ -36,10 +36,10 @@ The production Chronik reader is loaded from a locally built module whose SHA-25
 `/ready` returns HTTP 200 with `READ_ONLY_READY` only when:
 
 1. `XR1F_RO_ENABLED=true`.
-2. C3B SQLite opens read-only and passes `PRAGMA quick_check`.
+2. C3B SQLite is inspected through `/usr/bin/sqlite3` using URI `mode=ro&immutable=1` and passes `PRAGMA quick_check`.
 3. C3B schema contains required invoice columns and unique indexes.
 4. C3B DB is WAL.
-5. XR1D SQLite opens read-only and passes `PRAGMA quick_check`.
+5. XR1D SQLite is inspected through the same immutable read-only URI path and passes `PRAGMA quick_check`.
 6. XR1D `user_version=1`, STRICT table, canonical triggers and expiry index exist.
 7. Chronik provider artifact matches the configured SHA-256.
 8. Chronik reader exposes `getTx()` and no recognized write/broadcast methods.
@@ -89,3 +89,12 @@ Rollback does not touch either database.
 - independent exact-head review
 
 Successful XR1F-RO validation means **READ_ONLY_READY**, never `REAL_FUNDS_READY`.
+
+
+## SQLite WAL read-only note
+
+The production databases use WAL. A normal SQLite read-only connection may still require access to `-wal`/`-shm` sidecars and can fail with `attempt to write a readonly database` when the service directory is intentionally non-writable. XR1F-RO therefore performs integrity/schema inspection with the system `sqlite3` CLI using URI `mode=ro&immutable=1`. This preserves the service filesystem boundary and does not grant write permission to the database directory.
+
+The host must provide `/usr/bin/sqlite3`. The probe fails closed with `XR1F_RO_SQLITE3_UNAVAILABLE` if it is absent.
+
+`MemoryDenyWriteExecute=false` is intentional for this Node/Undici/Chronik process because Node's HTTP stack requires WebAssembly/JIT-compatible executable memory. Other systemd hardening remains enabled.
