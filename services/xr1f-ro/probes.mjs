@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { lstatSync, realpathSync } from 'node:fs';
+import { lstatSync, readFileSync, realpathSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -105,6 +105,18 @@ function requireQuickCheck(path, name, options) {
   }
 }
 
+function requireWalHeader(path, name) {
+  const header = readFileSync(path, { encoding: null, flag: 'r' });
+  if (
+    header.length < 20 ||
+    header.subarray(0, 16).toString('ascii') !== 'SQLite format 3\0' ||
+    header[18] !== 2 ||
+    header[19] !== 2
+  ) {
+    throw new Error(`${name}_WAL_REQUIRED`);
+  }
+}
+
 function tableColumns(path, table, options) {
   return new Set(
     runQuery(path, `PRAGMA table_info('${table}')`, options)
@@ -181,10 +193,7 @@ export function probeC3bStoreReadOnly(path, options = {}) {
     }
   }
 
-  const journal = runQuery(expected, 'PRAGMA journal_mode', options)[0]?.journal_mode;
-  if (String(journal).toLowerCase() !== 'wal') {
-    throw new Error('XR1F_RO_C3B_WAL_REQUIRED');
-  }
+  requireWalHeader(expected, 'XR1F_RO_C3B');
 
   return Object.freeze({ ok: true, component: 'c3bStore' });
 }
