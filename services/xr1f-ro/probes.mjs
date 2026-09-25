@@ -1,7 +1,10 @@
+import { spawnSync } from 'node:child_process';
+import { lstatSync, readFileSync, realpathSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { DatabaseSync } from 'node:sqlite';
+import { pathToFileURL } from 'node:url';
 
 const HEX_64 = /^[0-9a-f]{64}$/;
+const DEFAULT_SQLITE3_BIN = '/usr/bin/sqlite3';
 const FORBIDDEN_READER_METHODS = [
   'broadcastTx',
   'broadcast',
@@ -27,31 +30,97 @@ function validateDurablePath(path, name) {
   ) {
     throw new Error(`${name}_DURABLE_ABSOLUTE_PATH_REQUIRED`);
   }
-  return resolve(trimmed);
-}
 
-function openReadOnly(path, name) {
-  const expected = validateDurablePath(path, name);
-  const db = new DatabaseSync(expected, { readOnly: true });
-  const rows = db.prepare('PRAGMA database_list').all();
-  const main = rows.find(row => row?.name === 'main');
-  if (!main || typeof main.file !== 'string' || resolve(main.file) !== expected) {
-    db.close();
+  const expected = resolve(trimmed);
+  let stat;
+  try {
+    stat = lstatSync(expected);
+  } catch {
+    throw new Error(`${name}_DATABASE_NOT_FOUND`);
+  }
+  if (!stat.isFile() || stat.isSymbolicLink()) {
+    throw new Error(`${name}_REGULAR_FILE_REQUIRED`);
+  }
+  if (realpathSync(expected) !== expected) {
     throw new Error(`${name}_DATABASE_FILE_MISMATCH`);
   }
-  return db;
+  return expected;
 }
 
-function requireQuickCheck(db, name) {
-  const result = db.prepare('PRAGMA quick_check').get();
+export function immutableSqliteQuery(
+  path,
+  sql,
+  { sqlite3Bin = DEFAULT_SQLITE3_BIN, timeoutMs = 5000 } = {},
+) {
+  const expected = validateDurablePath(path, 'XR1F_RO_SQLITE');
+  const uri = `${pathToFileURL(expected).href}?mode=ro&immutable=1`;
+
+  const result = spawnSync(
+    sqlite3Bin,
+    ['-readonly', '-json', uri, sql],
+    {
+      encoding: 'utf8',
+      timeout: timeoutMs,
+      maxBuffer: 1024 * 1024,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    },
+  );
+
+  if (result.error) {
+    if (result.error.code === 'ENOENT') {
+      throw new Error('XR1F_RO_SQLITE3_UNAVAILABLE');
+    }
+    if (result.error.code === 'ETIMEDOUT') {
+      throw new Error('XR1F_RO_SQLITE3_TIMEOUT');
+    }
+    throw new Error('XR1F_RO_SQLITE_QUERY_FAILED');
+  }
+  if (result.status !== 0) {
+    throw new Error('XR1F_RO_SQLITE_QUERY_FAILED');
+  }
+
+  const stdout = String(result.stdout ?? '').trim();
+  if (stdout === '') return [];
+
+  try {
+    const rows = JSON.parse(stdout);
+    if (!Array.isArray(rows)) {
+      throw new TypeError('rows');
+    }
+    return rows;
+  } catch {
+    throw new Error('XR1F_RO_SQLITE_JSON_INVALID');
+  }
+}
+
+function runQuery(path, sql, options) {
+  const query = options?.query ?? immutableSqliteQuery;
+  return query(path, sql);
+}
+
+function requireQuickCheck(path, name, options) {
+  const result = runQuery(path, 'PRAGMA quick_check', options)[0];
   if (result?.quick_check !== 'ok') {
     throw new Error(`${name}_QUICK_CHECK_FAILED`);
   }
 }
 
-function tableColumns(db, table) {
+function requireWalHeader(path, name) {
+  const header = readFileSync(path, { encoding: null, flag: 'r' });
+  if (
+    header.length < 20 ||
+    header.subarray(0, 16).toString('ascii') !== 'SQLite format 3\0' ||
+    header[18] !== 2 ||
+    header[19] !== 2
+  ) {
+    throw new Error(`${name}_WAL_REQUIRED`);
+  }
+}
+
+function tableColumns(path, table, options) {
   return new Set(
-    db.prepare(`PRAGMA table_info('${table}')`).all().map(row => row.name),
+    runQuery(path, `PRAGMA table_info('${table}')`, options)
+      .map(row => row.name),
   );
 }
 
@@ -63,13 +132,15 @@ function requireColumns(actual, required, name) {
   }
 }
 
-function uniqueIndexedColumns(db, table) {
+function uniqueIndexedColumns(path, table, options) {
   const result = new Set();
-  for (const index of db.prepare(`PRAGMA index_list('${table}')`).all()) {
+  for (const index of runQuery(path, `PRAGMA index_list('${table}')`, options)) {
     if (Number(index.unique) !== 1) continue;
-    const columns = db
-      .prepare(`PRAGMA index_info('${index.name}')`)
-      .all()
+    const columns = runQuery(
+      path,
+      `PRAGMA index_info('${String(index.name).replaceAll("'", "''")}')`,
+      options,
+    )
       .map(row => row.name)
       .filter(Boolean);
     if (columns.length === 1) result.add(columns[0]);
@@ -77,117 +148,116 @@ function uniqueIndexedColumns(db, table) {
   return result;
 }
 
-export function probeC3bStoreReadOnly(path) {
-  const db = openReadOnly(path, 'XR1F_RO_C3B');
-  try {
-    requireQuickCheck(db, 'XR1F_RO_C3B');
+export function probeC3bStoreReadOnly(path, options = {}) {
+  const expected = validateDurablePath(path, 'XR1F_RO_C3B');
 
-    const table = db.prepare(
-      "SELECT sql FROM sqlite_master WHERE type='table' AND name='invoices'",
-    ).get();
-    if (!table?.sql) throw new Error('XR1F_RO_C3B_INVOICES_TABLE_MISSING');
+  requireQuickCheck(expected, 'XR1F_RO_C3B', options);
 
-    requireColumns(
-      tableColumns(db, 'invoices'),
-      [
-        'invoice_hash',
-        'nonce',
-        'resource_hash',
-        'amount_sats',
-        'pay_to',
-        'network',
-        'scheme',
-        'issued_at',
-        'expires_at',
-        'state',
-        'settled_txid',
-        'settled_at',
-        'derivation_index',
-      ],
-      'XR1F_RO_C3B',
-    );
+  const table = runQuery(
+    expected,
+    "SELECT sql FROM sqlite_master WHERE type='table' AND name='invoices'",
+    options,
+  )[0];
+  if (!table?.sql) throw new Error('XR1F_RO_C3B_INVOICES_TABLE_MISSING');
 
-    const unique = uniqueIndexedColumns(db, 'invoices');
-    for (const column of [
+  requireColumns(
+    tableColumns(expected, 'invoices', options),
+    [
       'invoice_hash',
       'nonce',
+      'resource_hash',
+      'amount_sats',
       'pay_to',
-      'derivation_index',
+      'network',
+      'scheme',
+      'issued_at',
+      'expires_at',
+      'state',
       'settled_txid',
-    ]) {
-      if (!unique.has(column)) {
-        throw new Error(`XR1F_RO_C3B_UNIQUE_INDEX_MISSING_${column}`);
-      }
-    }
+      'settled_at',
+      'derivation_index',
+    ],
+    'XR1F_RO_C3B',
+  );
 
-    const journal = db.prepare('PRAGMA journal_mode').get()?.journal_mode;
-    if (String(journal).toLowerCase() !== 'wal') {
-      throw new Error('XR1F_RO_C3B_WAL_REQUIRED');
+  const unique = uniqueIndexedColumns(expected, 'invoices', options);
+  for (const column of [
+    'invoice_hash',
+    'nonce',
+    'pay_to',
+    'derivation_index',
+    'settled_txid',
+  ]) {
+    if (!unique.has(column)) {
+      throw new Error(`XR1F_RO_C3B_UNIQUE_INDEX_MISSING_${column}`);
     }
-
-    return Object.freeze({ ok: true, component: 'c3bStore' });
-  } finally {
-    db.close();
   }
+
+  requireWalHeader(expected, 'XR1F_RO_C3B');
+
+  return Object.freeze({ ok: true, component: 'c3bStore' });
 }
 
-export function probeXr1dStoreReadOnly(path) {
-  const db = openReadOnly(path, 'XR1F_RO_XR1D');
-  try {
-    requireQuickCheck(db, 'XR1F_RO_XR1D');
+export function probeXr1dStoreReadOnly(path, options = {}) {
+  const expected = validateDurablePath(path, 'XR1F_RO_XR1D');
 
-    const version = db.prepare('PRAGMA user_version').get()?.user_version;
-    if (version !== 1) throw new Error('XR1F_RO_XR1D_SCHEMA_VERSION_MISMATCH');
+  requireQuickCheck(expected, 'XR1F_RO_XR1D', options);
 
-    const table = db.prepare(
-      "SELECT sql FROM sqlite_master WHERE type='table' AND name='xr1_entitlements'",
-    ).get();
-    if (!table?.sql || !/\bSTRICT\b/i.test(table.sql)) {
-      throw new Error('XR1F_RO_XR1D_STRICT_TABLE_REQUIRED');
-    }
+  const version = runQuery(expected, 'PRAGMA user_version', options)[0]?.user_version;
+  if (version !== 1) throw new Error('XR1F_RO_XR1D_SCHEMA_VERSION_MISMATCH');
 
-    requireColumns(
-      tableColumns(db, 'xr1_entitlements'),
-      [
-        'entitlement_id',
-        'invoice_hash',
-        'txid',
-        'resource_id',
-        'resource_hash',
-        'granted_at',
-        'expires_at',
-        'status',
-      ],
-      'XR1F_RO_XR1D',
-    );
-
-    const triggerNames = new Set(
-      db.prepare(
-        "SELECT name FROM sqlite_master WHERE type='trigger' AND tbl_name='xr1_entitlements'",
-      ).all().map(row => row.name),
-    );
-    for (const trigger of [
-      'xr1_entitlements_insert_active_only',
-      'xr1_entitlements_immutable_binding',
-      'xr1_entitlements_status_transition',
-      'xr1_entitlements_no_delete',
-    ]) {
-      if (!triggerNames.has(trigger)) {
-        throw new Error(`XR1F_RO_XR1D_TRIGGER_MISSING_${trigger}`);
-      }
-    }
-
-    const expiryIndex = db.prepare(
-      "SELECT sql FROM sqlite_master WHERE type='index' AND name='xr1_entitlements_active_expiry_idx'",
-    ).get();
-    if (!expiryIndex?.sql) {
-      throw new Error('XR1F_RO_XR1D_ACTIVE_EXPIRY_INDEX_MISSING');
-    }
-
-    return Object.freeze({ ok: true, component: 'xr1dStore' });
-  } finally {
-    db.close();
+  const table = runQuery(
+    expected,
+    "SELECT sql FROM sqlite_master WHERE type='table' AND name='xr1_entitlements'",
+    options,
+  )[0];
+  if (!table?.sql || !/\bSTRICT\b/i.test(table.sql)) {
+    throw new Error('XR1F_RO_XR1D_STRICT_TABLE_REQUIRED');
   }
+
+  requireColumns(
+    tableColumns(expected, 'xr1_entitlements', options),
+    [
+      'entitlement_id',
+      'invoice_hash',
+      'txid',
+      'resource_id',
+      'resource_hash',
+      'granted_at',
+      'expires_at',
+      'status',
+    ],
+    'XR1F_RO_XR1D',
+  );
+
+  const triggerNames = new Set(
+    runQuery(
+      expected,
+      "SELECT name FROM sqlite_master WHERE type='trigger' AND tbl_name='xr1_entitlements'",
+      options,
+    ).map(row => row.name),
+  );
+  for (const trigger of [
+    'xr1_entitlements_insert_active_only',
+    'xr1_entitlements_immutable_binding',
+    'xr1_entitlements_status_transition',
+    'xr1_entitlements_no_delete',
+  ]) {
+    if (!triggerNames.has(trigger)) {
+      throw new Error(`XR1F_RO_XR1D_TRIGGER_MISSING_${trigger}`);
+    }
+  }
+
+  const expiryIndex = runQuery(
+    expected,
+    "SELECT sql FROM sqlite_master WHERE type='index' AND name='xr1_entitlements_active_expiry_idx'",
+    options,
+  )[0];
+  if (!expiryIndex?.sql) {
+    throw new Error('XR1F_RO_XR1D_ACTIVE_EXPIRY_INDEX_MISSING');
+  }
+
+  return Object.freeze({ ok: true, component: 'xr1dStore' });
 }
 
 function validateChronikTx(tx, expectedTxid) {
