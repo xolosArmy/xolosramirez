@@ -185,8 +185,11 @@ export function bindAllocator({ db, allocator, boundAt }) {
     );
   }
 
+  let transactionOwned = false;
+
   try {
     db.exec('BEGIN IMMEDIATE');
+    transactionOwned = true;
 
     const raced = getExistingBinding(db);
     if (raced) {
@@ -198,6 +201,7 @@ export function bindAllocator({ db, allocator, boundAt }) {
       }
 
       db.exec('COMMIT');
+      transactionOwned = false;
       return Object.freeze({
         ok: true,
         status: 'BOUND',
@@ -224,6 +228,7 @@ export function bindAllocator({ db, allocator, boundAt }) {
     );
 
     db.exec('COMMIT');
+    transactionOwned = false;
 
     return Object.freeze({
       ok: true,
@@ -240,7 +245,9 @@ export function bindAllocator({ db, allocator, boundAt }) {
       }),
     });
   } catch (error) {
-    try { db.exec('ROLLBACK'); } catch {}
+    if (transactionOwned === true) {
+      try { db.exec('ROLLBACK'); } catch {}
+    }
 
     if (error instanceof Xr1fL1BindingError) throw error;
 
