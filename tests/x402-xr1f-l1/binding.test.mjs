@@ -1,6 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import {
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
@@ -8,6 +14,7 @@ import { DatabaseSync } from 'node:sqlite';
 import {
   Xr1fL1AllocatorError,
   createWatchOnlyAllocator,
+  loadPinnedX402AllocatorImplementation,
 } from '../../src/x402-xr1f-l1/allocator.mjs';
 import {
   Xr1fL1BindingError,
@@ -24,21 +31,99 @@ const MIGRATION = new URL(
 const XPUB_A =
   'xpub661MyMwAqRbcEtUEgdXRTY6dJQG9fRgs7C5QomqETKMYBJVtSGpRqyHSmhWy8snovPd5oWZgQ14zUquxbxu7Z1umuXbN5VDpUL1QobD5xUY';
 
-const XPUB_B =
-  'xpub661MyMwAqRbcFdifferentWatchOnlyPublicIdentityForBindingMismatch123456789ABCDEFG';
+const VALID_ADDRESS =
+  'ecash:qqg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyquz9y96w';
 
-function fakeFactory() {
-  return {
-    deriveAddress(index) {
-      return `ecash:q${String(index).padStart(41, '0')}`;
-    },
-  };
+const BASE58 =
+  '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+
+function base58Decode(value) {
+  const map = new Map([...BASE58].map((char, index) => [char, index]));
+  let n = 0n;
+  for (const char of value) {
+    n = n * 58n + BigInt(map.get(char));
+  }
+  let hex = n.toString(16);
+  if (hex.length % 2 !== 0) hex = `0${hex}`;
+  let bytes = Buffer.from(hex, 'hex');
+  let leading = 0;
+  while (leading < value.length && value[leading] === '1') leading += 1;
+  if (leading) bytes = Buffer.concat([Buffer.alloc(leading), bytes]);
+  return bytes;
 }
+
+function base58Encode(bytes) {
+  let n = BigInt(`0x${bytes.toString('hex') || '0'}`);
+  let out = '';
+  while (n > 0n) {
+    const mod = Number(n % 58n);
+    out = BASE58[mod] + out;
+    n /= 58n;
+  }
+  let leading = 0;
+  while (leading < bytes.length && bytes[leading] === 0) leading += 1;
+  return '1'.repeat(leading) + out;
+}
+
+function secondValidXpub() {
+  const decoded = base58Decode(XPUB_A);
+  const payload = Buffer.from(decoded.subarray(0, 78));
+
+  // Change only chain code; public key and mainnet xpub version remain valid.
+  payload[13] ^= 0x01;
+
+  const checksum = createHash('sha256')
+    .update(
+      createHash('sha256').update(payload).digest(),
+    )
+    .digest()
+    .subarray(0, 4);
+
+  return base58Encode(Buffer.concat([payload, checksum]));
+}
+
+const XPUB_B = secondValidXpub();
+
+const moduleDir = mkdtempSync(join(tmpdir(), 'xr1f-l1-binding-module-'));
+const modulePath = join(moduleDir, 'index.mjs');
+writeFileSync(
+  modulePath,
+  `
+    export function createXpubPayToAllocator(xpub) {
+      if (typeof xpub !== 'string' || !xpub.startsWith('xpub')) {
+        throw new TypeError('bad xpub');
+      }
+      return {
+        deriveAddress() {
+          return '${VALID_ADDRESS}';
+        }
+      };
+    }
+
+    export function decodeCashAddress(address) {
+      if (address !== '${VALID_ADDRESS}') throw new TypeError('invalid');
+      return { prefix: 'ecash', type: 0, hash: '11'.repeat(20) };
+    }
+  `,
+);
+const moduleSha256 = createHash('sha256')
+  .update(readFileSync(modulePath))
+  .digest('hex');
+
+const PINNED_IMPLEMENTATION =
+  await loadPinnedX402AllocatorImplementation({
+    modulePath,
+    expectedSha256: moduleSha256,
+  });
+
+test.after(() => {
+  rmSync(moduleDir, { recursive: true, force: true });
+});
 
 function allocator(xpub = XPUB_A) {
   return createWatchOnlyAllocator({
     merchantXpub: xpub,
-    createUpstreamAllocator: fakeFactory,
+    pinnedImplementation: PINNED_IMPLEMENTATION,
   });
 }
 
@@ -155,11 +240,12 @@ test('3. same allocator binding is idempotent and preserves original boundAt', (
   });
 });
 
-test('4. different allocator identity cannot replace an existing binding', () => {
+test('4. different valid allocator identity cannot replace an existing binding', () => {
   withDb(db => {
     const a = allocator(XPUB_A);
     const b = allocator(XPUB_B);
 
+    assert.notEqual(a.allocatorId, b.allocatorId);
     bindAllocator({ db, allocator: a, boundAt: 1 });
 
     expectBindingError(
@@ -218,7 +304,7 @@ test('7. pre-existing invoice history without binding is never adopted automatic
         'historical_nonce',
         'b'.repeat(64),
         '1000',
-        'ecash:qhistorical0000000000000000000000000000000',
+        VALID_ADDRESS,
         'xec:mainnet',
         'exact',
         100,
@@ -306,7 +392,7 @@ test('10. invalid boundAt values never create binding evidence', () => {
   });
 });
 
-test('11. binding write failure rolls back and leaves store UNBOUND', () => {
+test('11. allocator-owned write failure rolls back its own transaction only', () => {
   withDb(db => {
     db.exec(`
       CREATE TRIGGER xr1f_l1_test_abort_insert
@@ -326,11 +412,39 @@ test('11. binding write failure rolls back and leaves store UNBOUND', () => {
       'XR1F_L1_BINDING_WRITE_FAILED',
     );
 
+    assert.equal(db.isTransaction, false);
     assert.equal(readAllocatorBinding(db).status, 'UNBOUND');
   });
 });
 
-test('12. durable binding survives database close and reopen', () => {
+test('12. caller-owned transaction is never rolled back by bindAllocator', () => {
+  withDb(db => {
+    db.exec('CREATE TABLE caller_state (value TEXT NOT NULL)');
+    db.exec('BEGIN IMMEDIATE');
+    db.prepare('INSERT INTO caller_state(value) VALUES (?)').run('keep-me');
+
+    assert.equal(db.isTransaction, true);
+
+    expectBindingError(
+      () =>
+        bindAllocator({
+          db,
+          allocator: allocator(),
+          boundAt: 1,
+        }),
+      'XR1F_L1_BINDING_WRITE_FAILED',
+    );
+
+    assert.equal(db.isTransaction, true);
+    const row = db.prepare('SELECT value FROM caller_state').get();
+    assert.equal(row.value, 'keep-me');
+
+    db.exec('ROLLBACK');
+    assert.equal(db.isTransaction, false);
+  });
+});
+
+test('13. durable binding survives database close and reopen', () => {
   const dir = mkdtempSync(join(tmpdir(), 'xr1f-l1-binding-restart-'));
   const path = join(dir, 'c3b.sqlite');
   const a = allocator();
@@ -355,7 +469,7 @@ test('12. durable binding survives database close and reopen', () => {
   }
 });
 
-test('13. database triggers prevent post-binding mutation and deletion', () => {
+test('14. database triggers prevent post-binding mutation and deletion', () => {
   withDb(db => {
     bindAllocator({
       db,
@@ -381,7 +495,7 @@ test('13. database triggers prevent post-binding mutation and deletion', () => {
   });
 });
 
-test('14. binding rejects allocator objects carrying spend authority', () => {
+test('15. forged allocator object carrying spend authority cannot reach binding', () => {
   withDb(db => {
     const valid = allocator();
     const forged = {
@@ -398,34 +512,23 @@ test('14. binding rejects allocator objects carrying spend authority', () => {
         }),
       error =>
         error instanceof Xr1fL1AllocatorError &&
-        error.code === 'XR1F_L1_SPEND_CAPABILITY_FORBIDDEN',
+        error.code === 'XR1F_L1_ALLOCATOR_REQUIRED',
     );
 
     assert.equal(readAllocatorBinding(db).status, 'UNBOUND');
   });
 });
 
-test('15. binding ceremony does not derive addresses or issue invoices', () => {
+test('16. binding ceremony does not derive addresses or issue invoices', () => {
   withDb(
     db => {
-      let derivations = 0;
-      const a = createWatchOnlyAllocator({
-        merchantXpub: XPUB_A,
-        createUpstreamAllocator: () => ({
-          deriveAddress(index) {
-            derivations += 1;
-            return `ecash:q${String(index).padStart(41, '0')}`;
-          },
-        }),
-      });
+      const a = allocator();
 
       bindAllocator({
         db,
         allocator: a,
         boundAt: 1,
       });
-
-      assert.equal(derivations, 0);
 
       const invoices = db.prepare(
         'SELECT COUNT(*) AS n FROM invoices',
