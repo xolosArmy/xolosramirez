@@ -1,0 +1,44 @@
+name: X402-XR1F-L1 watch-only allocator verification
+
+on:
+  pull_request:
+    paths:
+      - 'src/x402-xr1f-l1/**'
+      - 'tests/x402-xr1f-l1/**'
+      - 'package.json'
+      - '.github/workflows/x402-xr1f-l1.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/x402-xr1f-l1/**'
+      - 'tests/x402-xr1f-l1/**'
+      - 'package.json'
+      - '.github/workflows/x402-xr1f-l1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  xr1f-l1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci --ignore-scripts
+
+      - name: Run XR1F-L1 allocator and binding suite
+        run: npm run test:x402-xr1f-l1
+
+      - name: Run XR1F boundary regressions
+        run: npm run test:x402-xr1f
+
+      - name: Run XR1F-RO regressions
+        run: npm run test:xr1f-ro
