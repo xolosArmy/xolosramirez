@@ -1,6 +1,7 @@
 name: X402-XR1F-L1 watch-only allocator verification
 
 on:
+  workflow_dispatch:
   pull_request:
     paths:
       - 'src/x402-xr1f-l1/**'
