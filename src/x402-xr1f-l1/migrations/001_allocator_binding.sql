@@ -36,9 +36,8 @@ CREATE TABLE xr1f_l1_allocator_binding (
 
   x402_xec_commit TEXT NOT NULL
     CHECK(
-      length(x402_xec_commit) = 40
-      AND x402_xec_commit = lower(x402_xec_commit)
-      AND x402_xec_commit NOT GLOB '*[^0-9a-f]*'
+      x402_xec_commit =
+        '0f409dea2959b397ecc4bb84d71519ec6e3aec04'
     ),
 
   bound_at INTEGER NOT NULL
