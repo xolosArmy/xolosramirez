@@ -84,6 +84,8 @@ jobs:
         run: npm run test:x402-xr1f-l1
 
       - name: Run XR1F boundary regressions
+        env:
+          XR1F_L1_CANONICAL_MODULE_PATH: ${{ github.workspace }}/.xr1f-l1-upstream/packages/x402-xec-core/dist/index.js
         run: npm run test:x402-xr1f
 
       - name: Run XR1F-RO regressions
