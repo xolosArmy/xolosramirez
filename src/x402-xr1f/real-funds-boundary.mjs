@@ -1,3 +1,6 @@
+import { assertWatchOnlyAllocator } from '../x402-xr1f-l1/allocator.mjs';
+import { assertAllocatorBinding } from '../x402-xr1f-l1/binding.mjs';
+
 export const XR1F_MODE = Object.freeze({
   CONTROLLED: 'CONTROLLED',
   REAL_FUNDS: 'REAL_FUNDS',
@@ -74,13 +77,32 @@ export function assertRealFundsBoundary(config) {
     );
   }
 
-  if (
-    !config.payToAllocator ||
-    typeof config.payToAllocator.allocate !== 'function'
-  ) {
+  try {
+    assertWatchOnlyAllocator(config.payToAllocator);
+  } catch {
     fail(
       'XR1F_PAYTO_ALLOCATOR_REQUIRED',
-      'Real funds require a watch-only unique payTo allocator',
+      'Real-funds boundary requires an authenticated XR1F-L1 watch-only allocator',
+    );
+  }
+
+  if (
+    !config.c3bDb ||
+    typeof config.c3bDb.prepare !== 'function' ||
+    typeof config.c3bDb.exec !== 'function'
+  ) {
+    fail(
+      'XR1F_C3B_DB_REQUIRED',
+      'Real-funds boundary requires the authoritative C3B SQLite handle for allocator binding verification',
+    );
+  }
+
+  try {
+    assertAllocatorBinding(config.c3bDb, config.payToAllocator);
+  } catch {
+    fail(
+      'XR1F_PAYTO_BINDING_REQUIRED',
+      'Real-funds boundary requires the authenticated allocator to match the durable C3B binding',
     );
   }
 
@@ -149,6 +171,12 @@ export function assertRealFundsBoundary(config) {
     mode: XR1F_MODE.REAL_FUNDS,
     approvalId: config.authorization.approvalId,
     production: true,
+    allocatorAuthenticated: true,
+    allocatorBindingVerified: true,
+    realFundsAuthorized: false,
+    invoiceIssuanceAuthorized: false,
+    signingAuthorized: false,
+    broadcastAuthorized: false,
   });
 }
 
