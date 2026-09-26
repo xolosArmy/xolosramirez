@@ -14,7 +14,7 @@
 
 BEGIN IMMEDIATE;
 
-CREATE TABLE xr1f_l1_allocator_binding (
+CREATE TABLE main.xr1f_l1_allocator_binding (
   binding_id INTEGER PRIMARY KEY
     CHECK(binding_id = 1),
 
@@ -49,16 +49,16 @@ CREATE TABLE xr1f_l1_allocator_binding (
 
 -- Once the production watch-only allocator identity is bound, it is immutable.
 -- Rotation/replacement must use a separately reviewed future migration/gate.
-CREATE TRIGGER xr1f_l1_allocator_binding_no_update
-BEFORE UPDATE ON xr1f_l1_allocator_binding
+CREATE TRIGGER main.xr1f_l1_allocator_binding_no_update
+BEFORE UPDATE ON main.xr1f_l1_allocator_binding
 FOR EACH ROW
 BEGIN
   SELECT RAISE(ABORT, 'XR1F_L1_ALLOCATOR_BINDING_IMMUTABLE');
 END;
 
 -- Binding evidence is retained permanently for audit/replay defense.
-CREATE TRIGGER xr1f_l1_allocator_binding_no_delete
-BEFORE DELETE ON xr1f_l1_allocator_binding
+CREATE TRIGGER main.xr1f_l1_allocator_binding_no_delete
+BEFORE DELETE ON main.xr1f_l1_allocator_binding
 FOR EACH ROW
 BEGIN
   SELECT RAISE(ABORT, 'XR1F_L1_ALLOCATOR_BINDING_DELETE_FORBIDDEN');
