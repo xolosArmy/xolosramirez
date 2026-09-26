@@ -35,6 +35,25 @@ jobs:
 
       - run: npm ci --ignore-scripts
 
+      - name: Checkout canonical x402-XEC
+        uses: actions/checkout@v4
+        with:
+          repository: xolosArmy/x402-XEC
+          ref: 0f409dea2959b397ecc4bb84d71519ec6e3aec04
+          path: .xr1f-l1-upstream
+
+      - name: Build canonical x402-XEC core and report artifact SHA-256
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd .xr1f-l1-upstream
+          corepack enable
+          corepack prepare pnpm@10.28.0 --activate
+          pnpm install --frozen-lockfile
+          pnpm --filter @x402-xec/core build
+          printf 'XR1F_L1_CANONICAL_CORE_INDEX_SHA256='
+          sha256sum packages/x402-xec-core/dist/index.js | awk '{print $1}'
+
       - name: Run XR1F-L1 allocator and binding suite
         run: npm run test:x402-xr1f-l1
 
