@@ -62,14 +62,14 @@ function insertBinding(db, overrides = {}) {
 test('1. migration creates one STRICT allocator-binding table and canonical triggers', () => {
   withDb(db => {
     const table = db.prepare(
-      "SELECT sql FROM sqlite_master WHERE type='table' AND name='xr1f_l1_allocator_binding'",
+      "SELECT sql FROM main.sqlite_master WHERE type='table' AND name='xr1f_l1_allocator_binding'",
     ).get();
     assert.ok(table?.sql);
     assert.match(table.sql, /\bSTRICT\b/i);
 
     const triggers = new Set(
       db.prepare(
-        "SELECT name FROM sqlite_master WHERE type='trigger' AND tbl_name='xr1f_l1_allocator_binding'",
+        "SELECT name FROM main.sqlite_master WHERE type='trigger' AND tbl_name='xr1f_l1_allocator_binding'",
       ).all().map(row => row.name),
     );
 
@@ -88,7 +88,7 @@ test('2. canonical watch-only binding can be inserted exactly once', () => {
     insertBinding(db);
 
     const row = db.prepare(
-      'SELECT * FROM xr1f_l1_allocator_binding WHERE binding_id = 1',
+      'SELECT * FROM main.xr1f_l1_allocator_binding WHERE binding_id = 1',
     ).get();
 
     assert.equal(row.schema_version, 1);
@@ -121,14 +121,14 @@ test('4. binding evidence is immutable and undeletable', () => {
 
     assert.throws(() =>
       db.prepare(
-        'UPDATE xr1f_l1_allocator_binding SET bound_at = ? WHERE binding_id = 1',
+        'UPDATE main.xr1f_l1_allocator_binding SET bound_at = ? WHERE binding_id = 1',
       ).run(1_797_000_001),
       /XR1F_L1_ALLOCATOR_BINDING_IMMUTABLE/,
     );
 
     assert.throws(() =>
       db.prepare(
-        'DELETE FROM xr1f_l1_allocator_binding WHERE binding_id = 1',
+        'DELETE FROM main.xr1f_l1_allocator_binding WHERE binding_id = 1',
       ).run(),
       /XR1F_L1_ALLOCATOR_BINDING_DELETE_FORBIDDEN/,
     );
@@ -138,7 +138,7 @@ test('4. binding evidence is immutable and undeletable', () => {
 test('5. migration performs no allocator binding or invoice issuance by itself', () => {
   withDb(db => {
     const count = db.prepare(
-      'SELECT COUNT(*) AS n FROM xr1f_l1_allocator_binding',
+      'SELECT COUNT(*) AS n FROM main.xr1f_l1_allocator_binding',
     ).get().n;
 
     assert.equal(Number(count), 0);
