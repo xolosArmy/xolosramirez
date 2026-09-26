@@ -514,3 +514,103 @@ canonicalTest('16. binding ceremony does not derive addresses or issue invoices'
     { invoices: true },
   );
 });
+
+
+canonicalTest('17. TEMP allocator-binding table cannot shadow durable main binding evidence', () => {
+  withDb(db => {
+    const a = allocator();
+
+    db.exec(`
+      CREATE TEMP TABLE xr1f_l1_allocator_binding (
+        binding_id INTEGER PRIMARY KEY,
+        schema_version INTEGER NOT NULL,
+        allocator_kind TEXT NOT NULL,
+        allocator_id TEXT NOT NULL,
+        network TEXT NOT NULL,
+        x402_xec_commit TEXT NOT NULL,
+        bound_at INTEGER NOT NULL
+      );
+    `);
+
+    db.prepare(`
+      INSERT INTO temp.xr1f_l1_allocator_binding (
+        binding_id, schema_version, allocator_kind, allocator_id,
+        network, x402_xec_commit, bound_at
+      ) VALUES (1, 1, ?, ?, ?, ?, ?)
+    `).run(
+      a.kind,
+      a.allocatorId,
+      a.network,
+      a.x402Commit,
+      123,
+    );
+
+    // Runtime reads are explicitly qualified to main, so TEMP evidence
+    // cannot make an unbound durable store appear bound.
+    assert.equal(readAllocatorBinding(db).status, 'UNBOUND');
+
+    const bound = bindAllocator({
+      db,
+      allocator: a,
+      boundAt: 456,
+    });
+    assert.equal(bound.idempotent, false);
+    assert.equal(bound.binding.boundAt, 456);
+
+    const mainRow = db.prepare(
+      'SELECT bound_at FROM main.xr1f_l1_allocator_binding WHERE binding_id = 1',
+    ).get();
+    const tempRow = db.prepare(
+      'SELECT bound_at FROM temp.xr1f_l1_allocator_binding WHERE binding_id = 1',
+    ).get();
+
+    assert.equal(Number(mainRow.bound_at), 456);
+    assert.equal(Number(tempRow.bound_at), 123);
+  });
+});
+
+canonicalTest('18. TEMP invoices table cannot hide durable main invoice history', () => {
+  withDb(
+    db => {
+      const a = allocator();
+
+      db.prepare(`
+        INSERT INTO main.invoices (
+          invoice_hash, nonce, resource_hash, amount_sats, pay_to,
+          network, scheme, issued_at, expires_at, state, derivation_index
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).run(
+        'd'.repeat(64),
+        'durable_history_nonce',
+        'e'.repeat(64),
+        '1000',
+        a.deriveAddress(7),
+        'xec:mainnet',
+        'exact',
+        100,
+        200,
+        'ISSUED',
+        7,
+      );
+
+      db.exec(`
+        CREATE TEMP TABLE invoices (
+          invoice_hash TEXT PRIMARY KEY
+        );
+      `);
+
+      expectBindingError(
+        () =>
+          bindAllocator({
+            db,
+            allocator: a,
+            boundAt: 999,
+          }),
+        'XR1F_L1_UNBOUND_HISTORY',
+      );
+
+      assert.equal(readAllocatorBinding(db).status, 'UNBOUND');
+    },
+    { invoices: true },
+  );
+});
