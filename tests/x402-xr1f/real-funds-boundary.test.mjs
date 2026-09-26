@@ -56,7 +56,6 @@ function baseConfig(overrides = {}) {
     allowInsecureDevelopmentMode: false,
     c3bStore: { isDurable: true },
     payToAllocator: null,
-    c3bDb: null,
     txProvider: { async getTx() {} },
     xr1dStore: {
       isDurable: true,
@@ -93,8 +92,12 @@ function withCanonicalConfig(fn, overrides = {}) {
     });
 
     const config = baseConfig({
+      c3bStore: {
+        isDurable: true,
+        db: c3bDb,
+        databasePath: dbPath,
+      },
       payToAllocator,
-      c3bDb,
       ...overrides,
     });
 
@@ -179,10 +182,6 @@ test('6. generic allocate() object is rejected; authenticated L1 allocator is re
       assertRealFundsBoundary(
         baseConfig({
           payToAllocator: { allocate() {} },
-          c3bDb: {
-            prepare() {},
-            exec() {},
-          },
         }),
       ),
     error =>
@@ -191,25 +190,35 @@ test('6. generic allocate() object is rejected; authenticated L1 allocator is re
   );
 });
 
-canonicalTest('7. authenticated allocator must be durably bound to the authoritative C3B database', () => {
+canonicalTest('7. allocator binding is verified only through the durable C3B store handle', () => {
   withCanonicalConfig((config, { payToAllocator }) => {
-    const otherDir = mkdtempSync(join(tmpdir(), 'xr1f-boundary-unbound-'));
+    const otherDir = mkdtempSync(join(tmpdir(), 'xr1f-boundary-detached-'));
     const otherPath = join(otherDir, 'c3b.sqlite');
     const otherDb = new DatabaseSync(otherPath);
 
     try {
       otherDb.exec(readFileSync(MIGRATION, 'utf8'));
+      bindAllocator({
+        db: otherDb,
+        allocator: payToAllocator,
+        boundAt: 1_797_000_001,
+      });
 
       assert.throws(
         () =>
           assertRealFundsBoundary({
             ...config,
-            payToAllocator,
-            c3bDb: otherDb,
+            c3bStore: {
+              ...config.c3bStore,
+              db: otherDb,
+              // Keep the durable store identity pointing at the authoritative
+              // invoice file, proving a detached bound DB cannot substitute.
+              databasePath: config.c3bStore.databasePath,
+            },
           }),
         error =>
           error instanceof Xr1fBoundaryError &&
-          error.code === 'XR1F_PAYTO_BINDING_REQUIRED',
+          error.code === 'XR1F_C3B_STORE_IDENTITY_MISMATCH',
       );
     } finally {
       try { otherDb.close(); } catch {}
@@ -218,17 +227,36 @@ canonicalTest('7. authenticated allocator must be durably bound to the authorita
   });
 });
 
-canonicalTest('8. authoritative C3B SQLite handle is mandatory', () => {
+canonicalTest('8. detached config.c3bDb is explicitly forbidden', () => {
   withCanonicalConfig(config => {
     assert.throws(
       () =>
         assertRealFundsBoundary({
           ...config,
-          c3bDb: null,
+          c3bDb: config.c3bStore.db,
         }),
       error =>
         error instanceof Xr1fBoundaryError &&
-        error.code === 'XR1F_C3B_DB_REQUIRED',
+        error.code === 'XR1F_DETACHED_C3B_DB_FORBIDDEN',
+    );
+  });
+});
+
+canonicalTest('8b. durable C3B store must expose a verifiable authoritative SQLite identity', () => {
+  withCanonicalConfig(config => {
+    assert.throws(
+      () =>
+        assertRealFundsBoundary({
+          ...config,
+          c3bStore: {
+            isDurable: true,
+            db: config.c3bStore.db,
+            databasePath: '',
+          },
+        }),
+      error =>
+        error instanceof Xr1fBoundaryError &&
+        error.code === 'XR1F_C3B_STORE_IDENTITY_REQUIRED',
     );
   });
 });
