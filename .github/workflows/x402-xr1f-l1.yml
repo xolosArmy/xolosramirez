@@ -53,13 +53,13 @@ jobs:
           pnpm --filter @x402-xec/core build
           HASH="$(sha256sum packages/x402-xec-core/dist/index.js | awk '{print $1}')"
           printf 'XR1F_L1_CANONICAL_CORE_INDEX_SHA256=%s\n' "$HASH"
-          printf '%s\n' "$HASH" > ../xr1f-l1-canonical-core-index.sha256
+          printf '%s\n' "$HASH" > "$GITHUB_WORKSPACE/xr1f-l1-canonical-core-index.sha256"
 
       - name: Publish canonical allocator artifact hash
         uses: actions/upload-artifact@v4
         with:
           name: xr1f-l1-canonical-core-index-sha256
-          path: .xr1f-l1-upstream/../xr1f-l1-canonical-core-index.sha256
+          path: xr1f-l1-canonical-core-index.sha256
           if-no-files-found: error
 
       - name: Run XR1F-L1 allocator and binding suite
