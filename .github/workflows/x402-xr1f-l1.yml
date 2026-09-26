@@ -5,7 +5,9 @@ on:
   pull_request:
     paths:
       - 'src/x402-xr1f-l1/**'
+      - 'src/x402-xr1f/**'
       - 'tests/x402-xr1f-l1/**'
+      - 'tests/x402-xr1f/**'
       - 'package.json'
       - '.github/workflows/x402-xr1f-l1.yml'
   push:
@@ -13,7 +15,9 @@ on:
       - main
     paths:
       - 'src/x402-xr1f-l1/**'
+      - 'src/x402-xr1f/**'
       - 'tests/x402-xr1f-l1/**'
+      - 'tests/x402-xr1f/**'
       - 'package.json'
       - '.github/workflows/x402-xr1f-l1.yml'
 
