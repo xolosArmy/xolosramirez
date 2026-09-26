@@ -149,27 +149,27 @@ test('4. real funds require production and forbid insecure development mode', ()
   );
 });
 
-test('5. real funds require durable C3B and durable XR1D stores', () => {
+test('5. real funds require durable C3B store', () => {
   assert.throws(
     () => assertRealFundsBoundary(baseConfig({ c3bStore: { isDurable: false } })),
     error =>
       error instanceof Xr1fBoundaryError &&
       error.code === 'XR1F_DURABLE_C3B_STORE_REQUIRED',
   );
+});
 
-  canonicalTest('5b. durable XR1D remains mandatory after L1 allocator verification', () => {
-    withCanonicalConfig(config => {
-      assert.throws(
-        () =>
-          assertRealFundsBoundary({
-            ...config,
-            xr1dStore: { isDurable: false },
-          }),
-        error =>
-          error instanceof Xr1fBoundaryError &&
-          error.code === 'XR1F_DURABLE_XR1D_REQUIRED',
-      );
-    });
+canonicalTest('5b. durable XR1D remains mandatory after L1 allocator verification', () => {
+  withCanonicalConfig(config => {
+    assert.throws(
+      () =>
+        assertRealFundsBoundary({
+          ...config,
+          xr1dStore: { isDurable: false },
+        }),
+      error =>
+        error instanceof Xr1fBoundaryError &&
+        error.code === 'XR1F_DURABLE_XR1D_REQUIRED',
+    );
   });
 });
 
