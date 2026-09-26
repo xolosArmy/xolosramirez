@@ -5,15 +5,20 @@ import {
 import {
   lstatSync,
   readFileSync,
+  readdirSync,
   realpathSync,
 } from 'node:fs';
-import { resolve } from 'node:path';
+import { basename, dirname, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 export const XR1F_L1_ALLOCATOR_KIND = 'X402_XEC_XPUB_V1';
 export const XR1F_L1_NETWORK = 'xec:mainnet';
 export const CANONICAL_X402_XEC_COMMIT =
   '0f409dea2959b397ecc4bb84d71519ec6e3aec04';
+export const CANONICAL_X402_XEC_CORE_DIST_SHA256 =
+  'd14608db556875bd90221d9953f0703207e0fd11dc6db984937b717c15930f57';
+export const CANONICAL_X402_XEC_CORE_INDEX_SHA256 =
+  '2808191f97ecfb026c4c40bc3c4ccdf17028aaf34dd44038877547a0973f7782';
 
 const ALLOCATOR_ID_DOMAIN = 'xr1f-l1/xpub/v1\0';
 const MAX_NON_HARDENED_INDEX = 0x80000000;
@@ -179,13 +184,6 @@ function assertNoSpendCapability(value) {
   }
 }
 
-function assertSha256Hex(value, code, message) {
-  if (typeof value !== 'string' || !/^[0-9a-f]{64}$/.test(value)) {
-    fail(code, message);
-  }
-  return value;
-}
-
 function resolveRegularFile(path, code) {
   if (typeof path !== 'string' || path.trim() === '') {
     fail(code, 'Pinned implementation path is required');
@@ -210,44 +208,111 @@ function resolveRegularFile(path, code) {
   return expected;
 }
 
-export async function loadPinnedX402AllocatorImplementation({
-  modulePath,
-  expectedSha256,
-  x402Commit = CANONICAL_X402_XEC_COMMIT,
-}) {
-  if (x402Commit !== CANONICAL_X402_XEC_COMMIT) {
-    fail('XR1F_L1_X402_PIN_MISMATCH', 'x402-XEC commit is not canonical');
+function computeDistTreeDigest(distDir) {
+  let entries;
+  try {
+    entries = readdirSync(distDir, { withFileTypes: true })
+      .filter(entry => entry.isFile() && entry.name.endsWith('.js'))
+      .map(entry => entry.name)
+      .sort();
+  } catch {
+    fail(
+      'XR1F_L1_IMPLEMENTATION_PATH_INVALID',
+      'Canonical x402-XEC dist directory is unavailable',
+    );
   }
 
-  const expectedHash = assertSha256Hex(
-    expectedSha256,
-    'XR1F_L1_IMPLEMENTATION_SHA256_INVALID',
-    'Pinned implementation SHA-256 is invalid',
-  );
+  if (entries.length === 0) {
+    fail(
+      'XR1F_L1_IMPLEMENTATION_INTEGRITY_MISMATCH',
+      'Canonical x402-XEC dist directory contains no JavaScript artifacts',
+    );
+  }
 
+  const lines = [];
+  for (const name of entries) {
+    const path = resolve(distDir, name);
+    let stat;
+    try {
+      stat = lstatSync(path);
+    } catch {
+      fail(
+        'XR1F_L1_IMPLEMENTATION_INTEGRITY_MISMATCH',
+        'Canonical x402-XEC dist artifact disappeared during verification',
+      );
+    }
+
+    if (!stat.isFile() || stat.isSymbolicLink() || realpathSync(path) !== path) {
+      fail(
+        'XR1F_L1_IMPLEMENTATION_INTEGRITY_MISMATCH',
+        'Canonical x402-XEC dist artifacts must be regular non-symlink files',
+      );
+    }
+
+    const digest = createHash('sha256').update(readFileSync(path)).digest('hex');
+    lines.push(`${digest}  ./${name}\n`);
+  }
+
+  const manifest = lines.join('');
+  return Object.freeze({
+    digest: createHash('sha256').update(manifest, 'utf8').digest('hex'),
+    manifest,
+  });
+}
+
+export async function loadPinnedX402AllocatorImplementation({
+  modulePath,
+}) {
   const resolvedPath = resolveRegularFile(
     modulePath,
     'XR1F_L1_IMPLEMENTATION_PATH_INVALID',
   );
-  const bytes = readFileSync(resolvedPath);
-  const actualHash = createHash('sha256').update(bytes).digest('hex');
 
-  if (actualHash !== expectedHash) {
+  if (basename(resolvedPath) !== 'index.js') {
+    fail(
+      'XR1F_L1_IMPLEMENTATION_PATH_INVALID',
+      'Pinned implementation must be canonical dist/index.js',
+    );
+  }
+
+  const distDir = dirname(resolvedPath);
+  const before = computeDistTreeDigest(distDir);
+  if (before.digest !== CANONICAL_X402_XEC_CORE_DIST_SHA256) {
     fail(
       'XR1F_L1_IMPLEMENTATION_INTEGRITY_MISMATCH',
-      'Pinned x402-XEC allocator implementation failed SHA-256 verification',
+      'x402-XEC core dist tree does not match the canonical reviewed build',
+    );
+  }
+
+  const indexHash = createHash('sha256')
+    .update(readFileSync(resolvedPath))
+    .digest('hex');
+  if (indexHash !== CANONICAL_X402_XEC_CORE_INDEX_SHA256) {
+    fail(
+      'XR1F_L1_IMPLEMENTATION_INTEGRITY_MISMATCH',
+      'x402-XEC core index artifact does not match the canonical reviewed build',
     );
   }
 
   let module;
   try {
     module = await import(
-      `${pathToFileURL(resolvedPath).href}?sha256=${actualHash}`
+      `${pathToFileURL(resolvedPath).href}?tree=${before.digest}`
     );
   } catch {
     fail(
       'XR1F_L1_IMPLEMENTATION_IMPORT_FAILED',
       'Pinned x402-XEC allocator implementation could not be imported',
+    );
+  }
+
+  // Re-hash after module evaluation. This fails closed if the dist tree was
+  // persistently replaced between pre-import verification and completion.
+  const after = computeDistTreeDigest(distDir);
+  if (after.digest !== before.digest) {
+    fail(
+      'XR1F_L1_IMPLEMENTATION_INTEGRITY_MISMATCH',
+      'x402-XEC core dist tree changed during module loading',
     );
   }
 
@@ -263,7 +328,8 @@ export async function loadPinnedX402AllocatorImplementation({
 
   const implementation = {
     x402Commit: CANONICAL_X402_XEC_COMMIT,
-    moduleSha256: actualHash,
+    moduleSha256: CANONICAL_X402_XEC_CORE_DIST_SHA256,
+    indexSha256: CANONICAL_X402_XEC_CORE_INDEX_SHA256,
     createXpubPayToAllocator: module.createXpubPayToAllocator,
     decodeCashAddress: module.decodeCashAddress,
   };
