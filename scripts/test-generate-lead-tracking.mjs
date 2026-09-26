@@ -401,7 +401,7 @@ for (const expectation of floatingPriceExpectations) {
 
   includes(
     cta,
-    'href="mailto:fernando@xolosramirez.com?subject=',
+    'href="mailto:contacto@xolosarmy.xyz?subject=',
     expectation.path + ' must open the primary email channel'
   );
 
