@@ -65,6 +65,9 @@ jobs:
           printf 'XR1F_L1_CANONICAL_CORE_DIST_SHA256=%s\n' "$TREE_HASH"
           printf '%s\n' "$TREE_HASH" > "$GITHUB_WORKSPACE/xr1f-l1-canonical-core-dist.sha256"
 
+          test "$HASH" = "2808191f97ecfb026c4c40bc3c4ccdf17028aaf34dd44038877547a0973f7782"
+          test "$TREE_HASH" = "d14608db556875bd90221d9953f0703207e0fd11dc6db984937b717c15930f57"
+
       - name: Publish canonical allocator artifact hash
         uses: actions/upload-artifact@v4
         with:
@@ -76,6 +79,8 @@ jobs:
           if-no-files-found: error
 
       - name: Run XR1F-L1 allocator and binding suite
+        env:
+          XR1F_L1_CANONICAL_MODULE_PATH: ${{ github.workspace }}/.xr1f-l1-upstream/packages/x402-xec-core/dist/index.js
         run: npm run test:x402-xr1f-l1
 
       - name: Run XR1F boundary regressions
