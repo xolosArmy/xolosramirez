@@ -38,18 +38,18 @@ function assertBoundAt(boundAt) {
 
 function getExistingBinding(db) {
   return db.prepare(
-    'SELECT binding_id, schema_version, allocator_kind, allocator_id, network, x402_xec_commit, bound_at FROM xr1f_l1_allocator_binding WHERE binding_id = 1',
+    'SELECT binding_id, schema_version, allocator_kind, allocator_id, network, x402_xec_commit, bound_at FROM main.xr1f_l1_allocator_binding WHERE binding_id = 1',
   ).get();
 }
 
 function countInvoiceHistory(db) {
   const invoicesTable = db.prepare(
-    "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'invoices'",
+    "SELECT name FROM main.sqlite_master WHERE type = 'table' AND name = 'invoices'",
   ).get();
 
   if (!invoicesTable) return 0;
 
-  const row = db.prepare('SELECT COUNT(*) AS n FROM invoices').get();
+  const row = db.prepare('SELECT COUNT(*) AS n FROM main.invoices').get();
   const count = Number(row?.n ?? 0);
   if (!Number.isSafeInteger(count) || count < 0) {
     fail(
@@ -218,7 +218,7 @@ export function bindAllocator({ db, allocator, boundAt }) {
     }
 
     db.prepare(
-      'INSERT INTO xr1f_l1_allocator_binding (binding_id, schema_version, allocator_kind, allocator_id, network, x402_xec_commit, bound_at) VALUES (1, 1, ?, ?, ?, ?, ?)',
+      'INSERT INTO main.xr1f_l1_allocator_binding (binding_id, schema_version, allocator_kind, allocator_id, network, x402_xec_commit, bound_at) VALUES (1, 1, ?, ?, ?, ?, ?)',
     ).run(
       XR1F_L1_ALLOCATOR_KIND,
       allocator.allocatorId,
