@@ -1,3 +1,7 @@
+import { assertWatchOnlyAllocator } from '../x402-xr1f-l1/allocator.mjs';
+import { assertAllocatorBinding } from '../x402-xr1f-l1/binding.mjs';
+import { resolve } from 'node:path';
+
 export const XR1F_MODE = Object.freeze({
   CONTROLLED: 'CONTROLLED',
   REAL_FUNDS: 'REAL_FUNDS',
@@ -26,6 +30,54 @@ function assertExplicitTrue(value, field) {
   if (value !== true) {
     fail('XR1F_NOT_AUTHORIZED', `${field} must be explicitly true`);
   }
+}
+
+function authoritativeC3bDb(store) {
+  if (
+    !store?.db ||
+    typeof store.db.prepare !== 'function' ||
+    typeof store.db.exec !== 'function'
+  ) {
+    fail(
+      'XR1F_C3B_DB_REQUIRED',
+      'Durable C3B store must expose its authoritative SQLite handle',
+    );
+  }
+
+  if (
+    typeof store.databasePath !== 'string' ||
+    store.databasePath.trim() === ''
+  ) {
+    fail(
+      'XR1F_C3B_STORE_IDENTITY_REQUIRED',
+      'Durable C3B store must expose its authoritative databasePath',
+    );
+  }
+
+  let rows;
+  try {
+    rows = store.db.prepare('PRAGMA database_list').all();
+  } catch {
+    fail(
+      'XR1F_C3B_STORE_IDENTITY_MISMATCH',
+      'Unable to verify durable C3B database identity',
+    );
+  }
+
+  const main = rows.find(row => row?.name === 'main');
+  if (
+    !main ||
+    typeof main.file !== 'string' ||
+    main.file.trim() === '' ||
+    resolve(main.file) !== resolve(store.databasePath)
+  ) {
+    fail(
+      'XR1F_C3B_STORE_IDENTITY_MISMATCH',
+      'Durable C3B store handle does not match its authoritative databasePath',
+    );
+  }
+
+  return store.db;
 }
 
 export function assertRealFundsBoundary(config) {
@@ -74,13 +126,30 @@ export function assertRealFundsBoundary(config) {
     );
   }
 
-  if (
-    !config.payToAllocator ||
-    typeof config.payToAllocator.allocate !== 'function'
-  ) {
+  try {
+    assertWatchOnlyAllocator(config.payToAllocator);
+  } catch {
     fail(
       'XR1F_PAYTO_ALLOCATOR_REQUIRED',
-      'Real funds require a watch-only unique payTo allocator',
+      'Real-funds boundary requires an authenticated XR1F-L1 watch-only allocator',
+    );
+  }
+
+  if (config.c3bDb !== undefined) {
+    fail(
+      'XR1F_DETACHED_C3B_DB_FORBIDDEN',
+      'Detached config.c3bDb is forbidden; binding verification must use c3bStore.db',
+    );
+  }
+
+  const c3bDb = authoritativeC3bDb(config.c3bStore);
+
+  try {
+    assertAllocatorBinding(c3bDb, config.payToAllocator);
+  } catch {
+    fail(
+      'XR1F_PAYTO_BINDING_REQUIRED',
+      'Real-funds boundary requires the authenticated allocator to match the durable C3B binding',
     );
   }
 
@@ -149,6 +218,12 @@ export function assertRealFundsBoundary(config) {
     mode: XR1F_MODE.REAL_FUNDS,
     approvalId: config.authorization.approvalId,
     production: true,
+    allocatorAuthenticated: true,
+    allocatorBindingVerified: true,
+    realFundsAuthorized: false,
+    invoiceIssuanceAuthorized: false,
+    signingAuthorized: false,
+    broadcastAuthorized: false,
   });
 }
 

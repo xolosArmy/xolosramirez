@@ -1,0 +1,96 @@
+name: X402-XR1F-L1 watch-only allocator verification
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'src/x402-xr1f-l1/**'
+      - 'src/x402-xr1f/**'
+      - 'tests/x402-xr1f-l1/**'
+      - 'tests/x402-xr1f/**'
+      - 'package.json'
+      - '.github/workflows/x402-xr1f-l1.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/x402-xr1f-l1/**'
+      - 'src/x402-xr1f/**'
+      - 'tests/x402-xr1f-l1/**'
+      - 'tests/x402-xr1f/**'
+      - 'package.json'
+      - '.github/workflows/x402-xr1f-l1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  xr1f-l1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci --ignore-scripts
+
+      - name: Checkout canonical x402-XEC
+        uses: actions/checkout@v4
+        with:
+          repository: xolosArmy/x402-XEC
+          ref: 0f409dea2959b397ecc4bb84d71519ec6e3aec04
+          path: .xr1f-l1-upstream
+
+      - name: Build canonical x402-XEC core and report artifact SHA-256
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd .xr1f-l1-upstream
+          corepack enable
+          corepack prepare pnpm@10.28.0 --activate
+          pnpm install --frozen-lockfile
+          pnpm --filter @x402-xec/core build
+          HASH="$(sha256sum packages/x402-xec-core/dist/index.js | awk '{print $1}')"
+          printf 'XR1F_L1_CANONICAL_CORE_INDEX_SHA256=%s\n' "$HASH"
+          printf '%s\n' "$HASH" > "$GITHUB_WORKSPACE/xr1f-l1-canonical-core-index.sha256"
+
+          (
+            cd packages/x402-xec-core/dist
+            find . -maxdepth 1 -type f -name '*.js' -print0 \
+              | sort -z \
+              | xargs -0 sha256sum
+          ) > "$GITHUB_WORKSPACE/xr1f-l1-canonical-core-dist.manifest"
+          TREE_HASH="$(sha256sum "$GITHUB_WORKSPACE/xr1f-l1-canonical-core-dist.manifest" | awk '{print $1}')"
+          printf 'XR1F_L1_CANONICAL_CORE_DIST_SHA256=%s\n' "$TREE_HASH"
+          printf '%s\n' "$TREE_HASH" > "$GITHUB_WORKSPACE/xr1f-l1-canonical-core-dist.sha256"
+
+          test "$HASH" = "2808191f97ecfb026c4c40bc3c4ccdf17028aaf34dd44038877547a0973f7782"
+          test "$TREE_HASH" = "d14608db556875bd90221d9953f0703207e0fd11dc6db984937b717c15930f57"
+
+      - name: Publish canonical allocator artifact hash
+        uses: actions/upload-artifact@v4
+        with:
+          name: xr1f-l1-canonical-core-integrity
+          path: |
+            xr1f-l1-canonical-core-index.sha256
+            xr1f-l1-canonical-core-dist.sha256
+            xr1f-l1-canonical-core-dist.manifest
+          if-no-files-found: error
+
+      - name: Run XR1F-L1 allocator and binding suite
+        env:
+          XR1F_L1_CANONICAL_MODULE_PATH: ${{ github.workspace }}/.xr1f-l1-upstream/packages/x402-xec-core/dist/index.js
+        run: npm run test:x402-xr1f-l1
+
+      - name: Run XR1F boundary regressions
+        env:
+          XR1F_L1_CANONICAL_MODULE_PATH: ${{ github.workspace }}/.xr1f-l1-upstream/packages/x402-xec-core/dist/index.js
+        run: npm run test:x402-xr1f
+
+      - name: Run XR1F-RO regressions
+        run: npm run test:xr1f-ro
