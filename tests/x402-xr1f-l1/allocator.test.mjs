@@ -9,6 +9,7 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 import {
   CANONICAL_X402_XEC_COMMIT,
@@ -25,6 +26,9 @@ import {
 
 const XPUB =
   'xpub661MyMwAqRbcEtUEgdXRTY6dJQG9fRgs7C5QomqETKMYBJVtSGpRqyHSmhWy8snovPd5oWZgQ14zUquxbxu7Z1umuXbN5VDpUL1QobD5xUY';
+
+const VALID_ADDRESS =
+  'ecash:qqg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyquz9y96w';
 
 const CANONICAL_MODULE =
   process.env.XR1F_L1_CANONICAL_MODULE_PATH?.trim() || null;
@@ -92,6 +96,70 @@ test('2. malformed, testnet and private extended keys fail before identity creat
   );
 });
 
+canonicalTest('4. poisoned parent ESM cache cannot contaminate isolated canonical worker graph', async () => {
+  const sourceDist = dirname(CANONICAL_MODULE);
+  const packageRoot = dirname(sourceDist);
+  const tempRoot = mkdtempSync(join(packageRoot, '.xr1f-l1-cache-poison-'));
+  const copiedDist = join(tempRoot, 'dist');
+  cpSync(sourceDist, copiedDist, { recursive: true });
+
+  const cashaddrPath = join(copiedDist, 'cashaddr.js');
+  const originalCashaddr = readFileSync(cashaddrPath, 'utf8');
+
+  const poisonedCashaddr = `
+    export function decodeCashAddress() {
+      return {
+        prefix: 'ecash',
+        type: 0,
+        hash: '00'.repeat(20),
+      };
+    }
+
+    export function isValidCashAddress() {
+      return true;
+    }
+
+    export function cashAddressToOutputScriptHex() {
+      return 'poisoned';
+    }
+  `;
+
+  try {
+    writeFileSync(cashaddrPath, poisonedCashaddr);
+
+    // Poison the ordinary parent-thread ESM cache key for this transitive
+    // dependency, then restore canonical bytes before XR1F-L1 verification.
+    const poisonedModule = await import(pathToFileURL(cashaddrPath).href);
+    assert.equal(
+      poisonedModule.decodeCashAddress(VALID_ADDRESS).hash,
+      '00'.repeat(20),
+    );
+
+    writeFileSync(cashaddrPath, originalCashaddr);
+
+    const implementation =
+      await loadPinnedX402AllocatorImplementation({
+        modulePath: join(copiedDist, 'index.js'),
+      });
+
+    const decoded = implementation.decodeCashAddress(VALID_ADDRESS);
+    assert.equal(decoded.prefix, 'ecash');
+    assert.equal(decoded.type, 0);
+    assert.equal(decoded.hash, '11'.repeat(20));
+
+    const allocator = createWatchOnlyAllocator({
+      merchantXpub: XPUB,
+      pinnedImplementation: implementation,
+    });
+    assert.match(allocator.deriveAddress(0), /^ecash:[a-z0-9]+$/);
+  } finally {
+    // Ensure canonical bytes are restored before cleanup even if poisoning
+    // or assertions fail part-way through the scenario.
+    try { writeFileSync(cashaddrPath, originalCashaddr); } catch {}
+    rmSync(tempRoot, { recursive: true, force: true });
+  }
+});
+
 canonicalTest('3. canonical loader authenticates the reviewed core dist tree without caller-supplied hash', async () => {
   const implementation = await loadPinnedX402AllocatorImplementation({
     modulePath: CANONICAL_MODULE,
@@ -111,7 +179,7 @@ canonicalTest('3. canonical loader authenticates the reviewed core dist tree wit
   assert.equal(Object.isFrozen(implementation), true);
 });
 
-canonicalTest('4. caller cannot bless a modified implementation by choosing a matching hash', async () => {
+canonicalTest('5. caller cannot bless a modified implementation by choosing a matching hash', async () => {
   const sourceDist = dirname(CANONICAL_MODULE);
   const dir = mkdtempSync(join(tmpdir(), 'xr1f-l1-tampered-dist-'));
   const copiedDist = join(dir, 'dist');
@@ -139,7 +207,7 @@ canonicalTest('4. caller cannot bless a modified implementation by choosing a ma
   }
 });
 
-canonicalTest('5. tampering a transitive core module such as cashaddr.js invalidates the whole dist tree', async () => {
+canonicalTest('6. tampering a transitive core module such as cashaddr.js invalidates the whole dist tree', async () => {
   const sourceDist = dirname(CANONICAL_MODULE);
   const dir = mkdtempSync(join(tmpdir(), 'xr1f-l1-tampered-cashaddr-'));
   const copiedDist = join(dir, 'dist');
@@ -163,7 +231,7 @@ canonicalTest('5. tampering a transitive core module such as cashaddr.js invalid
   }
 });
 
-canonicalTest('6. module path must be canonical dist/index.js', async () => {
+canonicalTest('7. module path must be canonical dist/index.js', async () => {
   await expectAllocatorReject(
     loadPinnedX402AllocatorImplementation({
       modulePath: join(dirname(CANONICAL_MODULE), 'cashaddr.js'),
@@ -172,7 +240,7 @@ canonicalTest('6. module path must be canonical dist/index.js', async () => {
   );
 });
 
-canonicalTest('7. canonical facade exposes stable watch-only identity and no merchant xpub', async () => {
+canonicalTest('8. canonical facade exposes stable watch-only identity and no merchant xpub', async () => {
   const implementation = await loadPinnedX402AllocatorImplementation({
     modulePath: CANONICAL_MODULE,
   });
@@ -218,7 +286,7 @@ canonicalTest('7. canonical facade exposes stable watch-only identity and no mer
   }
 });
 
-canonicalTest('8. canonical deriveAddress is deterministic and produces strict eCash P2PKH output', async () => {
+canonicalTest('9. canonical deriveAddress is deterministic and produces strict eCash P2PKH output', async () => {
   const implementation = await loadPinnedX402AllocatorImplementation({
     modulePath: CANONICAL_MODULE,
   });
@@ -241,7 +309,7 @@ canonicalTest('8. canonical deriveAddress is deterministic and produces strict e
   assert.match(decoded.hash, /^[0-9a-f]{40}$/);
 });
 
-canonicalTest('9. hardened, fractional, negative and unsafe derivation indices fail closed', async () => {
+canonicalTest('10. hardened, fractional, negative and unsafe derivation indices fail closed', async () => {
   const allocator = createWatchOnlyAllocator({
     merchantXpub: XPUB,
     pinnedImplementation: await loadPinnedX402AllocatorImplementation({
@@ -264,7 +332,7 @@ canonicalTest('9. hardened, fractional, negative and unsafe derivation indices f
   }
 });
 
-canonicalTest('10. forged facade objects cannot acquire trusted allocator provenance', async () => {
+canonicalTest('11. forged facade objects cannot acquire trusted allocator provenance', async () => {
   const valid = createWatchOnlyAllocator({
     merchantXpub: XPUB,
     pinnedImplementation: await loadPinnedX402AllocatorImplementation({
@@ -281,7 +349,7 @@ canonicalTest('10. forged facade objects cannot acquire trusted allocator proven
   );
 });
 
-canonicalTest('11. reflection-cloned allocator cannot steal provenance or replace deriveAddress', async () => {
+canonicalTest('12. reflection-cloned allocator cannot steal provenance or replace deriveAddress', async () => {
   const implementation = await loadPinnedX402AllocatorImplementation({
     modulePath: CANONICAL_MODULE,
   });
@@ -327,7 +395,7 @@ canonicalTest('11. reflection-cloned allocator cannot steal provenance or replac
   );
 });
 
-canonicalTest('12. reflection-cloned pinned implementation cannot acquire loader provenance', async () => {
+canonicalTest('13. reflection-cloned pinned implementation cannot acquire loader provenance', async () => {
   const validImplementation =
     await loadPinnedX402AllocatorImplementation({
       modulePath: CANONICAL_MODULE,
@@ -383,7 +451,7 @@ canonicalTest('12. reflection-cloned pinned implementation cannot acquire loader
   );
 });
 
-canonicalTest('13. same xpub and canonical dist tree produce stable identity across restarts', async () => {
+canonicalTest('14. same xpub and canonical dist tree produce stable identity across restarts', async () => {
   const implementation = await loadPinnedX402AllocatorImplementation({
     modulePath: CANONICAL_MODULE,
   });
