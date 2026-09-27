@@ -43,7 +43,7 @@ Solo las dos primeras capas pueden medirse enteramente en frontend. El sitio no 
 
 Estos estados no son equivalentes. El navegador no emite `video_call_booked`, `video_call_completed` ni `reservation`. La Hoja Maestra conserva las etapas operativas en `Funnel Comercial`, sin PII en el `prospect_id`.
 
-Los CTA genéricos de precio conservan la etiqueta pública, apuntan a `contacto@xolosarmy.xyz` y usan `subject` con `[Ref: price-<es|en>-<floating|inline|article-footer>]`. El cuerpo prellenado solicita ciudad, preferencia de sexo y talla, ejemplar de interés y si le gustaría una videollamada. El `Ref` de perfil existente se conserva. Ni el `Ref` ni el evento GA4 incluyen PII.
+Los CTA genéricos de precio conservan la etiqueta pública, apuntan a `contacto@xolosarmy.xyz` y usan `subject` con `[Ref: price-<lang>-<surface>-<placement>]`. Las superficies actuales son `home`, `contact`, `available` y `price-article`; las ubicaciones son `floating`, `inline` y `article-footer`. En el artículo, el identificador canónico es `price-<lang>-price-article-footer`: `article` ya forma parte de la superficie, mientras `data-cta-location` conserva `article_footer`. Cada combinación usada identifica idioma, página y ubicación del CTA en el correo recibido, sin depender de GA4 para conciliar su origen. El cuerpo prellenado solicita ciudad, preferencia de sexo y talla, ejemplar de interés y si le gustaría una videollamada. El `Ref` de perfil existente se conserva. Ni el `Ref` ni el evento GA4 incluyen PII.
 
 Los dos eventos de activación usan, cuando el contexto existe:
 

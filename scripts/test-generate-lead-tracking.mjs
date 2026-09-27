@@ -485,33 +485,60 @@ for (const expectation of floatingPriceExpectations) {
   notMatches(cta, /wa\.me|whatsapp:\/\//i, expectation.path + ' must not expose messaging links');
 }
 
-// Every price CTA carries an origin reference and the same localized, encoded intake prompts.
-for (const path of [
-  'index.html', 'en/index.html', 'xolos-disponibles.html', 'en/available-xolos.html',
-  'contacto.html', 'en/contact.html', 'blog/precio-xoloitzcuintle.html',
-  'en/blog/xoloitzcuintli-price.html',
-]) {
+// Current page/placement contexts must be recognizable from email alone. Reusing a
+// Ref for an additional CTA in the same context remains valid.
+const priceContexts = {
+  'index.html': { surface: 'home', placements: ['floating'] },
+  'en/index.html': { surface: 'home', placements: ['floating'] },
+  'contacto.html': { surface: 'contact', placements: ['floating'] },
+  'en/contact.html': { surface: 'contact', placements: ['floating'] },
+  'xolos-disponibles.html': { surface: 'available', placements: ['floating', 'inline'] },
+  'en/available-xolos.html': { surface: 'available', placements: ['floating', 'inline'] },
+  'blog/precio-xoloitzcuintle.html': { surface: 'price-article', placements: ['article-footer'] },
+  'en/blog/xoloitzcuintli-price.html': { surface: 'price-article', placements: ['article-footer'] },
+};
+const priceBodies = {
+  es: 'Hola, quisiera conocer el precio y el proceso para adquirir un xoloitzcuintle.\n\nCiudad / país:\n¿Busco macho o hembra?:\nTalla preferida:\nEjemplar que me interesa, si aplica:\n¿Me interesa conocerlo por videollamada?: Sí / No',
+  en: 'Hello, I would like to know the price and process for welcoming a Xoloitzcuintle.\n\nCity / country:\nLooking for a male or female?:\nPreferred size:\nXolo I am interested in, if applicable:\nWould I like to meet by video call?: Yes / No',
+};
+const observedPriceContexts = new Map();
+for (const [path, expected] of Object.entries(priceContexts)) {
   const html = read(path);
   const tags = html.match(/<a\b[^>]*data-lead-intent="price_inquiry"[^>]*>/gs) || [];
-  assert.ok(tags.length >= 1, `${path}: missing price CTA`);
+  assert.ok(tags.length >= expected.placements.length, `${path}: missing price CTA`);
+  const langFromPath = path.startsWith('en/') ? 'en' : 'es';
+  const seenPlacements = new Set();
   for (const tag of tags) {
     const lang = tag.match(/data-lang="(es|en)"/)?.[1];
     const location = tag.match(/data-cta-location="([a-z_]+)"/)?.[1];
     const href = tag.match(/href="([^"]+)"/)?.[1].replaceAll('&amp;', '&');
     assert.ok(lang && location && href, `${path}: incomplete price CTA`);
+    assert.equal(lang, langFromPath, `${path}: lang must match page`);
+    const placement = location.replaceAll('_', '-');
+    assert.ok(expected.placements.includes(placement), `${path}: unexpected price placement ${placement}`);
+    seenPlacements.add(placement);
+    // The canonical article Ref ends in "price-article-footer": the surface
+    // already carries "article", while data-cta-location is "article_footer".
+    const refPlacement = placement === 'article-footer' ? 'footer' : placement;
+    const ref = `price-${lang}-${expected.surface}-${refPlacement}`;
     const url = new URL(href);
     assert.equal(url.protocol, 'mailto:');
     assert.equal(url.pathname, 'contacto@xolosarmy.xyz');
-    assert.match(url.searchParams.get('subject'), new RegExp(`\\[Ref: price-${lang}-${location.replaceAll('_', '-')}\\]$`));
-    const body = url.searchParams.get('body');
-    for (const field of lang === 'es'
-      ? ['Ciudad / país:', '¿Busco macho o hembra?:', 'Talla preferida:', 'Ejemplar que me interesa, si aplica:', '¿Me interesa conocerlo por videollamada?: Sí / No']
-      : ['City / country:', 'Looking for a male or female?:', 'Preferred size:', 'Xolo I am interested in, if applicable:', 'Would I like to meet by video call?: Yes / No']) {
-      assert.ok(body.includes(field), `${path}: missing ${field}`);
-    }
+    assert.equal(url.searchParams.get('subject'), `${lang === 'es' ? 'Consulta de precio Xolos Ramírez' : 'Xolos Ramírez price inquiry'} [Ref: ${ref}]`);
+    assert.ok(href.includes(`%5BRef%3A%20${ref}%5D`), `${path}: Ref must remain encoded in subject`);
+    assert.equal(url.searchParams.get('body'), priceBodies[lang], `${path}: intake body changed`);
     assert.ok(href.includes('%0A'), `${path}: mailto line breaks must be encoded`);
+    const context = `${lang}:${expected.surface}:${placement}`;
+    assert.equal(observedPriceContexts.get(context) ?? ref, ref, `${path}: inconsistent Ref within one context`);
+    observedPriceContexts.set(context, ref);
   }
+  assert.deepEqual([...seenPlacements].sort(), [...expected.placements].sort(), `${path}: incomplete placement coverage`);
 }
+// Global uniqueness across the ten enumerated contexts; multiple CTAs in one
+// identical context may intentionally share that context's Ref in future.
+const priceRefs = [...observedPriceContexts.values()];
+assert.equal(priceRefs.length, 10, 'Expected ten current price CTA contexts');
+assert.equal(new Set(priceRefs).size, priceRefs.length, 'Price Ref reused between contexts');
 
 for (const path of ['contacto.html', 'en/contact.html']) {
   const html = read(path);
