@@ -9,7 +9,11 @@ import {
   realpathSync,
 } from 'node:fs';
 import { basename, dirname, resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
+import {
+  MessageChannel,
+  Worker,
+  receiveMessageOnPort,
+} from 'node:worker_threads';
 
 export const XR1F_L1_ALLOCATOR_KIND = 'X402_XEC_XPUB_V1';
 export const XR1F_L1_NETWORK = 'xec:mainnet';
@@ -28,6 +32,7 @@ const XPUB_MAINNET_VERSION = 0x0488b21e;
 // Trust is based on object identity, never on a discoverable/copyable property.
 const trustedImplementations = new WeakSet();
 const trustedAllocators = new WeakSet();
+const implementationCache = new Map();
 
 const FORBIDDEN_CAPABILITIES = Object.freeze([
   'sign',
@@ -263,6 +268,135 @@ function computeDistTreeDigest(distDir) {
   });
 }
 
+function spawnCanonicalWorker({
+  resolvedPath,
+  expectedDistSha256,
+  expectedIndexSha256,
+}) {
+  const { port1, port2 } = new MessageChannel();
+
+  const worker = new Worker(
+    new URL('./allocator-worker.mjs', import.meta.url),
+    {
+      workerData: {
+        modulePath: resolvedPath,
+        expectedDistSha256,
+        expectedIndexSha256,
+        rpcPort: port2,
+      },
+      transferList: [port2],
+    },
+  );
+
+  return new Promise((resolveWorker, rejectWorker) => {
+    let settled = false;
+
+    const cleanupStartupListeners = () => {
+      worker.removeListener('error', onError);
+      worker.removeListener('exit', onExit);
+      worker.removeListener('message', onMessage);
+    };
+
+    const rejectOnce = error => {
+      if (settled) return;
+      settled = true;
+      cleanupStartupListeners();
+      try { port1.close(); } catch {}
+      try { worker.terminate(); } catch {}
+      rejectWorker(error);
+    };
+
+    const onError = error => {
+      rejectOnce(error);
+    };
+
+    const onExit = code => {
+      if (!settled) {
+        rejectOnce(
+          new Error(
+            `XR1F-L1 canonical worker exited before readiness (code ${code})`,
+          ),
+        );
+      }
+    };
+
+    const onMessage = message => {
+      if (
+        !message ||
+        message.ok !== true ||
+        message.status !== 'XR1F_L1_WORKER_READY' ||
+        message.distSha256 !== expectedDistSha256 ||
+        message.indexSha256 !== expectedIndexSha256
+      ) {
+        rejectOnce(
+          new Error('XR1F-L1 canonical worker readiness attestation failed'),
+        );
+        return;
+      }
+
+      settled = true;
+      cleanupStartupListeners();
+
+      // Keep the isolated worker available for synchronous watch-only RPC
+      // without keeping the host process alive by itself.
+      worker.unref();
+      port1.unref();
+
+      let nextRpcId = 1;
+
+      const rpc = (op, ...args) => {
+        const id = nextRpcId++;
+        const signalBuffer = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT);
+        const signal = new Int32Array(signalBuffer);
+
+        port1.postMessage({
+          id,
+          op,
+          args,
+          signal: signalBuffer,
+        });
+
+        const waitResult = Atomics.wait(signal, 0, 0, 5_000);
+        if (waitResult === 'timed-out') {
+          fail(
+            'XR1F_L1_WORKER_RPC_TIMEOUT',
+            'Canonical allocator worker did not respond in time',
+          );
+        }
+
+        const packet = receiveMessageOnPort(port1);
+        if (!packet || !packet.message || packet.message.id !== id) {
+          fail(
+            'XR1F_L1_WORKER_RPC_INVALID',
+            'Canonical allocator worker returned an invalid RPC response',
+          );
+        }
+
+        if (packet.message.ok !== true) {
+          fail(
+            'XR1F_L1_WORKER_RPC_FAILED',
+            'Canonical allocator worker rejected the requested operation',
+          );
+        }
+
+        return packet.message.result;
+      };
+
+      resolveWorker(
+        Object.freeze({
+          rpc,
+          worker,
+          port: port1,
+        }),
+      );
+    };
+
+    worker.once('error', onError);
+    worker.once('exit', onExit);
+    worker.once('message', onMessage);
+  });
+}
+
 export async function loadPinnedX402AllocatorImplementation({
   modulePath,
 }) {
@@ -297,35 +431,31 @@ export async function loadPinnedX402AllocatorImplementation({
     );
   }
 
-  let module;
+  const cached = implementationCache.get(resolvedPath);
+  if (cached) return cached;
+
+  let isolated;
   try {
-    module = await import(
-      `${pathToFileURL(resolvedPath).href}?tree=${before.digest}`
-    );
+    isolated = await spawnCanonicalWorker({
+      resolvedPath,
+      expectedDistSha256: before.digest,
+      expectedIndexSha256: indexHash,
+    });
   } catch {
     fail(
       'XR1F_L1_IMPLEMENTATION_IMPORT_FAILED',
-      'Pinned x402-XEC allocator implementation could not be imported',
+      'Pinned x402-XEC allocator worker could not be initialized',
     );
   }
 
-  // Re-hash after module evaluation. This fails closed if the dist tree was
-  // persistently replaced between pre-import verification and completion.
+  // Verify the filesystem again after the isolated graph has loaded.
   const after = computeDistTreeDigest(distDir);
   if (after.digest !== before.digest) {
+    try { isolated.port.close(); } catch {}
+    try { isolated.worker.terminate(); } catch {}
     fail(
       'XR1F_L1_IMPLEMENTATION_INTEGRITY_MISMATCH',
-      'x402-XEC core dist tree changed during module loading',
-    );
-  }
-
-  if (
-    typeof module.createXpubPayToAllocator !== 'function' ||
-    typeof module.decodeCashAddress !== 'function'
-  ) {
-    fail(
-      'XR1F_L1_IMPLEMENTATION_EXPORTS_INVALID',
-      'Pinned implementation is missing canonical allocator/CashAddr exports',
+      'x402-XEC core dist tree changed during isolated module loading',
     );
   }
 
@@ -333,12 +463,25 @@ export async function loadPinnedX402AllocatorImplementation({
     x402Commit: CANONICAL_X402_XEC_COMMIT,
     moduleSha256: CANONICAL_X402_XEC_CORE_DIST_SHA256,
     indexSha256: CANONICAL_X402_XEC_CORE_INDEX_SHA256,
-    createXpubPayToAllocator: module.createXpubPayToAllocator,
-    decodeCashAddress: module.decodeCashAddress,
+
+    createXpubPayToAllocator(xpub) {
+      const handle = isolated.rpc('createAllocator', xpub);
+      return Object.freeze({
+        deriveAddress(index) {
+          return isolated.rpc('deriveAddress', handle, index);
+        },
+      });
+    },
+
+    decodeCashAddress(address) {
+      return isolated.rpc('decodeCashAddress', address);
+    },
   };
 
   trustedImplementations.add(implementation);
-  return Object.freeze(implementation);
+  const frozen = Object.freeze(implementation);
+  implementationCache.set(resolvedPath, frozen);
+  return frozen;
 }
 
 function assertPinnedImplementation(implementation) {
