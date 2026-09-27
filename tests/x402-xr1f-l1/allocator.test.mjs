@@ -281,7 +281,95 @@ canonicalTest('10. forged facade objects cannot acquire trusted allocator proven
   );
 });
 
-canonicalTest('11. same xpub and canonical dist tree produce stable identity across restarts', async () => {
+canonicalTest('11. reflection-cloned allocator cannot steal provenance or replace deriveAddress', async () => {
+  const implementation = await loadPinnedX402AllocatorImplementation({
+    modulePath: CANONICAL_MODULE,
+  });
+  const valid = createWatchOnlyAllocator({
+    merchantXpub: XPUB,
+    pinnedImplementation: implementation,
+  });
+
+  const descriptors = Object.getOwnPropertyDescriptors(valid);
+  const cloned = Object.create(Object.getPrototypeOf(valid));
+  Object.defineProperties(cloned, descriptors);
+
+  for (const symbol of Object.getOwnPropertySymbols(valid)) {
+    const descriptor = Object.getOwnPropertyDescriptor(valid, symbol);
+    if (descriptor) Object.defineProperty(cloned, symbol, descriptor);
+  }
+
+  // Replace behavior while preserving every observable own property/descriptor.
+  Object.defineProperty(cloned, 'deriveAddress', {
+    value() {
+      return 'ecash:not-a-valid-address';
+    },
+    enumerable: true,
+    configurable: true,
+    writable: true,
+  });
+
+  assert.notEqual(cloned, valid);
+  assert.equal(cloned.allocatorId, valid.allocatorId);
+  assert.deepEqual(
+    Object.getOwnPropertySymbols(cloned),
+    Object.getOwnPropertySymbols(valid),
+  );
+
+  expectAllocatorError(
+    () => assertWatchOnlyAllocator(cloned),
+    'XR1F_L1_ALLOCATOR_REQUIRED',
+  );
+});
+
+canonicalTest('12. reflection-cloned pinned implementation cannot acquire loader provenance', async () => {
+  const validImplementation =
+    await loadPinnedX402AllocatorImplementation({
+      modulePath: CANONICAL_MODULE,
+    });
+
+  const descriptors =
+    Object.getOwnPropertyDescriptors(validImplementation);
+  const clonedImplementation =
+    Object.create(Object.getPrototypeOf(validImplementation));
+  Object.defineProperties(clonedImplementation, descriptors);
+
+  for (const symbol of Object.getOwnPropertySymbols(validImplementation)) {
+    const descriptor =
+      Object.getOwnPropertyDescriptor(validImplementation, symbol);
+    if (descriptor) {
+      Object.defineProperty(clonedImplementation, symbol, descriptor);
+    }
+  }
+
+  Object.defineProperty(
+    clonedImplementation,
+    'createXpubPayToAllocator',
+    {
+      value() {
+        return {
+          deriveAddress() {
+            return 'ecash:not-a-valid-address';
+          },
+        };
+      },
+      enumerable: true,
+      configurable: true,
+      writable: true,
+    },
+  );
+
+  expectAllocatorError(
+    () =>
+      createWatchOnlyAllocator({
+        merchantXpub: XPUB,
+        pinnedImplementation: clonedImplementation,
+      }),
+    'XR1F_L1_PINNED_IMPLEMENTATION_REQUIRED',
+  );
+});
+
+canonicalTest('13. same xpub and canonical dist tree produce stable identity across restarts', async () => {
   const implementation = await loadPinnedX402AllocatorImplementation({
     modulePath: CANONICAL_MODULE,
   });
