@@ -23,8 +23,11 @@ export const CANONICAL_X402_XEC_CORE_INDEX_SHA256 =
 const ALLOCATOR_ID_DOMAIN = 'xr1f-l1/xpub/v1\0';
 const MAX_NON_HARDENED_INDEX = 0x80000000;
 const XPUB_MAINNET_VERSION = 0x0488b21e;
-const PINNED_IMPLEMENTATION = Symbol('xr1f-l1-pinned-implementation');
-const TRUSTED_ALLOCATOR = Symbol('xr1f-l1-trusted-allocator');
+
+// Provenance registries live only in this module's lexical scope.
+// Trust is based on object identity, never on a discoverable/copyable property.
+const trustedImplementations = new WeakSet();
+const trustedAllocators = new WeakSet();
 
 const FORBIDDEN_CAPABILITIES = Object.freeze([
   'sign',
@@ -334,13 +337,7 @@ export async function loadPinnedX402AllocatorImplementation({
     decodeCashAddress: module.decodeCashAddress,
   };
 
-  Object.defineProperty(implementation, PINNED_IMPLEMENTATION, {
-    value: true,
-    enumerable: false,
-    writable: false,
-    configurable: false,
-  });
-
+  trustedImplementations.add(implementation);
   return Object.freeze(implementation);
 }
 
@@ -348,7 +345,7 @@ function assertPinnedImplementation(implementation) {
   if (
     !implementation ||
     typeof implementation !== 'object' ||
-    implementation[PINNED_IMPLEMENTATION] !== true ||
+    !trustedImplementations.has(implementation) ||
     implementation.x402Commit !== CANONICAL_X402_XEC_COMMIT ||
     typeof implementation.createXpubPayToAllocator !== 'function' ||
     typeof implementation.decodeCashAddress !== 'function' ||
@@ -405,7 +402,7 @@ export function assertWatchOnlyAllocator(allocator) {
   if (
     !allocator ||
     typeof allocator !== 'object' ||
-    allocator[TRUSTED_ALLOCATOR] !== true
+    !trustedAllocators.has(allocator)
   ) {
     fail(
       'XR1F_L1_ALLOCATOR_REQUIRED',
@@ -499,12 +496,6 @@ export function createWatchOnlyAllocator({
     },
   };
 
-  Object.defineProperty(facade, TRUSTED_ALLOCATOR, {
-    value: true,
-    enumerable: false,
-    writable: false,
-    configurable: false,
-  });
-
+  trustedAllocators.add(facade);
   return Object.freeze(facade);
 }
