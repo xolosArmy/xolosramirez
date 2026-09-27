@@ -292,19 +292,24 @@ canonicalTest('11. reflection-cloned allocator cannot steal provenance or replac
 
   const descriptors = Object.getOwnPropertyDescriptors(valid);
   const cloned = Object.create(Object.getPrototypeOf(valid));
-  Object.defineProperties(cloned, descriptors);
+
+  // Copy every observable descriptor except the target method, then install
+  // attacker-controlled behavior at construction time. This models the
+  // strongest reflective clone possible without mutating the frozen source.
+  const { deriveAddress: _ignoredDeriveAddress, ...otherDescriptors } =
+    descriptors;
+  Object.defineProperties(cloned, otherDescriptors);
 
   for (const symbol of Object.getOwnPropertySymbols(valid)) {
     const descriptor = Object.getOwnPropertyDescriptor(valid, symbol);
     if (descriptor) Object.defineProperty(cloned, symbol, descriptor);
   }
 
-  // Replace behavior while preserving every observable own property/descriptor.
   Object.defineProperty(cloned, 'deriveAddress', {
     value() {
       return 'ecash:not-a-valid-address';
     },
-    enumerable: true,
+    enumerable: descriptors.deriveAddress?.enumerable ?? true,
     configurable: true,
     writable: true,
   });
@@ -332,7 +337,15 @@ canonicalTest('12. reflection-cloned pinned implementation cannot acquire loader
     Object.getOwnPropertyDescriptors(validImplementation);
   const clonedImplementation =
     Object.create(Object.getPrototypeOf(validImplementation));
-  Object.defineProperties(clonedImplementation, descriptors);
+
+  const {
+    createXpubPayToAllocator: _ignoredFactory,
+    ...otherImplementationDescriptors
+  } = descriptors;
+  Object.defineProperties(
+    clonedImplementation,
+    otherImplementationDescriptors,
+  );
 
   for (const symbol of Object.getOwnPropertySymbols(validImplementation)) {
     const descriptor =
@@ -353,7 +366,8 @@ canonicalTest('12. reflection-cloned pinned implementation cannot acquire loader
           },
         };
       },
-      enumerable: true,
+      enumerable:
+        descriptors.createXpubPayToAllocator?.enumerable ?? true,
       configurable: true,
       writable: true,
     },
