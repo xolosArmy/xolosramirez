@@ -212,6 +212,11 @@ const videoCallContext = {
   cta_location: 'inline',
   lang: 'es',
 };
+const postFormVideoContext = {
+  ...videoCallContext,
+  cta_location: 'post_form_success',
+  profile: 'xilonen',
+};
 const contactFormContext = {
   lead_channel: 'form',
   lead_intent: 'contact_form',
@@ -278,6 +283,14 @@ for (const noSelectedProfile of ['', 'general']) {
   assertQualifiedPair(fixture.emittedEvents.slice(0, 2), profileContext);
   assertQualifiedPair(fixture.emittedEvents.slice(2), videoCallContext);
   assertResetBeforeEveryEvent(fixture.rawPushes);
+}
+
+{
+  const fixture = trackingFixture();
+  fixture.click({ cta: 'video_call', leadIntent: 'video_call_request', pageType: 'contact', ctaLocation: 'post_form_success', profile: 'xilonen', lang: 'es' });
+  assertQualifiedPair(fixture.emittedEvents, postFormVideoContext);
+  assertResetBeforeEveryEvent(fixture.rawPushes);
+  notMatches(JSON.stringify(fixture.emittedEvents), /video_call_booked|video_call_completed|reservation|contact_received/);
 }
 
 {
@@ -472,6 +485,44 @@ for (const expectation of floatingPriceExpectations) {
   notMatches(cta, /wa\.me|whatsapp:\/\//i, expectation.path + ' must not expose messaging links');
 }
 
+// Every price CTA carries an origin reference and the same localized, encoded intake prompts.
+for (const path of [
+  'index.html', 'en/index.html', 'xolos-disponibles.html', 'en/available-xolos.html',
+  'contacto.html', 'en/contact.html', 'blog/precio-xoloitzcuintle.html',
+  'en/blog/xoloitzcuintli-price.html',
+]) {
+  const html = read(path);
+  const tags = html.match(/<a\b[^>]*data-lead-intent="price_inquiry"[^>]*>/gs) || [];
+  assert.ok(tags.length >= 1, `${path}: missing price CTA`);
+  for (const tag of tags) {
+    const lang = tag.match(/data-lang="(es|en)"/)?.[1];
+    const location = tag.match(/data-cta-location="([a-z_]+)"/)?.[1];
+    const href = tag.match(/href="([^"]+)"/)?.[1].replaceAll('&amp;', '&');
+    assert.ok(lang && location && href, `${path}: incomplete price CTA`);
+    const url = new URL(href);
+    assert.equal(url.protocol, 'mailto:');
+    assert.equal(url.pathname, 'contacto@xolosarmy.xyz');
+    assert.match(url.searchParams.get('subject'), new RegExp(`\\[Ref: price-${lang}-${location.replaceAll('_', '-')}\\]$`));
+    const body = url.searchParams.get('body');
+    for (const field of lang === 'es'
+      ? ['Ciudad / país:', '¿Busco macho o hembra?:', 'Talla preferida:', 'Ejemplar que me interesa, si aplica:', '¿Me interesa conocerlo por videollamada?: Sí / No']
+      : ['City / country:', 'Looking for a male or female?:', 'Preferred size:', 'Xolo I am interested in, if applicable:', 'Would I like to meet by video call?: Yes / No']) {
+      assert.ok(body.includes(field), `${path}: missing ${field}`);
+    }
+    assert.ok(href.includes('%0A'), `${path}: mailto line breaks must be encoded`);
+  }
+}
+
+for (const path of ['contacto.html', 'en/contact.html']) {
+  const html = read(path);
+  const panel = html.match(/<div data-contact-success hidden>[\s\S]*?<\/div>/)?.[0];
+  assert.ok(panel, `${path}: success panel initially hidden`);
+  includes(panel, 'https://calendar.app.google/1PXNvJM42iZ3JMHC8');
+  includes(panel, 'data-lead-intent="video_call_request"');
+  includes(panel, 'data-cta-location="post_form_success"');
+  notMatches(panel, /video_call_booked|video_call_completed|reservation|contact_received/);
+}
+
 const profileExpectations = [
   ['tlilxochitl', 'available', 'Tlilxóchitl Ramirez'],
   ['xilonen', 'available', 'Xilonen Ramirez'],
@@ -490,6 +541,7 @@ for (const [path, prefix] of [['xolos-disponibles.html', 'Preguntar por '], ['en
     includes(cta, 'data-lead-intent="profile_inquiry"');
     includes(cta, 'data-status="' + status + '"');
     includes(cta, 'data-page-type="available-xolos"');
+    includes(cta, `%5BRef%3A%20${profile}-`, `${path}: existing profile origin reference must remain`);
     includes(cta, '>' + prefix + name + '</a>');
   }
 }

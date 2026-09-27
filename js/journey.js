@@ -153,6 +153,8 @@
 
   if (!window.fetch || !window.FormData || !window.AbortController) return;
   const status = form.querySelector('[data-form-status]');
+  const successPanel = document.querySelector('[data-contact-success]');
+  const videoLink = successPanel?.querySelector('[data-post-form-video]');
   const button = form.querySelector('[type="submit"]');
   const initialLabel = button.textContent;
   let pending = false;
@@ -165,6 +167,7 @@
     form.setAttribute('aria-busy', 'true');
     status.hidden = false;
     status.dataset.state = 'pending';
+    if (successPanel) successPanel.hidden = true;
     status.textContent = english ? 'Sending your message…' : 'Enviando tu mensaje…';
     button.textContent = english ? 'Sending…' : 'Enviando…';
     const controller = new AbortController();
@@ -175,6 +178,7 @@
       const submittedProfile = typeof submittedProfileValue === 'string'
         && submittedProfileValue !== ''
         && submittedProfileValue !== 'general'
+        && Array.from(profile?.options || []).some((option) => option.value === submittedProfileValue)
         ? submittedProfileValue
         : '';
       const response = await window.fetch(form.action, {
@@ -183,9 +187,14 @@
       if (!response.ok) throw new Error('contact_request_failed');
       status.dataset.state = 'success';
       status.textContent = english
-        ? 'Thank you. Your message was sent. We will reply by email within 48 business hours. If you wish, you can also choose a video-call time above.'
-        : 'Gracias. Tu mensaje se envió. Te responderemos por correo en menos de 48 horas hábiles. Si lo deseas, también puedes elegir un horario de videollamada arriba.';
+        ? 'We received your message. We will reply by email within 48 business hours.'
+        : 'Recibimos tu mensaje. Te responderemos por correo en menos de 48 horas hábiles.';
       form.reset();
+      if (videoLink) {
+        if (submittedProfile) videoLink.dataset.profile = submittedProfile;
+        else delete videoLink.dataset.profile;
+      }
+      if (successPanel) successPanel.hidden = false;
       const submitPayload = {
         event: 'contact_form_submit',
         lead_channel: 'form',
@@ -195,6 +204,9 @@
         lang: english ? 'en' : 'es',
       };
       if (submittedProfile) submitPayload.profile = submittedProfile;
+      // GTM data layer variables persist between events unless explicitly cleared.
+      push({ profile: undefined, profile_status: undefined, lead_channel: undefined,
+        lead_intent: undefined, cta_location: undefined, page_type: undefined, lang: undefined });
       push(submitPayload);
     } catch {
       status.dataset.state = 'error';
