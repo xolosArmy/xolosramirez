@@ -31,6 +31,9 @@ function fixture({ lang = 'es', query = '', withForm = false, fetch } = {}) {
   toolbar.querySelectorAll = () => buttons;
   toolbar.querySelector = () => count;
   const status = new Element();
+  const videoLink = new Element();
+  const successPanel = new Element(); successPanel.hidden = true;
+  successPanel.querySelector = (selector) => selector === '[data-post-form-video]' ? videoLink : null;
   const button = new Element(); button.textContent = 'Enviar mensaje';
   const profile = { options: [{ value: 'general' }, { value: 'xilonen' }, { value: 'tlilxochitl' }], value: 'general' };
   const reason = { value: '' };
@@ -44,7 +47,9 @@ function fixture({ lang = 'es', query = '', withForm = false, fetch } = {}) {
   const document = new Element();
   document.documentElement = { lang };
   document.body = { classList: { contains: (name) => name === (withForm ? 'journey-contact' : 'journey-available') } };
-  document.querySelector = (selector) => selector === '[data-profile-filters]' ? toolbar : withForm ? form : null;
+  document.querySelector = (selector) => selector === '[data-profile-filters]' ? toolbar
+    : selector === '[data-contact-success]' ? (withForm ? successPanel : null)
+      : withForm ? form : null;
   document.querySelectorAll = (selector) => selector.startsWith('.puppy-card') ? cards : [];
   const window = new Element();
   window.location = { hash: '', search: query };
@@ -62,7 +67,7 @@ function fixture({ lang = 'es', query = '', withForm = false, fetch } = {}) {
   window.clearTimeout = () => { window.timeout = null; };
   const context = { document, window, Element, URLSearchParams, FormData: window.FormData, AbortController };
   vm.runInNewContext(source, context);
-  return { window, document, cards, buttons, count, toolbar, status, button, form, profile, reason };
+  return { window, document, cards, buttons, count, toolbar, status, button, form, profile, reason, successPanel, videoLink };
 }
 
 test('available-page JavaScript does not rewrite the canonical Latest Show HTML', () => {
@@ -121,13 +126,15 @@ test('duplicate clicks send once; confirmed success clears the form and records 
   assert.equal(f.button.disabled, true);
   assert.equal(f.form.attributes['aria-busy'], 'true');
   assert.equal(f.window.dataLayer.length, 0, 'no success event before response');
+  assert.equal(f.successPanel.hidden, true);
   resolve({ ok: true }); await first;
   assert.equal(f.form.resets, 1);
   assert.equal(f.status.dataset.state, 'success');
   assert.equal(f.button.disabled, false);
   assert.equal(f.status.focused, true);
-  assert.equal(f.window.dataLayer.length, 1);
-  assert.deepEqual(JSON.parse(JSON.stringify(f.window.dataLayer[0])), {
+  assert.equal(f.successPanel.hidden, false);
+  assert.equal(f.window.dataLayer.length, 2);
+  assert.deepEqual(JSON.parse(JSON.stringify(f.window.dataLayer[1])), {
     event: 'contact_form_submit',
     lead_channel: 'form',
     lead_intent: 'contact_form',
@@ -141,8 +148,9 @@ test('duplicate clicks send once; confirmed success clears the form and records 
 test('confirmed form submission includes a canonical profile only when selected', async () => {
   const f = fixture({ withForm: true, query: '?profile=xilonen', fetch: async () => ({ ok: true }) });
   await f.form.emit('submit');
-  assert.equal(f.window.dataLayer[0].profile, 'xilonen');
-  assert.equal('profile_status' in f.window.dataLayer[0], false);
+  assert.equal(f.window.dataLayer[1].profile, 'xilonen');
+  assert.equal(f.videoLink.dataset.profile, 'xilonen');
+  assert.equal('profile_status' in f.window.dataLayer[1], false);
 });
 test('confirmed form submission keeps the profile captured in the request body', async () => {
   let resolveRequest;
@@ -160,7 +168,8 @@ test('confirmed form submission keeps the profile captured in the request body',
   f.profile.value = 'tlilxochitl';
   resolveRequest({ ok: true });
   await pending;
-  assert.equal(f.window.dataLayer[0].profile, 'xilonen');
+  assert.equal(f.window.dataLayer[1].profile, 'xilonen');
+  assert.equal(f.videoLink.dataset.profile, 'xilonen');
 });
 test('HTTP rejection preserves the message and permits a successful retry', async () => {
   let requests = 0;
@@ -170,10 +179,11 @@ test('HTTP rejection preserves the message and permits a successful retry', asyn
   assert.match(f.form.message, /Private/);
   assert.equal(f.form.resets, undefined);
   assert.equal(f.window.dataLayer.length, 0);
+  assert.equal(f.successPanel.hidden, true);
   assert.equal(f.button.disabled, false);
   await f.form.emit('submit');
   assert.equal(f.status.dataset.state, 'success');
-  assert.equal(f.window.dataLayer[0].lang, 'en');
+  assert.equal(f.window.dataLayer[1].lang, 'en');
 });
 test('network failure retains input and offers the primary email alternative', async () => {
   const f = fixture({ withForm: true, fetch: async () => { throw new Error('offline'); } });
