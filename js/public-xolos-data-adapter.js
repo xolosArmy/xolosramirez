@@ -80,7 +80,7 @@ export const CANONICAL_PUBLIC_XOLOS = [
   {
     id: 'iztli',
     name: 'Iztli Ramirez',
-    status: 'available',
+    status: 'reserved',
     variety: 'pending_confirmation',
     size: 'small_intermediate',
     gender: 'male',
