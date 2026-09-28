@@ -414,7 +414,7 @@ for (const expectation of floatingPriceExpectations) {
 
   includes(
     cta,
-    'href="mailto:contacto@xolosarmy.xyz?subject=',
+    'href="mailto:fernando@xolosramirez.com?subject=',
     expectation.path + ' must open the primary email channel'
   );
 
@@ -523,7 +523,7 @@ for (const [path, expected] of Object.entries(priceContexts)) {
     const ref = `price-${lang}-${expected.surface}-${refPlacement}`;
     const url = new URL(href);
     assert.equal(url.protocol, 'mailto:');
-    assert.equal(url.pathname, 'contacto@xolosarmy.xyz');
+    assert.equal(url.pathname, 'fernando@xolosramirez.com');
     assert.equal(url.searchParams.get('subject'), `${lang === 'es' ? 'Consulta de precio Xolos Ramírez' : 'Xolos Ramírez price inquiry'} [Ref: ${ref}]`);
     assert.ok(href.includes(`%5BRef%3A%20${ref}%5D`), `${path}: Ref must remain encoded in subject`);
     assert.equal(url.searchParams.get('body'), priceBodies[lang], `${path}: intake body changed`);
