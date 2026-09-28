@@ -185,11 +185,11 @@ test('HTTP rejection preserves the message and permits a successful retry', asyn
   assert.equal(f.status.dataset.state, 'success');
   assert.equal(f.window.dataLayer[1].lang, 'en');
 });
-test('network failure retains input and offers the primary WhatsApp alternative', async () => {
+test('network failure retains input and offers the primary email alternative', async () => {
   const f = fixture({ withForm: true, fetch: async () => { throw new Error('offline'); } });
   await f.form.emit('submit');
   assert.equal(f.status.dataset.state, 'error');
-  assert.match(f.status.textContent, /enlace de WhatsApp/);
+  assert.match(f.status.textContent, /enlace de correo/);
   assert.match(f.form.message, /Private/);
   assert.equal(f.button.disabled, false);
 });

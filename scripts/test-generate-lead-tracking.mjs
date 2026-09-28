@@ -192,7 +192,7 @@ function assertResetBeforeEveryEvent(rawPushes) {
 }
 
 const profileContext = {
-  lead_channel: 'whatsapp',
+  lead_channel: 'email',
   lead_intent: 'profile_inquiry',
   page_type: 'available-xolos',
   cta_location: 'profile_card',
@@ -231,7 +231,7 @@ const xilonenContactFormContext = {
   profile: 'xilonen',
 };
 const generalContext = {
-  lead_channel: 'whatsapp',
+  lead_channel: 'email',
   lead_intent: 'general_inquiry',
   page_type: 'contact',
   cta_location: 'inline',
@@ -240,7 +240,7 @@ const generalContext = {
 
 function activateProfile(fixture) {
   fixture.click({
-    cta: 'whatsapp',
+    cta: 'email',
     leadIntent: 'profile_inquiry',
     pageType: 'available-xolos',
     ctaLocation: 'profile_card',
@@ -306,7 +306,7 @@ for (const noSelectedProfile of ['', 'general']) {
 
 {
   const fixture = trackingFixture();
-  fixture.click({ cta: 'whatsapp', leadIntent: 'general_inquiry', pageType: 'contact', ctaLocation: 'inline', lang: 'es' });
+  fixture.click({ cta: 'email', leadIntent: 'general_inquiry', pageType: 'contact', ctaLocation: 'inline', lang: 'es' });
   activateProfile(fixture);
   assert.deepEqual(fixture.emittedEvents.map(({ event }) => event), [
     'xolos_generate_lead',
@@ -427,36 +427,42 @@ for (const expectation of floatingPriceExpectations) {
   notMatches(cta, /mailto:/i, expectation.path + ' must not use mailto');
 }
 
-// Current page/placement contexts remain distinguishable through analytics attributes.
+// Price CTAs are hybrid by design: floating opens WhatsApp; contextual CTAs stay on email.
 const priceContexts = {
-  'index.html': { placements: ['floating'] },
-  'en/index.html': { placements: ['floating'] },
-  'contacto.html': { placements: ['floating'] },
-  'en/contact.html': { placements: ['floating'] },
-  'xolos-disponibles.html': { placements: ['floating', 'inline'] },
-  'en/available-xolos.html': { placements: ['floating', 'inline'] },
-  'blog/precio-xoloitzcuintle.html': { placements: ['article-footer'] },
-  'en/blog/xoloitzcuintli-price.html': { placements: ['article-footer'] },
+  'index.html': { surface: 'home', placements: ['floating'] },
+  'en/index.html': { surface: 'home', placements: ['floating'] },
+  'contacto.html': { surface: 'contact', placements: ['floating'] },
+  'en/contact.html': { surface: 'contact', placements: ['floating'] },
+  'xolos-disponibles.html': { surface: 'available', placements: ['floating', 'inline'] },
+  'en/available-xolos.html': { surface: 'available', placements: ['floating', 'inline'] },
+  'blog/precio-xoloitzcuintle.html': { surface: 'price-article', placements: ['article-footer'] },
+  'en/blog/xoloitzcuintli-price.html': { surface: 'price-article', placements: ['article-footer'] },
 };
 let observedPriceContexts = 0;
 for (const [path, expected] of Object.entries(priceContexts)) {
   const html = read(path);
   const tags = html.match(/<a\b[^>]*data-lead-intent="price_inquiry"[^>]*>/gs) || [];
   assert.ok(tags.length >= expected.placements.length, `${path}: missing price CTA`);
-  const langFromPath = path.startsWith('en/') ? 'en' : 'es';
+  const lang = path.startsWith('en/') ? 'en' : 'es';
   const seenPlacements = new Set();
-
   for (const tag of tags) {
-    const lang = tag.match(/data-lang="(es|en)"/)?.[1];
     const location = tag.match(/data-cta-location="([a-z_]+)"/)?.[1];
-    assert.ok(lang && location, `${path}: incomplete price CTA`);
-    assert.equal(lang, langFromPath, `${path}: lang must match page`);
+    assert.ok(location, `${path}: missing CTA location`);
     const placement = location.replaceAll('_', '-');
     assert.ok(expected.placements.includes(placement), `${path}: unexpected price placement ${placement}`);
     seenPlacements.add(placement);
-    includes(tag, 'href="' + WHATSAPP_BUSINESS_URL + '"');
-    includes(tag, 'data-cta="whatsapp"');
-    notMatches(tag, /mailto:/i);
+    if (placement === 'floating') {
+      includes(tag, 'href="' + WHATSAPP_BUSINESS_URL + '"');
+      includes(tag, 'data-cta="whatsapp"');
+      notMatches(tag, /mailto:/i);
+    } else {
+      includes(tag, 'data-cta="email"');
+      assert.match(tag, /href="mailto:fernando@xolosramirez\.com\?subject=/i);
+      const refPlacement = placement === 'article-footer' ? 'footer' : placement;
+      const ref = `price-${lang}-${expected.surface}-${refPlacement}`;
+      includes(tag, `%5BRef%3A%20${ref}%5D`, `${path}: email CTA must preserve origin Ref`);
+      notMatches(tag, /wa\.me|whatsapp:\/\//i);
+    }
     observedPriceContexts += 1;
   }
   assert.deepEqual([...seenPlacements].sort(), [...expected.placements].sort(), `${path}: incomplete placement coverage`);
@@ -487,43 +493,45 @@ for (const [path, prefix] of [['xolos-disponibles.html', 'Preguntar por '], ['en
     const match = html.match(new RegExp(`<a(?=[^>]*data-profile="${profile}")(?=[^>]*data-cta-location="profile_card")[^>]*>[\\s\\S]*?<\\/a>`));
     assert.ok(match, path + ' must expose the CTA for ' + profile);
     const cta = match[0];
-    includes(cta, 'data-cta="whatsapp"');
+    includes(cta, 'data-cta="email"');
     includes(cta, 'data-lead-intent="profile_inquiry"');
     includes(cta, 'data-status="' + status + '"');
     includes(cta, 'data-page-type="available-xolos"');
-    includes(cta, 'href="' + WHATSAPP_BUSINESS_URL + '"');
-    includes(cta, 'target="_blank"');
-    includes(cta, 'rel="noopener noreferrer"');
-    notMatches(cta, /mailto:/i);
+    includes(cta, `%5BRef%3A%20${profile}-`, path + ': existing profile origin reference must remain');
+    assert.match(cta, /href="mailto:fernando@xolosramirez\.com/i);
+    notMatches(cta, /wa\.me|whatsapp:\/\//i);
     includes(cta, '>' + prefix + name + '</a>');
   }
 }
 
-const whatsappCommercialSurfaces = [
+const floatingOnlySurfaces = [
   'index.html', 'en/index.html', 'xolos-disponibles.html', 'en/available-xolos.html',
-  'contacto.html', 'en/contact.html', 'blog/precio-xoloitzcuintle.html',
-  'en/blog/xoloitzcuintli-price.html',
+  'contacto.html', 'en/contact.html',
 ];
-for (const path of whatsappCommercialSurfaces) {
+for (const path of floatingOnlySurfaces) {
   const html = read(path);
-  includes(html, WHATSAPP_BUSINESS_URL, path + ' must expose WhatsApp');
-  notMatches(
-    html,
-    /<a\b(?=[^>]*href="mailto:fernando@xolosramirez\.com)(?=[^>]*data-lead-type="generate_lead")[^>]*>/i,
-    path + ' must not keep a commercial email lead CTA'
-  );
+  const blocks = html.match(/<a(?=[^>]*class="[^"]*\bhome-email-float\b[^"]*")[^>]*>[\s\S]*?<\/a>/g) || [];
+  assert.equal(blocks.length, 1, path + ' must have one floating CTA');
+  includes(blocks[0], WHATSAPP_BUSINESS_URL, path + ' floating CTA must use WhatsApp');
+  includes(blocks[0], 'data-cta="whatsapp"');
+  const withoutFloating = html.replace(blocks[0], '');
+  notMatches(withoutFloating, /wa\.me\/message\/EXX6AH4L77ZHK1/i, path + ' must keep WhatsApp exclusive to the floating CTA');
 }
-for (const path of ['teyolias-guardiania.html', 'en/teyolias-guardianship.html', 'public/xolos-disponibles.html']) {
-  notMatches(read(path), /wa\.me\/message\/EXX6AH4L77ZHK1/i, path + ' must stay outside this migration');
+
+for (const path of [
+  'blog/precio-xoloitzcuintle.html', 'en/blog/xoloitzcuintli-price.html',
+  'teyolias-guardiania.html', 'en/teyolias-guardianship.html', 'public/xolos-disponibles.html'
+]) {
+  notMatches(read(path), /wa\.me\/message\/EXX6AH4L77ZHK1/i, path + ' must not expose WhatsApp');
 }
 
 for (const [path, primaryLabel, secondaryLabel] of [
-  ['contacto.html', 'WhatsApp · canal principal', 'Videollamada'],
-  ['en/contact.html', 'WhatsApp · primary channel', 'Video call'],
+  ['contacto.html', 'Correo · canal principal', 'Videollamada'],
+  ['en/contact.html', 'Email · primary channel', 'Video call'],
 ]) {
   const html = read(path);
-  assert.ok(html.indexOf(primaryLabel) >= 0, path + ' must identify WhatsApp as primary');
-  assert.ok(html.indexOf(primaryLabel) < html.indexOf(secondaryLabel), path + ' must present WhatsApp before video call');
+  assert.ok(html.indexOf(primaryLabel) >= 0, path + ' must identify email as primary');
+  assert.ok(html.indexOf(primaryLabel) < html.indexOf(secondaryLabel), path + ' must present email before video call');
 }
 
 const sitemap = read('sitemap.xml');

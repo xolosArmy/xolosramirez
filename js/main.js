@@ -234,7 +234,7 @@ function getLeadIntent(element) {
   const profileStatus = getProfileStatus(element);
   const ctaLocation = getCtaLocation(element);
 
-  if ((leadChannel === 'email' || leadChannel === 'whatsapp') && profile && profile !== 'general') return 'profile_inquiry';
+  if (leadChannel === 'email' && profile && profile !== 'general') return 'profile_inquiry';
   if (ctaLocation === 'contact_form') return 'contact_form';
   if (profileStatus === 'reserved') return 'profile_inquiry';
   return '';

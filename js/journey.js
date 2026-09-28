@@ -211,8 +211,8 @@
     } catch {
       status.dataset.state = 'error';
       status.textContent = english
-        ? 'We could not confirm delivery. Your message remains in the form. Try again or use the WhatsApp link above.'
-        : 'No pudimos confirmar el envío. Tu mensaje sigue en el formulario. Intenta de nuevo o usa el enlace de WhatsApp de arriba.';
+        ? 'We could not confirm delivery. Your message remains in the form. Try again or use the email link above.'
+        : 'No pudimos confirmar el envío. Tu mensaje sigue en el formulario. Intenta de nuevo o usa el enlace de correo de arriba.';
     } finally {
       window.clearTimeout(timeout);
       pending = false;
