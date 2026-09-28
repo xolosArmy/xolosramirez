@@ -351,7 +351,7 @@ for (const entry of [[esForm, 'es'], [enForm, 'en']]) {
 
 for (const path of ['index.html', 'en/index.html']) {
   const html = read(path);
-  assert.ok(/class="[^"]*home-email-float[^"]*"[sS]*?data-cta="whatsapp"[sS]*?data-lead-type="generate_lead"/.test(html), path + ' must keep floating WhatsApp lead CTA');
+  assert.ok(/class="[^"]*home-email-float[^"]*"[\s\S]*?data-cta="whatsapp"[\s\S]*?data-lead-type="generate_lead"/.test(html), path + ' must keep floating WhatsApp lead CTA');
 }
 
 const floatingPriceExpectations = [
