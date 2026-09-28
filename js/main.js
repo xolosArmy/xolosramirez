@@ -187,6 +187,7 @@ function getLeadChannel(element) {
   if (element.dataset.leadChannel) return element.dataset.leadChannel;
   const cta = getDatasetField(element, 'cta', '').toLowerCase();
   if (cta === 'email') return 'email';
+  if (cta === 'whatsapp') return 'whatsapp';
   if (cta === 'video_call') return 'video_call';
   if (cta === 'contact-form' || cta === 'form') return 'form';
   return '';
