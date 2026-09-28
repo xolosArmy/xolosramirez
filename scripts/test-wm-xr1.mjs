@@ -11,7 +11,7 @@
  * 3. Valid schemas: inputSchema and outputSchema conform to JSON Schema Draft 2020-12 structure.
  * 4. Deterministic outputs: all execute callbacks return valid, consistent JSON structures.
  * 5. Data accuracy:
- *    - Iztli (#oce alias, available, small intermediate, variety pending confirmation, born 2026-07-14)
+ *    - Iztli (#oce alias, reserved, small intermediate, variety pending confirmation, born 2026-07-14)
  *    - Yohualli (female, intermediate, reserved)
  *    - Tlilxóchitl (standard, female, available, born 2026-08-03, 7 weeks)
  *    - Tonalli (standard, female, reserved)
@@ -83,14 +83,14 @@ test('WM-XR1: Deterministic output for list_available_xolos', async () => {
 
   // Filter test: available
   const availableFiltered = await PublicXolosDataAdapter.listAvailableXolos({ status: 'available' });
-  assert.ok(availableFiltered.total >= 3);
+  assert.ok(availableFiltered.total >= 2);
   for (const x of availableFiltered.xolos) {
     assert.equal(x.status, 'available');
   }
 
   // Filter test: reserved
   const reservedFiltered = await PublicXolosDataAdapter.listAvailableXolos({ status: 'reserved' });
-  assert.ok(reservedFiltered.total >= 3);
+  assert.ok(reservedFiltered.total >= 4);
   for (const x of reservedFiltered.xolos) {
     assert.equal(x.status, 'reserved');
   }
@@ -115,7 +115,7 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
   assert.equal(xilonen.xolo.gender, 'female');
   assert.equal(xilonen.xolo.status, 'available');
 
-  // 3. Iztli (available, small intermediate, male, historical #oce identifier)
+  // 3. Iztli (reserved, small intermediate, male, historical #oce identifier)
   const oce = await PublicXolosDataAdapter.getXoloProfile({ id: 'oce' });
   assert.equal(oce.found, true);
   assert.equal(oce.xolo.id, 'iztli');
@@ -123,7 +123,7 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
   assert.equal(oce.xolo.size, 'small_intermediate');
   assert.equal(oce.xolo.variety, 'pending_confirmation');
   assert.equal(oce.xolo.gender, 'male');
-  assert.equal(oce.xolo.status, 'available');
+  assert.equal(oce.xolo.status, 'reserved');
   assert.equal(oce.xolo.birthDate, '2026-07-14');
   assert.equal(oce.xolo.ageDescription, '2 meses · nacido el 14 de julio de 2026');
   assert.equal(oce.xolo.publicUrl, 'https://xolosramirez.com/xolos-disponibles.html#iztli');
