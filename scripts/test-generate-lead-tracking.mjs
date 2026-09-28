@@ -482,7 +482,7 @@ for (const path of ['contacto.html', 'en/contact.html']) {
 const profileExpectations = [
   ['tlilxochitl', 'available', 'Tlilxóchitl Ramirez'],
   ['xilonen', 'available', 'Xilonen Ramirez'],
-  ['iztli', 'available', 'Iztli Ramirez'],
+  ['iztli', 'reserved', 'Iztli Ramirez'],
   ['yohualli', 'reserved', 'Yohualli Ramirez'],
   ['tonalli', 'reserved', 'Tonalli Ramírez'],
   ['xochitl', 'reserved', 'Xochitl Ramirez'],
