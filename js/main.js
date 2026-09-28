@@ -187,7 +187,6 @@ function getLeadChannel(element) {
   if (element.dataset.leadChannel) return element.dataset.leadChannel;
   const cta = getDatasetField(element, 'cta', '').toLowerCase();
   if (cta === 'email') return 'email';
-  if (cta === 'whatsapp') return 'whatsapp';
   if (cta === 'video_call') return 'video_call';
   if (cta === 'contact-form' || cta === 'form') return 'form';
   return '';
@@ -234,7 +233,7 @@ function getLeadIntent(element) {
   const profileStatus = getProfileStatus(element);
   const ctaLocation = getCtaLocation(element);
 
-  if ((leadChannel === 'email' || leadChannel === 'whatsapp') && profile && profile !== 'general') return 'profile_inquiry';
+  if (leadChannel === 'email' && profile && profile !== 'general') return 'profile_inquiry';
   if (ctaLocation === 'contact_form') return 'contact_form';
   if (profileStatus === 'reserved') return 'profile_inquiry';
   return '';
