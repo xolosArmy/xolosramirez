@@ -178,3 +178,75 @@
 .journey-page .skip-link { z-index: 110; background: #171310; color: #fff0cd; }
 .journey-page .hamburger:not([data-enhanced]) { display: none; }
 .journey-price-note { border-top: 1px solid var(--color-borde); padding: 1.5rem; }
+
+/* Visual home: keep the sales path close to the portraits and let the long-form
+   care, price and lineage material live on the existing internal pages. */
+.journey-home main { gap: clamp(1.25rem, 3vw, 2.5rem); }
+.journey-home main > section { margin: 0; }
+.journey-home .home-visual-hero {
+  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  align-items: stretch; min-height: 0; padding: 0; text-align: left;
+}
+.journey-home .home-visual-hero::after { display: none; }
+.journey-home .home-visual-hero .hero__media { position: relative; inset: auto; z-index: auto; min-height: 420px; }
+.journey-home .home-visual-hero .hero__media img { width: 100%; height: 100%; object-fit: cover; object-position: center; border-radius: 0; }
+.journey-home .home-visual-hero .container { display: flex; align-items: center; padding: clamp(1.5rem, 4vw, 3.5rem); }
+.journey-home .home-visual-hero .hero__content { max-width: 36rem; }
+.journey-home .home-visual-hero .eyebrow { color: var(--color-dorado); font-size: .875rem; }
+.journey-home .home-visual-hero h1 { margin-bottom: 1rem; }
+.journey-home .home-visual-hero .journey-actions { margin-top: 1.5rem; }
+.journey-home .home-visual-hero .btn { min-width: 10rem; }
+
+.journey-home .home-section-heading { display: flex; align-items: end; justify-content: space-between; flex-wrap: wrap; gap: .5rem 1.5rem; margin-bottom: 1.5rem; }
+.journey-home .home-section-heading h2 { margin-bottom: 0; }
+.journey-home .home-xolo-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(1rem, 2vw, 1.5rem); }
+.journey-home .home-xolo-card { min-width: 0; overflow: hidden; border: 1px solid var(--color-borde); border-radius: .8rem; background: #1b1716; }
+.journey-home .home-xolo-photo { display: block; aspect-ratio: 4 / 3; overflow: hidden; }
+.journey-home .home-xolo-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
+.journey-home .home-xolo-info { display: grid; justify-items: start; gap: .5rem; padding: clamp(1.25rem, 2.5vw, 1.75rem); }
+.journey-home .home-xolo-info h3 { margin: 0; font-size: clamp(1.25rem, 2.5vw, 1.6rem); }
+.journey-home .home-xolo-info h3 a { color: inherit; }
+.journey-home .home-xolo-info p { margin: 0; }
+.journey-home .home-xolo-info .home-xolo-meta { color: var(--color-texto-suave); }
+.journey-home .home-xolo-status { display: inline-block; padding: .25rem .6rem; border-radius: 999px; background: #215f39; color: #fff; font-size: .8rem; font-weight: 600; }
+.journey-home .home-xolo-info .btn { margin-top: .5rem; width: 100%; }
+
+.journey-home .home-trust { display: flex; align-items: center; justify-content: space-between; gap: 1.25rem 2rem; background: #211b17; }
+.journey-home .home-trust h2 { font-size: 1.25rem; max-width: 12rem; margin: 0; }
+.journey-home .home-trust ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; flex: 1; list-style: none; margin: 0; padding: 0; }
+.journey-home .home-trust li { border-left: 2px solid var(--color-dorado); padding-left: .75rem; line-height: 1.4; }
+.journey-home .home-process .journey-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 1.5rem 0; }
+.journey-home .home-more-links { display: flex; flex-wrap: wrap; gap: .35rem 1.25rem; border-top: 1px solid var(--color-borde); padding-top: 1rem; }
+.journey-home .home-more-links a { display: inline-flex; align-items: center; min-height: 44px; text-decoration: underline; text-underline-offset: .2em; }
+
+.journey-home #testimonios.home-families { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); align-items: center; gap: clamp(1.25rem, 4vw, 3rem); padding: 0; overflow: hidden; background: #211b17; border: 1px solid var(--color-borde); box-shadow: none; max-width: none; }
+.journey-home .home-family-photo { height: 100%; max-height: 370px; overflow: hidden; }
+.journey-home .home-family-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 38%; border-radius: 0; }
+.journey-home .home-families > div:last-child { padding: 1.5rem; }
+.journey-home .home-families h2 { text-align: left; margin-bottom: 1rem; }
+.journey-home .home-families .text-link { margin-right: 1.25rem; }
+.journey-home #galeria.home-gallery { max-width: none; padding: clamp(1.25rem, 3.5vw, 3rem); background: linear-gradient(160deg, rgba(34, 27, 31, .95), rgba(25, 20, 25, .85)); box-shadow: none; }
+.journey-home .home-gallery h2 { text-align: left; }
+.journey-home .home-gallery-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: .75rem; }
+.journey-home .home-gallery-grid .live-show__video { box-shadow: none; border-radius: .6rem; }
+.journey-home .home-gallery-grid img { width: 100%; height: 100%; max-height: 440px; object-fit: cover; border-radius: .6rem; box-shadow: none; }
+.journey-home .home-final-cta { text-align: center; background: #211b17; }
+.journey-home .home-final-cta .journey-actions { justify-content: center; }
+@media (max-width: 850px) {
+  .journey-home .home-visual-hero { grid-template-columns: 1fr; }
+  .journey-home .home-visual-hero .hero__media { min-height: 0; aspect-ratio: 16 / 9; }
+  .journey-home .home-visual-hero .container { padding: 1.5rem; }
+  .journey-home .home-trust { display: block; }
+  .journey-home .home-trust h2 { max-width: none; margin-bottom: 1.25rem; }
+  .journey-home .home-trust ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .journey-home .home-gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .journey-home .home-gallery-grid .live-show__video { grid-column: 1 / -1; }
+  .journey-home .home-gallery-grid img { aspect-ratio: 4 / 3; }
+}
+@media (max-width: 620px) {
+  .journey-home .home-visual-hero .hero__media { aspect-ratio: 4 / 3; }
+  .journey-home .home-xolo-grid, .journey-home .home-process .journey-steps, .journey-home #testimonios.home-families { grid-template-columns: 1fr; }
+  .journey-home .home-family-photo { height: 250px; }
+  .journey-home .home-trust ul { gap: 1rem; }
+  .journey-home .home-visual-hero .journey-actions .btn { width: 100%; }
+}
