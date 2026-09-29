@@ -314,7 +314,7 @@ canonicalTest('11. no-op-only update trigger is rejected by real mutation probe'
 
   try {
     const db = new DatabaseSync(fx.path);
-    db.exec(\`
+    db.exec(`
       CREATE TABLE main.xr1f_l1_allocator_binding (
         binding_id INTEGER PRIMARY KEY CHECK(binding_id = 1),
         schema_version INTEGER NOT NULL CHECK(schema_version = 1),
@@ -347,7 +347,7 @@ canonicalTest('11. no-op-only update trigger is rejected by real mutation probe'
       BEGIN
         SELECT RAISE(ABORT, 'XR1F_L1_ALLOCATOR_BINDING_DELETE_FORBIDDEN');
       END;
-    \`);
+    `);
     db.close();
 
     await assert.rejects(
@@ -371,7 +371,7 @@ canonicalTest('12. comment bait cannot replace STRICT and functional CHECK const
 
   try {
     const db = new DatabaseSync(fx.path);
-    db.exec(\`
+    db.exec(`
       CREATE TABLE main.xr1f_l1_allocator_binding (
         binding_id INTEGER PRIMARY KEY /* check(binding_id = 1) */,
         schema_version INTEGER NOT NULL /* check(schema_version = 1) */,
@@ -395,7 +395,7 @@ canonicalTest('12. comment bait cannot replace STRICT and functional CHECK const
       BEGIN
         SELECT RAISE(ABORT, 'XR1F_L1_ALLOCATOR_BINDING_DELETE_FORBIDDEN');
       END;
-    \`);
+    `);
     db.close();
 
     await assert.rejects(
