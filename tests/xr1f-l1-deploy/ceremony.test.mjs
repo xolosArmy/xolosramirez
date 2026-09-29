@@ -1,15 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { spawnSync } from 'node:child_process';
 import {
   mkdtempSync,
   rmSync,
+  writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 
 import {
+  assertDeployedCheckoutClean,
   runBindingCeremony,
 } from '../../services/xr1f-l1/bind-allocator.mjs';
 import {
@@ -96,6 +99,7 @@ function env(path, enabled = true) {
 function runCeremony(options = {}) {
   return runBindingCeremony({
     getDeployedBuildSha: () => TEST_BUILD_SHA,
+    assertCheckoutClean: () => true,
     ...options,
   });
 }
@@ -149,6 +153,57 @@ test('2. configured build SHA must match the executing checkout before C3B acces
   );
 
   assert.equal(probeCalled, false);
+});
+
+test('3. deployed checkout attestation rejects staged and unstaged tracked changes', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'xr1f-l1-git-attest-'));
+  const git = args =>
+    spawnSync('/usr/bin/git', ['-C', dir, ...args], {
+      encoding: 'utf8',
+    });
+
+  try {
+    assert.equal(git(['init']).status, 0);
+    assert.equal(git(['config', 'user.email', 'xr1f@example.invalid']).status, 0);
+    assert.equal(git(['config', 'user.name', 'XR1F Test']).status, 0);
+
+    const tracked = join(dir, 'tracked.txt');
+    writeFileSync(tracked, 'canonical\n');
+    assert.equal(git(['add', 'tracked.txt']).status, 0);
+    assert.equal(git(['commit', '-m', 'canonical']).status, 0);
+
+    assert.equal(
+      assertDeployedCheckoutClean({
+        repoRoot: dir,
+        gitBin: '/usr/bin/git',
+      }),
+      true,
+    );
+
+    writeFileSync(tracked, 'unstaged\n');
+    assert.throws(
+      () =>
+        assertDeployedCheckoutClean({
+          repoRoot: dir,
+          gitBin: '/usr/bin/git',
+        }),
+      /XR1F_L1_DEPLOYED_CHECKOUT_DIRTY/,
+    );
+
+    assert.equal(git(['checkout', '--', 'tracked.txt']).status, 0);
+    writeFileSync(tracked, 'staged\n');
+    assert.equal(git(['add', 'tracked.txt']).status, 0);
+    assert.throws(
+      () =>
+        assertDeployedCheckoutClean({
+          repoRoot: dir,
+          gitBin: '/usr/bin/git',
+        }),
+      /XR1F_L1_DEPLOYED_CHECKOUT_DIRTY/,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 canonicalTest('5. partial unique index cannot satisfy global C3B pay_to uniqueness', async () => {
@@ -408,6 +463,119 @@ canonicalTest('12. comment bait cannot replace STRICT and functional CHECK const
           logger: logger(),
         }),
       /XR1F_L1_BINDING_SCHEMA_STRICT_REQUIRED/,
+    );
+  } finally {
+    fx.cleanup();
+  }
+});
+
+canonicalTest('7. finite-sample lookalike CHECK is rejected by canonical schema attestation', async () => {
+  const fx = makeC3b();
+
+  try {
+    const db = new DatabaseSync(fx.path);
+    db.exec(`
+      CREATE TABLE main.xr1f_l1_allocator_binding (
+        binding_id INTEGER PRIMARY KEY CHECK(binding_id != 2),
+        schema_version INTEGER NOT NULL CHECK(schema_version = 1),
+        allocator_kind TEXT NOT NULL CHECK(allocator_kind = 'X402_XEC_XPUB_V1'),
+        allocator_id TEXT NOT NULL UNIQUE CHECK(
+          length(allocator_id) = 64
+          AND allocator_id = lower(allocator_id)
+          AND allocator_id NOT GLOB '*[^0-9a-f]*'
+        ),
+        network TEXT NOT NULL CHECK(network = 'xec:mainnet'),
+        x402_xec_commit TEXT NOT NULL CHECK(
+          x402_xec_commit = '0f409dea2959b397ecc4bb84d71519ec6e3aec04'
+        ),
+        bound_at INTEGER NOT NULL CHECK(
+          bound_at >= 0 AND bound_at <= 9007199254740991
+        )
+      ) STRICT;
+
+      CREATE TRIGGER main.xr1f_l1_allocator_binding_no_update
+      BEFORE UPDATE ON main.xr1f_l1_allocator_binding
+      FOR EACH ROW
+      BEGIN
+        SELECT RAISE(ABORT, 'XR1F_L1_ALLOCATOR_BINDING_IMMUTABLE');
+      END;
+
+      CREATE TRIGGER main.xr1f_l1_allocator_binding_no_delete
+      BEFORE DELETE ON main.xr1f_l1_allocator_binding
+      FOR EACH ROW
+      BEGIN
+        SELECT RAISE(ABORT, 'XR1F_L1_ALLOCATOR_BINDING_DELETE_FORBIDDEN');
+      END;
+    `);
+    db.close();
+
+    await assert.rejects(
+      () =>
+        runCeremony({
+          env: env(fx.path),
+          probeC3b() {
+            return Object.freeze({ ok: true, component: 'c3bStore' });
+          },
+          logger: logger(),
+        }),
+      /XR1F_L1_BINDING_SCHEMA_CANONICAL_SQL_MISMATCH/,
+    );
+  } finally {
+    fx.cleanup();
+  }
+});
+
+canonicalTest('8. allocator-id mutation is blocked even by bound-at-scoped trigger bait', async () => {
+  const fx = makeC3b();
+
+  try {
+    const db = new DatabaseSync(fx.path);
+    db.exec(`
+      CREATE TABLE main.xr1f_l1_allocator_binding (
+        binding_id INTEGER PRIMARY KEY CHECK(binding_id = 1),
+        schema_version INTEGER NOT NULL CHECK(schema_version = 1),
+        allocator_kind TEXT NOT NULL CHECK(allocator_kind = 'X402_XEC_XPUB_V1'),
+        allocator_id TEXT NOT NULL UNIQUE CHECK(
+          length(allocator_id) = 64
+          AND allocator_id = lower(allocator_id)
+          AND allocator_id NOT GLOB '*[^0-9a-f]*'
+        ),
+        network TEXT NOT NULL CHECK(network = 'xec:mainnet'),
+        x402_xec_commit TEXT NOT NULL CHECK(
+          x402_xec_commit = '0f409dea2959b397ecc4bb84d71519ec6e3aec04'
+        ),
+        bound_at INTEGER NOT NULL CHECK(
+          bound_at >= 0 AND bound_at <= 9007199254740991
+        )
+      ) STRICT;
+
+      CREATE TRIGGER main.xr1f_l1_allocator_binding_no_update
+      BEFORE UPDATE ON main.xr1f_l1_allocator_binding
+      FOR EACH ROW
+      WHEN NEW.bound_at != OLD.bound_at
+      BEGIN
+        SELECT RAISE(ABORT, 'XR1F_L1_ALLOCATOR_BINDING_IMMUTABLE');
+      END;
+
+      CREATE TRIGGER main.xr1f_l1_allocator_binding_no_delete
+      BEFORE DELETE ON main.xr1f_l1_allocator_binding
+      FOR EACH ROW
+      BEGIN
+        SELECT RAISE(ABORT, 'XR1F_L1_ALLOCATOR_BINDING_DELETE_FORBIDDEN');
+      END;
+    `);
+    db.close();
+
+    await assert.rejects(
+      () =>
+        runCeremony({
+          env: env(fx.path),
+          probeC3b() {
+            return Object.freeze({ ok: true, component: 'c3bStore' });
+          },
+          logger: logger(),
+        }),
+      /XR1F_L1_BINDING_SCHEMA_UPDATE_TRIGGER_NOT_ENFORCED_allocator_id/,
     );
   } finally {
     fx.cleanup();

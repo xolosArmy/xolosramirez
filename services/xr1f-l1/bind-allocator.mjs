@@ -24,23 +24,32 @@ const REPO_ROOT = realpathSync(
 );
 const GIT_BIN = '/usr/bin/git';
 
-export function resolveDeployedBuildSha() {
-  const result = spawnSync(
-    GIT_BIN,
+function runGit(repoRoot, gitBin, args) {
+  return spawnSync(
+    gitBin,
     [
       '-c',
-      `safe.directory=${REPO_ROOT}`,
+      `safe.directory=${repoRoot}`,
       '-C',
-      REPO_ROOT,
-      'rev-parse',
-      '--verify',
-      'HEAD^{commit}',
+      repoRoot,
+      ...args,
     ],
     {
       encoding: 'utf8',
       timeout: 5000,
       stdio: ['ignore', 'pipe', 'pipe'],
     },
+  );
+}
+
+export function resolveDeployedBuildSha({
+  repoRoot = REPO_ROOT,
+  gitBin = GIT_BIN,
+} = {}) {
+  const result = runGit(
+    repoRoot,
+    gitBin,
+    ['rev-parse', '--verify', 'HEAD^{commit}'],
   );
 
   if (result.error || result.status !== 0) {
@@ -53,6 +62,30 @@ export function resolveDeployedBuildSha() {
   }
 
   return sha;
+}
+
+export function assertDeployedCheckoutClean({
+  repoRoot = REPO_ROOT,
+  gitBin = GIT_BIN,
+} = {}) {
+  const checks = [
+    ['diff', '--cached', '--quiet', '--no-ext-diff', 'HEAD', '--'],
+    ['diff', '--quiet', '--no-ext-diff', '--'],
+  ];
+
+  for (const args of checks) {
+    const result = runGit(repoRoot, gitBin, args);
+    if (result.error || (result.status !== 0 && result.status !== 1)) {
+      throw new Error(
+        'XR1F_L1_DEPLOYED_CHECKOUT_ATTESTATION_FAILED',
+      );
+    }
+    if (result.status === 1) {
+      throw new Error('XR1F_L1_DEPLOYED_CHECKOUT_DIRTY');
+    }
+  }
+
+  return true;
 }
 
 function assertDeployedBuildSha(expectedSha, getDeployedBuildSha) {
@@ -104,6 +137,37 @@ function normalizeSql(value) {
     .replace(/\s+/g, ' ')
     .trim()
     .toLowerCase();
+}
+
+function canonicalSql(value) {
+  return String(value ?? '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+let canonicalBindingTableSqlCache = null;
+
+function canonicalBindingTableSql() {
+  if (canonicalBindingTableSqlCache !== null) {
+    return canonicalBindingTableSqlCache;
+  }
+
+  const shadow = new DatabaseSync(':memory:');
+  try {
+    shadow.exec(migrationBody());
+    const row = shadow.prepare(
+      "SELECT sql FROM main.sqlite_master WHERE type='table' AND name='xr1f_l1_allocator_binding'",
+    ).get();
+    if (!row?.sql) {
+      throw new Error(
+        'XR1F_L1_CANONICAL_BINDING_SCHEMA_UNAVAILABLE',
+      );
+    }
+    canonicalBindingTableSqlCache = canonicalSql(row.sql);
+    return canonicalBindingTableSqlCache;
+  } finally {
+    shadow.close();
+  }
 }
 
 function hasBindingSchema(db) {
@@ -332,6 +396,12 @@ function assertCanonicalBindingSchema(db) {
     throw new Error('XR1F_L1_BINDING_SCHEMA_STRICT_REQUIRED');
   }
 
+  if (canonicalSql(table.sql) !== canonicalBindingTableSql()) {
+    throw new Error(
+      'XR1F_L1_BINDING_SCHEMA_CANONICAL_SQL_MISMATCH',
+    );
+  }
+
   assertBindingChecksFunctional(table.sql);
 
   const unique = uniqueIndexedColumns(
@@ -440,20 +510,45 @@ function assertImmutabilityTriggersFunctional(db) {
       );
     }
 
-    let updateBlocked = false;
-    try {
-      db.prepare(
-        'UPDATE main.xr1f_l1_allocator_binding SET bound_at = CASE WHEN bound_at = 0 THEN 1 ELSE 0 END WHERE binding_id = 1',
-      ).run();
-    } catch (error) {
-      updateBlocked = /XR1F_L1_ALLOCATOR_BINDING_IMMUTABLE/.test(
-        String(error?.message ?? error),
-      );
-    }
-    if (!updateBlocked) {
-      throw new Error(
-        'XR1F_L1_BINDING_SCHEMA_UPDATE_TRIGGER_NOT_ENFORCED',
-      );
+    const current = db.prepare(
+      'SELECT binding_id, schema_version, allocator_kind, allocator_id, network, x402_xec_commit, bound_at FROM main.xr1f_l1_allocator_binding WHERE binding_id = 1',
+    ).get();
+
+    const alternateAllocatorId =
+      current?.allocator_id === '0'.repeat(64)
+        ? '1'.repeat(64)
+        : '0'.repeat(64);
+    const alternateBoundAt =
+      Number(current?.bound_at) === 0 ? 1 : 0;
+
+    const updateProbes = [
+      ['allocator_id', 'allocator_id = ?', alternateAllocatorId],
+      ['bound_at', 'bound_at = ?', alternateBoundAt],
+      ['binding_id', 'binding_id = ?', 2],
+      ['schema_version', 'schema_version = ?', 2],
+      ['allocator_kind', 'allocator_kind = ?', 'NOT_CANONICAL'],
+      ['network', 'network = ?', 'xec:testnet'],
+      ['x402_xec_commit', 'x402_xec_commit = ?', '1'.repeat(40)],
+    ];
+
+    for (const [field, assignment, value] of updateProbes) {
+      let updateBlocked = false;
+      try {
+        db.prepare(
+          `UPDATE main.xr1f_l1_allocator_binding SET ${assignment} WHERE binding_id = 1`,
+        ).run(value);
+      } catch (error) {
+        updateBlocked =
+          /XR1F_L1_ALLOCATOR_BINDING_IMMUTABLE/.test(
+            String(error?.message ?? error),
+          );
+      }
+
+      if (!updateBlocked) {
+        throw new Error(
+          `XR1F_L1_BINDING_SCHEMA_UPDATE_TRIGGER_NOT_ENFORCED_${field}`,
+        );
+      }
     }
 
     let deleteBlocked = false;
@@ -489,6 +584,7 @@ export async function runBindingCeremony({
   logger = console,
   probeC3b = probeC3bStoreReadOnly,
   getDeployedBuildSha = resolveDeployedBuildSha,
+  assertCheckoutClean = assertDeployedCheckoutClean,
 } = {}) {
   const config = loadXr1fL1Config(env);
 
@@ -510,6 +606,7 @@ export async function runBindingCeremony({
     config.buildSha,
     getDeployedBuildSha,
   );
+  assertCheckoutClean();
 
   const c3bDbPath = canonicalRegularFile(
     config.c3bDbPath,

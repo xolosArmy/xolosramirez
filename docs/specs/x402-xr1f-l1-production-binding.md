@@ -51,10 +51,11 @@ Before opening a writable SQLite handle, the ceremony:
 1. requires the explicit bind kill-switch;
 2. validates the xpub fingerprint;
 3. validates the x402-XEC commit pin;
-4. requires canonical absolute regular-file paths;
-5. runs the existing XR1F-RO C3B read-only probe;
-6. verifies the canonical x402-XEC module graph in an isolated Worker;
-7. constructs the authenticated watch-only allocator.
+4. verifies the deployed Git HEAD and requires both the tracked index and worktree to be clean;
+5. requires canonical absolute regular-file paths;
+6. runs the existing XR1F-RO C3B read-only probe;
+7. verifies the canonical x402-XEC module graph in an isolated Worker;
+8. constructs the authenticated watch-only allocator.
 
 If any preflight fails, no L1 schema or binding is written.
 
@@ -70,7 +71,8 @@ It must fail closed if:
 
 - C3B has invoice history but no allocator binding;
 - another allocator identity is already bound;
-- the binding schema is malformed;
+- the binding schema differs from the exact reviewed canonical table definition;
+- the binding immutability trigger fails to block a real update of any protected field;
 - a caller-owned transaction already exists;
 - any canonical artifact or xpub validation fails.
 
@@ -97,6 +99,7 @@ The ceremony does not allocate an invoice derivation index and does not call C3B
 ## Evidence to retain
 
 - reviewed xolosramirez deployment SHA
+- clean tracked Git index/worktree attestation
 - canonical x402-XEC commit
 - canonical allocator artifact hashes
 - merchant xpub SHA-256 fingerprint, not the xpub itself in public evidence
