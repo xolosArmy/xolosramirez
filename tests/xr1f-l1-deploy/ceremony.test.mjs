@@ -13,6 +13,7 @@ import {
   runBindingCeremony,
 } from '../../services/xr1f-l1/bind-allocator.mjs';
 import {
+  Xr1fL1BindingError,
   readAllocatorBinding,
 } from '../../src/x402-xr1f-l1/binding.mjs';
 
@@ -333,7 +334,9 @@ canonicalTest('7. failure after schema creation rolls back the whole ceremony tr
           },
           logger: logger(),
         }),
-      /XR1F_L1_BOUND_AT_INVALID/,
+      error =>
+        error instanceof Xr1fL1BindingError &&
+        error.code === 'XR1F_L1_BOUND_AT_INVALID',
     );
 
     const verify = new DatabaseSync(fx.path);
