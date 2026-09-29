@@ -7,7 +7,7 @@ import {
   loadPinnedX402AllocatorImplementation,
 } from '../../src/x402-xr1f-l1/allocator.mjs';
 import {
-  bindAllocator,
+  bindAllocatorInTransaction,
   readAllocatorBinding,
 } from '../../src/x402-xr1f-l1/binding.mjs';
 import { loadXr1fL1Config } from './config.mjs';
@@ -268,15 +268,83 @@ function invoiceHistoryCount(db) {
   return count;
 }
 
+function migrationBody() {
+  return readFileSync(MIGRATION, 'utf8')
+    .replace(/^\s*BEGIN IMMEDIATE;\s*/m, '')
+    .replace(/\s*COMMIT;\s*$/m, '');
+}
+
 function ensureBindingSchema(db) {
   if (hasBindingSchema(db)) {
     assertCanonicalBindingSchema(db);
     return false;
   }
 
-  db.exec(readFileSync(MIGRATION, 'utf8'));
+  db.exec(migrationBody());
   assertCanonicalBindingSchema(db);
   return true;
+}
+
+function assertImmutabilityTriggersFunctional(db) {
+  const existing = db.prepare(
+    'SELECT binding_id FROM main.xr1f_l1_allocator_binding WHERE binding_id = 1',
+  ).get();
+
+  db.exec('SAVEPOINT xr1f_l1_trigger_probe');
+  try {
+    if (!existing) {
+      db.prepare(
+        'INSERT INTO main.xr1f_l1_allocator_binding (binding_id, schema_version, allocator_kind, allocator_id, network, x402_xec_commit, bound_at) VALUES (1, 1, ?, ?, ?, ?, ?)',
+      ).run(
+        'X402_XEC_XPUB_V1',
+        '0'.repeat(64),
+        'xec:mainnet',
+        '0f409dea2959b397ecc4bb84d71519ec6e3aec04',
+        0,
+      );
+    }
+
+    let updateBlocked = false;
+    try {
+      db.prepare(
+        'UPDATE main.xr1f_l1_allocator_binding SET bound_at = bound_at WHERE binding_id = 1',
+      ).run();
+    } catch (error) {
+      updateBlocked = /XR1F_L1_ALLOCATOR_BINDING_IMMUTABLE/.test(
+        String(error?.message ?? error),
+      );
+    }
+    if (!updateBlocked) {
+      throw new Error(
+        'XR1F_L1_BINDING_SCHEMA_UPDATE_TRIGGER_NOT_ENFORCED',
+      );
+    }
+
+    let deleteBlocked = false;
+    try {
+      db.prepare(
+        'DELETE FROM main.xr1f_l1_allocator_binding WHERE binding_id = 1',
+      ).run();
+    } catch (error) {
+      deleteBlocked =
+        /XR1F_L1_ALLOCATOR_BINDING_DELETE_FORBIDDEN/.test(
+          String(error?.message ?? error),
+        );
+    }
+    if (!deleteBlocked) {
+      throw new Error(
+        'XR1F_L1_BINDING_SCHEMA_DELETE_TRIGGER_NOT_ENFORCED',
+      );
+    }
+  } finally {
+    db.exec('ROLLBACK TO xr1f_l1_trigger_probe');
+    db.exec('RELEASE xr1f_l1_trigger_probe');
+  }
+
+  return Object.freeze({
+    ok: true,
+    component: 'allocatorBindingTriggers',
+  });
 }
 
 export async function runBindingCeremony({
@@ -323,9 +391,15 @@ export async function runBindingCeremony({
   });
 
   const db = new DatabaseSync(c3bDbPath);
+  let transactionOwned = false;
+
   try {
-    // Revalidate the exact live database state, including uncheckpointed WAL,
-    // on the same handle that would later persist the allocator binding.
+    // One write transaction owns the complete mutable ceremony. BEGIN
+    // IMMEDIATE prevents another writer from changing invoice/schema state
+    // between validation, migration and binding.
+    db.exec('BEGIN IMMEDIATE');
+    transactionOwned = true;
+
     assertLiveCanonicalC3b(db);
 
     if (!hasBindingSchema(db) && invoiceHistoryCount(db) !== 0) {
@@ -333,9 +407,12 @@ export async function runBindingCeremony({
     }
 
     const schemaCreated = ensureBindingSchema(db);
+    assertCanonicalBindingSchema(db);
+    assertImmutabilityTriggersFunctional(db);
+
     const before = readAllocatorBinding(db);
 
-    const bound = bindAllocator({
+    const bound = bindAllocatorInTransaction({
       db,
       allocator,
       boundAt: now(),
@@ -362,8 +439,16 @@ export async function runBindingCeremony({
       broadcastAuthorized: false,
     });
 
+    db.exec('COMMIT');
+    transactionOwned = false;
+
     logger.log(JSON.stringify(result));
     return result;
+  } catch (error) {
+    if (transactionOwned) {
+      try { db.exec('ROLLBACK'); } catch {}
+    }
+    throw error;
   } finally {
     db.close();
   }
