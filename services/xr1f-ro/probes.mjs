@@ -136,14 +136,39 @@ function uniqueIndexedColumns(path, table, options) {
   const result = new Set();
   for (const index of runQuery(path, `PRAGMA index_list('${table}')`, options)) {
     if (Number(index.unique) !== 1) continue;
+
+    const escaped = String(index.name).replaceAll("'", "''");
     const columns = runQuery(
       path,
-      `PRAGMA index_info('${String(index.name).replaceAll("'", "''")}')`,
+      `PRAGMA index_info('${escaped}')`,
       options,
     )
       .map(row => row.name)
       .filter(Boolean);
-    if (columns.length === 1) result.add(columns[0]);
+    if (columns.length !== 1) continue;
+
+    const column = columns[0];
+    const partial = Number(index.partial) === 1;
+
+    if (partial) {
+      if (column !== 'settled_txid') continue;
+
+      const indexRow = runQuery(
+        path,
+        `SELECT sql FROM sqlite_master WHERE type='index' AND name='${escaped}'`,
+        options,
+      )[0];
+      const sql = String(indexRow?.sql ?? '')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase();
+
+      if (!/\bwhere settled_txid is not null\s*$/.test(sql)) {
+        continue;
+      }
+    }
+
+    result.add(column);
   }
   return result;
 }
