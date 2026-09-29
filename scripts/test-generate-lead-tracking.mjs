@@ -6,6 +6,11 @@ import vm from 'node:vm';
 const read = (path) => readFileSync(path, 'utf8');
 const main = read('js/main.js');
 const WHATSAPP_BUSINESS_URL = 'https://wa.me/message/KGKS3MKYMHCWE1';
+const WHATSAPP_PREFILLED_MESSAGES = {
+  es: 'Hola, vi Xolos Ramírez y quisiera conocer el precio y el proceso de reserva de un xoloitzcuintle.',
+  en: 'Hello, I saw Xolos Ramírez and I’d like to learn about the price and reservation process for a Xoloitzcuintle.',
+};
+const whatsappUrl = (lang) => WHATSAPP_BUSINESS_URL + '?text=' + encodeURIComponent(WHATSAPP_PREFILLED_MESSAGES[lang]);
 const leadCode = main.slice(
   main.indexOf('function getLeadElement'),
   main.indexOf('function initializePuppyCarousels')
@@ -407,7 +412,7 @@ for (const expectation of floatingPriceExpectations) {
   assert.equal(matches.length, 1, expectation.path + ' must have exactly one floating price CTA');
 
   const cta = matches[0];
-  includes(cta, 'href="' + WHATSAPP_BUSINESS_URL + '"', expectation.path + ' must open the primary WhatsApp channel');
+  includes(cta, 'href="' + whatsappUrl(expectation.lang) + '"', expectation.path + ' must open the primary WhatsApp channel with localized prefilled text');
   includes(cta, 'class="home-email-float cta-lead cta-whatsapp"', expectation.path + ' must use the WhatsApp floating CTA classes');
   includes(cta, 'target="_blank"', expectation.path + ' must open WhatsApp in a new tab context');
   includes(cta, 'rel="noopener noreferrer"', expectation.path + ' must isolate the new tab');
@@ -452,7 +457,7 @@ for (const [path, expected] of Object.entries(priceContexts)) {
     assert.ok(expected.placements.includes(placement), `${path}: unexpected price placement ${placement}`);
     seenPlacements.add(placement);
     if (placement === 'floating') {
-      includes(tag, 'href="' + WHATSAPP_BUSINESS_URL + '"');
+      includes(tag, 'href="' + whatsappUrl(lang) + '"');
       includes(tag, 'data-cta="whatsapp"');
       notMatches(tag, /mailto:/i);
     } else {
@@ -512,7 +517,8 @@ for (const path of floatingOnlySurfaces) {
   const html = read(path);
   const blocks = html.match(/<a(?=[^>]*class="[^"]*\bhome-email-float\b[^"]*")[^>]*>[\s\S]*?<\/a>/g) || [];
   assert.equal(blocks.length, 1, path + ' must have one floating CTA');
-  includes(blocks[0], WHATSAPP_BUSINESS_URL, path + ' floating CTA must use WhatsApp');
+  const lang = path.startsWith('en/') ? 'en' : 'es';
+  includes(blocks[0], whatsappUrl(lang), path + ' floating CTA must use localized prefilled WhatsApp text');
   includes(blocks[0], 'data-cta="whatsapp"');
   const withoutFloating = html.replace(blocks[0], '');
   notMatches(withoutFloating, /wa\.me\/message\/EXX6AH4L77ZHK1/i, path + ' must keep WhatsApp exclusive to the floating CTA');
