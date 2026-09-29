@@ -30,13 +30,27 @@ function canonicalRegularFile(path, label) {
   return expected;
 }
 
-function ensureBindingSchema(db) {
+function hasBindingSchema(db) {
+  return Boolean(
+    db.prepare(
+      "SELECT name FROM main.sqlite_master WHERE type='table' AND name='xr1f_l1_allocator_binding'",
+    ).get(),
+  );
+}
+
+function invoiceHistoryCount(db) {
   const row = db.prepare(
-    "SELECT name FROM main.sqlite_master WHERE type='table' AND name='xr1f_l1_allocator_binding'",
+    'SELECT COUNT(*) AS n FROM main.invoices',
   ).get();
+  const count = Number(row?.n ?? 0);
+  if (!Number.isSafeInteger(count) || count < 0) {
+    throw new Error('XR1F_L1_C3B_HISTORY_INVALID');
+  }
+  return count;
+}
 
-  if (row) return false;
-
+function ensureBindingSchema(db) {
+  if (hasBindingSchema(db)) return false;
   db.exec(readFileSync(MIGRATION, 'utf8'));
   return true;
 }
@@ -86,6 +100,10 @@ export async function runBindingCeremony({
 
   const db = new DatabaseSync(c3bDbPath);
   try {
+    if (!hasBindingSchema(db) && invoiceHistoryCount(db) !== 0) {
+      throw new Error('XR1F_L1_UNBOUND_HISTORY');
+    }
+
     const schemaCreated = ensureBindingSchema(db);
     const before = readAllocatorBinding(db);
 
