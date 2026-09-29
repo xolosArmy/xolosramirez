@@ -46,13 +46,24 @@ export function loadXr1fL1Config(env = process.env) {
     throw new TypeError('XR1F-L1 x402-XEC commit pin mismatch');
   }
 
+  const buildSha = required(env, 'XR1F_L1_BUILD_SHA');
+  if (!/^[0-9a-f]{40}$/.test(buildSha)) {
+    throw new TypeError('XR1F_L1_BUILD_SHA must be lowercase 40-char git SHA');
+  }
+
+  const c3bDbPath = required(env, 'XR1F_L1_C3B_DB_PATH');
+  const x402ModulePath = required(env, 'XR1F_L1_X402_MODULE_PATH');
+  if (!c3bDbPath.startsWith('/') || !x402ModulePath.startsWith('/')) {
+    throw new TypeError('XR1F-L1 production paths must be absolute');
+  }
+
   return Object.freeze({
     gate: XR1F_L1_GATE,
     mode: XR1F_L1_MODE,
     enabled,
-    buildSha: required(env, 'XR1F_L1_BUILD_SHA'),
-    c3bDbPath: required(env, 'XR1F_L1_C3B_DB_PATH'),
-    x402ModulePath: required(env, 'XR1F_L1_X402_MODULE_PATH'),
+    buildSha,
+    c3bDbPath,
+    x402ModulePath,
     x402Commit,
     merchantXpub: normalizedXpub,
     merchantXpubSha256,
