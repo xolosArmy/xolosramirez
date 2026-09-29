@@ -152,7 +152,7 @@ const OFFICIAL_CONTACT_CHANNELS = {
   location: 'Ciudad de México, México (CDMX)',
   officialWebsite: 'https://xolosramirez.com',
   primaryChannel: 'email',
-  officialEmail: 'fernando@xolosramirez.com',
+  officialEmail: 'contacto@xolosarmy.xyz',
   videoCallBookingUrl: 'https://calendar.app.google/1PXNvJM42iZ3JMHC8',
   calendarBookingNotice: 'Las videollamadas de presentación y asesoría personalizada pueden agendarse en el calendario; el correo y el formulario oficial en https://xolosramirez.com/contacto.html son las vías de seguimiento.',
   socialChannels: [
@@ -203,7 +203,7 @@ const ETHICAL_PRICING_PROCESS = {
   ],
   inquiryProcess: [
     '1. Explora los perfiles públicos de cachorros disponibles en https://xolosramirez.com/xolos-disponibles.html',
-    '2. Inicia contacto directo por correo en fernando@xolosramirez.com o mediante el formulario oficial',
+    '2. Inicia contacto directo por correo en contacto@xolosarmy.xyz o mediante el formulario oficial',
     '3. Conversación personalizada para entender tu estilo de vida, espacio y experiencia con la raza',
     '4. Confirmación formal de disponibilidad, condiciones particulares y reserva acordada directamente con Fernando Ramírez'
   ],
@@ -297,7 +297,7 @@ export const PublicXolosDataAdapter = {
       careConsiderations: xolo.careConsiderations,
       lineageReference: xolo.lineageReference,
       publicUrl: xolo.publicUrl,
-      directContactNotice: 'Para consultar disponibilidad vigente o iniciar el proceso de adopción, escribe a fernando@xolosramirez.com.'
+      directContactNotice: 'Para consultar disponibilidad vigente o iniciar el proceso de adopción, escribe a contacto@xolosarmy.xyz.'
     };
 
     if (xolo.birthDate) {

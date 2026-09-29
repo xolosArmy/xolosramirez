@@ -198,7 +198,7 @@ test('WM-XR1: Deterministic output for get_delivery_information with national zo
 test('WM-XR1: Deterministic output for get_contact_options', async () => {
   const contact = await PublicXolosDataAdapter.getContactOptions();
   assert.equal(contact.primaryChannel, 'email');
-  assert.equal(contact.officialEmail, 'fernando@xolosramirez.com');
+  assert.equal(contact.officialEmail, 'contacto@xolosarmy.xyz');
   assert.equal(contact.videoCallBookingUrl, 'https://calendar.app.google/1PXNvJM42iZ3JMHC8');
   assert.equal(contact.officialWebsite, 'https://xolosramirez.com');
   assert.ok(Array.isArray(contact.socialChannels));
