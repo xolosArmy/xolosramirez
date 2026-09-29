@@ -222,15 +222,15 @@ function assertCanonicalBindingSchema(db) {
     throw new Error('XR1F_L1_BINDING_SCHEMA_TRIGGERS_MISMATCH');
   }
 
-  const deleteSql = normalizeSql(triggers[0].sql);
-  const updateSql = normalizeSql(triggers[1].sql);
+  const deleteSql = String(triggers[0].sql ?? '');
+  const updateSql = String(triggers[1].sql ?? '');
 
   if (
-    !deleteSql.includes(
-      'before delete on xr1f_l1_allocator_binding',
+    !/\bbefore\s+delete\s+on\s+(?:main\.)?xr1f_l1_allocator_binding\b/i.test(
+      deleteSql,
     ) ||
-    !deleteSql.includes(
-      "raise(abort, 'xr1f_l1_allocator_binding_delete_forbidden')",
+    !/raise\s*\(\s*abort\s*,\s*['"]XR1F_L1_ALLOCATOR_BINDING_DELETE_FORBIDDEN['"]\s*\)/i.test(
+      deleteSql,
     )
   ) {
     throw new Error(
@@ -239,11 +239,11 @@ function assertCanonicalBindingSchema(db) {
   }
 
   if (
-    !updateSql.includes(
-      'before update on xr1f_l1_allocator_binding',
+    !/\bbefore\s+update\s+on\s+(?:main\.)?xr1f_l1_allocator_binding\b/i.test(
+      updateSql,
     ) ||
-    !updateSql.includes(
-      "raise(abort, 'xr1f_l1_allocator_binding_immutable')",
+    !/raise\s*\(\s*abort\s*,\s*['"]XR1F_L1_ALLOCATOR_BINDING_IMMUTABLE['"]\s*\)/i.test(
+      updateSql,
     )
   ) {
     throw new Error(
