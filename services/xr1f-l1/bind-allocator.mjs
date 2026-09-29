@@ -206,6 +206,83 @@ function assertLiveCanonicalC3b(db) {
   });
 }
 
+function insertBindingValidationRow(db, overrides = {}) {
+  const row = {
+    bindingId: 1,
+    schemaVersion: 1,
+    allocatorKind: 'X402_XEC_XPUB_V1',
+    allocatorId: '0'.repeat(64),
+    network: 'xec:mainnet',
+    x402Commit:
+      '0f409dea2959b397ecc4bb84d71519ec6e3aec04',
+    boundAt: 0,
+    ...overrides,
+  };
+
+  db.prepare(
+    'INSERT INTO main.xr1f_l1_allocator_binding (binding_id, schema_version, allocator_kind, allocator_id, network, x402_xec_commit, bound_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
+  ).run(
+    row.bindingId,
+    row.schemaVersion,
+    row.allocatorKind,
+    row.allocatorId,
+    row.network,
+    row.x402Commit,
+    row.boundAt,
+  );
+}
+
+function assertBindingChecksFunctional(tableSql) {
+  const canonical = new DatabaseSync(':memory:');
+  try {
+    canonical.exec(tableSql);
+    insertBindingValidationRow(canonical);
+  } catch {
+    try { canonical.close(); } catch {}
+    throw new Error('XR1F_L1_BINDING_SCHEMA_CANONICAL_ROW_REJECTED');
+  }
+  canonical.close();
+
+  const probes = [
+    ['binding_id', { bindingId: 2 }],
+    ['schema_version', { schemaVersion: 2 }],
+    ['allocator_kind', { allocatorKind: 'NOT_CANONICAL' }],
+    ['allocator_id_length', { allocatorId: '0'.repeat(63) }],
+    ['allocator_id_lowercase', { allocatorId: 'A'.repeat(64) }],
+    ['allocator_id_hex', { allocatorId: 'g'.repeat(64) }],
+    ['network', { network: 'xec:testnet' }],
+    ['x402_xec_commit', { x402Commit: '1'.repeat(40) }],
+    ['bound_at_min', { boundAt: -1 }],
+    ['bound_at_max', { boundAt: 9007199254740992 }],
+  ];
+
+  for (const [name, overrides] of probes) {
+    const shadow = new DatabaseSync(':memory:');
+    let rejected = false;
+    try {
+      shadow.exec(tableSql);
+      insertBindingValidationRow(shadow, overrides);
+    } catch (error) {
+      rejected = /constraint failed/i.test(
+        String(error?.message ?? error),
+      );
+    } finally {
+      shadow.close();
+    }
+
+    if (!rejected) {
+      throw new Error(
+        `XR1F_L1_BINDING_SCHEMA_CONSTRAINT_NOT_ENFORCED_${name}`,
+      );
+    }
+  }
+
+  return Object.freeze({
+    ok: true,
+    component: 'allocatorBindingConstraints',
+  });
+}
+
 function assertCanonicalBindingSchema(db) {
   const table = db.prepare(
     "SELECT sql FROM main.sqlite_master WHERE type='table' AND name='xr1f_l1_allocator_binding'",
@@ -245,26 +322,17 @@ function assertCanonicalBindingSchema(db) {
     }
   }
 
-  const sql = normalizeSql(table.sql);
-  const requiredSqlFragments = [
-    ') strict',
-    'check(binding_id = 1)',
-    'check(schema_version = 1)',
-    "check(allocator_kind = 'x402_xec_xpub_v1')",
-    'length(allocator_id) = 64',
-    'allocator_id = lower(allocator_id)',
-    "allocator_id not glob '*[^0-9a-f]*'",
-    "check(network = 'xec:mainnet')",
-    "x402_xec_commit = '0f409dea2959b397ecc4bb84d71519ec6e3aec04'",
-    'bound_at >= 0',
-    'bound_at <= 9007199254740991',
-  ];
-
-  for (const fragment of requiredSqlFragments) {
-    if (!sql.includes(fragment)) {
-      throw new Error('XR1F_L1_BINDING_SCHEMA_CONSTRAINT_MISMATCH');
-    }
+  const tableList = db.prepare(
+    "PRAGMA main.table_list('xr1f_l1_allocator_binding')",
+  ).get();
+  if (
+    tableList?.name !== 'xr1f_l1_allocator_binding' ||
+    Number(tableList?.strict) !== 1
+  ) {
+    throw new Error('XR1F_L1_BINDING_SCHEMA_STRICT_REQUIRED');
   }
+
+  assertBindingChecksFunctional(table.sql);
 
   const unique = uniqueIndexedColumns(
     db,
@@ -375,7 +443,7 @@ function assertImmutabilityTriggersFunctional(db) {
     let updateBlocked = false;
     try {
       db.prepare(
-        'UPDATE main.xr1f_l1_allocator_binding SET bound_at = bound_at WHERE binding_id = 1',
+        'UPDATE main.xr1f_l1_allocator_binding SET bound_at = CASE WHEN bound_at = 0 THEN 1 ELSE 0 END WHERE binding_id = 1',
       ).run();
     } catch (error) {
       updateBlocked = /XR1F_L1_ALLOCATOR_BINDING_IMMUTABLE/.test(
