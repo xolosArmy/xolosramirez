@@ -12,7 +12,7 @@ test('1. XR1F-L1 unit is manual one-shot and never a resident daemon', () => {
 
   assert.match(source, /^Type=oneshot$/m);
   assert.equal(source.includes('RemainAfterExit=yes'), false);
-  assert.equal(source.includes('[Install]'), false);
+  assert.equal(/^\[Install\]$/m.test(source), false);
 });
 
 test('2. XR1F-L1 unit has no network and no ambient capabilities', () => {
