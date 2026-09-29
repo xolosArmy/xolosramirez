@@ -85,7 +85,7 @@ function env(path, enabled = true) {
 }
 
 function runCeremony(options = {}) {
-  return runCeremony({
+  return runBindingCeremony({
     getDeployedBuildSha: () => TEST_BUILD_SHA,
     ...options,
   });
