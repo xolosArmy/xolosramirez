@@ -127,15 +127,21 @@ function uniqueIndexedColumns(db, table) {
     if (Number(index.unique) !== 1) continue;
 
     const escaped = String(index.name).replaceAll("'", "''");
-    const columns = db.prepare(
+    const terms = db.prepare(
       `PRAGMA main.index_info('${escaped}')`,
-    ).all()
-      .map(row => row.name)
-      .filter(Boolean);
+    ).all();
 
-    if (columns.length !== 1) continue;
+    // Every key term counts. Expression terms have name=null and must not
+    // disappear during validation.
+    if (
+      terms.length !== 1 ||
+      typeof terms[0]?.name !== 'string' ||
+      terms[0].name.length === 0
+    ) {
+      continue;
+    }
 
-    const column = columns[0];
+    const column = terms[0].name;
     const partial = Number(index.partial) === 1;
 
     if (partial) {
