@@ -1,0 +1,41 @@
+[Unit]
+Description=Xolos Ramirez XR1F-L1 Watch-Only Allocator Binding Ceremony
+After=local-fs.target
+
+[Service]
+Type=oneshot
+User=xr1f-l1
+Group=xr1f-l1
+WorkingDirectory=/opt/xolosramirez
+EnvironmentFile=/etc/xolosramirez/xr1f-l1.env
+ExecStart=/usr/bin/node /opt/xolosramirez/services/xr1f-l1/bind-allocator.mjs
+RemainAfterExit=yes
+TimeoutStartSec=30
+
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+PrivateNetwork=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+RestrictSUIDSGID=true
+LockPersonality=true
+MemoryDenyWriteExecute=false
+RestrictNamespaces=true
+SystemCallArchitectures=native
+CapabilityBoundingSet=
+AmbientCapabilities=
+UMask=0077
+
+ReadOnlyPaths=/opt/xolosramirez
+ReadOnlyPaths=/opt/x402-xec
+ReadOnlyPaths=/etc/xolosramirez
+ReadWritePaths=/srv/xolosramirez/xr1f
+
+# Intentionally no [Install] section. This unit is operator-invoked only and
+# must never run automatically at boot.
