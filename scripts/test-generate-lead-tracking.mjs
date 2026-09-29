@@ -5,7 +5,7 @@ import vm from 'node:vm';
 
 const read = (path) => readFileSync(path, 'utf8');
 const main = read('js/main.js');
-const WHATSAPP_BUSINESS_URL = 'https://wa.me/message/EXX6AH4L77ZHK1';
+const WHATSAPP_BUSINESS_URL = 'https://wa.me/message/KGKS3MKYMHCWE1';
 const leadCode = main.slice(
   main.indexOf('function getLeadElement'),
   main.indexOf('function initializePuppyCarousels')
