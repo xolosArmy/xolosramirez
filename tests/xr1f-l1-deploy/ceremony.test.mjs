@@ -128,7 +128,54 @@ canonicalTest('2. failed canonical C3B probe prevents migration and binding', as
   }
 });
 
-canonicalTest('3. canonical ceremony creates one durable immutable binding', async () => {
+canonicalTest('3. existing invoice history prevents even binding-schema creation', async () => {
+  const fx = makeC3b();
+  try {
+    const db = new DatabaseSync(fx.path);
+    db.prepare(`
+      INSERT INTO main.invoices (
+        invoice_hash, nonce, resource_hash, amount_sats, pay_to,
+        network, scheme, issued_at, expires_at, state, derivation_index
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(
+      'a'.repeat(64),
+      'history_nonce',
+      'b'.repeat(64),
+      '1000',
+      'ecash:qqg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyquz9y96w',
+      'xec:mainnet',
+      'exact',
+      1,
+      2,
+      'ISSUED',
+      0,
+    );
+    db.close();
+
+    await assert.rejects(
+      () =>
+        runBindingCeremony({
+          env: env(fx.path),
+          probeC3b() {
+            return Object.freeze({ ok: true, component: 'c3bStore' });
+          },
+          logger: logger(),
+        }),
+      /XR1F_L1_UNBOUND_HISTORY/,
+    );
+
+    const verify = new DatabaseSync(fx.path);
+    const bindingTable = verify.prepare(
+      "SELECT name FROM main.sqlite_master WHERE type='table' AND name='xr1f_l1_allocator_binding'",
+    ).get();
+    verify.close();
+    assert.equal(bindingTable, undefined);
+  } finally {
+    fx.cleanup();
+  }
+});
+
+canonicalTest('4. canonical ceremony creates one durable immutable binding', async () => {
   const fx = makeC3b();
   const log = logger();
 
@@ -174,7 +221,7 @@ canonicalTest('3. canonical ceremony creates one durable immutable binding', asy
   }
 });
 
-canonicalTest('4. repeated ceremony is idempotent and preserves original binding time', async () => {
+canonicalTest('5. repeated ceremony is idempotent and preserves original binding time', async () => {
   const fx = makeC3b();
 
   try {
