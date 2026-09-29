@@ -11,6 +11,7 @@ import {
   readAllocatorBinding,
 } from '../../src/x402-xr1f-l1/binding.mjs';
 import { loadXr1fL1Config } from './config.mjs';
+import { probeC3bStoreReadOnly } from '../xr1f-ro/probes.mjs';
 
 const MIGRATION = new URL(
   '../../src/x402-xr1f-l1/migrations/001_allocator_binding.sql',
@@ -44,6 +45,7 @@ export async function runBindingCeremony({
   env = process.env,
   now = () => Math.floor(Date.now() / 1000),
   logger = console,
+  probeC3b = probeC3bStoreReadOnly,
 } = {}) {
   const config = loadXr1fL1Config(env);
 
@@ -67,6 +69,10 @@ export async function runBindingCeremony({
     config.x402ModulePath,
     'XR1F-L1 canonical x402-XEC module',
   );
+
+  // Fail closed before any writable SQLite handle is opened. This proves the
+  // target is the existing canonical C3B store, not a fresh or unrelated DB.
+  probeC3b(c3bDbPath);
 
   const implementation =
     await loadPinnedX402AllocatorImplementation({
