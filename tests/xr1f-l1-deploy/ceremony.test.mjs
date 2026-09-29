@@ -29,7 +29,10 @@ const canonicalTest = CANONICAL_MODULE ? test : test.skip;
 
 const TEST_BUILD_SHA = 'c'.repeat(40);
 
-function makeC3b({ partialPayTo = false } = {}) {
+function makeC3b({
+  partialPayTo = false,
+  expressionPayTo = false,
+} = {}) {
   const dir = mkdtempSync(join(tmpdir(), 'xr1f-l1-deploy-'));
   const path = join(dir, 'c3b.sqlite');
   const db = new DatabaseSync(path);
@@ -41,7 +44,7 @@ function makeC3b({ partialPayTo = false } = {}) {
       nonce TEXT NOT NULL UNIQUE,
       resource_hash TEXT NOT NULL,
       amount_sats TEXT NOT NULL,
-      pay_to TEXT NOT NULL${partialPayTo ? '' : ' UNIQUE'},
+      pay_to TEXT NOT NULL${partialPayTo || expressionPayTo ? '' : ' UNIQUE'},
       network TEXT NOT NULL,
       scheme TEXT NOT NULL,
       issued_at INTEGER NOT NULL,
@@ -56,6 +59,12 @@ function makeC3b({ partialPayTo = false } = {}) {
   if (partialPayTo) {
     db.exec(
       "CREATE UNIQUE INDEX bad_pay_to_partial ON invoices(pay_to) WHERE 0;",
+    );
+  }
+
+  if (expressionPayTo) {
+    db.exec(
+      "CREATE UNIQUE INDEX bad_pay_to_expression ON invoices(pay_to, (derivation_index % 2));",
     );
   }
 
@@ -267,7 +276,7 @@ canonicalTest('6. pre-existing degraded binding schema is rejected before reuse'
           },
           logger: logger(),
         }),
-      /XR1F_L1_BINDING_SCHEMA_CONSTRAINT_MISMATCH|XR1F_L1_BINDING_SCHEMA_TRIGGERS_MISMATCH/,
+      /XR1F_L1_BINDING_SCHEMA_STRICT_REQUIRED|XR1F_L1_BINDING_SCHEMA_TRIGGERS_MISMATCH/,
     );
 
     const verify = new DatabaseSync(fx.path);
@@ -276,6 +285,130 @@ canonicalTest('6. pre-existing degraded binding schema is rejected before reuse'
     ).get().n;
     verify.close();
     assert.equal(Number(count), 0);
+  } finally {
+    fx.cleanup();
+  }
+});
+
+canonicalTest('10. expression unique index cannot satisfy C3B pay_to uniqueness', async () => {
+  const fx = makeC3b({ expressionPayTo: true });
+  try {
+    await assert.rejects(
+      () =>
+        runCeremony({
+          env: env(fx.path),
+          probeC3b() {
+            return Object.freeze({ ok: true, component: 'c3bStore' });
+          },
+          logger: logger(),
+        }),
+      /XR1F_L1_C3B_LIVE_UNIQUE_INDEX_MISSING_pay_to/,
+    );
+  } finally {
+    fx.cleanup();
+  }
+});
+
+canonicalTest('11. no-op-only update trigger is rejected by real mutation probe', async () => {
+  const fx = makeC3b();
+
+  try {
+    const db = new DatabaseSync(fx.path);
+    db.exec(\`
+      CREATE TABLE main.xr1f_l1_allocator_binding (
+        binding_id INTEGER PRIMARY KEY CHECK(binding_id = 1),
+        schema_version INTEGER NOT NULL CHECK(schema_version = 1),
+        allocator_kind TEXT NOT NULL CHECK(allocator_kind = 'X402_XEC_XPUB_V1'),
+        allocator_id TEXT NOT NULL UNIQUE CHECK(
+          length(allocator_id) = 64
+          AND allocator_id = lower(allocator_id)
+          AND allocator_id NOT GLOB '*[^0-9a-f]*'
+        ),
+        network TEXT NOT NULL CHECK(network = 'xec:mainnet'),
+        x402_xec_commit TEXT NOT NULL CHECK(
+          x402_xec_commit = '0f409dea2959b397ecc4bb84d71519ec6e3aec04'
+        ),
+        bound_at INTEGER NOT NULL CHECK(
+          bound_at >= 0 AND bound_at <= 9007199254740991
+        )
+      ) STRICT;
+
+      CREATE TRIGGER main.xr1f_l1_allocator_binding_no_update
+      BEFORE UPDATE ON main.xr1f_l1_allocator_binding
+      FOR EACH ROW
+      WHEN NEW.bound_at = OLD.bound_at
+      BEGIN
+        SELECT RAISE(ABORT, 'XR1F_L1_ALLOCATOR_BINDING_IMMUTABLE');
+      END;
+
+      CREATE TRIGGER main.xr1f_l1_allocator_binding_no_delete
+      BEFORE DELETE ON main.xr1f_l1_allocator_binding
+      FOR EACH ROW
+      BEGIN
+        SELECT RAISE(ABORT, 'XR1F_L1_ALLOCATOR_BINDING_DELETE_FORBIDDEN');
+      END;
+    \`);
+    db.close();
+
+    await assert.rejects(
+      () =>
+        runCeremony({
+          env: env(fx.path),
+          probeC3b() {
+            return Object.freeze({ ok: true, component: 'c3bStore' });
+          },
+          logger: logger(),
+        }),
+      /XR1F_L1_BINDING_SCHEMA_UPDATE_TRIGGER_NOT_ENFORCED/,
+    );
+  } finally {
+    fx.cleanup();
+  }
+});
+
+canonicalTest('12. comment bait cannot replace STRICT and functional CHECK constraints', async () => {
+  const fx = makeC3b();
+
+  try {
+    const db = new DatabaseSync(fx.path);
+    db.exec(\`
+      CREATE TABLE main.xr1f_l1_allocator_binding (
+        binding_id INTEGER PRIMARY KEY /* check(binding_id = 1) */,
+        schema_version INTEGER NOT NULL /* check(schema_version = 1) */,
+        allocator_kind TEXT NOT NULL /* check(allocator_kind = 'X402_XEC_XPUB_V1') */,
+        allocator_id TEXT NOT NULL UNIQUE /* length(allocator_id) = 64 allocator_id = lower(allocator_id) allocator_id not glob '*[^0-9a-f]*' */,
+        network TEXT NOT NULL /* check(network = 'xec:mainnet') */,
+        x402_xec_commit TEXT NOT NULL /* x402_xec_commit = '0f409dea2959b397ecc4bb84d71519ec6e3aec04' */,
+        bound_at INTEGER NOT NULL /* bound_at >= 0 bound_at <= 9007199254740991 */
+      );
+
+      CREATE TRIGGER main.xr1f_l1_allocator_binding_no_update
+      BEFORE UPDATE ON main.xr1f_l1_allocator_binding
+      FOR EACH ROW
+      BEGIN
+        SELECT RAISE(ABORT, 'XR1F_L1_ALLOCATOR_BINDING_IMMUTABLE');
+      END;
+
+      CREATE TRIGGER main.xr1f_l1_allocator_binding_no_delete
+      BEFORE DELETE ON main.xr1f_l1_allocator_binding
+      FOR EACH ROW
+      BEGIN
+        SELECT RAISE(ABORT, 'XR1F_L1_ALLOCATOR_BINDING_DELETE_FORBIDDEN');
+      END;
+    \`);
+    db.close();
+
+    await assert.rejects(
+      () =>
+        runCeremony({
+          env: env(fx.path),
+          probeC3b() {
+            return Object.freeze({ ok: true, component: 'c3bStore' });
+          },
+          logger: logger(),
+        }),
+      /XR1F_L1_BINDING_SCHEMA_STRICT_REQUIRED/,
+    );
   } finally {
     fx.cleanup();
   }
@@ -416,7 +549,7 @@ canonicalTest('9. failure after schema creation rolls back the whole ceremony tr
   }
 });
 
-canonicalTest('10. canonical ceremony creates one durable immutable binding', async () => {
+canonicalTest('13. canonical ceremony creates one durable immutable binding', async () => {
   const fx = makeC3b();
   const log = logger();
 
@@ -462,7 +595,7 @@ canonicalTest('10. canonical ceremony creates one durable immutable binding', as
   }
 });
 
-canonicalTest('11. repeated ceremony is idempotent and preserves original binding time', async () => {
+canonicalTest('14. repeated ceremony is idempotent and preserves original binding time', async () => {
   const fx = makeC3b();
 
   try {
