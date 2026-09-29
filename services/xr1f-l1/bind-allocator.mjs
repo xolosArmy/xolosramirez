@@ -27,7 +27,15 @@ const GIT_BIN = '/usr/bin/git';
 export function resolveDeployedBuildSha() {
   const result = spawnSync(
     GIT_BIN,
-    ['-C', REPO_ROOT, 'rev-parse', '--verify', 'HEAD^{commit}'],
+    [
+      '-c',
+      `safe.directory=${REPO_ROOT}`,
+      '-C',
+      REPO_ROOT,
+      'rev-parse',
+      '--verify',
+      'HEAD^{commit}',
+    ],
     {
       encoding: 'utf8',
       timeout: 5000,
