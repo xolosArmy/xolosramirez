@@ -9,7 +9,6 @@ Group=xr1f-l1
 WorkingDirectory=/opt/xolosramirez
 EnvironmentFile=/etc/xolosramirez/xr1f-l1.env
 ExecStart=/usr/bin/node /opt/xolosramirez/services/xr1f-l1/bind-allocator.mjs
-RemainAfterExit=yes
 TimeoutStartSec=30
 
 NoNewPrivileges=true
