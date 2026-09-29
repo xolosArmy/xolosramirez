@@ -1,5 +1,7 @@
+import { spawnSync } from 'node:child_process';
 import { lstatSync, readFileSync, realpathSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
 
 import {
@@ -17,6 +19,41 @@ const MIGRATION = new URL(
   '../../src/x402-xr1f-l1/migrations/001_allocator_binding.sql',
   import.meta.url,
 );
+const REPO_ROOT = realpathSync(
+  fileURLToPath(new URL('../../', import.meta.url)),
+);
+const GIT_BIN = '/usr/bin/git';
+
+export function resolveDeployedBuildSha() {
+  const result = spawnSync(
+    GIT_BIN,
+    ['-C', REPO_ROOT, 'rev-parse', '--verify', 'HEAD^{commit}'],
+    {
+      encoding: 'utf8',
+      timeout: 5000,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    },
+  );
+
+  if (result.error || result.status !== 0) {
+    throw new Error('XR1F_L1_DEPLOYED_BUILD_SHA_UNAVAILABLE');
+  }
+
+  const sha = String(result.stdout ?? '').trim().toLowerCase();
+  if (!/^[0-9a-f]{40}$/.test(sha)) {
+    throw new Error('XR1F_L1_DEPLOYED_BUILD_SHA_INVALID');
+  }
+
+  return sha;
+}
+
+function assertDeployedBuildSha(expectedSha, getDeployedBuildSha) {
+  const actualSha = getDeployedBuildSha();
+  if (actualSha !== expectedSha) {
+    throw new Error('XR1F_L1_BUILD_SHA_MISMATCH');
+  }
+  return actualSha;
+}
 
 function canonicalRegularFile(path, label) {
   const expected = resolve(path);
@@ -88,7 +125,24 @@ function uniqueIndexedColumns(db, table) {
       .map(row => row.name)
       .filter(Boolean);
 
-    if (columns.length === 1) result.add(columns[0]);
+    if (columns.length !== 1) continue;
+
+    const column = columns[0];
+    const partial = Number(index.partial) === 1;
+
+    if (partial) {
+      if (column !== 'settled_txid') continue;
+
+      const row = db.prepare(
+        "SELECT sql FROM main.sqlite_master WHERE type='index' AND name=?",
+      ).get(index.name);
+      const sql = normalizeSql(row?.sql);
+      if (!/\bwhere settled_txid is not null\s*$/.test(sql)) {
+        continue;
+      }
+    }
+
+    result.add(column);
   }
 
   return result;
@@ -352,6 +406,7 @@ export async function runBindingCeremony({
   now = () => Math.floor(Date.now() / 1000),
   logger = console,
   probeC3b = probeC3bStoreReadOnly,
+  getDeployedBuildSha = resolveDeployedBuildSha,
 } = {}) {
   const config = loadXr1fL1Config(env);
 
@@ -366,6 +421,13 @@ export async function runBindingCeremony({
     logger.log(JSON.stringify(result));
     return result;
   }
+
+  // Bind evidence must describe the exact checkout executing this ceremony.
+  // Verify before opening or probing the production database.
+  assertDeployedBuildSha(
+    config.buildSha,
+    getDeployedBuildSha,
+  );
 
   const c3bDbPath = canonicalRegularFile(
     config.c3bDbPath,
