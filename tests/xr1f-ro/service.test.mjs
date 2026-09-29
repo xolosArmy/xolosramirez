@@ -16,7 +16,10 @@ const RESOURCE_HASH =
   '7de82337df5f68767c6c75206545cfe0e06eeaff6d15889547651eff972d930b';
 const TXID = 'a'.repeat(64);
 
-function createC3bDb(path, { partialPayTo = false } = {}) {
+function createC3bDb(path, {
+  partialPayTo = false,
+  expressionPayTo = false,
+} = {}) {
   const db = new DatabaseSync(path);
   db.exec(`
     PRAGMA journal_mode = WAL;
@@ -25,7 +28,7 @@ function createC3bDb(path, { partialPayTo = false } = {}) {
       nonce TEXT NOT NULL UNIQUE,
       resource_hash TEXT NOT NULL,
       amount_sats TEXT NOT NULL,
-      pay_to TEXT NOT NULL${partialPayTo ? '' : ' UNIQUE'},
+      pay_to TEXT NOT NULL${partialPayTo || expressionPayTo ? '' : ' UNIQUE'},
       network TEXT NOT NULL,
       scheme TEXT NOT NULL,
       issued_at INTEGER NOT NULL,
@@ -42,6 +45,12 @@ function createC3bDb(path, { partialPayTo = false } = {}) {
   if (partialPayTo) {
     db.exec(
       "CREATE UNIQUE INDEX bad_pay_to_partial ON invoices(pay_to) WHERE 0;",
+    );
+  }
+
+  if (expressionPayTo) {
+    db.exec(
+      "CREATE UNIQUE INDEX bad_pay_to_expression ON invoices(pay_to, (derivation_index % 2));",
     );
   }
 
@@ -228,6 +237,22 @@ test('6. noncanonical partial unique C3B index fails closed', () => {
   }
 });
 
+test('8. expression unique C3B index fails closed', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'xr1f-ro-expression-index-'));
+  const path = join(dir, 'c3b.sqlite');
+
+  createC3bDb(path, { expressionPayTo: true });
+
+  try {
+    assert.throws(
+      () => probeC3bStoreReadOnly(path),
+      /XR1F_RO_C3B_UNIQUE_INDEX_MISSING_pay_to/,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test('5. malformed XR1D schema version fails closed', () => {
   const fx = createFixture();
   try {
@@ -254,7 +279,7 @@ test('7. Chronik reader accepts valid read-only transaction shape', async () => 
   assert.equal(result.confirmed, true);
 });
 
-test('8. Chronik reader with broadcast capability is rejected', async () => {
+test('9. Chronik reader with broadcast capability is rejected', async () => {
   const reader = {
     ...goodChronikReader(),
     async broadcastTx() {},
@@ -270,7 +295,7 @@ test('8. Chronik reader with broadcast capability is rejected', async () => {
   );
 });
 
-test('9. Chronik timeout fails closed', async () => {
+test('10. Chronik timeout fails closed', async () => {
   const reader = {
     async getTx() {
       return new Promise(() => {});
@@ -287,7 +312,7 @@ test('9. Chronik timeout fails closed', async () => {
   );
 });
 
-test('10. Chronik malformed response fails closed', async () => {
+test('11. Chronik malformed response fails closed', async () => {
   const reader = {
     async getTx() {
       return { txid: TXID, outputs: [], isFinal: 'yes', timeFirstSeen: 1 };
@@ -304,7 +329,7 @@ test('10. Chronik malformed response fails closed', async () => {
   );
 });
 
-test('11. readiness reports READ_ONLY_READY only when all probes pass', async () => {
+test('12. readiness reports READ_ONLY_READY only when all probes pass', async () => {
   const fx = createFixture();
   try {
     const service = createXr1fRoService({
@@ -330,7 +355,7 @@ test('11. readiness reports READ_ONLY_READY only when all probes pass', async ()
   }
 });
 
-test('12. kill-switch disabled makes readiness fail closed', async () => {
+test('13. kill-switch disabled makes readiness fail closed', async () => {
   const fx = createFixture();
   try {
     const service = createXr1fRoService({
@@ -352,7 +377,7 @@ test('12. kill-switch disabled makes readiness fail closed', async () => {
   }
 });
 
-test('13. /health is alive even if readiness is disabled, and never authorizes funds', async () => {
+test('14. /health is alive even if readiness is disabled, and never authorizes funds', async () => {
   const fx = createFixture();
   const service = createXr1fRoService({
     config: config({
@@ -381,7 +406,7 @@ test('13. /health is alive even if readiness is disabled, and never authorizes f
   }
 });
 
-test('14. service exposes no payment, invoice or protected-resource route', async () => {
+test('15. service exposes no payment, invoice or protected-resource route', async () => {
   const fx = createFixture();
   const service = createXr1fRoService({
     config: config({
@@ -410,7 +435,7 @@ test('14. service exposes no payment, invoice or protected-resource route', asyn
   }
 });
 
-test('15. readiness failure never leaks filesystem paths', async () => {
+test('16. readiness failure never leaks filesystem paths', async () => {
   const fx = createFixture();
   try {
     const service = createXr1fRoService({
