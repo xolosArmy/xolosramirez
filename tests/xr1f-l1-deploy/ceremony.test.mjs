@@ -27,7 +27,9 @@ const CANONICAL_MODULE =
 
 const canonicalTest = CANONICAL_MODULE ? test : test.skip;
 
-function makeC3b() {
+const TEST_BUILD_SHA = 'c'.repeat(40);
+
+function makeC3b({ partialPayTo = false } = {}) {
   const dir = mkdtempSync(join(tmpdir(), 'xr1f-l1-deploy-'));
   const path = join(dir, 'c3b.sqlite');
   const db = new DatabaseSync(path);
@@ -39,7 +41,7 @@ function makeC3b() {
       nonce TEXT NOT NULL UNIQUE,
       resource_hash TEXT NOT NULL,
       amount_sats TEXT NOT NULL,
-      pay_to TEXT NOT NULL UNIQUE,
+      pay_to TEXT NOT NULL${partialPayTo ? '' : ' UNIQUE'},
       network TEXT NOT NULL,
       scheme TEXT NOT NULL,
       issued_at INTEGER NOT NULL,
@@ -50,6 +52,13 @@ function makeC3b() {
       derivation_index INTEGER NOT NULL UNIQUE
     );
   `);
+
+  if (partialPayTo) {
+    db.exec(
+      "CREATE UNIQUE INDEX bad_pay_to_partial ON invoices(pay_to) WHERE 0;",
+    );
+  }
+
   db.close();
 
   return {
@@ -65,7 +74,7 @@ function env(path, enabled = true) {
   return {
     NODE_ENV: 'production',
     XR1F_L1_BIND_ENABLED: enabled ? 'true' : 'false',
-    XR1F_L1_BUILD_SHA: 'c'.repeat(40),
+    XR1F_L1_BUILD_SHA: TEST_BUILD_SHA,
     XR1F_L1_C3B_DB_PATH: path,
     XR1F_L1_MERCHANT_XPUB: XPUB,
     XR1F_L1_MERCHANT_XPUB_SHA256: XPUB_SHA,
@@ -73,6 +82,13 @@ function env(path, enabled = true) {
       '0f409dea2959b397ecc4bb84d71519ec6e3aec04',
     XR1F_L1_X402_MODULE_PATH: CANONICAL_MODULE || '/not-used/index.js',
   };
+}
+
+function runCeremony(options = {}) {
+  return runCeremony({
+    getDeployedBuildSha: () => TEST_BUILD_SHA,
+    ...options,
+  });
 }
 
 function logger() {
@@ -87,7 +103,7 @@ function logger() {
 
 test('1. disabled ceremony performs no filesystem or database access', async () => {
   const log = logger();
-  const result = await runBindingCeremony({
+  const result = await runCeremony({
     env: {
       ...env('/does/not/exist.sqlite', false),
       XR1F_L1_X402_MODULE_PATH: '/does/not/exist/index.js',
@@ -103,12 +119,61 @@ test('1. disabled ceremony performs no filesystem or database access', async () 
   assert.equal(result.realFundsAuthorized, false);
 });
 
-canonicalTest('2. failed canonical C3B probe prevents migration and binding', async () => {
+test('2. configured build SHA must match the executing checkout before C3B access', async () => {
+  let probeCalled = false;
+
+  await assert.rejects(
+    () =>
+      runBindingCeremony({
+        env: {
+          ...env('/does/not/exist.sqlite'),
+          XR1F_L1_BUILD_SHA: 'd'.repeat(40),
+          XR1F_L1_X402_MODULE_PATH: '/does/not/exist/index.js',
+        },
+        getDeployedBuildSha: () => TEST_BUILD_SHA,
+        probeC3b() {
+          probeCalled = true;
+        },
+        logger: logger(),
+      }),
+    /XR1F_L1_BUILD_SHA_MISMATCH/,
+  );
+
+  assert.equal(probeCalled, false);
+});
+
+canonicalTest('5. partial unique index cannot satisfy global C3B pay_to uniqueness', async () => {
+  const fx = makeC3b({ partialPayTo: true });
+  try {
+    await assert.rejects(
+      () =>
+        runCeremony({
+          env: env(fx.path),
+          probeC3b() {
+            return Object.freeze({ ok: true, component: 'c3bStore' });
+          },
+          logger: logger(),
+        }),
+      /XR1F_L1_C3B_LIVE_UNIQUE_INDEX_MISSING_pay_to/,
+    );
+
+    const verify = new DatabaseSync(fx.path);
+    const bindingTable = verify.prepare(
+      "SELECT name FROM main.sqlite_master WHERE type='table' AND name='xr1f_l1_allocator_binding'",
+    ).get();
+    verify.close();
+    assert.equal(bindingTable, undefined);
+  } finally {
+    fx.cleanup();
+  }
+});
+
+canonicalTest('4. failed canonical C3B probe prevents migration and binding', async () => {
   const fx = makeC3b();
   try {
     await assert.rejects(
       () =>
-        runBindingCeremony({
+        runCeremony({
           env: env(fx.path),
           probeC3b() {
             throw new Error('XR1F_RO_C3B_QUICK_CHECK_FAILED');
@@ -155,7 +220,7 @@ canonicalTest('3. existing invoice history prevents even binding-schema creation
 
     await assert.rejects(
       () =>
-        runBindingCeremony({
+        runCeremony({
           env: env(fx.path),
           probeC3b() {
             return Object.freeze({ ok: true, component: 'c3bStore' });
@@ -176,7 +241,7 @@ canonicalTest('3. existing invoice history prevents even binding-schema creation
   }
 });
 
-canonicalTest('4. pre-existing degraded binding schema is rejected before reuse', async () => {
+canonicalTest('6. pre-existing degraded binding schema is rejected before reuse', async () => {
   const fx = makeC3b();
   try {
     const db = new DatabaseSync(fx.path);
@@ -195,7 +260,7 @@ canonicalTest('4. pre-existing degraded binding schema is rejected before reuse'
 
     await assert.rejects(
       () =>
-        runBindingCeremony({
+        runCeremony({
           env: env(fx.path),
           probeC3b() {
             return Object.freeze({ ok: true, component: 'c3bStore' });
@@ -216,7 +281,7 @@ canonicalTest('4. pre-existing degraded binding schema is rejected before reuse'
   }
 });
 
-canonicalTest('5. live WAL schema divergence is rejected before binding', async () => {
+canonicalTest('7. live WAL schema divergence is rejected before binding', async () => {
   const fx = makeC3b();
   const writer = new DatabaseSync(fx.path);
 
@@ -230,7 +295,7 @@ canonicalTest('5. live WAL schema divergence is rejected before binding', async 
 
     await assert.rejects(
       () =>
-        runBindingCeremony({
+        runCeremony({
           env: env(fx.path),
           // Model the stale immutable preflight as having succeeded. The
           // same writable/live handle used for binding must still catch the
@@ -255,7 +320,7 @@ canonicalTest('5. live WAL schema divergence is rejected before binding', async 
   }
 });
 
-canonicalTest('6. conditional WHEN 0 immutability triggers are rejected functionally', async () => {
+canonicalTest('8. conditional WHEN 0 immutability triggers are rejected functionally', async () => {
   const fx = makeC3b();
 
   try {
@@ -299,7 +364,7 @@ canonicalTest('6. conditional WHEN 0 immutability triggers are rejected function
 
     await assert.rejects(
       () =>
-        runBindingCeremony({
+        runCeremony({
           env: env(fx.path),
           probeC3b() {
             return Object.freeze({ ok: true, component: 'c3bStore' });
@@ -320,13 +385,13 @@ canonicalTest('6. conditional WHEN 0 immutability triggers are rejected function
   }
 });
 
-canonicalTest('7. failure after schema creation rolls back the whole ceremony transaction', async () => {
+canonicalTest('9. failure after schema creation rolls back the whole ceremony transaction', async () => {
   const fx = makeC3b();
 
   try {
     await assert.rejects(
       () =>
-        runBindingCeremony({
+        runCeremony({
           env: env(fx.path),
           now: () => -1,
           probeC3b() {
@@ -351,12 +416,12 @@ canonicalTest('7. failure after schema creation rolls back the whole ceremony tr
   }
 });
 
-canonicalTest('8. canonical ceremony creates one durable immutable binding', async () => {
+canonicalTest('10. canonical ceremony creates one durable immutable binding', async () => {
   const fx = makeC3b();
   const log = logger();
 
   try {
-    const result = await runBindingCeremony({
+    const result = await runCeremony({
       env: env(fx.path),
       now: () => 1_800_000_000,
       probeC3b() {
@@ -397,7 +462,7 @@ canonicalTest('8. canonical ceremony creates one durable immutable binding', asy
   }
 });
 
-canonicalTest('9. repeated ceremony is idempotent and preserves original binding time', async () => {
+canonicalTest('11. repeated ceremony is idempotent and preserves original binding time', async () => {
   const fx = makeC3b();
 
   try {
@@ -409,11 +474,11 @@ canonicalTest('9. repeated ceremony is idempotent and preserves original binding
       logger: logger(),
     };
 
-    const first = await runBindingCeremony({
+    const first = await runCeremony({
       ...options,
       now: () => 111,
     });
-    const second = await runBindingCeremony({
+    const second = await runCeremony({
       ...options,
       now: () => 999,
     });
