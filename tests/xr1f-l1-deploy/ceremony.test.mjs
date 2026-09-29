@@ -175,7 +175,86 @@ canonicalTest('3. existing invoice history prevents even binding-schema creation
   }
 });
 
-canonicalTest('4. canonical ceremony creates one durable immutable binding', async () => {
+canonicalTest('4. pre-existing degraded binding schema is rejected before reuse', async () => {
+  const fx = makeC3b();
+  try {
+    const db = new DatabaseSync(fx.path);
+    db.exec(`
+      CREATE TABLE main.xr1f_l1_allocator_binding (
+        binding_id INTEGER PRIMARY KEY,
+        schema_version INTEGER NOT NULL,
+        allocator_kind TEXT NOT NULL,
+        allocator_id TEXT NOT NULL UNIQUE,
+        network TEXT NOT NULL,
+        x402_xec_commit TEXT NOT NULL,
+        bound_at INTEGER NOT NULL
+      );
+    `);
+    db.close();
+
+    await assert.rejects(
+      () =>
+        runBindingCeremony({
+          env: env(fx.path),
+          probeC3b() {
+            return Object.freeze({ ok: true, component: 'c3bStore' });
+          },
+          logger: logger(),
+        }),
+      /XR1F_L1_BINDING_SCHEMA_CONSTRAINT_MISMATCH|XR1F_L1_BINDING_SCHEMA_TRIGGERS_MISMATCH/,
+    );
+
+    const verify = new DatabaseSync(fx.path);
+    const count = verify.prepare(
+      'SELECT COUNT(*) AS n FROM main.xr1f_l1_allocator_binding',
+    ).get().n;
+    verify.close();
+    assert.equal(Number(count), 0);
+  } finally {
+    fx.cleanup();
+  }
+});
+
+canonicalTest('5. live WAL schema divergence is rejected before binding', async () => {
+  const fx = makeC3b();
+  const writer = new DatabaseSync(fx.path);
+
+  try {
+    writer.exec('PRAGMA wal_autocheckpoint=0');
+    writer.exec('BEGIN IMMEDIATE');
+    writer.exec(
+      'ALTER TABLE main.invoices RENAME COLUMN state TO state_diverged',
+    );
+    writer.exec('COMMIT');
+
+    await assert.rejects(
+      () =>
+        runBindingCeremony({
+          env: env(fx.path),
+          // Model the stale immutable preflight as having succeeded. The
+          // same writable/live handle used for binding must still catch the
+          // uncheckpointed WAL-visible schema divergence.
+          probeC3b() {
+            return Object.freeze({ ok: true, component: 'c3bStore' });
+          },
+          logger: logger(),
+        }),
+      /XR1F_L1_C3B_LIVE_COLUMN_MISSING_state/,
+    );
+
+    const verify = new DatabaseSync(fx.path);
+    const bindingTable = verify.prepare(
+      "SELECT name FROM main.sqlite_master WHERE type='table' AND name='xr1f_l1_allocator_binding'",
+    ).get();
+    verify.close();
+    assert.equal(bindingTable, undefined);
+  } finally {
+    try { writer.close(); } catch {}
+    fx.cleanup();
+  }
+});
+
+canonicalTest('6. canonical ceremony creates one durable immutable binding', async () => {
   const fx = makeC3b();
   const log = logger();
 
@@ -221,7 +300,7 @@ canonicalTest('4. canonical ceremony creates one durable immutable binding', asy
   }
 });
 
-canonicalTest('5. repeated ceremony is idempotent and preserves original binding time', async () => {
+canonicalTest('7. repeated ceremony is idempotent and preserves original binding time', async () => {
   const fx = makeC3b();
 
   try {
