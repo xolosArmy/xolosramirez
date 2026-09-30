@@ -15,7 +15,7 @@
 
 export const CANONICAL_PUBLIC_BIRTH_DATES = {
   tlilxochitl: '2026-08-03', // Backed by public card in xolos-disponibles.html: "Recién nacida · 3 de agosto de 2026"
-  iztli: '2026-07-14' // Backed by the canonical Xolos Ramírez master sheet and now published on the ES/EN profile cards.
+  iztli: '2026-07-14' // Backed by the canonical Xolos Ramírez master sheet and published in the permanent delivery chronicle.
 };
 
 /**
@@ -80,7 +80,7 @@ export const CANONICAL_PUBLIC_XOLOS = [
   {
     id: 'iztli',
     name: 'Iztli Ramirez',
-    status: 'reserved',
+    status: 'delivered',
     variety: 'pending_confirmation',
     size: 'small_intermediate',
     gender: 'male',
@@ -92,7 +92,7 @@ export const CANONICAL_PUBLIC_XOLOS = [
       'Cuidados generales de cachorro y seguimiento de piel según evolución individual'
     ],
     lineageReference: 'Linaje Tonalli Xolos Ramírez',
-    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#iztli'
+    publicUrl: 'https://xolosramirez.com/30-09-2026-entrega-xoloitzcuintle-iztli-ramirez.html'
   },
   {
     id: 'yohualli',
@@ -223,7 +223,8 @@ export const PublicXolosDataAdapter = {
    */
   async listAvailableXolos(filter = {}) {
     const { status = 'all', variety = 'all', size = 'all' } = filter;
-    let results = CANONICAL_PUBLIC_XOLOS;
+    // Historical profiles remain retrievable, but never enter the active catalogue.
+    let results = CANONICAL_PUBLIC_XOLOS.filter((x) => ['available', 'reserved'].includes(x.status));
 
     if (status && status !== 'all') {
       results = results.filter((x) => x.status.toLowerCase() === status.toLowerCase());
@@ -297,7 +298,9 @@ export const PublicXolosDataAdapter = {
       careConsiderations: xolo.careConsiderations,
       lineageReference: xolo.lineageReference,
       publicUrl: xolo.publicUrl,
-      directContactNotice: 'Para consultar disponibilidad vigente o iniciar el proceso de adopción, escribe a contacto@xolosarmy.xyz.'
+      directContactNotice: xolo.status === 'delivered'
+        ? 'Perfil histórico de un ejemplar entregado. Consulta su crónica de entrega en publicUrl.'
+        : 'Para consultar disponibilidad vigente o iniciar el proceso de adopción, escribe a contacto@xolosarmy.xyz.'
     };
 
     if (xolo.birthDate) {

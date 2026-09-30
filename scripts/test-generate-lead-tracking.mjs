@@ -462,7 +462,7 @@ for (const [path, expected] of Object.entries(priceContexts)) {
       notMatches(tag, /mailto:/i);
     } else {
       includes(tag, 'data-cta="email"');
-      assert.match(tag, /href="mailto:fernando@xolosramirez\.com\?subject=/i);
+      assert.match(tag, /href="mailto:contacto@xolosarmy\.xyz\?subject=/i);
       const refPlacement = placement === 'article-footer' ? 'footer' : placement;
       const ref = `price-${lang}-${expected.surface}-${refPlacement}`;
       includes(tag, `%5BRef%3A%20${ref}%5D`, `${path}: email CTA must preserve origin Ref`);
@@ -487,13 +487,13 @@ for (const path of ['contacto.html', 'en/contact.html']) {
 const profileExpectations = [
   ['tlilxochitl', 'available', 'Tlilxóchitl Ramirez'],
   ['xilonen', 'available', 'Xilonen Ramirez'],
-  ['iztli', 'reserved', 'Iztli Ramirez'],
   ['yohualli', 'reserved', 'Yohualli Ramirez'],
   ['tonalli', 'reserved', 'Tonalli Ramírez'],
   ['xochitl', 'reserved', 'Xochitl Ramirez'],
 ];
 for (const [path, prefix] of [['xolos-disponibles.html', 'Preguntar por '], ['en/available-xolos.html', 'Ask about ']]) {
   const html = read(path);
+  notMatches(html, /data-profile-card="iztli"|id="iztli"|#iztli/);
   for (const [profile, status, name] of profileExpectations) {
     const match = html.match(new RegExp(`<a(?=[^>]*data-profile="${profile}")(?=[^>]*data-cta-location="profile_card")[^>]*>[\\s\\S]*?<\\/a>`));
     assert.ok(match, path + ' must expose the CTA for ' + profile);
@@ -503,7 +503,7 @@ for (const [path, prefix] of [['xolos-disponibles.html', 'Preguntar por '], ['en
     includes(cta, 'data-status="' + status + '"');
     includes(cta, 'data-page-type="available-xolos"');
     includes(cta, `%5BRef%3A%20${profile}-`, path + ': existing profile origin reference must remain');
-    assert.match(cta, /href="mailto:fernando@xolosramirez\.com/i);
+    assert.match(cta, /href="mailto:contacto@xolosarmy\.xyz/i);
     notMatches(cta, /wa\.me|whatsapp:\/\//i);
     includes(cta, '>' + prefix + name + '</a>');
   }
