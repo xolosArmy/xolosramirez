@@ -1,5 +1,11 @@
 import { spawnSync } from 'node:child_process';
-import { lstatSync, readFileSync, realpathSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import {
+  lstatSync,
+  readFileSync,
+  readlinkSync,
+  realpathSync,
+} from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
@@ -67,10 +73,152 @@ export function resolveDeployedBuildSha({
   return sha;
 }
 
+function gitBlobOid(bytes, algorithm) {
+  const header = Buffer.from(`blob ${bytes.length}\\0`, 'utf8');
+  const hash = createHash(algorithm);
+  hash.update(header);
+  hash.update(bytes);
+  return hash.digest('hex');
+}
+
+function physicalTrackedBlobOid({
+  repoRoot,
+  path,
+  mode,
+  objectFormat,
+}) {
+  const root = resolve(repoRoot);
+  const physicalPath = resolve(root, path);
+  if (
+    physicalPath === root ||
+    !physicalPath.startsWith(`${root}/`)
+  ) {
+    throw new Error(
+      'XR1F_L1_DEPLOYED_TREE_PATH_INVALID',
+    );
+  }
+
+  let stat;
+  try {
+    stat = lstatSync(physicalPath);
+  } catch {
+    throw new Error(
+      `XR1F_L1_DEPLOYED_PHYSICAL_FILE_MISSING_${path}`,
+    );
+  }
+
+  let bytes;
+  if (mode === '120000') {
+    if (!stat.isSymbolicLink()) {
+      throw new Error(
+        `XR1F_L1_DEPLOYED_PHYSICAL_TYPE_MISMATCH_${path}`,
+      );
+    }
+    bytes = readlinkSync(physicalPath, { encoding: 'buffer' });
+  } else if (mode === '100644' || mode === '100755') {
+    if (!stat.isFile() || stat.isSymbolicLink()) {
+      throw new Error(
+        `XR1F_L1_DEPLOYED_PHYSICAL_TYPE_MISMATCH_${path}`,
+      );
+    }
+
+    const expectedExecutable = mode === '100755';
+    const physicalExecutable = (stat.mode & 0o111) !== 0;
+    if (physicalExecutable !== expectedExecutable) {
+      throw new Error(
+        `XR1F_L1_DEPLOYED_PHYSICAL_MODE_MISMATCH_${path}`,
+      );
+    }
+
+    bytes = readFileSync(physicalPath);
+  } else {
+    throw new Error(
+      `XR1F_L1_DEPLOYED_TREE_MODE_UNSUPPORTED_${mode}`,
+    );
+  }
+
+  return gitBlobOid(bytes, objectFormat);
+}
+
+function assertPhysicalHeadIdentity(repoRoot, gitBin) {
+  const formatResult = runGit(
+    repoRoot,
+    gitBin,
+    ['rev-parse', '--show-object-format'],
+  );
+  if (formatResult.error || formatResult.status !== 0) {
+    throw new Error(
+      'XR1F_L1_DEPLOYED_CHECKOUT_ATTESTATION_FAILED',
+    );
+  }
+
+  const objectFormat = String(formatResult.stdout ?? '')
+    .trim()
+    .toLowerCase();
+  if (objectFormat !== 'sha1' && objectFormat !== 'sha256') {
+    throw new Error(
+      'XR1F_L1_DEPLOYED_OBJECT_FORMAT_UNSUPPORTED',
+    );
+  }
+
+  const treeResult = runGit(
+    repoRoot,
+    gitBin,
+    ['ls-tree', '-rz', '--full-tree', 'HEAD'],
+  );
+  if (treeResult.error || treeResult.status !== 0) {
+    throw new Error(
+      'XR1F_L1_DEPLOYED_CHECKOUT_ATTESTATION_FAILED',
+    );
+  }
+
+  const rawTree = String(treeResult.stdout ?? '');
+  if (!rawTree || !rawTree.endsWith('\0')) {
+    throw new Error(
+      'XR1F_L1_DEPLOYED_HEAD_TREE_INVALID',
+    );
+  }
+
+  for (const record of rawTree.split('\0').filter(Boolean)) {
+    const match = record.match(
+      /^([0-7]{6}) (blob|commit) ([0-9a-f]{40,64})\t([\s\S]+)$/,
+    );
+    if (!match) {
+      throw new Error(
+        'XR1F_L1_DEPLOYED_HEAD_TREE_INVALID',
+      );
+    }
+
+    const [, mode, type, expectedOid, path] = match;
+    if (type !== 'blob') {
+      throw new Error(
+        `XR1F_L1_DEPLOYED_TREE_ENTRY_UNSUPPORTED_${path}`,
+      );
+    }
+
+    const physicalOid = physicalTrackedBlobOid({
+      repoRoot,
+      path,
+      mode,
+      objectFormat,
+    });
+
+    if (physicalOid !== expectedOid) {
+      throw new Error(
+        `XR1F_L1_DEPLOYED_PHYSICAL_BLOB_MISMATCH_${path}`,
+      );
+    }
+  }
+
+  return true;
+}
+
 export function assertDeployedCheckoutClean({
   repoRoot = REPO_ROOT,
   gitBin = GIT_BIN,
 } = {}) {
+  assertPhysicalHeadIdentity(repoRoot, gitBin);
+
   const indexState = runGit(
     repoRoot,
     gitBin,
