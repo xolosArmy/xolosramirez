@@ -19,6 +19,7 @@ const TXID = 'a'.repeat(64);
 function createC3bDb(path, {
   partialPayTo = false,
   expressionPayTo = false,
+  settledTxidCommentBait = false,
 } = {}) {
   const db = new DatabaseSync(path);
   db.exec(`
@@ -38,9 +39,17 @@ function createC3bDb(path, {
       settled_at INTEGER,
       derivation_index INTEGER NOT NULL UNIQUE
     );
-    CREATE UNIQUE INDEX idx_invoices_settled_txid
-    ON invoices(settled_txid) WHERE settled_txid IS NOT NULL;
   `);
+
+  if (settledTxidCommentBait) {
+    db.exec(
+      "CREATE UNIQUE INDEX idx_invoices_settled_txid ON invoices(settled_txid) WHERE 0 /* WHERE settled_txid IS NOT NULL",
+    );
+  } else {
+    db.exec(
+      "CREATE UNIQUE INDEX idx_invoices_settled_txid ON invoices(settled_txid) WHERE settled_txid IS NOT NULL;",
+    );
+  }
 
   if (partialPayTo) {
     db.exec(
@@ -247,6 +256,22 @@ test('8. expression unique C3B index fails closed', () => {
     assert.throws(
       () => probeC3bStoreReadOnly(path),
       /XR1F_RO_C3B_UNIQUE_INDEX_MISSING_pay_to/,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('7. comment-bait settled_txid partial index fails closed', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'xr1f-ro-settled-comment-bait-'));
+  const path = join(dir, 'c3b.sqlite');
+
+  createC3bDb(path, { settledTxidCommentBait: true });
+
+  try {
+    assert.throws(
+      () => probeC3bStoreReadOnly(path),
+      /XR1F_RO_C3B_UNIQUE_INDEX_MISSING_settled_txid/,
     );
   } finally {
     rmSync(dir, { recursive: true, force: true });
