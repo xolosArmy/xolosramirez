@@ -14,6 +14,23 @@ const FORBIDDEN_READER_METHODS = [
   'broadcastRawTx',
 ];
 
+const CANONICAL_SETTLED_TXID_PARTIAL_INDEX_SQL =
+  'create unique index idx_invoices_settled_txid on invoices(settled_txid) where settled_txid is not null';
+
+function normalizeSchemaSql(value) {
+  return String(value ?? '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+}
+
+export function isCanonicalSettledTxidPartialIndexSql(value) {
+  return (
+    normalizeSchemaSql(value) ===
+    CANONICAL_SETTLED_TXID_PARTIAL_INDEX_SQL
+  );
+}
+
 function validateDurablePath(path, name) {
   if (typeof path !== 'string' || path.trim() === '') {
     throw new Error(`${name}_PATH_REQUIRED`);
@@ -163,12 +180,8 @@ function uniqueIndexedColumns(path, table, options) {
         `SELECT sql FROM sqlite_master WHERE type='index' AND name='${escaped}'`,
         options,
       )[0];
-      const sql = String(indexRow?.sql ?? '')
-        .replace(/\s+/g, ' ')
-        .trim()
-        .toLowerCase();
 
-      if (!/\bwhere settled_txid is not null\s*$/.test(sql)) {
+      if (!isCanonicalSettledTxidPartialIndexSql(indexRow?.sql)) {
         continue;
       }
     }
