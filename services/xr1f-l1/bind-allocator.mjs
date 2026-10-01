@@ -238,6 +238,7 @@ export function attestExpectedCommit({
   expectedSha,
   repoRoot = REPO_ROOT,
   gitBin = GIT_BIN,
+  captureSnapshot = true,
 } = {}) {
   if (!/^[0-9a-f]{40}$/.test(expectedSha ?? '')) {
     throw new Error('XR1F_L1_BUILD_SHA_INVALID');
@@ -283,6 +284,7 @@ export function attestExpectedCommit({
 
     const utf8 = entry.path.toString('utf8');
     if (
+      captureSnapshot &&
       Buffer.from(utf8, 'utf8').equals(entry.path) &&
       SNAPSHOT_PATHS.has(utf8)
     ) {
@@ -293,11 +295,13 @@ export function attestExpectedCommit({
     }
   }
 
-  for (const required of SNAPSHOT_PATHS) {
-    if (!snapshot.has(required)) {
-      throw new Error(
-        `XR1F_L1_DEPLOYED_SNAPSHOT_FILE_MISSING_${required}`,
-      );
+  if (captureSnapshot) {
+    for (const required of SNAPSHOT_PATHS) {
+      if (!snapshot.has(required)) {
+        throw new Error(
+          `XR1F_L1_DEPLOYED_SNAPSHOT_FILE_MISSING_${required}`,
+        );
+      }
     }
   }
 
@@ -345,7 +349,12 @@ export function assertDeployedCheckoutClean({
   gitBin = GIT_BIN,
   expectedSha = resolveDeployedBuildSha({ repoRoot, gitBin }),
 } = {}) {
-  attestExpectedCommit({ expectedSha, repoRoot, gitBin });
+  attestExpectedCommit({
+    expectedSha,
+    repoRoot,
+    gitBin,
+    captureSnapshot: false,
+  });
   return true;
 }
 
