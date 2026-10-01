@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import {
+  chmodSync,
   mkdtempSync,
   rmSync,
   writeFileSync,
@@ -316,6 +317,51 @@ test('6. deployed checkout attestation rejects untracked files', () => {
           gitBin: '/usr/bin/git',
         }),
       /XR1F_L1_DEPLOYED_CHECKOUT_DIRTY/,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('7. physical blob attestation defeats a lying fsmonitor hook', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'xr1f-l1-git-fsmonitor-'));
+  const git = args =>
+    spawnSync('/usr/bin/git', ['-C', dir, ...args], {
+      encoding: 'utf8',
+    });
+
+  try {
+    assert.equal(git(['init']).status, 0);
+    assert.equal(git(['config', 'user.email', 'xr1f@example.invalid']).status, 0);
+    assert.equal(git(['config', 'user.name', 'XR1F Test']).status, 0);
+
+    const tracked = join(dir, 'tracked.txt');
+    writeFileSync(tracked, 'canonical\n');
+    assert.equal(git(['add', 'tracked.txt']).status, 0);
+    assert.equal(git(['commit', '-m', 'canonical']).status, 0);
+
+    const hook = join(dir, 'lying-fsmonitor.sh');
+    writeFileSync(
+      hook,
+      "#!/bin/sh\nprintf 'xr1f-token\\0'\nexit 0\n",
+    );
+    chmodSync(hook, 0o755);
+
+    assert.equal(git(['config', 'core.fsmonitor', hook]).status, 0);
+    assert.equal(git(['config', 'core.fsmonitorHookVersion', '2']).status, 0);
+
+    // Prime Git's fsmonitor state while the tracked file still matches HEAD.
+    assert.equal(git(['status', '--porcelain=v1']).status, 0);
+
+    writeFileSync(tracked, 'ghost-change\n');
+
+    assert.throws(
+      () =>
+        assertDeployedCheckoutClean({
+          repoRoot: dir,
+          gitBin: '/usr/bin/git',
+        }),
+      /XR1F_L1_DEPLOYED_PHYSICAL_BLOB_MISMATCH_tracked\.txt/,
     );
   } finally {
     rmSync(dir, { recursive: true, force: true });
