@@ -213,6 +213,115 @@ test('3. deployed checkout attestation rejects staged and unstaged tracked chang
   }
 });
 
+test('4. deployed checkout attestation rejects assume-unchanged index flags', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'xr1f-l1-git-assume-'));
+  const git = args =>
+    spawnSync('/usr/bin/git', ['-C', dir, ...args], {
+      encoding: 'utf8',
+    });
+
+  try {
+    assert.equal(git(['init']).status, 0);
+    assert.equal(git(['config', 'user.email', 'xr1f@example.invalid']).status, 0);
+    assert.equal(git(['config', 'user.name', 'XR1F Test']).status, 0);
+
+    const tracked = join(dir, 'tracked.txt');
+    writeFileSync(tracked, 'canonical\n');
+    assert.equal(git(['add', 'tracked.txt']).status, 0);
+    assert.equal(git(['commit', '-m', 'canonical']).status, 0);
+    assert.equal(
+      git(['update-index', '--assume-unchanged', 'tracked.txt']).status,
+      0,
+    );
+
+    writeFileSync(tracked, 'ghost-change\n');
+
+    assert.throws(
+      () =>
+        assertDeployedCheckoutClean({
+          repoRoot: dir,
+          gitBin: '/usr/bin/git',
+        }),
+      /XR1F_L1_DEPLOYED_INDEX_FLAGS_FORBIDDEN/,
+    );
+  } finally {
+    try {
+      git(['update-index', '--no-assume-unchanged', 'tracked.txt']);
+    } catch {}
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('5. deployed checkout attestation rejects skip-worktree index flags', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'xr1f-l1-git-skip-'));
+  const git = args =>
+    spawnSync('/usr/bin/git', ['-C', dir, ...args], {
+      encoding: 'utf8',
+    });
+
+  try {
+    assert.equal(git(['init']).status, 0);
+    assert.equal(git(['config', 'user.email', 'xr1f@example.invalid']).status, 0);
+    assert.equal(git(['config', 'user.name', 'XR1F Test']).status, 0);
+
+    const tracked = join(dir, 'tracked.txt');
+    writeFileSync(tracked, 'canonical\n');
+    assert.equal(git(['add', 'tracked.txt']).status, 0);
+    assert.equal(git(['commit', '-m', 'canonical']).status, 0);
+    assert.equal(
+      git(['update-index', '--skip-worktree', 'tracked.txt']).status,
+      0,
+    );
+
+    writeFileSync(tracked, 'ghost-change\n');
+
+    assert.throws(
+      () =>
+        assertDeployedCheckoutClean({
+          repoRoot: dir,
+          gitBin: '/usr/bin/git',
+        }),
+      /XR1F_L1_DEPLOYED_INDEX_FLAGS_FORBIDDEN/,
+    );
+  } finally {
+    try {
+      git(['update-index', '--no-skip-worktree', 'tracked.txt']);
+    } catch {}
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('6. deployed checkout attestation rejects untracked files', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'xr1f-l1-git-untracked-'));
+  const git = args =>
+    spawnSync('/usr/bin/git', ['-C', dir, ...args], {
+      encoding: 'utf8',
+    });
+
+  try {
+    assert.equal(git(['init']).status, 0);
+    assert.equal(git(['config', 'user.email', 'xr1f@example.invalid']).status, 0);
+    assert.equal(git(['config', 'user.name', 'XR1F Test']).status, 0);
+
+    writeFileSync(join(dir, 'tracked.txt'), 'canonical\n');
+    assert.equal(git(['add', 'tracked.txt']).status, 0);
+    assert.equal(git(['commit', '-m', 'canonical']).status, 0);
+
+    writeFileSync(join(dir, 'untracked.txt'), 'unexpected\n');
+
+    assert.throws(
+      () =>
+        assertDeployedCheckoutClean({
+          repoRoot: dir,
+          gitBin: '/usr/bin/git',
+        }),
+      /XR1F_L1_DEPLOYED_CHECKOUT_DIRTY/,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 canonicalTest('5. partial unique index cannot satisfy global C3B pay_to uniqueness', async () => {
   const fx = makeC3b({ partialPayTo: true });
   try {
