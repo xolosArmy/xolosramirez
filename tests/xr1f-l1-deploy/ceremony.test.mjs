@@ -729,7 +729,7 @@ canonicalTest('8. conditional WHEN 0 immutability triggers are rejected function
           },
           logger: logger(),
         }),
-      /XR1F_L1_BINDING_SCHEMA_(UPDATE|DELETE)_TRIGGER_NOT_ENFORCED/,
+      /XR1F_L1_BINDING_SCHEMA_CANONICAL_TRIGGER_MISMATCH_xr1f_l1_allocator_binding_no_(delete|update)/,
     );
 
     const verify = new DatabaseSync(fx.path);
