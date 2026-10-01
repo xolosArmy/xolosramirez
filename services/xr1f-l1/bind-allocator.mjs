@@ -13,7 +13,10 @@ import {
   readAllocatorBinding,
 } from '../../src/x402-xr1f-l1/binding.mjs';
 import { loadXr1fL1Config } from './config.mjs';
-import { probeC3bStoreReadOnly } from '../xr1f-ro/probes.mjs';
+import {
+  isCanonicalSettledTxidPartialIndexSql,
+  probeC3bStoreReadOnly,
+} from '../xr1f-ro/probes.mjs';
 
 const MIGRATION = new URL(
   '../../src/x402-xr1f-l1/migrations/001_allocator_binding.sql',
@@ -263,8 +266,7 @@ function uniqueIndexedColumns(db, table) {
       const row = db.prepare(
         "SELECT sql FROM main.sqlite_master WHERE type='index' AND name=?",
       ).get(index.name);
-      const sql = normalizeSql(row?.sql);
-      if (!/\bwhere settled_txid is not null\s*$/.test(sql)) {
+      if (!isCanonicalSettledTxidPartialIndexSql(row?.sql)) {
         continue;
       }
     }
