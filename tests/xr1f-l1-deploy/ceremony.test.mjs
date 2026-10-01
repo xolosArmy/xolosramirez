@@ -35,6 +35,7 @@ const TEST_BUILD_SHA = 'c'.repeat(40);
 function makeC3b({
   partialPayTo = false,
   expressionPayTo = false,
+  settledTxidCommentBait = false,
 } = {}) {
   const dir = mkdtempSync(join(tmpdir(), 'xr1f-l1-deploy-'));
   const path = join(dir, 'c3b.sqlite');
@@ -53,7 +54,7 @@ function makeC3b({
       issued_at INTEGER NOT NULL,
       expires_at INTEGER NOT NULL,
       state TEXT NOT NULL,
-      settled_txid TEXT UNIQUE,
+      settled_txid TEXT${settledTxidCommentBait ? '' : ' UNIQUE'},
       settled_at INTEGER,
       derivation_index INTEGER NOT NULL UNIQUE
     );
@@ -68,6 +69,12 @@ function makeC3b({
   if (expressionPayTo) {
     db.exec(
       "CREATE UNIQUE INDEX bad_pay_to_expression ON invoices(pay_to, (derivation_index % 2));",
+    );
+  }
+
+  if (settledTxidCommentBait) {
+    db.exec(
+      "CREATE UNIQUE INDEX idx_invoices_settled_txid ON invoices(settled_txid) WHERE 0 /* WHERE settled_txid IS NOT NULL",
     );
   }
 
@@ -358,6 +365,26 @@ canonicalTest('10. expression unique index cannot satisfy C3B pay_to uniqueness'
           logger: logger(),
         }),
       /XR1F_L1_C3B_LIVE_UNIQUE_INDEX_MISSING_pay_to/,
+    );
+  } finally {
+    fx.cleanup();
+  }
+});
+
+canonicalTest('11. comment-bait settled_txid partial index is rejected by canonical DDL identity', async () => {
+  const fx = makeC3b({ settledTxidCommentBait: true });
+
+  try {
+    await assert.rejects(
+      () =>
+        runCeremony({
+          env: env(fx.path),
+          probeC3b() {
+            return Object.freeze({ ok: true, component: 'c3bStore' });
+          },
+          logger: logger(),
+        }),
+      /XR1F_L1_C3B_LIVE_UNIQUE_INDEX_MISSING_settled_txid/,
     );
   } finally {
     fx.cleanup();
