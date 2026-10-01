@@ -145,29 +145,78 @@ function canonicalSql(value) {
     .trim();
 }
 
-let canonicalBindingTableSqlCache = null;
+const CANONICAL_BINDING_TRIGGER_NAMES = Object.freeze([
+  'xr1f_l1_allocator_binding_no_delete',
+  'xr1f_l1_allocator_binding_no_update',
+]);
 
-function canonicalBindingTableSql() {
-  if (canonicalBindingTableSqlCache !== null) {
-    return canonicalBindingTableSqlCache;
+let canonicalBindingIdentityCache = null;
+
+function canonicalBindingIdentity() {
+  if (canonicalBindingIdentityCache !== null) {
+    return canonicalBindingIdentityCache;
   }
 
   const shadow = new DatabaseSync(':memory:');
   try {
     shadow.exec(migrationBody());
-    const row = shadow.prepare(
+
+    const table = shadow.prepare(
       "SELECT sql FROM main.sqlite_master WHERE type='table' AND name='xr1f_l1_allocator_binding'",
     ).get();
-    if (!row?.sql) {
+    if (!table?.sql) {
       throw new Error(
         'XR1F_L1_CANONICAL_BINDING_SCHEMA_UNAVAILABLE',
       );
     }
-    canonicalBindingTableSqlCache = canonicalSql(row.sql);
-    return canonicalBindingTableSqlCache;
+
+    const triggerRows = shadow.prepare(
+      "SELECT name, sql FROM main.sqlite_master WHERE type='trigger' AND tbl_name='xr1f_l1_allocator_binding' ORDER BY name",
+    ).all();
+
+    if (
+      triggerRows.length !== CANONICAL_BINDING_TRIGGER_NAMES.length ||
+      triggerRows.some(
+        (row, index) =>
+          row?.name !== CANONICAL_BINDING_TRIGGER_NAMES[index] ||
+          !row?.sql,
+      )
+    ) {
+      throw new Error(
+        'XR1F_L1_CANONICAL_BINDING_TRIGGERS_UNAVAILABLE',
+      );
+    }
+
+    canonicalBindingIdentityCache = Object.freeze({
+      tableSql: canonicalSql(table.sql),
+      triggerSql: Object.freeze(
+        Object.fromEntries(
+          triggerRows.map(row => [
+            row.name,
+            canonicalSql(row.sql),
+          ]),
+        ),
+      ),
+    });
+
+    return canonicalBindingIdentityCache;
   } finally {
     shadow.close();
   }
+}
+
+function canonicalBindingTableSql() {
+  return canonicalBindingIdentity().tableSql;
+}
+
+function canonicalBindingTriggerSql(triggerName) {
+  const sql = canonicalBindingIdentity().triggerSql[triggerName];
+  if (!sql) {
+    throw new Error(
+      `XR1F_L1_CANONICAL_TRIGGER_UNAVAILABLE_${triggerName}`,
+    );
+  }
+  return sql;
 }
 
 function hasBindingSchema(db) {
@@ -428,33 +477,16 @@ function assertCanonicalBindingSchema(db) {
     throw new Error('XR1F_L1_BINDING_SCHEMA_TRIGGERS_MISMATCH');
   }
 
-  const deleteSql = String(triggers[0].sql ?? '');
-  const updateSql = String(triggers[1].sql ?? '');
+  for (const trigger of triggers) {
+    const liveSql = canonicalSql(trigger.sql);
+    const canonicalTriggerSql =
+      canonicalBindingTriggerSql(trigger.name);
 
-  if (
-    !/\bbefore\s+delete\s+on\s+(?:main\.)?xr1f_l1_allocator_binding\b/i.test(
-      deleteSql,
-    ) ||
-    !/raise\s*\(\s*abort\s*,\s*['"]XR1F_L1_ALLOCATOR_BINDING_DELETE_FORBIDDEN['"]\s*\)/i.test(
-      deleteSql,
-    )
-  ) {
-    throw new Error(
-      'XR1F_L1_BINDING_SCHEMA_DELETE_TRIGGER_MISMATCH',
-    );
-  }
-
-  if (
-    !/\bbefore\s+update\s+on\s+(?:main\.)?xr1f_l1_allocator_binding\b/i.test(
-      updateSql,
-    ) ||
-    !/raise\s*\(\s*abort\s*,\s*['"]XR1F_L1_ALLOCATOR_BINDING_IMMUTABLE['"]\s*\)/i.test(
-      updateSql,
-    )
-  ) {
-    throw new Error(
-      'XR1F_L1_BINDING_SCHEMA_UPDATE_TRIGGER_MISMATCH',
-    );
+    if (liveSql !== canonicalTriggerSql) {
+      throw new Error(
+        `XR1F_L1_BINDING_SCHEMA_CANONICAL_TRIGGER_MISMATCH_${trigger.name}`,
+      );
+    }
   }
 
   return Object.freeze({

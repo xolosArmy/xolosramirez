@@ -72,6 +72,7 @@ It must fail closed if:
 - C3B has invoice history but no allocator binding;
 - another allocator identity is already bound;
 - the binding schema differs from the exact reviewed canonical table definition;
+- either binding trigger differs from the exact migration-generated canonical DDL;
 - the binding immutability trigger fails to block a real update of any protected field;
 - a caller-owned transaction already exists;
 - any canonical artifact or xpub validation fails.

@@ -364,7 +364,7 @@ canonicalTest('10. expression unique index cannot satisfy C3B pay_to uniqueness'
   }
 });
 
-canonicalTest('11. no-op-only update trigger is rejected by real mutation probe', async () => {
+canonicalTest('11. conditional no-op trigger is rejected by canonical trigger identity', async () => {
   const fx = makeC3b();
 
   try {
@@ -414,7 +414,7 @@ canonicalTest('11. no-op-only update trigger is rejected by real mutation probe'
           },
           logger: logger(),
         }),
-      /XR1F_L1_BINDING_SCHEMA_UPDATE_TRIGGER_NOT_ENFORCED/,
+      /XR1F_L1_BINDING_SCHEMA_CANONICAL_TRIGGER_MISMATCH_xr1f_l1_allocator_binding_no_update/
     );
   } finally {
     fx.cleanup();
@@ -525,7 +525,7 @@ canonicalTest('7. finite-sample lookalike CHECK is rejected by canonical schema 
   }
 });
 
-canonicalTest('8. allocator-id mutation is blocked even by bound-at-scoped trigger bait', async () => {
+canonicalTest('8. bound-at-scoped update trigger is rejected by canonical identity', async () => {
   const fx = makeC3b();
 
   try {
@@ -575,7 +575,64 @@ canonicalTest('8. allocator-id mutation is blocked even by bound-at-scoped trigg
           },
           logger: logger(),
         }),
-      /XR1F_L1_BINDING_SCHEMA_UPDATE_TRIGGER_NOT_ENFORCED_allocator_id/,
+      /XR1F_L1_BINDING_SCHEMA_CANONICAL_TRIGGER_MISMATCH_xr1f_l1_allocator_binding_no_update/
+    );
+  } finally {
+    fx.cleanup();
+  }
+});
+
+canonicalTest('9. probe-specific delete trigger is rejected by canonical identity', async () => {
+  const fx = makeC3b();
+
+  try {
+    const db = new DatabaseSync(fx.path);
+    db.exec(`
+      CREATE TABLE main.xr1f_l1_allocator_binding (
+        binding_id INTEGER PRIMARY KEY CHECK(binding_id = 1),
+        schema_version INTEGER NOT NULL CHECK(schema_version = 1),
+        allocator_kind TEXT NOT NULL CHECK(allocator_kind = 'X402_XEC_XPUB_V1'),
+        allocator_id TEXT NOT NULL UNIQUE CHECK(
+          length(allocator_id) = 64
+          AND allocator_id = lower(allocator_id)
+          AND allocator_id NOT GLOB '*[^0-9a-f]*'
+        ),
+        network TEXT NOT NULL CHECK(network = 'xec:mainnet'),
+        x402_xec_commit TEXT NOT NULL CHECK(
+          x402_xec_commit = '0f409dea2959b397ecc4bb84d71519ec6e3aec04'
+        ),
+        bound_at INTEGER NOT NULL CHECK(
+          bound_at >= 0 AND bound_at <= 9007199254740991
+        )
+      ) STRICT;
+
+      CREATE TRIGGER main.xr1f_l1_allocator_binding_no_update
+      BEFORE UPDATE ON main.xr1f_l1_allocator_binding
+      FOR EACH ROW
+      BEGIN
+        SELECT RAISE(ABORT, 'XR1F_L1_ALLOCATOR_BINDING_IMMUTABLE');
+      END;
+
+      CREATE TRIGGER main.xr1f_l1_allocator_binding_no_delete
+      BEFORE DELETE ON main.xr1f_l1_allocator_binding
+      FOR EACH ROW
+      WHEN OLD.allocator_id = '0000000000000000000000000000000000000000000000000000000000000000'
+      BEGIN
+        SELECT RAISE(ABORT, 'XR1F_L1_ALLOCATOR_BINDING_DELETE_FORBIDDEN');
+      END;
+    `);
+    db.close();
+
+    await assert.rejects(
+      () =>
+        runCeremony({
+          env: env(fx.path),
+          probeC3b() {
+            return Object.freeze({ ok: true, component: 'c3bStore' });
+          },
+          logger: logger(),
+        }),
+      /XR1F_L1_BINDING_SCHEMA_CANONICAL_TRIGGER_MISMATCH_xr1f_l1_allocator_binding_no_delete/,
     );
   } finally {
     fx.cleanup();
