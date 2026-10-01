@@ -71,6 +71,51 @@ export function assertDeployedCheckoutClean({
   repoRoot = REPO_ROOT,
   gitBin = GIT_BIN,
 } = {}) {
+  const indexState = runGit(
+    repoRoot,
+    gitBin,
+    ['ls-files', '-v', '-z', '--'],
+  );
+
+  if (indexState.error || indexState.status !== 0) {
+    throw new Error(
+      'XR1F_L1_DEPLOYED_CHECKOUT_ATTESTATION_FAILED',
+    );
+  }
+
+  const manipulatedIndexEntry = String(indexState.stdout ?? '')
+    .split('\0')
+    .filter(Boolean)
+    .find(entry => !entry.startsWith('H '));
+
+  if (manipulatedIndexEntry) {
+    throw new Error(
+      'XR1F_L1_DEPLOYED_INDEX_FLAGS_FORBIDDEN',
+    );
+  }
+
+  const porcelain = runGit(
+    repoRoot,
+    gitBin,
+    [
+      'status',
+      '--porcelain=v1',
+      '--untracked-files=all',
+      '--ignored=no',
+      '--',
+    ],
+  );
+
+  if (porcelain.error || porcelain.status !== 0) {
+    throw new Error(
+      'XR1F_L1_DEPLOYED_CHECKOUT_ATTESTATION_FAILED',
+    );
+  }
+
+  if (String(porcelain.stdout ?? '').length !== 0) {
+    throw new Error('XR1F_L1_DEPLOYED_CHECKOUT_DIRTY');
+  }
+
   const checks = [
     ['diff', '--cached', '--quiet', '--no-ext-diff', 'HEAD', '--'],
     ['diff', '--quiet', '--no-ext-diff', '--'],
