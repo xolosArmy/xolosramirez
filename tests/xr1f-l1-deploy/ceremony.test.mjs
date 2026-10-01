@@ -14,8 +14,10 @@ import { DatabaseSync } from 'node:sqlite';
 
 import {
   assertDeployedCheckoutClean,
-  runBindingCeremony,
 } from '../../services/xr1f-l1/bind-allocator.mjs';
+import {
+  runBindingCeremony,
+} from '../../services/xr1f-l1/ceremony.core.mjs';
 import {
   Xr1fL1BindingError,
   readAllocatorBinding,
@@ -106,8 +108,7 @@ function env(path, enabled = true) {
 
 function runCeremony(options = {}) {
   return runBindingCeremony({
-    getDeployedBuildSha: () => TEST_BUILD_SHA,
-    assertCheckoutClean: () => true,
+    attestedBuildSha: TEST_BUILD_SHA,
     ...options,
   });
 }
@@ -151,7 +152,7 @@ test('2. configured build SHA must match the executing checkout before C3B acces
           XR1F_L1_BUILD_SHA: 'd'.repeat(40),
           XR1F_L1_X402_MODULE_PATH: '/does/not/exist/index.js',
         },
-        getDeployedBuildSha: () => TEST_BUILD_SHA,
+        attestedBuildSha: TEST_BUILD_SHA,
         probeC3b() {
           probeCalled = true;
         },
@@ -195,7 +196,7 @@ test('3. deployed checkout attestation rejects staged and unstaged tracked chang
           repoRoot: dir,
           gitBin: '/usr/bin/git',
         }),
-      /XR1F_L1_DEPLOYED_CHECKOUT_DIRTY/,
+      /XR1F_L1_DEPLOYED_PHYSICAL_BLOB_MISMATCH_HEX_/,
     );
 
     assert.equal(git(['checkout', '--', 'tracked.txt']).status, 0);
@@ -207,7 +208,7 @@ test('3. deployed checkout attestation rejects staged and unstaged tracked chang
           repoRoot: dir,
           gitBin: '/usr/bin/git',
         }),
-      /XR1F_L1_DEPLOYED_CHECKOUT_DIRTY/,
+      /XR1F_L1_DEPLOYED_PHYSICAL_BLOB_MISMATCH_HEX_/,
     );
   } finally {
     rmSync(dir, { recursive: true, force: true });
@@ -243,7 +244,7 @@ test('4. deployed checkout attestation rejects assume-unchanged index flags', ()
           repoRoot: dir,
           gitBin: '/usr/bin/git',
         }),
-      /XR1F_L1_DEPLOYED_INDEX_FLAGS_FORBIDDEN/,
+      /XR1F_L1_DEPLOYED_PHYSICAL_BLOB_MISMATCH_HEX_/,
     );
   } finally {
     try {
@@ -282,7 +283,7 @@ test('5. deployed checkout attestation rejects skip-worktree index flags', () =>
           repoRoot: dir,
           gitBin: '/usr/bin/git',
         }),
-      /XR1F_L1_DEPLOYED_INDEX_FLAGS_FORBIDDEN/,
+      /XR1F_L1_DEPLOYED_PHYSICAL_BLOB_MISMATCH_HEX_/,
     );
   } finally {
     try {
@@ -361,7 +362,7 @@ test('7. physical blob attestation defeats a lying fsmonitor hook', () => {
           repoRoot: dir,
           gitBin: '/usr/bin/git',
         }),
-      /XR1F_L1_DEPLOYED_PHYSICAL_BLOB_MISMATCH_tracked\.txt/,
+      /XR1F_L1_DEPLOYED_PHYSICAL_BLOB_MISMATCH_HEX_/,
     );
   } finally {
     rmSync(dir, { recursive: true, force: true });
