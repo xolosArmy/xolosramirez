@@ -491,37 +491,71 @@ const profileExpectations = [
   ['tonalli', 'reserved', 'Tonalli Ramírez'],
   ['xochitl', 'reserved', 'Xochitl Ramirez'],
 ];
-for (const [path, prefix] of [['xolos-disponibles.html', 'Preguntar por '], ['en/available-xolos.html', 'Ask about ']]) {
-  const html = read(path);
+
+function profileWhatsappMessage(lang, name, status) {
+  if (lang === 'es') {
+    return status === 'available'
+      ? `Hola, vi el perfil de ${name} en Xolos Ramírez y me interesa recibir información sobre su disponibilidad, precio y proceso de reserva.`
+      : `Hola, vi el perfil de ${name} en Xolos Ramírez. Entiendo que este xoloitzcuintle está reservado y me interesa recibir información sobre ejemplares similares o futuras camadas.`;
+  }
+  return status === 'available'
+    ? `Hello, I saw ${name}'s profile on Xolos Ramírez and I'd like information about availability, price, and the reservation process.`
+    : `Hello, I saw ${name}'s profile on Xolos Ramírez. I understand this Xoloitzcuintle is reserved, and I'd like information about similar Xolos or future litters.`;
+}
+
+function profileWhatsappUrl(lang, name, status) {
+  return WHATSAPP_BUSINESS_URL + '?text=' + encodeURIComponent(profileWhatsappMessage(lang, name, status));
+}
+
+for (const config of [
+  { path: 'xolos-disponibles.html', lang: 'es', emailPrefix: 'Preguntar por ', whatsappLabel: 'Pregunta por WhatsApp' },
+  { path: 'en/available-xolos.html', lang: 'en', emailPrefix: 'Ask about ', whatsappLabel: 'Ask on WhatsApp' },
+]) {
+  const html = read(config.path);
   notMatches(html, /data-profile-card="iztli"|id="iztli"|#iztli/);
   for (const [profile, status, name] of profileExpectations) {
-    const match = html.match(new RegExp(`<a(?=[^>]*data-profile="${profile}")(?=[^>]*data-cta-location="profile_card")[^>]*>[\\s\\S]*?<\\/a>`));
-    assert.ok(match, path + ' must expose the CTA for ' + profile);
-    const cta = match[0];
-    includes(cta, 'data-cta="email"');
-    includes(cta, 'data-lead-intent="profile_inquiry"');
-    includes(cta, 'data-status="' + status + '"');
-    includes(cta, 'data-page-type="available-xolos"');
-    includes(cta, `%5BRef%3A%20${profile}-`, path + ': existing profile origin reference must remain');
-    assert.match(cta, /href="mailto:contacto@xolosarmy\.xyz/i);
-    notMatches(cta, /wa\.me|whatsapp:\/\//i);
-    includes(cta, '>' + prefix + name + '</a>');
+    const ctas = html.match(new RegExp(`<a(?=[^>]*data-profile="${profile}")(?=[^>]*data-cta-location="profile_card")[^>]*>[\\s\\S]*?<\\/a>`, 'g')) || [];
+    assert.equal(ctas.length, 2, config.path + ' must expose email and WhatsApp CTAs for ' + profile);
+
+    const emailCta = ctas.find((cta) => cta.includes('data-cta="email"'));
+    const whatsappCta = ctas.find((cta) => cta.includes('data-cta="whatsapp"'));
+    assert.ok(emailCta, config.path + ' must keep email CTA for ' + profile);
+    assert.ok(whatsappCta, config.path + ' must expose WhatsApp CTA for ' + profile);
+
+    includes(emailCta, 'data-lead-intent="profile_inquiry"');
+    includes(emailCta, 'data-status="' + status + '"');
+    includes(emailCta, 'data-page-type="available-xolos"');
+    includes(emailCta, `%5BRef%3A%20${profile}-`, config.path + ': existing profile origin reference must remain');
+    assert.match(emailCta, /href="mailto:contacto@xolosarmy\.xyz/i);
+    notMatches(emailCta, /wa\.me|whatsapp:\/\//i);
+    includes(emailCta, '>' + config.emailPrefix + name + '</a>');
+
+    includes(whatsappCta, 'href="' + profileWhatsappUrl(config.lang, name, status) + '"');
+    includes(whatsappCta, 'class="btn-small btn-primary-small cta-lead cta-whatsapp"');
+    includes(whatsappCta, 'target="_blank"');
+    includes(whatsappCta, 'rel="noopener noreferrer"');
+    includes(whatsappCta, 'data-lead-type="generate_lead"');
+    includes(whatsappCta, 'data-lead-intent="profile_inquiry"');
+    includes(whatsappCta, 'data-status="' + status + '"');
+    includes(whatsappCta, 'data-page-type="available-xolos"');
+    includes(whatsappCta, 'data-lang="' + config.lang + '"');
+    includes(whatsappCta, '>' + config.whatsappLabel + '</a>');
+    notMatches(whatsappCta, /mailto:/i);
   }
 }
 
-const floatingOnlySurfaces = [
+const surfacesWithFloatingWhatsapp = [
   'index.html', 'en/index.html', 'xolos-disponibles.html', 'en/available-xolos.html',
   'contacto.html', 'en/contact.html',
 ];
-for (const path of floatingOnlySurfaces) {
+for (const path of surfacesWithFloatingWhatsapp) {
   const html = read(path);
   const blocks = html.match(/<a(?=[^>]*class="[^"]*\bhome-email-float\b[^"]*")[^>]*>[\s\S]*?<\/a>/g) || [];
   assert.equal(blocks.length, 1, path + ' must have one floating CTA');
   const lang = path.startsWith('en/') ? 'en' : 'es';
   includes(blocks[0], whatsappUrl(lang), path + ' floating CTA must use localized prefilled WhatsApp text');
   includes(blocks[0], 'data-cta="whatsapp"');
-  const withoutFloating = html.replace(blocks[0], '');
-  notMatches(withoutFloating, /wa\.me\/message\/EXX6AH4L77ZHK1/i, path + ' must keep WhatsApp exclusive to the floating CTA');
+  notMatches(html, /wa\.me\/message\/EXX6AH4L77ZHK1/i, path + ' must not use the retired WhatsApp channel');
 }
 
 for (const path of [
