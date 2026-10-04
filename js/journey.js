@@ -10,7 +10,7 @@
       : document.body.classList.contains('journey-contact') ? 'contact' : 'editorial';
 
   if (pageType === 'available-xolos') {
-    const xilonenLatestVideoId = 'CgkV9BJ6xGY';
+    const xilonenLatestVideoId = 'aL4LT5-Sn6A';
     const xilonenLatestVideoUrl = `https://youtu.be/${xilonenLatestVideoId}`;
     const xilonenLatestEmbedUrl = `https://www.youtube.com/embed/${xilonenLatestVideoId}`;
     const xilonen = document.querySelector('.puppy-card[data-profile-card="xilonen"], #xilonen');
