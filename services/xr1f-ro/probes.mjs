@@ -14,6 +14,23 @@ const FORBIDDEN_READER_METHODS = [
   'broadcastRawTx',
 ];
 
+const CANONICAL_SETTLED_TXID_PARTIAL_INDEX_SQL =
+  'create unique index idx_invoices_settled_txid on invoices(settled_txid) where settled_txid is not null';
+
+function normalizeSchemaSql(value) {
+  return String(value ?? '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+}
+
+export function isCanonicalSettledTxidPartialIndexSql(value) {
+  return (
+    normalizeSchemaSql(value) ===
+    CANONICAL_SETTLED_TXID_PARTIAL_INDEX_SQL
+  );
+}
+
 function validateDurablePath(path, name) {
   if (typeof path !== 'string' || path.trim() === '') {
     throw new Error(`${name}_PATH_REQUIRED`);
@@ -136,14 +153,40 @@ function uniqueIndexedColumns(path, table, options) {
   const result = new Set();
   for (const index of runQuery(path, `PRAGMA index_list('${table}')`, options)) {
     if (Number(index.unique) !== 1) continue;
-    const columns = runQuery(
+
+    const escaped = String(index.name).replaceAll("'", "''");
+    const terms = runQuery(
       path,
-      `PRAGMA index_info('${String(index.name).replaceAll("'", "''")}')`,
+      `PRAGMA index_info('${escaped}')`,
       options,
-    )
-      .map(row => row.name)
-      .filter(Boolean);
-    if (columns.length === 1) result.add(columns[0]);
+    );
+
+    if (
+      terms.length !== 1 ||
+      typeof terms[0]?.name !== 'string' ||
+      terms[0].name.length === 0
+    ) {
+      continue;
+    }
+
+    const column = terms[0].name;
+    const partial = Number(index.partial) === 1;
+
+    if (partial) {
+      if (column !== 'settled_txid') continue;
+
+      const indexRow = runQuery(
+        path,
+        `SELECT sql FROM sqlite_master WHERE type='index' AND name='${escaped}'`,
+        options,
+      )[0];
+
+      if (!isCanonicalSettledTxidPartialIndexSql(indexRow?.sql)) {
+        continue;
+      }
+    }
+
+    result.add(column);
   }
   return result;
 }
