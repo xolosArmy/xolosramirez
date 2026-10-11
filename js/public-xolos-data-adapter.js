@@ -111,22 +111,23 @@ export const CANONICAL_PUBLIC_XOLOS = [
     lineageReference: 'Linaje Tonalli Xolos Ramírez',
     publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#yohualli'
   },
-  {
+{
     id: 'tonalli',
     name: 'Tonalli Ramírez',
-    status: 'reserved',
+    status: 'delivered',
     variety: 'hairless',
     size: 'standard',
     gender: 'female',
     color: 'black',
-    ageDescription: 'Cachorra recién nacida (reservada)',
-    personalitySummary: 'Cachorra xoloitzcuintle sin pelo de temperamento dulce y equilibrado, actualmente en etapa de crianza temprana y reservada.',
+    birthDate: '2026-07-06',
+    ageDescription: 'Entregada el 11 de octubre de 2026',
+    personalitySummary: 'Cachorra xoloitzcuintle sin pelo de temperamento dulce y equilibrado. Entregada exitosamente a su nueva familia.',
     careConsiderations: [
       'Cuidado dérmico ancestral e hidratación periódica',
       'Protección contra cambios de temperatura'
     ],
     lineageReference: 'Linaje Tonalli Xolos Ramírez',
-    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#tonalli'
+    publicUrl: 'https://xolosramirez.com/blog/2026-10-11-entrega-xoloitzcuintle-tonalli-ramirez.html'
   },
   {
     id: 'xochitl',
