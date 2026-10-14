@@ -8,18 +8,92 @@
     <!-- 1. Hoja de estilos global OBLIGATORIA -->
     <link rel="stylesheet" href="/css/styles.css">
     
-    <!-- 2. Estilos adicionales del artículo -->
+    <!-- 2. Estilos responsivos optimizados para móviles -->
     <style>
-        .guide-shell h1 { color: #3E2723; font-size: 2.5em; line-height: 1.2; margin-bottom: 20px; border-bottom: 3px solid #6D4C41; padding-bottom: 10px; }
-        .guide-shell h2 { color: #4E342E; font-size: 1.8em; margin-top: 40px; margin-bottom: 15px; }
-        .guide-shell h3 { color: #5D4037; font-size: 1.4em; margin-top: 30px; margin-bottom: 10px; }
-        .guide-shell p { margin-bottom: 20px; font-size: 1.05em; line-height: 1.7; }
-        .guide-shell table { width: 100%; border-collapse: collapse; margin: 30px 0; background-color: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #D7CCC8; }
-        .guide-shell th, .guide-shell td { padding: 15px; text-align: left; border-bottom: 1px solid #D7CCC8; }
-        .guide-shell th { background-color: #4E342E; color: #fff; font-weight: 600; }
-        .guide-shell tr:nth-child(even) { background-color: #EFEBE9; }
-        .guide-shell ul { margin-bottom: 20px; padding-left: 20px; }
-        .guide-shell li { margin-bottom: 10px; line-height: 1.7; }
+        .guide-shell {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 1.25rem 1rem 3rem;
+            box-sizing: border-box;
+        }
+        .guide-shell h1 {
+            color: #3E2723;
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            line-height: 1.2;
+            margin-bottom: 1.25rem;
+            border-bottom: 3px solid #6D4C41;
+            padding-bottom: 0.5rem;
+            word-wrap: break-word;
+        }
+        .guide-shell h2 {
+            color: #4E342E;
+            font-size: clamp(1.35rem, 3vw, 1.8rem);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        .guide-shell h3 {
+            color: #5D4037;
+            font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+        }
+        .guide-shell p {
+            margin-bottom: 1.25rem;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #333333;
+        }
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            border: 1px solid #D7CCC8;
+        }
+        .guide-shell table {
+            width: 100%;
+            min-width: 600px;
+            border-collapse: collapse;
+            background-color: #fff;
+        }
+        .guide-shell th, .guide-shell td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #D7CCC8;
+            font-size: 0.95rem;
+        }
+        .guide-shell th {
+            background-color: #4E342E;
+            color: #fff;
+            font-weight: 600;
+        }
+        .guide-shell tr:nth-child(even) {
+            background-color: #EFEBE9;
+        }
+        .guide-shell ul {
+            margin-bottom: 1.25rem;
+            padding-left: 1.25rem;
+        }
+        .guide-shell li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .guide-shell {
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+            }
+            .guide-shell th, .guide-shell td {
+                padding: 0.6rem 0.75rem;
+                font-size: 0.88rem;
+            }
+        }
     </style>
 </head>
 <body class="journey-page journey-editorial">
@@ -62,72 +136,75 @@
             <p>Alcanzar el núcleo del Mictlán, el noveno y último nivel conocido como Chiconahualoyan, donde el alma finalmente se liberaba de sus ataduras identitarias y alcanzaba la aniquilación pacífica ante Mictlantecuhtli y Mictecacíhuatl (los señores soberanos de la muerte), requería una travesía desgarradora que duraba exactamente cuatro años terrestres. Esta temporalidad no es arbitraria; corresponde a la observación empírica del tiempo que tarda un cuerpo humano sepultado en descomponerse hasta quedar reducido exclusivamente a su estructura ósea, despojándose completamente de la carne, que en el pensamiento nahua simboliza los apegos, las pasiones y la individualidad mortal.</p>
             <p>Durante estos cuatro años, el "teyolía" (la entidad anímica del ser humano, concebida como la chispa vital y la memoria que reside en el corazón) debía descender a través de nueve niveles topográficos, cada uno diseñado por los dioses para erosionar una parte específica de la resistencia del difunto. La siguiente tabla expone la estructura escatológica de este descenso, subrayando la indispensable intervención canina en los umbrales críticos.</p>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nivel del Inframundo</th>
-                        <th>Denominación Nahua</th>
-                        <th>Descripción Topográfica y Desafío Espiritual</th>
-                        <th>Función del Xoloitzcuintle (Psicopompo)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Primer Nivel</td>
-                        <td>Itzcuintlán ("Lugar de perros")</td>
-                        <td>Las riberas del caudaloso río Apanohuayan o Chiconahuapan. El teyolía llega desorientado, despojado de materia.</td>
-                        <td>Crítica y Primordial. El cánido evalúa la moralidad del difunto y actúa como barca viva para atravesar las aguas.</td>
-                    </tr>
-                    <tr>
-                        <td>Segundo Nivel</td>
-                        <td>Tepectli Monamictlan</td>
-                        <td>Montañas masivas que chocan continuamente entre sí, amenazando con aplastar la esencia.</td>
-                        <td>Acompañamiento y guía para evadir la colisión de los cerros.</td>
-                    </tr>
-                    <tr>
-                        <td>Tercer Nivel</td>
-                        <td>Iztepetl</td>
-                        <td>Un cerro escarpado cubierto de pedernales afilados que desgarran sistemáticamente la entidad anímica.</td>
-                        <td>Sustento moral ante el dolor de la desintegración del ego.</td>
-                    </tr>
-                    <tr>
-                        <td>Cuarto Nivel</td>
-                        <td>Itzehecayan</td>
-                        <td>El páramo del viento de obsidiana, caracterizado por un frío extremo y cortante.</td>
-                        <td>El calor corporal radiante del xoloitzcuintle protege al alma del congelamiento eterno y la inmovilidad.</td>
-                    </tr>
-                    <tr>
-                        <td>Quinto Nivel</td>
-                        <td>Paniecatacoyan</td>
-                        <td>Un desierto ingrávido donde las almas vuelan descontroladas y se voltean como banderas por la fuerza del viento.</td>
-                        <td>Anclaje espiritual para evitar la disipación en el vacío.</td>
-                    </tr>
-                    <tr>
-                        <td>Sexto Nivel</td>
-                        <td>Timiminaloayan</td>
-                        <td>Un sendero donde flechas invisibles acribillan a los transeúntes.</td>
-                        <td>Protección del guía ancestral contra agresiones externas.</td>
-                    </tr>
-                    <tr>
-                        <td>Séptimo Nivel</td>
-                        <td>Teocoyohuehualoyan</td>
-                        <td>Cavernas habitadas por fieras (frecuentemente jaguares) que devoran los restos del corazón (teyolía).</td>
-                        <td>Asistencia en la entrega voluntaria de las pasiones terrenales.</td>
-                    </tr>
-                    <tr>
-                        <td>Octavo Nivel</td>
-                        <td>Izmictlan Apochcalolca</td>
-                        <td>Un río de aguas negras o laguna de bruma donde el alma termina de disolverse.</td>
-                        <td>Observación de la inmersión y tránsito final.</td>
-                    </tr>
-                    <tr>
-                        <td>Noveno Nivel</td>
-                        <td>Chiconahualoyan</td>
-                        <td>El recinto oscuro de Mictlantecuhtli. El alma desaparece en la totalidad del universo, logrando la paz.</td>
-                        <td>Cumplimiento del mandato divino; el perro retorna a su origen o se integra a la deidad.</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nivel del Inframundo</th>
+                            <th>Denominación Nahua</th>
+                            <th>Descripción Topográfica y Desafío Espiritual</th>
+                            <th>Función del Xoloitzcuintle (Psicopompo)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Primer Nivel</td>
+                            <td>Itzcuintlán ("Lugar de perros")</td>
+                            <td>Las riberas del caudaloso río Apanohuayan o Chiconahuapan. El teyolía llega desorientado, despojado de materia.</td>
+                            <td>Crítica y Primordial. El cánido evalúa la moralidad del difunto y actúa como barca viva para atravesar las aguas.</td>
+                        </tr>
+                        <tr>
+                            <td>Segundo Nivel</td>
+                            <td>Tepectli Monamictlan</td>
+                            <td>Montañas masivas que chocan continuamente entre sí, amenazando con aplastar la esencia.</td>
+                            <td>Acompañamiento y guía para evadir la colisión de los cerros.</td>
+                        </tr>
+                        <tr>
+                            <td>Tercer Nivel</td>
+                            <td>Iztepetl</td>
+                            <td>Un cerro escarpado cubierto de pedernales afilados que desgarran sistemáticamente la entidad anímica.</td>
+                            <td>Sustento moral ante el dolor de la desintegración del ego.</td>
+                        </tr>
+                        <tr>
+                            <td>Cuarto Nivel</td>
+                            <td>Itzehecayan</td>
+                            <td>El páramo del viento de obsidiana, caracterizado por un frío extremo y cortante.</td>
+                            <td>El calor corporal radiante del xoloitzcuintle protege al alma del congelamiento eterno y la inmovilidad.</td>
+                        </tr>
+                        <tr>
+                            <td>Quinto Nivel</td>
+                            <td>Paniecatacoyan</td>
+                            <td>Un desierto ingrávido donde las almas vuelan descontroladas y se voltean como banderas por la fuerza del viento.</td>
+                            <td>Anclaje espiritual para evitar la disipación en el vacío.</td>
+                        </tr>
+                        <tr>
+                            <td>Sexto Nivel</td>
+                            <td>Timiminaloayan</td>
+                            <td>Un sendero donde flechas invisibles acribillan a los transeúntes.</td>
+                            <td>Protección del guía ancestral contra agresiones externas.</td>
+                        </tr>
+                        <tr>
+                            <td>Séptimo Nivel</td>
+                            <td>Teocoyohuehualoyan</td>
+                            <td>Cavernas habitadas por fieras (frecuentemente jaguares) que devoran los restos del corazón (teyolía).</td>
+                            <td>Asistencia en la entrega voluntaria de las pasiones terrenales.</td>
+                        </tr>
+                        <tr>
+                            <td>Octavo Nivel</td>
+                            <td>Izmictlan Apochcalolca</td>
+                            <td>Un río de aguas negras o laguna de bruma donde el alma termina de disolverse.</td>
+                            <td>Observación de la inmersión y tránsito final.</td>
+                        </tr>
+                        <tr>
+                            <td>Noveno Nivel</td>
+                            <td>Chiconahualoyan</td>
+                            <td>El recinto oscuro de Mictlantecuhtli. El alma desaparece en la totalidad del universo, logrando la paz.</td>
+                            <td>Cumplimiento del mandato divino; el perro retorna a su origen o se integra a la deidad.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
             <p>El escrutinio de estos niveles subraya una concepción del universo donde el sufrimiento póstumo opera como una mecánica de destilación existencial, y donde la soledad del alma es mitigada únicamente por la compasión y lealtad incondicional de una entidad no humana.</p>
 
             <h2>El Itzcuintlán: El Umbral del Río Sagrado y el Juicio Ético Interspecies</h2>
@@ -175,41 +252,43 @@
             <p>La intersección donde la biología evolutiva se engarza inexorablemente con el diseño teológico del xoloitzcuintle se materializa en su fenotipo más conspicuo: la alopecia hereditaria o ausencia casi total de manto piloso.</p>
 
             <h3>La Base Genómica: FOXI3 y la Resiliencia Epidérmica</h3>
-            <p>Bajo la lente de la biología molecular moderna, la condición glabra del xoloitzcuintle no es un artificio, sino el producto de una antigua mutación autosómica. Las investigaciones genómicas han aislado la causa en una forma de displasia ectodérmica canina de herencia semidominante, originada por una alteración en el gen FOXI3. Este factor de transcripción es imperativo durante el desarrollo ectodérmico embrionario. Como consecuencia directa de esta misma alteración de la capa germinal, la variante pelona padece de oligodoncia, que es la agenesia o ausencia congénita de numerosas piezas dentales (típicamente incisivos y premolares), fenómeno que explica el apelativo popular de perros "chimuelos".</p>
+            <p>Bajo la lens de la biología molecular moderna, la condición glabra del xoloitzcuintle no es un artificio, sino el producto de una antigua mutación autosómica. Las investigaciones genómicas han aislado la causa en una forma de displasia ectodérmica canina de herencia semidominante, originada por una alteración en el gen FOXI3. Este factor de transcripción es imperativo durante el desarrollo ectodérmico embrionario. Como consecuencia directa de esta misma alteración de la capa germinal, la variante pelona padece de oligodoncia, que es la agenesia o ausencia congénita de numerosas piezas dentales (típicamente incisivos y premolares), fenómeno que explica el apelativo popular de perros "chimuelos".</p>
             <p>En marcado contraste con la óptica veterinaria occidental que patologiza dichas condiciones, la ontología mexica decodificó esta morfología a través de la hermenéutica de Xólotl. La desnudez cutánea y la dentición incompleta no constituían taras biológicas, sino estigmas de lo sagrado; eran las marcas portentosas de una criatura deforme y anómala que gravitaba más cerca del plano divino que del zoológico.</p>
             <p>La carencia de pelaje forzó una serie de adaptaciones tegumentarias compensatorias de extrema eficacia biológica, detalladas a continuación:</p>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Adaptación Tegumentaria / Fisiológica</th>
-                        <th>Funcionalidad Biológica y Termodinámica</th>
-                        <th>Interpretación Metafísica / Aplicación</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Mutación FOXI3 (Alopecia / Oligodoncia)</td>
-                        <td>Pérdida de la barrera capilar; fenotipo atípico.</td>
-                        <td>La marca indiscutible del dios Xólotl; la anomalía que eleva al animal al plano sagrado.</td>
-                    </tr>
-                    <tr>
-                        <td>Engrosamiento del Estrato Córneo</td>
-                        <td>Incremento masivo en la resistencia de la piel frente a abrasiones, microtraumas y superficies ásperas.</td>
-                        <td>Resiliencia física necesaria para atravesar los pedernales afilados del cerro Iztepetl en el inframundo.</td>
-                    </tr>
-                    <tr>
-                        <td>Alta Concentración de Melanina (Eumelanina)</td>
-                        <td>La pigmentación oscura (negro, gris carbón, bronce) absorbe eficientemente la radiación ultravioleta, previniendo el daño celular.</td>
-                        <td>Afinidad con el ocre del atardecer; supervivencia diurna en el ecosistema semidesértico y tránsito seguro por las tierras muertas.</td>
-                    </tr>
-                    <tr>
-                        <td>Disipación Térmica Acelerada (Convección y Radiación)</td>
-                        <td>El alto flujo vascular superficial irradia calor rápidamente, requiriendo un metabolismo superior para la homeostasis.</td>
-                        <td>El "Fuego del Mictlán"; una fuente térmica terapéutica e inextinguible capaz de proteger a las almas del viento helado de obsidiana.</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Adaptación Tegumentaria / Fisiológica</th>
+                            <th>Funcionalidad Biológica y Termodinámica</th>
+                            <th>Interpretación Metafísica / Aplicación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Mutación FOXI3 (Alopecia / Oligodoncia)</td>
+                            <td>Pérdida de la barrera capilar; fenotipo atípico.</td>
+                            <td>La marca indiscutible del dios Xólotl; la anomalía que eleva al animal al plano sagrado.</td>
+                        </tr>
+                        <tr>
+                            <td>Engrosamiento del Estrato Córneo</td>
+                            <td>Incremento masivo en la resistencia de la piel frente a abrasiones, microtraumas y superficies ásperas.</td>
+                            <td>Resiliencia física necesaria para atravesar los pedernales afilados del cerro Iztepetl en el inframundo.</td>
+                        </tr>
+                        <tr>
+                            <td>Alta Concentración de Melanina (Eumelanina)</td>
+                            <td>La pigmentación oscura (negro, gris carbón, bronce) absorbe eficientemente la radiación ultravioleta, previniendo el daño celular.</td>
+                            <td>Afinidad con el ocre del atardecer; supervivencia diurna en el ecosistema semidesértico y tránsito seguro por las tierras muertas.</td>
+                        </tr>
+                        <tr>
+                            <td>Disipación Térmica Acelerada (Convección y Radiación)</td>
+                            <td>El alto flujo vascular superficial irradia calor rápidamente, requiriendo un metabolismo superior para la homeostasis.</td>
+                            <td>El "Fuego del Mictlán"; una fuente térmica terapéutica e inextinguible capaz de proteger a las almas del viento helado de obsidiana.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
             <h3>El Costo Metabólico y el Fuego Terapéutico</h3>
             <p>La termodinámica del xoloitzcuintle sin pelo dicta que, al carecer de una capa de aire aislante atrapada entre las fibras capilares, la transferencia de energía térmica hacia el exterior (por convección y radiación) es excepcionalmente alta. Al contacto táctil directo de una mano humana sobre la epidermis desnuda, el animal se percibe abrasadoramente caliente, emulando un estado febril permanente, aunque su temperatura basal interna (rectal) sea estadísticamente idéntica a la de cualquier otra raza canina.</p>
