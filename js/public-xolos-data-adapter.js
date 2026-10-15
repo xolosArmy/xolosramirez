@@ -14,6 +14,11 @@
  */
 
 export const CANONICAL_PUBLIC_BIRTH_DATES = {
+  ollin: '2026-10-13',
+  tlatoani: '2026-10-13',
+  tlaxcalli: '2026-10-13',
+  nochtli: '2026-10-12',
+  chok: '2026-10-12',
   tlilxochitl: '2026-08-03', // Backed by public card in xolos-disponibles.html: "Recién nacida · 3 de agosto de 2026"
   iztli: '2026-07-14' // Backed by the canonical Xolos Ramírez master sheet and published in the permanent delivery chronicle.
 };
@@ -41,15 +46,90 @@ const LEGACY_PUBLIC_PROFILE_ALIASES = Object.freeze({ oce: 'iztli' });
 
 export const CANONICAL_PUBLIC_XOLOS = [
   {
+    id: 'ollin',
+    name: 'Ollin Ramirez',
+    status: 'available',
+    variety: 'pending_confirmation',
+    size: 'standard',
+    gender: 'male',
+    color: 'black',
+    birthDate: '2026-10-13',
+    ageDescription: 'Nacido el 13 de octubre de 2026',
+    personalitySummary: 'Recién nacido con gran vitalidad y dinamismo, hijo de Tabasqueña.',
+    careConsiderations: ['Cuidados neonatales y seguimiento veterinario individual'],
+    lineageReference: 'Hijo de Tabasqueña; ascendencia paterna pendiente de confirmación.',
+    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#ollin'
+  },
+  {
+    id: 'tlatoani',
+    name: 'Tlatoani Ramirez',
+    status: 'available',
+    variety: 'pending_confirmation',
+    size: 'standard',
+    gender: 'male',
+    color: 'black',
+    birthDate: '2026-10-13',
+    ageDescription: 'Nacido el 13 de octubre de 2026',
+    personalitySummary: 'Recién nacido con gran porte y vitalidad desde sus primeros instantes.',
+    careConsiderations: ['Cuidados neonatales y seguimiento veterinario individual'],
+    lineageReference: 'Progenitores pendientes de confirmación.',
+    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#tlatoani'
+  },
+  {
+    id: 'tlaxcalli',
+    name: 'Tlaxcalli Ramirez',
+    status: 'available',
+    variety: 'pending_confirmation',
+    size: 'standard',
+    gender: 'female',
+    color: 'black',
+    birthDate: '2026-10-13',
+    ageDescription: 'Nacida el 13 de octubre de 2026',
+    personalitySummary: 'Recién nacida, curiosa y buscando cobijo, hija de Tabasqueña.',
+    careConsiderations: ['Cuidados neonatales y seguimiento veterinario individual'],
+    lineageReference: 'Hija de Tabasqueña; ascendencia paterna pendiente de confirmación.',
+    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#tlaxcalli'
+  },
+  {
+    id: 'nochtli',
+    name: 'Nochtli Ramirez',
+    status: 'available',
+    variety: 'pending_confirmation',
+    size: 'standard',
+    gender: 'male',
+    color: 'bermejo',
+    birthDate: '2026-10-12',
+    ageDescription: 'Nacido el 12 de octubre de 2026',
+    personalitySummary: 'Recién nacido dócil, de tonalidad rojiza, buscando calor.',
+    careConsiderations: ['Cuidados neonatales y seguimiento veterinario individual'],
+    lineageReference: 'Progenitores pendientes de confirmación.',
+    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#nochtli'
+  },
+  {
+    id: 'chok',
+    name: 'Chok Ramirez',
+    status: 'available',
+    variety: 'pending_confirmation',
+    size: 'standard',
+    gender: 'male',
+    color: 'black',
+    birthDate: '2026-10-12',
+    ageDescription: 'Nacido el 12 de octubre de 2026',
+    personalitySummary: 'Recién nacido de piel muy tersa, dócil y buscando cobijo constantemente.',
+    careConsiderations: ['Cuidados neonatales y seguimiento veterinario individual'],
+    lineageReference: 'Progenitores pendientes de confirmación.',
+    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#chok'
+  },
+  {
     id: 'tlilxochitl',
     name: 'Tlilxóchitl Ramirez',
     status: 'available',
     variety: 'hairless',
-    size: 'standard',
+    size: 'intermediate',
     gender: 'female',
     color: 'black',
     birthDate: '2026-08-03',
-    ageDescription: '7 semanas · nacida el 3 de agosto de 2026',
+    ageDescription: 'Nacida el 3 de agosto de 2026',
     personalitySummary: 'Cachorra xoloitzcuintle con copete característico, vivaz, atenta y de temperamento equilibrado con fuerte apego familiar.',
     careConsiderations: [
       'Protección solar e hidratación cutánea periódica',
