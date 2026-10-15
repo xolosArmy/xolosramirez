@@ -13,8 +13,8 @@
  * 5. Data accuracy:
  *    - Iztli (#oce alias, delivered, small intermediate, variety pending confirmation, born 2026-07-14)
  *    - Yohualli (female, intermediate, reserved)
- *    - Tlilxóchitl (standard, female, available, born 2026-08-03, 7 weeks)
- *    - Tonalli (standard, female, reserved)
+ *    - Tlilxóchitl (intermediate, female, available, born 2026-08-03)
+ *    - Tonalli (standard, female, delivered)
  *    - Xóchitl (intermediate, female, reserved)
  *    - Delivery zone recognizes "national".
  * 6. Ausencia de PII: no customer names, personal addresses, or private notes in outputs.
@@ -71,7 +71,7 @@ test('WM-XR1: Valid JSON Schema structures on all tools', () => {
 
 test('WM-XR1: Deterministic output for list_available_xolos', async () => {
   const result = await PublicXolosDataAdapter.listAvailableXolos();
-  assert.ok(result.total === 5, 'Should list 5 active public xolos (available + reserved)');
+  assert.equal(result.total, 9, 'Should list 9 active public xolos (available + reserved)');
   assert.ok(Array.isArray(result.xolos), 'xolos must be an array');
 
   for (const x of result.xolos) {
@@ -90,7 +90,7 @@ test('WM-XR1: Deterministic output for list_available_xolos', async () => {
 
   // Filter test: reserved
   const reservedFiltered = await PublicXolosDataAdapter.listAvailableXolos({ status: 'reserved' });
-  assert.ok(reservedFiltered.total === 3);
+  assert.equal(reservedFiltered.total, 2);
   for (const x of reservedFiltered.xolos) {
     assert.equal(x.status, 'reserved');
   }
@@ -108,16 +108,16 @@ test('WM-XR1: delivered Iztli stays historical through both identifiers and all 
 });
 
 test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', async () => {
-  // 1. Tlilxóchitl (available, standard, female)
+  // 1. Tlilxóchitl (available, intermediate, female)
   const tlil = await PublicXolosDataAdapter.getXoloProfile({ id: 'tlilxochitl' });
   assert.equal(tlil.found, true);
   assert.equal(tlil.xolo.id, 'tlilxochitl');
   assert.equal(tlil.xolo.name, 'Tlilxóchitl Ramirez');
-  assert.equal(tlil.xolo.size, 'standard');
+  assert.equal(tlil.xolo.size, 'intermediate');
   assert.equal(tlil.xolo.gender, 'female');
   assert.equal(tlil.xolo.status, 'available');
   assert.equal(tlil.xolo.birthDate, '2026-08-03');
-  assert.equal(tlil.xolo.ageDescription, '7 semanas · nacida el 3 de agosto de 2026');
+  assert.equal(tlil.xolo.ageDescription, 'Nacida el 3 de agosto de 2026');
 
   // 2. Xilonen (available, miniature, female)
   const xilonen = await PublicXolosDataAdapter.getXoloProfile({ id: 'xilonen' });
@@ -153,11 +153,11 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
   assert.equal(yohualli.xolo.gender, 'female');
   assert.equal(yohualli.xolo.status, 'reserved');
 
-  // 5. Tonalli (reserved, standard, female)
+  // 5. Tonalli (delivered, standard, female)
   const tonalli = await PublicXolosDataAdapter.getXoloProfile({ id: 'tonalli' });
   assert.equal(tonalli.found, true);
   assert.equal(tonalli.xolo.id, 'tonalli');
-  assert.equal(tonalli.xolo.status, 'reserved');
+  assert.equal(tonalli.xolo.status, 'delivered');
   assert.equal(tonalli.xolo.gender, 'female');
   assert.equal(tonalli.xolo.size, 'standard');
 
@@ -348,7 +348,7 @@ test('WM-XR1: Public approximate age vs synthetic exact birthDate invariant', as
   // Profiles with approximate public ages (e.g. "1 mes", "Recién nacida") must NEVER synthesize exact dates.
   const tlil = await PublicXolosDataAdapter.getXoloProfile({ id: 'tlilxochitl' });
   assert.equal(tlil.xolo.birthDate, '2026-08-03', 'Tlilxóchitl birthDate is explicitly published in public card');
-  assert.equal(tlil.xolo.ageDescription, '7 semanas · nacida el 3 de agosto de 2026');
+  assert.equal(tlil.xolo.ageDescription, 'Nacida el 3 de agosto de 2026');
   assert.equal(validatePublicAgeIntegrity(tlil.xolo).valid, true);
 
   // Iztli now has a canonical exact birth date from the master sheet and public ES/EN cards.
@@ -357,7 +357,7 @@ test('WM-XR1: Public approximate age vs synthetic exact birthDate invariant', as
   assert.equal(validatePublicAgeIntegrity(iztli.xolo).valid, true);
 
   // Remaining profiles only state approximate age on public cards; birthDate must be undefined
-  const approximateDogs = ['xilonen', 'yohualli', 'tonalli', 'xochitl'];
+  const approximateDogs = ['xilonen', 'yohualli', 'xochitl'];
   for (const dogId of approximateDogs) {
     const profile = await PublicXolosDataAdapter.getXoloProfile({ id: dogId });
     assert.equal(
@@ -381,4 +381,34 @@ test('WM-XR1: Public approximate age vs synthetic exact birthDate invariant', as
   const validationResult = validatePublicAgeIntegrity(syntheticDog);
   assert.equal(validationResult.valid, false, 'Validation must fail when synthetic birthDate is introduced');
   assert.match(validationResult.error, /synthetic or unverified birthDate/);
+});
+
+test('WM-XR1: newborn profiles, intermediate Tlilxóchitl and exact public birth dates', async () => {
+  const newborns = [
+    ['ollin', '2026-10-13', 'male', 'black'],
+    ['tlatoani', '2026-10-13', 'male', 'black'],
+    ['tlaxcalli', '2026-10-13', 'female', 'black'],
+    ['nochtli', '2026-10-12', 'male', 'bermejo'],
+    ['chok', '2026-10-12', 'male', 'black']
+  ];
+  const all = await PublicXolosDataAdapter.listAvailableXolos();
+  const standards = await PublicXolosDataAdapter.listAvailableXolos({ size: 'standard' });
+  const intermediates = await PublicXolosDataAdapter.listAvailableXolos({ size: 'intermediate' });
+  const hairless = await PublicXolosDataAdapter.listAvailableXolos({ variety: 'hairless' });
+  assert.ok(intermediates.xolos.some(x => x.id === 'tlilxochitl'));
+  assert.ok(!standards.xolos.some(x => x.id === 'tlilxochitl'));
+  for (const [id, birthDate, gender, color] of newborns) {
+    const profile = await PublicXolosDataAdapter.getXoloProfile({ id });
+    assert.equal(profile.found, true);
+    assert.equal(profile.xolo.status, 'available');
+    assert.equal(profile.xolo.size, 'standard');
+    assert.equal(profile.xolo.variety, 'pending_confirmation');
+    assert.equal(profile.xolo.gender, gender);
+    assert.equal(profile.xolo.color, color);
+    assert.equal(profile.xolo.birthDate, birthDate);
+    assert.equal(validatePublicAgeIntegrity(profile.xolo).valid, true);
+    assert.ok(all.xolos.some(x => x.id === id));
+    assert.ok(standards.xolos.some(x => x.id === id));
+    assert.ok(!hairless.xolos.some(x => x.id === id));
+  }
 });
