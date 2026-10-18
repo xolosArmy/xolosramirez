@@ -485,10 +485,14 @@ for (const path of ['contacto.html', 'en/contact.html']) {
 }
 
 const profileExpectations = [
+  ['ollin', 'available', 'Ollin Ramirez'],
+  ['tlatoani', 'available', 'Tlatoani Ramirez'],
+  ['tlaxcalli', 'available', 'Tlaxcalli Ramirez'],
+  ['nohpalli', 'available', 'Nohpalli Ramirez'],
+  ['nochtli', 'available', 'Nochtli Ramirez'],
+  ['chok', 'available', 'Chok Ramirez'],
   ['tlilxochitl', 'available', 'Tlilxóchitl Ramirez'],
   ['xilonen', 'available', 'Xilonen Ramirez'],
-  ['yohualli', 'reserved', 'Yohualli Ramirez'],
-  ['tonalli', 'reserved', 'Tonalli Ramírez'],
   ['xochitl', 'reserved', 'Xochitl Ramirez'],
 ];
 
@@ -512,7 +516,7 @@ for (const config of [
   { path: 'en/available-xolos.html', lang: 'en', emailPrefix: 'Ask about ', whatsappLabel: 'Ask on WhatsApp' },
 ]) {
   const html = read(config.path);
-  notMatches(html, /data-profile-card="iztli"|id="iztli"|#iztli/);
+  notMatches(html, /data-profile-card="iztli"|id="iztli"|#iztli|data-profile-card="yohualli"|id="yohualli"|#yohualli/);
   for (const [profile, status, name] of profileExpectations) {
     const ctas = html.match(new RegExp(`<a(?=[^>]*data-profile="${profile}")(?=[^>]*data-cta-location="profile_card")[^>]*>[\\s\\S]*?<\\/a>`, 'g')) || [];
     assert.equal(ctas.length, 2, config.path + ' must expose email and WhatsApp CTAs for ' + profile);
