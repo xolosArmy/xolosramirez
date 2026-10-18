@@ -12,9 +12,11 @@
  * 4. Deterministic outputs: all execute callbacks return valid, consistent JSON structures.
  * 5. Data accuracy:
  *    - Iztli (#oce alias, delivered, small intermediate, variety pending confirmation, born 2026-07-14)
- *    - Yohualli (female, intermediate, reserved)
- *    - Tlilxóchitl (standard, female, available, born 2026-08-03, 7 weeks)
- *    - Tonalli (standard, female, reserved)
+ *    - Yohualli (female, intermediate, delivered 2026-10-17)
+ *    - Seven newly listed public profiles are present in list_available_xolos
+ *    - Tlilxóchitl (intermediate, female, available, born 2026-08-03)
+ *    - Xilonen (miniature, female, available, born 2026-07-16)
+ *    - Tonalli (standard, female, delivered)
  *    - Xóchitl (intermediate, female, reserved)
  *    - Delivery zone recognizes "national".
  * 6. Ausencia de PII: no customer names, personal addresses, or private notes in outputs.
@@ -71,7 +73,7 @@ test('WM-XR1: Valid JSON Schema structures on all tools', () => {
 
 test('WM-XR1: Deterministic output for list_available_xolos', async () => {
   const result = await PublicXolosDataAdapter.listAvailableXolos();
-  assert.ok(result.total === 5, 'Should list 5 active public xolos (available + reserved)');
+  assert.equal(result.total, 10, 'Should list 10 active public xolos (available + reserved)');
   assert.ok(Array.isArray(result.xolos), 'xolos must be an array');
 
   for (const x of result.xolos) {
@@ -83,14 +85,14 @@ test('WM-XR1: Deterministic output for list_available_xolos', async () => {
 
   // Filter test: available
   const availableFiltered = await PublicXolosDataAdapter.listAvailableXolos({ status: 'available' });
-  assert.ok(availableFiltered.total >= 2);
+  assert.equal(availableFiltered.total, 9);
   for (const x of availableFiltered.xolos) {
     assert.equal(x.status, 'available');
   }
 
   // Filter test: reserved
   const reservedFiltered = await PublicXolosDataAdapter.listAvailableXolos({ status: 'reserved' });
-  assert.ok(reservedFiltered.total === 3);
+  assert.equal(reservedFiltered.total, 1);
   for (const x of reservedFiltered.xolos) {
     assert.equal(x.status, 'reserved');
   }
@@ -125,6 +127,8 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
   assert.equal(xilonen.xolo.size, 'miniature');
   assert.equal(xilonen.xolo.gender, 'female');
   assert.equal(xilonen.xolo.status, 'available');
+  assert.equal(xilonen.xolo.birthDate, '2026-07-16');
+  assert.equal(xilonen.xolo.ageDescription, '2 meses · nacida el 16 de julio de 2026');
 
   // 3. Iztli (delivered, small intermediate, male, historical #oce identifier)
   const oce = await PublicXolosDataAdapter.getXoloProfile({ id: 'oce' });
@@ -145,23 +149,45 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
     'Delivered profiles must stay outside the active intermediate catalogue'
   );
 
-  // 4. Yohualli (reserved, intermediate, female)
+  // 4. Yohualli (delivered, intermediate, female)
   const yohualli = await PublicXolosDataAdapter.getXoloProfile({ id: 'yohualli' });
   assert.equal(yohualli.found, true);
   assert.equal(yohualli.xolo.id, 'yohualli');
   assert.equal(yohualli.xolo.size, 'intermediate');
   assert.equal(yohualli.xolo.gender, 'female');
-  assert.equal(yohualli.xolo.status, 'reserved');
+  assert.equal(yohualli.xolo.status, 'delivered');
+  assert.equal(yohualli.xolo.publicUrl, 'https://xolosramirez.com/blog/2026-10-17-entrega-xoloitzcuintle-yohualli-ramirez.html');
+  assert.equal('birthDate' in yohualli.xolo, false, 'Do not publish an exact Yohualli birth date until records are reconciled');
+  const activeAfterYohualliDelivery = await PublicXolosDataAdapter.listAvailableXolos();
+  assert.ok(!activeAfterYohualliDelivery.xolos.some((x) => x.id === 'yohualli'));
 
-  // 5. Tonalli (reserved, standard, female)
+  // 5. Newly listed public profiles
+  const expectedNewProfiles = [
+    ['tonatiuh', 'miniature', 'male'],
+    ['ollin', 'standard', 'male'],
+    ['tlatoani', 'standard', 'male'],
+    ['tlaxcalli', 'standard', 'female'],
+    ['nohpalli', 'standard', 'female'],
+    ['nochtli', 'standard', 'male'],
+    ['chok', 'standard', 'male'],
+  ];
+  for (const [id, size, gender] of expectedNewProfiles) {
+    const profile = await PublicXolosDataAdapter.getXoloProfile({ id });
+    assert.equal(profile.found, true, id + ' must be retrievable');
+    assert.equal(profile.xolo.status, 'available');
+    assert.equal(profile.xolo.size, size);
+    assert.equal(profile.xolo.gender, gender);
+  }
+
+  // 6. Tonalli (delivered, standard, female)
   const tonalli = await PublicXolosDataAdapter.getXoloProfile({ id: 'tonalli' });
   assert.equal(tonalli.found, true);
   assert.equal(tonalli.xolo.id, 'tonalli');
-  assert.equal(tonalli.xolo.status, 'reserved');
+  assert.equal(tonalli.xolo.status, 'delivered');
   assert.equal(tonalli.xolo.gender, 'female');
   assert.equal(tonalli.xolo.size, 'standard');
 
-  // 6. Xóchitl (reserved, intermediate, female, bermejo)
+  // 7. Xóchitl (reserved, intermediate, female, bermejo)
   const xochitl = await PublicXolosDataAdapter.getXoloProfile({ id: 'xochitl' });
   assert.equal(xochitl.found, true);
   assert.equal(xochitl.xolo.id, 'xochitl');
