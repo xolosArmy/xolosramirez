@@ -14,8 +14,15 @@
  */
 
 export const CANONICAL_PUBLIC_BIRTH_DATES = {
-  tlilxochitl: '2026-08-03', // Backed by public card in xolos-disponibles.html: "Recién nacida · 3 de agosto de 2026"
-  iztli: '2026-07-14' // Backed by the canonical Xolos Ramírez master sheet and published in the permanent delivery chronicle.
+  tlilxochitl: '2026-08-03',
+  xilonen: '2026-07-16',
+  iztli: '2026-07-14',
+  ollin: '2026-10-13',
+  tlatoani: '2026-10-13',
+  tlaxcalli: '2026-10-13',
+  nohpalli: '2026-10-13',
+  nochtli: '2026-10-12',
+  chok: '2026-10-12'
 };
 
 /**
@@ -41,16 +48,120 @@ const LEGACY_PUBLIC_PROFILE_ALIASES = Object.freeze({ oce: 'iztli' });
 
 export const CANONICAL_PUBLIC_XOLOS = [
   {
+    id: 'tonatiuh',
+    name: 'Tonatiuh Ramirez',
+    status: 'available',
+    variety: 'pending_confirmation',
+    size: 'miniature',
+    gender: 'male',
+    color: 'black',
+    ageDescription: '8 meses',
+    personalitySummary: 'Perfil público vigente de Tonatiuh Ramirez.',
+    careConsiderations: [],
+    lineageReference: 'Xolos Ramírez',
+    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html'
+  },
+  {
+    id: 'ollin',
+    name: 'Ollin Ramirez',
+    status: 'available',
+    variety: 'pending_confirmation',
+    size: 'standard',
+    gender: 'male',
+    color: 'black',
+    birthDate: '2026-10-13',
+    ageDescription: 'Recién nacido · 13 de octubre de 2026',
+    personalitySummary: 'Recién nacido con gran vitalidad y dinamismo, hijo de Tabasqueña.',
+    careConsiderations: [],
+    lineageReference: 'Xolos Ramírez',
+    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#ollin'
+  },
+  {
+    id: 'tlatoani',
+    name: 'Tlatoani Ramirez',
+    status: 'available',
+    variety: 'pending_confirmation',
+    size: 'standard',
+    gender: 'male',
+    color: 'black',
+    birthDate: '2026-10-13',
+    ageDescription: 'Recién nacido · 13 de octubre de 2026',
+    personalitySummary: 'Recién nacido con gran porte y vitalidad desde sus primeros instantes.',
+    careConsiderations: [],
+    lineageReference: 'Xolos Ramírez',
+    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#tlatoani'
+  },
+  {
+    id: 'tlaxcalli',
+    name: 'Tlaxcalli Ramirez',
+    status: 'available',
+    variety: 'pending_confirmation',
+    size: 'standard',
+    gender: 'female',
+    color: 'black',
+    birthDate: '2026-10-13',
+    ageDescription: 'Recién nacida · 13 de octubre de 2026',
+    personalitySummary: 'Recién nacida, curiosa y buscando cobijo, hija de Tabasqueña.',
+    careConsiderations: [],
+    lineageReference: 'Xolos Ramírez',
+    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#tlaxcalli'
+  },
+  {
+    id: 'nohpalli',
+    name: 'Nohpalli Ramirez',
+    status: 'available',
+    variety: 'pending_confirmation',
+    size: 'standard',
+    gender: 'female',
+    color: 'black',
+    birthDate: '2026-10-13',
+    ageDescription: 'Recién nacida · 13 de octubre de 2026',
+    personalitySummary: 'Recién nacida en sus primeros días de vida. Su personalidad se irá conociendo conforme crezca.',
+    careConsiderations: [],
+    lineageReference: 'Xolos Ramírez',
+    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#nohpalli'
+  },
+  {
+    id: 'nochtli',
+    name: 'Nochtli Ramirez',
+    status: 'available',
+    variety: 'pending_confirmation',
+    size: 'standard',
+    gender: 'male',
+    color: 'bermejo',
+    birthDate: '2026-10-12',
+    ageDescription: 'Recién nacido · 12 de octubre de 2026',
+    personalitySummary: 'Recién nacido, dócil y de tonalidad rojiza buscando calor.',
+    careConsiderations: [],
+    lineageReference: 'Xolos Ramírez',
+    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#nochtli'
+  },
+  {
+    id: 'chok',
+    name: 'Chok Ramirez',
+    status: 'available',
+    variety: 'pending_confirmation',
+    size: 'standard',
+    gender: 'male',
+    color: 'black',
+    birthDate: '2026-10-12',
+    ageDescription: 'Recién nacido · 12 de octubre de 2026',
+    personalitySummary: 'Recién nacido de piel muy tersa, dócil y buscando cobijo constantemente.',
+    careConsiderations: [],
+    lineageReference: 'Xolos Ramírez',
+    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#chok'
+  },
+  {
     id: 'tlilxochitl',
     name: 'Tlilxóchitl Ramirez',
     status: 'available',
     variety: 'hairless',
-    size: 'standard',
+    size: 'intermediate',
     gender: 'female',
     color: 'black',
     birthDate: '2026-08-03',
-    ageDescription: '7 semanas · nacida el 3 de agosto de 2026',
-    personalitySummary: 'Cachorra xoloitzcuintle con copete característico, vivaz, atenta y de temperamento equilibrado con fuerte apego familiar.',
+    ageDescription: '2 meses · nacida el 3 de agosto de 2026',
+    personalitySummary: 'Tranquila, cariñosa y observadora. Tlilxóchitl es una bebé curiosa y confiada, disfruta el contacto humano y explora su entorno con una energía dulce y serena.',
     careConsiderations: [
       'Protección solar e hidratación cutánea periódica',
       'Temperatura templada en interiores',
@@ -67,8 +178,9 @@ export const CANONICAL_PUBLIC_XOLOS = [
     size: 'miniature',
     gender: 'female',
     color: 'black',
-    ageDescription: 'Cachorra miniatura de 1 mes',
-    personalitySummary: 'Cachorra xoloitzcuintle miniatura sin pelo, dulce, observadora, excelente para vida en departamento o compañía cercana.',
+    birthDate: '2026-07-16',
+    ageDescription: '2 meses · nacida el 16 de julio de 2026',
+    personalitySummary: 'Curiosa, despierta y exploradora. Xilonen es una cachorrita observadora que investiga su entorno con confianza y disfruta acercarse a las personas.',
     careConsiderations: [
       'Cuidado dérmico suave libre de fragancias sintéticas',
       'Ropa térmica ligera para temporadas frías',
@@ -76,6 +188,23 @@ export const CANONICAL_PUBLIC_XOLOS = [
     ],
     lineageReference: 'Linaje ancestral Xolos Ramírez con pedigree internacional',
     publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#xilonen'
+  },
+  {
+    id: 'xochitl',
+    name: 'Xochitl Ramirez',
+    status: 'reserved',
+    variety: 'hairless',
+    size: 'intermediate',
+    gender: 'female',
+    color: 'bermejo',
+    ageDescription: 'Cachorra recién nacida (reservada)',
+    personalitySummary: 'Cachorra xoloitzcuintle de tonalidad bermeja y carácter sereno, en etapa de crecimiento protegida.',
+    careConsiderations: [
+      'Protección dérmica especializada para xoloitzcuintles bermejos',
+      'Alimentación equilibrada de alta calidad'
+    ],
+    lineageReference: 'Linaje Tonalli Xolos Ramírez',
+    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#xochitl'
   },
   {
     id: 'iztli',
@@ -97,21 +226,21 @@ export const CANONICAL_PUBLIC_XOLOS = [
   {
     id: 'yohualli',
     name: 'Yohualli Ramirez',
-    status: 'reserved',
+    status: 'delivered',
     variety: 'hairless',
     size: 'intermediate',
     gender: 'female',
     color: 'black',
-    ageDescription: 'Cachorra hembra recién nacida (reservada)',
+    ageDescription: 'Entregada el 17 de octubre de 2026',
     personalitySummary: 'Hembra intermedia de temperamento equilibrado, cariñosa y atenta a su entorno.',
     careConsiderations: [
       'Ejercicio diario moderado',
       'Estimulación cognitiva y entrenamiento positivo'
     ],
     lineageReference: 'Linaje Tonalli Xolos Ramírez',
-    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#yohualli'
+    publicUrl: 'https://xolosramirez.com/blog/2026-10-17-entrega-xoloitzcuintle-yohualli-ramirez.html'
   },
-{
+  {
     id: 'tonalli',
     name: 'Tonalli Ramírez',
     status: 'delivered',
@@ -128,23 +257,6 @@ export const CANONICAL_PUBLIC_XOLOS = [
     ],
     lineageReference: 'Linaje Tonalli Xolos Ramírez',
     publicUrl: 'https://xolosramirez.com/blog/2026-10-11-entrega-xoloitzcuintle-tonalli-ramirez.html'
-  },
-  {
-    id: 'xochitl',
-    name: 'Xochitl Ramirez',
-    status: 'reserved',
-    variety: 'hairless',
-    size: 'intermediate',
-    gender: 'female',
-    color: 'bermejo',
-    ageDescription: 'Cachorra recién nacida (reservada)',
-    personalitySummary: 'Cachorra xoloitzcuintle de tonalidad bermeja y carácter sereno, en etapa de crecimiento protegida.',
-    careConsiderations: [
-      'Protección dérmica especializada para xoloitzcuintles bermejos',
-      'Alimentación equilibrada de alta calidad'
-    ],
-    lineageReference: 'Linaje Tonalli Xolos Ramírez',
-    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#xochitl'
   }
 ];
 
