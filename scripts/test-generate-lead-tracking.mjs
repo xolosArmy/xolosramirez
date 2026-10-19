@@ -489,6 +489,7 @@ const profileExpectations = [
   ['tlatoani', 'available', 'Tlatoani Ramirez'],
   ['tlaxcalli', 'available', 'Tlaxcalli Ramirez'],
   ['nohpalli', 'available', 'Nohpalli Ramirez'],
+  ['kin', 'available', 'Kin Ramirez'],
   ['nochtli', 'available', 'Nochtli Ramirez'],
   ['chok', 'available', 'Chok Ramirez'],
   ['tlilxochitl', 'available', 'Tlilxóchitl Ramirez'],
