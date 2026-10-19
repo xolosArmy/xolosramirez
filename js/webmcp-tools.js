@@ -97,7 +97,7 @@ export const WEBMCP_TOOLS_DEFINITIONS = [
       properties: {
         id: {
           type: 'string',
-          description: 'Identificador canónico del ejemplar (e.g. "tonatiuh", "ollin", "tlatoani", "tlaxcalli", "nohpalli", "kin", "nochtli", "chok", "tlilxochitl", "xilonen", "xochitl", "yohualli"). Usa siempre el identificador canónico vigente.'
+          description: 'Identificador canónico del ejemplar (e.g. "tonatiuh", "ollin", "tlatoani", "tlaxcalli", "nohpalli", "kin", "yolotl", "iztac", "nochtli", "chok", "tlilxochitl", "xilonen", "xochitl", "yohualli"). Usa siempre el identificador canónico vigente.'
         }
       },
       additionalProperties: false

@@ -22,6 +22,8 @@ export const CANONICAL_PUBLIC_BIRTH_DATES = {
   tlaxcalli: '2026-10-13',
   nohpalli: '2026-10-13',
   kin: '2026-10-16',
+  yolotl: '2026-10-16',
+  iztac: '2026-10-16',
   nochtli: '2026-10-12',
   chok: '2026-10-12'
 };
@@ -121,6 +123,36 @@ export const CANONICAL_PUBLIC_XOLOS = [
     careConsiderations: [],
     lineageReference: 'Xolos Ramírez',
     publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#kin'
+  },
+  {
+    id: 'yolotl',
+    name: 'Yolotl Ramirez',
+    status: 'available',
+    variety: 'hairless',
+    size: 'standard',
+    gender: 'male',
+    color: 'black',
+    birthDate: '2026-10-16',
+    ageDescription: 'Recién nacido · 16 de octubre de 2026',
+    personalitySummary: 'Su personalidad se irá conociendo conforme crezca.',
+    careConsiderations: [],
+    lineageReference: 'Xolos Ramírez',
+    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#yolotl'
+  },
+  {
+    id: 'iztac',
+    name: 'Iztac Ramirez',
+    status: 'available',
+    variety: 'hairless',
+    size: 'standard',
+    gender: 'male',
+    color: 'black',
+    birthDate: '2026-10-16',
+    ageDescription: 'Recién nacido · 16 de octubre de 2026',
+    personalitySummary: 'Su personalidad se irá conociendo conforme crezca.',
+    careConsiderations: [],
+    lineageReference: 'Xolos Ramírez',
+    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#iztac'
   },
   {
     id: 'nohpalli',

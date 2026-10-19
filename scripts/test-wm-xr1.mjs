@@ -169,6 +169,8 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
     ['tlaxcalli', 'standard', 'female'],
     ['nohpalli', 'standard', 'female'],
     ['kin', 'standard', 'male'],
+    ['yolotl', 'standard', 'male'],
+    ['iztac', 'standard', 'male'],
     ['nochtli', 'standard', 'male'],
     ['chok', 'standard', 'male'],
   ];
@@ -178,6 +180,15 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
     assert.equal(profile.xolo.status, 'available');
     assert.equal(profile.xolo.size, size);
     assert.equal(profile.xolo.gender, gender);
+  }
+
+  // Confirm both October 16 newborns have their verified public attributes.
+  for (const id of ['yolotl', 'iztac']) {
+    const profile = await PublicXolosDataAdapter.getXoloProfile({ id });
+    assert.equal(profile.found, true);
+    assert.equal(profile.xolo.birthDate, '2026-10-16');
+    assert.equal(profile.xolo.variety, 'hairless');
+    assert.equal(profile.xolo.color, 'black');
   }
 
   // 6. Tonalli (delivered, standard, female)
