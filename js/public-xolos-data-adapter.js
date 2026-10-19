@@ -114,7 +114,7 @@ export const CANONICAL_PUBLIC_XOLOS = [
     variety: 'pending_confirmation',
     size: 'standard',
     gender: 'male',
-    color: 'pending_confirmation',
+    color: 'black',
     birthDate: '2026-10-16',
     ageDescription: 'Recién nacido · 16 de octubre de 2026',
     personalitySummary: 'Recién nacido en sus primeros días de vida. Su personalidad se irá conociendo conforme crezca.',
