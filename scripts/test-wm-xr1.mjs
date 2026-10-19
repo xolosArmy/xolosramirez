@@ -73,7 +73,7 @@ test('WM-XR1: Valid JSON Schema structures on all tools', () => {
 
 test('WM-XR1: Deterministic output for list_available_xolos', async () => {
   const result = await PublicXolosDataAdapter.listAvailableXolos();
-  assert.equal(result.total, 10, 'Should list 10 active public xolos (available + reserved)');
+  assert.equal(result.total, 11, 'Should list 11 active public xolos (available + reserved)');
   assert.ok(Array.isArray(result.xolos), 'xolos must be an array');
 
   for (const x of result.xolos) {
@@ -85,7 +85,7 @@ test('WM-XR1: Deterministic output for list_available_xolos', async () => {
 
   // Filter test: available
   const availableFiltered = await PublicXolosDataAdapter.listAvailableXolos({ status: 'available' });
-  assert.equal(availableFiltered.total, 9);
+  assert.equal(availableFiltered.total, 10);
   for (const x of availableFiltered.xolos) {
     assert.equal(x.status, 'available');
   }
@@ -168,6 +168,7 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
     ['tlatoani', 'standard', 'male'],
     ['tlaxcalli', 'standard', 'female'],
     ['nohpalli', 'standard', 'female'],
+    ['kin', 'standard', 'male'],
     ['nochtli', 'standard', 'male'],
     ['chok', 'standard', 'male'],
   ];
