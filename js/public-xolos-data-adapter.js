@@ -21,6 +21,7 @@ export const CANONICAL_PUBLIC_BIRTH_DATES = {
   tlatoani: '2026-10-13',
   tlaxcalli: '2026-10-13',
   nohpalli: '2026-10-13',
+  kin: '2026-10-16',
   nochtli: '2026-10-12',
   chok: '2026-10-12'
 };
@@ -105,6 +106,21 @@ export const CANONICAL_PUBLIC_XOLOS = [
     careConsiderations: [],
     lineageReference: 'Xolos Ramírez',
     publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#tlaxcalli'
+  },
+  {
+    id: 'kin',
+    name: 'Kin Ramirez',
+    status: 'available',
+    variety: 'pending_confirmation',
+    size: 'standard',
+    gender: 'male',
+    color: 'pending_confirmation',
+    birthDate: '2026-10-16',
+    ageDescription: 'Recién nacido · 16 de octubre de 2026',
+    personalitySummary: 'Recién nacido en sus primeros días de vida. Su personalidad se irá conociendo conforme crezca.',
+    careConsiderations: [],
+    lineageReference: 'Xolos Ramírez',
+    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#kin'
   },
   {
     id: 'nohpalli',
