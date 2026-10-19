@@ -113,7 +113,7 @@ export const CANONICAL_PUBLIC_XOLOS = [
     id: 'kin',
     name: 'Kin Ramirez',
     status: 'available',
-    variety: 'pending_confirmation',
+    variety: 'hairless',
     size: 'standard',
     gender: 'male',
     color: 'black',
