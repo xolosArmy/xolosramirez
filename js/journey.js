@@ -16,6 +16,21 @@
     push({ event: 'xolos_journey_step', step: link.dataset.funnelStep, page_type: pageType, lang: english ? 'en' : 'es' });
   });
 
+  // Track entry from a commercial profile into a persistent Personalidad Xolo chronicle.
+  document.addEventListener('click', (event) => {
+    const link = event.target instanceof Element ? event.target.closest('a[data-personality-story]') : null;
+    if (!link) return;
+    push({
+      event: 'personality_story_click',
+      profile: link.dataset.profile || undefined,
+      source_section: link.dataset.sourceSection || 'profile_card',
+      page_type: pageType,
+      chronicle_cycle_start: '2026-10-20',
+      chronicle_cycle_end: '2026-10-26',
+      lang: english ? 'en' : 'es'
+    });
+  });
+
   const toolbar = document.querySelector('[data-profile-filters]');
   if (toolbar) {
     const cards = Array.from(document.querySelectorAll('.puppy-card[data-profile-status]'));
