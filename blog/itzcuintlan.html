@@ -94,6 +94,30 @@
                 font-size: 0.88rem;
             }
         }
+    
+        /* Mobile-first reading layout and overflow protection */
+        html { overflow-x: clip; }
+        body { min-width: 0; overflow-wrap: break-word; }
+        #contenido-principal { min-width: 0; width: 100%; }
+        .guide-shell { width: min(100%, 900px); min-width: 0; padding: clamp(1rem, 3vw, 1.75rem); }
+        .guide-shell img, .guide-shell video, .guide-shell iframe, .guide-shell svg { max-width: 100%; height: auto; }
+        .guide-shell p, .guide-shell li, .guide-shell td, .guide-shell th { overflow-wrap: anywhere; }
+        .guide-shell a { overflow-wrap: anywhere; }
+        .guide-shell .table-responsive { max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain; }
+        .guide-shell .table-responsive table { min-width: 600px; }
+        .itzcuintlan-hero { margin: 0 auto 1.5rem; max-width: 1100px; padding: 0 1rem; }
+        .itzcuintlan-hero img { display: block; width: 100%; height: auto; border-radius: 12px; }
+        @media (max-width: 600px) {
+          .guide-shell { padding: 1rem 1rem 2rem; }
+          .guide-shell h1 { font-size: clamp(1.55rem, 7vw, 2rem); line-height: 1.25; }
+          .guide-shell h2 { font-size: clamp(1.3rem, 5.5vw, 1.65rem); }
+          .guide-shell h3 { font-size: 1.15rem; }
+          .guide-shell p, .guide-shell li { font-size: 1rem; line-height: 1.75; }
+          .guide-shell ul, .guide-shell ol { padding-left: 1.3rem; }
+          .itzcuintlan-hero { padding: 0; margin-bottom: .5rem; }
+          .itzcuintlan-hero img { border-radius: 0; }
+          .guide-shell .table-responsive { margin-inline: 0; }
+        }
     </style>
     <meta property="og:image" content="https://xolosramirez.com/img/blog/itzcuintlan-hero.webp">
     <meta name="twitter:card" content="summary_large_image">
@@ -124,7 +148,7 @@
 
     <!-- 5. ESTRUCTURA SEMÁNTICA DEL CONTENIDO -->
     <main id="contenido-principal">
-    <figure style="margin:0 auto 1.5rem;max-width:1100px;padding:0 1rem"><img src="/img/blog/itzcuintlan-hero.webp" alt="Xoloitzcuintle, guía de las almas a través del Itzcuintlán" width="1536" height="1024" fetchpriority="high" style="display:block;width:100%;height:auto;border-radius:12px"></figure>
+    <figure class="itzcuintlan-hero"><img src="/img/blog/itzcuintlan-hero.webp" alt="Xoloitzcuintle, guía de las almas a través del Itzcuintlán" width="1536" height="1024" fetchpriority="high"></figure>
         <article class="guide-shell">
             <h1>El Legado del Xoloitzcuintle: Ontología del Itzcuintlán y el Significado Espiritual en la Filosofía de Xolos Ramírez</h1>
 
