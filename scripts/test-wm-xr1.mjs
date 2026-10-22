@@ -13,7 +13,7 @@
  * 5. Data accuracy:
  *    - Iztli (#oce alias, delivered, small intermediate, variety pending confirmation, born 2026-07-14)
  *    - Yohualli (female, intermediate, delivered 2026-10-17)
- *    - Seven newly listed public profiles are present in list_available_xolos
+ *    - Removed Ollin is absent from list_available_xolos and get_xolo_profile
  *    - Tlilxóchitl (intermediate, female, available, born 2026-08-03)
  *    - Xilonen (miniature, female, available, born 2026-07-16)
  *    - Tonalli (standard, female, delivered)
@@ -73,7 +73,7 @@ test('WM-XR1: Valid JSON Schema structures on all tools', () => {
 
 test('WM-XR1: Deterministic output for list_available_xolos', async () => {
   const result = await PublicXolosDataAdapter.listAvailableXolos();
-  assert.equal(result.total, 11, 'Should list 11 active public xolos (available + reserved)');
+  assert.equal(result.total, 10, 'Should list 10 active public xolos (available + reserved)');
   assert.ok(Array.isArray(result.xolos), 'xolos must be an array');
 
   for (const x of result.xolos) {
@@ -83,9 +83,14 @@ test('WM-XR1: Deterministic output for list_available_xolos', async () => {
     assert.ok(x.publicUrl.startsWith('https://xolosramirez.com/'), 'publicUrl must be canonical HTTPS');
   }
 
+  assert.ok(!result.xolos.some((x) => x.id === 'ollin'), 'Ollin must not be in the active public catalogue');
+  const removedOllin = await PublicXolosDataAdapter.getXoloProfile({ id: 'ollin' });
+  assert.equal(removedOllin.found, false, 'Ollin profile must no longer be publicly retrievable');
+  assert.equal(removedOllin.error, 'NOT_FOUND');
+
   // Filter test: available
   const availableFiltered = await PublicXolosDataAdapter.listAvailableXolos({ status: 'available' });
-  assert.equal(availableFiltered.total, 10);
+  assert.equal(availableFiltered.total, 9);
   for (const x of availableFiltered.xolos) {
     assert.equal(x.status, 'available');
   }
@@ -164,7 +169,6 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
   // 5. Newly listed public profiles
   const expectedNewProfiles = [
     ['tonatiuh', 'miniature', 'male'],
-    ['ollin', 'standard', 'male'],
     ['tlatoani', 'standard', 'male'],
     ['tlaxcalli', 'standard', 'female'],
     ['nohpalli', 'standard', 'female'],
