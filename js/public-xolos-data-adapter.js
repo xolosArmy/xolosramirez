@@ -17,7 +17,6 @@ export const CANONICAL_PUBLIC_BIRTH_DATES = {
   tlilxochitl: '2026-08-03',
   xilonen: '2026-07-16',
   iztli: '2026-07-14',
-  ollin: '2026-10-13',
   tlatoani: '2026-10-13',
   tlaxcalli: '2026-10-13',
   nohpalli: '2026-10-13',
@@ -63,21 +62,6 @@ export const CANONICAL_PUBLIC_XOLOS = [
     careConsiderations: [],
     lineageReference: 'Xolos Ramírez',
     publicUrl: 'https://xolosramirez.com/xolos-disponibles.html'
-  },
-  {
-    id: 'ollin',
-    name: 'Ollin Ramirez',
-    status: 'available',
-    variety: 'pending_confirmation',
-    size: 'standard',
-    gender: 'male',
-    color: 'black',
-    birthDate: '2026-10-13',
-    ageDescription: 'Recién nacido · 13 de octubre de 2026',
-    personalitySummary: 'Recién nacido con gran vitalidad y dinamismo, hijo de Tabasqueña.',
-    careConsiderations: [],
-    lineageReference: 'Xolos Ramírez',
-    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#ollin'
   },
   {
     id: 'tlatoani',
