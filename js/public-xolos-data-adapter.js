@@ -126,7 +126,7 @@ export const CANONICAL_PUBLIC_XOLOS = [
   },
   {
     id: 'iztac',
-    name: 'Iztac Ramirez',
+    name: 'Iztak Ramirez',
     status: 'available',
     variety: 'hairless',
     size: 'intermediate',
