@@ -24,7 +24,8 @@ export const CANONICAL_PUBLIC_BIRTH_DATES = {
   yolotl: '2026-10-16',
   iztac: '2026-10-16',
   nochtli: '2026-10-12',
-  chok: '2026-10-12'
+  chok: '2026-10-12',
+  xolotlquetzalli: '2026-10-19'
 };
 
 /**
@@ -182,6 +183,21 @@ export const CANONICAL_PUBLIC_XOLOS = [
     careConsiderations: [],
     lineageReference: 'Xolos Ramírez',
     publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#chok'
+  },
+  {
+    id: 'xolotlquetzalli',
+    name: 'XolotlQuetzalli Ramirez',
+    status: 'available',
+    variety: 'hairless',
+    size: 'pending_confirmation',
+    gender: 'female',
+    color: 'black',
+    birthDate: '2026-10-19',
+    ageDescription: 'Recién nacida · 19 de octubre de 2026',
+    personalitySummary: 'Recién nacida que descansa tranquila entre las manos durante sus primeros días de vida.',
+    careConsiderations: [],
+    lineageReference: 'Xolos Ramírez',
+    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#xolotlquetzalli'
   },
   {
     id: 'tlilxochitl',
