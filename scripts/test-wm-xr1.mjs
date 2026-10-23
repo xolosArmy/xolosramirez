@@ -193,6 +193,10 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
   assert.equal(newborn.xolo.color, 'black');
   assert.equal(validatePublicAgeIntegrity(newborn.xolo).valid, true);
 
+  const iztak = await PublicXolosDataAdapter.getXoloProfile({ id: 'iztac' });
+  assert.equal(iztak.found, true);
+  assert.equal(iztak.xolo.name, 'Iztak Ramirez');
+
   // Confirm both October 16 newborns have their verified public attributes.
   for (const id of ['yolotl', 'iztac']) {
     const profile = await PublicXolosDataAdapter.getXoloProfile({ id });
