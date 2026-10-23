@@ -157,7 +157,7 @@ export const CANONICAL_PUBLIC_XOLOS = [
   {
     id: 'nochtli',
     name: 'Nochtli Ramirez',
-    status: 'available',
+    status: 'reserved',
     variety: 'pending_confirmation',
     size: 'standard',
     gender: 'male',
