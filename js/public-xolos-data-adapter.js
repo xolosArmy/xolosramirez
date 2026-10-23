@@ -189,7 +189,7 @@ export const CANONICAL_PUBLIC_XOLOS = [
     name: 'XolotlQuetzalli Ramirez',
     status: 'available',
     variety: 'hairless',
-    size: 'pending_confirmation',
+    size: 'standard',
     gender: 'female',
     color: 'black',
     birthDate: '2026-10-19',
