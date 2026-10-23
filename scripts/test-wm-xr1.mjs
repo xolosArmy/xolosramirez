@@ -182,7 +182,7 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
   for (const [id, size, gender] of expectedNewProfiles) {
     const profile = await PublicXolosDataAdapter.getXoloProfile({ id });
     assert.equal(profile.found, true, id + ' must be retrievable');
-    assert.equal(profile.xolo.status, 'available');
+    assert.equal(profile.xolo.status, id === 'nochtli' ? 'reserved' : 'available');
     assert.equal(profile.xolo.size, size);
     assert.equal(profile.xolo.gender, gender);
   }
