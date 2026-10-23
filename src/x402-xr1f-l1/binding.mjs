@@ -147,11 +147,7 @@ export function assertAllocatorBinding(db, allocator) {
   });
 }
 
-export function bindAllocator({ db, allocator, boundAt }) {
-  assertDb(db);
-  assertWatchOnlyAllocator(allocator);
-  assertBoundAt(boundAt);
-
+function bindAllocatorCore({ db, allocator, boundAt }) {
   let existing;
   try {
     existing = getExistingBinding(db);
@@ -185,65 +181,75 @@ export function bindAllocator({ db, allocator, boundAt }) {
     );
   }
 
+  db.prepare(
+    'INSERT INTO main.xr1f_l1_allocator_binding (binding_id, schema_version, allocator_kind, allocator_id, network, x402_xec_commit, bound_at) VALUES (1, 1, ?, ?, ?, ?, ?)',
+  ).run(
+    XR1F_L1_ALLOCATOR_KIND,
+    allocator.allocatorId,
+    XR1F_L1_NETWORK,
+    CANONICAL_X402_XEC_COMMIT,
+    boundAt,
+  );
+
+  return Object.freeze({
+    ok: true,
+    status: 'BOUND',
+    idempotent: false,
+    binding: Object.freeze({
+      bindingId: 1,
+      schemaVersion: 1,
+      allocatorKind: XR1F_L1_ALLOCATOR_KIND,
+      allocatorId: allocator.allocatorId,
+      network: XR1F_L1_NETWORK,
+      x402Commit: CANONICAL_X402_XEC_COMMIT,
+      boundAt,
+    }),
+  });
+}
+
+export function bindAllocatorInTransaction({
+  db,
+  allocator,
+  boundAt,
+}) {
+  assertDb(db);
+  assertWatchOnlyAllocator(allocator);
+  assertBoundAt(boundAt);
+
+  if (db.isTransaction !== true) {
+    fail(
+      'XR1F_L1_CALLER_TRANSACTION_REQUIRED',
+      'Atomic allocator binding requires an existing caller-owned transaction',
+    );
+  }
+
+  return bindAllocatorCore({
+    db,
+    allocator,
+    boundAt,
+  });
+}
+
+export function bindAllocator({ db, allocator, boundAt }) {
+  assertDb(db);
+  assertWatchOnlyAllocator(allocator);
+  assertBoundAt(boundAt);
+
   let transactionOwned = false;
 
   try {
     db.exec('BEGIN IMMEDIATE');
     transactionOwned = true;
 
-    const raced = getExistingBinding(db);
-    if (raced) {
-      if (!bindingMatches(raced, allocator)) {
-        throw new Xr1fL1BindingError(
-          'XR1F_L1_ALLOCATOR_BINDING_MISMATCH',
-          'A different allocator identity was bound concurrently',
-        );
-      }
-
-      db.exec('COMMIT');
-      transactionOwned = false;
-      return Object.freeze({
-        ok: true,
-        status: 'BOUND',
-        idempotent: true,
-        binding: publicBinding(raced),
-      });
-    }
-
-    if (countInvoiceHistory(db) !== 0) {
-      throw new Xr1fL1BindingError(
-        'XR1F_L1_UNBOUND_HISTORY',
-        'C3B gained invoice history before allocator binding',
-      );
-    }
-
-    db.prepare(
-      'INSERT INTO main.xr1f_l1_allocator_binding (binding_id, schema_version, allocator_kind, allocator_id, network, x402_xec_commit, bound_at) VALUES (1, 1, ?, ?, ?, ?, ?)',
-    ).run(
-      XR1F_L1_ALLOCATOR_KIND,
-      allocator.allocatorId,
-      XR1F_L1_NETWORK,
-      CANONICAL_X402_XEC_COMMIT,
+    const result = bindAllocatorCore({
+      db,
+      allocator,
       boundAt,
-    );
+    });
 
     db.exec('COMMIT');
     transactionOwned = false;
-
-    return Object.freeze({
-      ok: true,
-      status: 'BOUND',
-      idempotent: false,
-      binding: Object.freeze({
-        bindingId: 1,
-        schemaVersion: 1,
-        allocatorKind: XR1F_L1_ALLOCATOR_KIND,
-        allocatorId: allocator.allocatorId,
-        network: XR1F_L1_NETWORK,
-        x402Commit: CANONICAL_X402_XEC_COMMIT,
-        boundAt,
-      }),
-    });
+    return result;
   } catch (error) {
     if (transactionOwned === true) {
       try { db.exec('ROLLBACK'); } catch {}

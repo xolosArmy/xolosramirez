@@ -19,6 +19,7 @@ import {
   Xr1fL1BindingError,
   assertAllocatorBinding,
   bindAllocator,
+  bindAllocatorInTransaction,
   readAllocatorBinding,
 } from '../../src/x402-xr1f-l1/binding.mjs';
 
@@ -613,4 +614,45 @@ canonicalTest('18. TEMP invoices table cannot hide durable main invoice history'
     },
     { invoices: true },
   );
+});
+
+
+canonicalTest('19. caller-owned binding primitive requires an active transaction', () => {
+  withDb(db => {
+    expectBindingError(
+      () =>
+        bindAllocatorInTransaction({
+          db,
+          allocator: allocator(),
+          boundAt: 1,
+        }),
+      'XR1F_L1_CALLER_TRANSACTION_REQUIRED',
+    );
+
+    assert.equal(readAllocatorBinding(db).status, 'UNBOUND');
+  });
+});
+
+canonicalTest('20. caller-owned binding primitive never commits the caller transaction', () => {
+  withDb(db => {
+    const a = allocator();
+
+    db.exec('BEGIN IMMEDIATE');
+    assert.equal(db.isTransaction, true);
+
+    const result = bindAllocatorInTransaction({
+      db,
+      allocator: a,
+      boundAt: 42,
+    });
+
+    assert.equal(result.ok, true);
+    assert.equal(result.idempotent, false);
+    assert.equal(db.isTransaction, true);
+    assert.equal(readAllocatorBinding(db).status, 'BOUND');
+
+    db.exec('ROLLBACK');
+    assert.equal(db.isTransaction, false);
+    assert.equal(readAllocatorBinding(db).status, 'UNBOUND');
+  });
 });
