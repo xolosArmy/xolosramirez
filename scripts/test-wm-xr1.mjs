@@ -73,7 +73,7 @@ test('WM-XR1: Valid JSON Schema structures on all tools', () => {
 
 test('WM-XR1: Deterministic output for list_available_xolos', async () => {
   const result = await PublicXolosDataAdapter.listAvailableXolos();
-  assert.equal(result.total, 13, 'Should list 13 active public xolos (available + reserved)');
+  assert.equal(result.total, 14, 'Should list 14 active public xolos (available + reserved)');
   assert.ok(Array.isArray(result.xolos), 'xolos must be an array');
 
   for (const x of result.xolos) {
@@ -90,7 +90,7 @@ test('WM-XR1: Deterministic output for list_available_xolos', async () => {
 
   // Filter test: available
   const availableFiltered = await PublicXolosDataAdapter.listAvailableXolos({ status: 'available' });
-  assert.equal(availableFiltered.total, 12);
+  assert.equal(availableFiltered.total, 13);
   for (const x of availableFiltered.xolos) {
     assert.equal(x.status, 'available');
   }
@@ -170,6 +170,7 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
   const expectedNewProfiles = [
     ['tonatiuh', 'miniature', 'male'],
     ['tlatoani', 'standard', 'male'],
+    ['tonanzin', 'intermediate', 'female'],
     ['tlaxcalli', 'standard', 'female'],
     ['nohpalli', 'standard', 'female'],
     ['atlixco', 'intermediate', 'male'],
@@ -186,6 +187,13 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
     assert.equal(profile.xolo.size, size);
     assert.equal(profile.xolo.gender, gender);
   }
+
+  const tonatzin = await PublicXolosDataAdapter.getXoloProfile({ id: 'tonanzin' });
+  assert.equal(tonatzin.xolo.name, 'Tonatzin Ramirez');
+  assert.equal(tonatzin.xolo.birthDate, '2026-10-20');
+  assert.equal(tonatzin.xolo.variety, 'hairless');
+  assert.deepEqual(await PublicXolosDataAdapter.getXoloProfile({ id: 'tonatzin' }), tonatzin);
+  assert.equal(validatePublicAgeIntegrity(tonatzin.xolo).valid, true);
 
   const newborn = await PublicXolosDataAdapter.getXoloProfile({ id: 'xolotlquetzalli' });
   assert.equal(newborn.xolo.birthDate, '2026-10-19');
