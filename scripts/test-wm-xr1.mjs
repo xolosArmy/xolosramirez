@@ -172,7 +172,7 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
     ['tlatoani', 'standard', 'male'],
     ['tlaxcalli', 'standard', 'female'],
     ['nohpalli', 'standard', 'female'],
-    ['kin', 'standard', 'male'],
+    ['atlixco', 'intermediate', 'male'],
     ['yolotl', 'standard', 'male'],
     ['iztac', 'standard', 'male'],
     ['nochtli', 'standard', 'male'],
@@ -192,6 +192,19 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
   assert.equal(newborn.xolo.variety, 'hairless');
   assert.equal(newborn.xolo.color, 'black');
   assert.equal(validatePublicAgeIntegrity(newborn.xolo).valid, true);
+
+  // Atlixco uses the current public identity; Kin remains a backwards-compatible lookup alias.
+  const atlixco = await PublicXolosDataAdapter.getXoloProfile({ id: 'atlixco' });
+  assert.equal(atlixco.found, true);
+  assert.equal(atlixco.xolo.name, 'Atlixco Ramirez');
+  assert.equal(atlixco.xolo.size, 'intermediate');
+  assert.equal(atlixco.xolo.variety, 'hairless');
+  assert.equal(atlixco.xolo.birthDate, '2026-10-16');
+  assert.equal(atlixco.xolo.publicUrl, 'https://xolosramirez.com/xolos-disponibles.html#atlixco');
+  assert.deepEqual(await PublicXolosDataAdapter.getXoloProfile({ id: 'kin' }), atlixco);
+  const currentCatalogue = await PublicXolosDataAdapter.listAvailableXolos();
+  assert.ok(currentCatalogue.xolos.some((x) => x.id === 'atlixco' && x.name === 'Atlixco Ramirez'));
+  assert.ok(!currentCatalogue.xolos.some((x) => x.id === 'kin' || x.id === 'pilli'));
 
   const iztak = await PublicXolosDataAdapter.getXoloProfile({ id: 'iztac' });
   assert.equal(iztak.found, true);
