@@ -20,7 +20,7 @@ export const CANONICAL_PUBLIC_BIRTH_DATES = {
   tlatoani: '2026-10-13',
   tlaxcalli: '2026-10-13',
   nohpalli: '2026-10-13',
-  kin: '2026-10-16',
+  atlixco: '2026-10-16',
   yolotl: '2026-10-16',
   iztac: '2026-10-16',
   nochtli: '2026-10-12',
@@ -47,7 +47,7 @@ export function validatePublicAgeIntegrity(profile) {
   return { valid: true };
 }
 
-const LEGACY_PUBLIC_PROFILE_ALIASES = Object.freeze({ oce: 'iztli' });
+const LEGACY_PUBLIC_PROFILE_ALIASES = Object.freeze({ oce: 'iztli', kin: 'atlixco' });
 
 export const CANONICAL_PUBLIC_XOLOS = [
   {
@@ -95,8 +95,8 @@ export const CANONICAL_PUBLIC_XOLOS = [
     publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#tlaxcalli'
   },
   {
-    id: 'kin',
-    name: 'Kin Ramirez',
+    id: 'atlixco',
+    name: 'Atlixco Ramirez',
     status: 'available',
     variety: 'hairless',
     size: 'intermediate',
@@ -107,7 +107,7 @@ export const CANONICAL_PUBLIC_XOLOS = [
     personalitySummary: 'Recién nacido en sus primeros días de vida. Su personalidad se irá conociendo conforme crezca.',
     careConsiderations: [],
     lineageReference: 'Xolos Ramírez',
-    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#kin'
+    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#atlixco'
   },
   {
     id: 'yolotl',
