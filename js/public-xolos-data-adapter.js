@@ -48,7 +48,7 @@ export function validatePublicAgeIntegrity(profile) {
   return { valid: true };
 }
 
-const LEGACY_PUBLIC_PROFILE_ALIASES = Object.freeze({ oce: 'iztli', kin: 'atlixco', tonatzin: 'tonanzin' });
+const LEGACY_PUBLIC_PROFILE_ALIASES = Object.freeze({ oce: 'iztli', kin: 'atlixco', tonatzin: 'tonanzin', tonantzin: 'tonanzin' });
 
 export const CANONICAL_PUBLIC_XOLOS = [
   {
@@ -67,7 +67,7 @@ export const CANONICAL_PUBLIC_XOLOS = [
   },
   {
     id: 'tonanzin',
-    name: 'Tonatzin Ramirez',
+    name: 'Tonantzin Ramirez',
     status: 'available',
     variety: 'hairless',
     size: 'intermediate',
