@@ -1,0 +1,204 @@
+/*
+ * Editorial reading layout for Xolos Ramírez's Linaje Vivo / Comunidad Digital series.
+ * Scoped to articles only. Site styles-base.css uses a global dark section design,
+ * which otherwise overrides light article layouts and makes paragraphs unreadable.
+ */
+body.xr-readable-article{
+  color-scheme: light;
+  background: #f2efe9;
+  color: #272623;
+  margin: 0;
+  padding: 0;
+  font-size: 17px;
+  line-height: 1.78;
+}
+body.xr-readable-article main {
+  display: block;
+  width: min(100% - 24px, 920px);
+  max-width: 920px;
+  min-width: 0;
+  margin: clamp(12px, 3vw, 36px) auto 56px;
+  padding: clamp(22px, 5vw, 54px);
+  border-radius: 16px;
+  background: #fffefc;
+  color: #272623;
+  box-shadow: 0 8px 34px rgba(34, 27, 21, .08);
+  text-align: left;
+  line-height: 1.78;
+}
+body.xr-readable-article main article,
+body.xr-readable-article main article p,
+body.xr-readable-article main article li {
+  color: #302a26;
+  font-weight: 400;
+  text-shadow: none;
+}
+body.xr-readable-article main article section {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 28px 0 36px;
+  border-radius: 0;
+  box-shadow: none;
+  color: #302a26;
+  text-align: left;
+}
+body.xr-readable-article main h1,
+body.xr-readable-article main h2,
+body.xr-readable-article main h3 {
+  text-transform: none;
+  text-shadow: none;
+  letter-spacing: normal;
+  line-height: 1.25;
+}
+body.xr-readable-article main h1 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 700;
+  font-size: clamp(2rem, 4.2vw, 2.85rem);
+  color: #2e261f;
+  margin: 18px 0;
+}
+body.xr-readable-article main h2 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 700;
+  color: #663d2a;
+  font-size: clamp(1.45rem, 2.6vw, 1.85rem);
+  margin: 36px 0 14px;
+}
+body.xr-readable-article main h3 {
+  font-family: Georgia, 'Times New Roman', serif;
+  color: #663d2a;
+  font-size: 1.26rem;
+}
+body.xr-readable-article main p {
+  line-height: 1.8;
+  margin: 14px 0 19px;
+  max-width: 76ch;
+}
+body.xr-readable-article main .lead,
+body.xr-readable-article main .intro {
+  color: #3b3029;
+  font-size: clamp(1.1rem, 2vw, 1.23rem);
+  line-height: 1.7;
+  max-width: 74ch;
+}
+body.xr-readable-article main .meta,
+body.xr-readable-article main .eyebrow,
+body.xr-readable-article main .byline {
+  color: #66584d;
+  font-size: .95rem;
+  text-shadow: none;
+}
+body.xr-readable-article main a {
+  color: #8b3e1d;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+body.xr-readable-article main a:hover,
+body.xr-readable-article main a:focus-visible {
+  color: #5e2511;
+  text-shadow: none;
+}
+body.xr-readable-article main nav {
+  margin-bottom: 24px;
+  color: #62584f;
+  font-size: .93rem;
+}
+body.xr-readable-article main img.hero,
+body.xr-readable-article main img.hero-image,
+body.xr-readable-article main img.feature-image {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  max-height: 420px;
+  min-height: 0;
+  height: auto;
+  object-fit: cover;
+  margin: 26px 0;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  box-shadow: none;
+  position: static;
+  isolation: auto;
+  text-align: left;
+  overflow: visible;
+}
+body.xr-readable-article main article section.related,
+body.xr-readable-article main article aside.related {
+  background: transparent;
+  border: 0;
+  border-top: 1px solid #e5ddd3;
+  padding: 20px 0 0;
+  margin: 38px 0 24px;
+  box-shadow: none;
+  color: #302a26;
+}
+body.xr-readable-article main .related ul {
+  padding-left: 1.6rem;
+  margin: 12px 0;
+}
+body.xr-readable-article main .related li {
+  margin: 12px 0;
+}
+body.xr-readable-article main .cta {
+  background: #f6efe4;
+  color: #302a26;
+  padding: clamp(16px, 3vw, 24px);
+  border-radius: 12px;
+  margin: 28px 0;
+  box-shadow: none;
+}
+body.xr-readable-article main .cta p {
+  color: #302a26;
+}
+body.xr-readable-article main ul,
+body.xr-readable-article main ol {
+  padding-left: 1.6rem;
+}
+body.xr-readable-article main li {
+  margin: .45rem 0;
+  line-height: 1.7;
+}
+body.xr-readable-article main .article-status {
+  background: #f5f0e8;
+  border-left: 4px solid #916440;
+  border-radius: 0 9px 9px 0;
+  padding: 18px 22px;
+  color: #302a26;
+  margin: 26px 0;
+}
+body.xr-readable-article main .article-status strong {
+  color: #452f22;
+}
+body.xr-readable-article main .article-table-wrap {
+  overflow-x: auto;
+}
+body.xr-readable-article main table {
+  border-collapse: collapse;
+  background: #fff;
+  color: #302a26;
+  min-width: 580px;
+  width: 100%;
+}
+body.xr-readable-article main table th,
+body.xr-readable-article main table td {
+  border: 1px solid #e2dacf;
+  padding: 12px;
+  vertical-align: top;
+  color: #302a26;
+}
+body.xr-readable-article main table th {
+  background: #eee6dc;
+  color: #302a26;
+  text-align: left;
+}
+@media (max-width: 600px) {
+  body.xr-readable-article {font-size:16px; padding-bottom:0}
+  body.xr-readable-article main {width:100%; border-radius:0; margin:0; padding:22px 19px 38px}
+  body.xr-readable-article main h1 {font-size:1.85rem}
+  body.xr-readable-article main h2 {font-size:1.42rem}
+}
