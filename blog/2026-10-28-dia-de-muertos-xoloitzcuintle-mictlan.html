@@ -32,9 +32,29 @@ figure{margin:1.8rem 0}figure img{display:block;width:100%;height:auto;max-heigh
 .related-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.9rem}.related-grid article{padding:1.15rem;border:1px solid var(--line);background:#fff;border-radius:12px}.related-grid article span{font-size:.78rem;color:#8b5b32;font-weight:700}.related-grid p{font-size:.92rem}
 .article-end{border-top:2px solid var(--gold);margin-top:2rem;padding-top:1.2rem}.editorial-footer{text-align:center;padding:1.5rem;color:#6a5950;font-size:.88rem}
 @media(max-width:720px){.related-grid{grid-template-columns:1fr}.article-wrap{border-radius:10px;margin-top:.6rem}.editorial-top .wrap{align-items:flex-start}.editorial-top nav{gap:.6rem 1rem}}
+/* Keep editorial text legible against the site's global dark-section theme. */
+body.xr-readable-article .article-wrap > article > section {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+  color: #302a26;
+  text-shadow: none;
+}
+body.xr-readable-article .article-wrap > article > section p,
+body.xr-readable-article .article-wrap > article > section li,
+body.xr-readable-article .article-wrap > article > section h3 {
+  color: #302a26;
+  text-shadow: none;
+}
+body.xr-readable-article .article-wrap .note { color: #302a26; }
+body.xr-readable-article .article-wrap .related-grid article {
+  color: #302a26;
+  background: #ffffff;
+}
 </style>
 </head>
-<body>
+<body class="xr-readable-article">
 <a href="#contenido-principal" class="skip">Saltar al contenido</a>
 <header class="editorial-top"><div class="wrap"><a href="/"><strong>Xolos Ramírez</strong></a><nav aria-label="Navegación principal"><a href="/blog/index.html">Blog</a><a href="/xolos-disponibles.html">Conoce a los Xolos</a><a href="https://xolosramirez.com/en/blog/2026-10-28-day-of-the-dead-xoloitzcuintli-mictlan.html" hreflang="en" lang="en">English</a></nav></div></header>
 <main id="contenido-principal" class="article-wrap"><article>
