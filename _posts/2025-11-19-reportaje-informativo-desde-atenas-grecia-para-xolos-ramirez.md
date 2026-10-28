@@ -104,3 +104,8 @@ cultural
 
 **Fuente de la información:** Los datos presentados en este reportaje fueron proporcionados por **Danay Farías** como fuente de la información para
 **Xolos Ramírez**.
+
+
+---
+
+**Actualización editorial · Día de Muertos 2026:** La historia de Tecuani en Atenas forma parte del nuevo especial de Xolos Ramírez, que conecta este testimonio con el simbolismo del Mictlán y la memoria familiar. [Leer el especial Día de Muertos 2026](/blog/2026-10-28-dia-de-muertos-xoloitzcuintle-mictlan.html).
