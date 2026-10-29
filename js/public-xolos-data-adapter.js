@@ -25,8 +25,7 @@ export const CANONICAL_PUBLIC_BIRTH_DATES = {
   iztac: '2026-10-16',
   nochtli: '2026-10-12',
   chok: '2026-10-12',
-  xolotlquetzalli: '2026-10-19',
-  tonanzin: '2026-10-20'
+  xolotlquetzalli: '2026-10-19'
 };
 
 /**
@@ -48,7 +47,7 @@ export function validatePublicAgeIntegrity(profile) {
   return { valid: true };
 }
 
-const LEGACY_PUBLIC_PROFILE_ALIASES = Object.freeze({ oce: 'iztli', kin: 'atlixco', tonatzin: 'tonanzin', tonantzin: 'tonanzin' });
+const LEGACY_PUBLIC_PROFILE_ALIASES = Object.freeze({ oce: 'iztli', kin: 'atlixco' });
 
 export const CANONICAL_PUBLIC_XOLOS = [
   {
@@ -64,21 +63,6 @@ export const CANONICAL_PUBLIC_XOLOS = [
     careConsiderations: [],
     lineageReference: 'Xolos Ramírez',
     publicUrl: 'https://xolosramirez.com/xolos-disponibles.html'
-  },
-  {
-    id: 'tonanzin',
-    name: 'Tonantzin Ramirez',
-    status: 'available',
-    variety: 'hairless',
-    size: 'intermediate',
-    gender: 'female',
-    color: 'black',
-    birthDate: '2026-10-20',
-    ageDescription: 'Recién nacida · 20 de octubre de 2026',
-    personalitySummary: 'Recién nacida en sus primeros días de vida. Su personalidad se irá conociendo conforme crezca.',
-    careConsiderations: [],
-    lineageReference: 'Xolos Ramírez',
-    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#tonanzin'
   },
   {
     id: 'tlatoani',
