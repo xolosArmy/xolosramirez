@@ -170,7 +170,6 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
   const expectedNewProfiles = [
     ['tonatiuh', 'miniature', 'male'],
     ['tlatoani', 'standard', 'male'],
-    ['tonanzin', 'intermediate', 'female'],
     ['tlaxcalli', 'standard', 'female'],
     ['nohpalli', 'standard', 'female'],
     ['atlixco', 'intermediate', 'male'],
@@ -188,13 +187,9 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
     assert.equal(profile.xolo.gender, gender);
   }
 
-  const tonatzin = await PublicXolosDataAdapter.getXoloProfile({ id: 'tonanzin' });
-  assert.equal(tonatzin.xolo.name, 'Tonantzin Ramirez');
-  assert.equal(tonatzin.xolo.birthDate, '2026-10-20');
-  assert.equal(tonatzin.xolo.variety, 'hairless');
-  assert.deepEqual(await PublicXolosDataAdapter.getXoloProfile({ id: 'tonatzin' }), tonatzin);
-  assert.deepEqual(await PublicXolosDataAdapter.getXoloProfile({ id: 'tonantzin' }), tonatzin);
-  assert.equal(validatePublicAgeIntegrity(tonatzin.xolo).valid, true);
+  for (const id of ['tonanzin', 'tonatzin', 'tonantzin']) {
+    assert.equal(await PublicXolosDataAdapter.getXoloProfile({ id }), null);
+  }
 
   const newborn = await PublicXolosDataAdapter.getXoloProfile({ id: 'xolotlquetzalli' });
   assert.equal(newborn.xolo.birthDate, '2026-10-19');
