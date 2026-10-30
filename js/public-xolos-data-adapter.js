@@ -172,7 +172,7 @@ export const CANONICAL_PUBLIC_XOLOS = [
   {
     id: 'chok',
     name: 'Chok Ramirez',
-    status: 'available',
+    status: 'reserved',
     variety: 'pending_confirmation',
     size: 'standard',
     gender: 'male',
