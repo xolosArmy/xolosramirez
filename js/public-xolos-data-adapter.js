@@ -19,7 +19,6 @@ export const CANONICAL_PUBLIC_BIRTH_DATES = {
   iztli: '2026-07-14',
   tlatoani: '2026-10-13',
   tlaxcalli: '2026-10-13',
-  nohpalli: '2026-10-13',
   atlixco: '2026-10-16',
   yolotl: '2026-10-16',
   iztac: '2026-10-16',
@@ -138,21 +137,6 @@ export const CANONICAL_PUBLIC_XOLOS = [
     careConsiderations: [],
     lineageReference: 'Xolos Ramírez',
     publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#iztac'
-  },
-  {
-    id: 'nohpalli',
-    name: 'Nohpalli Ramirez',
-    status: 'available',
-    variety: 'pending_confirmation',
-    size: 'standard',
-    gender: 'female',
-    color: 'black',
-    birthDate: '2026-10-13',
-    ageDescription: 'Recién nacida · 13 de octubre de 2026',
-    personalitySummary: 'Recién nacida en sus primeros días de vida. Su personalidad se irá conociendo conforme crezca.',
-    careConsiderations: [],
-    lineageReference: 'Xolos Ramírez',
-    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#nohpalli'
   },
   {
     id: 'nochtli',
