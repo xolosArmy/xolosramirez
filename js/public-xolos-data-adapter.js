@@ -205,13 +205,13 @@ export const CANONICAL_PUBLIC_XOLOS = [
   {
     id: 'xilonen',
     name: 'Xilonen Ramirez',
-    status: 'available',
+    status: 'delivered',
     variety: 'hairless',
     size: 'miniature',
     gender: 'female',
     color: 'black',
     birthDate: '2026-07-16',
-    ageDescription: '2 meses · nacida el 16 de julio de 2026',
+    ageDescription: 'Entregada el 3 de noviembre de 2026 · nacida el 16 de julio de 2026',
     personalitySummary: 'Curiosa, despierta y exploradora. Xilonen es una cachorrita observadora que investiga su entorno con confianza y disfruta acercarse a las personas.',
     careConsiderations: [
       'Cuidado dérmico suave libre de fragancias sintéticas',
@@ -219,7 +219,7 @@ export const CANONICAL_PUBLIC_XOLOS = [
       'Alimentación balanceada de alta digestibilidad'
     ],
     lineageReference: 'Linaje ancestral Xolos Ramírez con pedigree internacional',
-    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#xilonen'
+    publicUrl: 'https://xolosramirez.com/blog/entrega-xoloitzcuintle-xilonen-ramirez.html'
   },
   {
     id: 'xochitl',
