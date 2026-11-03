@@ -15,7 +15,7 @@
  *    - Yohualli (female, intermediate, delivered 2026-10-17)
  *    - Removed Ollin is absent from list_available_xolos and get_xolo_profile
  *    - Tlilxóchitl (intermediate, female, available, born 2026-08-03)
- *    - Xilonen (miniature, female, available, born 2026-07-16)
+ *    - Xilonen (miniature, female, delivered 2026-11-03, born 2026-07-16)
  *    - Tonalli (standard, female, delivered)
  *    - Xóchitl (intermediate, female, reserved)
  *    - Delivery zone recognizes "national".
@@ -73,7 +73,7 @@ test('WM-XR1: Valid JSON Schema structures on all tools', () => {
 
 test('WM-XR1: Deterministic output for list_available_xolos', async () => {
   const result = await PublicXolosDataAdapter.listAvailableXolos();
-  assert.equal(result.total, 14, 'Should list 14 active public xolos (available + reserved)');
+  assert.equal(result.total, 11, 'Should list 11 active public xolos (available + reserved), excluding delivered Xilonen');
   assert.ok(Array.isArray(result.xolos), 'xolos must be an array');
 
   for (const x of result.xolos) {
@@ -90,14 +90,14 @@ test('WM-XR1: Deterministic output for list_available_xolos', async () => {
 
   // Filter test: available
   const availableFiltered = await PublicXolosDataAdapter.listAvailableXolos({ status: 'available' });
-  assert.equal(availableFiltered.total, 13);
+  assert.equal(availableFiltered.total, 8);
   for (const x of availableFiltered.xolos) {
     assert.equal(x.status, 'available');
   }
 
   // Filter test: reserved
   const reservedFiltered = await PublicXolosDataAdapter.listAvailableXolos({ status: 'reserved' });
-  assert.equal(reservedFiltered.total, 1);
+  assert.equal(reservedFiltered.total, 3);
   for (const x of reservedFiltered.xolos) {
     assert.equal(x.status, 'reserved');
   }
@@ -126,14 +126,19 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
   assert.equal(tlil.xolo.birthDate, '2026-08-03');
   assert.equal(tlil.xolo.ageDescription, '7 semanas · nacida el 3 de agosto de 2026');
 
-  // 2. Xilonen (available, miniature, female)
+  // 2. Xilonen (delivered, miniature, female; remains retrievable as historical profile)
   const xilonen = await PublicXolosDataAdapter.getXoloProfile({ id: 'xilonen' });
   assert.equal(xilonen.found, true);
   assert.equal(xilonen.xolo.size, 'miniature');
   assert.equal(xilonen.xolo.gender, 'female');
-  assert.equal(xilonen.xolo.status, 'available');
+  assert.equal(xilonen.xolo.status, 'delivered');
   assert.equal(xilonen.xolo.birthDate, '2026-07-16');
-  assert.equal(xilonen.xolo.ageDescription, '2 meses · nacida el 16 de julio de 2026');
+  assert.equal(xilonen.xolo.ageDescription, 'Entregada el 3 de noviembre de 2026 · nacida el 16 de julio de 2026');
+  assert.equal(xilonen.xolo.publicUrl, 'https://xolosramirez.com/blog/entrega-xoloitzcuintle-xilonen-ramirez.html');
+  for (const filter of [{}, { status: 'all' }, { status: 'available' }, { status: 'reserved' }, { status: 'delivered' }, { size: 'miniature' }]) {
+    const listed = await PublicXolosDataAdapter.listAvailableXolos(filter);
+    assert.ok(!listed.xolos.some((x) => x.id === 'xilonen'), 'Delivered Xilonen must never appear in active listings');
+  }
 
   // 3. Iztli (delivered, small intermediate, male, historical #oce identifier)
   const oce = await PublicXolosDataAdapter.getXoloProfile({ id: 'oce' });
@@ -427,7 +432,7 @@ test('WM-XR1: Public approximate age vs synthetic exact birthDate invariant', as
   assert.equal(validatePublicAgeIntegrity(iztli.xolo).valid, true);
 
   // Remaining profiles only state approximate age on public cards; birthDate must be undefined
-  const approximateDogs = ['xilonen', 'yohualli', 'tonalli', 'xochitl'];
+  const approximateDogs = ['yohualli', 'tonalli', 'xochitl'];
   for (const dogId of approximateDogs) {
     const profile = await PublicXolosDataAdapter.getXoloProfile({ id: dogId });
     assert.equal(
