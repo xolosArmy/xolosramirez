@@ -24,7 +24,8 @@ export const CANONICAL_PUBLIC_BIRTH_DATES = {
   iztac: '2026-10-16',
   nochtli: '2026-10-12',
   chok: '2026-10-12',
-  xolotlquetzalli: '2026-10-19'
+  xolotlquetzalli: '2026-10-19',
+  xihuitl: '2026-11-03'
 };
 
 /**
@@ -62,6 +63,21 @@ export const CANONICAL_PUBLIC_XOLOS = [
     careConsiderations: [],
     lineageReference: 'Xolos Ramírez',
     publicUrl: 'https://xolosramirez.com/xolos-disponibles.html'
+  },
+  {
+    id: 'xihuitl',
+    name: 'Xihuitl Ramirez',
+    status: 'available',
+    variety: 'hairless',
+    size: 'miniature',
+    gender: 'male',
+    color: 'black',
+    birthDate: '2026-11-03',
+    ageDescription: 'Recién nacido · 3 de noviembre de 2026',
+    personalitySummary: 'Recién nacido en sus primeros días de vida. Su personalidad se irá conociendo conforme crezca.',
+    careConsiderations: [],
+    lineageReference: 'Xolos Ramírez',
+    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#xihuitl'
   },
   {
     id: 'tlatoani',
