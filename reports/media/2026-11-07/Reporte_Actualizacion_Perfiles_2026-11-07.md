@@ -7,7 +7,7 @@ Se optimizaron 9 fotografías, se produjeron 8 Shorts y se guardaron todos los f
 - Repositorio: [xolosArmy/xolosramirez](https://github.com/xolosArmy/xolosramirez).
 - Rama: `codex/perfiles-multimedia-2026-11-07`.
 - Base revisada: `8dea5afb315fbf7f3e35028e19ad1e2e12b16504`.
-- Pull Request: pendiente de creación al preparar esta versión del informe.
+- Pull Request: [574](https://github.com/xolosArmy/xolosramirez/pull/574) — borrador.
 - Squash and Merge: **no realizado**; faltan publicaciones, comprobaciones visuales y resolución o aceptación de fallos preexistentes de pruebas.
 - Entrega en Drive: [Actualizacion_Perfiles_2026-11-07](https://drive.google.com/drive/folders/1EqLQKtvk5GYupEEgjyHxXhU0bFQBv0gm).
 
