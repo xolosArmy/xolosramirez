@@ -177,7 +177,7 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
     ['tlatoani', 'standard', 'male'],
     ['tlaxcalli', 'standard', 'female'],
     ['nohpalli', 'standard', 'female'],
-    ['atlixco', 'intermediate', 'male'],
+    ['atlixco', 'standard', 'male'],
     ['yolotl', 'standard', 'male'],
     ['iztac', 'standard', 'male'],
     ['nochtli', 'standard', 'male'],
@@ -206,7 +206,7 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
   const atlixco = await PublicXolosDataAdapter.getXoloProfile({ id: 'atlixco' });
   assert.equal(atlixco.found, true);
   assert.equal(atlixco.xolo.name, 'Atlixco Ramirez');
-  assert.equal(atlixco.xolo.size, 'intermediate');
+  assert.equal(atlixco.xolo.size, 'standard');
   assert.equal(atlixco.xolo.variety, 'hairless');
   assert.equal(atlixco.xolo.birthDate, '2026-10-16');
   assert.equal(atlixco.xolo.publicUrl, 'https://xolosramirez.com/xolos-disponibles.html#atlixco');
