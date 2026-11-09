@@ -14,6 +14,8 @@
  */
 
 export const CANONICAL_PUBLIC_BIRTH_DATES = {
+  michina: '2026-10-20',
+  tonalli: '2026-07-06',
   tlilxochitl: '2026-08-03',
   xilonen: '2026-07-16',
   iztli: '2026-07-14',
@@ -50,6 +52,21 @@ export function validatePublicAgeIntegrity(profile) {
 const LEGACY_PUBLIC_PROFILE_ALIASES = Object.freeze({ oce: 'iztli', kin: 'atlixco' });
 
 export const CANONICAL_PUBLIC_XOLOS = [
+  {
+    id: 'michina',
+    name: 'Michina Ramirez',
+    status: 'available',
+    variety: 'hairless',
+    size: 'miniature',
+    gender: 'female',
+    color: 'black',
+    birthDate: '2026-10-20',
+    ageDescription: 'Recién nacida · 20 de octubre de 2026',
+    personalitySummary: 'Recién nacida en sus primeros días de vida. Su personalidad se irá conociendo conforme crezca.',
+    careConsiderations: [],
+    lineageReference: 'Xolos Ramírez',
+    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#michina'
+  },
   {
     id: 'tonatiuh',
     name: 'Tonatiuh Ramirez',

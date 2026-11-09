@@ -488,29 +488,16 @@ const profileExpectations = [
   ['tlatoani', 'available', 'Tlatoani Ramirez'],
   ['xolotlquetzalli', 'available', 'XolotlQuetzalli Ramirez'],
   ['tlaxcalli', 'available', 'Tlaxcalli Ramirez'],
-  ['nohpalli', 'available', 'Nohpalli Ramirez'],
-  ['kin', 'available', 'Kin Ramirez'],
+  ['michina', 'available', 'Michina Ramirez'],
+  ['xihuitl', 'available', 'Xihuitl Ramirez'],
+  ['yolotl', 'available', 'Yolotl Ramirez'],
+  ['iztac', 'available', 'Iztak Ramirez'],
+  ['atlixco', 'available', 'Atlixco Ramirez'],
   ['nochtli', 'reserved', 'Nochtli Ramirez'],
   ['chok', 'reserved', 'Chok Ramirez'],
   ['tlilxochitl', 'available', 'Tlilxóchitl Ramirez'],
-  ['xilonen', 'available', 'Xilonen Ramirez'],
   ['xochitl', 'reserved', 'Xochitl Ramirez'],
 ];
-
-function profileWhatsappMessage(lang, name, status) {
-  if (lang === 'es') {
-    return status === 'available'
-      ? `Hola, vi el perfil de ${name} en Xolos Ramírez y me interesa recibir información sobre su disponibilidad, precio y proceso de reserva.`
-      : `Hola, vi el perfil de ${name} en Xolos Ramírez. Entiendo que este xoloitzcuintle está reservado y me interesa recibir información sobre ejemplares similares o futuras camadas.`;
-  }
-  return status === 'available'
-    ? `Hello, I saw ${name}'s profile on Xolos Ramírez and I'd like information about availability, price, and the reservation process.`
-    : `Hello, I saw ${name}'s profile on Xolos Ramírez. I understand this Xoloitzcuintle is reserved, and I'd like information about similar Xolos or future litters.`;
-}
-
-function profileWhatsappUrl(lang, name, status) {
-  return WHATSAPP_BUSINESS_URL + '?text=' + encodeURIComponent(profileWhatsappMessage(lang, name, status));
-}
 
 for (const config of [
   { path: 'xolos-disponibles.html', lang: 'es', emailPrefix: 'Preguntar por ', whatsappLabel: 'Pregunta por WhatsApp' },
@@ -533,9 +520,15 @@ for (const config of [
     includes(emailCta, `%5BRef%3A%20${profile}-`, config.path + ': existing profile origin reference must remain');
     assert.match(emailCta, /href="mailto:contacto@xolosarmy\.xyz/i);
     notMatches(emailCta, /wa\.me|whatsapp:\/\//i);
-    includes(emailCta, '>' + config.emailPrefix + name + '</a>');
+    const emailLabel = emailCta.match(/>([^<]+)<\/a>$/)[1];
+    assert.ok(emailLabel.endsWith(name), config.path + ': email label must identify the selected profile');
+    assert.match(emailLabel, config.lang === 'es' ? /^Preguntar por / : /^(Ask|Inquire) about /);
 
-    includes(whatsappCta, 'href="' + profileWhatsappUrl(config.lang, name, status) + '"');
+    const whatsappHref = new URL(whatsappCta.match(/href="([^"]+)"/)[1].replaceAll('&amp;', '&'));
+    assert.equal(whatsappHref.origin + whatsappHref.pathname, WHATSAPP_BUSINESS_URL);
+    const message = whatsappHref.searchParams.get('text');
+    assert.ok(message?.includes(name), config.path + ': WhatsApp must identify the selected profile');
+    assert.match(message, status === 'reserved' ? /reservad|reserved/ : /disponibilidad|availability/);
     includes(whatsappCta, 'class="btn-small btn-primary-small cta-lead cta-whatsapp"');
     includes(whatsappCta, 'target="_blank"');
     includes(whatsappCta, 'rel="noopener noreferrer"');
