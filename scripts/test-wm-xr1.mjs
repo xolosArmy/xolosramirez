@@ -495,7 +495,7 @@ test('WM-XR1: WebMCP size and status parity with every ES/EN public profile card
     ['en/available-xolos.html', 'Size']
   ]) {
     const html = readFileSync(new URL('../' + file, import.meta.url), 'utf8');
-    const cards = [...html.matchAll(/<article\\b[^>]*data-profile-card="([^"]+)"[^>]*data-profile-status="([^"]+)"[^>]*>/g)];
+    const cards = [...html.matchAll(/<article\b[^>]*data-profile-card="([^"]+)"[^>]*data-profile-status="([^"]+)"[^>]*>/g)];
     assert.equal(cards.length, 12, file + ': unexpected public card count');
     const snapshot = new Map();
 
