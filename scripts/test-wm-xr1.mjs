@@ -175,7 +175,7 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
   // 5. Newly listed public profiles
   const expectedNewProfiles = [
     ['tonatiuh', 'miniature', 'male'],
-    ['tlatoani', 'standard', 'male'],
+    ['tlatoani', 'intermediate', 'male'],
     ['tlaxcalli', 'standard', 'female'],
     ['michina', 'miniature', 'female'],
     ['xihuitl', 'miniature', 'male'],
@@ -476,6 +476,55 @@ test('WM-XR1: every ES/EN public card is discoverable with the same status', asy
       assert.equal(result.xolo.status, status, file + ': status mismatch for ' + id);
     }
   }
+});
+
+test('WM-XR1: WebMCP size and status parity with every ES/EN public profile card', async () => {
+  const sizeLabels = {
+    'Estándar': 'standard',
+    'Intermedia': 'intermediate',
+    'Miniatura': 'miniature',
+    'Standard': 'standard',
+    'Intermediate': 'intermediate',
+    'Intermediate / Medium': 'intermediate',
+    'Miniature': 'miniature'
+  };
+
+  const seenByLocale = [];
+  for (const [file, label] of [
+    ['xolos-disponibles.html', 'Talla'],
+    ['en/available-xolos.html', 'Size']
+  ]) {
+    const html = readFileSync(new URL('../' + file, import.meta.url), 'utf8');
+    const cards = [...html.matchAll(/<article\\b[^>]*data-profile-card="([^"]+)"[^>]*data-profile-status="([^"]+)"[^>]*>/g)];
+    assert.equal(cards.length, 12, file + ': unexpected public card count');
+    const snapshot = new Map();
+
+    for (const match of cards) {
+      const [openingTag, id, status] = match;
+      const end = html.indexOf('</article>', match.index + openingTag.length);
+      assert.ok(end > match.index, file + ': unclosed profile card ' + id);
+      const cardHtml = html.slice(match.index, end);
+      const sizeMatch = cardHtml.match(new RegExp('<li>\\s*<strong>' + label + '<\\/strong>\\s*([^<]+)<\\/li>'));
+      assert.ok(sizeMatch, file + ': missing ' + label + ' for ' + id);
+      const publishedSize = sizeMatch[1].trim();
+      const canonicalSize = sizeLabels[publishedSize];
+      assert.ok(canonicalSize, file + ': unknown size "' + publishedSize + '" for ' + id);
+      const profile = await PublicXolosDataAdapter.getXoloProfile({ id });
+      assert.equal(profile.found, true, file + ': missing WebMCP profile ' + id);
+      assert.equal(profile.xolo.status, status, file + ': status mismatch for ' + id);
+      assert.equal(profile.xolo.size, canonicalSize, file + ': size mismatch for ' + id);
+      snapshot.set(id, { size: canonicalSize, status });
+    }
+    seenByLocale.push(snapshot);
+  }
+
+  assert.deepEqual([...seenByLocale[0].entries()].sort(), [...seenByLocale[1].entries()].sort(), 'ES/EN catalogues must agree');
+  const intermediateMales = await PublicXolosDataAdapter.listAvailableXolos({ size: 'intermediate', status: 'available' });
+  assert.ok(intermediateMales.xolos.some((x) => x.id === 'tlatoani' && x.gender === 'male'),
+    'Tlatoani must be discoverable as an available intermediate male');
+  const standard = await PublicXolosDataAdapter.listAvailableXolos({ size: 'standard' });
+  assert.ok(!standard.xolos.some((x) => x.id === 'tlatoani'),
+    'Tlatoani must not be suggested as standard');
 });
 
 test('WM-XR1: Michina remains miniature, public and available', async () => {
