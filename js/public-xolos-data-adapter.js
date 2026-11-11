@@ -101,7 +101,7 @@ export const CANONICAL_PUBLIC_XOLOS = [
     name: 'Tlatoani Ramirez',
     status: 'available',
     variety: 'pending_confirmation',
-    size: 'standard',
+    size: 'intermediate',
     gender: 'male',
     color: 'black',
     birthDate: '2026-10-13',
