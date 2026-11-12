@@ -385,15 +385,15 @@
     "specimen": "Ameyalli",
     "delivery_date": "",
     "delivery_status": "1_entrega_realizada_comprobada",
-    "delivery_method": "entrega narrada en crónica",
-    "evidence_url": "https://www.xolosramirez.com/2024/07/21/entrega-de-ameyalli-la-xoloitzcuintle-en-guadalajara-a-carmen-y-lupita/",
+    "delivery_method": "no precisada; referencia histórica de entrega en Guadalajara",
+    "evidence_url": "https://www.youtube.com/watch?v=yWazfZ2LNSs | https://xolosramirez.com/testimonios.html#carmen-ameyalli-sesasi | https://xolosramirez.com/blog/2026-10-20-sesasi-ameyalli-ramirez-mazda.html | https://github.com/xolosArmy/xolosramirez/blob/c960bc1ab890a42ef2660db975791ea0df99f28e/import/jimdo-sitemap.html",
     "website_urls": "https://xolosramirez.com/blog/2024-07-21-ameyalli-guadalajara-jalisco.html",
     "language": "ES",
     "seo_priority": "P2",
-    "confidence": "alta: cuerpo histórico leído; URL antigua no disponible en vivo",
+    "confidence": "alta para vida familiar en Guadalajara; entrega referenciada en índice histórico",
     "publication_date": "2024-07-21",
     "onward_destination": "",
-    "verification_note": "Texto histórico leído; versión editorial recuperada, no reproducción íntegra."
+    "verification_note": "XR-ARCHIVE-01: reconstrucción documental, no restauración literal. Entrevista publicada 2024-09-02; Guadalajara 19:10–19:35 y 36:49; Ameyalli sociable 11:49–12:06 y 24:44–25:08. Índice conserva referencia 2024-07-21. Cuerpo de julio no recuperado; día, punto, responsable y transporte no corroborados. Seguimiento 2026-10-20 no prueba logística."
   },
   {
     "destination_id": "tonansi-hermosillo-sonora",
