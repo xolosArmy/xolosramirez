@@ -1,0 +1,24 @@
+/* Opt-in remediation of the eight inherited contrast findings on the ES home. */
+.xr-home-contrast #testimonios cite {
+  color: #d1c6b5;
+}
+.xr-home-contrast body > footer {
+  background: #161410;
+  color: #f1e6d6;
+}
+.xr-home-contrast body > footer h3,
+.xr-home-contrast body > footer h4,
+.xr-home-contrast body > footer a {
+  color: #e6c46a;
+}
+.xr-home-contrast body > footer p {
+  color: #f1e6d6;
+}
+.xr-home-contrast body > footer a:hover,
+.xr-home-contrast body > footer a:focus {
+  color: #f1e6d6;
+}
+.xr-home-contrast body > footer a:focus-visible {
+  outline: 3px solid #e6c46a;
+  outline-offset: 3px;
+}
