@@ -27,7 +27,7 @@ class Metadata(HTMLParser):
 
 def sitemap_urls():
     files = list(ROOT.glob('*.html'))
-    for directory in ('blog', 'en', 'xolo-skin-care'):
+    for directory in ('blog', 'en', 'personalidad-xolo', 'xolo-skin-care'):
         files.extend((ROOT / directory).rglob('*.html'))
     urls = set()
     for path in files:

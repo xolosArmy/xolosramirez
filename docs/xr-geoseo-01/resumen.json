@@ -1,0 +1,25 @@
+{
+  "base": "e0259ae156a424eab67e84d466d961e4823a04ad",
+  "html_sources": 253,
+  "markdown_sources": 31,
+  "new_html": 11,
+  "audited_urls": 264,
+  "matrix_rows": 40,
+  "confirmed_mexican_states": [
+    "Baja California",
+    "Ciudad de México",
+    "Guanajuato",
+    "Jalisco",
+    "Nuevo León",
+    "Querétaro",
+    "Quintana Roo",
+    "San Luis Potosí",
+    "Sonora",
+    "Tamaulipas",
+    "Yucatán"
+  ],
+  "legacy_candidates": 49,
+  "legacy_pending": 32,
+  "changed_html": 39,
+  "duplicate_groups": 8
+}
