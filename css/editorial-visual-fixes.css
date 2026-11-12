@@ -1,0 +1,104 @@
+/* Scoped to the pages verified in Desktop's 2026-11-12 visual QA.
+   Keep these opt-in rules separate from the shared commercial/Journey styles. */
+
+/* Fixed-width Jimdo embeds must not enlarge the article's implicit grid track. */
+.xr-qa-legacy main.article {
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+}
+.xr-qa-legacy main.article > * {
+  min-width: 0;
+}
+.xr-qa-legacy .article .cc-m-video-gutter,
+.xr-qa-legacy .article figcaption {
+  max-width: 100%;
+}
+.xr-qa-legacy .article .cc-m-video-wrapper iframe {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+}
+.xr-qa-legacy .hero.blog-hero {
+  width: 100%;
+  margin-inline: 0;
+  overflow-wrap: anywhere;
+  /* The former SVG is a decorative text placeholder, not an original photo. */
+  background: linear-gradient(120deg, #151210, #32251d);
+}
+.xr-qa-legacy .blog-hero .hero__media {
+  display: none;
+}
+.xr-qa-legacy .site-header .brand {
+  color: #f1e6d6;
+}
+.xr-qa-legacy body > footer {
+  background: #161410;
+  color: #f1e6d6;
+}
+.xr-qa-legacy body > footer p,
+.xr-qa-legacy body > footer small {
+  color: #f1e6d6;
+}
+.xr-qa-legacy body > footer h3,
+.xr-qa-legacy body > footer h4,
+.xr-qa-legacy body > footer a {
+  color: #e6c46a;
+}
+.xr-qa-legacy :focus-visible {
+  outline: 3px solid #e6c46a;
+  outline-offset: 3px;
+}
+@media (max-width: 768px) {
+  /* A translated panel remains tabbable; visibility also removes closed
+     descendants from keyboard navigation. main.js owns aria-expanded. */
+  .xr-qa-legacy .nav-menu[data-visible="false"] {
+    visibility: hidden;
+  }
+  .xr-qa-legacy .nav-menu[data-visible="true"] {
+    visibility: visible;
+  }
+}
+
+/* Nox uses its own light article template. */
+.xr-qa-nox .meta {
+  color: #666;
+}
+.xr-qa-nox footer p {
+  color: #f3e9dc;
+}
+.xr-qa-nox header p {
+  color: #f3e9dc;
+}
+
+/* Tejocote's original photograph stays in place. Put the existing text above
+   the decorative overlay and give it a readable surface if Imgur is unavailable. */
+.xr-qa-tejocote .hero {
+  background-color: #161410;
+}
+.xr-qa-tejocote .hero > .wrap {
+  position: relative;
+  z-index: 2;
+  background: rgba(22, 20, 16, .92);
+  padding: clamp(1rem, 3vw, 2rem);
+  border-radius: 16px;
+}
+.xr-qa-tejocote .hero .meta {
+  color: #f1e7d4;
+}
+
+/* The topic navigation inherited dark link text from the global nav rules. */
+.xr-qa-blog-index .topic-links a {
+  color: #f1e6d6;
+  background: #211c17;
+  border-color: #a48b58;
+}
+.xr-qa-blog-index .topic-links a:hover,
+.xr-qa-blog-index .topic-links a:focus-visible {
+  color: #111;
+  background: #e6c46a;
+  border-color: #e6c46a;
+}
+.xr-qa-blog-index .topic-links a:focus-visible {
+  outline: 3px solid #e6c46a;
+  outline-offset: 3px;
+}
