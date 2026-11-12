@@ -318,10 +318,10 @@
     "website_urls": "https://xolosramirez.com/blog/2025-11-19-reportaje-informativo-desde-atenas-grecia-para-xolos-ramirez.html",
     "language": "ES",
     "seo_priority": "P2",
-    "confidence": "alta para seguimiento; limitada para modalidad de entrega",
+    "confidence": "alta para seguimiento; entrega histórica vinculada en registro separado",
     "publication_date": "2025-11-19",
     "onward_destination": "",
-    "verification_note": "No convertir este seguimiento en nueva entrega ni fijar aeropuerto o fecha."
+    "verification_note": "Seguimiento posterior; entrega documentada por separado en tecuani-atenas-delivery. No es otra entrega."
   },
   {
     "destination_id": "pepe-followup",
@@ -336,10 +336,10 @@
     "website_urls": "https://xolosramirez.com/blog/2025-11-23-pepe-ramirez-de-cruzar-fronteras-a-conquistar-podios-en-venezuela.html",
     "language": "ES",
     "seo_priority": "P2",
-    "confidence": "alta para seguimiento; limitada para modalidad de entrega",
+    "confidence": "alta para seguimiento; entrega histórica vinculada en registro separado",
     "publication_date": "2025-11-23",
     "onward_destination": "",
-    "verification_note": "No convertir este seguimiento en nueva entrega ni fijar aeropuerto o fecha."
+    "verification_note": "Seguimiento posterior; entrega documentada por separado en pepe-caracas-delivery. No es otra entrega."
   },
   {
     "destination_id": "athena-guatemala",
@@ -349,15 +349,15 @@
     "specimen": "Athena",
     "delivery_date": "",
     "delivery_status": "1_entrega_realizada_comprobada",
-    "delivery_method": "personal por Alexandra",
-    "evidence_url": "https://www.xolosramirez.com/2024/12/17/xoloitzcuintle-athena-ram%C3%ADrez-un-nuevo-hogar-en-guatemala/",
+    "delivery_method": "entrega personal por Alexandra",
+    "evidence_url": "https://web.archive.org/web/20250917171033/https://www.xolosramirez.com/2024/12/17/xoloitzcuintle-athena-ram%C3%ADrez-un-nuevo-hogar-en-guatemala/ | https://x.com/xolosramirez1/status/1869111856692072864 | https://www.tiktok.com/@xolosramirezoficial/photo/7449477357070470405 | https://x.com/xolosramirez1/status/1914100644748628014",
     "website_urls": "https://xolosramirez.com/blog/2024-12-17-athena-guatemala.html | https://xolosramirez.com/en/blog/2024-12-17-athena-guatemala.html",
     "language": "ES/EN",
     "seo_priority": "P1",
-    "confidence": "alta: cuerpo histórico leído; URL antigua no disponible en vivo",
+    "confidence": "alta: cuerpo archivado con SHA-256 verificado; corroboración social en expediente Desktop",
     "publication_date": "2024-12-17",
     "onward_destination": "",
-    "verification_note": "Texto recuperado mediante índice de búsqueda. Publicación no equivale a fecha de entrega. Alias Lola aportado por titular, no confirmado en crónica."
+    "verification_note": "XR-ARCHIVE-01: original Jimdo contrastado; fecha efectiva no fijada. Captura 20250917171033. Alias Lola documentado en publicación oficial del 20/04/2025."
   },
   {
     "destination_id": "luismi-santiago-chile",
@@ -367,15 +367,15 @@
     "specimen": "Luismi",
     "delivery_date": "",
     "delivery_status": "1_entrega_realizada_comprobada",
-    "delivery_method": "recepción en aeropuerto",
-    "evidence_url": "https://www.xolosramirez.com/2023/12/13/bienvenido-a-casa-luismi-una-historia-de-amor-canino-en-santiago-de-chile/",
+    "delivery_method": "recepción en aeropuerto de Santiago; responsable del traslado no identificado",
+    "evidence_url": "https://web.archive.org/web/20250809030207/https://www.xolosramirez.com/2023/12/13/bienvenido-a-casa-luismi-una-historia-de-amor-canino-en-santiago-de-chile/ | https://www.tiktok.com/@xolosramirezoficial/video/7312133903542652165",
     "website_urls": "https://xolosramirez.com/blog/2023-12-13-luismi-santiago-chile.html | https://xolosramirez.com/en/blog/2023-12-13-luismi-santiago-chile.html",
     "language": "ES/EN",
     "seo_priority": "P1",
-    "confidence": "alta: cuerpo histórico leído; URL antigua no disponible en vivo",
+    "confidence": "alta: cuerpo archivado con SHA-256 verificado; corroboración social en expediente Desktop",
     "publication_date": "2023-12-13",
     "onward_destination": "",
-    "verification_note": "Texto histórico leído; versión editorial recuperada, no reproducción íntegra."
+    "verification_note": "XR-ARCHIVE-01: original Jimdo contrastado; fecha efectiva no fijada. Captura 20250809030207. Edición histórica, no copia literal."
   },
   {
     "destination_id": "ameyalli-guadalajara-jalisco",
@@ -385,15 +385,15 @@
     "specimen": "Ameyalli",
     "delivery_date": "",
     "delivery_status": "1_entrega_realizada_comprobada",
-    "delivery_method": "no precisada; referencia histórica de entrega en Guadalajara",
-    "evidence_url": "https://www.youtube.com/watch?v=yWazfZ2LNSs | https://xolosramirez.com/testimonios.html#carmen-ameyalli-sesasi | https://xolosramirez.com/blog/2026-10-20-sesasi-ameyalli-ramirez-mazda.html | https://github.com/xolosArmy/xolosramirez/blob/c960bc1ab890a42ef2660db975791ea0df99f28e/import/jimdo-sitemap.html",
+    "delivery_method": "entrega por Fernando en Guadalajara; transporte no precisado",
+    "evidence_url": "https://web.archive.org/web/20250809000500/https://www.xolosramirez.com/2024/07/21/entrega-de-ameyalli-la-xoloitzcuintle-en-guadalajara-a-carmen-y-lupita/ | https://x.com/xolosramirez1/status/1815065599992647855 | https://www.tiktok.com/@xolosramirezoficial/video/7394128779091676422",
     "website_urls": "https://xolosramirez.com/blog/2024-07-21-ameyalli-guadalajara-jalisco.html",
     "language": "ES",
     "seo_priority": "P2",
-    "confidence": "alta para vida familiar en Guadalajara; entrega referenciada en índice histórico",
+    "confidence": "alta: cuerpo archivado con SHA-256 verificado; corroboración social en expediente Desktop",
     "publication_date": "2024-07-21",
     "onward_destination": "",
-    "verification_note": "XR-ARCHIVE-01: reconstrucción documental, no restauración literal. Entrevista publicada 2024-09-02; Guadalajara 19:10–19:35 y 36:49; Ameyalli sociable 11:49–12:06 y 24:44–25:08. Índice conserva referencia 2024-07-21. Cuerpo de julio no recuperado; día, punto, responsable y transporte no corroborados. Seguimiento 2026-10-20 no prueba logística."
+    "verification_note": "XR-ARCHIVE-01: original Jimdo contrastado; fecha efectiva no fijada. Captura 20250809000500. Edición histórica, no copia literal."
   },
   {
     "destination_id": "tonansi-hermosillo-sonora",
@@ -718,5 +718,41 @@
     "publication_date": "",
     "onward_destination": "",
     "verification_note": "Encuentro reciente, sin ubicación ni fecha exacta."
+  },
+  {
+    "destination_id": "tecuani-atenas-delivery",
+    "country": "Grecia",
+    "state_region": "Ática",
+    "city": "Atenas",
+    "specimen": "Tecuani",
+    "delivery_date": "",
+    "delivery_status": "1_entrega_realizada_comprobada",
+    "delivery_method": "entrega personal por Fernando en Atenas",
+    "evidence_url": "https://web.archive.org/web/20250809021644/https://www.xolosramirez.com/2025/06/10/puente-cultural-entrega-de-tecuani-ram%C3%ADrez-en-atenas/ | https://x.com/xolosramirez1/status/1932590767903764748",
+    "website_urls": "https://xolosramirez.com/blog/2025-11-19-reportaje-informativo-desde-atenas-grecia-para-xolos-ramirez.html#entrega-historica",
+    "language": "ES",
+    "seo_priority": "P2",
+    "confidence": "alta: cuerpo archivado con SHA-256 verificado; corroboración social en expediente Desktop",
+    "publication_date": "2025-06-10",
+    "onward_destination": "",
+    "verification_note": "Entrega histórica distinta del seguimiento. Sin día efectivo ni nombre de aeropuerto. No contar el seguimiento como otra entrega."
+  },
+  {
+    "destination_id": "pepe-caracas-delivery",
+    "country": "Venezuela",
+    "state_region": "",
+    "city": "Caracas",
+    "specimen": "Pepe",
+    "delivery_date": "",
+    "delivery_status": "1_entrega_realizada_comprobada",
+    "delivery_method": "entrega por Alexandra en aeropuerto de Caracas",
+    "evidence_url": "https://web.archive.org/web/20250809034859/https://www.xolosramirez.com/2025/05/31/pepe-ram%C3%ADrez-un-xoloitzcuintle-que-cruza-fronteras-hasta-caracas-venezuela/ | https://x.com/xolosramirez1/status/1929354372967739515",
+    "website_urls": "https://xolosramirez.com/blog/2025-11-23-pepe-ramirez-de-cruzar-fronteras-a-conquistar-podios-en-venezuela.html#entrega-historica",
+    "language": "ES",
+    "seo_priority": "P2",
+    "confidence": "alta: cuerpo archivado con SHA-256 verificado; corroboración social en expediente Desktop",
+    "publication_date": "2025-05-31",
+    "onward_destination": "",
+    "verification_note": "Entrega histórica distinta del seguimiento. Sin día efectivo ni nombre de aeropuerto. No contar el seguimiento como otra entrega."
   }
 ]

@@ -2,7 +2,7 @@
 
 ## Decisión editorial
 
-La autoridad se construye con historias verificables, no con una lista de destinos repetida en cada página. La colección central es útil porque reúne crónicas antes desconectadas, permite distinguir encuentro y residencia, y conecta Guatemala y Chile con el resto del historial. No se justifica crear landings independientes para cada estado o país con los datos disponibles.
+La autoridad se construye con historias verificables, no con una lista de destinos repetida en cada página. La colección central es útil porque reúne crónicas antes desconectadas, permite distinguir encuentro y residencia, y conecta Guatemala, Chile, Grecia y Venezuela con el resto del historial. No se justifica crear landings independientes para cada estado o país con los datos disponibles.
 
 La sede sigue siendo Ciudad de México. El primer nivel enlaza inicio, blog, catálogo y testimonios con la colección. El segundo agrupa encuentros por lugar, historias internacionales y seguimientos familiares. Cada crónica regresa a la colección y conduce a cuidados, testimonios, proceso o contacto según su utilidad.
 
@@ -18,10 +18,10 @@ La sede sigue siendo Ciudad de México. El primer nivel enlaza inicio, blog, cat
 | Xolos Ramírez + Guatemala | Marca/historia | Athena ES/EN | P1 por mandato y oportunidad editorial; el volumen no se presume |
 | Xoloitzcuintle precio Guatemala | Comercial | Información vigente de proceso, con enlace opcional a historia de Athena | La consulta observada no debe convertir la crónica en una tarifa local |
 | Xoloitzcuintle mexicano + Chile/Santiago | Historia/entrega | Luismi ES/EN | P1 editorial; muestra de demanda escasa, sin promesa comercial |
-| Xolos Ramírez + Atenas/Grecia o Caracas/Venezuela | Marca/cultural | Tecuani y Pepe | Seguimiento de vida familiar; no transformar en nuevas entregas |
+| Xolos Ramírez + Atenas/Grecia o Caracas/Venezuela | Marca/cultural | Tecuani y Pepe | Antecedentes de entrega documentados por separado de los seguimientos; no duplicar eventos ni crear sucursales |
 | Xoloitzcuintli breeder Mexico / international delivery | Comercial/informativa EN | Inicio EN, colección EN, historias equivalentes | Son hipótesis semánticas; no se ha demostrado volumen para estas frases exactas |
 | Estados Unidos / Texas / California / República Dominicana | Hogar posterior/itinerario | Crónicas que identifican encuentro en México | No equivale a entrega física del criadero en esos países |
-| Oaxaca, Puerto Rico, Estado de México y otros sin cuerpo verificable | Pendiente | Inventario de investigación | No crear afirmaciones ni landings todavía |
+| Oaxaca, Puerto Rico, Estado de México y otras referencias por evaluar | Pendiente | Inventario de investigación | No crear afirmaciones ni landings todavía |
 
 P1 es prioridad editorial/técnica y de evidencia; no un pronóstico de tráfico. La línea base privada distingue búsquedas reales de hipótesis. El país desde donde busca el usuario es una dimensión analítica distinta del destino narrado.
 
