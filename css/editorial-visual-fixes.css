@@ -91,6 +91,8 @@
   color: #f1e6d6;
   background: #211c17;
   border-color: #a48b58;
+  /* Keep foreground and background atomic on both entry and exit of focus/hover. */
+  transition: none;
 }
 .xr-qa-blog-index .topic-links a:hover,
 .xr-qa-blog-index .topic-links a:focus-visible {
