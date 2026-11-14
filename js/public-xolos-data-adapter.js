@@ -15,6 +15,7 @@
 
 export const CANONICAL_PUBLIC_BIRTH_DATES = {
   michina: '2026-10-20',
+  xochitl: '2026-07-04',
   tonalli: '2026-07-06',
   tlilxochitl: '2026-08-03',
   xilonen: '2026-07-16',
@@ -256,20 +257,21 @@ export const CANONICAL_PUBLIC_XOLOS = [
   },
   {
     id: 'xochitl',
-    name: 'Xochitl Ramirez',
-    status: 'reserved',
+    name: 'Xóchitl Ramirez',
+    status: 'delivered',
     variety: 'hairless',
     size: 'intermediate',
     gender: 'female',
     color: 'bermejo',
-    ageDescription: 'Cachorra recién nacida (reservada)',
+    birthDate: '2026-07-04',
+    ageDescription: 'Entregada el 13 de noviembre de 2026 · nacida el 4 de julio de 2026',
     personalitySummary: 'Cachorra xoloitzcuintle de tonalidad bermeja y carácter sereno, en etapa de crecimiento protegida.',
     careConsiderations: [
       'Protección dérmica especializada para xoloitzcuintles bermejos',
       'Alimentación equilibrada de alta calidad'
     ],
-    lineageReference: 'Linaje Tonalli Xolos Ramírez',
-    publicUrl: 'https://xolosramirez.com/xolos-disponibles.html#xochitl'
+    lineageReference: 'Linaje Xolos Ramírez: madre Axia Ramírez, padre Aztlán Ramírez. https://explorer.xolosarmy.xyz/linaje/xochitl-ramirez',
+    publicUrl: 'https://xolosramirez.com/blog/13-11-2026-entrega-xoloitzcuintle-xochitl-ramirez.html'
   },
   {
     id: 'iztli',
