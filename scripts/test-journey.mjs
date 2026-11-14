@@ -204,10 +204,34 @@ test('timeout aborts the request, keeps input and never confirms delivery', asyn
 test('journey analytics use a fixed step vocabulary and omit URL/profile details', async () => {
   const f = fixture();
   const link = new Element({ funnelStep: 'contact', profile: 'private@example.test' });
-  link.closest = () => link;
+  link.closest = (selector) => selector === 'a[data-funnel-step]' ? link : null;
   await f.document.emit('click', { target: link });
   assert.deepEqual(JSON.parse(JSON.stringify(f.window.dataLayer)), [{ event: 'xolos_journey_step', step: 'contact', page_type: 'available-xolos', lang: 'es' }]);
   link.dataset.funnelStep = 'private@example.test';
   await f.document.emit('click', { target: link });
   assert.equal(f.window.dataLayer.length, 1);
+});
+
+for (const lang of ['es', 'en']) {
+  test(`published personality story records canonical dimensions in ${lang}`, async () => {
+    const f = fixture({ lang });
+    const link = new Element({ profile: 'tlilxochitl', sourceSection: 'private@example.test' });
+    link.closest = (selector) => selector === 'a[data-personality-story]' ? link : null;
+    await f.document.emit('click', { target: link });
+    assert.deepEqual(JSON.parse(JSON.stringify(f.window.dataLayer)), [{
+      event: 'personality_story_click', profile: 'tlilxochitl', source_section: 'profile_card',
+      page_type: 'available-xolos', lang,
+      chronicle_cycle_start: '2026-10-20', chronicle_cycle_end: '2026-10-26',
+    }]);
+  });
+}
+
+test('unpublished or arbitrary personality profiles never enter Analytics', async () => {
+  const f = fixture();
+  for (const profile of [undefined, '', 'private@example.test', 'unknown', 'toString', 'constructor']) {
+    const link = new Element({ profile });
+    link.closest = (selector) => selector === 'a[data-personality-story]' ? link : null;
+    await f.document.emit('click', { target: link });
+  }
+  assert.equal(f.window.dataLayer.length, 0);
 });

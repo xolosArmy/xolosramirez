@@ -17,16 +17,22 @@
   });
 
   // Track entry from a commercial profile into a persistent Personalidad Xolo chronicle.
+  // Only published chronicles may contribute profile/cycle dimensions to Analytics.
+  const personalityStories = new Map([
+    ['tlilxochitl', { start: '2026-10-20', end: '2026-10-26' }],
+  ]);
   document.addEventListener('click', (event) => {
     const link = event.target instanceof Element ? event.target.closest('a[data-personality-story]') : null;
     if (!link) return;
+    const story = personalityStories.get(link.dataset.profile);
+    if (!story) return;
     push({
       event: 'personality_story_click',
-      profile: link.dataset.profile || undefined,
-      source_section: link.dataset.sourceSection || 'profile_card',
+      profile: link.dataset.profile,
+      source_section: 'profile_card',
       page_type: pageType,
-      chronicle_cycle_start: '2026-10-20',
-      chronicle_cycle_end: '2026-10-26',
+      chronicle_cycle_start: story.start,
+      chronicle_cycle_end: story.end,
       lang: english ? 'en' : 'es'
     });
   });
