@@ -17,7 +17,7 @@
  *    - Tlilxóchitl (intermediate, female, available, born 2026-08-03)
  *    - Xilonen (miniature, female, delivered 2026-11-03, born 2026-07-16)
  *    - Tonalli (standard, female, delivered)
- *    - Xóchitl (intermediate, female, reserved)
+ *    - Xóchitl (intermediate, female, delivered 2026-11-13)
  *    - Delivery zone recognizes "national".
  * 6. Ausencia de PII: no customer names, personal addresses, or private notes in outputs.
  * 7. Ausencia de precios privados: no numerical currency amounts or price tags exposed.
@@ -74,7 +74,7 @@ test('WM-XR1: Valid JSON Schema structures on all tools', () => {
 
 test('WM-XR1: Deterministic output for list_available_xolos', async () => {
   const result = await PublicXolosDataAdapter.listAvailableXolos();
-  assert.equal(result.total, 13, 'Should list 13 active adapter profiles, excluding delivered Xilonen');
+  assert.equal(result.total, 12, 'Should list 12 active adapter profiles, excluding delivered Xilonen and Xóchitl');
   assert.ok(Array.isArray(result.xolos), 'xolos must be an array');
 
   for (const x of result.xolos) {
@@ -98,7 +98,7 @@ test('WM-XR1: Deterministic output for list_available_xolos', async () => {
 
   // Filter test: reserved
   const reservedFiltered = await PublicXolosDataAdapter.listAvailableXolos({ status: 'reserved' });
-  assert.equal(reservedFiltered.total, 3);
+  assert.equal(reservedFiltered.total, 2);
   for (const x of reservedFiltered.xolos) {
     assert.equal(x.status, 'reserved');
   }
@@ -238,14 +238,23 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
   assert.equal(tonalli.xolo.gender, 'female');
   assert.equal(tonalli.xolo.size, 'standard');
 
-  // 7. Xóchitl (reserved, intermediate, female, bermejo)
+  // 7. Xóchitl (delivered, intermediate, female, bermejo)
   const xochitl = await PublicXolosDataAdapter.getXoloProfile({ id: 'xochitl' });
   assert.equal(xochitl.found, true);
   assert.equal(xochitl.xolo.id, 'xochitl');
-  assert.equal(xochitl.xolo.status, 'reserved');
+  assert.equal(xochitl.xolo.status, 'delivered');
   assert.equal(xochitl.xolo.gender, 'female');
   assert.equal(xochitl.xolo.size, 'intermediate');
   assert.equal(xochitl.xolo.color, 'bermejo');
+  assert.equal(xochitl.xolo.birthDate, '2026-07-04');
+  assert.equal(xochitl.xolo.publicUrl, 'https://xolosramirez.com/blog/13-11-2026-entrega-xoloitzcuintle-xochitl-ramirez.html');
+  assert.equal(validatePublicAgeIntegrity(xochitl.xolo).valid, true);
+  assert.match(xochitl.xolo.lineageReference, /Axia Ramírez/);
+  assert.match(xochitl.xolo.lineageReference, /Aztlán Ramírez/);
+  for (const filter of [{}, { status: 'all' }, { status: 'available' }, { status: 'reserved' }, { status: 'delivered' }, { size: 'intermediate' }]) {
+    const listed = await PublicXolosDataAdapter.listAvailableXolos(filter);
+    assert.ok(!listed.xolos.some((x) => x.id === 'xochitl'), 'Delivered Xóchitl must never appear in active listings');
+  }
 
   // Missing profile
   const missing = await PublicXolosDataAdapter.getXoloProfile({ id: 'non-existent-dog' });
