@@ -91,14 +91,16 @@ test('WM-XR1: Deterministic output for list_available_xolos', async () => {
 
   // Filter test: available
   const availableFiltered = await PublicXolosDataAdapter.listAvailableXolos({ status: 'available' });
-  assert.equal(availableFiltered.total, 10);
+  assert.equal(availableFiltered.total, 9);
+  assert.ok(!availableFiltered.xolos.some((x) => x.id === 'tlaxcalli'), 'Reserved Tlaxcalli must not be offered as available');
   for (const x of availableFiltered.xolos) {
     assert.equal(x.status, 'available');
   }
 
   // Filter test: reserved
   const reservedFiltered = await PublicXolosDataAdapter.listAvailableXolos({ status: 'reserved' });
-  assert.equal(reservedFiltered.total, 2);
+  assert.equal(reservedFiltered.total, 3);
+  assert.ok(reservedFiltered.xolos.some((x) => x.id === 'tlaxcalli'), 'Tlaxcalli belongs in reserved listings');
   for (const x of reservedFiltered.xolos) {
     assert.equal(x.status, 'reserved');
   }
@@ -189,7 +191,7 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
   for (const [id, size, gender] of expectedNewProfiles) {
     const profile = await PublicXolosDataAdapter.getXoloProfile({ id });
     assert.equal(profile.found, true, id + ' must be retrievable');
-    assert.equal(profile.xolo.status, ['nochtli', 'chok'].includes(id) ? 'reserved' : 'available');
+    assert.equal(profile.xolo.status, ['tlaxcalli', 'nochtli', 'chok'].includes(id) ? 'reserved' : 'available');
     assert.equal(profile.xolo.size, size);
     assert.equal(profile.xolo.gender, gender);
   }
@@ -505,7 +507,7 @@ test('WM-XR1: WebMCP size and status parity with every ES/EN public profile card
   ]) {
     const html = readFileSync(new URL('../' + file, import.meta.url), 'utf8');
     const cards = [...html.matchAll(/<article\b[^>]*data-profile-card="([^"]+)"[^>]*data-profile-status="([^"]+)"[^>]*>/g)];
-    assert.equal(cards.length, 12, file + ': unexpected public card count');
+    assert.equal(cards.length, 11, file + ': unexpected public card count'); // Tonatiuh is an existing adapter-only record.
     const snapshot = new Map();
 
     for (const match of cards) {
@@ -534,6 +536,20 @@ test('WM-XR1: WebMCP size and status parity with every ES/EN public profile card
   const standard = await PublicXolosDataAdapter.listAvailableXolos({ size: 'standard' });
   assert.ok(!standard.xolos.some((x) => x.id === 'tlatoani'),
     'Tlatoani must not be suggested as standard');
+});
+
+test('WM-XR1: Tlaxcalli remains public only as reserved', async () => {
+  const result = await PublicXolosDataAdapter.getXoloProfile({ id: 'tlaxcalli' });
+  assert.equal(result.found, true);
+  assert.equal(result.xolo.status, 'reserved');
+  assert.equal(result.xolo.size, 'standard');
+  assert.equal(result.xolo.gender, 'female');
+  assert.equal(result.xolo.birthDate, '2026-10-13');
+  assert.equal(result.xolo.publicUrl, 'https://xolosramirez.com/xolos-disponibles.html#tlaxcalli');
+  for (const status of ['all', 'reserved', 'available']) {
+    const listed = await PublicXolosDataAdapter.listAvailableXolos({ status, size: 'standard' });
+    assert.equal(listed.xolos.some((x) => x.id === 'tlaxcalli'), status !== 'available');
+  }
 });
 
 test('WM-XR1: Michina remains miniature, public and available', async () => {
