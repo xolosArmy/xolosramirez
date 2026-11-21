@@ -115,7 +115,7 @@ export const CANONICAL_PUBLIC_XOLOS = [
   {
     id: 'tlaxcalli',
     name: 'Tlaxcalli Ramirez',
-    status: 'available',
+    status: 'reserved',
     variety: 'pending_confirmation',
     size: 'standard',
     gender: 'female',
