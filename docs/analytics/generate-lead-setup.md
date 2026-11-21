@@ -1,6 +1,6 @@
 # Funnel de contacto y configuración de `generate_lead`
 
-Fecha de revisión: 28 de septiembre de 2026.
+Fecha de revisión del contrato frontend: 8 de noviembre de 2026. Esta revisión no certifica la configuración publicada de GTM.
 
 El frontend separa activación, intención cualificada y envío confirmado. No envía precios, moneda, contenido del formulario, correo, ciudad, query strings ni otros datos personales a Analytics.
 
@@ -43,7 +43,7 @@ Solo las dos primeras capas pueden medirse enteramente en frontend. El sitio no 
 
 Estos estados no son equivalentes. El navegador no emite `video_call_booked`, `video_call_completed` ni `reservation`. La Hoja Maestra conserva las etapas operativas en `Funnel Comercial`, sin PII en el `prospect_id`.
 
-El correo vuelve a ser el canal comercial principal. Los CTA contextuales de precio, perfiles y contacto apuntan a `fernando@xolosramirez.com`. Como excepción deliberada, los CTA flotantes de precio en Home, Disponibles y Contacto usan WhatsApp (`https://wa.me/message/KGKS3MKYMHCWE1`) con un mensaje precargado localizado mediante `?text=`: en español, “Hola, vi Xolos Ramírez y quisiera conocer el precio y el proceso de reserva de un xoloitzcuintle.”; en inglés, “Hello, I saw Xolos Ramírez and I’d like to learn about the price and reservation process for a Xoloitzcuintle.”. Los CTA de correo conservan `subject` con `[Ref: price-<lang>-<surface>-<placement>]`. Las superficies actuales son `home`, `contact`, `available` y `price-article`; las ubicaciones son `floating`, `inline` y `article-footer`. En el artículo, el identificador canónico es `price-<lang>-price-article-footer`: `article` ya forma parte de la superficie, mientras `data-cta-location` conserva `article_footer`. Cada combinación usada identifica idioma, página y ubicación del CTA en el correo recibido, sin depender de GA4 para conciliar su origen. El cuerpo prellenado solicita ciudad, preferencia de sexo y talla, ejemplar de interés y si le gustaría una videollamada. El `Ref` de perfil existente se conserva. Ni el `Ref` ni el evento GA4 incluyen PII.
+Las fichas públicas ES/EN ofrecen correo a `contacto@xolosarmy.xyz` y WhatsApp. Los CTA flotantes de precio también usan WhatsApp; los contextuales de precio usan correo. No interpretar una activación de ninguno de estos canales como mensaje recibido. Los asuntos de correo conservan referencias de origen sin PII: `[Ref: <profile>-<lang>-available]` o `[Ref: price-<lang>-<surface>-<placement>]`. En el pie de la guía de precio, la referencia es `price-<lang>-price-article-footer`, mientras `data-cta-location` es `article_footer`. El cuerpo prellenado puede solicitar información del interesado para la conversación privada; ese cuerpo no forma parte del payload de Analytics.
 
 Los dos eventos de activación usan, cuando el contexto existe:
 
@@ -60,7 +60,7 @@ Los dos eventos de activación usan, cuando el contexto existe:
 CTA de precio:
 
 ```text
-lead_channel=whatsapp  # solo floating
+lead_channel=whatsapp  # floating
 lead_channel=email     # inline|article_footer
 cta_location=floating|inline|article_footer
 lead_intent=price_inquiry
@@ -71,7 +71,7 @@ lang=es|en
 CTA de perfil:
 
 ```text
-lead_channel=email
+lead_channel=email|whatsapp
 cta_location=profile_card
 lead_intent=profile_inquiry
 profile=<canonical profile id>
@@ -84,7 +84,7 @@ Videollamada:
 
 ```text
 lead_channel=video_call
-cta_location=inline
+cta_location=inline|post_form_success
 lead_intent=video_call_request
 page_type=available-xolos|contact
 lang=es|en
@@ -139,6 +139,31 @@ En la página de contacto, después de HTTP exitoso aparece una sección de vide
 
 ## Regla de canal vigente
 
-- Correo: canal dominante para CTA de perfiles, precio contextual, contacto general y recuperación del formulario.
-- WhatsApp: únicamente CTA flotantes de precio en las seis superficies ES/EN de Home, Disponibles y Contacto.
+- Correo: CTA de perfiles, precio contextual, contacto general y recuperación del formulario.
+- WhatsApp: CTA de perfiles y CTA flotantes de precio en las seis superficies ES/EN de Home, Disponibles y Contacto.
 - Un clic en WhatsApp sigue siendo intención; no equivale a mensaje recibido ni reserva.
+
+
+## Interpretación de parámetros y comprobación antes de publicar
+
+`profile` no es obligatorio en una consulta general de precio. Un valor ausente no prueba un defecto. Para identificar omisiones inesperadas, cruzar evento, `lead_intent`, `cta_location`, `page_type`, `lang` y `profile`. La cobertura relevante es la de `profile_inquiry` desde `profile_card`, no el porcentaje global de todos los clics. No sustituir valores ausentes por un perfil inventado.
+
+`cta_type` y `source_section` no pertenecen al contrato de siete parámetros de `generate_lead`/`qualified_contact_intent`. Para estas capas, utilizar `cta_location`; no agregar dimensiones sólo para eliminar `(not set)`. `source_section=profile_card` sí pertenece a `personality_story_click`, un evento separado de lectura de contenido, que no acredita intención comercial ni reserva.
+
+El registro `personalityStories` de `js/journey.js` limita ese evento a crónicas publicadas. Sus fechas describen el ciclo editorial original, no la fecha del clic. Al agregar una crónica, actualizar el registro con su perfil canónico y su ciclo verificado. Los enlaces actuales ES/EN corresponden a Tlilxóchitl. Los valores arbitrarios de `data-profile` y `data-source-section` no deben transmitirse.
+
+`js/main.js` ya limpia los siete campos antes de cada push y deduplica la misma firma durante 1,500 ms. Esto evita arrastre dentro de la capa de datos y dobles activaciones inmediatas; no deduplica personas, contactos recibidos, sesiones ni etiquetas GTM configuradas por duplicado.
+
+| Caso de QA | Resultado esperado |
+| --- | --- |
+| CTA de perfil ES/EN por correo o WhatsApp | Un `xolos_generate_lead` y un `qualified_contact_intent`, con perfil/estado correctos |
+| CTA general tras CTA de perfil | Sin heredar `profile` ni `profile_status` |
+| Doble clic idéntico dentro de 1,500 ms | Una activación por capa |
+| Cambio real de perfil/canal | Nueva activación con el contexto nuevo |
+| Formulario válido con fallo HTTP/red/timeout | Puede registrar intento, nunca `contact_form_submit` |
+| Formulario aceptado por HTTP | Un `contact_form_submit`; sin contenido ni correo personal en Analytics |
+| Clic en crónica | Sólo `personality_story_click` con el contrato editorial permitido |
+
+Ejecutar `node scripts/test-generate-lead-tracking.mjs` y `node scripts/test-journey.mjs` localmente. Tras autorización para la validación conectada, contrastar la secuencia con Tag Assistant y DebugView de la propiedad correcta, verificando un solo envío por evento. Si hay una etiqueta duplicada, proponer la diferencia exacta del contenedor antes de publicar. Las pruebas locales no verifican etiquetas, consentimiento, dimensiones registradas, importación de conversiones a Ads ni su configuración primaria/secundaria. No modificar eventos clave sin revisar dependencias de puja.
+
+Referencia pública: [capa de datos de Google Tag Manager](https://developers.google.com/tag-platform/tag-manager/datalayer).
