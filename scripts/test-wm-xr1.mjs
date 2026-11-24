@@ -91,7 +91,7 @@ test('WM-XR1: Deterministic output for list_available_xolos', async () => {
 
   // Filter test: available
   const availableFiltered = await PublicXolosDataAdapter.listAvailableXolos({ status: 'available' });
-  assert.equal(availableFiltered.total, 9);
+  assert.equal(availableFiltered.total, 8);
   assert.ok(!availableFiltered.xolos.some((x) => x.id === 'tlaxcalli'), 'Reserved Tlaxcalli must not be offered as available');
   for (const x of availableFiltered.xolos) {
     assert.equal(x.status, 'available');
@@ -99,7 +99,7 @@ test('WM-XR1: Deterministic output for list_available_xolos', async () => {
 
   // Filter test: reserved
   const reservedFiltered = await PublicXolosDataAdapter.listAvailableXolos({ status: 'reserved' });
-  assert.equal(reservedFiltered.total, 3);
+  assert.equal(reservedFiltered.total, 4);
   assert.ok(reservedFiltered.xolos.some((x) => x.id === 'tlaxcalli'), 'Tlaxcalli belongs in reserved listings');
   for (const x of reservedFiltered.xolos) {
     assert.equal(x.status, 'reserved');
@@ -191,7 +191,7 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
   for (const [id, size, gender] of expectedNewProfiles) {
     const profile = await PublicXolosDataAdapter.getXoloProfile({ id });
     assert.equal(profile.found, true, id + ' must be retrievable');
-    assert.equal(profile.xolo.status, ['tlaxcalli', 'nochtli', 'chok'].includes(id) ? 'reserved' : 'available');
+    assert.equal(profile.xolo.status, ['tlaxcalli', 'nochtli', 'chok', 'yolotl'].includes(id) ? 'reserved' : 'available');
     assert.equal(profile.xolo.size, size);
     assert.equal(profile.xolo.gender, gender);
   }
@@ -561,4 +561,20 @@ test('WM-XR1: Michina remains miniature, public and available', async () => {
   const filtered = await PublicXolosDataAdapter.listAvailableXolos({ size: 'miniature', status: 'available' });
   assert.ok(filtered.xolos.some((x) => x.id === 'michina'));
   assert.ok(!filtered.xolos.some((x) => x.id === 'xilonen'));
+});
+
+test('WM-XR1: Yolotl remains public only as reserved', async () => {
+  const result = await PublicXolosDataAdapter.getXoloProfile({ id: 'yolotl' });
+  assert.equal(result.found, true);
+  assert.equal(result.xolo.status, 'reserved');
+  assert.equal(result.xolo.size, 'standard');
+  assert.equal(result.xolo.gender, 'male');
+  assert.equal(result.xolo.birthDate, '2026-10-16');
+  assert.equal(result.xolo.publicUrl, 'https://xolosramirez.com/xolos-disponibles.html#yolotl');
+  for (const status of ['all', 'reserved', 'available']) {
+    for (const size of ['all', 'standard']) {
+      const listed = await PublicXolosDataAdapter.listAvailableXolos({ status, size });
+      assert.equal(listed.xolos.some((x) => x.id === 'yolotl'), status !== 'available');
+    }
+  }
 });
