@@ -145,7 +145,7 @@ export const CANONICAL_PUBLIC_XOLOS = [
   {
     id: 'yolotl',
     name: 'Yolotl Ramirez',
-    status: 'available',
+    status: 'reserved',
     variety: 'hairless',
     size: 'standard',
     gender: 'male',
