@@ -56,7 +56,7 @@ export const CANONICAL_PUBLIC_XOLOS = [
   {
     id: 'michina',
     name: 'Michina Ramirez',
-    status: 'available',
+    status: 'reserved',
     variety: 'hairless',
     size: 'miniature',
     gender: 'female',

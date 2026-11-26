@@ -191,7 +191,7 @@ test('WM-XR1: Deterministic output for get_xolo_profile and catalog accuracy', a
   for (const [id, size, gender] of expectedNewProfiles) {
     const profile = await PublicXolosDataAdapter.getXoloProfile({ id });
     assert.equal(profile.found, true, id + ' must be retrievable');
-    assert.equal(profile.xolo.status, ['tlaxcalli', 'nochtli', 'chok', 'yolotl'].includes(id) ? 'reserved' : 'available');
+    assert.equal(profile.xolo.status, ['tlaxcalli', 'nochtli', 'chok', 'yolotl', 'michina'].includes(id) ? 'reserved' : 'available');
     assert.equal(profile.xolo.size, size);
     assert.equal(profile.xolo.gender, gender);
   }
@@ -552,15 +552,18 @@ test('WM-XR1: Tlaxcalli remains public only as reserved', async () => {
   }
 });
 
-test('WM-XR1: Michina remains miniature, public and available', async () => {
+test('WM-XR1: Michina remains miniature, public and reserved', async () => {
   const result = await PublicXolosDataAdapter.getXoloProfile({ id: 'michina' });
   assert.equal(result.found, true);
   assert.equal(result.xolo.size, 'miniature');
   assert.equal(result.xolo.birthDate, '2026-10-20');
   assert.equal(validatePublicAgeIntegrity(result.xolo).valid, true);
-  const filtered = await PublicXolosDataAdapter.listAvailableXolos({ size: 'miniature', status: 'available' });
+  assert.equal(result.xolo.status, 'reserved');
+  const filtered = await PublicXolosDataAdapter.listAvailableXolos({ size: 'miniature', status: 'reserved' });
   assert.ok(filtered.xolos.some((x) => x.id === 'michina'));
   assert.ok(!filtered.xolos.some((x) => x.id === 'xilonen'));
+  const available = await PublicXolosDataAdapter.listAvailableXolos({ size: 'miniature', status: 'available' });
+  assert.ok(!available.xolos.some((x) => x.id === 'michina'));
 });
 
 test('WM-XR1: Yolotl remains public only as reserved', async () => {
