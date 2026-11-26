@@ -91,16 +91,18 @@ test('WM-XR1: Deterministic output for list_available_xolos', async () => {
 
   // Filter test: available
   const availableFiltered = await PublicXolosDataAdapter.listAvailableXolos({ status: 'available' });
-  assert.equal(availableFiltered.total, 8);
+  assert.equal(availableFiltered.total, 7);
   assert.ok(!availableFiltered.xolos.some((x) => x.id === 'tlaxcalli'), 'Reserved Tlaxcalli must not be offered as available');
+  assert.ok(!availableFiltered.xolos.some((x) => x.id === 'michina'), 'Reserved Michina must not be offered as available');
   for (const x of availableFiltered.xolos) {
     assert.equal(x.status, 'available');
   }
 
   // Filter test: reserved
   const reservedFiltered = await PublicXolosDataAdapter.listAvailableXolos({ status: 'reserved' });
-  assert.equal(reservedFiltered.total, 4);
+  assert.equal(reservedFiltered.total, 5);
   assert.ok(reservedFiltered.xolos.some((x) => x.id === 'tlaxcalli'), 'Tlaxcalli belongs in reserved listings');
+  assert.ok(reservedFiltered.xolos.some((x) => x.id === 'michina'), 'Michina belongs in reserved listings');
   for (const x of reservedFiltered.xolos) {
     assert.equal(x.status, 'reserved');
   }
