@@ -34,6 +34,15 @@
   const toolbar = document.querySelector('[data-profile-filters]');
   if (toolbar) {
     const cards = Array.from(document.querySelectorAll('.puppy-card[data-profile-status]'));
+    // Keep the catalog's reserved profiles last, preserving order within each status.
+    const grid = document.querySelector('.puppy-grid');
+    if (grid && cards.every((card) => card.parentElement === grid)) {
+      const ordered = cards.filter((card) => card.dataset.profileStatus !== 'reserved')
+        .concat(cards.filter((card) => card.dataset.profileStatus === 'reserved'));
+      if (ordered.some((card, index) => card !== cards[index])) {
+        ordered.forEach((card) => grid.appendChild(card));
+      }
+    }
     const buttons = Array.from(toolbar.querySelectorAll('[data-filter]'));
     const count = toolbar.querySelector('[data-profile-count]');
     const applyFilter = (filter) => {
